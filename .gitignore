@@ -15,3 +15,4 @@ yarn-error.log
 /.vscode
 .htaccess
 .gitconfig
+deploy.py
