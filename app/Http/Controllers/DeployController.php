@@ -10,7 +10,7 @@ class DeployController extends Controller
 {
     public function index()
     {
-        $process = new Process(['python', '/opt/bitnami/projects/kc/deploy.py']);
+        $process = new Process(['python', 'deploy.py']);
         $process->run();
 
         // error handling
