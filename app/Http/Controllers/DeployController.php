@@ -11,14 +11,8 @@ class DeployController extends Controller
     //deploy
     public function index()
     {
-        $process = new Process(['deploy']);
-        $process->run();
+	$output = shell_exec('deploy');
+	var_dump($output);
 
-        // executes after the command finishes
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-
-        echo $process->getOutput();
     }
 }
