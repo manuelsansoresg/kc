@@ -11,8 +11,7 @@ class DeployController extends Controller
 {
     public function index()
     {
-        $service = new LaravelPython();
-        $result = $service->run('/deploy.py');
+        $result = \Python::run('/deploy.py');
 
     }
 }
