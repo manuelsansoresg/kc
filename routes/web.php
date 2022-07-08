@@ -21,7 +21,6 @@ Route::get('/', function () {
 Route::get('/data/web', function () {
     return view('welcome');
 });
- 
 
 Route::any('/deploy/index', [DeployController::class, 'index']);
 Route::post('/deploy/index', [DeployController::class, 'index']);
