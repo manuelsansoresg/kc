@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/manuel/web', function () {
+Route::get('/jesus/web', function () {
     return view('welcome');
 });
 Route::any('/deploy/index', [DeployController::class, 'index']);
