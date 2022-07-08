@@ -8,6 +8,6 @@ class DeployController extends Controller
 {
     public function index()
     {
-        $this->exec('deploy');
+        exec('deploy');
     }
 }
