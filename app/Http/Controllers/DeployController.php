@@ -11,7 +11,7 @@ class DeployController extends Controller
 {
     public function index()
     {
-        $result = \Python::run('/deploy.py');
+        $result = \Python::run('deploy.py');
 
     }
 }
