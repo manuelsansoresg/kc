@@ -163,20 +163,55 @@
             </div><!-- .header-main-->
             <div class="hero-wrap hero-wrap-2 section-space">
                 <div class="container">
-                    <div class="row align-items-center flex-md-row-reverse justify-content-between">
-                        <div class="col-lg-5 col-sm-9 col-md-6">
-                            <div class="hero-image">
-                                <img src="images/thumb/nft-img.png" alt="" class="w-100">
-                            </div>
+                    <div class="row flex-lg-row-reverse justify-content-between align-items-center align-items-xl-start">
+                        <div class="col-lg-5">
+                            <div class="swiper swiper-carousel swiper-button-s1" data-breakpoints='{
+                                "0":{"slidesPerView":1,"slidesPerGroup":1}
+                            }' data-loop="true" navigation="true" data-autoplay="false" data-speed="500" data-centeredslides="false">
+                                <!-- Additional required wrapper -->
+                                <div class="swiper-wrapper">
+                                    <!-- Slides -->
+                                    <div class="swiper-slide">
+                                        <a href="product-details-v1.html" class="card">
+                                            <img src="images/thumb/nft11.jpg" alt="" class="card-img-top">
+                                            <div class="card-body d-flex align-items-center">
+                                                <div class="avatar flex-shrink-0">
+                                                    <img src="images/thumb/avatar.jpg" alt="">
+                                                </div>
+                                                <div class="ms-2">
+                                                    <h5 class="card-title-effect">Sebastian Rainbow</h5>
+                                                    <span class="fs-13 text-secondary">By Alex Smith</span>
+                                                </div>
+                                            </div><!-- end card-body -->
+                                        </a><!-- end card -->
+                                    </div><!-- end swiper-slider -->
+                                    <div class="swiper-slide">
+                                        <a href="product-details-v1.html" class="card">
+                                            <img src="images/thumb/nft12.jpg" alt="" class="card-img-top">
+                                            <div class="card-body d-flex align-items-center">
+                                                <div class="avatar flex-shrink-0">
+                                                    <img src="images/thumb/avatar-2.jpg" alt="">
+                                                </div>
+                                                <div class="ms-2">
+                                                    <h5 class="card-title-effect">Rainbow Views</h5>
+                                                    <span class="fs-13 text-secondary">By Kevin Martin</span>
+                                                </div>
+                                            </div><!-- end card-body -->
+                                        </a><!-- end card -->
+                                    </div><!-- end swiper-slider -->
+                                </div>
+                                <!-- If we need navigation buttons -->
+                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next"></div>
+                            </div><!-- end swiper-container -->
                         </div><!-- end col-lg-5 -->
-                        <div class="col-lg-6 col-md-6">
-                            <div class="hero-content pb-0 pt-md-0 pe-lg-4">
-                                <h1 class="hero-title mb-4">Create, sell or collect digital items</h1>
-                                <p class="hero-text mb-4 pb-1">Complete account of the system, and expound the actual teachings of the great explorer of human happiness.</p>
-                                <!-- button group -->
-                                <ul class="btns-group hero-btns">
-                                    <li><a href="explore.html" class="btn btn-lg btn-dark">Explore</a></li>
-                                    <li><a href="create.html" class="btn btn-lg btn-outline-dark">Create</a></li>
+                        <div class="col-lg-6">
+                            <div class="hero-content pt-xl-3 pt-lg-0 pb-0">
+                                <h1 class="hero-title hero-title-s1 mb-3">Discover rare artworks by world class artists</h1>
+                                <p class="hero-text mb-4 pb-1">EnftyMart, a Global B2B SaaS, empowers you to launch your own white-label NFT store or NFT Marketplace without any technical knowledge, it's easy.</p>
+                                <ul class="hero-btns btns-group">
+                                    <li><a href="register.html" class="btn btn-lg btn-grad">Register Now</a></li>
+                                    <li><a href="create.html" class="btn btn-lg btn-outline-dark">Create Store</a></li>
                                 </ul>
                             </div><!-- hero-content -->
                         </div><!-- col-lg-6 -->
@@ -184,52 +219,156 @@
                 </div><!-- .container-->
             </div><!-- end hero-wrap -->
         </header><!-- end header-section -->
-        <section class="section-space-b feature-section">
+        <section class="category-section section-space-b">
             <div class="container">
                 <div class="section-head text-center">
-                    <h2 class="mb-3">Exclusive EnftyMart drops</h2>
+                    <h2 class="mb-3">Browse by category</h2>
                     <p>This is just a simple text made for this unique and awesome template, you can replace it with any text. It is a long established fact.</p>
                 </div><!-- end section-head -->
                 <div class="row g-gs">
-                    <div class="col-sm-6 col-md-6 col-lg-3">
-                        <a href="product-details-v1.html" class="card card-full">
-                            <img src="images/thumb/art.jpg" class="card-img-top" alt="">
-                            <div class="card-body p-4">
-                                <h5 class="card-title card-title-effect">Seasons by AlexSmith</h5>
-                                <p class="small">AlexSmith's Summer Collection featuring Time.</p>
-                            </div><!-- end card-body -->
-                        </a><!-- end card -->
+                    <div class="col-lg-3 col-6 col-md-4">
+                        <a href="explore.html" class="card card-cat h-100 text-center text-purple ">
+                            <div class="card-body card-body-s1">
+                                <span class="icon ni ni-camera mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
+                                <h5 class="card-cat-title">Artwork</h5>
+                            </div>
+                        </a>
                     </div><!-- end col -->
-                    <div class="col-sm-6 col-md-6 col-lg-3">
-                        <a href="product-details-v1.html" class="card card-full">
-                            <img src="images/thumb/art-2.jpg" class="card-img-top" alt="">
-                            <div class="card-body p-4">
-                                <h5 class="card-title card-title-effect">Kavin Martin EnftyMart.io</h5>
-                                <p class="small">After a sold-out Art Blocks drop, Martin is back with.</p>
-                            </div><!-- end card-body -->
-                        </a><!-- end card -->
+                    <div class="col-lg-3 col-6 col-md-4">
+                        <a href="explore.html" class="card card-cat h-100 text-center text-blue">
+                            <div class="card-body card-body-s1">
+                                <span class="icon ni ni-music mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
+                                <h5 class="card-cat-title">Music</h5>
+                            </div>
+                        </a>
                     </div><!-- end col -->
-                    <div class="col-sm-6 col-md-6 col-lg-3">
-                        <a href="product-details-v1.html" class="card card-full">
-                            <img src="images/thumb/art-3.jpg" class="card-img-top" alt="">
-                            <div class="card-body p-4">
-                                <h5 class="card-title card-title-effect">Kavin Martin EnftyMart.io</h5>
-                                <p class="small">After a sold-out Art Blocks drop, Martin is back with.</p>
-                            </div><!-- end card-body -->
-                        </a><!-- end card -->
+                    <div class="col-lg-3 col-6 col-md-4">
+                        <a href="explore.html" class="card card-cat h-100 text-center text-pink">
+                            <div class="card-body card-body-s1">
+                                <span class="icon ni ni-search mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
+                                <h5 class="card-cat-title">Domain Names</h5>
+                            </div>
+                        </a>
                     </div><!-- end col -->
-                    <div class="col-sm-6 col-md-6 col-lg-3">
-                        <a href="product-details-v1.html" class="card card-full">
-                            <img src="images/thumb/art-4.jpg" class="card-img-top" alt="">
-                            <div class="card-body p-4">
-                                <h5 class="card-title card-title-effect">Tyronejkd Universe</h5>
-                                <p class="small">After a sold-out Art Blocks drop, Martin is back with.</p>
-                            </div><!-- end card-body -->
-                        </a><!-- end card -->
+                    <div class="col-lg-3 col-6 col-md-4">
+                        <a href="explore.html" class="card card-cat h-100 text-center text-orange">
+                            <div class="card-body card-body-s1">
+                                <span class="icon ni ni-globe mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
+                                <h5 class="card-cat-title">Virtual Worlds</h5>
+                            </div>
+                        </a>
+                    </div><!-- end col -->
+                    <div class="col-lg-3 col-6 col-md-4">
+                        <a href="explore.html" class="card card-cat h-100 text-center text-yellow">
+                            <div class="card-body card-body-s1">
+                                <span class="icon ni ni-user mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
+                                <h5 class="card-cat-title">Trending Cards</h5>
+                            </div>
+                        </a>
+                    </div><!-- end col -->
+                    <div class="col-lg-3 col-6 col-md-4">
+                        <a href="explore.html" class="card card-cat h-100 text-center text-green">
+                            <div class="card-body card-body-s1">
+                                <span class="icon ni ni-opt-alt-fill mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
+                                <h5 class="card-cat-title">Collectibles</h5>
+                            </div>
+                        </a>
+                    </div><!-- end col -->
+                    <div class="col-lg-3 col-6 col-md-4">
+                        <a href="explore.html" class="card card-cat h-100 text-center text-teal">
+                            <div class="card-body card-body-s1">
+                                <span class="icon ni ni-hot-fill mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
+                                <h5 class="card-cat-title">Sports</h5>
+                            </div>
+                        </a>
+                    </div><!-- end col -->
+                    <div class="col-lg-3 col-6 col-md-4">
+                        <a href="explore.html" class="card card-cat h-100 text-center text-cyan">
+                            <div class="card-body card-body-s1">
+                                <span class="icon ni ni-setting mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
+                                <h5 class="card-cat-title">Utility</h5>
+                            </div>
+                        </a>
                     </div><!-- end col -->
                 </div><!-- end row -->
             </div><!-- end container -->
-        </section><!-- end feature-section-->
+        </section><!-- end category-section -->
+        <section class="recent-section section-space-b">
+            <div class="container">
+                <div class="section-head text-center">
+                    <h2 class="mb-3">Recently Created</h2>
+                    <p>This is just a simple text made for this unique and awesome template, you can replace it with any text. It is a long established fact.</p>
+                </div><!-- end section-head -->
+                <div class="swiper swiper-carousel swiper-pagination-space" data-breakpoints='{
+                    "0":{"slidesPerView":1,"slidesPerGroup":1},
+                    "767":{"slidesPerView":2,"slidesPerGroup":2},
+                    "992":{"slidesPerView":3,"slidesPerGroup":3}
+                }' data-loop="true" data-autoplay="false" data-speed="800" data-centeredslides="false">
+                    <!-- Additional required wrapper -->
+                    <div class="swiper-wrapper">
+                        <!-- Slides -->
+                        <div class="swiper-slide">
+                            <a href="product-details-v1.html" class="card">
+                                <img src="images/thumb/nft12.jpg" alt="" class="card-img-top">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="images/thumb/avatar.jpg" alt="">
+                                    </div>
+                                    <div class="ms-2">
+                                        <h5 class="card-title-effect">Hunter x Hunter</h5>
+                                        <span class="fs-13 text-secondary">By Alex Smith</span>
+                                    </div>
+                                </div><!-- end card-body -->
+                            </a><!-- end card -->
+                        </div><!-- end swiper-slider -->
+                        <div class="swiper-slide">
+                            <a href="product-details-v1.html" class="card">
+                                <img src="images/thumb/nft13.jpg" alt="" class="card-img-top">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="images/thumb/avatar-2.jpg" alt="">
+                                    </div>
+                                    <div class="ms-2">
+                                        <h5 class="card-title-effect">Mob Psycho 100</h5>
+                                        <span class="fs-13 text-secondary">By Kevin Martin</span>
+                                    </div>
+                                </div><!-- end card-body -->
+                            </a><!-- end card -->
+                        </div><!-- end swiper-slider -->
+                        <div class="swiper-slide">
+                            <a href="product-details-v1.html" class="card">
+                                <img src="images/thumb/nft14.jpg" alt="" class="card-img-top">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="images/thumb/avatar-3.jpg" alt="">
+                                    </div>
+                                    <div class="ms-2">
+                                        <h5 class="card-title-effect">Sunset #1</h5>
+                                        <span class="fs-13 text-secondary">By David Hardson</span>
+                                    </div>
+                                </div><!-- end card-body -->
+                            </a><!-- end card -->
+                        </div><!-- end swiper-slider -->
+                        <div class="swiper-slide">
+                            <a href="product-details-v1.html" class="card">
+                                <img src="images/thumb/nft11.jpg" alt="" class="card-img-top">
+                                <div class="card-body d-flex align-items-center">
+                                    <div class="avatar flex-shrink-0">
+                                        <img src="images/thumb/avatar-4.jpg" alt="">
+                                    </div>
+                                    <div class="ms-2">
+                                        <h5 class="card-title-effect">WorldOfArt #1</h5>
+                                        <span class="fs-13 text-secondary">By Kamran Ahmed</span>
+                                    </div>
+                                </div><!-- end card-body -->
+                            </a><!-- end card -->
+                        </div><!-- end swiper-slider -->
+                    </div>
+                    <!-- If we need pagination -->
+                    <div class="swiper-pagination"></div>
+                </div><!-- end swiper-container -->
+            </div><!-- end container -->
+        </section><!-- end recent-section -->
         <section class="section-space trending-section bg-gray">
             <div class="container">
                 <div class="section-head text-center">
@@ -858,7 +997,7 @@
         <section class="section-space how-it-work-section">
             <div class="container">
                 <div class="section-head text-center">
-                    <h2 class="mb-3">Create and sell your NFTs</h2>
+                    <h2 class="mb-3">Mint, Buy and Sell or Just Launch Your Own NFT Store</h2>
                     <p>This is just a simple text made for this unique and awesome template, you can replace it with any text. It is a long established fact.</p>
                 </div><!-- end section-head -->
                 <div class="row g-gs justify-content-center">
@@ -893,80 +1032,39 @@
                 </div><!-- end row -->
             </div><!-- end container -->
         </section><!-- end how-it-work-section -->
-        <section class="category-section section-space bg-gray">
+        <section class="fun-fact-section bg-gray section-space">
             <div class="container">
-                <div class="section-head text-center">
-                    <h2 class="mb-3">Browse by category</h2>
-                    <p>This is just a simple text made for this unique and awesome template, you can replace it with any text. It is a long established fact.</p>
-                </div><!-- end section-head -->
                 <div class="row g-gs">
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-purple ">
+                    <div class="col-md-4 col-lg-4 col-sm-6">
+                        <div class="card card-counter text-center">
                             <div class="card-body card-body-s1">
-                                <span class="icon ni ni-camera mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Artwork</h5>
-                            </div>
-                        </a>
+                                <img src="images/thumb/icon-employees.svg" alt="" class="mb-3">
+                                <h3 class="mb-1">Over 400+</h3>
+                                <p>Total Members</p>
+                            </div><!-- end card-body -->
+                        </div><!-- end card -->
                     </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-blue">
+                    <div class="col-md-4 col-lg-4 col-sm-6">
+                        <div class="card card-counter text-center">
                             <div class="card-body card-body-s1">
-                                <span class="icon ni ni-music mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Music</h5>
-                            </div>
-                        </a>
+                                <img src="images/thumb/icon-users.svg" alt="" class="mb-3">
+                                <h3 class="mb-1">Over 40+</h3>
+                                <p>Total Countries</p>
+                            </div><!-- end card-body -->
+                        </div><!-- end card -->
                     </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-pink">
+                    <div class="col-md-4 col-lg-4 col-sm-12">
+                        <div class="card card-counter text-center">
                             <div class="card-body card-body-s1">
-                                <span class="icon ni ni-search mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Domain Names</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-orange">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-globe mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Virtual Worlds</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-yellow">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-user mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Trending Cards</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-green">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-opt-alt-fill mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Collectibles</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-teal">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-hot-fill mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Sports</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-cyan">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-setting mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Utility</h5>
-                            </div>
-                        </a>
+                                <img src="images/thumb/icon-nfts.svg" alt="" class="mb-3">
+                                <h3 class="mb-1">Over 1000+</h3>
+                                <p>Total NFTs</p>
+                            </div><!-- end card-body -->
+                        </div><!-- end card -->
                     </div><!-- end col -->
                 </div><!-- end row -->
             </div><!-- end container -->
-        </section><!-- end category-section -->
+        </section><!-- end fun-fact-section -->
         <section class="subscibe-section section-space-sm">
             <div class="container">
                 <div class="join-form-wrap">

@@ -18,8 +18,8 @@
 
 <body>
     <div class="page-wrap">
-        <header class="header-section has-header-main bg-gradient-2">
-            <div class="header-main is-sticky is-transparent">
+        <header class="header-section has-header-main bg-gradient">
+            <div class="header-main is-sticky">
                 <div class="container">
                     <div class="header-wrap">
                         <div class="header-logo">
@@ -161,22 +161,27 @@
                     </div><!-- .header-warp-->
                 </div><!-- .container-->
             </div><!-- .header-main-->
-            <div class="hero-wrap hero-wrap-2 section-space">
+            <div class="hero-wrap">
                 <div class="container">
-                    <div class="row align-items-center flex-md-row-reverse justify-content-between">
-                        <div class="col-lg-5 col-sm-9 col-md-6">
-                            <div class="hero-image">
-                                <img src="images/thumb/nft-img.png" alt="" class="w-100">
+                    <div class="row align-items-center flex-md-row-reverse">
+                        <div class="col-lg-6 col-sm-9 col-md-6">
+                            <div class="hero-image hero-image-mobile">
+                                <img src="images/thumb/nft.jpg" alt="" class="w-100">
                             </div>
-                        </div><!-- end col-lg-5 -->
+                        </div><!-- end col-lg-6 -->
                         <div class="col-lg-6 col-md-6">
-                            <div class="hero-content pb-0 pt-md-0 pe-lg-4">
-                                <h1 class="hero-title mb-4">Create, sell or collect digital items</h1>
-                                <p class="hero-text mb-4 pb-1">Complete account of the system, and expound the actual teachings of the great explorer of human happiness.</p>
-                                <!-- button group -->
-                                <ul class="btns-group hero-btns">
-                                    <li><a href="explore.html" class="btn btn-lg btn-dark">Explore</a></li>
-                                    <li><a href="create.html" class="btn btn-lg btn-outline-dark">Create</a></li>
+                            <div class="hero-content">
+                                <h5 class="mb-3 text-uppercase hero-text">auction ending in</h5>
+                                <div class="countdown-timer d-flex align-items-center" id="counter" data-exp-time="2022-5-30 23:30:00"></div>
+                                <h1 class="hero-title mb-4">Swimming into this amazing world</h1>
+                                <h6 class="mb-2 text-uppercase hero-text hero-text-s1 text-dark-gray">current bid</h6>
+                                <div class="d-flex align-items-center mb-4">
+                                    <h2 class="fs-7 me-3">3.069 ETH</h2>
+                                    <span class="fw-semibold">$10,814.02</span>
+                                </div>
+                                <ul class="hero-btns btns-group">
+                                    <li><a href="product-details-v1.html" class="btn btn-lg btn-dark">Place a Bid</a></li>
+                                    <li><a href="explore.html" class="btn btn-lg bg-dark-dim">View Artwork</a></li>
                                 </ul>
                             </div><!-- hero-content -->
                         </div><!-- col-lg-6 -->
@@ -184,53 +189,7 @@
                 </div><!-- .container-->
             </div><!-- end hero-wrap -->
         </header><!-- end header-section -->
-        <section class="section-space-b feature-section">
-            <div class="container">
-                <div class="section-head text-center">
-                    <h2 class="mb-3">Exclusive EnftyMart drops</h2>
-                    <p>This is just a simple text made for this unique and awesome template, you can replace it with any text. It is a long established fact.</p>
-                </div><!-- end section-head -->
-                <div class="row g-gs">
-                    <div class="col-sm-6 col-md-6 col-lg-3">
-                        <a href="product-details-v1.html" class="card card-full">
-                            <img src="images/thumb/art.jpg" class="card-img-top" alt="">
-                            <div class="card-body p-4">
-                                <h5 class="card-title card-title-effect">Seasons by AlexSmith</h5>
-                                <p class="small">AlexSmith's Summer Collection featuring Time.</p>
-                            </div><!-- end card-body -->
-                        </a><!-- end card -->
-                    </div><!-- end col -->
-                    <div class="col-sm-6 col-md-6 col-lg-3">
-                        <a href="product-details-v1.html" class="card card-full">
-                            <img src="images/thumb/art-2.jpg" class="card-img-top" alt="">
-                            <div class="card-body p-4">
-                                <h5 class="card-title card-title-effect">Kavin Martin EnftyMart.io</h5>
-                                <p class="small">After a sold-out Art Blocks drop, Martin is back with.</p>
-                            </div><!-- end card-body -->
-                        </a><!-- end card -->
-                    </div><!-- end col -->
-                    <div class="col-sm-6 col-md-6 col-lg-3">
-                        <a href="product-details-v1.html" class="card card-full">
-                            <img src="images/thumb/art-3.jpg" class="card-img-top" alt="">
-                            <div class="card-body p-4">
-                                <h5 class="card-title card-title-effect">Kavin Martin EnftyMart.io</h5>
-                                <p class="small">After a sold-out Art Blocks drop, Martin is back with.</p>
-                            </div><!-- end card-body -->
-                        </a><!-- end card -->
-                    </div><!-- end col -->
-                    <div class="col-sm-6 col-md-6 col-lg-3">
-                        <a href="product-details-v1.html" class="card card-full">
-                            <img src="images/thumb/art-4.jpg" class="card-img-top" alt="">
-                            <div class="card-body p-4">
-                                <h5 class="card-title card-title-effect">Tyronejkd Universe</h5>
-                                <p class="small">After a sold-out Art Blocks drop, Martin is back with.</p>
-                            </div><!-- end card-body -->
-                        </a><!-- end card -->
-                    </div><!-- end col -->
-                </div><!-- end row -->
-            </div><!-- end container -->
-        </section><!-- end feature-section-->
-        <section class="section-space trending-section bg-gray">
+        <section class="section-space trending-section">
             <div class="container">
                 <div class="section-head text-center">
                     <h2 class="mb-3">Trending Auctions</h2>
@@ -855,138 +814,297 @@
                 </div>
             </div><!-- end container -->
         </section><!-- end trending-section -->
-        <section class="section-space how-it-work-section">
+        <section class="section-space-b featured-creator-section">
             <div class="container">
                 <div class="section-head text-center">
-                    <h2 class="mb-3">Create and sell your NFTs</h2>
+                    <h2 class="mb-3">Featured Creators</h2>
                     <p>This is just a simple text made for this unique and awesome template, you can replace it with any text. It is a long established fact.</p>
                 </div><!-- end section-head -->
-                <div class="row g-gs justify-content-center">
-                    <div class="col-10 col-sm-6 col-md-6 col-lg-3">
-                        <div class="card-htw text-center">
-                            <span class="icon ni ni-wallet icon-lg icon-circle shadow-sm icon-wbg mx-auto mb-4 text-primary"></span>
-                            <h4 class="mb-3">Set up your wallet</h4>
-                            <p class="card-text-s1">Once you’ve set up your wallet of choice, connect it to EnftyMart by clicking the.</p>
-                        </div>
-                    </div><!-- end col -->
-                    <div class="col-10 col-sm-6 col-md-6 col-lg-3">
-                        <div class="card-htw text-center">
-                            <span class="icon ni ni-setting icon-lg icon-circle shadow-sm icon-wbg mx-auto mb-4 text-danger"></span>
-                            <h4 class="mb-3">Create collection</h4>
-                            <p class="card-text-s1">Click <a href="profile.html" class="btn-link">My Collections</a> and set up your collection. Add social links, a description.</p>
-                        </div>
-                    </div><!-- end col -->
-                    <div class="col-10 col-sm-6 col-md-6 col-lg-3">
-                        <div class="card-htw text-center">
-                            <span class="icon ni ni-camera icon-lg icon-circle shadow-sm icon-wbg mx-auto mb-4 text-info"></span>
-                            <h4 class="mb-3">Add your NFTs</h4>
-                            <p class="card-text-s1">Upload your work (image, video, audio, or 3D art), add a title and description.</p>
-                        </div>
-                    </div><!-- end col -->
-                    <div class="col-10 col-sm-6 col-md-6 col-lg-3">
-                        <div class="card-htw text-center">
-                            <span class="icon ni ni-money icon-lg icon-circle shadow-sm icon-wbg mx-auto mb-4 text-success"></span>
-                            <h4 class="mb-3">List them for sale</h4>
-                            <p class="card-text-s1">Choose between auctions, fixed-price listings, and declining-price listings.</p>
-                        </div>
-                    </div><!-- end col -->
-                </div><!-- end row -->
+                <div class="swiper swiper-carousel swiper-pagination-space" data-breakpoints='{
+                    "0":{"slidesPerView":1,"slidesPerGroup":1},
+                    "768":{"slidesPerView":2,"slidesPerGroup":2},
+                    "992":{"slidesPerView":3,"slidesPerGroup":3}
+                    }' data-loop="true" navigation="true" data-autoplay="false" data-speed="500" data-centeredslides="false">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="card card-creator">
+                                <a href="author.html" class="d-block">
+                                    <img src="images/thumb/art.jpg" class="card-img-top" alt="birds art image">
+                                </a>
+                                <div class="card-body card-body-s1">
+                                    <a href="author.html" class="avatar avatar-1">
+                                        <img src="images/thumb/avatar.jpg" alt="avatar">
+                                    </a>
+                                    <h4 class="card-title mt-4 pt-2"><a href="author.html">Takeshi Murata</a></h4>
+                                    <p class="card-text mt-1 mb-3">Complete account of the system, and expound the actual things.</p>
+                                    <p class="text-dark-gray">
+                                        <span class="me-3 me-xl-4">
+                                            <strong class="text-black">756</strong> Followers </span>
+                                        <span>
+                                            <strong class="text-black">30</strong> Following </span>
+                                    </p>
+                                    <p class="mb-4 mt-1">3.45 ETH Last Sold</p>
+                                    <ul class="btns-group">
+                                        <li><a href="author.html" class="btn bg-dark-dim">Follow</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- end card -->
+                        </div><!-- end swiper-slide -->
+                        <div class="swiper-slide">
+                            <div class="card card-creator">
+                                <a href="author.html" class="d-block">
+                                    <img src="images/thumb/art-2.jpg" class="card-img-top" alt="birds art image">
+                                </a>
+                                <div class="card-body card-body-s1">
+                                    <a href="author.html" class="avatar avatar-1">
+                                        <img src="images/thumb/avatar-2.jpg" alt="avatar">
+                                    </a>
+                                    <h4 class="card-title mt-4 pt-2"><a href="author.html">Alex Smith</a></h4>
+                                    <p class="card-text mt-1 mb-3">Complete account of the system, and expound the actual things.</p>
+                                    <p class="text-dark-gray">
+                                        <span class="me-3 me-xl-4">
+                                            <strong class="text-black">202</strong> Followers </span>
+                                        <span>
+                                            <strong class="text-black">10</strong> Following </span>
+                                    </p>
+                                    <p class="mb-4 mt-1">1.23 ETH Last Sold</p>
+                                    <ul class="btns-group">
+                                        <li><a href="author.html" class="btn bg-dark-dim">Follow</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- end card -->
+                        </div><!-- end swiper-slide -->
+                        <div class="swiper-slide">
+                            <div class="card card-creator">
+                                <a href="author.html" class="d-block">
+                                    <img src="images/thumb/art-3.jpg" class="card-img-top" alt="birds art image">
+                                </a>
+                                <div class="card-body card-body-s1">
+                                    <a href="author.html" class="avatar avatar-1">
+                                        <img src="images/thumb/avatar-3.jpg" alt="avatar">
+                                    </a>
+                                    <h4 class="card-title mt-4 pt-2"><a href="author.html">Kevin Martin</a></h4>
+                                    <p class="card-text mt-1 mb-3">Complete account of the system, and expound the actual things.</p>
+                                    <p class="text-dark-gray">
+                                        <span class="me-3 me-xl-4">
+                                            <strong class="text-black">321</strong> Followers </span>
+                                        <span>
+                                            <strong class="text-black">34</strong> Following </span>
+                                    </p>
+                                    <p class="mb-4 mt-1">1.15 ETH Last Sold</p>
+                                    <ul class="btns-group">
+                                        <li><a href="author.html" class="btn bg-dark-dim">Follow</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- end card -->
+                        </div><!-- end swiper-slide -->
+                        <div class="swiper-slide">
+                            <div class="card card-creator">
+                                <a href="author.html" class="d-block">
+                                    <img src="images/thumb/art-4.jpg" class="card-img-top" alt="birds art image">
+                                </a>
+                                <div class="card-body card-body-s1">
+                                    <a href="author.html" class="avatar avatar-1">
+                                        <img src="images/thumb/avatar-4.jpg" alt="avatar">
+                                    </a>
+                                    <h4 class="card-title mt-4 pt-2"><a href="author.html">Jhonatan Doe</a></h4>
+                                    <p class="card-text mt-1 mb-3">Complete account of the system, and expound the actual things.</p>
+                                    <p class="text-dark-gray">
+                                        <span class="me-3 me-xl-4">
+                                            <strong class="text-black">232</strong> Followers </span>
+                                        <span>
+                                            <strong class="text-black">20</strong> Following </span>
+                                    </p>
+                                    <p class="mb-4 mt-1">3.45 ETH Last Sold</p>
+                                    <ul class="btns-group">
+                                        <li><a href="author.html" class="btn bg-dark-dim">Follow</a></li>
+                                    </ul>
+                                </div>
+                            </div><!-- end card -->
+                        </div><!-- end swiper-slide -->
+                    </div><!-- end swiper-wrapper -->
+                    <!-- If we need pagination buttons -->
+                    <div class="swiper-pagination"></div>
+                </div><!-- end swiper -->
+                <div class="text-center mt-5">
+                    <a href="author.html" class="btn-link btn-link-s1">View all creators</a>
+                </div>
             </div><!-- end container -->
-        </section><!-- end how-it-work-section -->
-        <section class="category-section section-space bg-gray">
+        </section><!-- end featured-creator-section -->
+        <section class="section-space-b blog-section">
             <div class="container">
                 <div class="section-head text-center">
-                    <h2 class="mb-3">Browse by category</h2>
+                    <h2 class="mb-3">Check Out Our News</h2>
                     <p>This is just a simple text made for this unique and awesome template, you can replace it with any text. It is a long established fact.</p>
                 </div><!-- end section-head -->
-                <div class="row g-gs">
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-purple ">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-camera mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Artwork</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-blue">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-music mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Music</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-pink">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-search mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Domain Names</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-orange">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-globe mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Virtual Worlds</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-yellow">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-user mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Trending Cards</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-green">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-opt-alt-fill mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Collectibles</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-teal">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-hot-fill mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Sports</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                    <div class="col-lg-3 col-6 col-md-4">
-                        <a href="#" class="card card-cat h-100 text-center text-cyan">
-                            <div class="card-body card-body-s1">
-                                <span class="icon ni ni-setting mb-3 mx-auto icon-circle icon-wbg icon-lg"></span>
-                                <h5 class="card-cat-title">Utility</h5>
-                            </div>
-                        </a>
-                    </div><!-- end col -->
-                </div><!-- end row -->
+                <div class="swiper swiper-carousel swiper-pagination-space" data-breakpoints='{
+                    "0":{"slidesPerView":1,"slidesPerGroup":1},
+                    "768":{"slidesPerView":2,"slidesPerGroup":2},
+                    "992":{"slidesPerView":3,"slidesPerGroup":3}
+                    }' data-loop="true" navigation="true" data-autoplay="false" data-speed="500" data-centeredslides="false">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="card card-blog">
+                                <a href="news-detail.html" class="d-block card-image">
+                                    <img src="images/thumb/blog-img.jpg" class="card-img-top" alt="">
+                                    <div class="bg-dark-transparent card-overlay">
+                                        <div class="d-flex align-items-center card-author">
+                                            <div class="flex-shrink-0 avatar avatar-2">
+                                                <img src="images/thumb/avatar.jpg" alt="">
+                                            </div>
+                                            <div class="flex-grow-1 ms-2 text-white">
+                                                <span>Alex Smith</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="card-body card-body-s1">
+                                    <h4 class="card-title mb-3">
+                                        <a href="news-detail.html">Enter Linda Dounia's Cyber Baat World</a>
+                                    </h4>
+                                    <p class="card-text">Predictions for how secondary NFT sales will revolutionize industries.</p>
+                                </div><!-- end card-body -->
+                                <hr class="my-0">
+                                <div class="card-body card-body-s1 py-3">
+                                    <div class="card-action-info">
+                                        <span>
+                                            <em class="ni ni-calender-date me-1"></em>25 Apr 2022 </span>
+                                        <span>
+                                            <span class="me-3">
+                                                <em class="ni ni-comments me-1"></em>25 </span>
+                                            <span>
+                                                <em class="ni ni-heart me-1"></em>38 </span>
+                                        </span>
+                                    </div><!-- end card-action-info -->
+                                </div><!-- end card-body -->
+                            </div><!-- end card -->
+                        </div><!-- end swiper-slide -->
+                        <div class="swiper-slide">
+                            <div class="card card-blog">
+                                <a href="news-detail.html" class="d-block card-image">
+                                    <img src="images/thumb/blog-img-2.jpg" class="card-img-top" alt="">
+                                    <div class="bg-dark-transparent card-overlay">
+                                        <div class="d-flex align-items-center card-author">
+                                            <div class="flex-shrink-0 avatar avatar-2">
+                                                <img src="images/thumb/avatar-2.jpg" alt="">
+                                            </div>
+                                            <div class="flex-grow-1 ms-2 text-white">
+                                                <span>Kevin Martin</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="card-body card-body-s1">
+                                    <h4 class="card-title mb-3">
+                                        <a href="news-detail.html">Artist Invite: Yung Jake and Lucien Smith</a>
+                                    </h4>
+                                    <p class="card-text">Art world friends and confidants share their thoughts on championing</p>
+                                </div><!-- end card-body -->
+                                <hr class="my-0">
+                                <div class="card-body card-body-s1 py-3">
+                                    <div class="card-action-info">
+                                        <span>
+                                            <em class="ni ni-calender-date me-1"></em>26 Apr 2022 </span>
+                                        <span>
+                                            <span class="me-3">
+                                                <em class="ni ni-comments me-1"></em>28 </span>
+                                            <span>
+                                                <em class="ni ni-heart me-1"></em>23 </span>
+                                        </span>
+                                    </div><!-- end card-action-info -->
+                                </div><!-- end card-body -->
+                            </div><!-- end card -->
+                        </div><!-- end swiper-slide -->
+                        <div class="swiper-slide">
+                            <div class="card card-blog">
+                                <a href="news-detail.html" class="d-block card-image">
+                                    <img src="images/thumb/blog-img-3.jpg" class="card-img-top" alt="">
+                                    <div class="bg-dark-transparent card-overlay">
+                                        <div class="d-flex align-items-center card-author">
+                                            <div class="flex-shrink-0 avatar avatar-2">
+                                                <img src="images/thumb/avatar-3.jpg" alt="">
+                                            </div>
+                                            <div class="flex-grow-1 ms-2 text-white">
+                                                <span>Kamran Ahmed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="card-body card-body-s1">
+                                    <h4 class="card-title mb-3">
+                                        <a href="news-detail.html">Visual storytelling with Alejandro Cartagena.</a>
+                                    </h4>
+                                    <p class="card-text">A photo-based interview with one of the leading photographers in NFTs.</p>
+                                </div><!-- end card-body -->
+                                <hr class="my-0">
+                                <div class="card-body card-body-s1 py-3">
+                                    <div class="card-action-info">
+                                        <span>
+                                            <em class="ni ni-calender-date me-1"></em>27 Apr 2022 </span>
+                                        <span>
+                                            <span class="me-3">
+                                                <em class="ni ni-comments me-1"></em>29 </span>
+                                            <span>
+                                                <em class="ni ni-heart me-1"></em>24 </span>
+                                        </span>
+                                    </div><!-- end card-action-info -->
+                                </div><!-- end card-body -->
+                            </div><!-- end card -->
+                        </div><!-- end swiper-slide -->
+                        <div class="swiper-slide">
+                            <div class="card card-blog">
+                                <a href="news-detail.html" class="d-block card-image">
+                                    <img src="images/thumb/blog-img-4.jpg" class="card-img-top" alt="">
+                                    <div class="bg-dark-transparent card-overlay">
+                                        <div class="d-flex align-items-center card-author">
+                                            <div class="flex-shrink-0 avatar avatar-2">
+                                                <img src="images/thumb/avatar-4.jpg" alt="">
+                                            </div>
+                                            <div class="flex-grow-1 ms-2 text-white">
+                                                <span>Jhon Doe</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="card-body card-body-s1">
+                                    <h4 class="card-title mb-3">
+                                        <a href="news-detail.html">Announcing Our $100m Raise, Led By A1Studio</a>
+                                    </h4>
+                                    <p class="card-text">Predictions for how secondary NFT sales will revolutionize industries.</p>
+                                </div><!-- end card-body -->
+                                <hr class="my-0">
+                                <div class="card-body card-body-s1 py-3">
+                                    <div class="card-action-info">
+                                        <span>
+                                            <em class="ni ni-calender-date me-1"></em>30 Apr 2022 </span>
+                                        <span>
+                                            <span class="me-3">
+                                                <em class="ni ni-comments me-1"></em>22 </span>
+                                            <span>
+                                                <em class="ni ni-heart me-1"></em>12 </span>
+                                        </span>
+                                    </div><!-- end card-action-info -->
+                                </div><!-- end card-body -->
+                            </div><!-- end card -->
+                        </div><!-- end swiper-slide -->
+                    </div><!-- end swiper-wrapper -->
+                    <!-- If we need pagination buttons -->
+                    <div class="swiper-pagination"></div>
+                </div><!-- end swiper -->
+                <div class="text-center mt-5">
+                    <a href="news.html" class="btn-link btn-link-s1">View all articles</a>
+                </div>
             </div><!-- end container -->
-        </section><!-- end category-section -->
-        <section class="subscibe-section section-space-sm">
+        </section><!-- end blog-section -->
+        <section class="section-space-b bg-pattern cta-section">
             <div class="container">
-                <div class="join-form-wrap">
-                    <div class="row g-gs align-items-center">
-                        <div class="col-lg-3">
-                            <h3 class="form-title">Join Our Newsletter</h3>
-                        </div><!-- end col -->
-                        <div class="col-lg-3 col-md-4">
-                            <input class="form-control form-control-s1" type="text" name="name" placeholder="Enter name">
-                        </div><!-- end col -->
-                        <div class="col-lg-3 col-md-4">
-                            <input class="form-control form-control-s1" type="text" name="email" placeholder="Enter email">
-                        </div><!-- end col -->
-                        <div class="col-lg-3 col-md-4">
-                            <a href="#" class="btn btn-dark d-md-block">Subscribe Now</a>
-                        </div><!-- end col -->
-                    </div><!-- row -->
-                </div><!-- end join-form-wrap -->
+                <div class="cta-box text-center">
+                    <h1 class="cta-title mb-4">Tyler Givens on making fantasies a reality</h1>
+                    <p class="cta-text mb-4">I must explain to you how all this mistaken idea of the denouncing and praising pain was born and I will give you complete.</p>
+                    <a href="explore.html" class="btn btn-lg btn-dark">Explore EnftyMart</a>
+                </div><!-- end cta-bod -->
             </div><!-- end container -->
-        </section><!-- end subscibe-section -->
+        </section><!-- end cta-section -->
         <footer class="footer-section bg-dark on-dark">
             <div class="container">
                 <div class="section-space-sm">
