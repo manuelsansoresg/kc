@@ -38,6 +38,38 @@
                     <div class="nk-sidebar-content">
                         <div class="nk-sidebar-menu" data-simplebar>
                             <ul class="nk-menu">
+                                
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-setting-alt-fill"></em></span>
+                                        <span class="nk-menu-text">Configuración</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item has-sub">
+                                            <a href="#" class="nk-menu-link nk-menu-toggle">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
+                                                <span class="nk-menu-text">Usuarios</span>
+                                            </a>
+                                            <ul class="nk-menu-sub">
+                                                <li class="nk-menu-item">
+                                                    <a href="html/project-card.html" class="nk-menu-link"><span class="nk-menu-text">Admin</span></a>
+                                                </li>
+                                                <li class="nk-menu-item">
+                                                    <a href="html/project-card.html" class="nk-menu-link"><span class="nk-menu-text">Asesores</span></a>
+                                                </li>
+                                                <li class="nk-menu-item">
+                                                    <a href="html/project-card.html" class="nk-menu-link"><span class="nk-menu-text">Cliente persona</span></a>
+                                                </li>
+                                                <li class="nk-menu-item">
+                                                    <a href="html/project-card.html" class="nk-menu-link"><span class="nk-menu-text">Cliente financiera</span></a>
+                                                </li>
+        
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                </li>
+
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">Use-Case Preview</h6>
                                 </li><!-- .nk-menu-item -->
