@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -37,7 +38,18 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->user_id == null) {
+            $this->validate($request, [
+                'email' => 'unique:users,email'
+            ]);
+        } else {
+            $this->validate($request, [
+                'email' => 'required|email|unique:users,email,' .$request->user_id . ',id',
+            ]);
+        }
+        
+        User::saveEdit($request);
+        return response()->json(200);
     }
 
     /**
@@ -48,7 +60,8 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        return response()->json($user);
     }
 
     /**
@@ -72,6 +85,11 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function updatePassword(Request $request)
+    {
+        User::changePassword($request);
     }
 
     /**

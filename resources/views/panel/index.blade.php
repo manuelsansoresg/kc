@@ -271,7 +271,7 @@
                                             <div class="nk-tb-col tb-col-sm">
                                                 <div class="user-card">
                                                     <div class="user-avatar user-avatar-sm bg-warning">
-                                                        <img src="./images/avatar/b-sm.jpg" alt="">
+                                                        <img src="/assets_admin/images/avatar/b-sm.jpg" alt="">
                                                     </div>
                                                     <div class="user-name">
                                                         <span class="tb-lead">Blanca Schultz</span>
@@ -405,7 +405,7 @@
                                 </div>
                                 <ul class="nk-activity">
                                     <li class="nk-activity-item">
-                                        <div class="nk-activity-media user-avatar bg-success"><img src="./images/avatar/c-sm.jpg" alt=""></div>
+                                        <div class="nk-activity-media user-avatar bg-success"><img src="/assets_admin/images/avatar/c-sm.jpg" alt=""></div>
                                         <div class="nk-activity-data">
                                             <div class="label">Keith Jensen requested to Widthdrawl.</div>
                                             <span class="time">2 hours ago</span>
@@ -426,7 +426,7 @@
                                         </div>
                                     </li>
                                     <li class="nk-activity-item">
-                                        <div class="nk-activity-media user-avatar bg-purple"><img src="./images/avatar/d-sm.jpg" alt=""></div>
+                                        <div class="nk-activity-media user-avatar bg-purple"><img src="/assets_admin/images/avatar/d-sm.jpg" alt=""></div>
                                         <div class="nk-activity-data">
                                             <div class="label">Nicholas Carr deposited funds.</div>
                                             <span class="time">2 hours ago</span>
@@ -561,7 +561,7 @@
                                 <ul class="nk-support">
                                     <li class="nk-support-item">
                                         <div class="user-avatar">
-                                            <img src="./images/avatar/a-sm.jpg" alt="">
+                                            <img src="/assets_admin/images/avatar/a-sm.jpg" alt="">
                                         </div>
                                         <div class="nk-support-content">
                                             <div class="title">
@@ -585,7 +585,7 @@
                                     </li>
                                     <li class="nk-support-item">
                                         <div class="user-avatar">
-                                            <img src="./images/avatar/b-sm.jpg" alt="">
+                                            <img src="/assets_admin/images/avatar/b-sm.jpg" alt="">
                                         </div>
                                         <div class="nk-support-content">
                                             <div class="title">

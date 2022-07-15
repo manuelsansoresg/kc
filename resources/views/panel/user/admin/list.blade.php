@@ -21,7 +21,7 @@
                                 </div>
                             </div>
                             <div class="nk-block-head-content">
-                                <a class="btn btn-icon btn-primary" onclick="modalUserAdmin(1)"><em
+                                <a class="btn btn-icon btn-primary" onclick="modalUserAdmin(1, null)"><em
                                         class="icon ni ni-plus"></em></a>
                             </div>
                         </div>
@@ -32,18 +32,30 @@
                                 <table id="example" class="table table-striped datatable" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Usuario</th>
+                                            <th>Nombres</th>
+                                            <th>Primer apellido</th>
+                                            <th>Segundo apellido</th>
+                                            <th>Celular</th>
                                             <th>Email</th>
-                                            <th>Teléfono</th>
+                                            <th>Activo</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($users as $query)
                                             <tr>
-                                                <td> {{ $query->name }} {{ $query->last_name }} </td>
+                                                <td> {{ $query->name }} </td>
+                                                <td>{{ $query->last_name }}</td>
+                                                <td>{{ $query->second_last_name }}</td>
+                                                <td> {{ $query->cellphone }} </td>
                                                 <td> {{ $query->email }} </td>
-                                                <td> {{ $query->phone }} </td>
+                                                <td>
+                                                    @if ($query->status === 1)
+                                                        <span class="badge bg-success">Sí</span>
+                                                        @else
+                                                        <span class="badge bg-danger">No</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <div class="drodown"><a href="#"
                                                             class="dropdown-toggle btn btn-icon btn-trigger"
@@ -52,12 +64,12 @@
                                                         <div class="dropdown-menu dropdown-menu-end">
                                                             <ul class="link-list-opt no-bdr">
                                                                 <li>
-                                                                    <a href="#">
-                                                                        <em class="icon ni ni-focus"></em><span>Editar</span></a>
+                                                                    <a class="pointer" onclick="modalUserAdmin(2, {{ $query->id }})">
+                                                                        <em class="icon ni ni-edit"></em><span>Editar</span></a>
                                                                     </li>
                                                                 <li>
-                                                                    <a href="#">
-                                                                        <em class="icon ni ni-eye"></em><span>Cambiar contraseña</span></a>
+                                                                    <a onclick="modalPasswod({{ $query->id }})">
+                                                                        <em class="icon ni ni-lock-alt-fill"></em><span>Cambiar contraseña</span></a>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -76,5 +88,6 @@
             </div>
         </div>
     </div>
-    @include('panel.modal.user.form_admin')
+    @include('panel.modal.user.admin.form')
+    @include('panel.modal.user.form_password')
 @endsection

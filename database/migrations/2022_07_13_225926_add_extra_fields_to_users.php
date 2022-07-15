@@ -15,8 +15,9 @@ class AddExtraFieldsToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('last_name')->after('name')->nullable();
-            $table->string('last_name2')->after('last_name')->nullable();
-            $table->string('phone')->after('last_name2')->nullable();
+            $table->string('second_last_name')->after('last_name')->nullable();
+            $table->smallInteger('status')->after('second_last_name')->nullable()->default(0);
+            $table->string('cellphone')->after('status')->nullable();
         });
     }
 
@@ -29,8 +30,9 @@ class AddExtraFieldsToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('last_name');
-            $table->dropColumn('last_name2');
-            $table->dropColumn('phone');
+            $table->dropColumn('second_last_name');
+            $table->dropColumn('status');
+            $table->dropColumn('cellphone');
         });
     }
 }

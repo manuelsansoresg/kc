@@ -4,22 +4,23 @@
                     class="icon ni ni-cross-sm"></em></a>
             <div class="modal-body modal-body-md">
                 <h5 class="title" id="user-admin-title"></h5>
-                <form method="post" id="frm-modal-user-admin" action="">
+
+                <form method="post" id="frmadmin" action="/panel/user/admin">
+                    @csrf
                     <div class="row gy-4">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label" for="edit-name">Nombre</label>
+                                <label class="form-label" for="frm-user-admin-name">Nombre</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="edit-name"
-                                        value="" required>
+                                    <input type="text" name="name" class="form-control" id="name" value="" >
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group"><label class="form-label">Primer apellido</label>
+                            <div class="form-group">
+                                <label class="form-label">Primer apellido</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="edit-name"
-                                    value="">
+                                    <input type="text" name="last_name" class="form-control" id="last_name" value="" >
                                 </div>
                             </div>
                         </div>
@@ -27,7 +28,7 @@
                             <div class="form-group">
                                 <label class="form-label">Segundo apellido</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="edit-name"
+                                    <input type="text" name="second_last_name" class="form-control" id="second_last_name"
                                     value="">
                                 </div>
                             </div>
@@ -35,40 +36,44 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="edit-open-deal">Celular </label>
-                                <input type="text" class="form-control" id="edit-open-deal"
-                                     value="">
+                                <input type="text" class="form-control" name="cellphone" id="cellphone"
+                                     value="" >
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label" for="edit-close-deal">Email</label>
-                                <input type="text" class="form-control" id="edit-close-deal"
-                                     value=""></div>
+                                <input type="email" name="email" class="form-control" id="email"
+                                     value="" >
+                                <span id="admin_email-error-exist" class="error"  style="display:none">El correo ya se encuentra registrado.</span>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group"><label class="form-label">Status</label>
                                 <div class="form-control-wrap">
                                     <select
-                                        class="form-select js-select2 select2-hidden-accessible" data-select2-id="25"
-                                        tabindex="-1" aria-hidden="true">
-                                        <option value="default_option" data-select2-id="27">Activo</option>
-                                        <option value="pending">Inactivo</option>
+                                        name="status"
+                                        class="form-control" 
+                                        id="status" >
+                                        <option value="1">Activo</option>
+                                        <option value="0">Inactivo</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="content-password" style="display: none">
                             <div class="form-group">
-                                <label class="form-label" for="edit-close-deal">Contraseña</label>
-                                <input type="text" class="form-control" id="edit-close-deal"
-                                     value=""></div>
+                                <label class="form-label" for="frm-user-admin-pass">Contraseña</label>
+                                <input type="password" name="password" class="form-control" id="password"
+                                     value="" ></div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="content-pass_confirm" style="display: none">
                             <div class="form-group">
-                                <label class="form-label" for="edit-close-deal">Confirmar contraseña</label>
-                                <input type="text" class="form-control" id="edit-close-deal"
-                                     value=""></div>
+                                <label class="form-label" for="frm-user-admin-confirm-pass">Confirmar contraseña</label>
+                                <input type="password" class="form-control" name="pass_confirm" id="pass_confirm"
+                                     value="" ></div>
                         </div>
+                        <input type="hidden" id="user_id" name="user_id">
                         <div class="col-12">
                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                 <li>

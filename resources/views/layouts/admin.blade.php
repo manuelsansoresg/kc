@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="./images/favicon.png">
+    <link rel="shortcut icon" href="/assets_admin/images/favicon.png">
     <!-- Page Title  -->
     <title>@yield('title')</title>
     <!-- StyleSheets  -->
@@ -31,8 +31,8 @@
                     </div>
                     <div class="nk-sidebar-brand">
                         <a href="html/index.html" class="logo-link nk-sidebar-logo">
-                            <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
-                            <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                            <img class="logo-light logo-img" src="/assets_admin/images/logo.png" srcset="/assets_admin/images/logo2x.png 2x" alt="logo">
+                            <img class="logo-dark logo-img" src="/assets_admin/images/logo-dark.png" srcset="/assets_admin/images/logo-dark2x.png 2x" alt="logo-dark">
                         </a>
                     </div>
                 </div><!-- .nk-sidebar-element -->
@@ -614,8 +614,8 @@
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="/assets_admin/images/logo.png" srcset="/assets_admin/images/logo2x.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="/assets_admin/images/logo-dark.png" srcset="/assets_admin/images/logo-dark2x.png 2x" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
                             <div class="nk-header-news d-none d-xl-block">
@@ -636,32 +636,32 @@
                                     <li class="dropdown language-dropdown d-none d-sm-block me-n1">
                                         <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
                                             <div class="quick-icon border border-light">
-                                                <img class="icon" src="./images/flags/english-sq.png" alt="">
+                                                <img class="icon" src="/assets_admin/images/flags/english-sq.png" alt="">
                                             </div>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-s1">
                                             <ul class="language-list">
                                                 <li>
                                                     <a href="#" class="language-item">
-                                                        <img src="./images/flags/english.png" alt="" class="language-flag">
+                                                        <img src="/assets_admin/images/flags/english.png" alt="" class="language-flag">
                                                         <span class="language-name">English</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="#" class="language-item">
-                                                        <img src="./images/flags/spanish.png" alt="" class="language-flag">
+                                                        <img src="/assets_admin/images/flags/spanish.png" alt="" class="language-flag">
                                                         <span class="language-name">Español</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="#" class="language-item">
-                                                        <img src="./images/flags/french.png" alt="" class="language-flag">
+                                                        <img src="/assets_admin/images/flags/french.png" alt="" class="language-flag">
                                                         <span class="language-name">Français</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="#" class="language-item">
-                                                        <img src="./images/flags/turkey.png" alt="" class="language-flag">
+                                                        <img src="/assets_admin/images/flags/turkey.png" alt="" class="language-flag">
                                                         <span class="language-name">Türkçe</span>
                                                     </a>
                                                 </li>
@@ -854,109 +854,109 @@
                         <ul class="country-list text-center gy-2">
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/arg.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/arg.png" alt="" class="country-flag">
                                     <span class="country-name">Argentina</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/aus.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/aus.png" alt="" class="country-flag">
                                     <span class="country-name">Australia</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/bangladesh.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/bangladesh.png" alt="" class="country-flag">
                                     <span class="country-name">Bangladesh</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/canada.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/canada.png" alt="" class="country-flag">
                                     <span class="country-name">Canada <small>(English)</small></span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/china.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/china.png" alt="" class="country-flag">
                                     <span class="country-name">Centrafricaine</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/china.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/china.png" alt="" class="country-flag">
                                     <span class="country-name">China</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/french.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/french.png" alt="" class="country-flag">
                                     <span class="country-name">France</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/germany.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/germany.png" alt="" class="country-flag">
                                     <span class="country-name">Germany</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/iran.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/iran.png" alt="" class="country-flag">
                                     <span class="country-name">Iran</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/italy.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/italy.png" alt="" class="country-flag">
                                     <span class="country-name">Italy</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/mexico.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/mexico.png" alt="" class="country-flag">
                                     <span class="country-name">México</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/philipine.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/philipine.png" alt="" class="country-flag">
                                     <span class="country-name">Philippines</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/portugal.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/portugal.png" alt="" class="country-flag">
                                     <span class="country-name">Portugal</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/s-africa.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/s-africa.png" alt="" class="country-flag">
                                     <span class="country-name">South Africa</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/spanish.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/spanish.png" alt="" class="country-flag">
                                     <span class="country-name">Spain</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/switzerland.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/switzerland.png" alt="" class="country-flag">
                                     <span class="country-name">Switzerland</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/uk.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/uk.png" alt="" class="country-flag">
                                     <span class="country-name">United Kingdom</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#" class="country-item">
-                                    <img src="./images/flags/english.png" alt="" class="country-flag">
+                                    <img src="/assets_admin/images/flags/english.png" alt="" class="country-flag">
                                     <span class="country-name">United State</span>
                                 </a>
                             </li>
@@ -967,11 +967,16 @@
         </div><!-- .modla-dialog -->
     </div><!-- .modal -->
     <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
     <script src="/assets_admin/js/bundle.js?ver=3.0.3"></script>
     <script src="/assets_admin/js/scripts.js?ver=3.0.3"></script>
     <script src="/assets_admin/js/charts/gd-default.js?ver=3.0.3"></script>
     <script type="text/javascript" src="/vendor/datatables/datatables.min.js"></script>
-    <script type="text/javascript" src="/vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/vendor/datatables/datatables.min.js"></script>
+    {{-- <script type="text/javascript" src="/vendor/jquery-validation/dist/jquery.validate.js"></script> --}}
+    <script type="text/javascript" src="/vendor/jquery-validation/dist/localization/messages_es.min.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
 </body>
 
