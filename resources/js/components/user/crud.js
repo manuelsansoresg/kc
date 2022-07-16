@@ -1,29 +1,38 @@
 import {showInfo} from '../utilities';
 
-window.modalUserAdmin = function (type, user_id) {
+window.modalUser = function (type, user_id) {
+    let route_datatable = $('#route_datatable').val();
+    
+    $('#frmadmin').trigger("reset");
     if (type === 1) {
-        $('#user-admin-title').html('Crear usuario');
+        $('#user-admin-title').html('Crear usuario '+ route_datatable);
         $('#content-password').show();
         $('#content-pass_confirm').show();
         $('#user_id').val(null);
+        $('#type_user').val(route_datatable);
+
     } else {
-        $('#user-admin-title').html('Editar usuario');
+        $('#user-admin-title').html('Editar usuario '+ route_datatable);
         $('#content-pass_confirm').hide();
         $('#content-password').hide();
         $('#user_id').val(user_id);
         setDataUser(user_id);
+        $('#type_user').val(route_datatable);
+
     }
     
     $('#modal-user-admin').modal('show');
 }
 
 function setDataUser(user_id) {
+    let route_datatable = $('#route_datatable').val();
     axios
-    .get("/panel/user/admin/"+user_id)
+    .get("/panel/user/"+route_datatable+"/"+user_id)
     .then(function (response) {
         let result = response.data;
         $('#name').val(result.name);
         $('#last_name').val(result.last_name);
+        $('#second_last_name').val(result.second_last_name);
         $('#cellphone').val(result.cellphone);
         $('#email').val(result.email);
         $('#status option[value="'+result.status+'"]').attr("selected", "selected");
@@ -76,7 +85,8 @@ $().ready(function () {
             .post("/panel/user/admin", data)
             .then(function (response) {
                 let result = response.data;
-                showInfo(2);
+                showInfo(2, 'dt-admin');
+                $('#modal-user-admin').modal('hide');
             })
             .catch(e => {
                 $('#admin_email-error-exist').show();
@@ -103,12 +113,14 @@ $().ready(function () {
 
             const new_form = document.getElementById("frmpassword");
             const data = new FormData(new_form);
-    
+            let route_datatable = $('#route_datatable').val();
+
             axios
-            .post("/panel/user/admin/password/update", data)
+            .post("/panel/user/"+route_datatable+"/password/update", data)
             .then(function (response) {
                 let result = response.data;
-                showInfo(2);
+                showInfo(2, 'dt-admin');
+                $('#modal-user-password').modal('hide');
             })
             .catch(e => {
              });

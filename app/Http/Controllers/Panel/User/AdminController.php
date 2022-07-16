@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Panel\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class PanelController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,14 @@ class PanelController extends Controller
      */
     public function index()
     {
-        return view('panel.index');
+        return view('panel.user.list', ['title' => 'Admin']);
+    }
+
+    public function list()
+    {
+        $users = User::listDatatable();
+        
+        return response()->json(['data' => $users]);
     }
 
     /**
@@ -24,7 +33,7 @@ class PanelController extends Controller
      */
     public function create()
     {
-        //
+        return view('panel.user.form');
     }
 
     /**
@@ -35,7 +44,18 @@ class PanelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->user_id == null) {
+            $this->validate($request, [
+                'email' => 'unique:users,email'
+            ]);
+        } else {
+            $this->validate($request, [
+                'email' => 'required|email|unique:users,email,' .$request->user_id . ',id',
+            ]);
+        }
+        
+        User::saveEdit($request);
+        return response()->json(200);
     }
 
     /**
@@ -46,7 +66,8 @@ class PanelController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        return response()->json($user);
     }
 
     /**
@@ -70,6 +91,11 @@ class PanelController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function updatePassword(Request $request)
+    {
+        User::changePassword($request);
     }
 
     /**

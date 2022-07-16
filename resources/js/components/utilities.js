@@ -1,4 +1,4 @@
-export function showInfo(redirect) {
+export function showInfo(redirect, idDatatable) {
 
     Swal.fire({
         icon: 'success',
@@ -13,7 +13,11 @@ export function showInfo(redirect) {
             if (redirect == 1) { //*redirect back
                 window.history.back();
             }
-            location.reload();
+            if (idDatatable == null) {
+                location.reload();
+            } else {
+                $('#'+idDatatable).DataTable().ajax.reload();
+            }
         }
     })
 

@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group"><label class="form-label">Status</label>
-                                <div class="form-control-wrap">
+                                <div class="form-control-select">
                                     <select
                                         name="status"
                                         class="form-control" 
@@ -74,6 +74,8 @@
                                      value="" ></div>
                         </div>
                         <input type="hidden" id="user_id" name="user_id">
+                        <input type="hidden" id="type_user" name="type_user">
+                        
                         <div class="col-12">
                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                 <li>

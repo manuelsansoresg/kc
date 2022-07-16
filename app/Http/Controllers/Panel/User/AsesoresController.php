@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Panel\User;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class AsesoresController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,14 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $users = User::getAdmin();
-        return view('panel.user.admin.list', compact('users'));
+        return view('panel.user.list', ['title' => 'Asesor']);
+    }
+
+    public function list()
+    {
+        $users = User::listDatatable(2);
+        
+        return response()->json(['data' => $users]);
     }
 
     /**
@@ -27,7 +32,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('panel.user.admin.form');
+        return view('panel.user.form');
     }
 
     /**

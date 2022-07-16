@@ -1,4 +1,4 @@
-$(document).ready(function () {
+/* $(document).ready(function () {
     $('.datatable').DataTable(
         {
             "language": 
@@ -246,4 +246,4 @@ $(document).ready(function () {
             }  
         }
     );
-});
+}); */

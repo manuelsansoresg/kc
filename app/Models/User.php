@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -22,10 +23,10 @@ class User extends Authenticatable
         'name',
         'last_name',
         'second_last_name',
-        'status',
+        'cellphone',
         'email',
+        'status',
         'password',
-        'cellphone'
     ];
 
     /**
@@ -47,24 +48,37 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public static function getAdmin()
+    public static function getUserRole($role)
     {
-        $users =  User::role('Administrador')->get();
+        $users =  User::select(
+            'id',
+            'name',
+            'last_name',
+            'second_last_name',
+            'cellphone',
+            'email',
+            DB::raw('(CASE 
+            WHEN status = "1" THEN "Sí" 
+            WHEN status = "0" THEN "No" 
+            END) AS status'),
+        )
+            ->role($role)->get();
         return $users;
     }
 
     public static function saveEdit($request)
     {
         if ($request->user_id == null) {
-            $user = new User($request->except(['_token', 'pass_confirm', 'password', 'user_id']));
+            $user = new User($request->except(['_token', 'pass_confirm', 'password', 'user_id', 'type_user']));
             $user->password = bcrypt($request->password);
             $user->save();
         } else {
             $user = User::find($request->user_id);
-            $user->fill($request->except(['_token', 'pass_confirm', 'password', 'user_id']));
+            $user->fill($request->except(['_token', 'pass_confirm', 'password', 'user_id', 'type_user']));
             $user->update();
         }
-        $user->assignRole('Administrador');
+       
+        $user->assignRole(ucfirst($request->type_user));
     }
 
     public static function changePassword($request)
@@ -73,5 +87,36 @@ class User extends Authenticatable
         $user = User::find($user_id);
         $user->password = bcrypt($request->user_password);
         $user->update();
+    }
+
+    public static function listDatatable($type = 1)
+    {
+        if ($type == 1) {
+            $get_users    = self::getUserRole('Administrador');
+        } else {
+            $get_users    = self::getUserRole('Asesor');
+        }
+        
+
+        $users        = array();
+        
+        foreach ($get_users as $user) {
+            $option = \View::make('panel.user.add_option_dt', [ 'type' => 2, 'user_id' => $user->id])->render();
+            $lbl_status = '<span class="badge bg-success">Sí</span>';
+            if ($user->status == 'No') {
+                $lbl_status = '<span class="badge bg-danger">No</span>';
+            }
+            
+            $users[] = array(
+                'name' => $user->name,
+                'last_name' => $user->last_name,
+                'second_last_name' => $user->second_last_name,
+                'cellphone' => $user->cellphone,
+                'email' => $user->email,
+                'status' => $lbl_status,
+                'options' => $option
+            );
+        }
+        return $users;
     }
 }

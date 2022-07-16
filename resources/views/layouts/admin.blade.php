@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link rel="stylesheet" type="text/css" href="/vendor/datatables/datatables.min.css"/>
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
+    <link rel="stylesheet" type="text/css" href="/vendor/toastr/build/toastr.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/app.css"/>
 </head>
 
@@ -57,7 +58,7 @@
                                                     <a href="/panel/user/admin" class="nk-menu-link"><span class="nk-menu-text">Admin</span></a>
                                                 </li>
                                                 <li class="nk-menu-item">
-                                                    <a href="html/project-card.html" class="nk-menu-link"><span class="nk-menu-text">Asesores</span></a>
+                                                    <a href="/panel/user/asesor" class="nk-menu-link"><span class="nk-menu-text">Asesores</span></a>
                                                 </li>
                                                 <li class="nk-menu-item">
                                                     <a href="html/project-card.html" class="nk-menu-link"><span class="nk-menu-text">Cliente persona</span></a>
@@ -977,6 +978,7 @@
     <script type="text/javascript" src="/vendor/datatables/datatables.min.js"></script>
     {{-- <script type="text/javascript" src="/vendor/jquery-validation/dist/jquery.validate.js"></script> --}}
     <script type="text/javascript" src="/vendor/jquery-validation/dist/localization/messages_es.min.js"></script>
+    <script type="text/javascript" src="/vendor/toastr/build/toastr.min.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
 </body>
 
