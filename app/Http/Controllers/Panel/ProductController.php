@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Panel\User;
+namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AdminRequest;
-use App\Models\User;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,12 +15,12 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('panel.user.list', ['title' => 'Administrador']);
+        return view('panel.product.list', ['title' => 'Admin']);
     }
 
     public function list()
     {
-        $users = User::listDatatable();
+        $users = Product::listDatatable();
         
         return response()->json(['data' => $users]);
     }
@@ -33,7 +32,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('panel.user.form');
+        //
     }
 
     /**
@@ -44,18 +43,7 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        
-        if ($request->user_id == null) {
-            $this->validate($request, [
-                'email' => 'unique:users,email'
-            ]);
-        } else {
-            $this->validate($request, [
-                'email' => 'required|email|unique:users,email,' .$request->user_id . ',id',
-            ]);
-        }
-        
-        User::saveEdit($request);
+        Product::saveEdit($request);
         return response()->json(200);
     }
 
@@ -67,7 +55,7 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
+        $user = Product::find($id);
         return response()->json($user);
     }
 
@@ -94,11 +82,6 @@ class AdminController extends Controller
         //
     }
 
-    public function updatePassword(Request $request)
-    {
-        User::changePassword($request);
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -107,6 +90,8 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
+        return response()->json(200);
     }
 }

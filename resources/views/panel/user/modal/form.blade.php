@@ -5,7 +5,7 @@
             <div class="modal-body modal-body-md">
                 <h5 class="title" id="user-admin-title"></h5>
 
-                <form method="post" id="frmadmin" action="/panel/user/admin">
+                <form method="post" id="frmadmin" action="/panel/user/administrador">
                     @csrf
                     <div class="row gy-4">
                         <div class="col-md-6">
@@ -55,6 +55,7 @@
                                         name="status"
                                         class="form-control" 
                                         id="status" >
+                                        <option value="">Selecciona una opción</option>
                                         <option value="1">Activo</option>
                                         <option value="0">Inactivo</option>
                                     </select>

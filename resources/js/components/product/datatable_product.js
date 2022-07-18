@@ -1,14 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     let route = $('#route_datatable').val();
-    let table = new DataTable('#dt-admin', {
+    let table = new DataTable('#dt-product', {
         processing: true,
-        ajax: '/panel/user/'+route+'/list/show',
+        ajax: '/panel/product/list/show',
         columns: [
             { data: 'name' },
-            { data: 'last_name' },
-            { data: 'second_last_name' },
-            { data: 'cellphone' },
-            { data: 'email' },
+            { data: 'service' },
+            { data: 'comment' },
             { data: 'status' },
             { data: 'options',}
         ],

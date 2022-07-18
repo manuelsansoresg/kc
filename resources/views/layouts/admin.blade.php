@@ -55,7 +55,7 @@
                                             </a>
                                             <ul class="nk-menu-sub">
                                                 <li class="nk-menu-item">
-                                                    <a href="/panel/user/admin" class="nk-menu-link"><span class="nk-menu-text">Admin</span></a>
+                                                    <a href="/panel/user/administrador" class="nk-menu-link"><span class="nk-menu-text">Admin</span></a>
                                                 </li>
                                                 <li class="nk-menu-item">
                                                     <a href="/panel/user/asesor" class="nk-menu-link"><span class="nk-menu-text">Asesores</span></a>
@@ -71,6 +71,12 @@
                                         </li>
 
                                     </ul>
+                                    <li class="nk-menu-item">
+                                        <a href="/panel/product" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-card-view"></em></span>
+                                            <span class="nk-menu-text">Productos</span>
+                                        </a>
+                                    </li><!-- .nk-menu-item -->
                                 </li>
 
                                 <li class="nk-menu-heading">

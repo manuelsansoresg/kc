@@ -53,6 +53,7 @@ $().ready(function () {
             last_name: {
                 required: true,
             },
+            
             cellphone: {
                 required: true,
                 number: true,
@@ -73,6 +74,9 @@ $().ready(function () {
                 minlength: 8,
                 equalTo: "#password"
             },
+            status: {
+                required: true,
+            },
         },
         submitHandler: function(form, event){
             event.preventDefault();
@@ -82,7 +86,7 @@ $().ready(function () {
             const data = new FormData(new_form);
     
             axios
-            .post("/panel/user/admin", data)
+            .post("/panel/user/administrador", data)
             .then(function (response) {
                 let result = response.data;
                 showInfo(2, 'dt-admin');
