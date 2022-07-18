@@ -2771,6 +2771,12 @@ function setDataUser(user_id) {
   });
 }
 
+window.deleteUser = function (id) {
+  axios.get("/panel/user/administrador/" + id + "/delete").then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin');
+  })["catch"](function (e) {});
+};
+
 $().ready(function () {
   $("#frmadmin").validate({
     rules: {
