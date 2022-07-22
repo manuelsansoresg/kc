@@ -15,6 +15,10 @@ Route::group(['prefix' => 'user'], function () {
     Route::resource('asesor', '\App\Http\Controllers\Panel\User\AsesoresController')->middleware('auth');
     Route::get('asesor/list/show', ['\App\Http\Controllers\Panel\User\AsesoresController', 'list'])->middleware('auth');
     Route::post('asesor/password/update', ['\App\Http\Controllers\Panel\User\AsesoresController', 'updatePassword'])->middleware('auth');
+    //*cliente persona
+    Route::resource('cliente-persona', '\App\Http\Controllers\Panel\User\ClientController')->middleware('auth');
+    Route::get('cliente-persona/list/show', ['\App\Http\Controllers\Panel\User\ClientController', 'list'])->middleware('auth');
+    Route::post('cliente-persona/password/update', ['\App\Http\Controllers\Panel\User\ClientController', 'updatePassword'])->middleware('auth');
     
     //*esta ruta equivale tanto como administrador como asesor
     Route::get('administrador/{id}/delete', ['\App\Http\Controllers\Panel\User\AdminController', 'destroy'])->middleware('auth');

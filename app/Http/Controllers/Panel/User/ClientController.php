@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class AsesoresController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +15,12 @@ class AsesoresController extends Controller
      */
     public function index()
     {
-        return view('panel.user.list', ['title' => 'Asesor', 'route' => 'asesor']);
+        return view('panel.user.list', ['title' => 'Cliente persona', 'route' => 'cliente-persona']);
     }
 
     public function list()
     {
-        $users = User::listDatatable(2);
+        $users = User::listDatatable(3);
         
         return response()->json(['data' => $users]);
     }
@@ -96,7 +96,7 @@ class AsesoresController extends Controller
     {
         User::changePassword($request);
     }
-
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -105,6 +105,8 @@ class AsesoresController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return response()->json(200);
     }
 }

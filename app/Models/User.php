@@ -77,8 +77,11 @@ class User extends Authenticatable
             $user->fill($request->except(['_token', 'pass_confirm', 'password', 'user_id', 'type_user']));
             $user->update();
         }
-       
-        $user->assignRole(ucfirst($request->type_user));
+        $role = $request->type_user;
+        if ($request->type_user == 'cliente-persona') {
+            $role = 'Cliente persona';
+        }
+        $user->assignRole(ucfirst($role));
     }
 
     public static function changePassword($request)
@@ -93,6 +96,8 @@ class User extends Authenticatable
     {
         if ($type == 1) {
             $get_users    = self::getUserRole('Administrador');
+        } elseif ($type == 3) {
+            $get_users    = self::getUserRole('Cliente persona');
         } else {
             $get_users    = self::getUserRole('Asesor');
         }

@@ -2736,10 +2736,11 @@ __webpack_require__.r(__webpack_exports__);
 
 window.modalUser = function (type, user_id) {
   var route_datatable = $('#route_datatable').val();
+  var title = $('#title').val();
   $('#frmadmin').trigger("reset");
 
   if (type === 1) {
-    $('#user-admin-title').html('Crear usuario ' + route_datatable);
+    $('#user-admin-title').html('Crear usuario ' + title);
     $('#content-password').show();
     $('#content-pass_confirm').show();
     $('#user_id').val(null);

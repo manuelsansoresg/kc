@@ -2,10 +2,10 @@ import {showInfo} from '../utilities';
 
 window.modalUser = function (type, user_id) {
     let route_datatable = $('#route_datatable').val();
-    
+    let title = $('#title').val();
     $('#frmadmin').trigger("reset");
     if (type === 1) {
-        $('#user-admin-title').html('Crear usuario '+ route_datatable);
+        $('#user-admin-title').html('Crear usuario '+ title);
         $('#content-password').show();
         $('#content-pass_confirm').show();
         $('#user_id').val(null);

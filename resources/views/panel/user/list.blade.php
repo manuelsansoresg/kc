@@ -50,7 +50,14 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="route_datatable" value="{{ strtolower($title) }}">
-    @include('panel.user.modal.form')
+    <input type="hidden" id="route_datatable" value="{{ $route }}">
+    <input type="hidden" id="title" value="{{ strtolower($title) }}">
+    
+    @if ($route == 'cliente-persona')
+        @include('panel.user.modal.form_client_persona')
+    @else
+        @include('panel.user.modal.form')
+    @endif
+
     @include('panel.user.modal.form_password')
 @endsection

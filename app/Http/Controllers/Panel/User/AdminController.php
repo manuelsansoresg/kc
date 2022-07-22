@@ -16,7 +16,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('panel.user.list', ['title' => 'Administrador']);
+        return view('panel.user.list', ['title' => 'Administrador', 'route' => 'administrador']);
     }
 
     public function list()
