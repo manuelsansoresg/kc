@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Panel\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\CFinancial;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class AsesoresController extends Controller
+class ClientFinancieraController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +16,15 @@ class AsesoresController extends Controller
      */
     public function index()
     {
-        return view('panel.user.list', ['title' => 'Asesor', 'route' => 'asesor']);
+        $financials = CFinancial::all();
+        $title = 'Cliente financiera';
+        $route = 'cliente-financiera';
+        return view('panel.user.list', ['title' => $title, 'route' => $route, 'financials' => $financials]);
     }
 
     public function list()
     {
-        $users = User::listDatatable(2);
+        $users = User::listDatatable(4);
         
         return response()->json(['data' => $users]);
     }
@@ -43,7 +47,6 @@ class AsesoresController extends Controller
      */
     public function store(Request $request)
     {
-        
     }
 
     /**
@@ -94,6 +97,8 @@ class AsesoresController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return response()->json(200);
     }
 }

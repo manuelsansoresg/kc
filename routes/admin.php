@@ -16,9 +16,13 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('asesor/list/show', ['\App\Http\Controllers\Panel\User\AsesoresController', 'list'])->middleware('auth');
     Route::post('asesor/password/update', ['\App\Http\Controllers\Panel\User\AsesoresController', 'updatePassword'])->middleware('auth');
     //*cliente persona
-    Route::resource('cliente-persona', '\App\Http\Controllers\Panel\User\ClientController')->middleware('auth');
-    Route::get('cliente-persona/list/show', ['\App\Http\Controllers\Panel\User\ClientController', 'list'])->middleware('auth');
-    Route::post('cliente-persona/password/update', ['\App\Http\Controllers\Panel\User\ClientController', 'updatePassword'])->middleware('auth');
+    Route::resource('cliente-persona', '\App\Http\Controllers\Panel\User\ClientPersonaController')->middleware('auth');
+    Route::get('cliente-persona/list/show', ['\App\Http\Controllers\Panel\User\ClientPersonaController', 'list'])->middleware('auth');
+    Route::post('cliente-persona/password/update', ['\App\Http\Controllers\Panel\User\ClientPersonaController', 'updatePassword'])->middleware('auth');
+    //*cliente financiera
+    Route::resource('cliente-financiera', '\App\Http\Controllers\Panel\User\ClientFinancieraController')->middleware('auth');
+    Route::get('cliente-financiera/list/show', ['\App\Http\Controllers\Panel\User\ClientFinancieraController', 'list'])->middleware('auth');
+    Route::post('cliente-financiera/password/update', ['\App\Http\Controllers\Panel\User\ClientFinancieraController', 'updatePassword'])->middleware('auth');
     
     //*esta ruta equivale tanto como administrador como asesor
     Route::get('administrador/{id}/delete', ['\App\Http\Controllers\Panel\User\AdminController', 'destroy'])->middleware('auth');

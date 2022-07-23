@@ -2761,6 +2761,27 @@ function setDataUser(user_id) {
   var route_datatable = $('#route_datatable').val();
   axios.get("/panel/user/" + route_datatable + "/" + user_id).then(function (response) {
     var result = response.data;
+    var razon_social = result.razon_social;
+
+    if (razon_social != '') {
+      //*limpiar los valores razon social
+      $('#content-razon').hide();
+      $('#razon_social').val('');
+      var type_person = result.type_person;
+      $('#c_financial_id option[value="' + result.c_financial_id + '"]').attr("selected", "selected");
+      $('#type_person option[value="' + result.type_person + '"]').attr("selected", "selected");
+
+      if (type_person == 2) {
+        $('#razon_social').val(result.razon_social);
+        $('#content-razon').show();
+      }
+    }
+
+    if (document.getElementById('type_person')) {
+      $('#c_financial_id option[value="' + result.c_financial_id + '"]').attr("selected", "selected");
+      $('#type_person option[value="' + result.type_person + '"]').attr("selected", "selected");
+    }
+
     $('#name').val(result.name);
     $('#last_name').val(result.last_name);
     $('#second_last_name').val(result.second_last_name);
@@ -2790,7 +2811,7 @@ $().ready(function () {
       cellphone: {
         required: true,
         number: true,
-        minlength: 8
+        minlength: 10
       },
       email: {
         required: true,
@@ -2823,6 +2844,64 @@ $().ready(function () {
       });
     }
   });
+  $("#frmfinanciera").validate({
+    rules: {
+      c_financial_id: {
+        required: true
+      },
+      type_person: {
+        required: true
+      },
+      razon_social: {
+        required: function required(element) {
+          var type_person = $("#type_person").val();
+
+          if (type_person == 2) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      },
+      name: {
+        required: true
+      },
+      last_name: {
+        required: true
+      },
+      cellphone: {
+        number: true,
+        minlength: 10
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 8
+      },
+      pass_confirm: {
+        required: true,
+        minlength: 8,
+        equalTo: "#password"
+      },
+      status: {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#admin_email-error-exist').hide();
+      var new_form = document.getElementById("frmfinanciera");
+      var data = new FormData(new_form);
+      axios.post("/panel/user/administrador", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin');
+        $('#modal-user-admin').modal('hide');
+      })["catch"](function (e) {});
+    }
+  });
   $("#frmpassword").validate({
     rules: {
       user_password: {
@@ -2852,6 +2931,15 @@ $().ready(function () {
 window.modalPasswod = function (user_id) {
   $('#password_user_id').val(user_id);
   $('#modal-user-password').modal('show');
+};
+
+window.showRazon = function () {
+  var type_person = $('#type_person').val();
+  $('#content-razon').hide();
+
+  if (type_person == 2) {
+    $('#content-razon').show();
+  }
 };
 
 /***/ }),

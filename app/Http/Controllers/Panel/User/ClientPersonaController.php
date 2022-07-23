@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class ClientController extends Controller
+class ClientPersonaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -43,18 +43,7 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->user_id == null) {
-            $this->validate($request, [
-                'email' => 'unique:users,email'
-            ]);
-        } else {
-            $this->validate($request, [
-                'email' => 'required|email|unique:users,email,' .$request->user_id . ',id',
-            ]);
-        }
         
-        User::saveEdit($request);
-        return response()->json(200);
     }
 
     /**

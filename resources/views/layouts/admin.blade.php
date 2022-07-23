@@ -64,7 +64,7 @@
                                                     <a href="/panel/user/cliente-persona" class="nk-menu-link"><span class="nk-menu-text">Cliente persona</span></a>
                                                 </li>
                                                 <li class="nk-menu-item">
-                                                    <a href="html/project-card.html" class="nk-menu-link"><span class="nk-menu-text">Cliente financiera</span></a>
+                                                    <a href="/panel/user/cliente-financiera" class="nk-menu-link"><span class="nk-menu-text">Cliente financiera</span></a>
                                                 </li>
         
                                             </ul>

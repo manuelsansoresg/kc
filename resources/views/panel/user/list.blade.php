@@ -55,9 +55,13 @@
     
     @if ($route == 'cliente-persona')
         @include('panel.user.modal.form_client_persona')
-    @else
-        @include('panel.user.modal.form')
+        @elseif($route == 'cliente-financiera')
+            @include('panel.user.modal.form_client_financiera')
+        @else
+            @include('panel.user.modal.form')
     @endif
+
+
 
     @include('panel.user.modal.form_password')
 @endsection

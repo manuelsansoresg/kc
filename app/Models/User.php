@@ -27,6 +27,10 @@ class User extends Authenticatable
         'email',
         'status',
         'password',
+        'c_financial_id',
+        'type_person',
+        'razon_social'
+
     ];
 
     /**
@@ -78,9 +82,15 @@ class User extends Authenticatable
             $user->update();
         }
         $role = $request->type_user;
+        
         if ($request->type_user == 'cliente-persona') {
             $role = 'Cliente persona';
         }
+        
+        if ($request->type_user == 'cliente-financiera') {
+            $role = 'Cliente financiera';
+        }
+
         $user->assignRole(ucfirst($role));
     }
 
@@ -98,6 +108,8 @@ class User extends Authenticatable
             $get_users    = self::getUserRole('Administrador');
         } elseif ($type == 3) {
             $get_users    = self::getUserRole('Cliente persona');
+        } elseif ($type == 4) {
+            $get_users    = self::getUserRole('Cliente financiera');
         } else {
             $get_users    = self::getUserRole('Asesor');
         }
