@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'Lista de usuarios'. $title)
 @section('content')
+
     <div class="nk-content ">
         <div class="container-fluid">
             <div class="nk-content-inner">

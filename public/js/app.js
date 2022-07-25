@@ -2074,6 +2074,8 @@ __webpack_require__(/*! ./components/product/datatable_product */ "./resources/j
 
 __webpack_require__(/*! ./components/product/crud */ "./resources/js/components/product/crud.js");
 
+__webpack_require__(/*! ./components/toastr */ "./resources/js/components/toastr.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -2725,6 +2727,139 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/toastr.js":
+/*!*******************************************!*\
+  !*** ./resources/js/components/toastr.js ***!
+  \*******************************************/
+/***/ (() => {
+
+"use strict";
+
+
+(function (NioApp, $) {
+  'use strict'; // Uses
+  // NioApp.Toast(message, type, {attr});
+  // 
+  // @message     = 'Your message' 
+  // @type        = 'info|success|warning|error',  
+  // @attr        = {position: 'bottom-right', icon: 'auto', ui: ''}
+  // 
+  // attr.ui used for additonal class as is-dark
+  // attr.icon used for custom icon
+  // attr.position used for position of the msg.
+  // Example Trigger
+
+  $('.eg-toastr-default').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for deafult toast message.', 'info');
+  });
+  $('.eg-toastr-bottom-center').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom center toast message.', 'info', {
+      position: 'bottom-center'
+    });
+  });
+  $('.eg-toastr-bottom-right').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom right toast message.', 'info');
+  });
+  $('.eg-toastr-bottom-left').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom left toast message.', 'info', {
+      position: 'bottom-left'
+    });
+  });
+  $('.eg-toastr-bottom-full').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom full width toast message.', 'info', {
+      position: 'bottom-full'
+    });
+  });
+  $('.eg-toastr-top-center').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for top center toast message.', 'info', {
+      position: 'top-center'
+    });
+  });
+  $('.eg-toastr-top-right').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for top right toast message.', 'info', {
+      position: 'top-right'
+    });
+  });
+  $('.eg-toastr-top-left').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for top left toast message.', 'info', {
+      position: 'top-left'
+    });
+  });
+  $('.eg-toastr-top-full').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for top full width toast message.', 'info', {
+      position: 'top-full'
+    });
+  });
+  $('.eg-toastr-info').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom right toast message.', 'info');
+  });
+  $('.eg-toastr-success').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for success toast message.', 'success');
+  });
+  $('.eg-toastr-warning').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for warning toast message.', 'warning');
+  });
+  $('.eg-toastr-error').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for error toast message.', 'error');
+  });
+  $('.eg-toastr-dark').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is dark version note of toast message.', 'info', {
+      ui: 'is-dark'
+    });
+  });
+  $('.eg-toastr-no-icon').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is without icon note of toast message.', 'info', {
+      icon: false
+    });
+  });
+  $('.eg-toastr-with-title').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('<h5>Update Successfully</h5><p>Your profile has been successfully updated.</p>', 'success', {
+      position: 'top-right'
+    });
+  });
+
+  window.showToast = function (title, description, type) {
+    toastr.clear();
+    NioApp.Toast('<h5>' + title + '</h5><p>' + description + '</p>', '' + type + '', {
+      position: 'top-right'
+    });
+  };
+})(NioApp, jQuery);
+
+/***/ }),
+
 /***/ "./resources/js/components/user/crud.js":
 /*!**********************************************!*\
   !*** ./resources/js/components/user/crud.js ***!
@@ -2899,7 +3034,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/user/administrador", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera');
         $('#modal-user-admin').modal('hide');
       })["catch"](function (e) {});
     }
@@ -3482,27 +3617,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "showInfo": () => (/* binding */ showInfo)
 /* harmony export */ });
 function showInfo(redirect, idDatatable) {
-  Swal.fire({
-    icon: 'success',
-    title: 'Información',
-    text: 'Los datos han sido guardados',
-    showDenyButton: false,
-    confirmButtonText: 'Continuar'
-  }).then(function (result) {
-    /* Read more about isConfirmed, isDenied below */
-    if (result.isConfirmed) {
-      if (redirect == 1) {
-        //*redirect back
-        window.history.back();
-      }
+  showToast('Datos Actualziados', 'Información actualizada correctamente.', 'success');
 
-      if (idDatatable == null) {
-        location.reload();
-      } else {
-        $('#' + idDatatable).DataTable().ajax.reload();
-      }
-    }
-  });
+  if (redirect == 1) {
+    //*redirect back
+    window.history.back();
+  }
+
+  if (idDatatable == null) {
+    location.reload();
+  } else {
+    $('#' + idDatatable).DataTable().ajax.reload();
+  }
 }
 
 /***/ }),

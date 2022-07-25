@@ -186,7 +186,7 @@ $().ready(function () {
             .post("/panel/user/administrador", data)
             .then(function (response) {
                 let result = response.data;
-                showInfo(2, 'dt-admin');
+                showInfo(2, 'dt-financiera');
                 $('#modal-user-admin').modal('hide');
             })
             .catch(e => {
