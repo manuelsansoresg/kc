@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     let route = $('#route_datatable').val();
-    let table = new DataTable('#dt-admin', {
+
+   
+    let table = NioApp.DataTable('#dt-admin', {
         processing: true,
         ajax: '/panel/user/'+route+'/list/show',
         columns: [
@@ -12,6 +14,13 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'status' },
             { data: 'options',}
         ],
+        columnDefs:[
+            { className: "nk-tb-col", targets: "_all" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass("nk-tb-item");
+            
+        },
         "language": 
             {
                 "processing": "Procesando...",

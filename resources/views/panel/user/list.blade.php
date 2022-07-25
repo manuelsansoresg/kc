@@ -31,14 +31,14 @@
                             <div class="card-body">
                                 <table id="dt-admin" class="display" style="width:100%">
                                     <thead>
-                                        <tr>
-                                            <th>Nombres</th>
-                                            <th>Primer apellido</th>
-                                            <th>Segundo apellido</th>
-                                            <th>Celular</th>
-                                            <th>Email</th>
-                                            <th>Activo</th>
-                                            <th></th>
+                                        <tr class="nk-tb-item nk-tb-head">
+                                            <th class="nk-tb-col"><span class="sub-text">Nombres </span></th>
+                                            <th class="nk-tb-col"><span class="sub-text">Primer apellido </span></th>
+                                            <th class="nk-tb-col"><span class="sub-text">Segundo apellido </span></th>
+                                            <th class="nk-tb-col"><span class="sub-text">Celular </span></th>
+                                            <th class="nk-tb-col"><span class="sub-text">Email </span></th>
+                                            <th class="nk-tb-col"><span class="sub-text">Activo </span></th>
+                                            <th class="nk-tb-col"></th>
                                         </tr>
                                     </thead>
                                    

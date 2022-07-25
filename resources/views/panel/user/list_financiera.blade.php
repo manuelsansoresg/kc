@@ -32,14 +32,14 @@
                             <div class="card-body">
                                 <table id="dt-financiera" class="display" style="width:100%">
                                     <thead>
-                                        <tr>
-                                            <th>Financiera</th>
-                                            <th>Tipo</th>
-                                            <th>Nombre</th>
-                                            <th>Email</th>
-                                            <th>Celular</th>
-                                            <th>Activo</th>
-                                            <th></th>
+                                        <tr class="nk-tb-item nk-tb-head">
+                                            <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Financiera</span></th>
+                                            <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Tipo</span></th>
+                                            <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Nombre</span></th>
+                                            <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Email</span></th>
+                                            <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Celular</span></th>
+                                            <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Activo</span></th>
+                                            <th class="nk-tb-col"></th>
                                         </tr>
                                     </thead>
                                    

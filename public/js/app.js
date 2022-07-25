@@ -3089,7 +3089,7 @@ window.showRazon = function () {
 
 document.addEventListener('DOMContentLoaded', function () {
   var route = $('#route_datatable').val();
-  var table = new DataTable('#dt-admin', {
+  var table = NioApp.DataTable('#dt-admin', {
     processing: true,
     ajax: '/panel/user/' + route + '/list/show',
     columns: [{
@@ -3107,6 +3107,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'options'
     }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    },
     "language": {
       "processing": "Procesando...",
       "lengthMenu": "Mostrar _MENU_ registros",
@@ -3351,7 +3358,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
   var route = $('#route_datatable').val();
-  var table = new DataTable('#dt-financiera', {
+  var table = NioApp.DataTable('#dt-financiera', {
     processing: true,
     ajax: '/panel/user/' + route + '/list/show',
     columns: [{
@@ -3369,6 +3376,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'options'
     }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    },
     "language": {
       "processing": "Procesando...",
       "lengthMenu": "Mostrar _MENU_ registros",
