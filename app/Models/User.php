@@ -142,7 +142,7 @@ class User extends Authenticatable
                 $users[] = array(
                     'financial' => ($financial != null) ? $financial->name : '',
                     'type_person' => $type_person[$user->type_person],
-                    'name' => $user->second_last_name,
+                    'name' => $user->last_name.' '.$user->name,
                     'email' => $user->email,
                     'cellphone' => $user->cellphone,
                     'status' => $lbl_status,

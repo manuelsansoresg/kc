@@ -13,6 +13,10 @@
                 <em class="icon ni ni-lock-alt-fill"></em><span>Cambiar contraseña</span></a>
         </li>
         <li>
+            <a href="/panel/user/client-profile/{{ $user_id }}">
+                <em class="icon ni ni-users-fill"></em><span>Perfíl</span></a>
+        </li>
+        <li>
             <a class="pointer" onclick="deleteUser({{ $user_id }})">
                 <em class="icon ni ni-trash"></em><span>Borrar</span></a>
         </li>
