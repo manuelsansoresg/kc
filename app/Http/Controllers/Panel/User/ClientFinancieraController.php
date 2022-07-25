@@ -19,7 +19,7 @@ class ClientFinancieraController extends Controller
         $financials = CFinancial::all();
         $title = 'Cliente financiera';
         $route = 'cliente-financiera';
-        return view('panel.user.list', ['title' => $title, 'route' => $route, 'financials' => $financials]);
+        return view('panel.user.list_financiera', ['title' => $title, 'route' => $route, 'financials' => $financials]);
     }
 
     public function list()

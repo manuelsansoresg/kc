@@ -65,6 +65,8 @@ class User extends Authenticatable
             WHEN status = "1" THEN "Sí" 
             WHEN status = "0" THEN "No" 
             END) AS status'),
+            'c_financial_id',
+            'type_person'
         )
             ->role($role)->get();
         return $users;
@@ -123,17 +125,36 @@ class User extends Authenticatable
             if ($user->status == 'No') {
                 $lbl_status = '<span class="badge bg-danger">No</span>';
             }
-            
-            $users[] = array(
-                'name' => $user->name,
-                'last_name' => $user->last_name,
-                'second_last_name' => $user->second_last_name,
-                'cellphone' => $user->cellphone,
-                'email' => $user->email,
-                'status' => $lbl_status,
-                'options' => $option
-            );
+            if ($type != 4) {
+                $users[] = array(
+                    'name' => $user->name,
+                    'last_name' => $user->last_name,
+                    'second_last_name' => $user->second_last_name,
+                    'cellphone' => $user->cellphone,
+                    'email' => $user->email,
+                    'status' => $lbl_status,
+                    'options' => $option
+                );
+            } else {
+                $financial = $user->financial;
+                $type_person = config('enums.type_person');
+                
+                $users[] = array(
+                    'financial' => ($financial != null) ? $financial->name : '',
+                    'type_person' => $type_person[$user->type_person],
+                    'name' => $user->second_last_name,
+                    'email' => $user->email,
+                    'cellphone' => $user->cellphone,
+                    'status' => $lbl_status,
+                    'options' => $option
+                );
+            }
         }
         return $users;
+    }
+
+    public function financial()
+    {
+        return $this->belongsTo(CFinancial::class, 'c_financial_id');
     }
 }
