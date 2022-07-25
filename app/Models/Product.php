@@ -36,8 +36,8 @@ class Product extends Model
         $get_list    = Product::all();
         $users        = array();
         foreach ($get_list as $query) {
-            $product = $query->cProduct;
-            $service = $query->cService;
+            $product = $query->catalogProduct;
+            $service = $query->catalogService;
             $option = \View::make('panel.product.add_option_dt', [ 'type' => 2, 'id' => $query->id])->render();
             
             $lbl_status = '<span class="badge bg-success">Sí</span>';
@@ -46,8 +46,8 @@ class Product extends Model
             }
             
             $users[] = array(
-                'name' => $product->name,
-                'service' => $service->name,
+                'name' => ($product!= null) ? $product->name : '',
+                'service' => ($service != null) ? $service->name : '',
                 'comment' => $query->comment,
                 'status' => $lbl_status,
                 'options' => $option
@@ -56,13 +56,13 @@ class Product extends Model
         return $users;
     }
     
-    public function cProduct()
+    public function catalogProduct()
     {
         return $this->belongsTo(CProduct::class, 'c_product_id');
     }
     
-    public function cService()
+    public function catalogService()
     {
-        return $this->belongsTo(CProduct::class, 'c_service_id');
+        return $this->belongsTo(CService::class, 'c_service_id');
     }
 }

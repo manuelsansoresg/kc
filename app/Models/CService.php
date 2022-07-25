@@ -16,4 +16,9 @@ class CService extends Model
     {
         return CService::all();
     }
+
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
