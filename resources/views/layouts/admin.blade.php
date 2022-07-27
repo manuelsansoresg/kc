@@ -74,6 +74,12 @@
                                                 <span class="nk-menu-text">Productos</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/agreement" class="nk-menu-link">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-card-view"></em></span>
+                                                <span class="nk-menu-text">Convenios</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
                                     </ul>
                                    
                                 </li>

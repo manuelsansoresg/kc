@@ -1,12 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     let route = $('#route_datatable').val();
-    let table = NioApp.DataTable('#dt-product', {
+    let table = NioApp.DataTable('#dt-agreement', {
         processing: true,
-        ajax: '/panel/product/list/show',
+        ajax: '/panel/agreement/list/show',
         columns: [
             { data: 'name' },
-            { data: 'service' },
-            { data: 'comment' },
+            { data: 'description' },
             { data: 'status' },
             { data: 'options',}
         ],
@@ -16,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 "lengthMenu": "Mostrar _MENU_ registros",
                 "zeroRecords": "No se encontraron resultados",
                 "emptyTable": "Ningún dato disponible en esta tabla",
-                "infoEmpty": "Eegistros del 0 al 0 de un total de 0 registros",
+                "infoEmpty": "Registros del 0 al 0 de un total de 0 registros",
                 "infoFiltered": "(filtrado de un total de _MAX_ registros)",
                 "search": "Buscar:",
                 "infoThousands": ",",

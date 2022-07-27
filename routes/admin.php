@@ -37,3 +37,7 @@ Route::resource('product', '\App\Http\Controllers\Panel\ProductController')->mid
 Route::get('product/list/show', ['\App\Http\Controllers\Panel\ProductController', 'list'])->middleware('auth');
 Route::get('product/{product_id}/delete', ['\App\Http\Controllers\Panel\ProductController', 'destroy'])->middleware('auth');
 
+//*agreement
+Route::resource('agreement', '\App\Http\Controllers\Panel\AgreementController')->middleware('auth');
+Route::get('agreement/list/show', ['\App\Http\Controllers\Panel\AgreementController', 'list'])->middleware('auth');
+Route::get('agreement/{product_id}/delete', ['\App\Http\Controllers\Panel\AgreementController', 'destroy'])->middleware('auth');
