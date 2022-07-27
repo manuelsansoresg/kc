@@ -85,25 +85,31 @@
                                             </div>
                                             @php
                                                 $financiera = $user->financial;
+                                                $cliente_financiera = $user->hasRole('Cliente financiera');
                                             @endphp
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Financiera</span>
-                                                    <span class="profile-ud-value">
-                                                        @if ($financiera != null)
-                                                            {{ $financiera->name }}
-                                                        @endif
-                                                    </span>
+                                            @if ($cliente_financiera === true)
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Financiera</span>
+                                                        
+                                                        <span class="profile-ud-value">
+                                                            @if ($financiera != null)
+                                                                {{ $financiera->name }}
+                                                            @endif
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Tipo persona</span>
-                                                    <span class="profile-ud-value">
-                                                        {{ config('enums.type_person')[$user->type_person] }}
-                                                    </span>
+                                            @endif
+                                            @if ($cliente_financiera === true)
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Tipo persona</span>
+                                                        <span class="profile-ud-value">
+                                                            {{ config('enums.type_person')[$user->type_person] }}
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endif
                                         </div><!-- .profile-ud-list -->
                                     </div><!-- .nk-block -->
                                     <div class="nk-block d-none">
