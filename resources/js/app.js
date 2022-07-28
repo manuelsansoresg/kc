@@ -9,4 +9,6 @@ require('./components/product/datatable_product');
 require('./components/product/crud');
 require('./components/agreement/datatable');
 require('./components/agreement/crud');
+require('./components/lead/datatable');
+require('./components/lead/crud');
 require('./components/toastr');

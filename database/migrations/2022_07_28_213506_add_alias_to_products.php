@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAgreements extends Migration
+class AddAliasToProducts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateAgreements extends Migration
      */
     public function up()
     {
-        Schema::create('agreements', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->integer('status')->nullable();
-            $table->timestamps();
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('alias')->nullable()->after('id');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateAgreements extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('agreements');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropcolumn('alias');
+        });
     }
 }

@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'status' },
             { data: 'options',}
         ],
+        columnDefs:[
+            { className: "nk-tb-col", targets: "_all" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass("nk-tb-item");
+            
+        },
         "language": 
             {
                 "processing": "Procesando...",

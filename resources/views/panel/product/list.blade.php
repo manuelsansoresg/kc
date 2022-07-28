@@ -28,9 +28,10 @@
                     <div class="nk-block">
                         <div class="card card-bordered card-stretch">
                             <div class="card-body">
-                                <table id="dt-product" class="display" style="width:100%">
+                                <table id="dt-product" class="display nowrap nk-tb-list nk-tb-ulist dataTable no-footer" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th>Alias</th>
                                             <th>Producto</th>
                                             <th>Servicio</th>
                                             <th>Comentario</th>

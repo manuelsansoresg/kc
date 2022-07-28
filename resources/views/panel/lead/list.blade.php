@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Lista de convenios')
+@section('title', 'Lista de prospectos')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -8,19 +8,18 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Convenios</h3>
+                                <h3 class="nk-block-title page-title">Prospecto</h3>
                                 <div class="nk-block-des text-soft">
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
-                                            <li class="breadcrumb-item">Configuración</li>
-                                            <li class="breadcrumb-item active"><a href="/panel/agreement">Convenio</a></li>
+                                            <li class="breadcrumb-item active"><a href="/panel/lead">Prospecto</a></li>
                                         </ul>
                                     </nav>
                                 </div>
                             </div>
                             <div class="nk-block-head-content">
-                                <a href="/panel/agreement/create" class="btn btn-icon btn-primary"><em
+                                <a href="/panel/lead/create" class="btn btn-icon btn-primary"><em
                                         class="icon ni ni-plus"></em></a>
                             </div>
                         </div>
@@ -28,12 +27,16 @@
                     <div class="nk-block">
                         <div class="card card-bordered card-stretch">
                             <div class="card-body">
-                                <table id="dt-agreement" class="display nowrap nk-tb-list nk-tb-ulist dataTable no-footer" style="width:100%">
+                                <table id="dt-lead" class="display nowrap nk-tb-list nk-tb-ulist dataTable no-footer" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
-                                            <th>Descripcion</th>
-                                            <th>Activo</th>
+                                            <th>Fecha</th>
+                                            <th>Producto</th>
+                                            <th>Origen</th>
+                                            <th>Etiqueta</th>
+                                            <th>Asesor</th>
+                                            <th>Estatus</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -46,5 +49,4 @@
             </div>
         </div>
     </div>
-    @include('panel.product.modal.form')
 @endsection

@@ -41,3 +41,9 @@ Route::get('product/{product_id}/delete', ['\App\Http\Controllers\Panel\ProductC
 Route::resource('agreement', '\App\Http\Controllers\Panel\AgreementController')->middleware('auth');
 Route::get('agreement/list/show', ['\App\Http\Controllers\Panel\AgreementController', 'list'])->middleware('auth');
 Route::get('agreement/{product_id}/delete', ['\App\Http\Controllers\Panel\AgreementController', 'destroy'])->middleware('auth');
+
+//*leads
+Route::resource('lead', '\App\Http\Controllers\Panel\LeadController')->middleware('auth');
+Route::get('lead/list/show', ['\App\Http\Controllers\Panel\LeadController', 'list'])->middleware('auth');
+Route::get('lead/{lead_id}/delete', ['\App\Http\Controllers\Panel\LeadController', 'destroy'])->middleware('auth');
+Route::get('lead/{lead_id}/origin', ['\App\Http\Controllers\Panel\LeadController', 'listOrigin'])->middleware('auth');

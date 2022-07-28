@@ -14,6 +14,17 @@ class Agreement extends Model
         'status'
     ];
 
+
+    public function getAll()
+    {
+        return Agreement::all();
+    }
+    
+    public function getAllActive()
+    {
+        return Agreement::where('status', 1)->get();
+    }
+
     public static function listDatatable()
     {
        
@@ -50,5 +61,10 @@ class Agreement extends Model
         }
        
         return $product;
+    }
+
+    public function lead()
+    {
+        return $this->hasOne(Lead::class);
     }
 }

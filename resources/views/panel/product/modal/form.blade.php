@@ -17,6 +17,14 @@
                     <div class="row gy-4">
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label class="form-label">Alias</label>
+                                <div class="form-control-wrap">
+                                   <input type="text" name="alias" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label class="form-label" for="frm-product-name">Producto</label>
                                 <div class="form-control-select">
                                     <select

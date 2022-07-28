@@ -49,6 +49,9 @@ window.deleteProduct = function (product_id) {
 $().ready(function () {
     $("#frm-product").validate({
         rules: {
+            alias: {
+                required: true,
+            },
             c_product_id: {
                 required: true,
             },

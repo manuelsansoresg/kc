@@ -30,7 +30,7 @@
                     <div class="nk-block">
                         <div class="card card-bordered card-stretch">
                             <div class="card-body">
-                                <table id="dt-financiera" class="display" style="width:100%">
+                                <table id="dt-financiera" class="display nowrap nk-tb-list nk-tb-ulist dataTable no-footer" style="width:100%">
                                     <thead>
                                         <tr class="nk-tb-item nk-tb-head">
                                             <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Financiera</span></th>

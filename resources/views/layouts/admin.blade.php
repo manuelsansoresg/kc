@@ -84,6 +84,23 @@
                                    
                                 </li>
 
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                                        <span class="nk-menu-text">Prospectos</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/lead" class="nk-menu-link">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                                                <span class="nk-menu-text">Persona</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                    </ul>
+                                   
+                                </li>
+
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">Use-Case Preview</h6>
                                 </li><!-- .nk-menu-item -->

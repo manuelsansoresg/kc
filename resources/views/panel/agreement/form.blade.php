@@ -19,10 +19,7 @@
                                 </nav>
                             </div>
                         </div>
-                        <div class="nk-block-head-content">
-                            <a href="/panel/agreement/create" class="btn btn-icon btn-primary"><em
-                                    class="icon ni ni-plus"></em></a>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="nk-block">

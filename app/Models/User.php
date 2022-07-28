@@ -157,4 +157,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(CFinancial::class, 'c_financial_id');
     }
+
+    public function lead()
+    {
+        return $this->hasOne(Lead::class);
+    }
 }

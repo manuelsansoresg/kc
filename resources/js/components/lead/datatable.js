@@ -1,13 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
     let route = $('#route_datatable').val();
-    let table = NioApp.DataTable('#dt-product', {
+    let table = NioApp.DataTable('#dt-lead', {
         processing: true,
-        ajax: '/panel/product/list/show',
+        ajax: '/panel/lead/list/show',
         columns: [
-            { data: 'alias' },
             { data: 'name' },
-            { data: 'service' },
-            { data: 'comment' },
+            { data: 'date' },
+            { data: 'product' },
+            { data: 'origin' },
+            { data: 'label' },
+            { data: 'advisor' },
             { data: 'status' },
             { data: 'options',}
         ],
@@ -15,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { className: "nk-tb-col", targets: "_all" },
         ],
         createdRow: function (row, data, dataIndex) {
-            $(row).addClass("nk-tb-item");
+            $(row).addClass("nk-tb-item odd");
             
         },
         "language": 

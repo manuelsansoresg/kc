@@ -9,11 +9,17 @@ class Product extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'alias',
         'c_product_id',
         'c_service_id',
         'comment',
         'status'
     ];
+
+    public function getAll()
+    {
+        return Product::all();
+    }
 
     public static function saveEdit($request)
     {
@@ -46,6 +52,7 @@ class Product extends Model
             }
             
             $users[] = array(
+                'alias' => $query->alias,
                 'name' => ($product!= null) ? $product->name : '',
                 'service' => ($service != null) ? $service->name : '',
                 'comment' => $query->comment,
@@ -58,11 +65,16 @@ class Product extends Model
     
     public function catalogProduct()
     {
-        return $this->belongsTo(CProduct::class, 'c_product_id');
+        return $this->belongsTo(Product::class, 'c_product_id');
     }
     
     public function catalogService()
     {
         return $this->belongsTo(CService::class, 'c_service_id');
+    }
+
+    public function lead()
+    {
+        return $this->hasOne(Lead::class);
     }
 }
