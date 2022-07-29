@@ -13,6 +13,10 @@
                 <em class="icon ni ni-edit"></em><span>Agregar nota</span></a>
         </li>
         <li>
+            <a href="/panel/lead/{{ $id }}/profile">
+                <em class="icon ni ni-users-fill"></em><span>Perfíl</span></a>
+        </li>
+        <li>
             <a class="pointer" onclick="deleteLead({{ $id }})">
                 <em class="icon ni ni-trash"></em><span>Borrar</span></a>
         </li>

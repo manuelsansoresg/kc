@@ -91,6 +91,7 @@ window.deleteLead = function (lead_id) {
 
 window.modalNoteLead = function (note_id) { 
     $('#lead_note_id').val(note_id);
+    $('#modal-lead-description').val('');
     $('#modal-lead-note').modal('show');
 }
 

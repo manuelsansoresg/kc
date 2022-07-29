@@ -44,7 +44,10 @@ Route::get('agreement/{product_id}/delete', ['\App\Http\Controllers\Panel\Agreem
 
 //*leads
 Route::resource('lead', '\App\Http\Controllers\Panel\LeadController')->middleware('auth');
-Route::get('lead/list/show', ['\App\Http\Controllers\Panel\LeadController', 'list'])->middleware('auth');
-Route::get('lead/{lead_id}/delete', ['\App\Http\Controllers\Panel\LeadController', 'destroy'])->middleware('auth');
-Route::get('lead/{lead_id}/origin', ['\App\Http\Controllers\Panel\LeadController', 'listOrigin'])->middleware('auth');
-Route::post('lead/{lead_id}/note', ['\App\Http\Controllers\Panel\LeadController', 'noteStore'])->middleware('auth');
+Route::group(['prefix' => 'lead'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\LeadController', 'list'])->middleware('auth');
+    Route::get('{lead_id}/delete', ['\App\Http\Controllers\Panel\LeadController', 'destroy'])->middleware('auth');
+    Route::get('{lead_id}/origin', ['\App\Http\Controllers\Panel\LeadController', 'listOrigin'])->middleware('auth');
+    Route::post('{lead_id}/note', ['\App\Http\Controllers\Panel\LeadController', 'noteStore'])->middleware('auth');
+    Route::get('{lead_id}/profile', ['\App\Http\Controllers\Panel\LeadController', 'profile'])->middleware('auth');
+});

@@ -12,4 +12,15 @@ class LeadNote extends Model
         'lead_id' ,
         'note_id' ,
     ];
+
+    public function lead()
+    {
+        return $this->belongsTo(Lead::class, 'lead_id');
+    }
+
+    public function note()
+    {
+        return $this->belongsTo(Note::class, 'note_id');
+    }
+
 }

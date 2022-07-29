@@ -7,6 +7,7 @@ use App\Models\Lead;
 use App\Models\LeadNote;
 use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LeadController extends Controller
 {
@@ -60,7 +61,8 @@ class LeadController extends Controller
 
     public function noteStore($lead_id, Request $request)
     {
-        $note = new Note(['description' => $request->description]);
+        $user_id = Auth::user()->id;
+        $note = new Note(['description' => $request->description, 'user_id' => $user_id]);
         $note->save();
         $lead_note = new LeadNote(['lead_id' => $lead_id, 'note_id'=> $note->id]);
         $lead_note->save();
@@ -78,6 +80,13 @@ class LeadController extends Controller
         $lead = Lead::find($id);
         $channel = Lead::getChanelByOrigin($lead->origin_id);
         return response()->json(['lead' => $lead, 'channel' => $channel]);
+    }
+
+    public function profile($lead_id)
+    {
+        $lead = Lead::find($lead_id);
+        
+        return view('panel.lead.profile', compact('lead'));
     }
 
     /**

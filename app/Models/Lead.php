@@ -106,4 +106,9 @@ class Lead extends Model
     {
         return $this->belongsTo(User::class, 'asesor_id');
     }
+
+    public function leadNotes()
+    {
+        return $this->hasMany(LeadNote::class);
+    }
 }

@@ -162,4 +162,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Lead::class);
     }
+
+    public function note()
+    {
+        return $this->hasOne(Lead::class);
+    }
 }
