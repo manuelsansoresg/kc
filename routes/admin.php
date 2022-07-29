@@ -47,3 +47,4 @@ Route::resource('lead', '\App\Http\Controllers\Panel\LeadController')->middlewar
 Route::get('lead/list/show', ['\App\Http\Controllers\Panel\LeadController', 'list'])->middleware('auth');
 Route::get('lead/{lead_id}/delete', ['\App\Http\Controllers\Panel\LeadController', 'destroy'])->middleware('auth');
 Route::get('lead/{lead_id}/origin', ['\App\Http\Controllers\Panel\LeadController', 'listOrigin'])->middleware('auth');
+Route::post('lead/{lead_id}/note', ['\App\Http\Controllers\Panel\LeadController', 'noteStore'])->middleware('auth');

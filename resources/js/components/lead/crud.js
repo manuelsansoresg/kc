@@ -78,9 +78,9 @@ function setData() {
         });
 }
 
-window.deleteProduct = function (product_id) {
+window.deleteLead = function (lead_id) {
     axios
-        .get("panel/product/"+product_id+"/delete")
+        .get("panel/lead/"+lead_id+"/delete")
         .then(function (response) {
             showInfo(2, 'dt-lead');
         })
@@ -89,6 +89,25 @@ window.deleteProduct = function (product_id) {
         });
 }
 
+window.modalNoteLead = function (note_id) { 
+    $('#lead_note_id').val(note_id);
+    $('#modal-lead-note').modal('show');
+}
+
+$( "#frm-lead-note" ).submit(function( event ) {
+    event.preventDefault();
+    let lead_id =  $('#lead_note_id').val();
+    let description =  $('#modal-lead-description').val();
+    axios
+        .post("panel/lead/"+lead_id+"/note", {description:description})
+        .then(function (response) {
+            showInfo(2, 'dt-lead');
+            $('#modal-lead-note').modal('hide');
+        })
+        .catch(e => {
+            
+        });
+  });
 
 $().ready(function () {
     $("#frm-lead").validate({
@@ -157,8 +176,9 @@ function resolveTextSetting() {
     });
   }
   $(document).ready(function(){
-
-    resolveTextSetting();
+    if (document.getElementById('lead-channel')) {
+        resolveTextSetting();
+    }
     
   })
 

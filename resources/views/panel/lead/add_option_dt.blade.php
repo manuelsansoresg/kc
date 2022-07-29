@@ -9,9 +9,14 @@
                 <em class="icon ni ni-edit"></em><span>Editar</span></a>
         </li>
         <li>
+            <a class="pointer" onclick="modalNoteLead({{ $id }})">
+                <em class="icon ni ni-edit"></em><span>Agregar nota</span></a>
+        </li>
+        <li>
             <a class="pointer" onclick="deleteLead({{ $id }})">
                 <em class="icon ni ni-trash"></em><span>Borrar</span></a>
         </li>
+        
     </ul>
 </div>
 </div>

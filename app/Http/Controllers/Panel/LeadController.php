@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\Lead;
+use App\Models\LeadNote;
+use App\Models\Note;
 use Illuminate\Http\Request;
 
 class LeadController extends Controller
@@ -54,6 +56,15 @@ class LeadController extends Controller
     {
         Lead::saveEdit($request);
         return response()->json(200);
+    }
+
+    public function noteStore($lead_id, Request $request)
+    {
+        $note = new Note(['description' => $request->description]);
+        $note->save();
+        $lead_note = new LeadNote(['lead_id' => $lead_id, 'note_id'=> $note->id]);
+        $lead_note->save();
+         return response()->json(200);
     }
 
     /**
