@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Lead extends Model
 {
@@ -25,8 +26,14 @@ class Lead extends Model
     public static function listDatatable()
     {
        
-        
-        $get_list    = Lead::all();
+        $is_asesor = Auth::user()->hasRole('Asesor');
+        if ($is_asesor === true) {
+            $get_list    = Lead::where('asesor_id', Auth::user()->id)->get();
+        } else { 
+            $get_list    = Lead::all();
+        }
+
+
         $data        = array();
         foreach ($get_list as $query) {
             $option = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id])->render();
