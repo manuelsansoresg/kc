@@ -65,7 +65,7 @@ class Product extends Model
     
     public function catalogProduct()
     {
-        return $this->belongsTo(Product::class, 'c_product_id');
+        return $this->belongsTo(CProduct::class, 'c_product_id');
     }
     
     public function catalogService()

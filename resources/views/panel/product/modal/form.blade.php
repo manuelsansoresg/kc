@@ -19,7 +19,7 @@
                             <div class="form-group">
                                 <label class="form-label">Alias</label>
                                 <div class="form-control-wrap">
-                                   <input type="text" name="alias" class="form-control">
+                                   <input type="text" name="alias" id="product-alias" class="form-control">
                                 </div>
                             </div>
                         </div>

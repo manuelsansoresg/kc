@@ -3150,6 +3150,7 @@ function setDataUser(product_id) {
     $('#c_service_id option[value="' + result.c_service_id + '"]').attr("selected", "selected");
     $('#status option[value="' + result.status + '"]').attr("selected", "selected");
     $('#comment').val(result.comment);
+    $('#product-alias').val(result.alias);
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
