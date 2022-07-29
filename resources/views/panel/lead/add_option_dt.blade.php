@@ -1,3 +1,6 @@
+@php
+    $user   = Auth::user();
+@endphp
 <div class="drodown"><a href="#"
     class="dropdown-toggle btn btn-icon btn-trigger"
     data-bs-toggle="dropdown"><em
@@ -16,6 +19,13 @@
             <a href="/panel/lead/{{ $id }}/profile">
                 <em class="icon ni ni-users-fill"></em><span>Perfíl</span></a>
         </li>
+        @if ($user->hasRole('Asesor') != true)
+        <li>
+            <a onclick="modalAdvisor({{$id}})">
+                <em class="icon ni ni-users-fill"></em><span>Asignar asesor</span></a>
+        </li>
+        @endif
+        
         <li>
             <a class="pointer" onclick="deleteLead({{ $id }})">
                 <em class="icon ni ni-trash"></em><span>Borrar</span></a>

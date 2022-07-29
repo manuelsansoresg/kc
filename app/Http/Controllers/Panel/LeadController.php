@@ -69,6 +69,13 @@ class LeadController extends Controller
          return response()->json(200);
     }
 
+    public function advisorStore($lead_id, Request $request)
+    {
+        $lead               = Lead::find($lead_id);
+        $lead->asesor_id    = $request->asesor_id;
+        $lead->update();
+    }
+
     /**
      * Display the specified resource.
      *

@@ -39,7 +39,7 @@ window.deleteProduct = function (product_id) {
     axios
         .get("panel/product/"+product_id+"/delete")
         .then(function (response) {
-            showInfo(2, 'dt-product');
+            showInfo(2, 'dt-product', 'Información actualizada correctamente');
         })
         .catch(e => {
             
@@ -73,7 +73,7 @@ $().ready(function () {
                 .post("/panel/product", data)
                 .then(function (response) {
                     let result = response.data;
-                    showInfo(2, 'dt-product');
+                    showInfo(2, 'dt-product', 'Información actualizada correctamente');
                     $('#modal-product').modal('hide');
                 })
                 .catch(e => {
@@ -106,7 +106,7 @@ $().ready(function () {
                 .post("/panel/user/" + route_datatable + "/password/update", data)
                 .then(function (response) {
                     let result = response.data;
-                    showInfo(2, 'dt-admin');
+                    showInfo(2, 'dt-admin', 'Información actualizada correctamente');
                     $('#modal-user-password').modal('hide');
                 })
                 .catch(e => {

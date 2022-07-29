@@ -1,5 +1,5 @@
-export function showInfo(redirect, idDatatable) {
-    showToast('Datos Actualziados', 'Información actualizada correctamente.', 'success');
+export function showInfo(redirect, idDatatable, msg) {
+    showToast('Datos Actualziados', msg, 'success');
     if (redirect == 1) { //*redirect back
         window.history.back();
     }

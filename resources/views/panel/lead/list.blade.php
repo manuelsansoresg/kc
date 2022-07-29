@@ -50,4 +50,5 @@
         </div>
     </div>
     @include('panel.lead.modal.note')
+    @include('panel.lead.modal.advisor')
 @endsection

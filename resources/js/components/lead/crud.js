@@ -82,12 +82,14 @@ window.deleteLead = function (lead_id) {
     axios
         .get("panel/lead/"+lead_id+"/delete")
         .then(function (response) {
-            showInfo(2, 'dt-lead');
+            showInfo(2, 'dt-lead', 'Información actualizada correctamente');
         })
         .catch(e => {
             
         });
 }
+
+
 
 window.modalNoteLead = function (note_id) { 
     $('#lead_note_id').val(note_id);
@@ -102,13 +104,33 @@ $( "#frm-lead-note" ).submit(function( event ) {
     axios
         .post("panel/lead/"+lead_id+"/note", {description:description})
         .then(function (response) {
-            showInfo(2, 'dt-lead');
+            showInfo(2, 'dt-lead', 'Información actualizada correctamente');
             $('#modal-lead-note').modal('hide');
         })
         .catch(e => {
             
         });
   });
+
+window.modalAdvisor = function (lead_id) {
+    $('#lead_advisor_id').val(lead_id);
+    $('#modal-advisor').modal('show');
+}
+
+$( "#frm-advisor" ).submit(function( event ) {
+    event.preventDefault();
+    let asesor_id   = $('#modal-advisor-id').val();
+    let lead_id     = $('#lead_advisor_id').val();
+    axios
+        .post("panel/lead/"+lead_id+"/advisor/store", {asesor_id:asesor_id})
+        .then(function (response) {
+            showInfo(2, 'dt-lead', 'Prospecto asignado');
+            $('#modal-advisor').modal('hide');
+        })
+        .catch(e => {
+            
+        });
+});
 
 $().ready(function () {
     $("#frm-lead").validate({

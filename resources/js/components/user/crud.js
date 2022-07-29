@@ -65,7 +65,7 @@ window.deleteUser = function (id) {
     axios
         .get("/panel/user/administrador/"+id+"/delete")
         .then(function (response) {
-            showInfo(2, 'dt-admin');
+            showInfo(2, 'dt-admin', 'Información actualizada correctamente');
         })
         .catch(e => {
             
@@ -117,7 +117,7 @@ $().ready(function () {
             .post("/panel/user/administrador", data)
             .then(function (response) {
                 let result = response.data;
-                showInfo(2, 'dt-admin');
+                showInfo(2, 'dt-admin', 'Información actualizada correctamente');
                 $('#modal-user-admin').modal('hide');
             })
             .catch(e => {
@@ -186,7 +186,7 @@ $().ready(function () {
             .post("/panel/user/administrador", data)
             .then(function (response) {
                 let result = response.data;
-                showInfo(2, 'dt-financiera');
+                showInfo(2, 'dt-financiera', 'Información actualizada correctamente');
                 $('#modal-user-admin').modal('hide');
             })
             .catch(e => {
@@ -219,7 +219,7 @@ $().ready(function () {
             .post("/panel/user/"+route_datatable+"/password/update", data)
             .then(function (response) {
                 let result = response.data;
-                showInfo(2, 'dt-admin');
+                showInfo(2, 'dt-admin', 'Información actualizada correctamente');
                 $('#modal-user-password').modal('hide');
             })
             .catch(e => {

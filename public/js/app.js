@@ -2130,7 +2130,7 @@ __webpack_require__.r(__webpack_exports__);
 
 window.deleteAgreement = function (agreement) {
   axios.get("panel/agreement/" + agreement + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Información actualizada correctamente');
   })["catch"](function (e) {});
 };
 
@@ -2150,7 +2150,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/agreement", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Información actualizada correctamente');
         window.location = '/panel/agreement';
       })["catch"](function (e) {});
     }
@@ -2759,7 +2759,7 @@ function setData() {
 
 window.deleteLead = function (lead_id) {
   axios.get("panel/lead/" + lead_id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Información actualizada correctamente');
   })["catch"](function (e) {});
 };
 
@@ -2776,8 +2776,25 @@ $("#frm-lead-note").submit(function (event) {
   axios.post("panel/lead/" + lead_id + "/note", {
     description: description
   }).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Información actualizada correctamente');
     $('#modal-lead-note').modal('hide');
+  })["catch"](function (e) {});
+});
+
+window.modalAdvisor = function (lead_id) {
+  $('#lead_advisor_id').val(lead_id);
+  $('#modal-advisor').modal('show');
+};
+
+$("#frm-advisor").submit(function (event) {
+  event.preventDefault();
+  var asesor_id = $('#modal-advisor-id').val();
+  var lead_id = $('#lead_advisor_id').val();
+  axios.post("panel/lead/" + lead_id + "/advisor/store", {
+    asesor_id: asesor_id
+  }).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Prospecto asignado');
+    $('#modal-advisor').modal('hide');
   })["catch"](function (e) {});
 });
 $().ready(function () {
@@ -3158,7 +3175,7 @@ function setDataUser(product_id) {
 
 window.deleteProduct = function (product_id) {
   axios.get("panel/product/" + product_id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Información actualizada correctamente');
   })["catch"](function (e) {});
 };
 
@@ -3184,7 +3201,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/product", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Información actualizada correctamente');
         $('#modal-product').modal('hide');
       })["catch"](function (e) {});
     }
@@ -3208,7 +3225,7 @@ $().ready(function () {
       var route_datatable = $('#route_datatable').val();
       axios.post("/panel/user/" + route_datatable + "/password/update", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Información actualizada correctamente');
         $('#modal-user-password').modal('hide');
       })["catch"](function (e) {});
     }
@@ -3694,7 +3711,7 @@ function setDataUser(user_id) {
 
 window.deleteUser = function (id) {
   axios.get("/panel/user/administrador/" + id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Información actualizada correctamente');
   })["catch"](function (e) {});
 };
 
@@ -3736,7 +3753,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/user/administrador", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Información actualizada correctamente');
         $('#modal-user-admin').modal('hide');
       })["catch"](function (e) {
         $('#admin_email-error-exist').show();
@@ -3796,7 +3813,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/user/administrador", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera', 'Información actualizada correctamente');
         $('#modal-user-admin').modal('hide');
       })["catch"](function (e) {});
     }
@@ -3820,7 +3837,7 @@ $().ready(function () {
       var route_datatable = $('#route_datatable').val();
       axios.post("/panel/user/" + route_datatable + "/password/update", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Información actualizada correctamente');
         $('#modal-user-password').modal('hide');
       })["catch"](function (e) {});
     }
@@ -4392,8 +4409,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "showInfo": () => (/* binding */ showInfo)
 /* harmony export */ });
-function showInfo(redirect, idDatatable) {
-  showToast('Datos Actualziados', 'Información actualizada correctamente.', 'success');
+function showInfo(redirect, idDatatable, msg) {
+  showToast('Datos Actualziados', msg, 'success');
 
   if (redirect == 1) {
     //*redirect back
