@@ -61,6 +61,9 @@ class Lead extends Model
     public static function saveEdit($request)
     {
         $data = $request->data;
+
+        $is_asesor = Auth::user()->hasRole('Asesor');
+
         if ($data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
             $agreement = new Agreement(['name' => $request->new_agreement, 'status' => 1]);
             $agreement->save();
@@ -68,6 +71,9 @@ class Lead extends Model
         }
 
         if ($request->lead_id == null) {
+            if ($is_asesor === true) {
+                $data['asesor_id'] =  Auth::user()->id;
+            }
             $product = new Lead($data);
             $product->save();
         } else {

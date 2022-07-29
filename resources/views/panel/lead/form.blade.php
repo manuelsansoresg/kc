@@ -14,6 +14,7 @@
     $origins      = config('enums.origin');
     $advisors     = $user->getUserRole('Asesor');
     $temperatures = config('enums.temperatures');
+    $user         = Auth::user();
     @endphp
 
     <div class="nk-content ">
@@ -150,12 +151,22 @@
                                             <div class="form-group">
                                                 <label class="form-label">Asesor</label>
                                                 <div class="form-control-wrap">
-                                                    <select class="form-select js-select2" name="data[asesor_id]" id="lead-asesor-id"  data-search="on">
-                                                        @foreach ($advisors as $advisor)
-                                                            <option value="{{ $advisor->id }}">{{ $advisor->name }} {{ $advisor->last_name }} {{ $advisor->second_last_name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
+                                                    @if ($user->hasRole('Asesor') == true)
+                                                        <select class="form-select" name="data[asesor_id]" id="lead-asesor-id"  data-search="on" disabled>
+                                                            @foreach ($advisors as $advisor)
+                                                                <option value="{{ $advisor->id }}" {{ ($user->id == $advisor->id)? 'selected' : '' }} >{{ $advisor->name }} {{ $advisor->last_name }} {{ $advisor->second_last_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @else
+                                                        <select class="form-select js-select2" name="data[asesor_id]" id="lead-asesor-id"  data-search="on">
+                                                            @foreach ($advisors as $advisor)
+                                                                <option value="{{ $advisor->id }}">{{ $advisor->name }} {{ $advisor->last_name }} {{ $advisor->second_last_name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    @endif
+                                                    
                                                 </div>
                                             </div>
                                         </div>
