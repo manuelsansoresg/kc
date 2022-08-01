@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Lib\Csendgrid;
 use Illuminate\Http\Request;
 
 class PanelController extends Controller
@@ -14,6 +15,15 @@ class PanelController extends Controller
      */
     public function index()
     {
+        $role = 'Cliente persona';
+        $to = 'manuelsansoresg@gmail.com';
+        $subject = 'Cuenta creada';
+        
+        $send_grid = new Csendgrid($to, $subject, 'prueba');
+        $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
+        $send_grid->setParams(['first_name'=> 'Manuel']);
+        $send_grid->send();
+
         return view('panel.index');
     }
 
