@@ -12,7 +12,7 @@ class Csendgrid
     public $idTemplate;
     public $params;
 
-    public function __construct($to, $subject = '', $content = '', $from = 'contacto@kaaxclub.com')
+    public function __construct($to, $subject = '', $content = ' ', $from = 'contacto@kaaxclub.com')
     {
         $this->from       = $from;
         $this->to         = $to;
