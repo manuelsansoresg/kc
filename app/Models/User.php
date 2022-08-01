@@ -90,7 +90,7 @@ class User extends Authenticatable
             $role = 'Cliente persona';
             $to = $user->email;
             
-            $send_grid = new Csendgrid($to);
+            $send_grid = new Csendgrid($to, 'creacion cuenta');
             $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
             $send_grid->setParams(['first_name'=> 'Manuel']);
             $send_grid->send();
