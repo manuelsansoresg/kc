@@ -57,6 +57,37 @@ class Lead extends Model
         }
         return $data;
     }
+    
+    public static function listArchive()
+    {
+       
+        
+        $status_id = HistoryLog::$status['lead-archive'];
+        $get_list    = HistoryLog::where(['status_id' => $status_id, 'status' => 1])->get();
+        $data        = array();
+        foreach ($get_list as $query) {
+            $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'id' => $query->id])->render();
+            
+            $lbl_status   = '<span class="badge bg-success">Valido</span>';
+            $lead         = $query->historyLead;
+            $product      = $lead->productLead;
+            $user         = $lead->advisorLead;
+
+            $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $lead])->render();
+
+            $data[] = array(
+                'name' => $content_lead,
+                'date' => formatDateNameMonth($query->created_at),
+                'product' => ($product != null) ? $product->alias : '',
+                'origin' => config('enums.origin')[$lead->origin_id],
+                'label' => config('enums.temperatures')[$lead->temperature_id],
+                'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
+                'status' => $lbl_status,
+                'options' => $option
+            );
+        }
+        return $data;
+    }
 
     public static function saveEdit($request)
     {
@@ -123,5 +154,10 @@ class Lead extends Model
     public function leadNotes()
     {
         return $this->hasMany(LeadNote::class);
+    }
+
+    public function history()
+    {
+        return $this->hasOne(HistoryLog::class);
     }
 }

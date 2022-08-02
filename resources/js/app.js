@@ -12,3 +12,4 @@ require('./components/agreement/crud');
 require('./components/lead/datatable');
 require('./components/lead/crud');
 require('./components/toastr');
+require('./components/crm');

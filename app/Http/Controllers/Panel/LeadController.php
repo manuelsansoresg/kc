@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\LeadNote;
 use App\Models\Note;
@@ -35,6 +36,23 @@ class LeadController extends Controller
         return response()->json($channel);
     }
 
+    public function moveArchive($id_rel, Request $request)
+    {
+        $history = HistoryLog::move($id_rel, 'lead-archive', 'lead-archive', $request);
+        return response()->json($history);
+    }
+
+    public function archive()
+    {
+        return view('panel.lead.archive');
+    }
+
+    public function listArchive()
+    {
+        $archive = Lead::listArchive();
+        
+        return response()->json(['data' => $archive]);
+    }
     /**
      * Show the form for creating a new resource.
      *

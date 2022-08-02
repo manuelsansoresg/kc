@@ -4,7 +4,7 @@ window.deleteAgreement = function (agreement) {
     axios
         .get("panel/agreement/"+agreement+"/delete")
         .then(function (response) {
-            showInfo(2, 'dt-agreement', 'Información actualizada correctamente');
+            showInfo(2, 'dt-agreement', 'Datos actualizados', 'Información actualizada correctamente');
         })
         .catch(e => {
             
@@ -32,7 +32,7 @@ $().ready(function () {
                 .post("/panel/agreement", data)
                 .then(function (response) {
                     let result = response.data;
-                    showInfo(2, 'dt-agreement', 'Información actualizada correctamente');
+                    showInfo(2, 'dt-agreement', 'Datos actualizados', 'Información actualizada correctamente');
                     window.location = '/panel/agreement';
                 })
                 .catch(e => {

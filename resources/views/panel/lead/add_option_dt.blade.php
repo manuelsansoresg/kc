@@ -19,6 +19,10 @@
             <a href="/panel/lead/{{ $id }}/profile">
                 <em class="icon ni ni-users-fill"></em><span>Perfíl</span></a>
         </li>
+        <li>
+            <a class="pointer" onclick="archiveModal({{ $id }})">
+                <em class="icon ni ni-files"></em><span>Archivar</span></a>
+        </li>
         @if ($user->hasRole('Asesor') != true)
         <li>
             <a onclick="modalAdvisor({{$id}})">

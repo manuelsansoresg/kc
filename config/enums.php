@@ -40,4 +40,10 @@ return [
         1 => 'Creación de cuenta',
         2 => 'Cuenta RRSS',
     ),
+    'reason_archive' => array(
+        '' => 'Selecciona una opción',
+        1 => 'No interesado',
+        2 => 'Sin convenio',
+        3 => 'Otro',
+    ),
 ];

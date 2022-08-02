@@ -2084,6 +2084,8 @@ __webpack_require__(/*! ./components/lead/crud */ "./resources/js/components/lea
 
 __webpack_require__(/*! ./components/toastr */ "./resources/js/components/toastr.js");
 
+__webpack_require__(/*! ./components/crm */ "./resources/js/components/crm.js");
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -2130,7 +2132,7 @@ __webpack_require__.r(__webpack_exports__);
 
 window.deleteAgreement = function (agreement) {
   axios.get("panel/agreement/" + agreement + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Información actualizada correctamente');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Datos actualizados', 'Información actualizada correctamente');
   })["catch"](function (e) {});
 };
 
@@ -2150,7 +2152,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/agreement", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Información actualizada correctamente');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Datos actualizados', 'Información actualizada correctamente');
         window.location = '/panel/agreement';
       })["catch"](function (e) {});
     }
@@ -2418,6 +2420,48 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
   });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/crm.js":
+/*!****************************************!*\
+  !*** ./resources/js/components/crm.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utilities */ "./resources/js/components/utilities.js");
+
+
+function move(id, path, route, form, modal, datatable, title, msg) {
+  var new_form = document.getElementById(form);
+  var data = new FormData(new_form);
+  axios.post("panel/" + path + "/" + id + "/move/" + route, data).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, datatable, title, msg);
+    $('#' + modal).modal('hide');
+  })["catch"](function (e) {});
+}
+
+window.archiveModal = function (id) {
+  $('#frm-archive').trigger("reset");
+  $('#id_rel').val(id);
+  $('#modal-archive-title').html('Archivar');
+  $('#modal-archive').modal('show');
+};
+
+if (document.getElementById('frm-archive')) {
+  NioApp.Select2('#modal-reason-id', {
+    dropdownParent: $('#modal-archive')
+  });
+}
+
+$("#frm-archive").submit(function (event) {
+  event.preventDefault();
+  var id_rel = $('#id_rel').val();
+  var msg = 'registro archivado exitosamente';
+  move(id_rel, 'lead', 'archive', 'frm-archive', 'modal-archive', 'dt-lead', 'Archivo', msg);
 });
 
 /***/ }),
@@ -2759,7 +2803,7 @@ function setData() {
 
 window.deleteLead = function (lead_id) {
   axios.get("panel/lead/" + lead_id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Información actualizada correctamente');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
   })["catch"](function (e) {});
 };
 
@@ -2776,7 +2820,7 @@ $("#frm-lead-note").submit(function (event) {
   axios.post("panel/lead/" + lead_id + "/note", {
     description: description
   }).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Información actualizada correctamente');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
     $('#modal-lead-note').modal('hide');
   })["catch"](function (e) {});
 });
@@ -2793,7 +2837,7 @@ $("#frm-advisor").submit(function (event) {
   axios.post("panel/lead/" + lead_id + "/advisor/store", {
     asesor_id: asesor_id
   }).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Prospecto asignado');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Prospecto asignado');
     $('#modal-advisor').modal('hide');
   })["catch"](function (e) {});
 });
@@ -3129,6 +3173,265 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
   });
+  var table_archive = NioApp.DataTable('#dt-lead-archive', {
+    processing: true,
+    ajax: '/panel/archive/lead/list/show',
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'date'
+    }, {
+      data: 'product'
+    }, {
+      data: 'origin'
+    }, {
+      data: 'label'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    },
+    "language": {
+      "processing": "Procesando...",
+      "lengthMenu": "Mostrar _MENU_ registros",
+      "zeroRecords": "No se encontraron resultados",
+      "emptyTable": "Ningún dato disponible en esta tabla",
+      "infoEmpty": "Eegistros del 0 al 0 de un total de 0 registros",
+      "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+      "search": "Buscar:",
+      "infoThousands": ",",
+      "loadingRecords": "Cargando...",
+      "paginate": {
+        "first": "Primero",
+        "last": "Último",
+        "next": "Siguiente",
+        "previous": "Anterior"
+      },
+      "aria": {
+        "sortAscending": ": Activar para ordenar la columna de manera ascendente",
+        "sortDescending": ": Activar para ordenar la columna de manera descendente"
+      },
+      "buttons": {
+        "copy": "Copiar",
+        "colvis": "Visibilidad",
+        "collection": "Colección",
+        "colvisRestore": "Restaurar visibilidad",
+        "copyKeys": "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br \/> <br \/> Para cancelar, haga clic en este mensaje o presione escape.",
+        "copySuccess": {
+          "1": "Copiada 1 fila al portapapeles",
+          "_": "Copiadas %ds fila al portapapeles"
+        },
+        "copyTitle": "Copiar al portapapeles",
+        "csv": "CSV",
+        "excel": "Excel",
+        "pageLength": {
+          "-1": "Mostrar todas las filas",
+          "_": "Mostrar %d filas"
+        },
+        "pdf": "PDF",
+        "print": "Imprimir",
+        "renameState": "Cambiar nombre",
+        "updateState": "Actualizar",
+        "createState": "Crear Estado",
+        "removeAllStates": "Remover Estados",
+        "removeState": "Remover",
+        "savedStates": "Estados Guardados",
+        "stateRestore": "Estado %d"
+      },
+      "autoFill": {
+        "cancel": "Cancelar",
+        "fill": "Rellene todas las celdas con <i>%d<\/i>",
+        "fillHorizontal": "Rellenar celdas horizontalmente",
+        "fillVertical": "Rellenar celdas verticalmentemente"
+      },
+      "decimal": ",",
+      "searchBuilder": {
+        "add": "Añadir condición",
+        "button": {
+          "0": "Constructor de búsqueda",
+          "_": "Constructor de búsqueda (%d)"
+        },
+        "clearAll": "Borrar todo",
+        "condition": "Condición",
+        "conditions": {
+          "date": {
+            "after": "Despues",
+            "before": "Antes",
+            "between": "Entre",
+            "empty": "Vacío",
+            "equals": "Igual a",
+            "notBetween": "No entre",
+            "notEmpty": "No Vacio",
+            "not": "Diferente de"
+          },
+          "number": {
+            "between": "Entre",
+            "empty": "Vacio",
+            "equals": "Igual a",
+            "gt": "Mayor a",
+            "gte": "Mayor o igual a",
+            "lt": "Menor que",
+            "lte": "Menor o igual que",
+            "notBetween": "No entre",
+            "notEmpty": "No vacío",
+            "not": "Diferente de"
+          },
+          "string": {
+            "contains": "Contiene",
+            "empty": "Vacío",
+            "endsWith": "Termina en",
+            "equals": "Igual a",
+            "notEmpty": "No Vacio",
+            "startsWith": "Empieza con",
+            "not": "Diferente de",
+            "notContains": "No Contiene",
+            "notStarts": "No empieza con",
+            "notEnds": "No termina con"
+          },
+          "array": {
+            "not": "Diferente de",
+            "equals": "Igual",
+            "empty": "Vacío",
+            "contains": "Contiene",
+            "notEmpty": "No Vacío",
+            "without": "Sin"
+          }
+        },
+        "data": "Data",
+        "deleteTitle": "Eliminar regla de filtrado",
+        "leftTitle": "Criterios anulados",
+        "logicAnd": "Y",
+        "logicOr": "O",
+        "rightTitle": "Criterios de sangría",
+        "title": {
+          "0": "Constructor de búsqueda",
+          "_": "Constructor de búsqueda (%d)"
+        },
+        "value": "Valor"
+      },
+      "searchPanes": {
+        "clearMessage": "Borrar todo",
+        "collapse": {
+          "0": "Paneles de búsqueda",
+          "_": "Paneles de búsqueda (%d)"
+        },
+        "count": "{total}",
+        "countFiltered": "{shown} ({total})",
+        "emptyPanes": "Sin paneles de búsqueda",
+        "loadMessage": "Cargando paneles de búsqueda",
+        "title": "Filtros Activos - %d",
+        "showMessage": "Mostrar Todo",
+        "collapseMessage": "Colapsar Todo"
+      },
+      "select": {
+        "cells": {
+          "1": "1 celda seleccionada",
+          "_": "%d celdas seleccionadas"
+        },
+        "columns": {
+          "1": "1 columna seleccionada",
+          "_": "%d columnas seleccionadas"
+        },
+        "rows": {
+          "1": "1 fila seleccionada",
+          "_": "%d filas seleccionadas"
+        }
+      },
+      "thousands": ".",
+      "datetime": {
+        "previous": "Anterior",
+        "next": "Proximo",
+        "hours": "Horas",
+        "minutes": "Minutos",
+        "seconds": "Segundos",
+        "unknown": "-",
+        "amPm": ["AM", "PM"],
+        "months": {
+          "0": "Enero",
+          "1": "Febrero",
+          "10": "Noviembre",
+          "11": "Diciembre",
+          "2": "Marzo",
+          "3": "Abril",
+          "4": "Mayo",
+          "5": "Junio",
+          "6": "Julio",
+          "7": "Agosto",
+          "8": "Septiembre",
+          "9": "Octubre"
+        },
+        "weekdays": ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"]
+      },
+      "editor": {
+        "close": "Cerrar",
+        "create": {
+          "button": "Nuevo",
+          "title": "Crear Nuevo Registro",
+          "submit": "Crear"
+        },
+        "edit": {
+          "button": "Editar",
+          "title": "Editar Registro",
+          "submit": "Actualizar"
+        },
+        "remove": {
+          "button": "Eliminar",
+          "title": "Eliminar Registro",
+          "submit": "Eliminar",
+          "confirm": {
+            "_": "¿Está seguro que desea eliminar %d filas?",
+            "1": "¿Está seguro que desea eliminar 1 fila?"
+          }
+        },
+        "error": {
+          "system": "Ha ocurrido un error en el sistema (<a target=\"\\\" rel=\"\\ nofollow\" href=\"\\\">Más información&lt;\\\/a&gt;).<\/a>"
+        },
+        "multi": {
+          "title": "Múltiples Valores",
+          "info": "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
+          "restore": "Deshacer Cambios",
+          "noMulti": "Este registro puede ser editado individualmente, pero no como parte de un grupo."
+        }
+      },
+      "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+      "stateRestore": {
+        "creationModal": {
+          "button": "Crear",
+          "name": "Nombre:",
+          "order": "Clasificación",
+          "paging": "Paginación",
+          "search": "Busqueda",
+          "select": "Seleccionar",
+          "columns": {
+            "search": "Búsqueda de Columna",
+            "visible": "Visibilidad de Columna"
+          },
+          "title": "Crear Nuevo Estado",
+          "toggleLabel": "Incluir:"
+        },
+        "emptyError": "El nombre no puede estar vacio",
+        "removeConfirm": "¿Seguro que quiere eliminar este %s?",
+        "removeError": "Error al eliminar el registro",
+        "removeJoiner": "y",
+        "removeSubmit": "Eliminar",
+        "renameButton": "Cambiar Nombre",
+        "renameLabel": "Nuevo nombre para %s",
+        "duplicateError": "Ya existe un Estado con este nombre.",
+        "emptyStates": "No hay Estados guardados",
+        "removeTitle": "Remover Estado",
+        "renameTitle": "Cambiar Nombre Estado"
+      }
+    }
+  });
 });
 
 /***/ }),
@@ -3175,7 +3478,7 @@ function setDataUser(product_id) {
 
 window.deleteProduct = function (product_id) {
   axios.get("panel/product/" + product_id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Información actualizada correctamente');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Datos actualizados', 'Información actualizada correctamente');
   })["catch"](function (e) {});
 };
 
@@ -3201,7 +3504,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/product", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Información actualizada correctamente');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Datos actualizados', 'Información actualizada correctamente');
         $('#modal-product').modal('hide');
       })["catch"](function (e) {});
     }
@@ -3225,7 +3528,7 @@ $().ready(function () {
       var route_datatable = $('#route_datatable').val();
       axios.post("/panel/user/" + route_datatable + "/password/update", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Información actualizada correctamente');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
         $('#modal-user-password').modal('hide');
       })["catch"](function (e) {});
     }
@@ -3711,7 +4014,7 @@ function setDataUser(user_id) {
 
 window.deleteUser = function (id) {
   axios.get("/panel/user/administrador/" + id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Información actualizada correctamente');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
   })["catch"](function (e) {});
 };
 
@@ -3753,7 +4056,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/user/administrador", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Información actualizada correctamente');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
         $('#modal-user-admin').modal('hide');
       })["catch"](function (e) {
         $('#admin_email-error-exist').show();
@@ -3813,7 +4116,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/user/administrador", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera', 'Información actualizada correctamente');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera', 'Datos actualizados', 'Información actualizada correctamente');
         $('#modal-user-admin').modal('hide');
       })["catch"](function (e) {});
     }
@@ -3837,7 +4140,7 @@ $().ready(function () {
       var route_datatable = $('#route_datatable').val();
       axios.post("/panel/user/" + route_datatable + "/password/update", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Información actualizada correctamente');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
         $('#modal-user-password').modal('hide');
       })["catch"](function (e) {});
     }
@@ -4409,8 +4712,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "showInfo": () => (/* binding */ showInfo)
 /* harmony export */ });
-function showInfo(redirect, idDatatable, msg) {
-  showToast('Datos Actualziados', msg, 'success');
+function showInfo(redirect, idDatatable, title, msg) {
+  showToast(title, msg, 'success');
 
   if (redirect == 1) {
     //*redirect back

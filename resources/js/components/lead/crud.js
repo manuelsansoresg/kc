@@ -82,7 +82,7 @@ window.deleteLead = function (lead_id) {
     axios
         .get("panel/lead/"+lead_id+"/delete")
         .then(function (response) {
-            showInfo(2, 'dt-lead', 'Información actualizada correctamente');
+            showInfo(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
         })
         .catch(e => {
             
@@ -104,7 +104,7 @@ $( "#frm-lead-note" ).submit(function( event ) {
     axios
         .post("panel/lead/"+lead_id+"/note", {description:description})
         .then(function (response) {
-            showInfo(2, 'dt-lead', 'Información actualizada correctamente');
+            showInfo(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
             $('#modal-lead-note').modal('hide');
         })
         .catch(e => {
@@ -124,7 +124,7 @@ $( "#frm-advisor" ).submit(function( event ) {
     axios
         .post("panel/lead/"+lead_id+"/advisor/store", {asesor_id:asesor_id})
         .then(function (response) {
-            showInfo(2, 'dt-lead', 'Prospecto asignado');
+            showInfo(2, 'dt-lead', 'Datos actualizados', 'Prospecto asignado');
             $('#modal-advisor').modal('hide');
         })
         .catch(e => {
