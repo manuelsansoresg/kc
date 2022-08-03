@@ -25,13 +25,4 @@ class HomeController extends Controller
     {
         return view('home');
     }
-
-    public function passwordChange($lead_id)
-    {
-        $lead = Lead::find($lead_id);
-        if ($lead == null) {
-            abort(404);
-        }
-        return view('panel.user.change_password', compact('lead'));
-    }
 }

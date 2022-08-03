@@ -20,6 +20,6 @@ Route::get('/', function () {
     return view('default.index');
 });
 
-Route::get('account/{lead_id}/password/change', ['\App\Http\Controllers\HomeController', 'passwordChange']);
+
 
 Auth::routes();
