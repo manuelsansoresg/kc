@@ -127,7 +127,7 @@ class User extends Authenticatable
         $lead_client->save();
 
         //* send email new account
-        $domain = 'https://app.kaaxclub.com/';
+        $domain = 'https://app.kaaxclub.com';
         $link_account = $domain.'/account/'.$lead_id.'/password/change';
         $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
         $send_grid->setTemplate('d-235b3d5c43c14184b365def8c1d1e160');
