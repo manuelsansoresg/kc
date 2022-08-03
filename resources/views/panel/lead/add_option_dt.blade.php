@@ -20,6 +20,10 @@
                 <em class="icon ni ni-users-fill"></em><span>Perfíl</span></a>
         </li>
         <li>
+            <a  class="pointer" onclick="createClientPerson({{ $id }})">
+                <em class="icon ni ni-users-fill"></em><span>Crear cuenta</span></a>
+        </li>
+        <li>
             <a class="pointer" onclick="archiveModal({{ $id }})">
                 <em class="icon ni ni-files"></em><span>Archivar</span></a>
         </li>

@@ -51,6 +51,7 @@ Route::group(['prefix' => 'lead'], function () {
     Route::post('{lead_id}/note', ['\App\Http\Controllers\Panel\LeadController', 'noteStore'])->middleware('auth');
     Route::get('{lead_id}/profile', ['\App\Http\Controllers\Panel\LeadController', 'profile'])->middleware('auth');
     Route::post('{lead_id}/advisor/store', ['\App\Http\Controllers\Panel\LeadController', 'advisorStore'])->middleware('auth');
+    Route::post('{lead_id}/client-person/store', ['\App\Http\Controllers\Panel\LeadController', 'storeClientPerson'])->middleware('auth');
 });
 
 //*etapas para mover del lugar

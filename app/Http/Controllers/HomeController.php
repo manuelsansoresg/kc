@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lead;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -13,7 +14,6 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
     }
 
     /**
@@ -24,5 +24,14 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function passwordChange($lead_id)
+    {
+        $lead = Lead::find($lead_id);
+        if ($lead == null) {
+            abort(404);
+        }
+        return view('panel.user.change_password', compact('lead'));
     }
 }

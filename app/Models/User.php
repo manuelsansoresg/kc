@@ -103,6 +103,38 @@ class User extends Authenticatable
         $user->assignRole(ucfirst($role));
     }
 
+    public static function saveClientPersona($data)
+    {
+        $name       = explode(' ', $data['name']);
+        $password   = 'hola'.$name[0];
+        $lead_id    = $data['id'];
+        unset($data['id']);
+        //*create user with leads parameters
+        $user = new User($data);
+        $user->password = bcrypt($password);
+        $user->save();
+
+        //*assign role user
+        $role = 'Cliente persona';
+        $user->assignRole(ucfirst($role));
+
+        //*create relation lead to client
+        $data_lead_client = array(
+            'lead_id' => $lead_id,
+            'client_person_id' => $user->id
+        );
+        $lead_client = new LeadClient($data_lead_client);
+        $lead_client->save();
+
+        //* send email new account
+        $domain = 'https://app.kaaxclub.com/';
+        $link_account = $domain.'/account/'.$lead_id.'/password/change';
+        $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
+        $send_grid->setTemplate('d-235b3d5c43c14184b365def8c1d1e160');
+        $send_grid->setParams(['first_name'=> $data['name'], 'link_account' => $link_account]);
+        $send_grid->send();
+    }
+
     public static function changePassword($request)
     {
         $user_id = $request->password_user_id;
@@ -159,6 +191,8 @@ class User extends Authenticatable
         }
         return $users;
     }
+
+    
 
     public function financial()
     {

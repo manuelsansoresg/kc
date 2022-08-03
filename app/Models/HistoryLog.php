@@ -22,11 +22,15 @@ class HistoryLog extends Model
         'lead-archive' => 1,
     ];
 
-    public static function move($id_rel, $status_id, $old_status_id, $request)
+    public static function move($id_rel, $status_id, $old_status_id, $request = null)
     {
         $status_id                = HistoryLog::$status[$status_id];
         $old_status_id            = HistoryLog::$status[$old_status_id];
-        $data                     = $request->data;
+        
+        if ($request != null) {
+            $data = $request->data;
+        }
+
         $data['id_rel']           = $id_rel;
         $data['status_id']        = $status_id;
         $data['old_status_id']    = $old_status_id;

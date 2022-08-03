@@ -77,6 +77,12 @@ class LeadController extends Controller
         return response()->json(200);
     }
 
+    public function storeClientPerson($lead_id)
+    {
+        $lead = Lead::createClientPerson($lead_id);
+        return response()->json($lead);
+    }
+
     public function noteStore($lead_id, Request $request)
     {
         $user_id = Auth::user()->id;

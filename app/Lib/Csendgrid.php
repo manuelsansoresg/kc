@@ -44,11 +44,8 @@ class Csendgrid
         $sendgrid = new \SendGrid('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');
         try {
             $response = $sendgrid->send($email);
-            print $response->statusCode() . "\n";
-            print_r($response->headers());
-            print $response->body() . "\n";
         } catch (\Exception $e) {
-            return 'Caught exception: '. $e->getMessage() ."\n";
+            return 500;
         }
     }
 }

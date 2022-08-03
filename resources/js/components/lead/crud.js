@@ -132,6 +132,18 @@ $( "#frm-advisor" ).submit(function( event ) {
         });
 });
 
+window.createClientPerson = function(lead_id) {
+    axios
+    .post("panel/lead/"+lead_id+"/client-person/store")
+    .then(function (response) {
+        let result = response.data;
+        showInfo(2, 'dt-lead', 'Datos actualizados', 'Cuenta creada');
+    })
+    .catch(e => {
+        
+    });
+}
+
 $().ready(function () {
     $("#frm-lead").validate({
         rules: {

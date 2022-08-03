@@ -57,6 +57,18 @@ class Lead extends Model
         }
         return $data;
     }
+
+    public static function createClientPerson($lead_id)
+    {
+        $get_lead = LeadClient::where('lead_id', $lead_id)->count();
+        $status = 500;
+        if ($get_lead === 0) {
+            $status = 200;
+            $lead = Lead::find($lead_id)->toArray();
+            User::saveClientPersona($lead);
+        }
+        return $status;
+    }
     
     public static function listArchive()
     {

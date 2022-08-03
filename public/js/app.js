@@ -2841,6 +2841,14 @@ $("#frm-advisor").submit(function (event) {
     $('#modal-advisor').modal('hide');
   })["catch"](function (e) {});
 });
+
+window.createClientPerson = function (lead_id) {
+  axios.post("panel/lead/" + lead_id + "/client-person/store").then(function (response) {
+    var result = response.data;
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Cuenta creada');
+  })["catch"](function (e) {});
+};
+
 $().ready(function () {
   $("#frm-lead").validate({
     rules: {

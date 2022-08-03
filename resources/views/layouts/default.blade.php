@@ -12,8 +12,8 @@
     <!-- Favicon -->
     <link rel="icon" sizes="16x16" href="images/favicon.png">
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="assets/css/vendor.bundle.css?ver=100">
-    <link rel="stylesheet" href="assets/css/style.css?ver=100">
+    <link rel="stylesheet" href="/assets/css/vendor.bundle.css?ver=100">
+    <link rel="stylesheet" href="/assets/css/style.css?ver=100">
 </head>
 
 <body>
@@ -1061,8 +1061,8 @@
         </footer><!-- end footer-section -->
     </div>
     <!-- Scripts -->
-    <script src="assets/js/bundle.js"></script>
-    <script src="assets/js/scripts.js"></script>
+    <script src="/assets/js/bundle.js"></script>
+    <script src="/assets/js/scripts.js"></script>
 </body>
 
 </html>
