@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Strategies\Values\ValidateStagesValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -41,8 +42,14 @@ class Lead extends Model
             
             $lbl_status = '<span class="badge bg-success">Valido</span>';
             
-            $product    = $query->productLead;
-            $user       = $query->advisorLead;
+            $product        = $query->productLead;
+            $user           = $query->advisorLead;
+
+            $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
+            $validate       = (new $leadStrategy)->getValidate($query->id);
+            if ($validate['error'] === true) {
+                $lbl_status = '<span class="badge bg-danger">Invalido</span>';
+            }
 
             $data[] = array(
                 'name' => $lead,

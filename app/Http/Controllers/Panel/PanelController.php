@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Lib\Csendgrid;
+use App\Strategies\Values\ValidateStagesValues;
 use Illuminate\Http\Request;
 
 class PanelController extends Controller
@@ -16,6 +17,15 @@ class PanelController extends Controller
     public function index()
     {
         return view('panel.index');
+    }
+
+    public function showValidate($id, $model)
+    {
+        $leadStrategy   = ValidateStagesValues::STRATEGY[$model];
+        $validate       = (new $leadStrategy)->getValidate($id);
+        
+        $view_validate  = \View::make('panel.table_validate', ['errors' => $validate['table']])->render();
+        return response()->json($view_validate);
     }
 
     /**

@@ -53,11 +53,13 @@ Route::group(['prefix' => 'lead'], function () {
     Route::post('{lead_id}/advisor/store', ['\App\Http\Controllers\Panel\LeadController', 'advisorStore'])->middleware('auth');
     Route::post('{lead_id}/client-person/store', ['\App\Http\Controllers\Panel\LeadController', 'storeClientPerson'])->middleware('auth');
     Route::post('{lead_id}/tag/update', ['\App\Http\Controllers\Panel\LeadController', 'updateTag'])->middleware('auth');
+
+    //* mover del lugar
+    Route::post('{id_rel}/move/archive', ['\App\Http\Controllers\Panel\LeadController', 'moveArchive'])->middleware('auth');
 });
 
-//*etapas para mover del lugar
-Route::post('lead/{id_rel}/move/archive', ['\App\Http\Controllers\Panel\LeadController', 'moveArchive'])->middleware('auth');
 
+Route::get('{id}/{model}/validate/show', ['\App\Http\Controllers\Panel\PanelController', 'showValidate'])->middleware('auth');
 
 Route::group(['prefix' => 'archive'], function () {
     Route::get('lead', ['\App\Http\Controllers\Panel\LeadController', 'archive'])->middleware('auth');

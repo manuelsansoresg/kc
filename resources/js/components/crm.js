@@ -37,3 +37,20 @@ $( "#frm-archive" ).submit(function( event ) {
     let msg = 'registro archivado exitosamente';
     move(id_rel, 'lead', 'archive', 'frm-archive', 'modal-archive', 'dt-lead', 'Archivo', msg);
 });
+
+window.modalValidate = function(id, model){
+    $('#modal-validate-content').html('');
+    axios
+    .get('/panel/'+id+'/'+model+'/validate/show')
+    .then(function (response) {
+        let result = response.data;
+        $('#modal-validate-content').html(result);
+        $('#modal-validate').modal('show');
+    })
+    .catch(e => {
+        
+    });
+
+    
+    
+}

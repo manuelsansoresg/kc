@@ -33,10 +33,14 @@
         </li>
         @if ($user->hasRole('Asesor') != true)
         <li>
-            <a onclick="modalAdvisor({{$id}})">
+            <a class="pointer" onclick="modalAdvisor({{$id}})">
                 <em class="icon ni ni-users-fill"></em><span>Asignar asesor</span></a>
         </li>
         @endif
+        <li>
+            <a class="pointer" onclick="modalValidate({{$id}}, 'lead')">
+                <em class="icon ni ni-alert-circle-fill"></em><span>Ver validaciónes</span></a>
+        </li>
         
         <li>
             <a class="pointer" onclick="deleteLead({{ $id }})">

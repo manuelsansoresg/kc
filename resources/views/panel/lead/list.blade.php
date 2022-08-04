@@ -53,4 +53,5 @@
     @include('panel.lead.modal.advisor')
     @include('panel.modal.archive')
     @include('panel.modal.tags')
+    @include('panel.modal.validate')
 @endsection
