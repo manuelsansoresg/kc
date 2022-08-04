@@ -145,6 +145,12 @@ class LeadController extends Controller
         //
     }
 
+    public function updateTag($lead_id, Request $request)
+    {
+        Lead::saveEdit($request);
+        return response()->json(200);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

@@ -144,6 +144,36 @@ window.createClientPerson = function(lead_id) {
     });
 }
 
+window.modalTags = function(lead_id) {
+    $('#modal-tag-lead_id').val(lead_id);
+    $('#modal-tags').modal('show');
+}
+
+
+
+if (document.getElementById('frm-tags')) {
+    NioApp.Select2('#modal-tags-tag', {
+        dropdownParent: $('#modal-tags')
+    });
+}
+
+$( "#frm-tags" ).submit(function( event ) {
+    event.preventDefault();
+    let lead_id = $('#modal-tag-lead_id').val();
+    const new_form = document.getElementById("frm-tags");
+    const data = new FormData(new_form);
+
+    axios
+        .post("panel/lead/"+lead_id+"/tag/update", data)
+        .then(function (response) {
+            showInfo(2, 'dt-lead', 'Datos actualizados', 'Etiqueta actualizada');
+            $('#modal-tags').modal('hide');
+        })
+        .catch(e => {
+            
+        });
+});
+
 $().ready(function () {
     $("#frm-lead").validate({
         rules: {

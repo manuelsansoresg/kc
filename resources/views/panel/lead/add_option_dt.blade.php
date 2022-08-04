@@ -24,6 +24,10 @@
                 <em class="icon ni ni-users-fill"></em><span>Crear cuenta</span></a>
         </li>
         <li>
+            <a  class="pointer" onclick="modalTags({{ $id }})">
+                <em class="icon ni ni-tag"></em><span>Etiquetas</span></a>
+        </li>
+        <li>
             <a class="pointer" onclick="archiveModal({{ $id }})">
                 <em class="icon ni ni-files"></em><span>Archivar</span></a>
         </li>

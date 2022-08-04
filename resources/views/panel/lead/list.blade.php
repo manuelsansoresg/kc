@@ -52,4 +52,5 @@
     @include('panel.lead.modal.note')
     @include('panel.lead.modal.advisor')
     @include('panel.modal.archive')
+    @include('panel.modal.tags')
 @endsection

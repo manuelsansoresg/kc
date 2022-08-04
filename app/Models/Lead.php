@@ -107,12 +107,11 @@ class Lead extends Model
 
         $is_asesor = Auth::user()->hasRole('Asesor');
 
-        if ($data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
+        if (isset($data['agreement_id']) && $data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
             $agreement = new Agreement(['name' => $request->new_agreement, 'status' => 1]);
             $agreement->save();
             $data['agreement_id'] = $agreement->id;
         }
-
         if ($request->lead_id == null) {
             if ($is_asesor === true) {
                 $data['asesor_id'] =  Auth::user()->id;

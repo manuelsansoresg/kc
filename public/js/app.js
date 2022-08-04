@@ -2849,6 +2849,27 @@ window.createClientPerson = function (lead_id) {
   })["catch"](function (e) {});
 };
 
+window.modalTags = function (lead_id) {
+  $('#modal-tag-lead_id').val(lead_id);
+  $('#modal-tags').modal('show');
+};
+
+if (document.getElementById('frm-tags')) {
+  NioApp.Select2('#modal-tags-tag', {
+    dropdownParent: $('#modal-tags')
+  });
+}
+
+$("#frm-tags").submit(function (event) {
+  event.preventDefault();
+  var lead_id = $('#modal-tag-lead_id').val();
+  var new_form = document.getElementById("frm-tags");
+  var data = new FormData(new_form);
+  axios.post("panel/lead/" + lead_id + "/tag/update", data).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Etiqueta actualizada');
+    $('#modal-tags').modal('hide');
+  })["catch"](function (e) {});
+});
 $().ready(function () {
   $("#frm-lead").validate({
     rules: {
