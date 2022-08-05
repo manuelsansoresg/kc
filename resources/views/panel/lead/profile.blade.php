@@ -174,7 +174,7 @@
                                             @if ($history->status_id === $m_history_log::LEAD_ARCHIVE)
                                                 <div class="user-card mt-3">
                                                     <div class="user-info">
-                                                        <span class="dot dot-secondary bg-gray  ms-1">  </span><span class="tb-lead"> <em class="icon ni ni-archive-fill"></em> {{ $leyend_status[$m_history_log::LEAD_ARCHIVE] }}  <span class="dot dot-success d-md-none ms-1"></span>
+                                                        <span class="tb-lead"> <em class="icon ni ni-archive-fill"></em> {{ $leyend_status[$m_history_log::LEAD_ARCHIVE] }}  <span class="dot dot-success d-md-none ms-1"></span>
                                                         <p class="ms-1"> {{ formatDateNameMonth($history->created_at) }}</p>
                                                     </span>
                                                     
@@ -189,7 +189,7 @@
                                             @endphp
                                             <div class="user-card mt-3">
                                                 <div class="user-info">
-                                                    <span class="dot dot-secondary bg-gray  ms-1">  </span> <span class="tb-lead"> <em class="icon ni ni-forward-fill"></em> {{ $leyend_status[$m_history_log::ADD_PROSPECT] }} {{ $lead->name}} {{ $lead->last_name}} {{ $lead->second_last_name}}  
+                                                     <span class="tb-lead"> <em class="icon ni ni-forward-fill"></em> {{ $leyend_status[$m_history_log::ADD_PROSPECT] }} {{ $lead->name}} {{ $lead->last_name}} {{ $lead->second_last_name}}  
                                                         <p class="ms-1"> {{ formatDateNameMonth($history->created_at) }}</p>
                                                     </span>
                                                 </div>
@@ -202,7 +202,7 @@
                                             @endphp
                                             <div class="user-card mt-3">
                                                 <div class="user-info">
-                                                    <span class="dot dot-secondary bg-gray  ms-1">  </span> <span class="tb-lead"><em class="icon ni ni-user-add-fill"></em> {{ $leyend_status[$m_history_log::CREATE_PROSPECT] }} {{ $lead->name}} {{ $lead->last_name}} {{ $lead->second_last_name}}  
+                                                     <span class="tb-lead"><em class="icon ni ni-user-add-fill"></em> {{ $leyend_status[$m_history_log::CREATE_PROSPECT] }} {{ $lead->name}} {{ $lead->last_name}} {{ $lead->second_last_name}}  
                                                         <p>{{ formatDateNameMonth($history->created_at) }}</p>
                                                         
                                                     </span>
