@@ -81,9 +81,9 @@ class Lead extends Model
     {
        
         
-        $status_id = HistoryLog::$status['lead-archive'];
-        $get_list    = HistoryLog::where(['status_id' => $status_id, 'status' => 1])->get();
-        $data        = array();
+        $status_id    = HistoryLog::LEAD_ARCHIVE;
+        $get_list     = HistoryLog::where(['status_id' => $status_id, 'status' => 1])->get();
+        $data         = array();
         foreach ($get_list as $query) {
             $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'id' => $query->id])->render();
             
@@ -123,15 +123,21 @@ class Lead extends Model
             if ($is_asesor === true) {
                 $data['asesor_id'] =  Auth::user()->id;
             }
-            $product = new Lead($data);
-            $product->save();
+            $lead = new Lead($data);
+            $lead->save();
+
+            if ($is_asesor === true) {
+                $lead_advisor = LeadAdvisor::create([ 'lead_id' => $lead->id, 'advisor_id' => Auth::user()->id]);
+                HistoryLog::move($lead_advisor->id, HistoryLog::ADD_PROSPECT, HistoryLog::ADD_PROSPECT);
+            }
+            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         } else {
-            $product = Lead::find($request->lead_id);
-            $product->fill($data);
-            $product->update();
+            $lead = Lead::find($request->lead_id);
+            $lead->fill($data);
+            $lead->update();
         }
        
-        return $product;
+        return $lead;
     }
 
     public static function getChanelByOrigin($origin_id)
@@ -177,5 +183,10 @@ class Lead extends Model
     public function history()
     {
         return $this->hasOne(HistoryLog::class);
+    }
+
+    public function leadAdvisor()
+    {
+        return $this->hasMany(LeadAdvisor::class);
     }
 }

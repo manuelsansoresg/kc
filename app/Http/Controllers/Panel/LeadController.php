@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\HistoryLog;
 use App\Models\Lead;
+use App\Models\LeadAdvisor;
 use App\Models\LeadNote;
 use App\Models\Note;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class LeadController extends Controller
 
     public function moveArchive($id_rel, Request $request)
     {
-        $history = HistoryLog::move($id_rel, 'lead-archive', 'lead-archive', $request);
+        $history = HistoryLog::move($id_rel, HistoryLog::LEAD_ARCHIVE, HistoryLog::LEAD_ARCHIVE, $request);
         return response()->json($history);
     }
 
@@ -98,6 +99,8 @@ class LeadController extends Controller
         $lead               = Lead::find($lead_id);
         $lead->asesor_id    = $request->asesor_id;
         $lead->update();
+        $lead_advisor = LeadAdvisor::create([ 'lead_id' => $lead->id, 'advisor_id' => Auth::user()->id]);
+        HistoryLog::move($lead_advisor->id, HistoryLog::ADD_PROSPECT, HistoryLog::ADD_PROSPECT);
     }
 
     /**
