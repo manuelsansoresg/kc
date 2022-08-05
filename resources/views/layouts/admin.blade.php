@@ -1023,6 +1023,12 @@
     <script type="text/javascript" src="/vendor/jquery-validation/dist/localization/messages_es.min.js"></script>
     <script type="text/javascript" src="/vendor/toastr/build/toastr.min.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
+    <script>
+        Echo.channel('trades')
+            .listen('SendPush', (e) => {
+                console.log(e.trade);
+            })
+    </script>
 </body>
 
 </html>
