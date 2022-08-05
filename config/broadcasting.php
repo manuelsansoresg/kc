@@ -40,8 +40,8 @@ return [
                 'encrypted' => true,
                 'host' => '127.0.0.1',
                 'port' => 8080,
-                'scheme' => 'https',
-                'useTLS' => true
+                'scheme' => 'http',
+                //'useTLS' => true
             ],
             'curl_options' => [
                 CURLOPT_SSL_VERIFYHOST => 0,

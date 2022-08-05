@@ -8,7 +8,7 @@ window.Echo = new Echo({
     wsHost: window.location.hostname,
     wsPort: 8080,
     wssPort: 8080,
-    forceTLS: true,
+    //forceTLS: true,
     disableStats: true,
     enabledTransports:['ws', 'wss']
 });
