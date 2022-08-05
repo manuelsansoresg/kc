@@ -150,11 +150,11 @@ class Lead extends Model
                 break;
             case '2':
                 //* WebPage
-                $channel = config('enums.channel_asesor');
+                $channel = config('enums.channel_web_page');
                 break;
             case '3':
                 //* WebApp
-                $channel = config('enums.channel_asesor');
+                $channel = config('enums.channel_web_app');
                 break;
         }
         return $channel;
