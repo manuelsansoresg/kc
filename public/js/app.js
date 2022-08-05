@@ -4786,7 +4786,7 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   wsHost: window.location.hostname,
   wsPort: 8080,
   wssPort: 8080,
-  forceTLS: false,
+  forceTLS: true,
   disableStats: true,
   enabledTransports: ['ws', 'wss']
 });
