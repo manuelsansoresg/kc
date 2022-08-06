@@ -6,10 +6,10 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: 'abcb59ca67abeb8745bb',
     wsHost: window.location.hostname,
-    wsPort: 8080,
-    wssPort: 8080,
-    //forceTLS: true,
-    disableStats: true,
+    wsPort: 8443,
+    wssPort: 8443,
+    forceTLS: true,
+    disableStats: false,
     enabledTransports:['ws', 'wss']
 });
 
