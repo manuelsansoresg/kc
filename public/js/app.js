@@ -2972,7 +2972,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'status'
     }, {
-      data: 'options'
+      data: 'options',
+      className: 'nk-tb-col-tools text-end'
     }],
     columnDefs: [{
       className: "nk-tb-col",

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'label' },
             { data: 'advisor' },
             { data: 'status' },
-            { data: 'options', }
+            { data: 'options', className: 'nk-tb-col-tools text-end' }
         ],
         columnDefs: [
             { className: "nk-tb-col", targets: "_all" },
