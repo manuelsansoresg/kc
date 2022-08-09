@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Lib\Csendgrid;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\LeadAdvisor;
@@ -27,6 +28,7 @@ class LeadController extends Controller
     public function list()
     {
         $users = Lead::listDatatable();
+        
         
         return response()->json(['data' => $users]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Lib\Csendgrid;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\ValidateStagesValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -139,6 +140,9 @@ class Lead extends Model
                 (new $notification_add)->send($lead->id);
             }
             HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+            //*crear contacto sendgrid
+            $send_grid = new Csendgrid();
+            $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name);
         } else {
             $lead = Lead::find($request->lead_id);
             $lead->fill($data);
