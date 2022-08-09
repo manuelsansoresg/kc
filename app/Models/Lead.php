@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\ValidateStagesValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -126,9 +127,16 @@ class Lead extends Model
             $lead = new Lead($data);
             $lead->save();
 
+            //* Execute notification in create lead
+            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+            (new $notification)->send($lead->id);
+
             if ($is_asesor === true) {
                 $lead_advisor = LeadAdvisor::create([ 'lead_id' => $lead->id, 'advisor_id' => Auth::user()->id]);
                 HistoryLog::move($lead_advisor->id, HistoryLog::ADD_PROSPECT, HistoryLog::ADD_PROSPECT);
+                //* Execute notification in add lead
+                $notification_add   = SendNotificationsValues::STRATEGY['leadAddProspect'];
+                (new $notification_add)->send($lead->id);
             }
             HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         } else {

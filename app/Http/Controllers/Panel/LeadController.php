@@ -8,6 +8,7 @@ use App\Models\Lead;
 use App\Models\LeadAdvisor;
 use App\Models\LeadNote;
 use App\Models\Note;
+use App\Strategies\Values\SendNotificationsValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -99,6 +100,11 @@ class LeadController extends Controller
         $lead               = Lead::find($lead_id);
         $lead->asesor_id    = $request->asesor_id;
         $lead->update();
+
+        //* Execute notification in add lead
+        $notification_add   = SendNotificationsValues::STRATEGY['leadAddProspect'];
+        (new $notification_add)->send($lead->id);
+        
         $lead_advisor = LeadAdvisor::create([ 'lead_id' => $lead->id, 'advisor_id' => Auth::user()->id]);
         HistoryLog::move($lead_advisor->id, HistoryLog::ADD_PROSPECT, HistoryLog::ADD_PROSPECT);
     }

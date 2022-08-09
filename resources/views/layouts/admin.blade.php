@@ -1012,6 +1012,7 @@
             </div><!-- .modal-content -->
         </div><!-- .modla-dialog -->
     </div><!-- .modal -->
+    <input type="hidden" id="user_id" value="{{ (isset(Auth::user()->id))? Auth::user()->id : null }}">
     <!-- JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
@@ -1022,13 +1023,8 @@
     {{-- <script type="text/javascript" src="/vendor/jquery-validation/dist/jquery.validate.js"></script> --}}
     <script type="text/javascript" src="/vendor/jquery-validation/dist/localization/messages_es.min.js"></script>
     <script type="text/javascript" src="/vendor/toastr/build/toastr.min.js"></script>
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
-    <script>
-        Echo.channel('trades')
-            .listen('SendPush', (e) => {
-                console.log(e.trade);
-            })
-    </script>
 </body>
 
 </html>

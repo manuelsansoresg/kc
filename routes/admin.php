@@ -65,3 +65,5 @@ Route::group(['prefix' => 'archive'], function () {
     Route::get('lead', ['\App\Http\Controllers\Panel\LeadController', 'archive'])->middleware('auth');
     Route::get('lead/list/show', ['\App\Http\Controllers\Panel\LeadController', 'listArchive'])->middleware('auth');
 });
+
+Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\NotificationController', 'show'])->middleware('auth');

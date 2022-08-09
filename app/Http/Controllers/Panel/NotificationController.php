@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Lib\Csendgrid;
-use App\Lib\Pusher;
 use App\Strategies\Values\SendNotificationsValues;
-use App\Strategies\Values\ValidateStagesValues;
 use Illuminate\Http\Request;
 
-class PanelController extends Controller
+class NotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,18 +15,7 @@ class PanelController extends Controller
      */
     public function index()
     {
-       
-
-        return view('panel.index');
-    }
-
-    public function showValidate($id, $model)
-    {
-        $leadStrategy   = ValidateStagesValues::STRATEGY[$model];
-        $validate       = (new $leadStrategy)->getValidate($id);
-        
-        $view_validate  = \View::make('panel.table_validate', ['errors' => $validate['table']])->render();
-        return response()->json($view_validate);
+        //
     }
 
     /**
@@ -59,9 +45,11 @@ class PanelController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($model)
     {
-        //
+        $notification       = SendNotificationsValues::STRATEGY[$model];
+        $get_notification   = (new $notification)->get();
+        return response()->json($get_notification);
     }
 
     /**

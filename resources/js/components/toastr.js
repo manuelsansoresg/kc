@@ -119,4 +119,11 @@
         position: 'top-right'
       });
   }
+  window.showToastDark = function (title, description, type) {
+    toastr.clear();
+    NioApp.Toast('<h5>'+title+'</h5><p>'+description+'</p>', ''+type+'', {
+        position: 'top-right',
+        ui: 'is-dark'
+      });
+  }
 })(NioApp, jQuery);
