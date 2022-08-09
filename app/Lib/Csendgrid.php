@@ -70,9 +70,6 @@ class Csendgrid
         
         try {
             $response = $this->sendgrid->client->marketing()->contacts()->put($request_body);
-            print $response->statusCode() . "\n";
-            print_r($response->headers());
-            print $response->body() . "\n";
         } catch (Error $err) {
             return 500;
         }
