@@ -25,7 +25,7 @@ Route::get('/', function () {
 Auth::routes();
 
 
-Route::get('/politicas-de-privacidad', function () {
+Route::get('/politicas', function () {
     return view('politicas');
 });
 
