@@ -1,7 +1,11 @@
 import { showInfo } from '../utilities';
 
 
-NioApp.Select2.init();
+
+$('.js-select2').select2({
+    placeholder: "Escribe para buscar..",
+    allowClear: true
+});
 
   $("#lead-agreement" ).change(function() {
     let lead_agreement = $("#lead-agreement" ).val();
@@ -149,11 +153,20 @@ window.modalTags = function(lead_id) {
     $('#modal-tags').modal('show');
 }
 
+if (document.getElementById('frm-advisor')) {
+    $('#modal-advisor-id').select2({
+        dropdownParent: $('#modal-advisor'),
+        placeholder: "Escribe para buscar..",
+        allowClear: true
+    });
+}
 
 
 if (document.getElementById('frm-tags')) {
-    NioApp.Select2('#modal-tags-tag', {
-        dropdownParent: $('#modal-tags')
+    $('#modal-tags-tag').select2({
+        dropdownParent: $('#modal-tags'),
+        placeholder: "Escribe para buscar..",
+        allowClear: true
     });
 }
 
@@ -192,6 +205,9 @@ $().ready(function () {
                 email: true
             },
             'data[origin_id]': {
+                required: true,
+            },
+            'data[channel_id]': {
                 required: true,
             },
             'new_agreement': {
@@ -233,17 +249,21 @@ window.modalPasswod = function (user_id) {
     $('#modal-user-password').modal('show');
 }
 
-function resolveTextSetting() {
+/* function resolveTextSetting() {
     return new Promise(resolve => {
       setTimeout(() => {
         setData();
       }, 3000);
     });
-  }
+  } */
   $(document).ready(function(){
     if (document.getElementById('lead-channel')) {
-        resolveTextSetting();
+        /* resolveTextSetting(); */
+        setData();
     }
     
   })
 
+  $(document).on("select2:open", () => {
+    document.querySelector(".select2-container--open .select2-search__field").focus()
+  })

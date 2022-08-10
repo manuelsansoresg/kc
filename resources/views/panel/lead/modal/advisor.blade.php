@@ -2,7 +2,7 @@
 @php
     $advisors = $m_user->getUserRole('Asesor');
 @endphp
-<div class="modal fade" id="modal-advisor" tabindex="-1" aria-modal="true" role="dialog">
+<div class="modal fade" id="modal-advisor" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content"><a href="#" class="close" data-bs-dismiss="modal"><em
                     class="icon ni ni-cross-sm"></em></a>
@@ -16,7 +16,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Asesor</label>
                                 <div class="form-control-wrap">
-                                    <select class="form-select js-select2" name="data[asesor_id]" id="modal-advisor-id"  data-search="on">
+                                    <select class="form-select" name="data[asesor_id]" id="modal-advisor-id"  data-search="on">
                                         @foreach ($advisors as $advisor)
                                             <option value="{{ $advisor->id }}">{{ $advisor->name }} {{ $advisor->last_name }} {{ $advisor->second_last_name }}
                                             </option>

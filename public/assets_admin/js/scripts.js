@@ -735,10 +735,10 @@
     NioApp.Range('.form-range-slider');
   };
 
-  NioApp.Select2.init = function () {
+ /*  NioApp.Select2.init = function () {
     // NioApp.Select2('.select');
     NioApp.Select2('.js-select2');
-  }; // Slick Slider @v1.0.1
+  }; // Slick Slider @v1.0.1 */
 
 
   NioApp.Slick = function (elm, opt) {
@@ -974,7 +974,7 @@
   NioApp.Addons.Init = function () {
     NioApp.Knob.init();
     NioApp.Range.init();
-    NioApp.Select2.init();
+    /* NioApp.Select2.init(); */
     NioApp.Dropzone.init();
     NioApp.Slider.init();
     NioApp.DataTable.init();
@@ -997,7 +997,7 @@
 
   NioApp.BS.modalOnInit = function () {
     $('.modal').on('shown.bs.modal', function () {
-      NioApp.Select2.init();
+      /* NioApp.Select2.init(); */
       NioApp.Validate.init();
     });
   }; // Initial by default

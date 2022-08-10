@@ -52,13 +52,14 @@ class Lead extends Model
             if ($validate['error'] === true) {
                 $lbl_status = '<span class="badge bg-danger">Invalido</span>';
             }
-
+            $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
+            $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
             $data[] = array(
                 'name' => $lead,
                 'date' => formatDateNameMonth($query->created_at),
                 'product' => ($product != null) ? $product->alias : '',
-                'origin' => config('enums.origin')[$query->origin_id],
-                'label' => config('enums.temperatures')[$query->temperature_id],
+                'origin' => $origin,
+                'label' => $label,
                 'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
                 'status' => $lbl_status,
                 'options' => $option

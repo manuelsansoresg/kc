@@ -51,7 +51,10 @@
                                                 <div class="form-control-wrap">
                                                    
                                                     <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement"  data-search="on">
-                                                        <option value="">Selecciona una opción</option>
+                                                        @if ($lead_id == null)
+                                                            <option value="">Escribe para buscar</option>
+                                                        @endif
+
                                                         @foreach ($agreements as $agreement)
                                                             <option value="{{ $agreement->id }}">{{ $agreement->name }}</option>
                                                         @endforeach
@@ -71,7 +74,9 @@
                                                 <label class="form-label">Producto</label>
                                                 <div class="form-control-wrap">
                                                     <select class="form-select js-select2" name="data[product_id]" id="lead-product-id"  data-search="on">
-                                                        <option value="">Selecciona una opción</option>
+                                                        @if ($lead_id == null)
+                                                            <option value="">Escribe para buscar</option>
+                                                        @endif
                                                         @foreach ($products as $product)
                                                             <option value="{{ $product->id }}">{{ $product->alias }}
                                                             </option>
@@ -130,6 +135,9 @@
                                                 <label class="form-label">Origen</label>
                                                 <div class="form-control-wrap">
                                                     <select class="form-control js-select2" name="data[origin_id]" id="lead-origin"  data-search="on">
+                                                        @if ($lead == null)
+                                                        <option value="">Escribe para buscar</option>
+                                                        @endif
                                                         @foreach ($origins as $key=>$origin)
                                                             <option value="{{ $key }}">{{ $origin }}
                                                             </option>
@@ -143,6 +151,7 @@
                                                 <label class="form-label">Canal</label>
                                                 <div class="form-control-wrap">
                                                     <select class="form-select js-select2" name="data[channel_id]" id="lead-channel"  data-search="on">
+                                                        <option value="">Escribe para buscar</option>
                                                     </select>
                                                 </div>
                                             </div>

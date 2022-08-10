@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link rel="stylesheet" type="text/css" href="/vendor/datatables/datatables.min.css"/>
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
+    
     <link rel="stylesheet" type="text/css" href="/css/app.css"/>
 </head>
 
@@ -1024,6 +1025,7 @@
     <script type="text/javascript" src="/vendor/jquery-validation/dist/localization/messages_es.min.js"></script>
     <script type="text/javascript" src="/vendor/toastr/build/toastr.min.js"></script>
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
 </body>
 

@@ -2745,7 +2745,10 @@ window.modalValidate = function (id, model) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
 
-NioApp.Select2.init();
+$('.js-select2').select2({
+  placeholder: "Escribe para buscar..",
+  allowClear: true
+});
 $("#lead-agreement").change(function () {
   var lead_agreement = $("#lead-agreement").val();
   $('#lead-content-agreement').hide();
@@ -2865,9 +2868,19 @@ window.modalTags = function (lead_id) {
   $('#modal-tags').modal('show');
 };
 
+if (document.getElementById('frm-advisor')) {
+  $('#modal-advisor-id').select2({
+    dropdownParent: $('#modal-advisor'),
+    placeholder: "Escribe para buscar..",
+    allowClear: true
+  });
+}
+
 if (document.getElementById('frm-tags')) {
-  NioApp.Select2('#modal-tags-tag', {
-    dropdownParent: $('#modal-tags')
+  $('#modal-tags-tag').select2({
+    dropdownParent: $('#modal-tags'),
+    placeholder: "Escribe para buscar..",
+    allowClear: true
   });
 }
 
@@ -2901,6 +2914,9 @@ $().ready(function () {
       'data[origin_id]': {
         required: true
       },
+      'data[channel_id]': {
+        required: true
+      },
       'new_agreement': {
         required: function required(element) {
           var lead_agreement = $("#lead-agreement").val();
@@ -2929,19 +2945,23 @@ window.modalPasswod = function (user_id) {
   $('#password_user_id').val(user_id);
   $('#modal-user-password').modal('show');
 };
+/* function resolveTextSetting() {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        setData();
+      }, 3000);
+    });
+  } */
 
-function resolveTextSetting() {
-  return new Promise(function (resolve) {
-    setTimeout(function () {
-      setData();
-    }, 3000);
-  });
-}
 
 $(document).ready(function () {
   if (document.getElementById('lead-channel')) {
-    resolveTextSetting();
+    /* resolveTextSetting(); */
+    setData();
   }
+});
+$(document).on("select2:open", function () {
+  document.querySelector(".select2-container--open .select2-search__field").focus();
 });
 
 /***/ }),
