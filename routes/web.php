@@ -23,3 +23,15 @@ Route::get('/', function () {
 
 
 Auth::routes();
+
+
+Route::get('/politicas-de-privacidad', function () {
+    return view('politicas');
+});
+
+Route::get('/unsubscribe', function () {
+    return view('index');
+});
+Route::get('/condiciones', function () {
+    return view('index');
+});
