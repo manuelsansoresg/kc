@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Models\Action;
-use App\Models\File;
+use App\Models\RegisterAction;
 use Illuminate\Http\Request;
 
-class ActionController extends Controller
+class RegisterActionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,25 +36,8 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
-        $action = Action::saveEdit($request);
-        if ($action != null) {
-            $request->session()->put('id_rel_action', $action->id);
-        }
-        return response()->json($action);
-    }
-
-    /**
-     * guarda el archivo dependiendo del modelo y el tipo de relacion
-     *
-     * @param int $model   model to indicate relationship
-     * @param [type] $id_rel id_rel id to relationship
-     * @param Request $request
-     * @return void
-     */
-    public function storeFile($model, Request $request)
-    {
-        $id_rel = $request->session()->get('id_rel_action');
-        File::upload($model, $id_rel, $request);
+        $register_action = RegisterAction::create($request->data);
+        return response()->json($register_action);
     }
 
     /**

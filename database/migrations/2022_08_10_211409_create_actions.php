@@ -35,7 +35,6 @@ class CreateActions extends Migration
             $table->unsignedBigInteger('action_id')->nullable();
             $table->integer('state')->nullable();
             $table->text('comment')->nullable();
-            $table->string('file')->nullable();
             $table->foreign('action_id')->references('id')->on('actions')->onDelete('cascade');
             $table->timestamps();
         });

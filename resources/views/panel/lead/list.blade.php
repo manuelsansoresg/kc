@@ -55,4 +55,5 @@
     @include('panel.modal.tags')
     @include('panel.modal.validate')
     @include('panel.action.modal.form')
+    @include('panel.action.modal.register_action')
 @endsection

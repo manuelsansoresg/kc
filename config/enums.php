@@ -53,4 +53,16 @@ return [
     "status_actions" => array(
         1 => 'prospecto'
     ),
+    "status_register_actions" => array(
+        1 => 'Enviado',
+        2 => 'Contacto exitoso',
+        3 => 'Número no existe',
+        4 => 'No responde',
+        5 => 'Buzón',
+        6 => 'Número equivocado',
+        7 => 'Llamar después',
+        8 => 'No llamar',
+        9 => 'Ocupado'
+
+    ),
 ];

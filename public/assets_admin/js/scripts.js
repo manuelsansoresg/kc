@@ -461,8 +461,9 @@
 
 
   NioApp.Dropzone.init = function () {
+    let model = $('#model-file-temp').val();
     NioApp.Dropzone('.upload-zone', {
-      url: "/images"
+      url: "/panel/temp/images/"+model
     });
   }; // Wizard @v1.0
 

@@ -2127,13 +2127,19 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*!************************************************!*\
   !*** ./resources/js/components/action/crud.js ***!
   \************************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+
 
 window.actionModal = function (id) {
   if (document.getElementById('modal-action-id-rel-lead')) {
     getPerson(id);
   }
 
+  resetAction();
   $('#modal-action-id-rel').val(id);
   $('#modal-action').modal('show');
 };
@@ -2176,15 +2182,54 @@ $().ready(function () {
         var result = response.data;
         var status = $('#modal-action-status').val();
 
-        if (status == 1) {//*se marco como completada
+        if (status == 1 && result != null) {
+          //*se marco como completada
+          $('#register-action-id-rel').val(result.id);
+          $('#modal-action').modal('hide');
+          $('#modal-register-action').modal('show');
+        } else {
+          $('#modal-action').modal('hide');
+          (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
         }
       })["catch"](function (e) {});
     }
   });
 });
+
+function resetAction() {
+  $("#modal-action-type").val('').trigger('change');
+  $('#modal-action-subject').val('');
+  $('#modal-action-start_date').val('');
+  $('#modal-action-end_date').val('');
+  $('#modal-action-description').val('');
+}
+
 $('#frm-action input').on('change', function () {
   var status = $('input[name=status]:checked', '#frm-action').val();
   $('#modal-action-status').val(status);
+}); //*form register action
+
+$().ready(function () {
+  $("#frm-register-action").validate({
+    rules: {
+      'data[state]': {
+        required: true
+      },
+      'data[comment]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frm-register-action");
+      var data = new FormData(new_form);
+      axios.post("/panel/register-action", data).then(function (response) {
+        var result = response.data;
+        $('#modal-register-action').modal('hide');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
+      })["catch"](function (e) {});
+    }
+  });
 });
 
 /***/ }),
@@ -3012,6 +3057,12 @@ $().ready(function () {
 window.modalPasswod = function (user_id) {
   $('#password_user_id').val(user_id);
   $('#modal-user-password').modal('show');
+}; //*id_rel is action_id
+
+
+window.modalRegisterAction = function (id_rel) {
+  $('#register-action-id-rel').val(id_rel);
+  $('#modal-register-action').modal('show');
 };
 /* function resolveTextSetting() {
     return new Promise(resolve => {

@@ -248,6 +248,11 @@ window.modalPasswod = function (user_id) {
     $('#password_user_id').val(user_id);
     $('#modal-user-password').modal('show');
 }
+//*id_rel is action_id
+window.modalRegisterAction = function (id_rel) {
+    $('#register-action-id-rel').val(id_rel);
+    $('#modal-register-action').modal('show');
+}
 
 /* function resolveTextSetting() {
     return new Promise(resolve => {

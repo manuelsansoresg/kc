@@ -10,6 +10,7 @@ use App\Models\Lead;
 use App\Models\LeadAdvisor;
 use App\Models\LeadNote;
 use App\Models\Note;
+use App\Models\File;
 use App\Strategies\Values\SendNotificationsValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +24,9 @@ class LeadController extends Controller
      */
     public function index()
     {
-        $model = Action::LEAD;
-        return view('panel.lead.list', compact('model'));
+        $model        = Action::LEAD;
+        $model_file   = File::ACTION_LEAD;
+        return view('panel.lead.list', compact('model', 'model_file'));
     }
 
     public function list()

@@ -69,3 +69,7 @@ Route::group(['prefix' => 'archive'], function () {
 Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\NotificationController', 'show'])->middleware('auth');
 
 Route::resource('action', '\App\Http\Controllers\Panel\ActionController')->middleware('auth');
+//*dropzone file
+Route::post('temp/images/{model}', ['\App\Http\Controllers\Panel\ActionController', 'storeFile'])->middleware('auth');
+//*register action
+Route::resource('register-action', '\App\Http\Controllers\Panel\RegisterActionController')->middleware('auth');

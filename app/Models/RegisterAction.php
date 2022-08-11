@@ -12,6 +12,5 @@ class RegisterAction extends Model
         'action_id',
         'state',
         'comment',
-        'file',
     ];
 }

@@ -46,7 +46,7 @@
                                         <div class="form-icon form-icon-left">
                                             <em class="icon ni ni-calendar"></em>
                                         </div>
-                                        <input type="text" id="edit-start-date"  name="data[start_date]" class="form-control date-picker" data-date-format="yyyy-mm-dd">
+                                        <input type="text" id="modal-action-start_date"  name="data[start_date]" class="form-control date-picker" data-date-format="yyyy-mm-dd">
                                     </div>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                                         <div class="form-icon form-icon-left">
                                             <em class="icon ni ni-clock"></em>
                                         </div>
-                                        <input type="text" name="data[start_time]" class="form-control  time-picker" id="outlined-time-picker">
+                                        <input type="text" name="data[start_time]" class="form-control  time-picker" id="modal-action-start_time">
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +70,7 @@
                                         <div class="form-icon form-icon-left">
                                             <em class="icon ni ni-calendar"></em>
                                         </div>
-                                        <input type="text" id="edit-dead-date" name="data[end_date]" class="form-control date-picker" data-date-format="yyyy-mm-dd">
+                                        <input type="text" id="modal-action-end_date" name="data[end_date]" class="form-control date-picker" data-date-format="yyyy-mm-dd">
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                                         <div class="form-icon form-icon-left">
                                             <em class="icon ni ni-clock"></em>
                                         </div>
-                                        <input type="text" name="data[end_time]" class="form-control time-picker-fin" id="outlined-time-picker">
+                                        <input type="text" name="data[end_time]" class="form-control time-picker-fin" id="modal-action-end_time">
                                     </div>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
                                     <label class="form-label">Descripción</label>
                                     <div class="form-control-wrap">
                                         <!-- Create the editor container -->
-                                        <textarea name="data[description]" id="" cols="30" rows="4" class="form-control"></textarea>
+                                        <textarea name="data[description]" id="modal-action-description" cols="30" rows="4" class="form-control"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@
                             @if ($m_action::LEAD == $model)
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">Persona</label>
+                                    <label class="form-label">Nombre</label>
                                     <div class="form-control-wrap">
                                         <select class="form-select" id="modal-action-id-rel-lead"  data-search="on" disabled>
                                             
