@@ -1026,6 +1026,9 @@
     <script type="text/javascript" src="/vendor/toastr/build/toastr.min.js"></script>
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
+
     <script type="text/javascript" src="/js/app.js"></script>
 </body>
 

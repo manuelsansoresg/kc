@@ -67,3 +67,5 @@ Route::group(['prefix' => 'archive'], function () {
 });
 
 Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\NotificationController', 'show'])->middleware('auth');
+
+Route::resource('action', '\App\Http\Controllers\Panel\ActionController')->middleware('auth');

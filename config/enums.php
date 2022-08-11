@@ -40,4 +40,17 @@ return [
         2 => 'Sin convenio',
         3 => 'Otro',
     ),
+    //*actions
+    "type_actions" => array(
+        1 => 'Llamada',
+        2 => 'Chat',
+        3 => 'Reunión',
+        4 => 'Seguimiento',
+        5 => 'Plazo',
+        6 => 'EMail',
+        7 => 'SMS'
+    ),
+    "status_actions" => array(
+        1 => 'prospecto'
+    ),
 ];

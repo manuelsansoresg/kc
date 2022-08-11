@@ -959,11 +959,44 @@
     NioApp.BS.tabfix();
   }; // Picker Init @v1.0
 
+  let time = new Date();
+  //let time_init = new Date(time.getTime() + 15*60000); 
+  let timefin = new Date(time.getTime() + 15*60000);
+
+  let format_initial = time.toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })
+  let format_final = timefin.toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })
+  console.log(format_initial);
+  console.log(format_final);
 
   NioApp.Picker.init = function () {
     NioApp.Picker.date('.date-picker');
     NioApp.Picker.dob('.date-picker-alt');
-    NioApp.Picker.time('.time-picker');
+
+    $('.time-picker').timepicker({
+      timeFormat: 'h:mm p',
+      interval: 15,
+      minTime: '7',
+      startTime: '7',
+      defaultTime: time.getHours() + ":" + (Math.floor(time.getMinutes() / 15) * 15),
+      dynamic: false,
+      dropdown: true,
+      scrollbar: true,
+      
+  });
+  
+  $('.time-picker-fin').timepicker({
+      scrollDefault: 'now',
+      timeFormat: 'h:mm p',
+      interval: 15,
+      minTime: '7',
+      startTime: '7',
+      defaultTime: timefin.getHours() + ":" + (Math.floor(timefin.getMinutes() / 15) * 15),
+      dynamic: false,
+      dropdown: true,
+      scrollbar: true,
+      
+  });
+
     NioApp.Picker.date('.date-picker-range', {
       todayHighlight: false,
       autoclose: false

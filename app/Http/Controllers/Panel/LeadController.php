@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Lib\Csendgrid;
+use App\Models\Action;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\LeadAdvisor;
@@ -22,7 +23,8 @@ class LeadController extends Controller
      */
     public function index()
     {
-        return view('panel.lead.list');
+        $model = Action::LEAD;
+        return view('panel.lead.list', compact('model'));
     }
 
     public function list()

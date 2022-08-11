@@ -49,6 +49,10 @@ $user = Auth::user();
                         <a class="pointer" onclick="archiveModal({{ $id }})">
                             <em class="icon ni ni-files"></em><span>Archivar</span></a>
                     </li>
+                    <li>
+                        <a class="pointer" onclick="actionModal({{ $id }})">
+                            <em class="icon ni ni-calendar-check-fill"></em><span>Acción</span></a>
+                    </li>
                     @if ($user->hasRole('Asesor') != true)
                         <li>
                             <a class="pointer" onclick="modalAdvisor({{ $id }})">

@@ -54,4 +54,5 @@
     @include('panel.modal.archive')
     @include('panel.modal.tags')
     @include('panel.modal.validate')
+    @include('panel.action.modal.form')
 @endsection
