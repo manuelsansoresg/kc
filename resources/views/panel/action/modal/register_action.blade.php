@@ -16,7 +16,7 @@ $status = config('enums.status_register_actions');
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Estado</label>
                                 <div class="form-control-wrap">
-                                    <select class="form-select js-select2" name="data[state]" data-search="on">
+                                    <select class="form-select js-select2" name="data[state]" id="frm-register-action-state" data-search="on">
                                         <option value="">Escribe para buscar</option>
                                         @foreach ($status as $key => $status)
                                             <option value="{{ $key }}">{{ $status }}
@@ -30,7 +30,7 @@ $status = config('enums.status_register_actions');
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Comentario</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" name="data[comment]">
+                                    <textarea name="data[comment]" id="frm-register-action-comment" cols="30" rows="4" class="form-control"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@ $status = config('enums.status_register_actions');
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Archivo</label>
                                 <div class="form-control-wrap">
-                                    <div class="upload-zone">
+                                    <div class="upload-zone"  data-accepted-files="image/*">
                                         <div class="dz-message" data-dz-message> 
                                             <span class="dz-message-text">Arrastra y suelta el archivo</span>
                                              <span class="dz-message-or">o</span> <button
@@ -47,6 +47,8 @@ $status = config('enums.status_register_actions');
                                 </div>
                             </div>
                         </div>
+                        
+                        <div  id="frm-register-action-preview"></div>
 
                         <input type="hidden" name="data[id_rel]" id="register-action-id-rel">
                         <input type="hidden" id="model-file-temp" value="{{ $model_file  }}">

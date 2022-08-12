@@ -160,14 +160,14 @@
                                         <ul class="custom-control-group g-3 align-center flex-wrap">
                                             <li>
                                                 <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input"  name="status" id="edit-course-active" value="1">
-                                                    <label class="custom-control-label" for="edit-course-active">Sí</label>
+                                                    <input type="radio" class="custom-control-input"  name="status" id="modal-action-complete-active" value="1">
+                                                    <label class="custom-control-label" for="modal-action-complete-active">Sí</label>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input" name="status" id="edit-course-pending" value="0">
-                                                    <label class="custom-control-label" for="edit-course-pending">No</label>
+                                                    <input type="radio" class="custom-control-input" name="status" id="modal-action-complete-pending" value="0">
+                                                    <label class="custom-control-label" for="modal-action-complete-pending">No</label>
                                                 </div>
                                             </li>
                                            

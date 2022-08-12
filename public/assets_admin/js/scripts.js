@@ -463,8 +463,25 @@
   NioApp.Dropzone.init = function () {
     let model = $('#model-file-temp').val();
     NioApp.Dropzone('.upload-zone', {
-      url: "/panel/temp/images/"+model
-    });
+      url: "/panel/temp/images/"+model,
+      
+      init: function () {
+        this.on("success", function (file, message) {
+          axios
+            .get("/panel/temp/images/"+model+'/show')
+            .then(function (response) {
+               $('#frm-register-action-preview').html(response.data);
+            })
+            .catch(e => {
+                
+            });
+        });
+        this.on("complete", function(file) { 
+          this.removeAllFiles(true); 
+       })
+      }
+    }
+    );
   }; // Wizard @v1.0
 
 
@@ -966,8 +983,6 @@
 
   let format_initial = time.toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })
   let format_final = timefin.toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })
-  console.log(format_initial);
-  console.log(format_final);
 
   NioApp.Picker.init = function () {
     NioApp.Picker.date('.date-picker');

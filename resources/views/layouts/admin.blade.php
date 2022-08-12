@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link rel="stylesheet" type="text/css" href="/vendor/datatables/datatables.min.css"/>
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
-    
     <link rel="stylesheet" type="text/css" href="/css/app.css"/>
 </head>
 
@@ -1017,7 +1016,7 @@
     <!-- JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
     <script src="/assets_admin/js/bundle.js?ver=3.0.3"></script>
     <script src="/assets_admin/js/scripts.js?ver=3.0.3"></script>
     <script src="/assets_admin/js/charts/gd-default.js?ver=3.0.3"></script>

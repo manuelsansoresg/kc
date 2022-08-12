@@ -4,6 +4,7 @@ window.actionModal = function(id)
 {
     if (document.getElementById('modal-action-id-rel-lead')) {
         getPerson(id);
+        
     }
     resetAction();
     $('#modal-action-id-rel').val(id);
@@ -11,6 +12,7 @@ window.actionModal = function(id)
 
 }
 
+      
 if (document.getElementById('frm-action')) {
     $('#modal-action-type').select2({
         dropdownParent: $('#modal-action'),
@@ -57,8 +59,10 @@ $().ready(function () {
                     let result    = response.data;
                     let status    = $('#modal-action-status').val();
                     if (status == 1 && result != null) { //*se marco como completada
+                        
                         $('#register-action-id-rel').val(result.id);
                         $('#modal-action').modal('hide');
+                        resetRegisterAction();
                         $('#modal-register-action').modal('show');
                     } else {
                         $('#modal-action').modal('hide');
@@ -78,9 +82,40 @@ function resetAction() {
     $('#modal-action-start_date').val('');
     $('#modal-action-end_date').val('');
     $('#modal-action-description').val('');
+    $('#modal-action-complete-active').prop("checked", true);
 }
 
+function resetRegisterAction() {
+    $("#frm-register-action-state").val('').trigger('change');
+    $('#frm-register-action-comment').val('');
+    $('#frm-register-action-preview').html('');
+    //myDropzone.removeAllFiles(true); 
+    
+}
 
+window.deleteFile = function (model,id) {
+    $('#frm-register-action-preview').html('');
+    axios
+    .get("/panel/temp/images/"+id+"/delete")
+    .then(function (response) {
+        showInfo(2, 'dt-lead', 'Archivos', 'Archivo borrado');
+        reloadFile(model);
+
+    })
+    .catch(e => {
+    });
+}
+
+function reloadFile(model) {
+    axios
+    .get("/panel/temp/images/"+model+'/show')
+    .then(function (response) {
+        $('#frm-register-action-preview').html(response.data);
+    })
+    .catch(e => {
+        
+    });
+}
 
 $('#frm-action input').on('change', function() {
     let status = $('input[name=status]:checked', '#frm-action').val();

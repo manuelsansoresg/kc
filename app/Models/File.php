@@ -33,4 +33,11 @@ class File extends Model
             }
         }
     }
+
+    public static function getAll($model, $id_rel)
+    {
+        $files = File::where(['model' => $model, 'id_rel' => $id_rel])->get();
+        $view_files = \View::make('panel.action.dropzone_preview', ['files' => $files])->render();
+        return $view_files;
+    }
 }

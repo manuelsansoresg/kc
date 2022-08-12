@@ -71,5 +71,7 @@ Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\Notificati
 Route::resource('action', '\App\Http\Controllers\Panel\ActionController')->middleware('auth');
 //*dropzone file
 Route::post('temp/images/{model}', ['\App\Http\Controllers\Panel\ActionController', 'storeFile'])->middleware('auth');
+Route::get('temp/images/{model}/show', ['\App\Http\Controllers\Panel\ActionController', 'showFiles'])->middleware('auth');
+Route::get('temp/images/{id}/delete', ['\App\Http\Controllers\Panel\ActionController', 'deleteFile'])->middleware('auth');
 //*register action
 Route::resource('register-action', '\App\Http\Controllers\Panel\RegisterActionController')->middleware('auth');

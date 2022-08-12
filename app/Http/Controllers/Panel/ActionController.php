@@ -58,6 +58,24 @@ class ActionController extends Controller
         File::upload($model, $id_rel, $request);
     }
 
+    public function showFiles($model, Request $request)
+    {
+        $id_rel = $request->session()->get('id_rel_action');
+        $files = File::getAll($model, $id_rel);
+        return response()->json($files);
+    }
+    /**
+     * delete file register action
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function deleteFile($id)
+    {
+        $file = File::find($id);
+        $file->delete();
+    }
+
     /**
      * Display the specified resource.
      *
