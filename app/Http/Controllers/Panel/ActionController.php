@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Action;
 use App\Models\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ActionController extends Controller
 {
@@ -84,7 +85,8 @@ class ActionController extends Controller
      */
     public function show($id)
     {
-        //
+        $action = Action::getById($id, 'lead');
+        return response()->json($action);
     }
 
     /**
@@ -118,6 +120,6 @@ class ActionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Action::find($id)->delete();
     }
 }

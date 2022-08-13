@@ -1,10 +1,9 @@
 import { showInfo } from '../utilities';
 
-window.actionModal = function(id)
-{
+window.actionModal = function (id) {
     if (document.getElementById('modal-action-id-rel-lead')) {
         getPerson(id);
-        
+
     }
     resetAction();
     $('#modal-action-id-rel').val(id);
@@ -12,7 +11,7 @@ window.actionModal = function(id)
 
 }
 
-      
+
 if (document.getElementById('frm-action')) {
     $('#modal-action-type').select2({
         dropdownParent: $('#modal-action'),
@@ -22,16 +21,16 @@ if (document.getElementById('frm-action')) {
 }
 function getPerson(lead_id) {
     axios
-    .get("/panel/lead/"+lead_id)
-    .then(function (response) {
-        let result = response.data;
-        let lead = result.lead;
-        let lead_name = lead.name+' '+lead.last_name;
-        $("#modal-action-id-rel-lead").prepend("<option value='"+lead.id+"' selected='selected'> "+lead_name+"</option>");
-    })
-    .catch(e => {
-        
-    });
+        .get("/panel/lead/" + lead_id)
+        .then(function (response) {
+            let result = response.data;
+            let lead = result.lead;
+            let lead_name = lead.name + ' ' + lead.last_name;
+            $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+        })
+        .catch(e => {
+
+        });
 }
 
 $().ready(function () {
@@ -56,14 +55,17 @@ $().ready(function () {
             axios
                 .post("/panel/action", data)
                 .then(function (response) {
-                    let result    = response.data;
-                    let status    = $('#modal-action-status').val();
+                    let result = response.data;
+                    let status = $('#modal-action-status').val();
+                    let id_action = $('#modal-action-id-action').val();
                     if (status == 1 && result != null) { //*se marco como completada
-                        
+
                         $('#register-action-id-rel').val(result.id);
                         $('#modal-action').modal('hide');
                         resetRegisterAction();
-                        $('#modal-register-action').modal('show');
+                        if (id_action == null) {
+                            $('#modal-register-action').modal('show');
+                        }
                     } else {
                         $('#modal-action').modal('hide');
                         showInfo(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
@@ -90,37 +92,37 @@ function resetRegisterAction() {
     $('#frm-register-action-comment').val('');
     $('#frm-register-action-preview').html('');
     //myDropzone.removeAllFiles(true); 
-    
+
 }
 
-window.deleteFile = function (model,id) {
+window.deleteFile = function (model, id) {
     $('#frm-register-action-preview').html('');
     axios
-    .get("/panel/temp/images/"+id+"/delete")
-    .then(function (response) {
-        showInfo(2, 'dt-lead', 'Archivos', 'Archivo borrado');
-        reloadFile(model);
+        .get("/panel/temp/images/" + id + "/delete")
+        .then(function (response) {
+            showInfo(2, 'dt-lead', 'Archivos', 'Archivo borrado');
+            reloadFile(model);
 
-    })
-    .catch(e => {
-    });
+        })
+        .catch(e => {
+        });
 }
 
 function reloadFile(model) {
     axios
-    .get("/panel/temp/images/"+model+'/show')
-    .then(function (response) {
-        $('#frm-register-action-preview').html(response.data);
-    })
-    .catch(e => {
-        
-    });
+        .get("/panel/temp/images/" + model + '/show')
+        .then(function (response) {
+            $('#frm-register-action-preview').html(response.data);
+        })
+        .catch(e => {
+
+        });
 }
 
-$('#frm-action input').on('change', function() {
+$('#frm-action input').on('change', function () {
     let status = $('input[name=status]:checked', '#frm-action').val();
     $('#modal-action-status').val(status);
-  });
+});
 
 //*form register action
 $().ready(function () {
@@ -142,7 +144,7 @@ $().ready(function () {
             axios
                 .post("/panel/register-action", data)
                 .then(function (response) {
-                    let result    = response.data;
+                    let result = response.data;
                     $('#modal-register-action').modal('hide');
                     showInfo(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
                 })
@@ -152,3 +154,71 @@ $().ready(function () {
         }
     });
 });
+
+window.modalRegisterAction = function (id) {
+    $('#register-action-id-rel').val(id);
+    $('#modal-register-action').modal('show');
+}
+
+window.alerDeleteAction = function (id) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, elimina',
+        cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+        if (result.value) {
+            deleteAction(id);
+        }
+    });
+}
+
+window.deleteAction = function (id) {
+    axios
+    .delete("/panel/action/"+id)
+    .then(function (response) {
+    })
+    .catch(e => {
+    });
+}
+
+window.setModalAction = function (action_id, disabled) {
+    if (disabled == true) {
+        $('#frm-action input, textarea, select').attr('disabled', 'disabled');
+        $('#modal-action-save').hide();
+    }
+    axios
+    .get("/panel/action/"+action_id)
+    .then(function (response) {
+        let result = response.data;
+        let action = result.action;
+        let advisor = result.advisor;
+        let lead = result.lead;
+        //*set value form action
+        if (result != null) {
+            let lead_name = lead.name + ' ' + lead.last_name;
+            $("#modal-action-type").val(action.type).trigger('change');
+            $("#modal-action-subject").val(action.subject);
+            $("#modal-action-id-action").val(action_id);
+            $("#modal-action-subject").val(action.subject);
+            $("#modal-action-start_date").val(action.start_date);
+            $("#modal-action-start_time").val(action.start_time);
+            $("#modal-action-end_date").val(action.end_date);
+            $("#modal-action-description").val(action.description);
+            $("#lead-asesor-id").val(advisor.id).trigger('change');
+            $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+            $('#modal-action').modal('show');
+            
+            if (action.status == 1) {
+                $('#modal-action-complete-active').prop("checked", true);
+                $('#modal-action-complete-pending').prop("checked", false);
+            } else {
+                $('#modal-action-complete-active').prop("checked", false);
+                $('#modal-action-complete-pending').prop("checked", true);
+            }
+        }
+    })
+    .catch(e => {
+    });
+}

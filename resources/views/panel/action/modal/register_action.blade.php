@@ -50,8 +50,9 @@ $status = config('enums.status_register_actions');
                         
                         <div  id="frm-register-action-preview"></div>
 
-                        <input type="hidden" name="data[id_rel]" id="register-action-id-rel">
+                        <input type="hidden" name="data[action_id]" id="register-action-id-rel">
                         <input type="hidden" id="model-file-temp" value="{{ $model_file  }}">
+                        <input type="hidden" name="model"  id="register-action-model" value="{{ $model  }}">
 
                         <div class="col-12">
                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">

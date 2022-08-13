@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Action;
 use App\Models\RegisterAction;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,10 @@ class RegisterActionController extends Controller
      */
     public function store(Request $request)
     {
-        $register_action = RegisterAction::create($request->data);
+        $model = $request->model;
+        $data = $request->data;
+        $register_action = RegisterAction::create($data);
+        Action::updateByModel($data['action_id']);
         return response()->json($register_action);
     }
 

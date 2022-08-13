@@ -2,7 +2,6 @@
 
 @php
     $path = $m_file::PATH;
-    $model = $m_file::ACTION_LEAD;
 @endphp
 <div class="row">
 

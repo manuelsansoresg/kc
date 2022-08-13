@@ -59,13 +59,17 @@ $().ready(function () {
       axios.post("/panel/action", data).then(function (response) {
         var result = response.data;
         var status = $('#modal-action-status').val();
+        var id_action = $('#modal-action-id-action').val();
 
         if (status == 1 && result != null) {
           //*se marco como completada
           $('#register-action-id-rel').val(result.id);
           $('#modal-action').modal('hide');
           resetRegisterAction();
-          $('#modal-register-action').modal('show');
+
+          if (id_action == null) {
+            $('#modal-register-action').modal('show');
+          }
         } else {
           $('#modal-action').modal('hide');
           (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
@@ -131,6 +135,66 @@ $().ready(function () {
     }
   });
 });
+
+window.modalRegisterAction = function (id) {
+  $('#register-action-id-rel').val(id);
+  $('#modal-register-action').modal('show');
+};
+
+window.alerDeleteAction = function (id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      deleteAction(id);
+    }
+  });
+};
+
+window.deleteAction = function (id) {
+  axios["delete"]("/panel/action/" + id).then(function (response) {})["catch"](function (e) {});
+};
+
+window.setModalAction = function (action_id, disabled) {
+  if (disabled == true) {
+    $('#frm-action input, textarea, select').attr('disabled', 'disabled');
+    $('#modal-action-save').hide();
+  }
+
+  axios.get("/panel/action/" + action_id).then(function (response) {
+    var result = response.data;
+    var action = result.action;
+    var advisor = result.advisor;
+    var lead = result.lead; //*set value form action
+
+    if (result != null) {
+      var lead_name = lead.name + ' ' + lead.last_name;
+      $("#modal-action-type").val(action.type).trigger('change');
+      $("#modal-action-subject").val(action.subject);
+      $("#modal-action-id-action").val(action_id);
+      $("#modal-action-subject").val(action.subject);
+      $("#modal-action-start_date").val(action.start_date);
+      $("#modal-action-start_time").val(action.start_time);
+      $("#modal-action-end_date").val(action.end_date);
+      $("#modal-action-description").val(action.description);
+      $("#lead-asesor-id").val(advisor.id).trigger('change');
+      $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+      $('#modal-action').modal('show');
+
+      if (action.status == 1) {
+        $('#modal-action-complete-active').prop("checked", true);
+        $('#modal-action-complete-pending').prop("checked", false);
+      } else {
+        $('#modal-action-complete-active').prop("checked", false);
+        $('#modal-action-complete-pending').prop("checked", true);
+      }
+    }
+  })["catch"](function (e) {});
+};
 
 /***/ }),
 

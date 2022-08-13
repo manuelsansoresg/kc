@@ -151,8 +151,9 @@
                             </div>
                             @endif
                             <input type="hidden" id="modal-action-id-rel" name="data[id_rel]" value="">
+                            <input type="hidden" id="modal-action-id-action" name="action_id" value="null">
                             <input type="hidden" name="data[section]" value="{{ $model }}">
-                            <input type="hidden" name="data[status]" id="modal-action-status" value="{{ $model }}">
+                            <input type="hidden" id="modal-action-status" value="{{ $model }}">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Completado</label>
@@ -190,7 +191,7 @@
                                     </div>
                                 </div>
                             </div> --}}
-                            <div class="col-12">
+                            <div class="col-12" id="modal-action-save">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">Guardar</button>
                                 </div>
