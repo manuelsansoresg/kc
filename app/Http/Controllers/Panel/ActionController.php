@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Action;
 use App\Models\File;
+use App\Strategies\Values\ActionValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -87,6 +88,13 @@ class ActionController extends Controller
     {
         $action = Action::getById($id, 'lead');
         return response()->json($action);
+    }
+
+    public function listAction($id, $model, $status)
+    {
+        $leadStrategy   = ActionValues::STRATEGY[$model];
+        $list       = (new $leadStrategy)->list($id, $model, $status);
+        return response()->json($list);
     }
 
     /**

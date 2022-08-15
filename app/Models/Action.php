@@ -24,7 +24,13 @@ class Action extends Model
         'status',
     ];
 
-    const LEAD = 1;
+    const STATUS = [
+        'programed' => 0,
+        'completed' => 1,
+    ];
+    const MODEL = [
+        'lead' => 1,
+    ];
 
     public static function saveEdit($request)
     {
@@ -69,4 +75,5 @@ class Action extends Model
         );
         return $data_action;
     }
+
 }

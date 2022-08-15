@@ -50,6 +50,7 @@ Route::group(['prefix' => 'lead'], function () {
     Route::get('{lead_id}/origin', ['\App\Http\Controllers\Panel\LeadController', 'listOrigin'])->middleware('auth');
     Route::post('{lead_id}/note', ['\App\Http\Controllers\Panel\LeadController', 'noteStore'])->middleware('auth');
     Route::get('{lead_id}/profile', ['\App\Http\Controllers\Panel\LeadController', 'profile'])->middleware('auth');
+    
     Route::post('{lead_id}/advisor/store', ['\App\Http\Controllers\Panel\LeadController', 'advisorStore'])->middleware('auth');
     Route::post('{lead_id}/client-person/store', ['\App\Http\Controllers\Panel\LeadController', 'storeClientPerson'])->middleware('auth');
     Route::post('{lead_id}/tag/update', ['\App\Http\Controllers\Panel\LeadController', 'updateTag'])->middleware('auth');
@@ -67,9 +68,13 @@ Route::group(['prefix' => 'archive'], function () {
 });
 
 Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\NotificationController', 'show'])->middleware('auth');
+
 //Route::get('notification/{id}/delete', ['\App\Http\Controllers\Panel\NotificationController', 'destroy'])->middleware('auth');
 
 Route::resource('action', '\App\Http\Controllers\Panel\ActionController')->middleware('auth');
+Route::group(['prefix' => 'action'], function () {
+    Route::get('list/{id}/{model}/{status}', ['\App\Http\Controllers\Panel\ActionController', 'listAction'])->middleware('auth');
+});
 //*dropzone file
 Route::post('temp/images/{model}', ['\App\Http\Controllers\Panel\ActionController', 'storeFile'])->middleware('auth');
 Route::get('temp/images/{model}/show', ['\App\Http\Controllers\Panel\ActionController', 'showFiles'])->middleware('auth');

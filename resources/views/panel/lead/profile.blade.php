@@ -263,79 +263,20 @@
                                                 <a class="pointer" onclick="actionModal({{ $lead->id }})">Haz clic
                                                     para agregar accion</a>
                                             </div>
-
+                                            <input type="hidden" id="id-rel-action" value="{{ $lead->id }}">
+                                            <input type="hidden" id="model-action" value="{{ $model_action }}">
                                             <div class="col-12 text-center mt-3">
                                                 <span class="badge rounded-pill bg-light">Programadas</span>
                                             </div>
-                                            @foreach ($actions_programmed as $programed)
-                                                <div class="card mt-3">
-                                                    <div class="kanban-item">
-                                                        <div class="kanban-item-title">
-                                                            <h6 class="title">
-                                                                <em class="{{ $icons[$programed->type] }}"></em>
-                                                                {{ $actions[$programed->type] }}
-                                                            </h6>
-                                                        </div>
-                                                        <div class="kanban-item-text">
-                                                            <p>{{ $programed->subject }}</p>
-                                                        </div>
-                                                      
-                                                        <div class="kanban-item-meta">
-                                                            <ul class="kanban-item-meta-list">
-                                                                <li><em class="icon ni ni-calendar"></em><span>{{ $programed->created_at->diffForHumans() }}</span></li>
-                                                                
-                                                            </ul>
-                                                            <ul class="kanban-item-meta-list">
-                                                                <li>
-                                                                    <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Marcar como completada" onclick="modalRegisterAction({{ $programed->id }})"><em class="icon ni ni-check-round"></em></a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar" onclick="setModalAction({{ $programed->id }}, false)"><em class="icon ni ni-edit-alt"></em></a>
-                                                                </li>
-                                                                <li>
-                                                                    <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" onclick="alerDeleteAction({{ $programed->id }})"><em class="icon ni ni-trash-alt"></em></a> 
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
+                                            <div id="content-profile-programed">
+                                                
+                                            </div>
                                             <div class="col-12 text-center mt-3">
                                                 <span class="badge rounded-pill bg-light">Completadas</span>
                                             </div>
-                                            @foreach ($actions_completed as $completed)
-                                            <div class="card mt-3">
-                                                <div class="kanban-item">
-                                                    <div class="kanban-item-title">
-                                                        <h6 class="title">
-                                                            <em class="{{ $icons[$completed->type] }}"></em>
-                                                            {{ $actions[$completed->type] }}
-                                                        </h6>
-                                                    </div>
-                                                    <div class="kanban-item-text">
-                                                        <p>{{ $completed->subject }}</p>
-                                                    </div>
-                                                  
-                                                    <div class="kanban-item-meta">
-                                                        <ul class="kanban-item-meta-list">
-                                                            <li><em class="icon ni ni-calendar"></em><span>{{ $completed->created_at->diffForHumans() }}</span></li>
-                                                            
-                                                        </ul>
-                                                        <ul class="kanban-item-meta-list">
-                                                            <li>
-                                                                <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver registro de accion" onclick="setModalAction({{ $completed->id }}, true)"><em class="icon ni ni-eye-alt"></em></a>
-                                                            </li>
-                                                            {{-- <li>
-                                                                <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Marcar como pendiente" onclick=""><em class="icon ni ni-minus-round"></em></a>
-                                                            </li> --}}
-                                                            <li>
-                                                                <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" onclick="alerDeleteAction({{ $completed->id }})"><em class="icon ni ni-trash-alt"></em></a> 
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                                            <div id="content-profile-completed">
+                                                
                                             </div>
-                                            @endforeach
                                         </div>
                                         {{-- <div class="tab-pane" id="tabItem4">
                                         <p>contnet</p>

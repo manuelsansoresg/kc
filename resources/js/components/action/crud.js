@@ -19,6 +19,8 @@ if (document.getElementById('frm-action')) {
         allowClear: true
     });
 }
+
+
 function getPerson(lead_id) {
     axios
         .get("/panel/lead/" + lead_id)
@@ -70,6 +72,7 @@ $().ready(function () {
                         $('#modal-action').modal('hide');
                         showInfo(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
                     }
+                    refreshListActions();
                 })
                 .catch(e => {
                 });
@@ -147,6 +150,7 @@ $().ready(function () {
                     let result = response.data;
                     $('#modal-register-action').modal('hide');
                     showInfo(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
+                    refreshListActions();
                 })
                 .catch(e => {
                 });
@@ -178,6 +182,7 @@ window.deleteAction = function (id) {
     axios
     .delete("/panel/action/"+id)
     .then(function (response) {
+        refreshListActions();
     })
     .catch(e => {
     });
@@ -206,6 +211,7 @@ window.setModalAction = function (action_id, disabled) {
             $("#modal-action-start_time").val(action.start_time);
             $("#modal-action-end_date").val(action.end_date);
             $("#modal-action-description").val(action.description);
+            $("#modal-action-id-rel").val(action.id_rel);
             $("#lead-asesor-id").val(advisor.id).trigger('change');
             $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
             $('#modal-action').modal('show');
@@ -222,3 +228,26 @@ window.setModalAction = function (action_id, disabled) {
     .catch(e => {
     });
 }
+
+window.refreshAction = function(id, model, status, content) {
+    $('#'+content+'').html();
+    axios
+    .get("/panel/action/list/"+id+"/"+model+"/"+status)
+    .then(function (response) {
+        $('#'+content+'').html(response.data);
+    })
+    .catch(e => {
+    });
+}
+window.refreshListActions = function() {
+    let id_rel    = $('#id-rel-action').val();
+    let model     = $('#model-action').val();
+
+    refreshAction(id_rel, model, 'programed', 'content-profile-programed')
+    refreshAction(id_rel, model, 'completed', 'content-profile-completed')
+}
+if (document.getElementById('content-profile-programed')) {
+    refreshListActions();
+}
+
+

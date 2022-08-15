@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if ($m_action::LEAD == $model)
+                            {{-- posiblemente este campo sea dinamico de acuerdo al modelo --}}
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Nombre</label>
@@ -149,7 +149,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif
+
                             <input type="hidden" id="modal-action-id-rel" name="data[id_rel]" value="">
                             <input type="hidden" id="modal-action-id-action" name="action_id" value="null">
                             <input type="hidden" name="data[section]" value="{{ $model }}">

@@ -44,4 +44,13 @@ class LeadStrategy implements ActionInterface
     {
         return $this->lead;
     }
+    public function list($id, $model, $status)
+    {
+        $status   = Action::STATUS[$status];
+        $model    = Action::MODEL[$model];
+        
+        $actions   = Action::getByModel($id, $model, $status);
+        $list = \View::make('panel.action.list', [ 'actions' => $actions, 'status' => $status])->render();
+        return $list;
+    }
 }
