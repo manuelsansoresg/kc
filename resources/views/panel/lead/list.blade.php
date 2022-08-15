@@ -24,9 +24,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="nk-block">
-                        <div class="card card-bordered card-stretch">
-                            <div class="card-body">
+                    <div class="nk-block nk-block-lg">
+                        <div class="card card-bordered card-preview">
+                            <div class="card-inner">
                                 <table id="dt-lead" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>

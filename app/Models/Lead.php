@@ -42,7 +42,7 @@ class Lead extends Model
             $option = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id])->render();
             $lead = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
             
-            $lbl_status = '<span class="badge bg-success">Valido</span>';
+            $lbl_status = '<span class="text-success">Valido</span>';
             
             $product        = $query->productLead;
             $user           = $query->advisorLead;
@@ -50,7 +50,7 @@ class Lead extends Model
             $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
             $validate       = (new $leadStrategy)->getValidate($query->id);
             if ($validate['error'] === true) {
-                $lbl_status = '<span class="badge bg-danger">Invalido</span>';
+                $lbl_status = '<span class="text-danger">Invalido</span>';
             }
             $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
             $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
@@ -90,7 +90,7 @@ class Lead extends Model
         foreach ($get_list as $query) {
             $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'id' => $query->id])->render();
             
-            $lbl_status   = '<span class="badge bg-success">Valido</span>';
+            $lbl_status   = '<span class="text-success">Valido</span>';
             $lead         = $query->historyLead;
             $product      = $lead->productLead;
             $user         = $lead->advisorLead;
