@@ -160,9 +160,9 @@ class User extends Authenticatable
         
         foreach ($get_users as $user) {
             $option = \View::make('panel.user.add_option_dt', [ 'type' => 2, 'user_id' => $user->id])->render();
-            $lbl_status = '<span class="badge bg-success">Sí</span>';
+            $lbl_status = '<span class="text-success">Sí</span>';
             if ($user->status == 'No') {
-                $lbl_status = '<span class="badge bg-danger">No</span>';
+                $lbl_status = '<span class="text-danger">No</span>';
             }
             if ($type != 4) {
                 $users[] = array(

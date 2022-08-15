@@ -46,9 +46,9 @@ class Product extends Model
             $service = $query->catalogService;
             $option = \View::make('panel.product.add_option_dt', [ 'type' => 2, 'id' => $query->id])->render();
             
-            $lbl_status = '<span class="badge bg-success">Sí</span>';
+            $lbl_status = '<span class="text-success">Sí</span>';
             if ($query->status == 0) {
-                $lbl_status = '<span class="badge bg-danger">No</span>';
+                $lbl_status = '<span class="text-danger">No</span>';
             }
             
             $users[] = array(
