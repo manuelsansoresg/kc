@@ -34,8 +34,7 @@ class LeadController extends Controller
     {
         $model        = $this->model;
         $model_file   = $this->model_file;
-        
-        return view('panel.lead.list', compact('model', 'model_file', 'model_action'));
+        return view('panel.lead.list', compact('model', 'model_file'));
     }
 
     public function list()
