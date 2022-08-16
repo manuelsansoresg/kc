@@ -11,7 +11,6 @@ class ApiSurveySparrow extends Model
     protected $table = 'api_surveysparrows';
     protected $fillable = [
         'model_id',
-        'state',
         'response',
         'status'
     ];
