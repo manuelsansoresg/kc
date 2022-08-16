@@ -46,7 +46,7 @@
             </div>
         </div>
     </div>
-    <input type="text" id="refresh-dt" value="dt-acctions">
+    <input type="hidden" id="refresh-dt" value="dt-acctions">
     @include('panel.action.modal.form')
     @include('panel.action.modal.register_action')
 @endsection
