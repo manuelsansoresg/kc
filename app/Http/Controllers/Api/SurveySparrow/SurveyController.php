@@ -36,7 +36,11 @@ class SurveyController extends Controller
      */
     public function store(Request $request)
     {
-        $api_survey = ApiSurveySparrow::create($request->all());
+        $data_survey = array(
+            'model' => 'survey',
+            'response' => $request->all()
+        );
+        $api_survey = ApiSurveySparrow::create($data_survey);
         return response()->json($api_survey);
     }
 
