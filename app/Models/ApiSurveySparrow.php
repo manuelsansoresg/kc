@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ApiSurveySparrow extends Model
 {
     use HasFactory;
+    protected $table = 'api_surveysparrows';
     protected $fillable = [
         'model',
         'response',
