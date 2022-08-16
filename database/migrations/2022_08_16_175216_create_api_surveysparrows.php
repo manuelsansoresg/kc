@@ -15,8 +15,10 @@ class CreateApiSurveysparrows extends Migration
     {
         Schema::create('api_surveysparrows', function (Blueprint $table) {
             $table->id();
-            $table->string('model');
+            $table->integer('model_id');
+            $table->integer('state')->nullable();
             $table->text('response')->nullable();
+            $table->integer('status')->nullable()->default(0);
             $table->timestamps();
         });
     }

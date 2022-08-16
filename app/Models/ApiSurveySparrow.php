@@ -10,7 +10,16 @@ class ApiSurveySparrow extends Model
     use HasFactory;
     protected $table = 'api_surveysparrows';
     protected $fillable = [
-        'model',
+        'model_id',
+        'state',
         'response',
+        'status'
+    ];
+
+    const MODEL = [
+        'survey' => 1,
+    ];
+    const STATE = [
+        1 => 'Formulario alta prospecto',
     ];
 }
