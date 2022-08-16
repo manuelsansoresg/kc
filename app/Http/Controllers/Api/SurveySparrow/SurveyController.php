@@ -1,16 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Panel;
+namespace App\Http\Controllers\Api\SurveySparrow;
 
 use App\Http\Controllers\Controller;
-use App\Lib\Csendgrid;
-use App\Lib\CSurveySparrow;
-use App\Lib\Pusher;
-use App\Strategies\Values\SendNotificationsValues;
-use App\Strategies\Values\ValidateStagesValues;
+use App\Models\ApiSurveySparrow;
 use Illuminate\Http\Request;
 
-class PanelController extends Controller
+class SurveyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,19 +15,7 @@ class PanelController extends Controller
      */
     public function index()
     {
-        $survey = new CSurveySparrow();
-        $create_survey = $survey->getAllResponse();
-        dd($create_survey);
-        return view('panel.index');
-    }
-
-    public function showValidate($id, $model)
-    {
-        $leadStrategy   = ValidateStagesValues::STRATEGY[$model];
-        $validate       = (new $leadStrategy)->getValidate($id);
-        
-        $view_validate  = \View::make('panel.table_validate', ['errors' => $validate['table']])->render();
-        return response()->json($view_validate);
+        //
     }
 
     /**
@@ -52,7 +36,8 @@ class PanelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $api_survey = ApiSurveySparrow::create($request->all());
+        return response()->json($api_survey);
     }
 
     /**
