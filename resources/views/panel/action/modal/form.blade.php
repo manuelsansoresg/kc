@@ -1,6 +1,8 @@
 @inject('m_user', 'App\Models\User')
 @inject('m_action', 'App\Models\Action')
-
+@php
+    $model =  (isset($model))? $model : null;
+@endphp
 <div class="modal fade" id="modal-action">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -152,7 +154,7 @@
 
                             <input type="hidden" id="modal-action-id-rel" name="data[id_rel]" value="">
                             <input type="hidden" id="modal-action-id-action" name="action_id" value="null">
-                            <input type="hidden" name="data[section]" value="{{ $model }}">
+                            <input type="hidden" name="data[section]"  id="modal-action-id-section" value="{{ $model }}">
                             <input type="hidden" id="modal-action-status" value="{{ $model }}">
                             <div class="col-md-6">
                                 <div class="form-group">

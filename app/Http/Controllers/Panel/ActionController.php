@@ -90,11 +90,39 @@ class ActionController extends Controller
         return response()->json($action);
     }
 
+    public function viewAction($status)
+    {
+        $title = ($status == 'programed')? 'Programadas': 'Completadas';
+        return view('panel.action.list', compact('title', 'status'));
+    }
+    
+    /**
+     * Use list action programmed and complete
+     *
+     * @param [type] $id
+     * @param [type] $model
+     * @param [type] $status
+     * @return void
+     */
     public function listAction($id, $model, $status)
     {
         $leadStrategy   = ActionValues::STRATEGY[$model];
         $list       = (new $leadStrategy)->list($id, $model, $status);
         return response()->json($list);
+    }
+
+    /**
+     * List use in datatable action list
+     *
+     * @param [type] $id
+     * @param [type] $model
+     * @param [type] $status
+     * @return void
+     */
+    public function list($status)
+    {
+        $list = Action::listDt($status);
+        return response()->json(['data' => $list]);
     }
 
     /**

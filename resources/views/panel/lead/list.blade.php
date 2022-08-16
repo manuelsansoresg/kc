@@ -49,6 +49,7 @@
             </div>
         </div>
     </div>
+    <input type="text" id="refresh-dt" value="dt-lead">
     @include('panel.lead.modal.note')
     @include('panel.lead.modal.advisor')
     @include('panel.modal.archive')

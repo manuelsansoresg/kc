@@ -118,6 +118,31 @@
                                    
                                 </li>
 
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-check-circle-cut"></em></span>
+                                        <span class="nk-menu-text">Acciones</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/action/programed/view" class="nk-menu-link">
+                                                <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
+                                                <span class="nk-menu-text">Programadas</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/action/completed/view" class="nk-menu-link">
+                                                <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
+                                                <span class="nk-menu-text">Completadas</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                    </ul>
+                                   
+                                </li>
+
+                                
+
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">Use-Case Preview</h6>
                                 </li><!-- .nk-menu-item -->

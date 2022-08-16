@@ -260,7 +260,7 @@
                                                 $actions = config('enums.type_actions');
                                             @endphp
                                             <div class="border-bottom text-center py-3">
-                                                <a class="pointer" onclick="actionModal({{ $lead->id }})">Haz clic
+                                                <a class="pointer" onclick="actionModal({{ $lead->id }}, false)">Haz clic
                                                     para agregar accion</a>
                                             </div>
                                             <input type="hidden" id="id-rel-action" value="{{ $lead->id }}">
@@ -291,6 +291,7 @@
             </div>
         </div>
     </div>
+    <input type="text" id="refresh-dt" value="null">
     @include('panel.action.modal.form')
     @include('panel.action.modal.register_action')
 @endsection

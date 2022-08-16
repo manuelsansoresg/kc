@@ -461,7 +461,7 @@
 
 
   NioApp.Dropzone.init = function () {
-    let model = $('#model-file-temp').val();
+    let model = $('#register-action-model').val();
     NioApp.Dropzone('.upload-zone', {
       url: "/panel/temp/images/"+model,
       
@@ -558,7 +558,7 @@
             search: "",
             searchPlaceholder: "Escribe para buscar",
             lengthMenu: "<span class='d-none d-sm-inline-block'>Show</span><div class='form-control-select'> _MENU_ </div>",
-            info: "_START_ -_END_ of _TOTAL_",
+            info: "_START_ -_END_ de _TOTAL_",
             infoEmpty: "0",
             infoFiltered: "( Total _MAX_  )",
             lengthMenu: "Mostrar &nbsp;  _MENU_",

@@ -19,6 +19,11 @@ class RegisterActionController extends Controller
         //
     }
 
+    public function setIdRel($id, Request $request)
+    {
+        $request->session()->put('id_rel_action', $id);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

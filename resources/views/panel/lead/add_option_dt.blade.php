@@ -50,7 +50,7 @@ $user = Auth::user();
                             <em class="icon ni ni-files"></em><span>Archivar</span></a>
                     </li>
                     <li>
-                        <a class="pointer" onclick="actionModal({{ $id }})">
+                        <a class="pointer" onclick="actionModal({{ $id }}, true)">
                             <em class="icon ni ni-calendar-check-fill"></em><span>Acción</span></a>
                     </li>
                     @if ($user->hasRole('Asesor') != true)

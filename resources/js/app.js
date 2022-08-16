@@ -10,6 +10,7 @@ require('./components/lead/datatable');
 require('./components/lead/crud');
 require('./components/toastr');
 require('./components/crm');
+require('./components/action/datatable');
 require('./components/action/crud');
 
 require('./components/websocket');

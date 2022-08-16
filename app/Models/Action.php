@@ -13,6 +13,7 @@ class Action extends Model
     protected $fillable = [
         'type',
         'subject',
+        'section',
         'start_date',
         'start_time',
         'end_date',
@@ -20,7 +21,6 @@ class Action extends Model
         'description',
         'advisor_id',
         'id_rel',
-        'section',
         'status',
     ];
 
@@ -31,13 +31,21 @@ class Action extends Model
     const MODEL = [
         'lead' => 1,
     ];
+    
+    const KEY_MODEL = [
+        1 => 'lead',
+    ];
+    const NAME_MODEL = [
+        1 => 'Prospectos',
+    ];
 
     public static function saveEdit($request)
     {
         $data = $request->data;
         $data['start_time'] = date('H:i:s', strtotime($data['start_time']));
         $data['end_time'] = date('H:i:s', strtotime($data['end_time']));
-        if ($request->action_id == null) {
+        $action = null;
+        if ($request->action_id == 'null') {
             $action = Action::create($data);
         } else {
             $action = Action::find($request->action_id);
@@ -50,6 +58,11 @@ class Action extends Model
     public static function getByModel($id_rel, $model, $status = 0)
     {
         return Action::where(['id_rel' => $id_rel, 'section'=> $model, 'status' => $status])->get();
+    }
+    
+    public static function getByStatus($status = 0)
+    {
+        return Action::where(['status' => $status])->get();
     }
 
     public static function updateByModel($id)
@@ -76,4 +89,16 @@ class Action extends Model
         return $data_action;
     }
 
+    public static function listDt($status)
+    {
+        $status         = Action::STATUS[$status];
+        $list_actions   = Action::getByStatus($status);
+        $data           = array();
+        foreach ($list_actions as $list_action) {
+            $model          = Action::KEY_MODEL[$list_action->section];
+            $get_strategy   = ActionValues::STRATEGY[$model];
+            $data[]           = (new $get_strategy)->listDt($status, $list_action);
+        }
+        return $data;
+    }
 }

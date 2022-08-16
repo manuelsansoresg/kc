@@ -18,12 +18,10 @@ use Illuminate\Support\Facades\Auth;
 class LeadController extends Controller
 {
     public $model;
-    public $model_file;
 
     public function __construct()
     {
         $this->model = Action::MODEL['lead'];
-        $this->model_file = File::ACTION_LEAD;
     }
     /**
      * Display a listing of the resource.
@@ -33,8 +31,7 @@ class LeadController extends Controller
     public function index()
     {
         $model        = $this->model;
-        $model_file   = $this->model_file;
-        return view('panel.lead.list', compact('model', 'model_file'));
+        return view('panel.lead.list', compact('model'));
     }
 
     public function list()
@@ -140,9 +137,8 @@ class LeadController extends Controller
     {
         $lead   = Lead::find($lead_id);
         $model  = $this->model;
-        $model_file   = $this->model_file;
         $model_action = 'lead';
-        return view('panel.lead.profile', compact('lead', 'model', 'model_file', 'model_action'));
+        return view('panel.lead.profile', compact('lead', 'model', 'model_action'));
     }
 
     /**

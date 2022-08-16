@@ -1,12 +1,15 @@
 import { showInfo } from '../utilities';
 
-window.actionModal = function (id) {
+window.actionModal = function (id, is_new) {
     if (document.getElementById('modal-action-id-rel-lead')) {
         getPerson(id);
 
     }
     resetAction();
     $('#modal-action-id-rel').val(id);
+    if (is_new == 'true') {
+        $('#modal-action-id-action').val(null);
+    }
     $('#modal-action').modal('show');
 
 }
@@ -18,6 +21,7 @@ if (document.getElementById('frm-action')) {
         placeholder: "Escribe para buscar..",
         allowClear: true
     });
+   
 }
 
 
@@ -53,26 +57,29 @@ $().ready(function () {
 
             const new_form = document.getElementById("frm-action");
             const data = new FormData(new_form);
-
+            let refresh_dt = $('#refresh-dt').val();
             axios
                 .post("/panel/action", data)
                 .then(function (response) {
                     let result = response.data;
                     let status = $('#modal-action-status').val();
                     let id_action = $('#modal-action-id-action').val();
+                    console.log(status);
                     if (status == 1 && result != null) { //*se marco como completada
 
                         $('#register-action-id-rel').val(result.id);
                         $('#modal-action').modal('hide');
                         resetRegisterAction();
-                        if (id_action == null) {
+                        if (id_action == 'null') {
                             $('#modal-register-action').modal('show');
                         }
                     } else {
                         $('#modal-action').modal('hide');
-                        showInfo(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
+                        if (refresh_dt != 'null') {
+                            showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+                        }
                     }
-                    refreshListActions();
+                    //refreshListActions();
                 })
                 .catch(e => {
                 });
@@ -143,14 +150,18 @@ $().ready(function () {
 
             const new_form = document.getElementById("frm-register-action");
             const data = new FormData(new_form);
-
+            let refresh_dt = $('#refresh-dt').val();
+            
             axios
                 .post("/panel/register-action", data)
                 .then(function (response) {
                     let result = response.data;
                     $('#modal-register-action').modal('hide');
-                    showInfo(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
-                    refreshListActions();
+                    if (refresh_dt != 'null') {
+                        showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+                    } else {
+                        refreshListActions();
+                    }
                 })
                 .catch(e => {
                 });
@@ -159,12 +170,22 @@ $().ready(function () {
     });
 });
 
-window.modalRegisterAction = function (id) {
+window.modalRegisterAction = function (model, id) {
+    resetRegisterAction();
+    axios
+    .get("/panel/register-action/set-id/"+id+'/set')
+    .then(function (response) {
+
+    })
+    .catch(e => {
+    });
+    $('#register-action-model').val(model);
     $('#register-action-id-rel').val(id);
     $('#modal-register-action').modal('show');
 }
 
 window.alerDeleteAction = function (id) {
+   
     Swal.fire({
         title: '¿Estás seguro?',
         icon: 'warning',
@@ -179,10 +200,15 @@ window.alerDeleteAction = function (id) {
 }
 
 window.deleteAction = function (id) {
+    let refresh_dt = $('#refresh-dt').val();
     axios
     .delete("/panel/action/"+id)
     .then(function (response) {
-        refreshListActions();
+        if (refresh_dt != 'null') {
+            showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+        } else {
+            refreshListActions();
+        }
     })
     .catch(e => {
     });
@@ -207,6 +233,8 @@ window.setModalAction = function (action_id, disabled) {
             $("#modal-action-subject").val(action.subject);
             $("#modal-action-id-action").val(action_id);
             $("#modal-action-subject").val(action.subject);
+            $("#modal-action-id-section").val(action.section);
+            $("#modal-action-status").val(action.status);
             $("#modal-action-start_date").val(action.start_date);
             $("#modal-action-start_time").val(action.start_time);
             $("#modal-action-end_date").val(action.end_date);

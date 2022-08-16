@@ -14,7 +14,7 @@
             <div class="kanban-item-text">
                 <p>{{ $action->subject }}</p>
             </div>
-
+            
             <div class="kanban-item-meta">
                 @if ($status == 'programed')
                 <ul class="kanban-item-meta-list">
@@ -25,7 +25,7 @@
                 <ul class="kanban-item-meta-list">
                     <li>
                         <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Marcar como completada" onclick="modalRegisterAction({{ $action->id }})"><em
+                            title="Marcar como completada" onclick="modalRegisterAction({{ $model}}, {{ $action->id }})"><em
                                 class="icon ni ni-check-round"></em></a>
                     </li>
                     <li>
@@ -46,7 +46,7 @@
                 </ul>
                 <ul class="kanban-item-meta-list">
                     <li>
-                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver registro de accion" onclick="setModalAction({{ $action->id }}, true)"><em class="icon ni ni-eye-alt"></em></a>
+                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver registro de accion" onclick="setModalAction({{ $action->id }}, true)"><em class="icon ni ni-todo-fill"></em></a>
                     </li>
                     {{-- <li>
                         <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Marcar como pendiente" onclick=""><em class="icon ni ni-minus-round"></em></a>

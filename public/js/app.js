@@ -12,13 +12,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
 
 
-window.actionModal = function (id) {
+window.actionModal = function (id, is_new) {
   if (document.getElementById('modal-action-id-rel-lead')) {
     getPerson(id);
   }
 
   resetAction();
   $('#modal-action-id-rel').val(id);
+
+  if (is_new == 'true') {
+    $('#modal-action-id-action').val(null);
+  }
+
   $('#modal-action').modal('show');
 };
 
@@ -56,10 +61,12 @@ $().ready(function () {
       event.preventDefault();
       var new_form = document.getElementById("frm-action");
       var data = new FormData(new_form);
+      var refresh_dt = $('#refresh-dt').val();
       axios.post("/panel/action", data).then(function (response) {
         var result = response.data;
         var status = $('#modal-action-status').val();
         var id_action = $('#modal-action-id-action').val();
+        console.log(status);
 
         if (status == 1 && result != null) {
           //*se marco como completada
@@ -67,15 +74,17 @@ $().ready(function () {
           $('#modal-action').modal('hide');
           resetRegisterAction();
 
-          if (id_action == null) {
+          if (id_action == 'null') {
             $('#modal-register-action').modal('show');
           }
         } else {
           $('#modal-action').modal('hide');
-          (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
-        }
 
-        refreshListActions();
+          if (refresh_dt != 'null') {
+            (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+          }
+        } //refreshListActions();
+
       })["catch"](function (e) {});
     }
   });
@@ -129,17 +138,25 @@ $().ready(function () {
       event.preventDefault();
       var new_form = document.getElementById("frm-register-action");
       var data = new FormData(new_form);
+      var refresh_dt = $('#refresh-dt').val();
       axios.post("/panel/register-action", data).then(function (response) {
         var result = response.data;
         $('#modal-register-action').modal('hide');
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Registro guardado');
-        refreshListActions();
+
+        if (refresh_dt != 'null') {
+          (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+        } else {
+          refreshListActions();
+        }
       })["catch"](function (e) {});
     }
   });
 });
 
-window.modalRegisterAction = function (id) {
+window.modalRegisterAction = function (model, id) {
+  resetRegisterAction();
+  axios.get("/panel/register-action/set-id/" + id + '/set').then(function (response) {})["catch"](function (e) {});
+  $('#register-action-model').val(model);
   $('#register-action-id-rel').val(id);
   $('#modal-register-action').modal('show');
 };
@@ -159,8 +176,13 @@ window.alerDeleteAction = function (id) {
 };
 
 window.deleteAction = function (id) {
+  var refresh_dt = $('#refresh-dt').val();
   axios["delete"]("/panel/action/" + id).then(function (response) {
-    refreshListActions();
+    if (refresh_dt != 'null') {
+      (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+    } else {
+      refreshListActions();
+    }
   })["catch"](function (e) {});
 };
 
@@ -182,6 +204,8 @@ window.setModalAction = function (action_id, disabled) {
       $("#modal-action-subject").val(action.subject);
       $("#modal-action-id-action").val(action_id);
       $("#modal-action-subject").val(action.subject);
+      $("#modal-action-id-section").val(action.section);
+      $("#modal-action-status").val(action.status);
       $("#modal-action-start_date").val(action.start_date);
       $("#modal-action-start_time").val(action.start_time);
       $("#modal-action-end_date").val(action.end_date);
@@ -219,6 +243,50 @@ window.refreshListActions = function () {
 if (document.getElementById('content-profile-programed')) {
   refreshListActions();
 }
+
+/***/ }),
+
+/***/ "./resources/js/components/action/datatable.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/action/datatable.js ***!
+  \*****************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var status = $('#dt-action-status').val();
+  var table = NioApp.DataTable('#dt-acctions', {
+    processing: true,
+    responsive: {
+      details: true
+    },
+    ajax: '/panel/action/' + status + '/dt/show',
+    columns: [{
+      data: 'type'
+    }, {
+      data: 'subject'
+    }, {
+      data: 'section'
+    }, {
+      data: 'name'
+    }, {
+      data: 'date_in'
+    }, {
+      data: 'date_fin'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options',
+      className: 'nk-tb-col-tools text-end'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+});
 
 /***/ }),
 
@@ -1661,6 +1729,8 @@ __webpack_require__(/*! ./components/lead/crud */ "./resources/js/components/lea
 __webpack_require__(/*! ./components/toastr */ "./resources/js/components/toastr.js");
 
 __webpack_require__(/*! ./components/crm */ "./resources/js/components/crm.js");
+
+__webpack_require__(/*! ./components/action/datatable */ "./resources/js/components/action/datatable.js");
 
 __webpack_require__(/*! ./components/action/crud */ "./resources/js/components/action/crud.js");
 

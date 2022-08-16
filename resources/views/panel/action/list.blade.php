@@ -1,62 +1,52 @@
-@php
-    $icons = config('enums.type_icon_actions');
-@endphp
-@foreach ($actions as $action)
-    <div class="card mt-3">
-        <div class="kanban-item">
-            <div class="kanban-item-title">
-                <h6 class="title">
-                    <em class="{{ $icons[$action->type] }}"></em>
-                    {{ $action[$action->type] }}
-                </h6>
-            </div>
-            <div class="kanban-item-text">
-                <p>{{ $action->subject }}</p>
-            </div>
-
-            <div class="kanban-item-meta">
-                @if ($status == 'programed')
-                <ul class="kanban-item-meta-list">
-                    <li><em class="icon ni ni-calendar"></em><span>{{ $action->created_at->diffForHumans() }}</span>
-                    </li>
-
-                </ul>
-                <ul class="kanban-item-meta-list">
-                    <li>
-                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Marcar como completada" onclick="modalRegisterAction({{ $action->id }})"><em
-                                class="icon ni ni-check-round"></em></a>
-                    </li>
-                    <li>
-                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Editar" onclick="setModalAction({{ $action->id }}, false)"><em
-                                class="icon ni ni-edit-alt"></em></a>
-                    </li>
-                    <li>
-                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Eliminar" onclick="alerDeleteAction({{ $action->id }})"><em
-                                class="icon ni ni-trash-alt"></em></a>
-                    </li>
-                </ul>
-                @else
-                <ul class="kanban-item-meta-list">
-                    <li><em class="icon ni ni-calendar"></em><span>{{ $action->created_at->diffForHumans() }}</span></li>
-                    
-                </ul>
-                <ul class="kanban-item-meta-list">
-                    <li>
-                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver registro de accion" onclick="setModalAction({{ $action->id }}, true)"><em class="icon ni ni-eye-alt"></em></a>
-                    </li>
-                    {{-- <li>
-                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Marcar como pendiente" onclick=""><em class="icon ni ni-minus-round"></em></a>
-                    </li> --}}
-                    <li>
-                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar" onclick="alerDeleteAction({{ $action->id }})"><em class="icon ni ni-trash-alt"></em></a> 
-                    </li>
-                </ul>
-                @endif
-                
+@extends('layouts.admin')
+@section('title', 'Lista de acciones'.$title)
+@section('content')
+    <div class="nk-content ">
+        <div class="container-fluid">
+            <div class="nk-content-inner">
+                <div class="nk-content-body">
+                    <div class="nk-block-head nk-block-head-sm">
+                        <div class="nk-block-between">
+                            <div class="nk-block-head-content">
+                                <h3 class="nk-block-title page-title">{{ $title }}</h3>
+                                <div class="nk-block-des text-soft">
+                                    <nav>
+                                        <ul class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
+                                            <li class="breadcrumb-item active">{{ strtoupper($title) }}</li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="dt-action-status" value="{{ $status }}">
+                    <div class="nk-block nk-block-lg">
+                        <div class="card card-bordered card-preview">
+                            <div class="card-inner">
+                                <table id="dt-acctions" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th>Asunto</th>
+                                            <th>Sección</th>
+                                            <th>Nombre</th>
+                                            <th>Fecha inicio</th>
+                                            <th>Fecha fin</th>
+                                            <th>Asesor</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                   
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-@endforeach
+    <input type="text" id="refresh-dt" value="dt-acctions">
+    @include('panel.action.modal.form')
+    @include('panel.action.modal.register_action')
+@endsection

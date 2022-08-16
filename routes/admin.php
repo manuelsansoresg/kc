@@ -74,6 +74,8 @@ Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\Notificati
 Route::resource('action', '\App\Http\Controllers\Panel\ActionController')->middleware('auth');
 Route::group(['prefix' => 'action'], function () {
     Route::get('list/{id}/{model}/{status}', ['\App\Http\Controllers\Panel\ActionController', 'listAction'])->middleware('auth');
+    Route::get('{status}/view', ['\App\Http\Controllers\Panel\ActionController', 'viewAction'])->middleware('auth');
+    Route::get('{status}/dt/show', ['\App\Http\Controllers\Panel\ActionController', 'list'])->middleware('auth');
 });
 //*dropzone file
 Route::post('temp/images/{model}', ['\App\Http\Controllers\Panel\ActionController', 'storeFile'])->middleware('auth');
@@ -81,3 +83,6 @@ Route::get('temp/images/{model}/show', ['\App\Http\Controllers\Panel\ActionContr
 Route::get('temp/images/{id}/delete', ['\App\Http\Controllers\Panel\ActionController', 'deleteFile'])->middleware('auth');
 //*register action
 Route::resource('register-action', '\App\Http\Controllers\Panel\RegisterActionController')->middleware('auth');
+Route::group(['prefix' => 'register-action'], function () {
+    Route::get('set-id/{id}/set', ['\App\Http\Controllers\Panel\RegisterActionController', 'setIdRel'])->middleware('auth');
+});

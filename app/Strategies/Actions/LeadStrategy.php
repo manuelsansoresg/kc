@@ -35,12 +35,12 @@ class LeadStrategy implements ActionInterface
         return $action;
     }
 
-    public function getAdvisor($advisor_id)
+    public function getAdvisor()
     {
         return $this->advisor;
     }
 
-    public function getLead($lead_id)
+    public function getLead()
     {
         return $this->lead;
     }
@@ -50,7 +50,36 @@ class LeadStrategy implements ActionInterface
         $model    = Action::MODEL[$model];
         
         $actions   = Action::getByModel($id, $model, $status);
-        $list = \View::make('panel.action.list', [ 'actions' => $actions, 'status' => $status])->render();
+        $list = \View::make('panel.action.list_action', [ 'actions' => $actions, 'status' => $status, 'model' => $model])->render();
         return $list;
+    }
+    /**
+     * print dinamic datatable action #dt-acctions
+     *
+     * @param object $model_action model
+     * @return void
+     */
+    public function listDt($status, $model_action)
+    {
+        $lead           = Lead::find($model_action->id_rel);
+        $advisor        = User::find($model_action->advisor_id);
+        $type_actions   = config('enums.type_actions');
+        $data_option = array(
+            'status' => $status,
+            'model' => $model_action
+        );
+        $option         = \View::make('panel.action.add_option_dt', $data_option)->render();
+
+        $data = array(
+            'type' => $type_actions[$model_action->type],
+            'subject' => $model_action->subject,
+            'section' => Action::NAME_MODEL[$model_action->section],
+            'name' => $lead->name.' '.$lead->last_name,
+            'date_in' => formatDateNameMonth($model_action->start_date),
+            'date_fin' => formatDateNameMonth($model_action->end_date),
+            'advisor' => $advisor->name,
+            'options' => $option
+        );
+        return $data;
     }
 }
