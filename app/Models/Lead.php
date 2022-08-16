@@ -153,6 +153,26 @@ class Lead extends Model
         return $lead;
     }
 
+    public static function createWithSurvey($data, $survey_id)
+    {
+        $response = json_decode($data['response']);
+        $data_lead = array(
+            'name' => $response->name,
+            'cellphone' => $response->cellphone,
+            'email' => $response->email,
+            'origin_id' => 1,
+            'channel_id' =>1
+        );
+        $exist_lead = Lead::where($data_lead)->count();
+        if ($exist_lead === 0) {
+            $survey = ApiSurveySparrow::find($survey_id);
+            $survey->status = 1;
+            $survey->update();
+            $lead = Lead::create($data_lead);
+            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+        }
+    }
+
     public static function getChanelByOrigin($origin_id)
     {
         $channel = null;

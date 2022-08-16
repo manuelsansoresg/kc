@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\SurveySparrow;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApiSurveySparrow;
+use App\Models\Lead;
 use Illuminate\Http\Request;
 
 class SurveyController extends Controller
@@ -43,6 +44,9 @@ class SurveyController extends Controller
             'response' => json_encode($request->all())
         );
         $api_survey = ApiSurveySparrow::create($data_survey);
+        if ($api_survey != null) {
+            Lead::createWithSurvey($data_survey, $api_survey->id);
+        }
         return response()->json($api_survey);
     }
 

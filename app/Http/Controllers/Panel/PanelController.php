@@ -19,9 +19,6 @@ class PanelController extends Controller
      */
     public function index()
     {
-        $survey = new CSurveySparrow();
-        $create_survey = $survey->getAllResponse();
-        dd($create_survey);
         return view('panel.index');
     }
 
