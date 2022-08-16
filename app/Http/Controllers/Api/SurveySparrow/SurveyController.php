@@ -42,7 +42,6 @@ class SurveyController extends Controller
             'state' => ApiSurveySparrow::STATE[$model_id],
             'response' => json_encode($request->all())
         );
-        dd($data_survey);
         $api_survey = ApiSurveySparrow::create($data_survey);
         return response()->json($api_survey);
     }
