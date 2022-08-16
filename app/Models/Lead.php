@@ -160,7 +160,7 @@ class Lead extends Model
             'name' => $response->name,
             'cellphone' => $response->cellphone,
             'email' => $response->email,
-            'origin_id' => 1,
+            'origin_id' => 2,
             'channel_id' =>1
         );
         $exist_lead = Lead::where($data_lead)->count();

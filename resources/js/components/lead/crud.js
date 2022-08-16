@@ -57,6 +57,7 @@ function setData() {
             $('#lead-asesor-id option[value="' + lead.asesor_id + '"]').attr("selected", "selected");
             $('#lead-temperature-id option[value="' + lead.temperature_id + '"]').attr("selected", "selected");
             
+            
             $('#lead-name').val(lead.name); 
             $('#lead-last_name').val(lead.last_name); 
             $('#lead-second_last_name').val(lead.second_last_name); 
@@ -74,7 +75,7 @@ function setData() {
                     
                 }
             }
-
+            $('#lead-channel option[value="' + lead.channel_id + '"]').attr("selected", "selected");
 
         })
         .catch(e => {

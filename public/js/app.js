@@ -748,6 +748,8 @@ function setData() {
         }
       }
     }
+
+    $('#lead-channel option[value="' + lead.channel_id + '"]').attr("selected", "selected");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
