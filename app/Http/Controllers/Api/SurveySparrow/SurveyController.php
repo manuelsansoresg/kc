@@ -37,7 +37,6 @@ class SurveyController extends Controller
     public function store(Request $request)
     {
         $model_id =  ApiSurveySparrow::MODEL['survey'];
-        dd($model_id);
         $data_survey = array(
             'model_id' => $model_id,
             'state' => ApiSurveySparrow::STATE[$model_id],
