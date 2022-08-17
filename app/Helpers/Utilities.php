@@ -6,7 +6,7 @@ if (!function_exists('formatDateNameMonth')) {
                     '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre',
                     '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
                 );
-        $format_date = date('d-m-Y H:i', strtotime($date));
+        $format_date = date('d-m-Y h:i a', strtotime($date));
         $day = substr($format_date, 0, 3);
         $month  = $monhts[substr($format_date, 3, 2)];
         $year_hour           = substr($format_date, 6);

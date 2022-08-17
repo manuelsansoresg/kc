@@ -17,6 +17,7 @@ return [
         4 => 'Referente',
     ),
     'temperatures' => array(
+        '' => '',
         1 => 'Frío',
         2 => 'Tibio',
         3 => 'Caliente',
