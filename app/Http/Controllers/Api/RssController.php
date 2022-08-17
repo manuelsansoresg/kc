@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Lib\Csendgrid;
+use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -43,7 +45,11 @@ class RssController extends Controller
         $data_lead['channel_id']  = 2;
 
         $lead = Lead::create($data_lead)->toArray();
-
+        //*crear prospecto en log
+        HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+        //*crear contacto sendgrid
+        $send_grid = new Csendgrid();
+        $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name);
         $user = User::saveClientPersona($lead);
         return response()->json($user);
     }
