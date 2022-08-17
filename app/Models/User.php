@@ -30,7 +30,8 @@ class User extends Authenticatable
         'password',
         'c_financial_id',
         'type_person',
-        'razon_social'
+        'razon_social',
+        'is_rss'
 
     ];
 

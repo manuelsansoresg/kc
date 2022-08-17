@@ -22,3 +22,4 @@ Route::group(['prefix' => 'surveysparrow'], function () {
     Route::resource('survey', '\App\Http\Controllers\Api\SurveySparrow\SurveyController');
 });
 
+Route::resource('rrss', '\App\Http\Controllers\Api\RssController');
