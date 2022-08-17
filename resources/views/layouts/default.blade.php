@@ -176,7 +176,7 @@
                                 <!-- button group -->
                                 <ul class="btns-group hero-btns">
                                     <li><a href="explore.html" class="btn btn-lg btn-dark">Explore</a></li>
-                                    <li><a href="create.html" class="btn btn-lg btn-outline-dark">Create</a></li>
+                                    <li><a href="https://sprw.io/stt-d1fdfd" target="_blank" class="btn btn-lg btn-outline-dark">Iniciar</a></li>
                                 </ul>
                             </div><!-- hero-content -->
                         </div><!-- col-lg-6 -->
