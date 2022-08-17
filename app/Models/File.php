@@ -40,4 +40,19 @@ class File extends Model
         $view_files = \View::make('panel.action.dropzone_preview', ['files' => $files, 'model' => $model])->render();
         return $view_files;
     }
+
+    public static function deleteByModel($model, $id_rel)
+    {
+        $files = File::where([
+            'model'=> $model,
+            'id_rel' => $id_rel,
+        ])->get();
+
+        foreach ($files as $file) {
+            unlink(File::PATH.'/'.$file->name);
+            $get_file = File::find($file->id);
+            $get_file->delete();
+        }
+        
+    }
 }

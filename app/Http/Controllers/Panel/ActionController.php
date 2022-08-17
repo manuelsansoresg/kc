@@ -56,12 +56,18 @@ class ActionController extends Controller
      */
     public function storeFile($model, Request $request)
     {
+        if ($model == 'null') {
+            $model = $request->session()->get('model_action');
+        }
         $id_rel = $request->session()->get('id_rel_action');
         File::upload($model, $id_rel, $request);
     }
 
     public function showFiles($model, Request $request)
     {
+        if ($model == 'null') {
+            $model = $request->session()->get('model_action');
+        }
         $id_rel = $request->session()->get('id_rel_action');
         $files = File::getAll($model, $id_rel);
         return response()->json($files);

@@ -170,10 +170,20 @@ $().ready(function () {
     });
 });
 
+
 window.modalRegisterAction = function (model, id) {
     resetRegisterAction();
+    
     axios
     .get("/panel/register-action/set-id/"+id+'/set')
+    .then(function (response) {
+
+    })
+    .catch(e => {
+    });
+    
+    axios
+    .get("/panel/register-action/set-model/"+model+'/set')
     .then(function (response) {
 
     })
@@ -182,6 +192,25 @@ window.modalRegisterAction = function (model, id) {
     $('#register-action-model').val(model);
     $('#register-action-id-rel').val(id);
     $('#modal-register-action').modal('show');
+}
+
+window.setIdRel = function() {
+    
+}
+
+window.deleteRegisterAction = function(action_id) {
+    let refresh_dt = $('#refresh-dt').val();
+    axios
+    .delete("/panel/register-action/"+action_id)
+    .then(function (response) {
+        if (refresh_dt != 'null') {
+            showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+        } else {
+            refreshListActions();
+        }
+    })
+    .catch(e => {
+    });
 }
 
 window.alerDeleteAction = function (id) {

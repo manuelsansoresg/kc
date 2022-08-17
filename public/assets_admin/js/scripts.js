@@ -462,11 +462,15 @@
 
   NioApp.Dropzone.init = function () {
     let model = $('#register-action-model').val();
+    if (model == '') {
+      model = null;
+    }
     NioApp.Dropzone('.upload-zone', {
       url: "/panel/temp/images/"+model,
       
       init: function () {
         this.on("success", function (file, message) {
+          
           axios
             .get("/panel/temp/images/"+model+'/show')
             .then(function (response) {

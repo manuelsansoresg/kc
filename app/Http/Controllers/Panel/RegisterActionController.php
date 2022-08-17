@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\Action;
+use App\Models\File;
 use App\Models\RegisterAction;
 use Illuminate\Http\Request;
 
@@ -22,6 +23,11 @@ class RegisterActionController extends Controller
     public function setIdRel($id, Request $request)
     {
         $request->session()->put('id_rel_action', $id);
+    }
+    
+    public function setModel($model, Request $request)
+    {
+        $request->session()->put('model_action', $model);
     }
 
     /**
@@ -91,6 +97,14 @@ class RegisterActionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $register_action = RegisterAction::find($id);
+        
+        $get_action           = Action::find($id);
+        $get_action->status   = 0;
+        $get_action->update();
+        if ($register_action !== null) {
+            File::deleteByModel($get_action->section, $id);
+            $register_action->delete();
+        }
     }
 }

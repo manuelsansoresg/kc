@@ -85,4 +85,5 @@ Route::get('temp/images/{id}/delete', ['\App\Http\Controllers\Panel\ActionContro
 Route::resource('register-action', '\App\Http\Controllers\Panel\RegisterActionController')->middleware('auth');
 Route::group(['prefix' => 'register-action'], function () {
     Route::get('set-id/{id}/set', ['\App\Http\Controllers\Panel\RegisterActionController', 'setIdRel'])->middleware('auth');
+    Route::get('set-model/{id}/set', ['\App\Http\Controllers\Panel\RegisterActionController', 'setModel'])->middleware('auth');
 });

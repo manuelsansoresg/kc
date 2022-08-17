@@ -156,9 +156,23 @@ $().ready(function () {
 window.modalRegisterAction = function (model, id) {
   resetRegisterAction();
   axios.get("/panel/register-action/set-id/" + id + '/set').then(function (response) {})["catch"](function (e) {});
+  axios.get("/panel/register-action/set-model/" + model + '/set').then(function (response) {})["catch"](function (e) {});
   $('#register-action-model').val(model);
   $('#register-action-id-rel').val(id);
   $('#modal-register-action').modal('show');
+};
+
+window.setIdRel = function () {};
+
+window.deleteRegisterAction = function (action_id) {
+  var refresh_dt = $('#refresh-dt').val();
+  axios["delete"]("/panel/register-action/" + action_id).then(function (response) {
+    if (refresh_dt != 'null') {
+      (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+    } else {
+      refreshListActions();
+    }
+  })["catch"](function (e) {});
 };
 
 window.alerDeleteAction = function (id) {

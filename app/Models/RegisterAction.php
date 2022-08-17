@@ -13,4 +13,5 @@ class RegisterAction extends Model
         'state',
         'comment',
     ];
+    protected $primaryKey = 'action_id';
 }

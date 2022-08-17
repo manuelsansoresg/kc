@@ -46,6 +46,9 @@
                 </ul>
                 <ul class="kanban-item-meta-list">
                     <li>
+                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Marcar como pendiente" onclick="deleteRegisterAction({{ $action->id }}, true)"><em class="icon ni ni-minus-circle-fill"></em></a>
+                    </li>
+                    <li>
                         <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver registro de accion" onclick="setModalAction({{ $action->id }}, true)"><em class="icon ni ni-todo-fill"></em></a>
                     </li>
                     {{-- <li>

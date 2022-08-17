@@ -21,6 +21,9 @@ $user = Auth::user();
             <em class="icon ni ni-todo-fill"></em>
         </a>
     </li>
+    <li class="nk-tb-action-hidden">
+        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Marcar como pendiente" onclick="deleteRegisterAction({{ $model->id }}, true)"><em class="icon ni ni-minus-circle-fill"></em></a>
+    </li>
     @endif
     <li>
         <div class="drodown">
@@ -43,12 +46,16 @@ $user = Auth::user();
                             <em
                                 class="icon ni ni-edit-alt"></em><span>Editar</span></a>
                     </li>
+                   
                     
                     @else
-                        
+                    <li>
+                        <a class="pointer" onclick="deleteRegisterAction({{ $model->id }}, true)">
+                            <em class="icon ni ni-minus-circle-fill"></em><span>Marcar como pendiente</span></a>
+                    </li>
                     @endif
                     <li>
-                        <a onclick="alerDeleteAction({{ $model->id }})">
+                        <a  class="pointer" onclick="alerDeleteAction({{ $model->id }})">
                             <em
                                 class="icon ni ni-trash-alt"></em><span>Eliminar</span></a>
                     </li>
