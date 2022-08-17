@@ -44,8 +44,8 @@ class RssController extends Controller
 
         $lead = Lead::create($data_lead)->toArray();
 
-        User::saveClientPersona($lead);
-        return response()->json('ok');
+        $user = User::saveClientPersona($lead);
+        return response()->json($user);
     }
 
     /**

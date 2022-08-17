@@ -134,6 +134,7 @@ class User extends Authenticatable
         $send_grid->setTemplate('d-235b3d5c43c14184b365def8c1d1e160');
         $send_grid->setParams(['first_name'=> $data['name'], 'link_account' => $link_account]);
         $send_grid->send();
+        return $user;
     }
 
     public static function changePassword($request)
