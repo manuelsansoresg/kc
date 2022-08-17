@@ -271,10 +271,10 @@ window.refreshListActions = function() {
     let id_rel    = $('#id-rel-action').val();
     let model     = $('#model-action').val();
 
-    refreshAction(id_rel, model, 'programed', 'content-profile-programed')
+    refreshAction(id_rel, model, 'in_progress', 'content-profile-in_progress')
     refreshAction(id_rel, model, 'completed', 'content-profile-completed')
 }
-if (document.getElementById('content-profile-programed')) {
+if (document.getElementById('content-profile-in_progress')) {
     refreshListActions();
 }
 

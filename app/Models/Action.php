@@ -25,7 +25,7 @@ class Action extends Model
     ];
 
     const STATUS = [
-        'programed' => 0,
+        'in_progress' => 0,
         'completed' => 1,
     ];
     const MODEL = [

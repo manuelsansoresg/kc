@@ -266,13 +266,13 @@
                                             <input type="hidden" id="id-rel-action" value="{{ $lead->id }}">
                                             <input type="hidden" id="model-action" value="{{ $model_action }}">
                                             <div class="col-12 text-center mt-3">
-                                                <span class="badge rounded-pill bg-light">Programadas</span>
+                                                <span class="badge rounded-pill bg-light">En curso</span>
                                             </div>
-                                            <div id="content-profile-programed">
+                                            <div id="content-profile-in_progress">
                                                 
                                             </div>
                                             <div class="col-12 text-center mt-3">
-                                                <span class="badge rounded-pill bg-light">Completadas</span>
+                                                <span class="badge rounded-pill bg-light">Concluidas</span>
                                             </div>
                                             <div id="content-profile-completed">
                                                 

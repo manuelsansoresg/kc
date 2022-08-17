@@ -16,7 +16,7 @@
             </div>
             
             <div class="kanban-item-meta">
-                @if ($status == 'programed')
+                @if ($status == 'in_progress')
                 <ul class="kanban-item-meta-list">
                     <li><em class="icon ni ni-calendar"></em><span>{{ $action->created_at->diffForHumans() }}</span>
                     </li>

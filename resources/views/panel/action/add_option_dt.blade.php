@@ -7,7 +7,7 @@ $user = Auth::user();
             <em class="icon ni ni-user-fill"></em>
         </a>
     </li>
-    @if ($status == 'programed')
+    @if ($status == 'in_progress')
     <li class="nk-tb-action-hidden">
         <a class="btn btn-trigger btn-icon" onclick="modalRegisterAction({{ $model->section}},{{ $model->id }})" data-bs-toggle="tooltip" data-bs-placement="top"
             title="Completar">
@@ -32,7 +32,7 @@ $user = Auth::user();
                         <a href="/panel/lead/{{ $model->id_rel }}/profile">
                             <em class="icon ni ni-user-fill"></em><span>Ver perfíl</span></a>
                     </li>
-                    @if ($status == 'programed')
+                    @if ($status == 'in_progress')
                    
                     <li>
                         <a onclick="modalRegisterAction({{ $model->section}},{{ $model->id }})">

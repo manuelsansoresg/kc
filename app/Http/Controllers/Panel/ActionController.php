@@ -92,7 +92,7 @@ class ActionController extends Controller
 
     public function viewAction($status)
     {
-        $title = ($status == 'programed')? 'Programadas': 'Completadas';
+        $title = ($status == 'in_progress')? 'En curso': 'Concluidas';
         return view('panel.action.list', compact('title', 'status'));
     }
     
