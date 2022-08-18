@@ -15,6 +15,7 @@
     $advisors     = $user->getUserRole('Asesor');
     $temperatures = config('enums.temperatures');
     $user         = Auth::user();
+    $types        = config('enums.type_lead');
     @endphp
 
     <div class="nk-content ">
@@ -179,6 +180,25 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <hr class="preview-hr">
+                                        <span class="preview-title-lg overline-title">Servicio</span>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Tipo</label>
+                                                <div class="form-control-wrap">
+                                                    <select class="form-select js-select2" name="data[type_id]" id="lead-type_id"  data-search="on">
+                                                        @if ($lead == null)
+                                                            <option value="">Escribe para buscar</option>
+                                                        @endif
+                                                        @foreach ($types as $key=>$type)
+                                                            <option value="{{ $key }}">{{ $type }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <hr class="preview-hr">
                                         <span class="preview-title-lg overline-title">Etiquetas</span>
 

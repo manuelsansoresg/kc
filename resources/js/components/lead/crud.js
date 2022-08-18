@@ -55,6 +55,7 @@ function setData() {
             $('#lead-product-id option[value="' + lead.product_id + '"]').attr("selected", "selected");
             $('#lead-origin option[value="' + lead.origin_id + '"]').attr("selected", "selected");
             $('#lead-asesor-id option[value="' + lead.asesor_id + '"]').attr("selected", "selected");
+            $('#lead-type_id option[value="' + lead.type_id + '"]').attr("selected", "selected");
             $('#lead-temperature-id option[value="' + lead.temperature_id + '"]').attr("selected", "selected");
             
             

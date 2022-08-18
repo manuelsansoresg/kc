@@ -41,6 +41,11 @@ return [
         2 => 'Sin convenio',
         3 => 'Otro',
     ),
+    'type_lead' => array(
+        1 => 'Autoservicio',
+        2 => 'Asistido',
+    ),
+
     //*actions
     "type_actions" => array(
         1 => 'Llamada',

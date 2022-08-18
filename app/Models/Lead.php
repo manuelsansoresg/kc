@@ -24,6 +24,7 @@ class Lead extends Model
         'channel_id' ,
         'asesor_id' ,
         'temperature_id' ,
+        'type_id'
     ];
 
     public static function listDatatable()
