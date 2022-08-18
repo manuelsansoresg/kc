@@ -8,6 +8,8 @@ require('./components/agreement/datatable');
 require('./components/agreement/crud');
 require('./components/lead/datatable');
 require('./components/lead/crud');
+require('./components/tag/datatable');
+require('./components/tag/crud');
 require('./components/toastr');
 require('./components/crm');
 require('./components/action/datatable');

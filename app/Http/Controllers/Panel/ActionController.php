@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Action;
 use App\Models\File;
+use App\Models\RegisterAction;
 use App\Strategies\Values\ActionValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -162,6 +163,14 @@ class ActionController extends Controller
      */
     public function destroy($id)
     {
-        Action::find($id)->delete();
+        $action = Action::find($id);
+        if ($action != null) {
+            File::deleteByModel($action->section, $action->id);
+            $register_action = RegisterAction::find($action->id);
+            if ($register_action != null) {
+                $register_action->delete();
+            }
+            $action->delete();
+        }
     }
 }

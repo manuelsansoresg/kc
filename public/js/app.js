@@ -1140,6 +1140,119 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/tag/crud.js":
+/*!*********************************************!*\
+  !*** ./resources/js/components/tag/crud.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+
+$().ready(function () {
+  $("#frm-tag").validate({
+    rules: {
+      'data[name]': {
+        required: true
+      },
+      'data[type_id]': {
+        required: true
+      },
+      'data[section_id]': {
+        required: true
+      },
+      'data[status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#frm-tag-name-unique-error').html('');
+      $('#frm-tag-name-unique-error').hide();
+      var new_form = document.getElementById("frm-tag");
+      var data = new FormData(new_form);
+      axios.post("/panel/tag", data).then(function (response) {
+        window.location = '/panel/tag';
+      })["catch"](function (e) {
+        var response = e.response;
+        var data_errors = response.data.errors;
+        $('#frm-tag-name-unique-error').html('Este campo ya se encuentra registrado.');
+        $('#frm-tag-name-unique-error').show();
+      });
+    }
+  });
+
+  if (document.getElementById('frm-tag') && $('#tag_id').val() != null) {
+    var tag_id = $('#tag_id').val();
+    axios.get("/panel/tag/" + tag_id).then(function (response) {
+      var result = response.data;
+      $('#frm-tag-name').val(result.name);
+      $('#frm-tag-type_id option[value="' + result.type_id + '"]').attr("selected", "selected");
+      $('#frm-tag-section_id option[value="' + result.type_id + '"]').attr("selected", "selected");
+      $('#frm-tag-comment').val(result.name);
+      $('#frm-tag-status option[value="' + result.status + '"]').attr("selected", "selected");
+    })["catch"](function (e) {});
+  }
+});
+
+window.deleteTag = function (id) {
+  axios["delete"]("/panel/tag/" + id).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-tag', 'Datos actualizados', 'Registro guardado');
+  })["catch"](function (e) {});
+};
+
+window.alerDelete = function (id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      deleteTag(id);
+    }
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/tag/datatable.js":
+/*!**************************************************!*\
+  !*** ./resources/js/components/tag/datatable.js ***!
+  \**************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-tag', {
+    processing: true,
+    ajax: '/panel/tag/list/show',
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'type'
+    }, {
+      data: 'section'
+    }, {
+      data: 'description'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/toastr.js":
 /*!*******************************************!*\
   !*** ./resources/js/components/toastr.js ***!
@@ -1741,6 +1854,10 @@ __webpack_require__(/*! ./components/agreement/crud */ "./resources/js/component
 __webpack_require__(/*! ./components/lead/datatable */ "./resources/js/components/lead/datatable.js");
 
 __webpack_require__(/*! ./components/lead/crud */ "./resources/js/components/lead/crud.js");
+
+__webpack_require__(/*! ./components/tag/datatable */ "./resources/js/components/tag/datatable.js");
+
+__webpack_require__(/*! ./components/tag/crud */ "./resources/js/components/tag/crud.js");
 
 __webpack_require__(/*! ./components/toastr */ "./resources/js/components/toastr.js");
 

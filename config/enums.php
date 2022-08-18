@@ -75,4 +75,13 @@ return [
         9 => 'Ocupado'
 
     ),
+    //*tags
+    "type_tags" => array(
+        1 => 'Automática',
+        2 => 'Manual',
+    ),
+    "type_section" => array(
+        1 => 'Perfi',
+        2 => 'Módulo',
+    ),
 ];
