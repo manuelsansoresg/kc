@@ -566,6 +566,7 @@
             infoEmpty: "0",
             infoFiltered: "( Total _MAX_  )",
             lengthMenu: "Mostrar &nbsp;  _MENU_",
+            emptyTable: "No hay datos disponibles en la tabla",
             paginate: {
               "first": "Primero",
               "last": "Ultimo",
