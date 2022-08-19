@@ -41,4 +41,30 @@ $().ready(function () {
         }
     });
 
+    if (document.getElementById('frm-agreement') && $('#agreement_id').val() != 'null') {
+        let agreement_id = $('#agreement_id').val();
+        axios
+            .get("/panel/agreement/" + agreement_id)
+            .then(function (response) {
+                let result    = response.data;
+                let agreement = result.agreement;
+                let financials   = result.financials;
+                
+                $('#agreement-name').val(agreement.name);
+                $('#agreement-description').val(agreement.description);
+                
+                $('#agreement-financials').val(financials);
+                $('#agreement-financials').trigger("change");
+                
+                $('#agreement-status').val(agreement.status).trigger("change");
+
+                //$('#agreement-status option[value="' + agreement.status + '"]').trigger("change");
+                
+                
+            })
+            .catch(e => {
+                $('#admin_email-error-exist').show();
+            });
+    }
+
 });

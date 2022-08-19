@@ -52,19 +52,24 @@ class Agreement extends Model
     public static function saveEdit($request)
     {
         if ($request->agreement_id == null) {
-            $product = new Agreement($request->data);
-            $product->save();
+            $agreement = new Agreement($request->data);
+            $agreement->save();
         } else {
-            $product = Agreement::find($request->agreement_id);
-            $product->fill($request->data);
-            $product->update();
+            $agreement = Agreement::find($request->agreement_id);
+            $agreement->fill($request->data);
+            $agreement->update();
         }
        
-        return $product;
+        return $agreement;
     }
 
     public function lead()
     {
         return $this->hasOne(Lead::class);
+    }
+
+    public function financialAgreement()
+    {
+        return $this->hasMany(FinancialAgreement::class);
     }
 }

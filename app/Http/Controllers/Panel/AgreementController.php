@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agreement;
+use App\Models\FinancialAgreement;
 use Illuminate\Http\Request;
 
 class AgreementController extends Controller
@@ -45,7 +46,8 @@ class AgreementController extends Controller
      */
     public function store(Request $request)
     {
-        Agreement::saveEdit($request);
+        $agreement = Agreement::saveEdit($request);
+        FinancialAgreement::saveEdit($agreement->id, $request);
         return response()->json(200);
     }
 
@@ -57,7 +59,15 @@ class AgreementController extends Controller
      */
     public function show($id)
     {
-        //
+        $agreement = Agreement::find($id);
+        $get_financials = $agreement->financialAgreement;
+        //$financials = '';
+        foreach ($get_financials as $financial) {
+            $financials[]= $financial->financial_id;
+        }
+        //$financials = trim($financials, ',');
+        $data = array('agreement' => $agreement, 'financials' => $financials);
+        return response()->json($data);
     }
 
     /**

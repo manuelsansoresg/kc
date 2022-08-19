@@ -347,6 +347,22 @@ $().ready(function () {
       })["catch"](function (e) {});
     }
   });
+
+  if (document.getElementById('frm-agreement') && $('#agreement_id').val() != 'null') {
+    var agreement_id = $('#agreement_id').val();
+    axios.get("/panel/agreement/" + agreement_id).then(function (response) {
+      var result = response.data;
+      var agreement = result.agreement;
+      var financials = result.financials;
+      $('#agreement-name').val(agreement.name);
+      $('#agreement-description').val(agreement.description);
+      $('#agreement-financials').val(financials);
+      $('#agreement-financials').trigger("change");
+      $('#agreement-status').val(agreement.status).trigger("change"); //$('#agreement-status option[value="' + agreement.status + '"]').trigger("change");
+    })["catch"](function (e) {
+      $('#admin_email-error-exist').show();
+    });
+  }
 });
 
 /***/ }),
@@ -794,6 +810,9 @@ __webpack_require__.r(__webpack_exports__);
 $('.js-select2').select2({
   placeholder: "Escribe para buscar..",
   allowClear: true
+});
+$('.select2multiple').select2({
+  placeholder: "Escribe para buscar.."
 });
 $("#lead-agreement").change(function () {
   var lead_agreement = $("#lead-agreement").val();

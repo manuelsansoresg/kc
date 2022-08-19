@@ -13,6 +13,11 @@ class Financial extends Model
         'company_name',
     ];
 
+    public function getAll()
+    {
+        return Financial::all();
+    }
+
     public static function saveEdit($request)
     {
         if ($request->financial_id == null) {

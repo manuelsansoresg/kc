@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 @section('title', 'Formulario convenio')
+@inject('m_financials', 'App\Models\Financial')
 @section('content')
 <div class="nk-content ">
     <div class="container-fluid">
@@ -33,9 +34,9 @@
                                             <label class="form-label" for="frm-product-name">Nombre</label>
                                             <div class="form-control-wrap">
                                                 @php
-                                                    $name = ($agreement != null) ? $agreement->name : ''
+                                                    $financials = $m_financials->getAll();
                                                 @endphp
-                                                <input type="text" name="data[name]" id="name" class="form-control" value="{{ $name }}">
+                                                <input type="text" name="data[name]" id="agreement-name" class="form-control">
                                                 
                                             </div>
                                         </div>
@@ -44,10 +45,21 @@
                                         <div class="form-group">
                                             <label class="form-label">Descripcion</label>
                                             <div class="form-control-wrap">
-                                                @php
-                                                $description = ($agreement != null) ? $agreement->description : ''
-                                            @endphp
-                                                <textarea name="data[description]" id="comment" cols="30" rows="4" class="form-control">{{ $description }}</textarea>
+                                              
+                                                <textarea name="data[description]" id="agreement-description" cols="30" rows="4" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="frm-product-name">Financieras</label>
+                                            <div class="form-control-wrap">
+                                                <select class="form-select select2multiple" multiple="multiple" name="financials[]" id="agreement-financials"   data-search="on">
+                                                @foreach ($financials as $financial)
+                                                    <option value="{{ $financial->id }}"> {{ $financial->commercial_name }} </option>
+                                                @endforeach
+                                                </select>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -56,14 +68,13 @@
                                             <div class="form-control-select">
                                                 @php
                                                     $list_status = config('enums.status');
-                                                    $status = ($agreement != null) ? $agreement->status : ''
                                                 @endphp
                                                 <select
                                                     name="data[status]"
                                                     class="form-control" 
-                                                    id="status" >
+                                                    id="agreement-status" >
                                                     @foreach ($list_status as $key => $get_status)
-                                                        <option value="{{ $key }}" {{ ($status == $key) ? 'selected' : ''}} > {{ $get_status }} </option>
+                                                        <option value="{{ $key }}"> {{ $get_status }} </option>
                                                     @endforeach
                                                 </select>
                                             </div>

@@ -6,6 +6,9 @@ $('.js-select2').select2({
     placeholder: "Escribe para buscar..",
     allowClear: true
 });
+$('.select2multiple').select2({
+    placeholder: "Escribe para buscar..",
+});
 
   $("#lead-agreement" ).change(function() {
     let lead_agreement = $("#lead-agreement" ).val();
