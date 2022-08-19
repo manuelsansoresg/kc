@@ -30,7 +30,7 @@ class User extends Authenticatable
         'password',
         'financial_id',
         'type_person',
-        'razon_social',
+        'rol_id',
         'is_rss'
 
     ];
@@ -181,7 +181,7 @@ class User extends Authenticatable
                 $type_person = config('enums.type_person');
                 
                 $users[] = array(
-                    'financial' => ($financial != null) ? $financial->name : '',
+                    'financial' => ($financial != null) ? $financial->commercial_name : '',
                     'type_person' => $type_person[$user->type_person],
                     'name' => $user->last_name.' '.$user->name,
                     'email' => $user->email,

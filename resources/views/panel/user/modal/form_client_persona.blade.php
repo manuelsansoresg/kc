@@ -60,7 +60,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group"><label class="form-label">Status</label>
+                                    <div class="form-group"><label class="form-label">Estatus</label>
                                         <div class="form-control-select">
                                             <select name="status" class="form-control" id="status">
                                                 <option value="">Selecciona una opción</option>

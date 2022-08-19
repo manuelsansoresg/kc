@@ -45,6 +45,10 @@ return [
         1 => 'Autoservicio',
         2 => 'Asistido',
     ),
+    'role_user_financial' => array(
+        1 => 'Ventas',
+        2 => 'Administración',
+    ),
 
     //*actions
     "type_actions" => array(

@@ -1530,7 +1530,16 @@ __webpack_require__.r(__webpack_exports__);
 window.modalUser = function (type, user_id) {
   var route_datatable = $('#route_datatable').val();
   var title = $('#title').val();
-  $('#frmadmin').trigger("reset");
+
+  if (document.getElementById('frmadmin')) {
+    $('#frmadmin').trigger("reset");
+    $('#financial_id').val("").trigger("change");
+    ;
+  }
+
+  if (document.getElementById('frmfinanciera')) {
+    $('#frmfinanciera').trigger("reset");
+  }
 
   if (type === 1) {
     $('#user-admin-title').html('Crear usuario ' + title);
@@ -1554,26 +1563,20 @@ function setDataUser(user_id) {
   var route_datatable = $('#route_datatable').val();
   axios.get("/panel/user/" + route_datatable + "/" + user_id).then(function (response) {
     var result = response.data;
-    var razon_social = result.razon_social;
 
-    if (razon_social != '') {
+    if (document.getElementById('rol') != '') {
       //*limpiar los valores razon social
-      $('#content-razon').hide();
-      $('#razon_social').val('');
       var type_person = result.type_person;
-      $('#c_financial_id option[value="' + result.c_financial_id + '"]').attr("selected", "selected");
+      $('#financial_id').val(result.financial_id).trigger("change");
       $('#type_person option[value="' + result.type_person + '"]').attr("selected", "selected");
+      $('#rol_id option[value="' + result.rol_id + '"]').attr("selected", "selected");
+    } //TODO: borrar si todo funciona en pruebas
 
-      if (type_person == 2) {
-        $('#razon_social').val(result.razon_social);
-        $('#content-razon').show();
-      }
-    }
+    /* if (document.getElementById('type_person')) {
+        $('#financial_id option[value="'+result.financial_id+'"]').attr("selected", "selected");
+        $('#type_person option[value="'+result.type_person+'"]').attr("selected", "selected");
+    } */
 
-    if (document.getElementById('type_person')) {
-      $('#c_financial_id option[value="' + result.c_financial_id + '"]').attr("selected", "selected");
-      $('#type_person option[value="' + result.type_person + '"]').attr("selected", "selected");
-    }
 
     $('#name').val(result.name);
     $('#last_name').val(result.last_name);
@@ -1593,6 +1596,14 @@ window.deleteUser = function (id) {
 };
 
 $().ready(function () {
+  if (document.getElementById('frmfinanciera')) {
+    $('#financial_id').select2({
+      dropdownParent: $('#modal-user-admin'),
+      placeholder: "Escribe para buscar..",
+      allowClear: true
+    });
+  }
+
   $("#frmadmin").validate({
     rules: {
       name: {
@@ -1639,22 +1650,14 @@ $().ready(function () {
   });
   $("#frmfinanciera").validate({
     rules: {
-      c_financial_id: {
+      financial_id: {
         required: true
       },
       type_person: {
         required: true
       },
-      razon_social: {
-        required: function required(element) {
-          var type_person = $("#type_person").val();
-
-          if (type_person == 2) {
-            return true;
-          } else {
-            return false;
-          }
-        }
+      rol_id: {
+        required: true
       },
       name: {
         required: true
@@ -1692,7 +1695,16 @@ $().ready(function () {
         var result = response.data;
         (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera', 'Datos actualizados', 'Información actualizada correctamente');
         $('#modal-user-admin').modal('hide');
-      })["catch"](function (e) {});
+      })["catch"](function (e) {
+        var response = e.response;
+        var errors = response.data.errors;
+
+        if (errors.email) {
+          $('#admin_email-error-exist').show();
+        }
+
+        console.log(e.response);
+      });
     }
   });
   $("#frmpassword").validate({
@@ -1724,15 +1736,6 @@ $().ready(function () {
 window.modalPasswod = function (user_id) {
   $('#password_user_id').val(user_id);
   $('#modal-user-password').modal('show');
-};
-
-window.showRazon = function () {
-  var type_person = $('#type_person').val();
-  $('#content-razon').hide();
-
-  if (type_person == 2) {
-    $('#content-razon').show();
-  }
 };
 
 /***/ }),

@@ -7,6 +7,9 @@
 
                 <form method="post" id="frmfinanciera" action="/panel/user/administrador">
                     @csrf
+                    @php
+                        $roles = config('enums.role_user_financial');
+                    @endphp
                     <ul class="nav nav-tabs">
                         <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab" href="#tabItem1">Cuenta</a>
                         </li>
@@ -18,35 +21,39 @@
                         <div class="tab-pane active" id="tabItem1">
                             <div class="row gy-4">
                                 <div class="col-md-6">
-                                    <div class="form-group"><label class="form-label">Financiera</label>
-                                        <div class="form-control-select">
-                                            <select name="c_financial_id" class="form-control" id="c_financial_id">
-                                                <option value="">Selecciona una opción</option>
+                                    <div class="form-group"><label class="form-label">*Financiera</label>
+                                        <div class="form-control-wrap">
+                                            <select name="financial_id" class="form-control" id="financial_id">
+                                                <option></option>
                                                 @foreach ($financials as $financial)
-                                                <option value="{{ $financial->id }}">{{ $financial->name }}</option>
+                                                <option value="{{ $financial->id }}">{{ $financial->commercial_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group"><label class="form-label">Persona tipo</label>
+                                    <div class="form-group"><label class="form-label">*Persona tipo</label>
                                         <div class="form-control-select">
                                             <select name="type_person" class="form-control" id="type_person" onchange="showRazon()">
                                                 <option value="">Selecciona una opción</option>
-                                                <option value="1">Física</option>
-                                                <option value="2">Moral</option>
+                                                @foreach ($roles as $key => $role)
+                                                    <option value="{{ $key }}"> {{ $role }} </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <div id="content-razon" style="display: none">
+                                <div id="content-razon" style="">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="frm-user-admin-name">Razón social</label>
-                                            <div class="form-control-wrap">
-                                                <input type="text" name="razon_social" class="form-control" id="razon_social"
-                                                    value="">
+                                            <label class="form-label" for="frm-user-admin-name">*Rol</label>
+                                            <div class="form-control-select">
+                                                <select name="rol_id" class="form-control" id="rol_id" onchange="showRazon()">
+                                                    <option value="">Selecciona una opción</option>
+                                                    <option value="1">Física</option>
+                                                    <option value="2">Moral</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -54,7 +61,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label" for="frm-user-admin-name">Nombre</label>
+                                        <label class="form-label" for="frm-user-admin-name">*Nombres</label>
                                         <div class="form-control-wrap">
                                             <input type="text" name="name" class="form-control" id="name"
                                                 value="">
@@ -63,7 +70,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label">Primer apellido</label>
+                                        <label class="form-label">*Primer apellido</label>
                                         <div class="form-control-wrap">
                                             <input type="text" name="last_name" class="form-control" id="last_name"
                                                 value="">
@@ -88,7 +95,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label" for="edit-close-deal">Email</label>
+                                        <label class="form-label" for="edit-close-deal">*Email</label>
                                         <input type="email" name="email" class="form-control" id="email" value="">
                                         <span id="admin_email-error-exist" class="error" style="display:none">El correo ya se
                                             encuentra registrado.</span>
@@ -107,17 +114,28 @@
                                 </div>
                                 <div class="col-md-6" id="content-password" style="display: none">
                                     <div class="form-group">
-                                        <label class="form-label" for="frm-user-admin-pass">Contraseña</label>
+                                        <label class="form-label" for="frm-user-admin-pass">*Contraseña</label>
                                         <input type="password" name="password" class="form-control" id="password"
                                             value="">
                                     </div>
                                 </div>
                                 <div class="col-md-6" id="content-pass_confirm" style="display: none">
                                     <div class="form-group">
-                                        <label class="form-label" for="frm-user-admin-confirm-pass">Confirmar
+                                        <label class="form-label" for="frm-user-admin-confirm-pass">*Confirmar
                                             contraseña</label>
                                         <input type="password" class="form-control" name="pass_confirm" id="pass_confirm"
                                             value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group"><label class="form-label">Estatus</label>
+                                        <div class="form-control-select">
+                                            <select name="status" class="form-control" id="status">
+                                                <option value="">Selecciona una opción</option>
+                                                <option value="1">Activo</option>
+                                                <option value="0">Inactivo</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                                 <input type="hidden" id="user_id" name="user_id">
