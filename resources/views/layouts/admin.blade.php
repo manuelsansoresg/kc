@@ -80,6 +80,14 @@
                                                 <span class="nk-menu-text">Convenios</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/financial" class="nk-menu-link">
+                                                <span class="nk-menu-icon">
+                                                    <em class="icon ni ni-building"></em>
+                                                </span>
+                                                <span class="nk-menu-text">Financieras</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
                                     </ul>
                                    
                                 </li>

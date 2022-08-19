@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Panel\User;
+namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Models\Financial;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class ClientFinancieraController extends Controller
+class FinancialController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,17 +14,7 @@ class ClientFinancieraController extends Controller
      */
     public function index()
     {
-        $financials = Financial::all();
-        $title = 'Cliente financiera';
-        $route = 'cliente-financiera';
-        return view('panel.user.list_financiera', ['title' => $title, 'route' => $route, 'financials' => $financials]);
-    }
-
-    public function list()
-    {
-        $users = User::listDatatable(4);
-        
-        return response()->json(['data' => $users]);
+        return view('panel.financial.list');
     }
 
     /**
@@ -36,7 +24,8 @@ class ClientFinancieraController extends Controller
      */
     public function create()
     {
-        return view('panel.user.form');
+        $financial_id = null;
+        return view('panel.financial.form', compact('financial_id'));
     }
 
     /**
@@ -47,6 +36,25 @@ class ClientFinancieraController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->tag_id == null) {
+            $request->validate(
+                [
+                'data.name' => 'required|unique:tags,name',
+                ],
+                [
+                    'data.name.unique' => 'El valor ya se encuentra registrado'
+                ]
+            );
+        } else {
+            $request->validate(
+                [
+                    'data.name' => 'required|unique:tags,name,' . $request->tag_id . ',id',
+                ],
+                [
+                    'data.name.unique' => 'El valor ya se encuentra registrado'
+                ]
+            );
+        }
     }
 
     /**
@@ -57,8 +65,7 @@ class ClientFinancieraController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        return response()->json($user);
+        //
     }
 
     /**
@@ -84,11 +91,6 @@ class ClientFinancieraController extends Controller
         //
     }
 
-    public function updatePassword(Request $request)
-    {
-        User::changePassword($request);
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -97,8 +99,6 @@ class ClientFinancieraController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        $user->delete();
-        return response()->json(200);
+        //
     }
 }

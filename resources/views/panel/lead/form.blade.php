@@ -53,7 +53,7 @@
                                                    
                                                     <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement"  data-search="on">
                                                         @if ($lead_id == null)
-                                                            <option value="">Escribe para buscar</option>
+                                                            <option></option>
                                                         @endif
 
                                                         @foreach ($agreements as $agreement)

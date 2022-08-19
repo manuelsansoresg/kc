@@ -28,7 +28,7 @@ class User extends Authenticatable
         'email',
         'status',
         'password',
-        'c_financial_id',
+        'financial_id',
         'type_person',
         'razon_social',
         'is_rss'
@@ -67,7 +67,7 @@ class User extends Authenticatable
             WHEN status = "1" THEN "Sí" 
             WHEN status = "0" THEN "No" 
             END) AS status'),
-            'c_financial_id',
+            'financial_id',
             'type_person'
         )
             ->role($role)->get();
@@ -198,7 +198,7 @@ class User extends Authenticatable
 
     public function financial()
     {
-        return $this->belongsTo(CFinancial::class, 'c_financial_id');
+        return $this->belongsTo(Financial::class, 'financial_id');
     }
 
     public function lead()

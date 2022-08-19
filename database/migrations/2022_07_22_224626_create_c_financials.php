@@ -13,14 +13,9 @@ class CreateCFinancials extends Migration
      */
     public function up()
     {
-        Schema::create('c_financials', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('c_financial_id')->nullable()->after('id');
-            $table->smallInteger('type_person')->nullable()->after('c_financial_id');
+            $table->unsignedBigInteger('financial_id')->nullable()->after('id');
+            $table->smallInteger('type_person')->nullable()->after('financial_id');
             $table->string('razon_social')->nullable()->after('type_person');
         });
     }
@@ -32,11 +27,9 @@ class CreateCFinancials extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('c_financials');
-        Schema::dropIfExists('c_type_persons');
 
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('c_financial_id');
+            $table->dropColumn('financial_id');
             $table->dropColumn('type_person');
             $table->dropColumn('razon_social');
         });

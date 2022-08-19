@@ -10,6 +10,8 @@ require('./components/lead/datatable');
 require('./components/lead/crud');
 require('./components/tag/datatable');
 require('./components/tag/crud');
+require('./components/financial/datatable');
+require('./components/financial/crud');
 require('./components/toastr');
 require('./components/crm');
 require('./components/action/datatable');
