@@ -94,3 +94,7 @@ Route::group(['prefix' => 'tag'], function () {
 });
 
 Route::resource('financial', '\App\Http\Controllers\Panel\FinancialController')->middleware('auth');
+
+Route::group(['prefix' => 'financial'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\FinancialController', 'list'])->middleware('auth');
+});

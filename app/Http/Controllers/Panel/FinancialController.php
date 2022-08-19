@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\Financial;
 use Illuminate\Http\Request;
 
 class FinancialController extends Controller
@@ -17,6 +18,13 @@ class FinancialController extends Controller
         return view('panel.financial.list');
     }
 
+    public function list()
+    {
+        $tags = Financial::listDatatable();
+
+        return response()->json(['data' => $tags]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -25,7 +33,8 @@ class FinancialController extends Controller
     public function create()
     {
         $financial_id = null;
-        return view('panel.financial.form', compact('financial_id'));
+        $financial = null;
+        return view('panel.financial.form', compact('financial_id', 'financial'));
     }
 
     /**
@@ -36,25 +45,27 @@ class FinancialController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->tag_id == null) {
+        if ($request->financial_id == null) {
             $request->validate(
                 [
-                'data.name' => 'required|unique:tags,name',
+                'commercial_name' => 'required|unique:financials,commercial_name',
                 ],
                 [
-                    'data.name.unique' => 'El valor ya se encuentra registrado'
+                    'commercial_name.unique' => 'El valor ya se encuentra registrado'
                 ]
             );
         } else {
             $request->validate(
                 [
-                    'data.name' => 'required|unique:tags,name,' . $request->tag_id . ',id',
+                    'commercial_name' => 'required|unique:financials,commercial_name,' . $request->financial_id . ',id',
                 ],
                 [
-                    'data.name.unique' => 'El valor ya se encuentra registrado'
+                    'commercial_name.unique' => 'El valor ya se encuentra registrado'
                 ]
             );
         }
+        $financial = Financial::saveEdit($request);
+        return response()->json($financial);
     }
 
     /**
@@ -76,7 +87,10 @@ class FinancialController extends Controller
      */
     public function edit($id)
     {
-        //
+        
+        $financial      = Financial::find($id);
+        $financial_id   = $financial->id;
+        return view('panel.financial.form', compact('financial_id', 'financial'));
     }
 
     /**
@@ -88,7 +102,6 @@ class FinancialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
     }
 
     /**
@@ -99,6 +112,7 @@ class FinancialController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $financial = Financial::find($id);
+        $financial->delete();
     }
 }

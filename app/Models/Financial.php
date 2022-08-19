@@ -13,7 +13,7 @@ class Financial extends Model
         'company_name',
     ];
 
-    public function saveEdit($request)
+    public static function saveEdit($request)
     {
         if ($request->financial_id == null) {
             $financial = Financial::create($request->except(['_token', 'financial_id']));
@@ -23,6 +23,23 @@ class Financial extends Model
             $financial->update();
         }
         return $financial;
+    }
+
+    public static function listDatatable()
+    {
+        $get_list   = Financial::all();
+        $data       = array();
+
+        foreach ($get_list as $query) {
+            $option = \View::make('panel.financial.add_option_dt', ['id' => $query->id])->render();
+            
+            $data[] = array(
+                'commercial_name' => $query->commercial_name,
+                'company_name' => $query->company_name,
+                'options' => $option
+            );
+        }
+        return $data;
     }
 
     public function user()

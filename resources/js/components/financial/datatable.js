@@ -1,13 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
-    let table = NioApp.DataTable('#dt-tag', {
+    let table = NioApp.DataTable('#dt-financial', {
         processing: true,
-        ajax: '/panel/tag/list/show',
+        ajax: '/panel/financial/list/show',
         columns: [
-            { data: 'name' },
-            { data: 'type' },
-            { data: 'section' },
-            { data: 'description' },
-            { data: 'status'},
+            { data: 'commercial_name' },
+            { data: 'company_name' },
             { data: 'options'},
         ],
         columnDefs:[

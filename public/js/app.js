@@ -718,8 +718,8 @@ $().ready(function () {
       $('#financial-commercial_name-unique-error').hide();
       var new_form = document.getElementById("frm-financial");
       var data = new FormData(new_form);
-      axios.post("/panel/tag", data).then(function (response) {
-        window.location = '/panel/tag';
+      axios.post("/panel/financial", data).then(function (response) {
+        window.location = '/panel/financial';
       })["catch"](function (e) {
         var response = e.response;
         var data_errors = response.data.errors;
@@ -730,9 +730,9 @@ $().ready(function () {
   });
 });
 
-window.deleteTag = function (id) {
-  axios["delete"]("/panel/tag/" + id).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-tag', 'Datos actualizados', 'Registro guardado');
+window.deleteFinancial = function (id) {
+  axios["delete"]("/panel/financial/" + id).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financial', 'Datos actualizados', 'Registro borrado');
   })["catch"](function (e) {});
 };
 
@@ -745,7 +745,7 @@ window.alerDelete = function (id) {
     cancelButtonText: 'Mejor no'
   }).then(function (result) {
     if (result.value) {
-      deleteTag(id);
+      deleteFinancial(id);
     }
   });
 };
@@ -759,19 +759,13 @@ window.alerDelete = function (id) {
 /***/ (() => {
 
 document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-tag', {
+  var table = NioApp.DataTable('#dt-financial', {
     processing: true,
-    ajax: '/panel/tag/list/show',
+    ajax: '/panel/financial/list/show',
     columns: [{
-      data: 'name'
+      data: 'commercial_name'
     }, {
-      data: 'type'
-    }, {
-      data: 'section'
-    }, {
-      data: 'description'
-    }, {
-      data: 'status'
+      data: 'company_name'
     }, {
       data: 'options'
     }],

@@ -27,12 +27,16 @@
                         <div class="card-body">
                             <form method="post" id="frm-financial" action="">
                                 @csrf
+                                @php
+                                    $commercial_name = ($financial != null)? $financial->commercial_name : '';
+                                    $company_name = ($financial != null)? $financial->company_name : '';
+                                @endphp
                                 <div class="row gy-4">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label" for="frm-product-name">*Nombre comerial</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" name="commercial_name"  class="form-control">
+                                                <input type="text" name="commercial_name"  class="form-control" value="{{ $commercial_name}}">
                                                 <label id="financial-commercial_name-unique-error" class="error"  style="display: none"></label>
                                             </div>
                                         </div>
@@ -41,7 +45,7 @@
                                         <div class="form-group">
                                             <label class="form-label" for="frm-product-name">*Razón social</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" name="company_name"  class="form-control">
+                                                <input type="text" name="company_name"  class="form-control" value="{{ $company_name}}">
                                             </div>
                                         </div>
                                     </div>

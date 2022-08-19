@@ -18,9 +18,9 @@ $().ready(function () {
             const data = new FormData(new_form);
 
             axios
-                .post("/panel/tag", data)
+                .post("/panel/financial", data)
                 .then(function (response) {
-                   window.location = '/panel/tag';
+                   window.location = '/panel/financial';
                 })
                 .catch(e => {
                     let response = e.response;
@@ -36,11 +36,11 @@ $().ready(function () {
 
 });
 
-window.deleteTag = function (id) {
+window.deleteFinancial = function (id) {
     axios
-    .delete("/panel/tag/"+id)
+    .delete("/panel/financial/"+id)
     .then(function (response) {
-        showInfo(2, 'dt-tag', 'Datos actualizados', 'Registro guardado');
+        showInfo(2, 'dt-financial', 'Datos actualizados', 'Registro borrado');
     })
     .catch(e => {
     });
@@ -56,7 +56,7 @@ window.alerDelete = function (id) {
         cancelButtonText: 'Mejor no'
     }).then(function (result) {
         if (result.value) {
-            deleteTag(id);
+            deleteFinancial(id);
         }
     });
 }
