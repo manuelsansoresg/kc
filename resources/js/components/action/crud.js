@@ -1,4 +1,5 @@
-import { showInfo } from '../utilities';
+import { showInfo, addEmptySelectSearch } from '../utilities';
+
 
 window.actionModal = function (id, is_new) {
     if (document.getElementById('modal-action-id-rel-lead')) {
@@ -10,6 +11,7 @@ window.actionModal = function (id, is_new) {
     if (is_new == 'true') {
         $('#modal-action-id-action').val(null);
     }
+   
     $('#modal-action').modal('show');
 
 }
@@ -77,6 +79,8 @@ $().ready(function () {
                         $('#modal-action').modal('hide');
                         if (refresh_dt != 'null') {
                             showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+                        } else {
+                            refreshListActions();
                         }
                     }
                     //refreshListActions();
@@ -89,12 +93,16 @@ $().ready(function () {
 });
 
 function resetAction() {
+    $('#frm-action input, textarea, select').removeAttr('disabled');
+    $('#modal-action-save').show();
     $("#modal-action-type").val('').trigger('change');
     $('#modal-action-subject').val('');
     $('#modal-action-start_date').val('');
     $('#modal-action-end_date').val('');
     $('#modal-action-description').val('');
+    $('#modal-action-id-action').val('null');
     $('#modal-action-complete-active').prop("checked", true);
+    
 }
 
 function resetRegisterAction() {

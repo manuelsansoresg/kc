@@ -82,6 +82,8 @@ $().ready(function () {
 
           if (refresh_dt != 'null') {
             (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+          } else {
+            refreshListActions();
           }
         } //refreshListActions();
 
@@ -91,11 +93,14 @@ $().ready(function () {
 });
 
 function resetAction() {
+  $('#frm-action input, textarea, select').removeAttr('disabled');
+  $('#modal-action-save').show();
   $("#modal-action-type").val('').trigger('change');
   $('#modal-action-subject').val('');
   $('#modal-action-start_date').val('');
   $('#modal-action-end_date').val('');
   $('#modal-action-description').val('');
+  $('#modal-action-id-action').val('null');
   $('#modal-action-complete-active').prop("checked", true);
 }
 
@@ -739,12 +744,17 @@ function setData() {
     var result = response.data;
     var lead = result.lead;
     var channel = result.channel;
-    $('#lead-agreement option[value="' + lead.agreement_id + '"]').attr("selected", "selected");
-    $('#lead-product-id option[value="' + lead.product_id + '"]').attr("selected", "selected");
-    $('#lead-origin option[value="' + lead.origin_id + '"]').attr("selected", "selected");
-    $('#lead-asesor-id option[value="' + lead.asesor_id + '"]').attr("selected", "selected");
-    $('#lead-type_id option[value="' + lead.type_id + '"]').attr("selected", "selected");
-    $('#lead-temperature-id option[value="' + lead.temperature_id + '"]').attr("selected", "selected");
+    $('#lead-agreement').val(lead.agreement_id);
+    $('#lead-agreement').trigger("change");
+    $('#lead-product-id').val(lead.product_id);
+    $('#lead-product-id').trigger("change");
+    $('#lead-origin').val(lead.origin_id);
+    $('#lead-origin').trigger("change");
+    $('#lead-asesor-id').val(lead.asesor_id);
+    $('#lead-asesor-id').trigger("change");
+    $('#lead-type_id').val(lead.type_id);
+    $('#lead-type_id').trigger("change");
+    $('#lead-temperature-id option[value="' + lead.temperature_id + '"]').trigger("change");
     $('#lead-name').val(lead.name);
     $('#lead-last_name').val(lead.last_name);
     $('#lead-second_last_name').val(lead.second_last_name);
@@ -764,7 +774,8 @@ function setData() {
       }
     }
 
-    $('#lead-channel option[value="' + lead.channel_id + '"]').attr("selected", "selected");
+    $('#lead-channel').val(lead.channel_id);
+    $('#lead-channel').trigger("change");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
@@ -1189,8 +1200,10 @@ $().ready(function () {
     axios.get("/panel/tag/" + tag_id).then(function (response) {
       var result = response.data;
       $('#frm-tag-name').val(result.name);
-      $('#frm-tag-type_id option[value="' + result.type_id + '"]').attr("selected", "selected");
-      $('#frm-tag-section_id option[value="' + result.type_id + '"]').attr("selected", "selected");
+      $('#frm-tag-type_id').val(result.type_id);
+      $('#frm-tag-type_id').trigger("change");
+      $('#frm-tag-section_id').val(result.section_id);
+      $('#frm-tag-section_id').trigger("change");
       $('#frm-tag-comment').val(result.name);
       $('#frm-tag-status option[value="' + result.status + '"]').attr("selected", "selected");
     })["catch"](function (e) {});
@@ -1701,6 +1714,7 @@ document.addEventListener('DOMContentLoaded', function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "addEmptySelectSearch": () => (/* binding */ addEmptySelectSearch),
 /* harmony export */   "showInfo": () => (/* binding */ showInfo)
 /* harmony export */ });
 function showInfo(redirect, idDatatable, title, msg) {
@@ -1716,6 +1730,16 @@ function showInfo(redirect, idDatatable, title, msg) {
   } else {
     $('#' + idDatatable).DataTable().ajax.reload();
   }
+}
+function addEmptySelectSearch(id) {
+  var data = {
+    id: '',
+    text: ''
+  };
+  var newOption = new Option(data.text, data.id, false, false);
+  $('#' + id).append(newOption).trigger('change');
+  $('#' + id).val('');
+  $('#' + id).trigger("change");
 }
 
 /***/ }),

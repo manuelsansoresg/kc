@@ -50,13 +50,24 @@ function setData() {
             let result = response.data;
             let lead = result.lead;
             let channel = result.channel;
+            
+            $('#lead-agreement').val(lead.agreement_id);
+            $('#lead-agreement').trigger("change");
+            
+            $('#lead-product-id').val(lead.product_id);
+            $('#lead-product-id').trigger("change");
+            
+            $('#lead-origin').val(lead.origin_id);
+            $('#lead-origin').trigger("change");
+            
+            $('#lead-asesor-id').val(lead.asesor_id);
+            $('#lead-asesor-id').trigger("change");
 
-            $('#lead-agreement option[value="' + lead.agreement_id + '"]').attr("selected", "selected");
-            $('#lead-product-id option[value="' + lead.product_id + '"]').attr("selected", "selected");
-            $('#lead-origin option[value="' + lead.origin_id + '"]').attr("selected", "selected");
-            $('#lead-asesor-id option[value="' + lead.asesor_id + '"]').attr("selected", "selected");
-            $('#lead-type_id option[value="' + lead.type_id + '"]').attr("selected", "selected");
-            $('#lead-temperature-id option[value="' + lead.temperature_id + '"]').attr("selected", "selected");
+            
+            $('#lead-type_id').val(lead.type_id);
+            $('#lead-type_id').trigger("change");
+            
+            $('#lead-temperature-id option[value="' + lead.temperature_id + '"]').trigger("change");
             
             
             $('#lead-name').val(lead.name); 
@@ -76,8 +87,9 @@ function setData() {
                     
                 }
             }
-            $('#lead-channel option[value="' + lead.channel_id + '"]').attr("selected", "selected");
 
+            $('#lead-channel').val(lead.channel_id);
+            $('#lead-channel').trigger("change");
         })
         .catch(e => {
             $('#admin_email-error-exist').show();

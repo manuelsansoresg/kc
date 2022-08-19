@@ -44,12 +44,18 @@ $().ready(function () {
         axios
         .get("/panel/tag/"+tag_id)
         .then(function (response) {
-           let result = response.data;
-           $('#frm-tag-name').val(result.name);
-           $('#frm-tag-type_id option[value="' + result.type_id + '"]').attr("selected", "selected");
-           $('#frm-tag-section_id option[value="' + result.type_id + '"]').attr("selected", "selected");
-           $('#frm-tag-comment').val(result.name);
-           $('#frm-tag-status option[value="' + result.status + '"]').attr("selected", "selected");
+            let result = response.data;
+            $('#frm-tag-name').val(result.name);
+           
+            $('#frm-tag-type_id').val(result.type_id);
+            $('#frm-tag-type_id').trigger("change");
+
+            $('#frm-tag-section_id').val(result.section_id);
+            $('#frm-tag-section_id').trigger("change");
+            
+
+            $('#frm-tag-comment').val(result.name);
+            $('#frm-tag-status option[value="' + result.status + '"]').attr("selected", "selected");
         })
         .catch(e => {
           

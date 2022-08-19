@@ -24,7 +24,7 @@
                                     <label class="form-label" for="create-task-name">Tipo</label>
                                     <div class="form-control-wrap">
                                         <select class="form-select" name="data[type]" id="modal-action-type"  data-search="on">
-                                            <option value="">Escribe para buscar</option>
+                                            <option></option>
                                             @foreach ($types as $key => $type)
                                                 <option value="{{ $key }}">{{ $type }} 
                                                 </option>
@@ -106,6 +106,7 @@
                                     <div class="form-control-wrap">
                                         @if ($user->hasRole('Asesor') == true)
                                             <select class="form-select" name="data[advisor_id]" id="lead-asesor-id"  data-search="on" disabled>
+                                                
                                                 @foreach ($advisors as $advisor)
                                                     <option value="{{ $advisor->id }}" {{ ($user->id == $advisor->id)? 'selected' : '' }} >{{ $advisor->name }} {{ $advisor->last_name }} {{ $advisor->second_last_name }}
                                                     </option>
@@ -113,7 +114,7 @@
                                             </select>
                                         @else
                                             <select class="form-select js-select2" name="data[advisor_id]" id="lead-asesor-id"  data-search="on">
-                                                <option value="">Escribe para buscar</option>
+                                                <option></option>
                                                 @foreach ($advisors as $advisor)
                                                     <option value="{{ $advisor->id }}">{{ $advisor->name }} {{ $advisor->last_name }} {{ $advisor->second_last_name }}
                                                     </option>

@@ -50,7 +50,7 @@
                                                         <option value="">Escribe para buscar</option>
                                                     @endif
                                                     @foreach ($types as $key => $type)
-                                                        <option value="{{ $key }}"> {{ $type }} </option>
+                                                        <option value="{{ $key }}"> {{$key}} {{ $type }} </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -64,8 +64,8 @@
                                                         <option value="">Escribe para buscar</option>
                                                     @endif
                                                     
-                                                    @foreach ($sections as $key => $section)
-                                                        <option value="{{ $key }}"> {{ $section }} </option>
+                                                    @foreach ($sections as $key_section => $section)
+                                                        <option value="{{ $key_section }}"> {{ $key_section }} {{ $section }} </option>
                                                     @endforeach
                                                 </select>
                                             </div>
