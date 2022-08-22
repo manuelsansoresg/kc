@@ -43,12 +43,12 @@ $('.select2multiple').select2({
   $("#lead-origin" ).change(function() {
     let origin_id = $("#lead-origin" ).val();
     $('#lead-channel').empty();
+    var lead_channel = $('#lead-channel');
     axios
         .get("/panel/lead/"+origin_id+"/origin/")
         .then(function (response) {
             let result = response.data;
             if (result != null) {
-                var lead_channel = $('#lead-channel');
                 for (const key in result) {
                     const element = result[key];
                     if (element != 'Selecciona una opción') {
@@ -57,8 +57,10 @@ $('.select2multiple').select2({
                     }
                     
                 }
+              
+              
             }
-
+            $('#lead-channel').val(null).trigger('change');
         })
         .catch(e => {
             $('#admin_email-error-exist').show();

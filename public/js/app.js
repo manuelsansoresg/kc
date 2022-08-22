@@ -846,12 +846,11 @@ function getFinancial(lead_id) {
 $("#lead-origin").change(function () {
   var origin_id = $("#lead-origin").val();
   $('#lead-channel').empty();
+  var lead_channel = $('#lead-channel');
   axios.get("/panel/lead/" + origin_id + "/origin/").then(function (response) {
     var result = response.data;
 
     if (result != null) {
-      var lead_channel = $('#lead-channel');
-
       for (var key in result) {
         var element = result[key];
 
@@ -861,6 +860,8 @@ $("#lead-origin").change(function () {
         }
       }
     }
+
+    $('#lead-channel').val(null).trigger('change');
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
