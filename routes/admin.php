@@ -57,6 +57,7 @@ Route::group(['prefix' => 'lead'], function () {
 
     //* mover del lugar
     Route::post('{id_rel}/move/archive', ['\App\Http\Controllers\Panel\LeadController', 'moveArchive'])->middleware('auth');
+    Route::get('financial/{lead_id}/show', ['\App\Http\Controllers\Panel\LeadController', 'listFinancial'])->middleware('auth');
 });
 
 

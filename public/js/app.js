@@ -816,12 +816,33 @@ $('.select2multiple').select2({
 });
 $("#lead-agreement").change(function () {
   var lead_agreement = $("#lead-agreement").val();
+  getFinancial(lead_agreement);
   $('#lead-content-agreement').hide();
 
   if (lead_agreement == 0) {
     $('#lead-content-agreement').show('slow');
   }
 });
+
+function getFinancial(lead_id) {
+  $('#lead-financial_id').empty();
+  axios.get("/panel/lead/financial/" + lead_id + "/show").then(function (response) {
+    var result = response.data;
+
+    if (result != null) {
+      var lead_financial = $('#lead-financial_id');
+
+      for (var key in result) {
+        var element = result[key];
+        var option = new Option(element.commercial_name, element.id, true, true);
+        lead_financial.append(option).trigger('change');
+      }
+    }
+  })["catch"](function (e) {
+    $('#admin_email-error-exist').show();
+  });
+}
+
 $("#lead-origin").change(function () {
   var origin_id = $("#lead-origin").val();
   $('#lead-channel').empty();
@@ -848,10 +869,12 @@ $("#lead-origin").change(function () {
 function setData() {
   var lead_id = $('#lead_id').val();
   $('#lead-channel').empty();
+  $('#lead-channel').empty();
   axios.get("/panel/lead/" + lead_id).then(function (response) {
     var result = response.data;
     var lead = result.lead;
     var channel = result.channel;
+    var financials = result.financials;
     $('#lead-agreement').val(lead.agreement_id);
     $('#lead-agreement').trigger("change");
     $('#lead-product-id').val(lead.product_id);
@@ -882,8 +905,18 @@ function setData() {
       }
     }
 
-    $('#lead-channel').val(lead.channel_id);
-    $('#lead-channel').trigger("change");
+    if (financials != null) {
+      var lead_financial = $('#lead-financial_id');
+
+      for (var _key in result) {
+        var _element = result[_key];
+        var option = new Option(_element.commercial_name, _element.id, true, true);
+        lead_financial.append(option).trigger('change');
+      }
+    }
+
+    $('#lead-channel').val(lead.channel_id).trigger("change");
+    $('#lead-financial_id').val(lead.financial_id).trigger("change");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });

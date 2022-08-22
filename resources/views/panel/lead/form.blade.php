@@ -86,6 +86,16 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="form-label">Financiera</label>
+                                                <div class="form-control-wrap">
+                                                    <select class="form-select js-select2" name="data[financial_id]" id="lead-financial_id"  data-search="on">
+                                                        <option value="">Escribe para buscar</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <hr class="preview-hr">
                                         <span class="preview-title-lg overline-title">General</span>
                                         <div class="col-md-6">

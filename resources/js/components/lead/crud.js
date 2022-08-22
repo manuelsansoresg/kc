@@ -12,11 +12,33 @@ $('.select2multiple').select2({
 
   $("#lead-agreement" ).change(function() {
     let lead_agreement = $("#lead-agreement" ).val();
+    getFinancial(lead_agreement);
     $('#lead-content-agreement').hide();
     if (lead_agreement == 0) {
         $('#lead-content-agreement').show('slow');
     }
   });
+
+  function getFinancial(lead_id) {
+    $('#lead-financial_id').empty();
+    axios
+        .get("/panel/lead/financial/"+lead_id+"/show")
+        .then(function (response) {
+            let result = response.data;
+            if (result != null) {
+                var lead_financial = $('#lead-financial_id');
+                for (const key in result) {
+                    const element = result[key];
+                    var option = new Option(element.commercial_name, element.id, true, true);
+                    lead_financial.append(option).trigger('change');
+                    
+                }
+            }
+        })
+    .catch(e => {
+        $('#admin_email-error-exist').show();
+    });
+  }
   
   $("#lead-origin" ).change(function() {
     let origin_id = $("#lead-origin" ).val();
@@ -46,13 +68,15 @@ $('.select2multiple').select2({
 function setData() {
     let lead_id = $('#lead_id').val();
     $('#lead-channel').empty();
+    $('#lead-channel').empty();
 
     axios
         .get("/panel/lead/" + lead_id)
         .then(function (response) {
-            let result = response.data;
-            let lead = result.lead;
-            let channel = result.channel;
+            let result        = response.data;
+            let lead          = result.lead;
+            let channel       = result.channel;
+            let financials    = result.financials;
             
             $('#lead-agreement').val(lead.agreement_id);
             $('#lead-agreement').trigger("change");
@@ -91,8 +115,18 @@ function setData() {
                 }
             }
 
-            $('#lead-channel').val(lead.channel_id);
-            $('#lead-channel').trigger("change");
+            if (financials != null) {
+                var lead_financial = $('#lead-financial_id');
+                for (const key in result) {
+                    const element = result[key];
+                    var option = new Option(element.commercial_name, element.id, true, true);
+                    lead_financial.append(option).trigger('change');
+                    
+                }
+            }
+
+            $('#lead-channel').val(lead.channel_id).trigger("change");
+            $('#lead-financial_id').val(lead.financial_id).trigger("change");
         })
         .catch(e => {
             $('#admin_email-error-exist').show();

@@ -31,8 +31,24 @@ class FinancialAgreement extends Model
         }
     }
 
+    public static function getList($agreement_id)
+    {
+        $get_financials = FinancialAgreement::where('agreement_id', $agreement_id)->get();
+        $financials = array();
+        foreach ($get_financials as $get_financial) {
+            $financial = Financial::find($get_financial->financial_id);
+            $financials[] = $financial;
+        }
+        return $financials;
+    }
+
     public function agreement()
     {
         return $this->belongsTo(Agreement::class, 'agreement_id');
+    }
+    
+    public function financial()
+    {
+        return $this->belongsTo(Financial::class, 'financial_id');
     }
 }

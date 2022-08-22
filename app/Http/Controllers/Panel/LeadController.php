@@ -11,6 +11,7 @@ use App\Models\LeadAdvisor;
 use App\Models\LeadNote;
 use App\Models\Note;
 use App\Models\File;
+use App\Models\FinancialAgreement;
 use App\Strategies\Values\SendNotificationsValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,12 @@ class LeadController extends Controller
         
         
         return response()->json(['data' => $users]);
+    }
+
+    public function listFinancial($lead_id)
+    {
+        $financials = FinancialAgreement::getList($lead_id);
+        return response()->json($financials);
     }
 
     public function listOrigin($origin_id)
@@ -128,9 +135,15 @@ class LeadController extends Controller
      */
     public function show($id)
     {
-        $lead = Lead::find($id);
-        $channel = Lead::getChanelByOrigin($lead->origin_id);
-        return response()->json(['lead' => $lead, 'channel' => $channel]);
+        $lead       = Lead::find($id);
+        $channel    = Lead::getChanelByOrigin($lead->origin_id);
+        $financials = null;
+
+        if ($lead  != null) {
+            $financials = FinancialAgreement::getList($lead->id);
+        }
+        
+        return response()->json(['lead' => $lead, 'channel' => $channel, 'financials' => $financials]);
     }
 
     public function profile($lead_id)

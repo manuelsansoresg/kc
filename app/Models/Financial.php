@@ -51,4 +51,9 @@ class Financial extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function financialAgreement()
+    {
+        return $this->hasMany(FinancialAgreement::class);
+    }
 }
