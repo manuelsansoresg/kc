@@ -41,7 +41,11 @@ class Lead extends Model
 
         $data        = array();
         foreach ($get_list as $query) {
-            $option = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id])->render();
+            
+            $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
+            $validate       = (new $leadStrategy)->getValidate($query->id);
+
+            $option = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'validate' => $validate])->render();
             $lead = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
             
             $lbl_status = '<span class="text-success">Valido</span>';
@@ -49,8 +53,7 @@ class Lead extends Model
             $product        = $query->productLead;
             $user           = $query->advisorLead;
 
-            $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
-            $validate       = (new $leadStrategy)->getValidate($query->id);
+            
             if ($validate['error'] === true) {
                 $lbl_status = '<span class="text-danger">Invalido</span>';
             }

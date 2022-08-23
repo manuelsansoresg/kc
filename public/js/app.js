@@ -1859,7 +1859,6 @@ document.addEventListener('DOMContentLoaded', function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "addEmptySelectSearch": () => (/* binding */ addEmptySelectSearch),
 /* harmony export */   "showInfo": () => (/* binding */ showInfo)
 /* harmony export */ });
 function showInfo(redirect, idDatatable, title, msg) {
@@ -1875,16 +1874,6 @@ function showInfo(redirect, idDatatable, title, msg) {
   } else {
     $('#' + idDatatable).DataTable().ajax.reload();
   }
-}
-function addEmptySelectSearch(id) {
-  var data = {
-    id: '',
-    text: ''
-  };
-  var newOption = new Option(data.text, data.id, false, false);
-  $('#' + id).append(newOption).trigger('change');
-  $('#' + id).val('');
-  $('#' + id).trigger("change");
 }
 
 /***/ }),

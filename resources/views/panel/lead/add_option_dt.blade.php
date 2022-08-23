@@ -6,12 +6,21 @@ $user = Auth::user();
         <a href="/panel/lead/{{ $id }}/profile" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Perfíl">
             <em class="icon ni ni-user-fill"></em>
         </a>
-    </li>
+  
     <li class="nk-tb-action-hidden">
-        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-            title="Siguiente">
+    </li>
+        @if ($validate['error'] === true)
+            <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+            title="Siguiente" onclick="modalValidate({{ $id }}, 'lead')">
             <em class="icon ni ni-arrow-right-circle"></em>
         </a>
+        @else
+            <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+            title="Siguiente">
+            <em class="icon ni ni-arrow-right-circle"></em>
+    </a>
+        @endif
+       
     </li>
     <li class="nk-tb-action-hidden">
         <a  onclick="archiveModal({{ $id }})" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"

@@ -10,17 +10,3 @@ export function showInfo(redirect, idDatatable, title, msg) {
     }
 
 }
-
-export function addEmptySelectSearch(id) {
-    var data = {
-        id: '',
-        text: ''
-    };
-    
-    var newOption = new Option(data.text, data.id, false, false);
-    $('#'+id).append(newOption).trigger('change');
-   
-    $('#'+id).val('');
-    $('#'+id).trigger("change");
-    
-}

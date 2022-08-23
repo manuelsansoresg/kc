@@ -314,5 +314,3 @@ window.refreshListActions = function() {
 if (document.getElementById('content-profile-in_progress')) {
     refreshListActions();
 }
-
-

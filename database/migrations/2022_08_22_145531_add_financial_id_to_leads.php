@@ -14,7 +14,7 @@ class AddFinancialIdToLeads extends Migration
     public function up()
     {
         Schema::table('leads', function (Blueprint $table) {
-            $table->unsignedBigInteger('financial_id')->nullable();
+            $table->unsignedBigInteger('financial_id')->after('type_id')->nullable();
             $table->foreign('financial_id')->references('id')->on('financials')->onDelete('cascade');
         });
     }
