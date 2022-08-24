@@ -77,4 +77,9 @@ class Product extends Model
     {
         return $this->hasOne(Lead::class);
     }
+
+    public function clientPerson()
+    {
+        return $this->hasOne(Credit::class);
+    }
 }

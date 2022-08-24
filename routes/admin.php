@@ -78,10 +78,12 @@ Route::group(['prefix' => 'action'], function () {
     Route::get('{status}/view', ['\App\Http\Controllers\Panel\ActionController', 'viewAction'])->middleware('auth');
     Route::get('{status}/dt/show', ['\App\Http\Controllers\Panel\ActionController', 'list'])->middleware('auth');
 });
+
 //*dropzone file
 Route::post('temp/images/{model}', ['\App\Http\Controllers\Panel\ActionController', 'storeFile'])->middleware('auth');
 Route::get('temp/images/{model}/show', ['\App\Http\Controllers\Panel\ActionController', 'showFiles'])->middleware('auth');
 Route::get('temp/images/{id}/delete', ['\App\Http\Controllers\Panel\ActionController', 'deleteFile'])->middleware('auth');
+
 //*register action
 Route::resource('register-action', '\App\Http\Controllers\Panel\RegisterActionController')->middleware('auth');
 Route::group(['prefix' => 'register-action'], function () {
@@ -101,3 +103,6 @@ Route::group(['prefix' => 'financial'], function () {
 });
 
 Route::get('{section}/{id}/move', ['\App\Http\Controllers\Panel\PanelController', 'move'])->middleware('auth');
+
+//*Client
+Route::resource('client', '\App\Http\Controllers\Panel\Client\ClientPersonController')->middleware('auth');

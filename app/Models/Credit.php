@@ -18,4 +18,14 @@ class Credit extends Model
         'type_id',
         'asesor_id',
     ];
+
+    public function creditClientPerson()
+    {
+        return $this->belongsTo(ClientPerson::class, 'client_person_id');
+    }
+
+    public function creditProduct()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

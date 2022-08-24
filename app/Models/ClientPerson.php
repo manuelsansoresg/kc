@@ -18,4 +18,9 @@ class ClientPerson extends Model
         'email',
         'agreement_id',
     ];
+
+    public function credit()
+    {
+        return $this->hasMany(Credit::class);
+    }
 }
