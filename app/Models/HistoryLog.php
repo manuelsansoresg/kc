@@ -10,9 +10,10 @@ class HistoryLog extends Model
 {
     use HasFactory;
 
-    const LEAD_ARCHIVE            = 1;
-    const ADD_PROSPECT            = 2;
-    const CREATE_PROSPECT         = 3;
+    const LEAD_ARCHIVE    = 1;
+    const ADD_PROSPECT    = 2;
+    const CREATE_PROSPECT = 3;
+    const LEAD_CONVERT    = 4;
 
     protected $fillable = [
         'id_rel',
@@ -29,7 +30,7 @@ class HistoryLog extends Model
         1 => 'Se archivó el prospecto',
         2 => 'Se asigno el prospecto a',
         3 => 'Se créo el prospecto',
-        4 => 'Se archivó el prospecto',
+        4 => 'Se creó cliente persona desde prospecto',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null)

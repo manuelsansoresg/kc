@@ -231,8 +231,9 @@
                                                     @if ($history->status_id === $m_history_log::ADD_PROSPECT)
                                                         @php
                                                             $advisor = $history->historyLeadAdvisor;
-                                                            $lead_history = $advisor->lead;
+                                                            $lead_history = $advisor !== null ?  $advisor->lead : null;
                                                         @endphp
+                                                        @if ($lead_history !== null)
                                                         <div class="user-card mt-3">
                                                             <div class="user-info">
                                                                 <span class="tb-lead"> <em
@@ -245,12 +246,14 @@
                                                                 </span>
                                                             </div>
                                                         </div>
+                                                        @endif
                                                     @endif
         
                                                     @if ($history->status_id === $m_history_log::CREATE_PROSPECT)
                                                         @php
                                                             $lead_history = $history->historyLead;
                                                         @endphp
+                                                        @if ($lead_history !== null)
                                                         <div class="user-card mt-3">
                                                             <div class="user-info">
                                                                 <span class="tb-lead"><em
@@ -263,6 +266,7 @@
                                                                 </span>
                                                             </div>
                                                         </div>
+                                                        @endif
                                                     @endif
                                                     {{-- <div class="user-card">
                                                     <div class="user-info">
