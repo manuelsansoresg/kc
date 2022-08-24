@@ -17,4 +17,18 @@ require('./components/crm');
 require('./components/action/datatable');
 require('./components/action/crud');
 
+window.moveElement = function (section, id, idDatatable) {
+    axios
+    .get("/panel/"+section+"/"+id+"/move")
+    .then(function (response) {
+        if (idDatatable == null) {
+            location.reload();
+        } else {
+            $('#'+idDatatable).DataTable().ajax.reload();
+        }
+    })
+    .catch(e => {
+    });
+}
+
 require('./components/websocket');

@@ -40,6 +40,7 @@ return [
         1 => 'No interesado',
         2 => 'Sin convenio',
         3 => 'Otro',
+        4 => 'Conversión',
     ),
     'type_lead' => array(
         1 => 'Autoservicio',

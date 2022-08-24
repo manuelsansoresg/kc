@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class HistoryLog extends Model
 {
     use HasFactory;
 
-    const LEAD_ARCHIVE    = 1;
-    const ADD_PROSPECT    = 2;
-    const CREATE_PROSPECT = 3;
+    const LEAD_ARCHIVE            = 1;
+    const ADD_PROSPECT            = 2;
+    const CREATE_PROSPECT         = 3;
 
     protected $fillable = [
         'id_rel',
@@ -21,12 +22,14 @@ class HistoryLog extends Model
         'file',
         'comment',
         'status',
+        'user_id'
     ];
 
     public static $label_status = [
         1 => 'Se archivó el prospecto',
         2 => 'Se asigno el prospecto a',
         3 => 'Se créo el prospecto',
+        4 => 'Se archivó el prospecto',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null)
@@ -38,6 +41,7 @@ class HistoryLog extends Model
         $data['id_rel']           = $id_rel;
         $data['status_id']        = $status_id;
         $data['old_status_id']    = $old_status_id;
+        
         $get_status = HistoryLog::where($data)->first();
         
         //*validate if old status exist
@@ -53,15 +57,16 @@ class HistoryLog extends Model
         }
         //* if new status and old status don't exist create status
         if ($get_status === null) {
+            $data['user_id']    = Auth::user()->id;
             $history = new HistoryLog($data);
             $history->save();
             return $history;
         }
     }
 
-    public function getByStatus($status)
+    public static function getByStatus($status_id)
     {
-        return HistoryLog::wherein('status', $status)->where('status', 1)->get();
+        return HistoryLog::wherein('status_id', $status_id)->where('status', 1)->get();
     }
 
     public function historyLead()

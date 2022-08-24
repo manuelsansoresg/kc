@@ -17,8 +17,9 @@ class Notification extends Model
     ];
 
     //* constante para modelos
-    const CREATE_PROSPECT = 1;
-    const ADD_PROSPECT    = 2;
+    const CREATE_PROSPECT         = 1;
+    const ADD_PROSPECT            = 2;
+    const BTN_NEXT_LEAD           = 3;
 
     public static function getByModel($model, $status = 0)
     {

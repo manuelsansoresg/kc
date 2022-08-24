@@ -99,3 +99,5 @@ Route::resource('financial', '\App\Http\Controllers\Panel\FinancialController')-
 Route::group(['prefix' => 'financial'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\FinancialController', 'list'])->middleware('auth');
 });
+
+Route::get('{section}/{id}/move', ['\App\Http\Controllers\Panel\PanelController', 'move'])->middleware('auth');

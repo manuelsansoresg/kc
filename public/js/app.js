@@ -869,8 +869,6 @@ $("#lead-origin").change(function () {
 
 function setData() {
   var lead_id = $('#lead_id').val();
-  $('#lead-channel').empty();
-  $('#lead-channel').empty();
   axios.get("/panel/lead/" + lead_id).then(function (response) {
     var result = response.data;
     var lead = result.lead;
@@ -886,7 +884,6 @@ function setData() {
     $('#lead-asesor-id').trigger("change");
     $('#lead-type_id').val(lead.type_id);
     $('#lead-type_id').trigger("change");
-    $('#lead-temperature-id option[value="' + lead.temperature_id + '"]').trigger("change");
     $('#lead-name').val(lead.name);
     $('#lead-last_name').val(lead.last_name);
     $('#lead-second_last_name').val(lead.second_last_name);
@@ -894,14 +891,15 @@ function setData() {
     $('#lead-email').val(lead.email);
 
     if (channel != null) {
+      $('#lead-channel').empty();
       var lead_channel = $('#lead-channel');
 
       for (var key in channel) {
         var element = channel[key];
 
         if (element != 'Selecciona una opción') {
-          var option = new Option(element, key, true, true);
-          lead_channel.append(option).trigger('change');
+          /*  var option = new Option(element, key, true, true);
+           lead_channel.append(option).trigger('change'); */
         }
       }
     }
@@ -918,6 +916,7 @@ function setData() {
 
     $('#lead-channel').val(lead.channel_id).trigger("change");
     $('#lead-financial_id').val(lead.financial_id).trigger("change");
+    $('#lead-temperature-id').val(lead.financial_id).trigger("change");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
@@ -2029,6 +2028,16 @@ __webpack_require__(/*! ./components/crm */ "./resources/js/components/crm.js");
 __webpack_require__(/*! ./components/action/datatable */ "./resources/js/components/action/datatable.js");
 
 __webpack_require__(/*! ./components/action/crud */ "./resources/js/components/action/crud.js");
+
+window.moveElement = function (section, id, idDatatable) {
+  axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {
+    if (idDatatable == null) {
+      location.reload();
+    } else {
+      $('#' + idDatatable).DataTable().ajax.reload();
+    }
+  })["catch"](function (e) {});
+};
 
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
 })();

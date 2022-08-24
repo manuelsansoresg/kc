@@ -228,8 +228,7 @@
                                                             </div>
                                                         </div>
                 
-                                                        <input type="hidden" id="lead_id" name="lead_id"
-                                                            value="{{ $lead_id }}">
+                                                        <input type="hidden" id="lead_id" name="lead_id" value="{{ $lead_id }}">
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>

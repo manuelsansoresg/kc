@@ -69,9 +69,7 @@ $('.select2multiple').select2({
 
 function setData() {
     let lead_id = $('#lead_id').val();
-    $('#lead-channel').empty();
-    $('#lead-channel').empty();
-
+    
     axios
         .get("/panel/lead/" + lead_id)
         .then(function (response) {
@@ -96,9 +94,6 @@ function setData() {
             $('#lead-type_id').val(lead.type_id);
             $('#lead-type_id').trigger("change");
             
-            $('#lead-temperature-id option[value="' + lead.temperature_id + '"]').trigger("change");
-            
-            
             $('#lead-name').val(lead.name); 
             $('#lead-last_name').val(lead.last_name); 
             $('#lead-second_last_name').val(lead.second_last_name); 
@@ -106,12 +101,13 @@ function setData() {
             $('#lead-email').val(lead.email); 
 
             if (channel != null) {
+                $('#lead-channel').empty();
                 var lead_channel = $('#lead-channel');
                 for (const key in channel) {
                     const element = channel[key];
                     if (element != 'Selecciona una opción') {
-                        var option = new Option(element, key, true, true);
-                        lead_channel.append(option).trigger('change');
+                       /*  var option = new Option(element, key, true, true);
+                        lead_channel.append(option).trigger('change'); */
                     }
                     
                 }
@@ -129,6 +125,7 @@ function setData() {
 
             $('#lead-channel').val(lead.channel_id).trigger("change");
             $('#lead-financial_id').val(lead.financial_id).trigger("change");
+            $('#lead-temperature-id').val(lead.financial_id).trigger("change");
         })
         .catch(e => {
             $('#admin_email-error-exist').show();
@@ -317,6 +314,7 @@ window.modalRegisterAction = function (id_rel) {
   $(document).ready(function(){
     if (document.getElementById('lead-channel')) {
         /* resolveTextSetting(); */
+        
         setData();
     }
     

@@ -7,6 +7,7 @@ use App\Lib\Csendgrid;
 use App\Lib\CSurveySparrow;
 use App\Lib\Pusher;
 use App\Strategies\Values\SendNotificationsValues;
+use App\Strategies\Values\TemplateValues;
 use App\Strategies\Values\ValidateStagesValues;
 use Illuminate\Http\Request;
 
@@ -29,6 +30,12 @@ class PanelController extends Controller
         
         $view_validate  = \View::make('panel.table_validate', ['errors' => $validate['table']])->render();
         return response()->json($view_validate);
+    }
+
+    public function move($model, $id)
+    {
+        $template   = TemplateValues::STRATEGY[$model];
+        $move       = (new $template)->move($id);
     }
 
     /**

@@ -38,7 +38,7 @@ class Lead extends Model
             $get_list    = Lead::all();
         }
 
-
+        //dd($get_list);
         $data        = array();
         foreach ($get_list as $query) {
             
@@ -87,7 +87,6 @@ class Lead extends Model
     
     public static function listArchive()
     {
-       
         
         $status_id    = HistoryLog::LEAD_ARCHIVE;
         $get_list     = HistoryLog::where(['status_id' => $status_id, 'status' => 1])->get();
@@ -97,21 +96,24 @@ class Lead extends Model
             
             $lbl_status   = '<span class="text-success">Valido</span>';
             $lead         = $query->historyLead;
-            $product      = $lead->productLead;
-            $user         = $lead->advisorLead;
 
-            $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $lead])->render();
-
-            $data[] = array(
-                'name' => $content_lead,
-                'date' => formatDateNameMonth($query->created_at),
-                'product' => ($product != null) ? $product->alias : '',
-                'origin' => config('enums.origin')[$lead->origin_id],
-                'label' => config('enums.temperatures')[$lead->temperature_id],
-                'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
-                'status' => $lbl_status,
-                'options' => $option
-            );
+            if ($lead != null) {
+                $product      = $lead != null ? $lead->productLead : null;
+                $user         = $lead != null ? $lead->advisorLead : null;
+    
+                $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $lead])->render();
+    
+                $data[] = array(
+                    'name' => $content_lead,
+                    'date' => formatDateNameMonth($query->created_at),
+                    'product' => ($product != null) ? $product->alias : '',
+                    'origin' => config('enums.origin')[$lead->origin_id],
+                    'label' => config('enums.temperatures')[$lead->temperature_id],
+                    'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
+                    'status' => $lbl_status,
+                    'options' => $option
+                );
+            }
         }
         return $data;
     }

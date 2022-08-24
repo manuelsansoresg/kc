@@ -7,15 +7,15 @@ $user = Auth::user();
             <em class="icon ni ni-user-fill"></em>
         </a>
   
-    <li class="nk-tb-action-hidden">
     </li>
+    <li class="nk-tb-action-hidden">
         @if ($validate['error'] === true)
             <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-            title="Siguiente" onclick="modalValidate({{ $id }}, 'lead')">
+            title="Siguiente" onclick="modalValidate({{ $id }}, 'lead', 'dt-lead')">
             <em class="icon ni ni-arrow-right-circle"></em>
         </a>
         @else
-            <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+            <a class="btn btn-trigger btn-icon" onclick="moveElement('lead', {{ $id }})" data-bs-toggle="tooltip" data-bs-placement="top"
             title="Siguiente">
             <em class="icon ni ni-arrow-right-circle"></em>
     </a>

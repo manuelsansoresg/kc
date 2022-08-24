@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Strategies\Notifications;
+
+use App\Models\Notification;
+use App\Models\User;
+use App\Strategies\Notifications\Models\Pusher;
+use App\Strategies\SendNotificationsInterface;
+
+class PushBtnNextLead implements SendNotificationsInterface
+{
+    public function send($id)
+    {
+        $data_notification = array(
+            'id_rel' => $id,
+            'title' => 'Prospectos',
+            'body' => 'Se ha creado un nuevo crédito',
+            'model' => Notification::BTN_NEXT_LEAD,
+        );
+        Notification::create($data_notification);
+        $push  = new Pusher;
+        $push->send(['model' => 'btnNextLead']);
+    }
+    
+    public function get()
+    {
+        $get_notifications = Notification::getByModel(Notification::CREATE_PROSPECT);
+        $notifications = array();
+        foreach ($get_notifications as $notification) {
+            $users = User::getUserRole('Administrador');
+            foreach ($users as $user) {
+                $notifications[] = array(
+                    'user_id' => $user->id,
+                    'title' => $notification->title,
+                    'body' => $notification->body,
+                );
+            }
+            //*activate recieve push
+            $get_notification = Notification::find($notification->id);
+            $get_notification->status = 1;
+            $get_notification->update();
+        }
+        return $notifications;
+    }
+}
