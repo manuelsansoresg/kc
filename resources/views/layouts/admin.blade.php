@@ -13,7 +13,6 @@
     <title>@yield('title')</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
-    <link rel="stylesheet" type="text/css" href="/vendor/datatables/datatables.min.css"/>
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
     <link rel="stylesheet" type="text/css" href="/css/app.css"/>
 </head>

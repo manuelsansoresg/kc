@@ -30,6 +30,7 @@
                                 <table id="dt-lead" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
+                                            <th>ID</th>
                                             <th>Nombre</th>
                                             <th>Fecha</th>
                                             <th>Producto</th>

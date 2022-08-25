@@ -13,3 +13,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 .logo-profile {
   max-width: 100px;
 }
+
+.cell_table {
+  max-width: 250px !important;
+}

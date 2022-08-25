@@ -60,6 +60,7 @@ class Lead extends Model
             $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
             $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
             $data[] = array(
+                'id' => $query->id,
                 'name' => $lead,
                 'date' => formatDateNameMonth($query->created_at),
                 'product' => ($product != null) ? $product->alias : '',
