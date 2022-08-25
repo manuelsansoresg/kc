@@ -72,13 +72,13 @@
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
                                                                     <span class="profile-ud-label">Nombres</span>
-                                                                    <span class="profile-ud-value"> {{-- {{ $lead->name }} --}} </span>
+                                                                    <span class="profile-ud-value"> {{ $client->name }} </span>
                                                                 </div>
                                                             </div>
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
                                                                     <span class="profile-ud-label">Primer apellido</span>
-                                                                    <span class="profile-ud-value"> {{-- {{ $lead->last_name }} --}}
+                                                                    <span class="profile-ud-value"> {{ $client->last_name }}
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -86,20 +86,20 @@
                                                                 <div class="profile-ud wider">
                                                                     <span class="profile-ud-label">Segundo apellido</span>
                                                                     <span class="profile-ud-value">
-                                                                       {{--  {{ $lead->second_last_name }} --}} </span>
+                                                                        {{ $client->second_last_name }} </span>
                                                                 </div>
                                                             </div>
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
                                                                     <span class="profile-ud-label">Celular</span>
-                                                                    <span class="profile-ud-value">{{--  {{ $lead->cellphone }} --}}
+                                                                    <span class="profile-ud-value"> {{ $client->cellphone }}
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
                                                                     <span class="profile-ud-label">Email</span>
-                                                                    <span class="profile-ud-value"> {{-- {{ $lead->email }}  --}}</span>
+                                                                    <span class="profile-ud-value"> {{ $client->email }} </span>
                                                                 </div>
                                                             </div>
         
