@@ -50,8 +50,10 @@ class LeadStrategyTemplate implements TemplateInterface
                 'asesor_id' => $lead->asesor_id,
             );
             $credit = Credit::create($data_lead);
-            //*create history
+            //*create history in client person
             HistoryLog::move($lead->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
+            //*create history in credit
+            HistoryLog::move($credit->id, HistoryLog::CREATE_CLIENT_PERSON, HistoryLog::CREATE_CLIENT_PERSON);
         }
     }
 }
