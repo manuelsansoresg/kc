@@ -27,7 +27,7 @@ class LeadStrategyTemplate implements TemplateInterface
             $notification_add   = SendNotificationsValues::STRATEGY['btnNextLead'];
             (new $notification_add)->send($lead->id);
 
-            //*create client_person
+            //* create client_person
             $data_client_person = array(
                 'name' => $lead->name,
                 'last_name' => $lead->last_name,
@@ -38,7 +38,7 @@ class LeadStrategyTemplate implements TemplateInterface
             );
             $client_person = ClientPerson::create($data_client_person);
 
-            //*create credit
+            //* create credit
             $data_lead = array(
                 'client_person_id' => $client_person->id,
                 'product_id' => $lead->product_id,
@@ -50,10 +50,12 @@ class LeadStrategyTemplate implements TemplateInterface
                 'asesor_id' => $lead->asesor_id,
             );
             $credit = Credit::create($data_lead);
-            //*create history in client person
-            HistoryLog::move($lead->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
-            //*create history in credit
+            //* create history in client person
+            HistoryLog::move($client_person->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
+            //* create history in credit
             HistoryLog::move($credit->id, HistoryLog::CREATE_CLIENT_PERSON, HistoryLog::CREATE_CLIENT_PERSON);
+            //* enter module kc-checkup
+            HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
         }
     }
 }
