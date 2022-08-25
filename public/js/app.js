@@ -276,7 +276,14 @@ document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-acctions', {
     processing: true,
     responsive: {
-      details: true
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
     },
     ajax: '/panel/action/' + status + '/dt/show',
     columns: [{
@@ -377,6 +384,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var route = $('#route_datatable').val();
   var table = NioApp.DataTable('#dt-agreement', {
     processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
     ajax: '/panel/agreement/list/show',
     columns: [{
       data: 'name'
@@ -777,6 +794,16 @@ window.alerDelete = function (id) {
 document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-financial', {
     processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
     ajax: '/panel/financial/list/show',
     columns: [{
       data: 'commercial_name'
@@ -1169,6 +1196,16 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-check-up', {
     processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
     ajax: '/panel/kc-check-up/list/show',
     columns: [{
       data: 'id'
@@ -1313,6 +1350,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var route = $('#route_datatable').val();
   var table = NioApp.DataTable('#dt-product', {
     processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
     ajax: '/panel/product/list/show',
     columns: [{
       data: 'alias'
@@ -1429,6 +1476,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-tag', {
     processing: true,
     ajax: '/panel/tag/list/show',
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
     columns: [{
       data: 'name'
     }, {
@@ -1829,6 +1886,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var route = $('#route_datatable').val();
   var table = NioApp.DataTable('#dt-admin', {
     processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
     ajax: '/panel/user/' + route + '/list/show',
     columns: [{
       data: 'name'
@@ -1867,6 +1934,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var route = $('#route_datatable').val();
   var table = NioApp.DataTable('#dt-financiera', {
     processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var data = $.map(columns, function (col, i) {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
     ajax: '/panel/user/' + route + '/list/show',
     columns: [{
       data: 'financial'

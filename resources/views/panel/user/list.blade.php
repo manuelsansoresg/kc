@@ -29,7 +29,7 @@
                     <div class="nk-block">
                         <div class="card card-bordered card-stretch">
                             <div class="card-body">
-                                <table id="dt-admin" class="display nowrap nk-tb-list nk-tb-ulist dataTable no-footer" style="width:100%">
+                                <table id="dt-admin" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr class="nk-tb-item nk-tb-head">
                                             <th class="nk-tb-col"><span class="sub-text">Nombres </span></th>
