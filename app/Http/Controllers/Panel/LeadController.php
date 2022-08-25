@@ -38,8 +38,6 @@ class LeadController extends Controller
     public function list()
     {
         $users = Lead::listDatatable();
-        
-        
         return response()->json(['data' => $users]);
     }
 

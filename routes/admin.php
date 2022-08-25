@@ -106,3 +106,8 @@ Route::get('{section}/{id}/move', ['\App\Http\Controllers\Panel\PanelController'
 
 //*Client
 Route::resource('client', '\App\Http\Controllers\Panel\Client\ClientPersonController')->middleware('auth');
+//*modules
+Route::resource('kc-check-up', '\App\Http\Controllers\Panel\Module\KcCheckupController')->middleware('auth');
+Route::group(['prefix' => 'kc-check-up'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcCheckupController', 'list'])->middleware('auth');
+});

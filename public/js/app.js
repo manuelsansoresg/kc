@@ -1151,6 +1151,43 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/module/datatable.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/module/datatable.js ***!
+  \*****************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-check-up', {
+    processing: true,
+    ajax: '/panel/kc-check-up/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/product/crud.js":
 /*!*************************************************!*\
   !*** ./resources/js/components/product/crud.js ***!
@@ -2028,6 +2065,8 @@ __webpack_require__(/*! ./components/crm */ "./resources/js/components/crm.js");
 __webpack_require__(/*! ./components/action/datatable */ "./resources/js/components/action/datatable.js");
 
 __webpack_require__(/*! ./components/action/crud */ "./resources/js/components/action/crud.js");
+
+__webpack_require__(/*! ./components/module/datatable */ "./resources/js/components/module/datatable.js");
 
 window.moveElement = function (section, id, idDatatable) {
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {

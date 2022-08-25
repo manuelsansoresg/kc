@@ -209,6 +209,11 @@ class User extends Authenticatable
 
     public function note()
     {
-        return $this->hasOne(Lead::class);
+        return $this->hasOne(Note::class);
+    }
+    
+    public function credit()
+    {
+        return $this->hasOne(Credit::class);
     }
 }

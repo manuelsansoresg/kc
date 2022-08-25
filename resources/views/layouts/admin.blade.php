@@ -157,12 +157,12 @@
                                 </li><!-- .nk-menu-item -->
 
                                 <li class="nk-menu-heading">
-                                    <h6 class="overline-title text-primary-alt">Use-Case Preview</h6>
+                                    <h6 class="overline-title text-primary-alt">MÓDULOS</h6>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
-                                    <a href="html/crm/index.html" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-user-list"></em></span>
-                                        <span class="nk-menu-text">CRM Panel</span><span class="nk-menu-badge">HOT</span>
+                                    <a href="/panel/kc-check-up" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
+                                        <span class="nk-menu-text">KC- Check up</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">

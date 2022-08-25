@@ -16,6 +16,7 @@ require('./components/toastr');
 require('./components/crm');
 require('./components/action/datatable');
 require('./components/action/crud');
+require('./components/module/datatable');
 
 window.moveElement = function (section, id, idDatatable) {
     axios
