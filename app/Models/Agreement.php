@@ -67,6 +67,11 @@ class Agreement extends Model
     {
         return $this->hasOne(Lead::class);
     }
+    
+    public function credit()
+    {
+        return $this->hasOne(Credit::class);
+    }
 
     public function financialAgreement()
     {

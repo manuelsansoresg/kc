@@ -55,6 +55,16 @@ class Credit extends Model
     {
         return $this->belongsTo(ClientPerson::class, 'client_person_id');
     }
+    
+    public function creditAgreement()
+    {
+        return $this->belongsTo(Agreement::class, 'agreement_id');
+    }
+    
+    public function creditFinancial()
+    {
+        return $this->belongsTo(Financial::class, 'financial_id');
+    }
 
     public function creditProduct()
     {

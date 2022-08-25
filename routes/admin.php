@@ -111,3 +111,5 @@ Route::resource('kc-check-up', '\App\Http\Controllers\Panel\Module\KcCheckupCont
 Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcCheckupController', 'list'])->middleware('auth');
 });
+//*credit
+Route::resource('credit', '\App\Http\Controllers\Panel\CreditController')->middleware('auth');
