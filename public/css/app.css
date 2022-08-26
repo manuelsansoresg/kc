@@ -17,3 +17,26 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 .cell_table {
   max-width: 250px !important;
 }
+
+.width-content-options {
+  width: 100%;
+}
+
+.content-options {
+  display: block;
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .content-options {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+}
+@media (min-width: 992px) {
+  .content-options {
+    display: block;
+    width: 100%;
+  }
+}

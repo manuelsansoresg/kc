@@ -5,13 +5,22 @@ document.addEventListener('DOMContentLoaded', function () {
         responsive: {
             details: {
                 renderer: function ( api, rowIdx, columns ) {
+                    let total = columns.length -1;
                     var data = $.map( columns, function ( col, i ) {
-                        return col.hidden ?
-                            '<tr class="py-3" data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-                                '<td class="px-3">'+col.title+'</td> '+
-                                '<td>'+col.data+'</td>'+
+                       if (total == i) {
+                            return col.hidden ?
+                            '<tr class="py-3">'+
+                            '<td colspan="2" class="w-100">'+col.data+'</td>'+
                             '</tr>' :
                             '';
+                       } else {
+                            return col.hidden ?
+                            '<tr class="py-3" data-dt-row="'+col.rowIndex+'">'+
+                                '<td class="px-3">'+col.title+'</td> '+
+                                '<td class="w-100">'+col.data+'</td>'+
+                            '</tr>' :
+                            '';
+                       }
                     } ).join('');
  
                     return data ?

@@ -278,8 +278,13 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
@@ -387,8 +392,13 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
@@ -797,8 +807,13 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
@@ -1119,8 +1134,13 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
@@ -1199,8 +1219,13 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
@@ -1353,8 +1378,13 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
@@ -1472,41 +1502,46 @@ window.alerDelete = function (id) {
   \**************************************************/
 /***/ (() => {
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-tag', {
+  var _NioApp$DataTable;
+
+  var table = NioApp.DataTable('#dt-tag', (_NioApp$DataTable = {
     processing: true,
-    ajax: '/panel/tag/list/show',
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var data = $.map(columns, function (col, i) {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
+    ajax: '/panel/tag/list/show'
+  }, _defineProperty(_NioApp$DataTable, "processing", true), _defineProperty(_NioApp$DataTable, "responsive", {
+    details: {
+      renderer: function renderer(api, rowIdx, columns) {
+        var total = columns.length - 1;
+        var data = $.map(columns, function (col, i) {
+          if (total == i) {
+            return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+          } else {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+          }
+        }).join('');
+        return data ? $('<table/>').append(data) : false;
       }
-    },
-    columns: [{
-      data: 'name'
-    }, {
-      data: 'type'
-    }, {
-      data: 'section'
-    }, {
-      data: 'description'
-    }, {
-      data: 'status'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
     }
-  });
+  }), _defineProperty(_NioApp$DataTable, "columns", [{
+    data: 'name'
+  }, {
+    data: 'type'
+  }, {
+    data: 'section'
+  }, {
+    data: 'description'
+  }, {
+    data: 'status'
+  }, {
+    data: 'options'
+  }]), _defineProperty(_NioApp$DataTable, "columnDefs", [{
+    className: "nk-tb-col",
+    targets: "_all"
+  }]), _defineProperty(_NioApp$DataTable, "createdRow", function createdRow(row, data, dataIndex) {
+    $(row).addClass("nk-tb-item");
+  }), _NioApp$DataTable));
 });
 
 /***/ }),
@@ -1889,8 +1924,13 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
@@ -1937,8 +1977,13 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
