@@ -91,7 +91,7 @@ return [
         2 => 'Manual',
     ),
     "type_section" => array(
-        1 => 'Perfi',
+        1 => 'Perfíl',
         2 => 'Módulo',
     ),
 ];

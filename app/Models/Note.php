@@ -19,4 +19,10 @@ class Note extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    
+    public function creditNote()
+    {
+        return $this->hasOne(CreditNotes::class);
+    }
 }

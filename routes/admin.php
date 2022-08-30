@@ -48,7 +48,7 @@ Route::group(['prefix' => 'lead'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\LeadController', 'list'])->middleware('auth');
     Route::get('{lead_id}/delete', ['\App\Http\Controllers\Panel\LeadController', 'destroy'])->middleware('auth');
     Route::get('{lead_id}/origin', ['\App\Http\Controllers\Panel\LeadController', 'listOrigin'])->middleware('auth');
-    Route::post('{lead_id}/note', ['\App\Http\Controllers\Panel\LeadController', 'noteStore'])->middleware('auth');
+    
     Route::get('{lead_id}/profile', ['\App\Http\Controllers\Panel\LeadController', 'profile'])->middleware('auth');
     
     Route::post('{lead_id}/advisor/store', ['\App\Http\Controllers\Panel\LeadController', 'advisorStore'])->middleware('auth');
@@ -62,6 +62,7 @@ Route::group(['prefix' => 'lead'], function () {
 
 
 Route::get('{id}/{model}/validate/show', ['\App\Http\Controllers\Panel\PanelController', 'showValidate'])->middleware('auth');
+Route::post('{model}/note', ['\App\Http\Controllers\Panel\PanelController', 'noteStore'])->middleware('auth');
 
 Route::group(['prefix' => 'archive'], function () {
     Route::get('lead', ['\App\Http\Controllers\Panel\LeadController', 'archive'])->middleware('auth');
@@ -113,3 +114,8 @@ Route::group(['prefix' => 'kc-check-up'], function () {
 });
 //*credit
 Route::resource('credit', '\App\Http\Controllers\Panel\CreditController')->middleware('auth');
+Route::group(['prefix' => 'credit'], function () {
+    Route::post('tag/store', ['\App\Http\Controllers\Panel\CreditController', 'storeTag'])->middleware('auth');
+    Route::get('tag/{credit_id}/get-all', ['\App\Http\Controllers\Panel\CreditController', 'getTag'])->middleware('auth');
+    Route::get('note/{credit_id}/get-all', ['\App\Http\Controllers\Panel\CreditController', 'getNote'])->middleware('auth');
+});

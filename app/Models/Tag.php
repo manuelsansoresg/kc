@@ -19,7 +19,7 @@ class Tag extends Model
     public static function saveEdit($request)
     {
         $data = $request->data;
-        if ($request->tag_id == 'null') {
+        if ($request->tag_id == null) {
             $action = Tag::create($data);
         } else {
             $action = Tag::find($request->tag_id);
@@ -55,5 +55,15 @@ class Tag extends Model
             );
         }
         return $users;
+    }
+
+    public function getByCredit()
+    {
+        return Tag::where(['section_id' => 1, 'type_id' => 2, 'status' => 1])->get();
+    }
+
+    public function creditTag()
+    {
+        return $this->hasOne(CreditTag::class);
     }
 }

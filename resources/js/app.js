@@ -16,7 +16,10 @@ require('./components/toastr');
 require('./components/crm');
 require('./components/action/datatable');
 require('./components/action/crud');
+require('./components/action/credit');
+require('./components/general');
 require('./components/module/datatable');
+
 
 window.moveElement = function (section, id, idDatatable) {
     axios
@@ -31,5 +34,8 @@ window.moveElement = function (section, id, idDatatable) {
     .catch(e => {
     });
 }
+
+
+
 
 require('./components/websocket');

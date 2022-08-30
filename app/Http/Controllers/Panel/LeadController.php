@@ -12,6 +12,7 @@ use App\Models\LeadNote;
 use App\Models\Note;
 use App\Models\File;
 use App\Models\FinancialAgreement;
+use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,16 +100,6 @@ class LeadController extends Controller
     {
         $lead = Lead::createClientPerson($lead_id);
         return response()->json($lead);
-    }
-
-    public function noteStore($lead_id, Request $request)
-    {
-        $user_id = Auth::user()->id;
-        $note = new Note(['description' => $request->description, 'user_id' => $user_id]);
-        $note->save();
-        $lead_note = new LeadNote(['lead_id' => $lead_id, 'note_id'=> $note->id]);
-        $lead_note->save();
-         return response()->json(200);
     }
 
     public function advisorStore($lead_id, Request $request)

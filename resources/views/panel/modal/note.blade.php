@@ -17,7 +17,8 @@
                             </div>
                         </div>
                         
-                        <input type="hidden" id="lead_note_id" name="lead_id">
+                        <input type="hidden" id="id_rel" name="id_rel">
+                        <input type="hidden" id="model_note">
                         
                         <div class="col-12">
                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">

@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-    @include('panel.lead.modal.note')
+    @include('panel.modal.note')
     @include('panel.lead.modal.advisor')
     @include('panel.modal.archive')
 @endsection

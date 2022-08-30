@@ -13,7 +13,7 @@
                 <em class="icon ni ni-users-fill"></em><span>Perfíl cliente</span></a>
         </li>
         <li>
-            <a class="pointer">
+            <a class="pointer" href="/panel/credit/{{ $id }}">
                 <em class="icon ni ni-users-fill"></em><span>Perfíl crédito</span></a>
         </li>
       

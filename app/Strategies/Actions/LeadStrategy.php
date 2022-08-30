@@ -3,8 +3,11 @@ namespace App\Strategies\Actions;
 
 use App\Models\Action;
 use App\Models\Lead;
+use App\Models\LeadNote;
+use App\Models\Note;
 use App\Models\User;
 use App\Strategies\ActionInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class LeadStrategy implements ActionInterface
@@ -81,5 +84,12 @@ class LeadStrategy implements ActionInterface
             'options' => $option
         );
         return $data;
+    }
+
+    public function saveNote($request)
+    {
+        $user_id    = Auth::user()->id;
+        $note       = Note::create(['description' => $request->description, 'user_id' => $user_id]);
+        $lead_note  = LeadNote::create(['lead_id' => $request->id_rel, 'note_id'=> $note->id]);
     }
 }

@@ -161,8 +161,11 @@
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-sm nk-block-between">
                                                             <h5 class="title">Notas</h5>
+                                                            
                                                             {{-- <a href="#" class="link link-sm">+ Add Note</a> --}}
                                                         </div><!-- .nk-block-head -->
+                                                        <p> <a class="pointer" onclick="modalNote({{ $credit->id }}, 'credit')">Haz click para agregar notas</a> </p>
+                                                        <div id="content-note"></div>
                                                         {{-- @if ($notes != null)
                                                             @foreach ($notes as $row_note)
                                                                 @php
@@ -269,6 +272,8 @@
                                     </div><!-- .card-inner -->
                                     <div class="card-inner">
                                         <h6 class="overline-title-alt mb-3">Etiquetas  </h6>
+                                        <p> <a class="pointer" onclick="modalCreditTag({{ $credit->id}})">Haz click para agregar etiquetas</a> </p>
+                                        <div id="content-tag"></div>
                                         <ul class="g-1 d-none">
                                             <li class="btn-group">
                                                 
@@ -289,6 +294,9 @@
 {{-- content --}}
     
     <input type="hidden" id="refresh-dt" value="null">
+    <input type="hidden" id="credit-profile-credit_id" value="{{ $credit->id }}">
     @include('panel.action.modal.form')
     @include('panel.action.modal.register_action')
+    @include('panel.modal.note')
+    @include('panel.credit.modal.tag')
 @endsection

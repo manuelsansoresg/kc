@@ -1,6 +1,61 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./resources/js/components/action/credit.js":
+/*!**************************************************!*\
+  !*** ./resources/js/components/action/credit.js ***!
+  \**************************************************/
+/***/ (() => {
+
+window.modalCreditTag = function (credit_id) {
+  $('#modal-credit-tag-tag').val(null).trigger('change');
+  $('#lead-financial_id').val('').trigger('change');
+  $('#modal-credit-credit_id').val(credit_id);
+  $('#modal-credit-tag').modal('show');
+};
+
+$("#frm-credit-tag").submit(function (event) {
+  event.preventDefault();
+  var lead_id = $('#modal-tag-lead_id').val();
+  var new_form = document.getElementById("frm-credit-tag");
+  var data = new FormData(new_form);
+  axios.post("/panel/credit/tag/store", data).then(function (response) {
+    $('#modal-credit-tag').modal('hide');
+    creditRefresh(creditRefresh);
+  })["catch"](function (e) {});
+});
+
+if (document.getElementById('frm-credit-tag')) {
+  getTags();
+  getNotes();
+}
+
+function getTags() {
+  $('#content-tag').html('');
+  var credit_id = $('#credit-profile-credit_id').val();
+  axios.get("/panel/credit/tag/" + credit_id + "/get-all").then(function (response) {
+    var result = response.data;
+    $('#content-tag').html(result.tags);
+  })["catch"](function (e) {});
+}
+
+function getNotes() {
+  $('#content-note').html('');
+  var credit_id = $('#credit-profile-credit_id').val();
+  axios.get("/panel/credit/note/" + credit_id + "/get-all").then(function (response) {
+    var result = response.data;
+    $('#content-note').html(result.tags);
+  })["catch"](function (e) {});
+}
+
+window.creditRefresh = function () {
+  $('#modal-lead-note').modal('hide');
+  getTags();
+  getNotes();
+};
+
+/***/ }),
+
 /***/ "./resources/js/components/action/crud.js":
 /*!************************************************!*\
   !*** ./resources/js/components/action/crud.js ***!
@@ -839,6 +894,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/general.js":
+/*!********************************************!*\
+  !*** ./resources/js/components/general.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utilities */ "./resources/js/components/utilities.js");
+
+
+window.modalNote = function (note_id, model_note) {
+  $('#id_rel').val(note_id);
+  $('#model_note').val(model_note);
+  $('#modal-lead-description').val('');
+  $('#modal-lead-note').modal('show');
+};
+
+var refresh = {
+  'credit': creditRefresh
+};
+$("#frm-lead-note").submit(function (event) {
+  event.preventDefault();
+  var model_note = $('#model_note').val();
+  var refresh_dt = $('#refresh-dt').val();
+  var new_form = document.getElementById("frm-lead-note");
+  var data = new FormData(new_form);
+  axios.post("/panel/" + model_note + "/note", data).then(function (response) {
+    if (refresh_dt != 'null') {
+      (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
+      $('#modal-lead-note').modal('hide');
+    } else {
+      refresh[model_note]();
+    }
+  })["catch"](function (e) {});
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/lead/crud.js":
 /*!**********************************************!*\
   !*** ./resources/js/components/lead/crud.js ***!
@@ -969,24 +1063,6 @@ window.deleteLead = function (lead_id) {
     (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
   })["catch"](function (e) {});
 };
-
-window.modalNoteLead = function (note_id) {
-  $('#lead_note_id').val(note_id);
-  $('#modal-lead-description').val('');
-  $('#modal-lead-note').modal('show');
-};
-
-$("#frm-lead-note").submit(function (event) {
-  event.preventDefault();
-  var lead_id = $('#lead_note_id').val();
-  var description = $('#modal-lead-description').val();
-  axios.post("panel/lead/" + lead_id + "/note", {
-    description: description
-  }).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
-    $('#modal-lead-note').modal('hide');
-  })["catch"](function (e) {});
-});
 
 window.modalAdvisor = function (lead_id) {
   $('#lead_advisor_id').val(lead_id);
@@ -2196,6 +2272,10 @@ __webpack_require__(/*! ./components/crm */ "./resources/js/components/crm.js");
 __webpack_require__(/*! ./components/action/datatable */ "./resources/js/components/action/datatable.js");
 
 __webpack_require__(/*! ./components/action/crud */ "./resources/js/components/action/crud.js");
+
+__webpack_require__(/*! ./components/action/credit */ "./resources/js/components/action/credit.js");
+
+__webpack_require__(/*! ./components/general */ "./resources/js/components/general.js");
 
 __webpack_require__(/*! ./components/module/datatable */ "./resources/js/components/module/datatable.js");
 

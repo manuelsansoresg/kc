@@ -144,28 +144,6 @@ window.deleteLead = function (lead_id) {
 }
 
 
-
-window.modalNoteLead = function (note_id) { 
-    $('#lead_note_id').val(note_id);
-    $('#modal-lead-description').val('');
-    $('#modal-lead-note').modal('show');
-}
-
-$( "#frm-lead-note" ).submit(function( event ) {
-    event.preventDefault();
-    let lead_id =  $('#lead_note_id').val();
-    let description =  $('#modal-lead-description').val();
-    axios
-        .post("panel/lead/"+lead_id+"/note", {description:description})
-        .then(function (response) {
-            showInfo(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
-            $('#modal-lead-note').modal('hide');
-        })
-        .catch(e => {
-            
-        });
-  });
-
 window.modalAdvisor = function (lead_id) {
     $('#lead_advisor_id').val(lead_id);
     $('#modal-advisor').modal('show');

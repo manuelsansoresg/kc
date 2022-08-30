@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Strategies\Values\ActionValues;
 use Illuminate\Http\Request;
 
 class CreditController extends Controller
@@ -37,6 +38,26 @@ class CreditController extends Controller
     public function store(Request $request)
     {
         //
+    }
+
+    public function storeTag(Request $request)
+    {
+        $actionStrategy   = ActionValues::STRATEGY['credit'];
+        $tag              = (new $actionStrategy)->saveTag($request);
+    }
+
+    public function getTag($credit_id)
+    {
+        $actionStrategy   = ActionValues::STRATEGY['credit'];
+        $get_tag              = (new $actionStrategy)->getTags($credit_id);
+        return response()->json($get_tag);
+    }
+
+    public function getNote($credit_id) 
+    {
+        $actionStrategy   = ActionValues::STRATEGY['credit'];
+        $get_note         = (new $actionStrategy)->getNotes($credit_id);
+        return response()->json($get_note);
     }
 
     /**

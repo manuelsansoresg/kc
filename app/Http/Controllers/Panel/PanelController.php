@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Lib\Csendgrid;
 use App\Lib\CSurveySparrow;
 use App\Lib\Pusher;
+use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
 use App\Strategies\Values\ValidateStagesValues;
@@ -30,6 +31,13 @@ class PanelController extends Controller
         
         $view_validate  = \View::make('panel.table_validate', ['errors' => $validate['table']])->render();
         return response()->json($view_validate);
+    }
+
+    public function noteStore($model, Request $request)
+    {
+        $actionStrategy   = ActionValues::STRATEGY[$model];
+        $note       = (new $actionStrategy)->saveNote($request);
+        return response()->json(200);
     }
 
     public function move($model, $id)

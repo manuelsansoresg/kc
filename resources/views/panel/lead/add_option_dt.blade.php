@@ -40,7 +40,7 @@ $user = Auth::user();
                                 <em class="icon ni ni-edit"></em><span>Editar</span></a>
                         </li>
                         <li>
-                            <a class="pointer" onclick="modalNoteLead({{ $id }})">
+                            <a class="pointer" onclick="modalNote({{ $id }}, 'lead')">
                                 <em class="icon ni ni-edit"></em><span>Agregar nota</span></a>
                         </li>
                         <li>
