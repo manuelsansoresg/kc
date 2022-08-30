@@ -54,6 +54,13 @@ window.creditRefresh = function () {
   getNotes();
 };
 
+window.deleteTag = function (tag_id) {
+  axios.get("/panel/credit/tag/" + tag_id + "/drop").then(function (response) {
+    var result = response.data;
+    getTags();
+  })["catch"](function (e) {});
+};
+
 /***/ }),
 
 /***/ "./resources/js/components/action/crud.js":

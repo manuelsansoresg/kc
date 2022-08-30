@@ -117,5 +117,6 @@ Route::resource('credit', '\App\Http\Controllers\Panel\CreditController')->middl
 Route::group(['prefix' => 'credit'], function () {
     Route::post('tag/store', ['\App\Http\Controllers\Panel\CreditController', 'storeTag'])->middleware('auth');
     Route::get('tag/{credit_id}/get-all', ['\App\Http\Controllers\Panel\CreditController', 'getTag'])->middleware('auth');
+    Route::get('tag/{tag_id}/drop', ['\App\Http\Controllers\Panel\CreditController', 'deleteTag'])->middleware('auth');
     Route::get('note/{credit_id}/get-all', ['\App\Http\Controllers\Panel\CreditController', 'getNote'])->middleware('auth');
 });

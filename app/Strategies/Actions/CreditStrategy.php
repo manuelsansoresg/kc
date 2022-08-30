@@ -42,6 +42,12 @@ class CreditStrategy implements ActionInterface
         $list = \View::make('panel.credit.tags', [ 'tags' => $tags])->render();
         return ['tags' => $list];
     }
+
+    public function deleteTag($tag_id)
+    {
+        $tag = CreditTag::find($tag_id);
+        $tag->delete();
+    }
     
     public function getNotes($credit_id)
     {

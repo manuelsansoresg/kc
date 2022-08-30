@@ -66,3 +66,15 @@ window.creditRefresh = function() {
     getTags();
     getNotes();
 }
+
+window.deleteTag = function(tag_id) {   
+    axios
+        .get("/panel/credit/tag/"+tag_id+"/drop")
+        .then(function (response) {
+            let result = response.data;
+            getTags();
+        })
+        .catch(e => {
+
+        });
+}

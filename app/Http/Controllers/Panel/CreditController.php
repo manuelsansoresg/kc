@@ -53,6 +53,13 @@ class CreditController extends Controller
         return response()->json($get_tag);
     }
 
+    public function deleteTag($tag_id)
+    {
+        $actionStrategy   = ActionValues::STRATEGY['credit'];
+        $tag              = (new $actionStrategy)->deleteTag($tag_id);
+        return response()->json($tag);
+    }
+
     public function getNote($credit_id) 
     {
         $actionStrategy   = ActionValues::STRATEGY['credit'];

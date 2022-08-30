@@ -164,29 +164,8 @@
                                                             
                                                             {{-- <a href="#" class="link link-sm">+ Add Note</a> --}}
                                                         </div><!-- .nk-block-head -->
-                                                        <p> <a class="pointer" onclick="modalNote({{ $credit->id }}, 'credit')">Haz click para agregar notas</a> </p>
+                                                        <p> <a class="link pointer" onclick="modalNote({{ $credit->id }}, 'credit')">Haz click para agregar notas</a> </p>
                                                         <div id="content-note"></div>
-                                                        {{-- @if ($notes != null)
-                                                            @foreach ($notes as $row_note)
-                                                                @php
-                                                                    $get_note = $row_note->note;
-                                                                @endphp
-                                                                <div class="bq-note">
-                                                                    <div class="bq-note-item">
-                                                                        <div class="bq-note-text">
-                                                                            <p> {{ $get_note->description }}</p>
-                                                                        </div>
-                                                                        <div class="bq-note-meta">
-                                                                            <span class="bq-note-added">Agregado el <span
-                                                                                    class="date">
-                                                                                    {{ formatDateNameMonth($get_note->created_at) }}
-                                                                                </span> </span>
-                                                                      
-                                                                        </div>
-                                                                    </div><!-- .bq-note-item -->
-                                                                </div><!-- .bq-note -->
-                                                            @endforeach
-                                                        @endif --}}
                                                     </div><!-- .nk-block -->
                                                 </div><!-- .card-inner -->
                                             </div>
@@ -272,15 +251,8 @@
                                     </div><!-- .card-inner -->
                                     <div class="card-inner">
                                         <h6 class="overline-title-alt mb-3">Etiquetas  </h6>
-                                        <p> <a class="pointer" onclick="modalCreditTag({{ $credit->id}})">Haz click para agregar etiquetas</a> </p>
+                                        <p> <a class="link pointer" onclick="modalCreditTag({{ $credit->id}})">Haz click para agregar etiquetas</a> </p>
                                         <div id="content-tag"></div>
-                                        <ul class="g-1 d-none">
-                                            <li class="btn-group">
-                                                
-                                                <a class="btn btn-xs btn-light btn-dim" href="#"> </a>
-                                                <a class="btn btn-xs btn-icon btn-light btn-dim"><em class="icon ni ni-cross"></em></a>
-                                            </li>
-                                        </ul>
                                     </div><!-- .card-inner -->
                                 </div><!-- .card-inner-group -->
                             </div><!-- card-aside -->
