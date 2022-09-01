@@ -48,7 +48,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="row">
+                                    <div class="row content-action-preview">
                                         <div  id="{{ $key}}-files-action-preview" class=""></div>
                                     </div>
                                     @if ($file['is_date'] === true)

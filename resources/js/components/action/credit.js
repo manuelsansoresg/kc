@@ -94,7 +94,6 @@ if (document.getElementById('action-model')) {
         .then(function (response) {
             let result = response.data;
             let config_files = result.config_files;
-            let preview = result.preview;
 
             for (const key in config_files) {
                 if (config_files.hasOwnProperty.call(config_files, key)) {
@@ -112,7 +111,6 @@ if (document.getElementById('action-model')) {
                             });
 
                             this.on("success", function (file, message) {
-
                                 getData();
                             });
                             this.on("complete", function (file) {
@@ -130,23 +128,24 @@ if (document.getElementById('action-model')) {
 
         });
 
-        window.deleteFileTemplate = function (model, id) {
-            $('#frm-register-action-preview').html('');
-            axios
-                .get("/panel/temp/images/" + id + "/delete")
-                .then(function (response) {
-                    getData();
-                    showToast('Archivos', 'Archivo borrado', 'success');
-        
-                })
-                .catch(e => {
-                });
-        }
+    window.deleteFileTemplate = function (model, id) {
+        $('#frm-register-action-preview').html('');
+        axios
+            .get("/panel/temp/images/" + id + "/delete")
+            .then(function (response) {
+                getData();
+                showToast('Archivos', 'Archivo borrado', 'success');
+
+            })
+            .catch(e => {
+            });
+    }
 
     //* get data saved 
     function getData() {
+        clearPreviewFiles();
         axios
-            .get("/panel/files/template/"+model+"/"+id_rel+"/show")
+            .get("/panel/files/template/" + model + "/" + id_rel + "/show")
             .then(function (response) {
                 let result = response.data;
                 let files = result.files;
@@ -154,26 +153,47 @@ if (document.getElementById('action-model')) {
                 for (const key in file_dates) {
                     if (file_dates.hasOwnProperty.call(file_dates, key)) {
                         const element_date_file = file_dates[key];
-                        $('#'+element_date_file.template_config_id+'-date_file').val(element_date_file.date_file);
-                        
+                        $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
+
                     }
                 }
 
-                for (const key_file in files) {
+                /* for (const key_file in files) {
                     if (files.hasOwnProperty.call(files, key_file)) {
                         const element_file = files[key_file];
                         
                         $('#' + element_file.template_config_id + '-files-action-preview').html('');
                     }
-                }
-                
+                } */
+
                 for (const key_file in files) {
                     if (files.hasOwnProperty.call(files, key_file)) {
                         const element_file = files[key_file];
                         $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
                     }
                 }
-               
+
+            })
+            .catch(e => {
+
+            });
+    }
+
+    function clearPreviewFiles() {
+        axios
+            .get("/panel/files/images/" + model + '/' + id_rel + '/get/config')
+            .then(function (response) {
+                let result = response.data;
+                let config_files = result.config_files;
+
+                for (const key in config_files) {
+                    if (config_files.hasOwnProperty.call(config_files, key)) {
+                        const element = config_files[key];
+                        //create dinamic dropzone element
+                        $('#' + key + '-files-action-preview').html('');
+
+                    }
+                }
             })
             .catch(e => {
 

@@ -64,6 +64,7 @@ window.deleteTag = function (tag_id) {
 if (document.getElementById('action-model')) {
   //* get data saved 
   var getData = function getData() {
+    clearPreviewFiles();
     axios.get("/panel/files/template/" + model + "/" + id_rel + "/show").then(function (response) {
       var result = response.data;
       var files = result.files;
@@ -75,18 +76,34 @@ if (document.getElementById('action-model')) {
           $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
         }
       }
+      /* for (const key_file in files) {
+          if (files.hasOwnProperty.call(files, key_file)) {
+              const element_file = files[key_file];
+              
+              $('#' + element_file.template_config_id + '-files-action-preview').html('');
+          }
+      } */
+
 
       for (var key_file in files) {
         if (files.hasOwnProperty.call(files, key_file)) {
           var element_file = files[key_file];
-          $('#' + element_file.template_config_id + '-files-action-preview').html('');
+          $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
         }
       }
+    })["catch"](function (e) {});
+  };
 
-      for (var _key_file in files) {
-        if (files.hasOwnProperty.call(files, _key_file)) {
-          var _element_file = files[_key_file];
-          $('#' + _element_file.template_config_id + '-files-action-preview').append(_element_file.preview);
+  var clearPreviewFiles = function clearPreviewFiles() {
+    axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config').then(function (response) {
+      var result = response.data;
+      var config_files = result.config_files;
+
+      for (var key in config_files) {
+        if (config_files.hasOwnProperty.call(config_files, key)) {
+          var element = config_files[key]; //create dinamic dropzone element
+
+          $('#' + key + '-files-action-preview').html('');
         }
       }
     })["catch"](function (e) {});
@@ -103,7 +120,6 @@ if (document.getElementById('action-model')) {
   axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config').then(function (response) {
     var result = response.data;
     var config_files = result.config_files;
-    var preview = result.preview;
 
     var _loop = function _loop(key) {
       if (config_files.hasOwnProperty.call(config_files, key)) {
