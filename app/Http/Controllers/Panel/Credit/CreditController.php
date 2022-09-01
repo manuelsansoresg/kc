@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Panel;
+namespace App\Http\Controllers\Panel\Credit;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;

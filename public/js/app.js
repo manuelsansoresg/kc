@@ -61,6 +61,111 @@ window.deleteTag = function (tag_id) {
   })["catch"](function (e) {});
 };
 
+if (document.getElementById('action-model')) {
+  //* get data saved 
+  var getData = function getData() {
+    axios.get("/panel/files/template/" + model + "/" + id_rel + "/show").then(function (response) {
+      var result = response.data;
+      var files = result.files;
+      var file_dates = result.file_date;
+
+      for (var key in file_dates) {
+        if (file_dates.hasOwnProperty.call(file_dates, key)) {
+          var element_date_file = file_dates[key];
+          $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
+        }
+      }
+
+      for (var key_file in files) {
+        if (files.hasOwnProperty.call(files, key_file)) {
+          var element_file = files[key_file];
+          $('#' + element_file.template_config_id + '-files-action-preview').html('');
+        }
+      }
+
+      for (var _key_file in files) {
+        if (files.hasOwnProperty.call(files, _key_file)) {
+          var _element_file = files[_key_file];
+          $('#' + _element_file.template_config_id + '-files-action-preview').append(_element_file.preview);
+        }
+      }
+    })["catch"](function (e) {});
+  };
+
+  var model = $('#action-model').val();
+  var id_rel = $('#action-id_rel').val();
+
+  if (model == '') {
+    model = null;
+  } //*get configuration in template
+
+
+  axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config').then(function (response) {
+    var result = response.data;
+    var config_files = result.config_files;
+    var preview = result.preview;
+
+    var _loop = function _loop(key) {
+      if (config_files.hasOwnProperty.call(config_files, key)) {
+        var element = config_files[key]; //create dinamic dropzone element
+
+        NioApp.Dropzone('#' + key + '-dropzone-action', {
+          url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+          init: function init() {
+            this.on("sending", function (file, xhr, formData) {
+              var date_file = null;
+
+              if (document.getElementById(key + '-date_file')) {
+                date_file = $('#' + key + '-date_file').val();
+              }
+
+              formData.append("date_file", date_file);
+            });
+            this.on("success", function (file, message) {
+              getData();
+            });
+            this.on("complete", function (file) {
+              this.removeAllFiles(true);
+            });
+          }
+        });
+      }
+    };
+
+    for (var key in config_files) {
+      _loop(key);
+    } //
+
+  })["catch"](function (e) {});
+
+  window.deleteFileTemplate = function (model, id) {
+    $('#frm-register-action-preview').html('');
+    axios.get("/panel/temp/images/" + id + "/delete").then(function (response) {
+      getData();
+      showToast('Archivos', 'Archivo borrado', 'success');
+    })["catch"](function (e) {});
+  };
+
+  $().ready(function () {
+    getData();
+    $("#frm-action-files").validate({
+      rules: {
+        'date_file[]': {
+          required: true
+        }
+      },
+      submitHandler: function submitHandler(form, event) {
+        event.preventDefault();
+        var new_form = document.getElementById("frm-action-files");
+        var data = new FormData(new_form);
+        axios.post("/panel/files/template/date", data).then(function (response) {
+          var result = response.data;
+        })["catch"](function (e) {});
+      }
+    });
+  });
+}
+
 /***/ }),
 
 /***/ "./resources/js/components/action/crud.js":
@@ -266,6 +371,11 @@ window.deleteAction = function (id) {
     }
   })["catch"](function (e) {});
 };
+/* window.editModalAction = function(action_id, disabled) {
+    setModalAction(action_id, disabled);
+    $('#modal-action').modal('show');
+} */
+
 
 window.setModalAction = function (action_id, disabled) {
   if (disabled == true) {
@@ -275,12 +385,13 @@ window.setModalAction = function (action_id, disabled) {
 
   axios.get("/panel/action/" + action_id).then(function (response) {
     var result = response.data;
+    console.log(result);
     var action = result.action;
     var advisor = result.advisor;
     var lead = result.lead; //*set value form action
 
     if (result != null) {
-      var lead_name = lead.name + ' ' + lead.last_name;
+      var lead_name = lead != null ? lead.name + ' ' + lead.last_name : null;
       $("#modal-action-type").val(action.type).trigger('change');
       $("#modal-action-subject").val(action.subject);
       $("#modal-action-id-action").val(action_id);
@@ -293,7 +404,11 @@ window.setModalAction = function (action_id, disabled) {
       $("#modal-action-description").val(action.description);
       $("#modal-action-id-rel").val(action.id_rel);
       $("#lead-asesor-id").val(advisor.id).trigger('change');
-      $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+
+      if (lead != null) {
+        $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+      }
+
       $('#modal-action').modal('show');
 
       if (action.status == 1) {
@@ -303,6 +418,8 @@ window.setModalAction = function (action_id, disabled) {
         $('#modal-action-complete-active').prop("checked", false);
         $('#modal-action-complete-pending').prop("checked", true);
       }
+
+      $('#modal-action').modal('show');
     }
   })["catch"](function (e) {});
 };

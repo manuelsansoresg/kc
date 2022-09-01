@@ -17,7 +17,7 @@ $user = Auth::user();
         </li>
         @else
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a class="btn btn-trigger btn-icon" onclick="setModalAction({{ $model->id }}, true)" data-bs-toggle="tooltip" data-bs-placement="top"
+            <a class="btn btn-trigger btn-icon" onclick="setModalAction({{ $model->id }}, false)" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="Ver registro">
                 <em class="icon ni ni-todo-fill"></em>
             </a>
@@ -43,7 +43,7 @@ $user = Auth::user();
                                 <em class="icon ni ni-check-circle-fill"></em><span>Marcar como completada</span></a>
                         </li>
                         <li>
-                            <a onclick="setModalAction({{ $model->id }}, false)">
+                            <a class="pointer" onclick="setModalAction({{ $model->id }}, false)">
                                 <em
                                     class="icon ni ni-edit-alt"></em><span>Editar</span></a>
                         </li>

@@ -14,6 +14,7 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         '/deploy/index',
         '/panel/temp/*',
+        '/panel/files/images/*',
         'api/surveysparrow/*',
         'api/rrss/*'
     ];

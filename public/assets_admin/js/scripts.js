@@ -489,6 +489,8 @@
   }; // Wizard @v1.0
 
 
+
+
   NioApp.Wizard = function () {
     var $wizard = $(".nk-wizard");
 

@@ -30,7 +30,7 @@
                     </li>
                     <li>
                         <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Editar" onclick="setModalAction({{ $action->id }}, false)"><em
+                            title="Editar" onclick="setModalAction({{ $action->id }}, true)"><em
                                 class="icon ni ni-edit-alt"></em></a>
                     </li>
                     <li>

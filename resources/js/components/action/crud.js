@@ -251,21 +251,32 @@ window.deleteAction = function (id) {
     });
 }
 
+
+/* window.editModalAction = function(action_id, disabled) {
+    setModalAction(action_id, disabled);
+    $('#modal-action').modal('show');
+} */
+
 window.setModalAction = function (action_id, disabled) {
+    
     if (disabled == true) {
         $('#frm-action input, textarea, select').attr('disabled', 'disabled');
         $('#modal-action-save').hide();
-    }
+    } 
+    
     axios
     .get("/panel/action/"+action_id)
     .then(function (response) {
+        
         let result = response.data;
+        console.log(result);
         let action = result.action;
         let advisor = result.advisor;
         let lead = result.lead;
         //*set value form action
         if (result != null) {
-            let lead_name = lead.name + ' ' + lead.last_name;
+            let lead_name = (lead != null) ? lead.name + ' ' + lead.last_name : null;
+            
             $("#modal-action-type").val(action.type).trigger('change');
             $("#modal-action-subject").val(action.subject);
             $("#modal-action-id-action").val(action_id);
@@ -278,7 +289,9 @@ window.setModalAction = function (action_id, disabled) {
             $("#modal-action-description").val(action.description);
             $("#modal-action-id-rel").val(action.id_rel);
             $("#lead-asesor-id").val(advisor.id).trigger('change');
-            $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+            if (lead != null) {
+                $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+            } 
             $('#modal-action').modal('show');
             
             if (action.status == 1) {
@@ -288,7 +301,9 @@ window.setModalAction = function (action_id, disabled) {
                 $('#modal-action-complete-active').prop("checked", false);
                 $('#modal-action-complete-pending').prop("checked", true);
             }
+            $('#modal-action').modal('show');
         }
+        
     })
     .catch(e => {
     });

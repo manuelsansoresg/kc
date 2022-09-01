@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Action;
 use App\Models\File;
 use App\Models\RegisterAction;
+use App\Models\TemplateFile;
 use App\Strategies\Values\ActionValues;
+use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -64,6 +66,40 @@ class ActionController extends Controller
         File::upload($model, $id_rel, $request);
     }
 
+    public function configFilesTemplate($model, $id_rel)
+    {
+        $actionStrategy   = TemplateValues::STRATEGY[$model];
+        $config_files       = (new $actionStrategy)->configUpload();
+        $preview = File::getAll($model, $id_rel);
+
+        $data = array('config_files' => $config_files, 'preview' => $preview);
+        return response()->json($data);
+    }
+
+    public function storeFilesTemplate($model, $id_rel, $template_config_id, Request $request)
+    {
+        $models = File::MODEL;
+        File::upload($models[$model], $id_rel, $request, $template_config_id);
+    }
+
+    public function getDataTemplate($model, $id_rel)
+    {
+        $models = File::MODEL;
+        $data_where = array(
+            'model' => $models[$model],
+            'id_rel' => $id_rel
+        );
+        $files = File::getAllTemplate($models[$model], $id_rel);
+        $file_date = TemplateFile::where($data_where)->get();
+
+        return response()->json(['files' => $files, 'file_date' => $file_date]);
+    }
+
+    public function storeFilesDateTemplate(Request $request)
+    {
+        TemplateFile::saveTemplate($request);
+    }
+
     public function showFiles($model, Request $request)
     {
         if ($model == 'null') {
@@ -81,7 +117,9 @@ class ActionController extends Controller
      */
     public function deleteFile($id)
     {
+        $path = File::PATH;
         $file = File::find($id);
+        unlink($path.'/'.$file->name);
         $file->delete();
     }
 

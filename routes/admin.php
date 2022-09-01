@@ -73,6 +73,7 @@ Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\Notificati
 
 //Route::get('notification/{id}/delete', ['\App\Http\Controllers\Panel\NotificationController', 'destroy'])->middleware('auth');
 
+//*action
 Route::resource('action', '\App\Http\Controllers\Panel\ActionController')->middleware('auth');
 Route::group(['prefix' => 'action'], function () {
     Route::get('list/{id}/{model}/{status}', ['\App\Http\Controllers\Panel\ActionController', 'listAction'])->middleware('auth');
@@ -81,10 +82,19 @@ Route::group(['prefix' => 'action'], function () {
 });
 
 //*dropzone file
-Route::post('temp/images/{model}', ['\App\Http\Controllers\Panel\ActionController', 'storeFile'])->middleware('auth');
-Route::get('temp/images/{model}/show', ['\App\Http\Controllers\Panel\ActionController', 'showFiles'])->middleware('auth');
-Route::get('temp/images/{id}/delete', ['\App\Http\Controllers\Panel\ActionController', 'deleteFile'])->middleware('auth');
+Route::group(['prefix' => 'temp'], function () {
+    Route::post('images/{model}', ['\App\Http\Controllers\Panel\ActionController', 'storeFile'])->middleware('auth');
+    Route::get('images/{model}/show', ['\App\Http\Controllers\Panel\ActionController', 'showFiles'])->middleware('auth');
+    Route::get('images/{id}/delete', ['\App\Http\Controllers\Panel\ActionController', 'deleteFile'])->middleware('auth');
+});
 
+Route::group(['prefix' => 'files'], function () {
+    Route::get('images/{model}/{id_rel}/get/config', ['\App\Http\Controllers\Panel\ActionController', 'configFilesTemplate'])->middleware('auth');
+    Route::post('images/{model}/{id_rel}/{template_config_id}', ['\App\Http\Controllers\Panel\ActionController', 'storeFilesTemplate'])->middleware('auth');
+    
+    Route::post('template/date', ['\App\Http\Controllers\Panel\ActionController', 'storeFilesDateTemplate'])->middleware('auth');
+    Route::get('template/{model}/{id_rel}/show', ['\App\Http\Controllers\Panel\ActionController', 'getDataTemplate'])->middleware('auth');
+});
 //*register action
 Route::resource('register-action', '\App\Http\Controllers\Panel\RegisterActionController')->middleware('auth');
 Route::group(['prefix' => 'register-action'], function () {
@@ -113,10 +123,14 @@ Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcCheckupController', 'list'])->middleware('auth');
 });
 //*credit
-Route::resource('credit', '\App\Http\Controllers\Panel\CreditController')->middleware('auth');
+Route::resource('credit', '\App\Http\Controllers\Panel\Credit\CreditController')->middleware('auth');
 Route::group(['prefix' => 'credit'], function () {
-    Route::post('tag/store', ['\App\Http\Controllers\Panel\CreditController', 'storeTag'])->middleware('auth');
-    Route::get('tag/{credit_id}/get-all', ['\App\Http\Controllers\Panel\CreditController', 'getTag'])->middleware('auth');
-    Route::get('tag/{tag_id}/drop', ['\App\Http\Controllers\Panel\CreditController', 'deleteTag'])->middleware('auth');
-    Route::get('note/{credit_id}/get-all', ['\App\Http\Controllers\Panel\CreditController', 'getNote'])->middleware('auth');
+    Route::post('tag/store', ['\App\Http\Controllers\Panel\Credit\CreditController', 'storeTag'])->middleware('auth');
+    Route::get('tag/{credit_id}/get-all', ['\App\Http\Controllers\Panel\Credit\CreditController', 'getTag'])->middleware('auth');
+    Route::get('tag/{tag_id}/drop', ['\App\Http\Controllers\Panel\Credit\CreditController', 'deleteTag'])->middleware('auth');
+    Route::get('note/{credit_id}/get-all', ['\App\Http\Controllers\Panel\Credit\CreditController', 'getNote'])->middleware('auth');
+
+    Route::get('note/{credit_id}/get-all', ['\App\Http\Controllers\Panel\Credit\CreditController', 'getNote'])->middleware('auth');
+
+    Route::resource('action/document', '\App\Http\Controllers\Panel\Credit\DocumentController')->middleware('auth');
 });

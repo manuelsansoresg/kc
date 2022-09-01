@@ -94,4 +94,10 @@ return [
         1 => 'Perfíl',
         2 => 'Módulo',
     ),
+
+    //*leyend is required
+    'is_required' => array(
+        true => 'Obligatorio',
+        false => 'Opcional',
+    )
 ];
