@@ -85,17 +85,17 @@ $( "#frm-financial-buro" ).submit(function( event ) {
         });
   });
 
-window.deleteFinancial = function (id) {
+window.deleteProduct = function (id) {
     axios
-    .delete("/panel/financial/"+id)
+    .delete("/panel/financial-product/"+id)
     .then(function (response) {
-        showInfo(2, 'dt-financial', 'Datos actualizados', 'Registro borrado');
+        showInfo(2, 'dt-financial-product', 'Producto', 'Registro borrado');
     })
     .catch(e => {
     });
 }
 
-window.alerDelete = function (id) {
+window.alerDeleteProduct = function (id) {
    
     Swal.fire({
         title: '¿Estás seguro?',
@@ -105,7 +105,7 @@ window.alerDelete = function (id) {
         cancelButtonText: 'Mejor no'
     }).then(function (result) {
         if (result.value) {
-            deleteFinancial(id);
+            deleteProduct(id);
         }
     });
 }

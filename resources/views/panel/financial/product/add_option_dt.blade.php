@@ -8,7 +8,7 @@
                         <em class="icon ni ni-edit"></em><span>Editar</span></a>
                 </li>
                 <li>
-                    <a class="pointer" onclick="alerDelete({{ $id }})">
+                    <a class="pointer" onclick="alerDeleteProduct({{ $id }})">
                         <em class="icon ni ni-trash"></em><span>Borrar</span></a>
                 </li>
             </ul>

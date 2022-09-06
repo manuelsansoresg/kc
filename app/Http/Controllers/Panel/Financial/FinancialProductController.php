@@ -108,6 +108,7 @@ class FinancialProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $financial = FinancialProduct::find($id);
+        $financial->delete();
     }
 }
