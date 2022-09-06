@@ -948,6 +948,9 @@ $().ready(function () {
       },
       'company_name': {
         required: true
+      },
+      'email': {
+        email: true
       }
     },
     submitHandler: function submitHandler(form, event) {
@@ -957,7 +960,8 @@ $().ready(function () {
       var new_form = document.getElementById("frm-financial");
       var data = new FormData(new_form);
       axios.post("/panel/financial", data).then(function (response) {
-        window.location = '/panel/financial';
+        var result = response.data;
+        window.location = '/panel/financial/' + result.id + '/edit';
       })["catch"](function (e) {
         var response = e.response;
         var data_errors = response.data.errors;
@@ -966,6 +970,33 @@ $().ready(function () {
       });
     }
   });
+});
+$("#frm-financial-data-pricacy").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-data-pricacy");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial", data).then(function (response) {
+    var result = response.data;
+    showToast('Financiera', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+$("#frm-financial-buro").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-buro");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial", data).then(function (response) {
+    var result = response.data;
+    showToast('Financiera', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+$("#frm-financial-billing").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-billing");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial", data).then(function (response) {
+    var result = response.data;
+    showToast('Financiera', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
 });
 
 window.deleteFinancial = function (id) {
@@ -1019,6 +1050,140 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'commercial_name'
     }, {
       data: 'company_name'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/financial/product/crud.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/financial/product/crud.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utilities */ "./resources/js/components/utilities.js");
+
+$().ready(function () {
+  $("#frm-product-info").validate({
+    rules: {
+      'name': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#product-name-unique-error').html('');
+      $('#product-name-unique-error').hide();
+      var new_form = document.getElementById("frm-product-info");
+      var data = new FormData(new_form);
+      axios.post("/panel/financial-product", data).then(function (response) {
+        var result = response.data;
+        window.location = '/panel/financial-product/' + result.id + '/edit';
+      })["catch"](function (e) {
+        var response = e.response;
+        var data_errors = response.data.errors;
+        $('#product-name-unique-error').html('Este campo ya se encuentra registrado.');
+        $('#product-name-unique-error').show();
+      });
+    }
+  });
+});
+$("#frm-financial-buro").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-buro");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+$("#frm-financial-comision").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-comision");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+$("#frm-financial-contact").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-contact");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+
+window.deleteFinancial = function (id) {
+  axios["delete"]("/panel/financial/" + id).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financial', 'Datos actualizados', 'Registro borrado');
+  })["catch"](function (e) {});
+};
+
+window.alerDelete = function (id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      deleteFinancial(id);
+    }
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/financial/product/datatable.js":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/financial/product/datatable.js ***!
+  \****************************************************************/
+/***/ (() => {
+
+/* DT PRODUCT */
+if (document.getElementById('dt-financial-product')) {
+  var financial_id = $('#financial_id').val();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-financial-product', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/financial/product/' + financial_id + '/list/show',
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'status'
     }, {
       data: 'options'
     }],
@@ -2404,6 +2569,10 @@ __webpack_require__(/*! ./components/tag/crud */ "./resources/js/components/tag/
 __webpack_require__(/*! ./components/financial/datatable */ "./resources/js/components/financial/datatable.js");
 
 __webpack_require__(/*! ./components/financial/crud */ "./resources/js/components/financial/crud.js");
+
+__webpack_require__(/*! ./components/financial/product/datatable */ "./resources/js/components/financial/product/datatable.js");
+
+__webpack_require__(/*! ./components/financial/product/crud */ "./resources/js/components/financial/product/crud.js");
 
 __webpack_require__(/*! ./components/toastr */ "./resources/js/components/toastr.js");
 

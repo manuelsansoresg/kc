@@ -12,6 +12,8 @@ require('./components/tag/datatable');
 require('./components/tag/crud');
 require('./components/financial/datatable');
 require('./components/financial/crud');
+require('./components/financial/product/datatable');
+require('./components/financial/product/crud');
 require('./components/toastr');
 require('./components/crm');
 require('./components/action/datatable');

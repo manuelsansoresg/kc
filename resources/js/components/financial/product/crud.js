@@ -1,36 +1,30 @@
-import { showInfo } from '../utilities';
+import { showInfo } from '../../utilities';
 
 $().ready(function () {
-    $("#frm-financial").validate({
+    $("#frm-product-info").validate({
         rules: {
-            'commercial_name': {
+            'name': {
                 required: true,
-            },
-            'company_name': {
-                required: true,
-            },
-            'email': {
-                email: true,
             },
         },
         submitHandler: function (form, event) {
             event.preventDefault();
-            $('#financial-commercial_name-unique-error').html('');
-            $('#financial-commercial_name-unique-error').hide();
-            const new_form = document.getElementById("frm-financial");
+            $('#product-name-unique-error').html('');
+            $('#product-name-unique-error').hide();
+            const new_form = document.getElementById("frm-product-info");
             const data = new FormData(new_form);
 
             axios
-                .post("/panel/financial", data)
+                .post("/panel/financial-product", data)
                 .then(function (response) {
                     let result = response.data;
-                    window.location = '/panel/financial/'+result.id+'/edit';
+                    window.location = '/panel/financial-product/'+result.id+'/edit';
                 })
                 .catch(e => {
                     let response = e.response;
                     let data_errors = response.data.errors; 
-                    $('#financial-commercial_name-unique-error').html('Este campo ya se encuentra registrado.');
-                    $('#financial-commercial_name-unique-error').show();
+                    $('#product-name-unique-error').html('Este campo ya se encuentra registrado.');
+                    $('#product-name-unique-error').show();
                 });
 
         }
@@ -40,33 +34,16 @@ $().ready(function () {
 
 });
 
-$( "#frm-financial-data-pricacy" ).submit(function( event ) {
-    event.preventDefault();
-    const new_form = document.getElementById("frm-financial-data-pricacy");
-    const data = new FormData(new_form);
-
-    axios
-        .post("/panel/financial", data)
-        .then(function (response) {
-            let result = response.data;
-            showToast('Financiera', 'Datos guardados', 'success');
-            
-        })
-        .catch(e => {
-            
-        });
-  });
-
-  $( "#frm-financial-buro" ).submit(function( event ) {
+$( "#frm-financial-buro" ).submit(function( event ) {
     event.preventDefault();
     const new_form = document.getElementById("frm-financial-buro");
     const data = new FormData(new_form);
 
     axios
-        .post("/panel/financial", data)
+        .post("/panel/financial-product", data)
         .then(function (response) {
             let result = response.data;
-            showToast('Financiera', 'Datos guardados', 'success');
+            showToast('Producto', 'Datos guardados', 'success');
             
         })
         .catch(e => {
@@ -74,16 +51,33 @@ $( "#frm-financial-data-pricacy" ).submit(function( event ) {
         });
   });
 
-  $( "#frm-financial-billing" ).submit(function( event ) {
+  $( "#frm-financial-comision" ).submit(function( event ) {
     event.preventDefault();
-    const new_form = document.getElementById("frm-financial-billing");
+    const new_form = document.getElementById("frm-financial-comision");
     const data = new FormData(new_form);
 
     axios
-        .post("/panel/financial", data)
+        .post("/panel/financial-product", data)
         .then(function (response) {
             let result = response.data;
-            showToast('Financiera', 'Datos guardados', 'success');
+            showToast('Producto', 'Datos guardados', 'success');
+            
+        })
+        .catch(e => {
+            
+        });
+  });
+
+  $( "#frm-financial-contact" ).submit(function( event ) {
+    event.preventDefault();
+    const new_form = document.getElementById("frm-financial-contact");
+    const data = new FormData(new_form);
+
+    axios
+        .post("/panel/financial-product", data)
+        .then(function (response) {
+            let result = response.data;
+            showToast('Producto', 'Datos guardados', 'success');
             
         })
         .catch(e => {

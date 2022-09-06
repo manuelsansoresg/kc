@@ -107,10 +107,17 @@ Route::group(['prefix' => 'tag'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\TagController', 'list'])->middleware('auth');
 });
 
-Route::resource('financial', '\App\Http\Controllers\Panel\FinancialController')->middleware('auth');
+Route::resource('financial', '\App\Http\Controllers\Panel\Financial\FinancialController')->middleware('auth');
 
 Route::group(['prefix' => 'financial'], function () {
-    Route::get('list/show', ['\App\Http\Controllers\Panel\FinancialController', 'list'])->middleware('auth');
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Financial\FinancialController', 'list'])->middleware('auth');
+    Route::get('product/{financial_id}/list/show', ['\App\Http\Controllers\Panel\Financial\FinancialController', 'listProduct'])->middleware('auth');
+});
+
+Route::resource('financial-product', '\App\Http\Controllers\Panel\Financial\FinancialProductController')->middleware('auth');
+
+Route::group(['prefix' => 'financial-product'], function () {
+    Route::get('{financial_id}/create', ['\App\Http\Controllers\Panel\Financial\FinancialProductController', 'create'])->middleware('auth');
 });
 
 Route::get('{section}/{id}/move', ['\App\Http\Controllers\Panel\PanelController', 'move'])->middleware('auth');

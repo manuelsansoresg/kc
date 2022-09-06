@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Panel;
+namespace App\Http\Controllers\Panel\Financial;
 
 use App\Http\Controllers\Controller;
 use App\Models\Financial;
@@ -21,6 +21,12 @@ class FinancialController extends Controller
     public function list()
     {
         $tags = Financial::listDatatable();
+
+        return response()->json(['data' => $tags]);
+    }
+    public function listProduct($financial_id)
+    {
+        $tags = Financial::listProductDatatable($financial_id);
 
         return response()->json(['data' => $tags]);
     }
@@ -45,24 +51,26 @@ class FinancialController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->financial_id == null) {
-            $request->validate(
-                [
-                'commercial_name' => 'required|unique:financials,commercial_name',
-                ],
-                [
-                    'commercial_name.unique' => 'El valor ya se encuentra registrado'
-                ]
-            );
-        } else {
-            $request->validate(
-                [
-                    'commercial_name' => 'required|unique:financials,commercial_name,' . $request->financial_id . ',id',
-                ],
-                [
-                    'commercial_name.unique' => 'El valor ya se encuentra registrado'
-                ]
-            );
+        if ($request->is_required == 'true') {
+            if ($request->financial_id == null) {
+                $request->validate(
+                    [
+                    'commercial_name' => 'required|unique:financials,commercial_name',
+                    ],
+                    [
+                        'commercial_name.unique' => 'El valor ya se encuentra registrado'
+                    ]
+                );
+            } else {
+                $request->validate(
+                    [
+                        'commercial_name' => 'required|unique:financials,commercial_name,' . $request->financial_id . ',id',
+                    ],
+                    [
+                        'commercial_name.unique' => 'El valor ya se encuentra registrado'
+                    ]
+                );
+            }
         }
         $financial = Financial::saveEdit($request);
         return response()->json($financial);
