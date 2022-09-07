@@ -23,9 +23,11 @@ class Credit extends Model
     {
        
         
-        $get_list    = Credit::all();
+        $get_list    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP]);
+        
         $users        = array();
-        foreach ($get_list as $query) {
+        foreach ($get_list as $history) {
+            $query = Credit::find($history->id_rel);
             $product          = $query->creditProduct;
             $alias_product    = $product !== null ? $product->alias : null;
             $client           = $query->creditClientPerson;

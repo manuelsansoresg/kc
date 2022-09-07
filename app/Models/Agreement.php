@@ -20,7 +20,7 @@ class Agreement extends Model
         return Agreement::all();
     }
     
-    public function getAllActive()
+    public static function getAllActive()
     {
         return Agreement::where('status', 1)->get();
     }

@@ -21,6 +21,7 @@ require('./components/action/crud');
 require('./components/action/credit');
 require('./components/general');
 require('./components/module/datatable');
+require('./components/module/template');
 
 
 window.moveElement = function (section, id, idDatatable) {

@@ -1481,18 +1481,9 @@ window.modalRegisterAction = function (id_rel) {
   $('#register-action-id-rel').val(id_rel);
   $('#modal-register-action').modal('show');
 };
-/* function resolveTextSetting() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        setData();
-      }, 3000);
-    });
-  } */
-
 
 $(document).ready(function () {
   if (document.getElementById('lead-channel')) {
-    /* resolveTextSetting(); */
     setData();
   }
 });
@@ -1637,6 +1628,71 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
+/***/ }),
+
+/***/ "./resources/js/components/module/template.js":
+/*!****************************************************!*\
+  !*** ./resources/js/components/module/template.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+
+var refresh = {
+  'newCredit': creditRefresh
+};
+$().ready(function () {
+  $("#frm-template_new_credit").validate({
+    rules: {
+      'agreement_id': {
+        required: true
+      },
+      'name': {
+        required: true
+      },
+      'last_name': {
+        required: true
+      },
+      'cellphone': {
+        number: true,
+        minlength: 10
+      },
+      'data[channel_id]': {
+        required: true
+      },
+      'new_agreement': {
+        required: function required(element) {
+          var lead_agreement = $("#lead-agreement").val();
+
+          if (lead_agreement == 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_new_credit', 'newCredit');
+    }
+  });
+});
+
+function saveForm(id_form, model) {
+  var new_form = document.getElementById(id_form);
+  var data = new FormData(new_form);
+  var id_rel = $('#id_rel').val();
+  data.append('model', model);
+  data.append('id_rel', id_rel);
+  axios.post("/panel/module-form", data).then(function (response) {
+    var result = response.data;
+    showToast('Formulario', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+}
 
 /***/ }),
 
@@ -2587,6 +2643,8 @@ __webpack_require__(/*! ./components/action/credit */ "./resources/js/components
 __webpack_require__(/*! ./components/general */ "./resources/js/components/general.js");
 
 __webpack_require__(/*! ./components/module/datatable */ "./resources/js/components/module/datatable.js");
+
+__webpack_require__(/*! ./components/module/template */ "./resources/js/components/module/template.js");
 
 window.moveElement = function (section, id, idDatatable) {
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {

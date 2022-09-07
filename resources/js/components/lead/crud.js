@@ -282,17 +282,8 @@ window.modalRegisterAction = function (id_rel) {
     $('#modal-register-action').modal('show');
 }
 
-/* function resolveTextSetting() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        setData();
-      }, 3000);
-    });
-  } */
   $(document).ready(function(){
     if (document.getElementById('lead-channel')) {
-        /* resolveTextSetting(); */
-        
         setData();
     }
     

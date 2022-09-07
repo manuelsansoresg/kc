@@ -141,3 +141,10 @@ Route::group(['prefix' => 'credit'], function () {
 
     Route::resource('action/document', '\App\Http\Controllers\Panel\Credit\DocumentController')->middleware('auth');
 });
+
+//* template
+Route::resource('module-form', '\App\Http\Controllers\Panel\Module\FormController')->middleware('auth');
+
+Route::group(['prefix' => 'module-form'], function () {
+    Route::get('{model}/{id_rel}/form', ['\App\Http\Controllers\Panel\Module\FormController', 'index'])->middleware('auth');
+});
