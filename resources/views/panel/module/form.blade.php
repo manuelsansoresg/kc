@@ -16,6 +16,17 @@
             </div>
         </div>
         @endif
+       
+        @if ($element['type'] == 'number')
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="form-label">{{ $indicator_required }} {{ $element['title']}}</label>
+                <div class="form-control-wrap">
+                    <input type="number" class="form-control" name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}">
+                </div>
+            </div>
+        </div>
+        @endif
             @if ($element['type'] == 'select2')
                 @php
                     $options = $element['options'];
