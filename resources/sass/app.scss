@@ -26,6 +26,14 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     width: 100%;
 }
 
+#dt-acctions .nk-tb-col{
+    padding: 0.5rem 0.5rem;
+}
+
+#dt-acctions .nk-tb-item:not(:last-child) .nk-tb-col{
+    border-bottom: 1px solid #b4b7c0;
+}
+
 @media (min-width: 576px) {
     .content-options{
         display: flex;
