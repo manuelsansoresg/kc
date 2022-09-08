@@ -32,7 +32,7 @@ class Credit extends Model
             $alias_product    = $product !== null ? $product->alias : null;
             $client           = $query->creditClientPerson;
             $advisor          = $query->creditAdvisor;
-            $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $query->id, 'client' => $client])->render();
+            $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client])->render();
             $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
             $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client])->render();
             $dead_line        = \View::make('panel.module.checkup.deadline', [ 'deadline' => $query])->render();
@@ -76,5 +76,10 @@ class Credit extends Model
     public function creditAdvisor()
     {
         return $this->belongsTo(User::class, 'asesor_id');
+    }
+
+    public function history()
+    {
+        return $this->hasOne(HistoryLog::class);
     }
 }

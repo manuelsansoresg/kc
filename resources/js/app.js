@@ -22,6 +22,7 @@ require('./components/action/credit');
 require('./components/general');
 require('./components/module/datatable');
 require('./components/module/template');
+require('./components/module/kc_check_up/datatable');
 
 
 window.moveElement = function (section, id, idDatatable) {

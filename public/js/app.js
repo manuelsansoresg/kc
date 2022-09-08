@@ -1631,6 +1631,65 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/module/kc_check_up/datatable.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/module/kc_check_up/datatable.js ***!
+  \*****************************************************************/
+/***/ (() => {
+
+var history_id;
+
+if (document.getElementById('dt-check-up-steps')) {
+  history_id = $('#history_id').val();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-check-up-steps', {
+    processing: true,
+    searching: false,
+    ordering: false,
+    paging: false,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-check-up/list/' + history_id + '/show',
+    columns: [{
+      data: 'numbre'
+    }, {
+      data: 'step'
+    }, {
+      data: 'status'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/module/template.js":
 /*!****************************************************!*\
   !*** ./resources/js/components/module/template.js ***!
@@ -2646,6 +2705,8 @@ __webpack_require__(/*! ./components/general */ "./resources/js/components/gener
 __webpack_require__(/*! ./components/module/datatable */ "./resources/js/components/module/datatable.js");
 
 __webpack_require__(/*! ./components/module/template */ "./resources/js/components/module/template.js");
+
+__webpack_require__(/*! ./components/module/kc_check_up/datatable */ "./resources/js/components/module/kc_check_up/datatable.js");
 
 window.moveElement = function (section, id, idDatatable) {
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {

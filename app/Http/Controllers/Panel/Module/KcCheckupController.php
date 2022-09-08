@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Models\HistoryLog;
+use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
 class KcCheckupController extends Controller
@@ -22,6 +24,14 @@ class KcCheckupController extends Controller
     {
         $users = Credit::listDatatable();
         return response()->json(['data' => $users]);
+    }
+    
+    public function listStep($history_id)
+    {
+        $actionStrategy   = TemplateValues::STRATEGY['newCredit'];
+        $list       = (new $actionStrategy)->listStep($history_id);
+        
+        return response()->json(['data' => $list]);
     }
 
     /**
@@ -53,7 +63,12 @@ class KcCheckupController extends Controller
      */
     public function show($id)
     {
-        //
+        $history_id = $id;
+        $history = HistoryLog::find($id);
+        $credit = $history->historyCredit;
+        $client = $credit->creditClientPerson;
+        $product = $credit->creditProduct;
+        return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client'));
     }
 
     /**

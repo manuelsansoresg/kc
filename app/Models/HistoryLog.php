@@ -83,4 +83,9 @@ class HistoryLog extends Model
     {
         return $this->belongsTo(LeadAdvisor::class, 'id_rel');
     }
+
+    public function historyCredit()
+    {
+        return $this->belongsTo(Credit::class, 'id_rel');
+    }
 }

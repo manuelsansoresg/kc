@@ -128,6 +128,7 @@ Route::resource('client', '\App\Http\Controllers\Panel\Client\ClientPersonContro
 Route::resource('kc-check-up', '\App\Http\Controllers\Panel\Module\KcCheckupController')->middleware('auth');
 Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcCheckupController', 'list'])->middleware('auth');
+    Route::get('list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckupController', 'listStep'])->middleware('auth');
 });
 //*credit
 Route::resource('credit', '\App\Http\Controllers\Panel\Credit\CreditController')->middleware('auth');

@@ -1,4 +1,4 @@
-{{-- <div class="drodown"><a href="#"
+<div class="drodown"><a href="#"
     class="dropdown-toggle btn btn-icon btn-trigger"
     data-bs-toggle="dropdown"><em
         class="icon ni ni-more-h"></em></a>
@@ -6,17 +6,13 @@
     <ul class="link-list-opt no-bdr">
         <li>
             <a class="pointer" href="/panel/kc-check-up/{{ $id }}">
-                <em class="icon ni ni-card-view"></em><span>Etapas</span></a>
+                <em class="icon ni ni-card-view"></em><span>Carga de archivos</span></a>
         </li>
         <li>
             <a class="pointer" href="/panel/client/{{ $client->id }}">
-                <em class="icon ni ni-users-fill"></em><span>Perfíl cliente</span></a>
+                <em class="icon ni ni-users-fill"></em><span>Formulario</span></a>
         </li>
-        <li>
-            <a class="pointer" href="/panel/credit/{{ $id }}">
-                <em class="icon ni ni-users-fill"></em><span>Perfíl crédito</span></a>
-        </li>
-      
+        
     </ul>
 </div>
-</div> --}}
+</div>
