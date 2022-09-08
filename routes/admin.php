@@ -130,6 +130,12 @@ Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcCheckupController', 'list'])->middleware('auth');
     Route::get('list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckupController', 'listStep'])->middleware('auth');
 });
+
+Route::resource('kc-check-up-actions', '\App\Http\Controllers\Panel\Module\ActionController')->middleware('auth');
+Route::group(['prefix' => 'kc-check-up-actions'], function () {
+    Route::get('list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\ActionController', 'list'])->middleware('auth');
+});
+
 //*credit
 Route::resource('credit', '\App\Http\Controllers\Panel\Credit\CreditController')->middleware('auth');
 Route::group(['prefix' => 'credit'], function () {
@@ -140,12 +146,13 @@ Route::group(['prefix' => 'credit'], function () {
 
     Route::get('note/{credit_id}/get-all', ['\App\Http\Controllers\Panel\Credit\CreditController', 'getNote'])->middleware('auth');
 
-    Route::resource('action/document', '\App\Http\Controllers\Panel\Credit\DocumentController')->middleware('auth');
+    
 });
 
-//* template
-Route::resource('module-form', '\App\Http\Controllers\Panel\Module\FormController')->middleware('auth');
+//* actions template
+Route::resource('action-form', '\App\Http\Controllers\Panel\Module\FormController')->middleware('auth');
+Route::resource('action-document', '\App\Http\Controllers\Panel\Credit\DocumentController')->middleware('auth');
 
-Route::group(['prefix' => 'module-form'], function () {
+Route::group(['prefix' => 'action-form'], function () {
     Route::get('{model}/{id_rel}/form', ['\App\Http\Controllers\Panel\Module\FormController', 'index'])->middleware('auth');
 });

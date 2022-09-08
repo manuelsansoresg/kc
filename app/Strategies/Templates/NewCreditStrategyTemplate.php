@@ -108,7 +108,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'is_required' => true,
             ],
         );
-        $list = \View::make('panel.module.form', [ 'elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel])->render();
         return $list;
     }
 
@@ -126,7 +126,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $credit                 = Credit::find($id_rel);
         $credit->agreement_id   = $agreement_id;
         $credit->update();
-        
+
         $client                     = ClientPerson::find($credit->client_person_id);
         $client->agreement_id       = $agreement_id;
         $client->name               = $request->name;
@@ -138,40 +138,41 @@ class NewCreditStrategyTemplate implements TemplateInterface
 
     public function listStep($history_id)
     {
-        $history                    = HistoryLog::find($history_id);
-        $credit                     = $history->historyCredit;
-        $max_hour                    = 12;
-        $hour                        = Carbon::parse($credit->created_at)->hour;
-        $percent_form               = self::percentForm($history);
-        $percent_file               = self::percentFile($history->id_rel);
-        $color_inf_credit           = 'success';
-        $color_report           = 'success';
+        $history            = HistoryLog::find($history_id);
+        $credit             = $history->historyCredit;
+        $max_hour           = 12;
+        $hour               = Carbon::parse($credit->created_at)->hour;
+        $percent_form       = self::percentForm($history);
+        $percent_file       = self::percentFile($history->id_rel);
+        $color_inf_credit   = 'success';
+        $color_report       = 'success';
+        $total_percent = $percent_file + $percent_form;
 
         if ($hour > 5) {
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
         }
-        
+
         if ($hour > 5) {
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
         }
-        
-        $view_option  = \View::make('panel.module.checkup.add_option_dt', [])->render();
-        $view_percent_inf_credit    = \View::make('panel.module.view_percent', [ 'percent' => $percent_form])->render();
-        $view_count_inf_credit      = \View::make('panel.module.view_count', [ 'number' => 1])->render();
+
+        $view_option  = \View::make('panel.module.checkup.steps.add_option_dt', ['id' => $history_id])->render();
+        $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
+        $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 1])->render();
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         $status_inf_credit          = ($percent_form == 100) ? 'Cerrado' : 'Abierto';
-        
-        $view_percent_report        = \View::make('panel.module.view_percent', [ 'percent' => $percent_file])->render();
-        $view_count_report          = \View::make('panel.module.view_count', [ 'number' => 2])->render();
+
+        $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => $percent_file])->render();
+        $view_count_report          = \View::make('panel.module.view_count', ['number' => 2])->render();
         $status_report              = 'En espera';
-        
-        if ($percent_form == 100) {
-            $status_report = ($percent_file == 100) ? 'Cerrado' : 'Abierto';
+
+        if ($total_percent == 200) {
+            $status_report = ($total_percent == 200) ? 'Cerrado' : 'Abierto';
         }
 
         $data = array();
         $data[] = array(
-            'numbre' => $view_count_inf_credit,
+            'name' => $view_count_inf_credit,
             'step' => 'Información del crédito',
             'status' => $status_inf_credit,
             'progress' => $view_percent_inf_credit,
@@ -179,7 +180,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             'options' => $view_option,
         );
         $data[] = array(
-            'numbre' => $view_count_report,
+            'name' => $view_count_report,
             'step' => 'Reporte',
             'status' => $status_report,
             'progress' => $view_percent_report,
@@ -189,29 +190,94 @@ class NewCreditStrategyTemplate implements TemplateInterface
         return $data;
     }
 
+    public function listAction($history_id)
+    {
+        $history        = HistoryLog::find($history_id);
+        $credit         = $history->historyCredit;
+        $advisor        = $credit->creditAdvisor;
+        $percent_file   = self::percentFile($history->id_rel);
+        $percent_form   = self::percentForm($history);
+        $status_file    = $percent_file == 100 ? 'En curso' : 'Concluido';
+        $status_form    = $percent_form == 100 ? 'En curso' : 'Concluido';
+        $max_hour       = 12;
+        $hour           = Carbon::parse($credit->created_at)->hour;
+        $name_advisor   = $advisor->name.' '.$advisor->last_name;
+        $menu_options   = self::menuOptions($history);
+
+        if ($hour > 5) {
+            $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
+        }
+        $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
+        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+
+        //dd(json_encode($option_file));
+
+        $data = array();
+        $data[] = array(
+            'name' => 'Carga',
+            'status' => $status_file,
+            'deadline' => $view_dead_line_inf_credit,
+            'advisor' => $name_advisor,
+            'options' => $file_option,
+        );
+        
+        $data[] = array(
+            'name' => 'Formulario',
+            'status' => $status_form,
+            'deadline' => $view_dead_line_inf_credit,
+            'advisor' => $name_advisor,
+            'options' => $form_option,
+        );
+
+        return $data;
+    }
+
+    public function menuOptions($history)
+    {
+        $menu = array(
+            'form' => array(
+                [
+                    'link' => '/panel/action-document/'.$history->id_rel,
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                ]
+            ),
+            'file' => array(
+                [
+                    'link' => '/panel/action-form/newCredit/'.$history->id_rel.'/form',
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                ]
+            )
+        );
+
+        return $menu;
+    }
+
     public function percentForm($history)
     {
         $credit     = $history->historyCredit;
         $client     = $credit->creditClientPerson;
         $percent = 0;
         $total_valid = 0;
-        if ($credit!= null && $credit->agreement_id != '' && $client != null && $client->agreement_id != '') {
+        if ($credit != null && $credit->agreement_id != '' && $client != null && $client->agreement_id != '') {
             $total_valid = $total_valid + 25;
         }
 
         if ($client != null && $client->name != null) {
             $total_valid = $total_valid + 25;
         }
-       
+
         if ($client != null && $client->last_name != null) {
             $total_valid = $total_valid + 25;
         }
-        
+
         if ($client != null && $client->cellphone != null) {
             $total_valid = $total_valid + 25;
         }
 
-        $percent =  (100/100) * $total_valid ;
+        $percent =  (100 / 100) * $total_valid;
         return $percent;
     }
 
@@ -223,12 +289,13 @@ class NewCreditStrategyTemplate implements TemplateInterface
 
         $file = File::where([
             'model' => $model,
-            'template_config_id' => 2
+            'template_config_id' => 2,
+            'id_rel' => $id_rel
         ])->count();
         if ($file > 0) {
             $total_valid = 100;
         }
-        $percent =  (100/100) * $total_valid ;
+        $percent =  (100 / 100) * $total_valid;
         return $percent;
     }
 }

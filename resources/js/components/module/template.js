@@ -52,7 +52,7 @@ function saveForm(id_form, model) {
     data.append('model', model);
     data.append('id_rel', id_rel);
     axios
-        .post("/panel/module-form", data)
+        .post("/panel/action-form", data)
         .then(function (response) {
             let result = response.data;
             showToast('Formulario', 'Datos guardados', 'success');

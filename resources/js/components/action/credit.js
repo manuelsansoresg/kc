@@ -158,14 +158,6 @@ if (document.getElementById('action-model')) {
                     }
                 }
 
-                /* for (const key_file in files) {
-                    if (files.hasOwnProperty.call(files, key_file)) {
-                        const element_file = files[key_file];
-                        
-                        $('#' + element_file.template_config_id + '-files-action-preview').html('');
-                    }
-                } */
-
                 for (const key_file in files) {
                     if (files.hasOwnProperty.call(files, key_file)) {
                         const element_file = files[key_file];

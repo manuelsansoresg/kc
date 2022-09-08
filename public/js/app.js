@@ -76,14 +76,6 @@ if (document.getElementById('action-model')) {
           $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
         }
       }
-      /* for (const key_file in files) {
-          if (files.hasOwnProperty.call(files, key_file)) {
-              const element_file = files[key_file];
-              
-              $('#' + element_file.template_config_id + '-files-action-preview').html('');
-          }
-      } */
-
 
       for (var key_file in files) {
         if (files.hasOwnProperty.call(files, key_file)) {
@@ -1631,6 +1623,63 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/module/kc_check_up/action/datatable.js":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/module/kc_check_up/action/datatable.js ***!
+  \************************************************************************/
+/***/ (() => {
+
+var history_id;
+
+if (document.getElementById('dt-check-up-actions')) {
+  history_id = $('#history_id').val();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-check-up-actions', {
+    processing: true,
+    searching: false,
+    ordering: false,
+    paging: false,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-check-up-actions/list/' + history_id + '/show',
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'status'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/module/kc_check_up/datatable.js":
 /*!*****************************************************************!*\
   !*** ./resources/js/components/module/kc_check_up/datatable.js ***!
@@ -1666,7 +1715,7 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     ajax: '/panel/kc-check-up/list/' + history_id + '/show',
     columns: [{
-      data: 'numbre'
+      data: 'name'
     }, {
       data: 'step'
     }, {
@@ -1748,7 +1797,7 @@ function saveForm(id_form, model) {
   var id_rel = $('#id_rel').val();
   data.append('model', model);
   data.append('id_rel', id_rel);
-  axios.post("/panel/module-form", data).then(function (response) {
+  axios.post("/panel/action-form", data).then(function (response) {
     var result = response.data;
     showToast('Formulario', 'Datos guardados', 'success');
   })["catch"](function (e) {});
@@ -2707,6 +2756,8 @@ __webpack_require__(/*! ./components/module/datatable */ "./resources/js/compone
 __webpack_require__(/*! ./components/module/template */ "./resources/js/components/module/template.js");
 
 __webpack_require__(/*! ./components/module/kc_check_up/datatable */ "./resources/js/components/module/kc_check_up/datatable.js");
+
+__webpack_require__(/*! ./components/module/kc_check_up/action/datatable */ "./resources/js/components/module/kc_check_up/action/datatable.js");
 
 window.moveElement = function (section, id, idDatatable) {
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {
