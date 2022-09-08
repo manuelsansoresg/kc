@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
+use App\Models\Credit;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
@@ -16,8 +17,11 @@ class FormController extends Controller
     public function index($model, $id_rel)
     {
         $actionStrategy   = TemplateValues::STRATEGY[$model];
-        $form       = (new $actionStrategy)->configForm($id_rel);
-        return view('panel.module.checkup.content_form', compact('form', 'id_rel'));
+        $form             = (new $actionStrategy)->configForm($id_rel);
+        $credit           = Credit::find($id_rel);
+        $client = $credit->creditClientPerson;
+        $product          = $credit->creditProduct;
+        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'product', 'credit', 'client'));
     }
 
     /**
