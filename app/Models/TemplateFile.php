@@ -25,11 +25,18 @@ class TemplateFile extends Model
         foreach ($dates as $key => $date) {
             $data = array(
                 'template_config_id' => $key,
-                'date_file' => $date,
                 'id_rel' => $request->id_rel,
                 'model' => $models[$request->model],
             );
-           TemplateFile :: create($data);
+            $template = TemplateFile::where($data);
+            if ($template->count() === 0) {
+                $data['date_file'] = $date;
+                TemplateFile :: create($data);
+            } else {
+                $data['date_file'] = $date;
+                $template->update($data);
+            }
+
         }
     }
 }

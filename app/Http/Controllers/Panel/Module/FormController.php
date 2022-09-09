@@ -54,7 +54,9 @@ class FormController extends Controller
      */
     public function show($id)
     {
-        //
+        $credit   = Credit::find($id);
+        $client   = $credit->creditClientPerson;
+        return response()->json(['credit' => $credit, 'client' => $client]);
     }
 
     /**

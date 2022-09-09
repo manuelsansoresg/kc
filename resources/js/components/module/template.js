@@ -5,6 +5,7 @@ var refresh = {
 }
 
 $().ready(function () {
+
     $("#frm-template_new_credit").validate({
         rules: {
             'agreement_id': {
@@ -42,8 +43,25 @@ $().ready(function () {
             saveForm('frm-template_new_credit', 'newCredit');
         }
     });
+    
+    let id_rel = $('#id_rel').val();
 
+    axios
+    .get("/panel/action-form/"+id_rel)
+    .then(function (response) {
+      let result = response.data;
+      let credit = result.credit;
+      let client = result.client;
+      $('#lead-agreement').val(credit.agreement_id).trigger("change");
+      $('#name').val(client.name);
+      $('#last_name').val(client.last_name);
+      $('#second_last_name').val(client.second_last_name);
+      $('#cellphone').val(client.cellphone);
+    })
+    .catch(e => {
+    });
 });
+
 
 function saveForm(id_form, model) {
     const new_form = document.getElementById(id_form);
@@ -55,7 +73,7 @@ function saveForm(id_form, model) {
         .post("/panel/action-form", data)
         .then(function (response) {
             let result = response.data;
-            showToast('Formulario', 'Datos guardados', 'success');
+            window.history.back();
         })
         .catch(e => {
         });

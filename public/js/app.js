@@ -168,6 +168,7 @@ if (document.getElementById('action-model')) {
         var data = new FormData(new_form);
         axios.post("/panel/files/template/date", data).then(function (response) {
           var result = response.data;
+          window.history.back();
         })["catch"](function (e) {});
       }
     });
@@ -1791,6 +1792,17 @@ $().ready(function () {
       saveForm('frm-template_new_credit', 'newCredit');
     }
   });
+  var id_rel = $('#id_rel').val();
+  axios.get("/panel/action-form/" + id_rel).then(function (response) {
+    var result = response.data;
+    var credit = result.credit;
+    var client = result.client;
+    $('#lead-agreement').val(credit.agreement_id).trigger("change");
+    $('#name').val(client.name);
+    $('#last_name').val(client.last_name);
+    $('#second_last_name').val(client.second_last_name);
+    $('#cellphone').val(client.cellphone);
+  })["catch"](function (e) {});
 });
 
 function saveForm(id_form, model) {
@@ -1801,7 +1813,7 @@ function saveForm(id_form, model) {
   data.append('id_rel', id_rel);
   axios.post("/panel/action-form", data).then(function (response) {
     var result = response.data;
-    showToast('Formulario', 'Datos guardados', 'success');
+    window.history.back();
   })["catch"](function (e) {});
 }
 

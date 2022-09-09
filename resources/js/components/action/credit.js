@@ -211,7 +211,7 @@ if (document.getElementById('action-model')) {
                     .post("/panel/files/template/date", data)
                     .then(function (response) {
                         let result = response.data;
-
+                        window.history.back();
                     })
                     .catch(e => {
                     });
