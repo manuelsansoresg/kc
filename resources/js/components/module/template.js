@@ -44,22 +44,26 @@ $().ready(function () {
         }
     });
     
-    let id_rel = $('#id_rel').val();
-
-    axios
-    .get("/panel/action-form/"+id_rel)
-    .then(function (response) {
-      let result = response.data;
-      let credit = result.credit;
-      let client = result.client;
-      $('#lead-agreement').val(credit.agreement_id).trigger("change");
-      $('#name').val(client.name);
-      $('#last_name').val(client.last_name);
-      $('#second_last_name').val(client.second_last_name);
-      $('#cellphone').val(client.cellphone);
-    })
-    .catch(e => {
-    });
+    
+    if (document.getElementById('id_rel')) {
+        let id_rel = $('#id_rel').val();
+        if (id_rel != '') {
+            axios
+            .get("/panel/action-form/"+id_rel)
+            .then(function (response) {
+              let result = response.data;
+              let credit = result.credit;
+              let client = result.client;
+              $('#lead-agreement').val(credit.agreement_id).trigger("change");
+              $('#name').val(client.name);
+              $('#last_name').val(client.last_name);
+              $('#second_last_name').val(client.second_last_name);
+              $('#cellphone').val(client.cellphone);
+            })
+            .catch(e => {
+            });
+        }
+    }
 });
 
 

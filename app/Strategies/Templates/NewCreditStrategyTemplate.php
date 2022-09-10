@@ -197,8 +197,8 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $advisor        = $credit->creditAdvisor;
         $percent_file   = self::percentFile($history->id_rel);
         $percent_form   = self::percentForm($history);
-        $status_file    = $percent_file == 100 ? 'En curso' : 'Concluido';
-        $status_form    = $percent_form == 100 ? 'En curso' : 'Concluido';
+        $status_file    = $percent_file == 100 ? 'Concluido' : 'En curso';
+        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $max_hour       = 12;
         $hour           = Carbon::parse($credit->created_at)->hour;
         $name_advisor   = $advisor->name.' '.$advisor->last_name;
@@ -276,7 +276,6 @@ class NewCreditStrategyTemplate implements TemplateInterface
         if ($client != null && $client->cellphone != null) {
             $total_valid = $total_valid + 25;
         }
-
         $percent =  (100 / 100) * $total_valid;
         return $percent;
     }

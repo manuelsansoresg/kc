@@ -24,6 +24,7 @@ require('./components/module/datatable');
 require('./components/module/template');
 require('./components/module/kc_check_up/datatable');
 require('./components/module/kc_check_up/action/datatable');
+require('./components/action/datatablemodule');
 
 
 window.moveElement = function (section, id, idDatatable) {

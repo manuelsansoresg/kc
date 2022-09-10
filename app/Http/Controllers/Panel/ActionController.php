@@ -156,6 +156,19 @@ class ActionController extends Controller
         return response()->json($list);
     }
 
+    public function viewModuleAction($name_status)
+    {
+        $title = $name_status == 'in_progress' ? 'En curso' : 'Completado';
+        return view('panel.action.module.list', compact('title', 'name_status'));
+    }
+
+    public function listModuleAction($name_status)
+    {
+        $leadStrategy   = ActionValues::STRATEGY['list'];
+        $list       = (new $leadStrategy)->get($name_status);
+        return response()->json(['data' => $list]);
+    }
+
     /**
      * List use in datatable action list
      *

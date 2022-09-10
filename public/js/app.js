@@ -509,6 +509,58 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/action/datatablemodule.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/action/datatablemodule.js ***!
+  \***********************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var name_status = $('#name_status').val();
+  var table = NioApp.DataTable('#dt-acctions-module', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/action/module/' + name_status + '/list',
+    columns: [{
+      data: 'action'
+    }, {
+      data: 'module'
+    }, {
+      data: 'name'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options',
+      className: 'nk-tb-col-tools text-end'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/agreement/crud.js":
 /*!***************************************************!*\
   !*** ./resources/js/components/agreement/crud.js ***!
@@ -1792,17 +1844,23 @@ $().ready(function () {
       saveForm('frm-template_new_credit', 'newCredit');
     }
   });
-  var id_rel = $('#id_rel').val();
-  axios.get("/panel/action-form/" + id_rel).then(function (response) {
-    var result = response.data;
-    var credit = result.credit;
-    var client = result.client;
-    $('#lead-agreement').val(credit.agreement_id).trigger("change");
-    $('#name').val(client.name);
-    $('#last_name').val(client.last_name);
-    $('#second_last_name').val(client.second_last_name);
-    $('#cellphone').val(client.cellphone);
-  })["catch"](function (e) {});
+
+  if (document.getElementById('id_rel')) {
+    var id_rel = $('#id_rel').val();
+
+    if (id_rel != '') {
+      axios.get("/panel/action-form/" + id_rel).then(function (response) {
+        var result = response.data;
+        var credit = result.credit;
+        var client = result.client;
+        $('#lead-agreement').val(credit.agreement_id).trigger("change");
+        $('#name').val(client.name);
+        $('#last_name').val(client.last_name);
+        $('#second_last_name').val(client.second_last_name);
+        $('#cellphone').val(client.cellphone);
+      })["catch"](function (e) {});
+    }
+  }
 });
 
 function saveForm(id_form, model) {
@@ -2772,6 +2830,8 @@ __webpack_require__(/*! ./components/module/template */ "./resources/js/componen
 __webpack_require__(/*! ./components/module/kc_check_up/datatable */ "./resources/js/components/module/kc_check_up/datatable.js");
 
 __webpack_require__(/*! ./components/module/kc_check_up/action/datatable */ "./resources/js/components/module/kc_check_up/action/datatable.js");
+
+__webpack_require__(/*! ./components/action/datatablemodule */ "./resources/js/components/action/datatablemodule.js");
 
 window.moveElement = function (section, id, idDatatable) {
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {

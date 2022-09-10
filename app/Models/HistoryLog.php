@@ -10,12 +10,14 @@ class HistoryLog extends Model
 {
     use HasFactory;
 
-    const LEAD_ARCHIVE            = 1;
-    const ADD_PROSPECT            = 2;
-    const CREATE_PROSPECT         = 3;
-    const LEAD_CONVERT            = 4;
-    const CREATE_CLIENT_PERSON    = 5;
-    const KC_CHECK_UP             = 6;
+    const LEAD_ARCHIVE                = 1;
+    const ADD_PROSPECT                = 2;
+    const CREATE_PROSPECT             = 3;
+    const LEAD_CONVERT                = 4;
+    const CREATE_CLIENT_PERSON        = 5;
+    const KC_CHECK_UP                 = 6;
+    const KC_CHECK_UP_ACTION_UPLOAD   = 7;
+    const KC_CHECK_UP_ACTION_FORM     = 8;
 
     protected $fillable = [
         'id_rel',
@@ -35,6 +37,8 @@ class HistoryLog extends Model
         4 => 'Se creó cliente persona desde prospecto',
         5 => 'se creó el crédito',
         6 => 'Entró a KC - Check up',
+        7 => 'Carga',
+        8 => 'Formulario',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null)
