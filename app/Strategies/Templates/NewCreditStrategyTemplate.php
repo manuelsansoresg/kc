@@ -290,7 +290,10 @@ class NewCreditStrategyTemplate implements TemplateInterface
             'model' => $model,
             'template_config_id' => 2,
             'id_rel' => $id_rel
-        ])->count();
+        ])
+        ->wherein('template_config_id', [2])
+        ->count();
+        
         if ($file > 0) {
             $total_valid = 100;
         }

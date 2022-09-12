@@ -6,7 +6,7 @@
     <ul class="link-list-opt no-bdr">
         <li>
             <a class="pointer" href="/panel/kc-check-up-actions/{{ $id }}">
-                <em class="icon ni ni-card-view"></em><span>Ver etapas</span></a>
+                <em class="icon ni ni-card-view"></em><span>Ver acciones</span></a>
         </li>
        {{--  <li>
             <a class="pointer" href="/panel/client/{{ $client->id }}">
