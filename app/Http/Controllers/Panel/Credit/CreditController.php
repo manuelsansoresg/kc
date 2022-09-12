@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Credit;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Models\HistoryLog;
 use App\Strategies\Values\ActionValues;
 use Illuminate\Http\Request;
 
@@ -65,6 +66,18 @@ class CreditController extends Controller
         $actionStrategy   = ActionValues::STRATEGY['credit'];
         $get_note         = (new $actionStrategy)->getNotes($credit_id);
         return response()->json($get_note);
+    }
+
+    public function getListAction($credit_id)
+    {
+        $leadStrategy   = ActionValues::STRATEGY['list'];
+        $actions = [
+            HistoryLog::KC_CHECK_UP_ACTION_UPLOAD,
+            HistoryLog::KC_CHECK_UP_ACTION_FORM,
+        ];
+        
+        $list       = (new $leadStrategy)->get('completed', $actions, $credit_id);
+        return response()->json(['data' => $list]);
     }
 
     /**

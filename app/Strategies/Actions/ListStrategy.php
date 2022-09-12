@@ -23,12 +23,17 @@ class ListStrategy implements ActionInterface
      * @param string $name_status
      * @return void
      */
-    public function get($name_status)
+    public function get($name_status, $list_actions = null, $id_rel = null)
     {
-        $history_logs = HistoryLog::getByStatus([
-            HistoryLog::KC_CHECK_UP_ACTION_UPLOAD,
-            HistoryLog::KC_CHECK_UP_ACTION_FORM,
-        ]);
+        if ($list_actions === null) {
+            $list_actions = [
+                HistoryLog::KC_CHECK_UP_ACTION_UPLOAD,
+                HistoryLog::KC_CHECK_UP_ACTION_FORM,
+            ];
+        }
+
+        $history_logs = HistoryLog::getByStatus($list_actions, $id_rel);
+
         $data = array();
         
         foreach ($history_logs as $history_log) {

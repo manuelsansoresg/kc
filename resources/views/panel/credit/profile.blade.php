@@ -86,7 +86,7 @@
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
                                                                     <span class="profile-ud-label">Financiera tipo</span>
-                                                                    <span class="profile-ud-value"> {{ $types[$credit->type_id] }}
+                                                                    <span class="profile-ud-value"> {{ (isset($types[$credit->type_id])) ? $types[$credit->type_id] : null }}
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -192,6 +192,19 @@
                                                 @endforeach
                                             </div>
                                             <div class="tab-pane" id="tabActions">
+                                                <table id="dt-acctions-profile" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Acción</th>
+                                                            <th>Módulo</th>
+                                                            <th>Nombre</th>
+                                                            <th>Deadline</th>
+                                                            <th>Asesor</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                   
+                                                </table>
                                             </div>
                                           
                                         </div>

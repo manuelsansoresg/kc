@@ -147,6 +147,7 @@ Route::group(['prefix' => 'credit'], function () {
     Route::get('note/{credit_id}/get-all', ['\App\Http\Controllers\Panel\Credit\CreditController', 'getNote'])->middleware('auth');
 
     Route::get('note/{credit_id}/get-all', ['\App\Http\Controllers\Panel\Credit\CreditController', 'getNote'])->middleware('auth');
+    Route::get('action/{credit_id}/list', ['\App\Http\Controllers\Panel\Credit\CreditController', 'getListAction'])->middleware('auth');
 
     
 });

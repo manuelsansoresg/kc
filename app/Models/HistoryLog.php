@@ -73,9 +73,14 @@ class HistoryLog extends Model
         }
     }
 
-    public static function getByStatus($status_id)
+    public static function getByStatus($status_id, $id_rel = null)
     {
-        return HistoryLog::wherein('status_id', $status_id)->where('status', 1)->get();
+        $history = HistoryLog::wherein('status_id', $status_id);
+        if ($id_rel != null) {
+            $history->where('id_rel', $id_rel);
+        }
+        $history = $history->where('status', 1)->get();
+        return $history;
     }
 
     public function historyLead()
