@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="/assets_report/css/theme.min.css">
     </head>
 
-    <body>
+    <body class="dark-mode">
         <nav
             class="navbar navbar-expand-lg navbar-transparent navbar-sticky navbar-dark">
             <div class="container-fluid position-relative">
@@ -514,6 +514,10 @@
         <script src="/assets_report/vendor/node_modules/js/swiper-bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
+            document.body.classList.add("dark-mode");
+            checkbox.checked = true;
+            sessionStorage.setItem("mode", "dark");
+            
             var swiper = new Swiper(".swiper-partners", {
                 slidesPerView: 3,
                 spaceBetween: 16,
