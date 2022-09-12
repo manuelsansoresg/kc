@@ -36,4 +36,4 @@ Route::get('/condiciones', function () {
     return view('index');
 });
 
-Route::get('reporte/{history_id}', ['\App\Http\Controllers\HomeController', 'report'])->middleware('auth');
+Route::get('reporte/{history_id}', ['\App\Http\Controllers\HomeController', 'report']);
