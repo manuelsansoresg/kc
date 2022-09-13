@@ -148,10 +148,9 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $color_report       = 'success';
         $total_percent = $percent_file + $percent_form;
         $total_credit_percent = $percent_file + $percent_form;
-
-        if ($total_percent == 200) {
-            $status_report = ($total_percent == 200) ? 'Cerrado' : 'Abierto';
-        }
+        $status_report              = 'En espera';
+       
+        $status_inf_credit = ($total_percent > 100) ? 'Cerrado' : 'Abierto';
         
         $total_credit_percent = ($total_percent> 100) ? 100 : 50;
 
@@ -167,11 +166,10 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $total_credit_percent])->render();
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 1])->render();
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        $status_inf_credit          = ($percent_form == 100) ? 'Cerrado' : 'Abierto';
 
         $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => 0])->render();
         $view_count_report          = \View::make('panel.module.view_count', ['number' => 2])->render();
-        $status_report              = 'En espera';
+        
 
         
 
