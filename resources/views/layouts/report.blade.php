@@ -8,10 +8,10 @@
     <title>Reporte</title>
 
     <!--:Page styles:-->
-    <link rel="stylesheet" href="/assets_report/vendor/node_modules/css/glightbox.min.css">
-    <link rel="stylesheet" href="/assets_report/vendor/node_modules/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{{ asset('/assets_report/vendor/node_modules/css/glightbox.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets_report/vendor/node_modules/css/swiper-bundle.min.css') }}">
     <!--:AOS Animation:-->
-    <link rel="stylesheet" href="/assets_report/vendor/node_modules/css/aos.css">
+    <link rel="stylesheet" href="{{ asset('/assets_report/vendor/node_modules/css/aos.css') }}">
     <!--:Google fonts:-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,14 +23,14 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     <!--:Main style:-->
-    <link rel="stylesheet" href="/assets_report/css/theme.min.css">
+    <link rel="stylesheet" href="{{ asset('/assets_report/css/theme.min.css') }}">
 </head>
 
 <body class="dark-mode">
     <nav class="navbar navbar-expand-lg navbar-transparent navbar-sticky navbar-dark">
         <div class="container-fluid position-relative">
             <a class="navbar-brand" href="index.html">
-                <img src="/assets_report/img/logo-white.svg" class="img-fluid" alt="">
+                <img src="{{ asset('/assets_report/img/logo-white.svg') }}" class="img-fluid" alt="">
             </a><button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbarDefault" aria-controls="offcanvasNavbarDefault" aria-expanded="false"
                 aria-label="Toggle navigation"><span class="material-symbols-rounded align-middle">menu</span></button>
@@ -436,7 +436,7 @@
             <div class="row">
                 <div class="col-md-6 col-lg-3 mb-5">
                     <div class="mb-4"><a class="text-reset d-table width-120" href="/">
-                            <img src="/assets_report/img/logo-white.svg" class="img-fluid" alt="">
+                            <img src="{{ asset('/assets_report/img/logo-white.svg') }}" class="img-fluid" alt="">
                         </a>
                     </div>
                     <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pellentesque
@@ -502,10 +502,10 @@
 
 
     <!--:Theme script:-->
-    <script src="/assets_report/js/theme.bundle.js"></script>
+    <script src="{{ asset('/assets_report/js/theme.bundle.js') }}"></script>
 
     <!--:Page scripts:-->
-    <script src="/assets_report/vendor/node_modules/js/swiper-bundle.min.js"></script>
+    <script src="{{ asset('/assets_report/vendor/node_modules/js/swiper-bundle.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
         integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
