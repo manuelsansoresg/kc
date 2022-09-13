@@ -176,7 +176,7 @@
                                                 Para un crédito de $10,000 a 1 año; pagarías el siguiente interés.
                                             </p>
                                             
-                                            <ul class="list-unstyled mb-4 mb-lg-5" data-aos="fade-up"
+                                            <ul class="list-unstyled mb-4 mb-lg-5 d-none" data-aos="fade-up"
                                             data-aos-delay="200">
                                             <li class="d-flex mb-3 align-items-start"><span
                                                     class="material-symbols-rounded align-middle text-warning fs-4 me-3">check_circle</span>Financiera 1: $4,000 de interés.
@@ -219,6 +219,54 @@
             </div>
         </div>
     </section>
+
+    {{-- plazo --}}
+    <section class="position-relative bg-style-1">
+        <div class="container py-9 py-lg-11 position-relative z-index-1">
+            <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
+                <h6 class="bg-primary bg-opacity-25 text-primary d-table mx-auto rounded-pill px-3 py-2 mb-4"
+                    data-aos="fade-up">Plazo</h6>
+
+            </div>
+            <div class="row justify-content-between align-items-start">
+                <div class="col-12">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="analytics1" role="tabpanel">
+                            <div class="row align-items-center">
+                                <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0" data-aos="fade-up"
+                                    data-aos-delay="100">
+                                    <div class="row align-items-center">
+                                        <div class="col-12">
+                                            <canvas id="myChartPlazo"></canvas>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-5 mx-auto">
+                                    <h2 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4"
+                                        data-aos="fade-up"> Plazo máximo
+                                    </h2>
+                                    <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
+                                        En ocasiones, una buena estrategia para adquirir un crédito es solicitar el plazo máximo para obtener un pago menor y realizar pagos anticipados (abono a capital) cada vez que sea posible. De ese modo, pagarás menos interés.
+
+
+                                    </p>
+                                    <p class="mb-4" data-aos="fade-up" data-aos-delay="100">Lorem
+                                        Si tienes dudas sobre cómo realizar pagos adelantados (abono a capital), contacta un asesor. Con gusto atenderá. 
+
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {{-- plazo --}}
     <!--::Benefits::-->
     <section class="position-relative">
         <div class="container py-9 py-lg-11">
@@ -652,7 +700,7 @@
                     label: 'Financiera1',
                     backgroundColor: 'rgb(255, 99, 132)',
                     borderColor: 'rgb(255, 99, 132)',
-                    data: [80, 0, 0, 0, 0],
+                    data: [4000, 0, 0, 0, 0],
                    
                 },
                 {
@@ -710,6 +758,57 @@
         const myChart_interes = new Chart(
             document.getElementById('myChartInteres'),
             config_interes
+        );
+        /* plazo */
+        const labels_plazo = [
+            'Financiera 1',
+            'Financiera 2',
+            'Financiera 3',
+            'Financiera 4',
+            'Financiera 5',
+        ];
+
+        const data_plazo = {
+            labels: labels_plazo,
+            datasets: [{
+                    label: 'Años',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [2, 2.5, 3, 3.5, 3],
+                   
+                },
+                
+            ]
+        };
+
+        const config_plazo = {
+            type: 'bar',
+            data: data_plazo,
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Chart.js Bar Chart'
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            },
+        };
+        const myChart_plazo = new Chart(
+            document.getElementById('myChartPlazo'),
+            config_plazo
         );
     </script>
 
