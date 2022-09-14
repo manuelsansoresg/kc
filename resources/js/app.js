@@ -45,4 +45,5 @@ window.moveElement = function (section, id, idDatatable) {
 
 
 
+
 require('./components/websocket');

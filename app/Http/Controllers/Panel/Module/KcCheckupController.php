@@ -34,6 +34,8 @@ class KcCheckupController extends Controller
         return response()->json(['data' => $list]);
     }
 
+   
+
     /**
      * Show the form for creating a new resource.
      *

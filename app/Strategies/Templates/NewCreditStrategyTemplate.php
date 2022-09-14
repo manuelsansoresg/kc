@@ -162,14 +162,14 @@ class NewCreditStrategyTemplate implements TemplateInterface
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
         }
 
-        $view_option  = \View::make('panel.module.checkup.steps.add_option_dt', ['id' => $history_id])->render();
+        $option_inf_credit  = \View::make('panel.module.checkup.steps.add_option_dt', ['id' => $history_id, 'is_report' => false])->render();
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $total_credit_percent])->render();
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 1])->render();
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
 
         $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => 0])->render();
         $view_count_report          = \View::make('panel.module.view_count', ['number' => 2])->render();
-        
+        $option_inf_report  = \View::make('panel.module.checkup.steps.add_option_dt', ['id' => $history_id, 'is_report' => true])->render();
 
         
 
@@ -180,7 +180,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             'status' => $status_inf_credit,
             'progress' => $view_percent_inf_credit,
             'deadline' => $view_dead_line_inf_credit,
-            'options' => $view_option,
+            'options' => $option_inf_credit,
         );
         $data[] = array(
             'name' => $view_count_report,
@@ -188,7 +188,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             'status' => $status_report,
             'progress' => $view_percent_report,
             'deadline' => '',
-            'options' => $view_option,
+            'options' => $option_inf_report,
         );
         return $data;
     }
@@ -211,8 +211,8 @@ class NewCreditStrategyTemplate implements TemplateInterface
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
         }
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $form_option  = \View::make('panel.module.checkup.actions.credit_info.add_option_dt', ['options' => $menu_options['file']])->render();
+        $file_option  = \View::make('panel.module.checkup.actions.credit_info.add_option_dt', ['options' => $menu_options['form']])->render();
 
         //dd(json_encode($option_file));
 

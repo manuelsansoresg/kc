@@ -1335,6 +1335,15 @@ $("#frm-lead-note").submit(function (event) {
   })["catch"](function (e) {});
 });
 
+window.copyToClipBoardReport = function () {
+  var content = document.getElementById('url_report').value;
+  navigator.clipboard.writeText(content).then(function () {
+    showToast('', 'URL copiada en el portapapeles', 'success');
+  })["catch"](function (err) {
+    console.log('Something went wrong', err);
+  });
+};
+
 /***/ }),
 
 /***/ "./resources/js/components/lead/crud.js":

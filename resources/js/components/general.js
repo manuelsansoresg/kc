@@ -33,3 +33,17 @@ $( "#frm-lead-note" ).submit(function( event ) {
             
         });
   });
+
+
+  window.copyToClipBoardReport = function() {
+
+    var content = document.getElementById('url_report').value;
+ 
+     navigator.clipboard.writeText(content)
+         .then(() => {
+         showToast('', 'URL copiada en el portapapeles', 'success');
+     })
+         .catch(err => {
+         console.log('Something went wrong', err);
+     })
+ }

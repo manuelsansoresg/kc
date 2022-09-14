@@ -136,6 +136,7 @@ Route::group(['prefix' => 'kc-check-up'], function () {
 Route::resource('kc-check-up-actions', '\App\Http\Controllers\Panel\Module\ActionController')->middleware('auth');
 Route::group(['prefix' => 'kc-check-up-actions'], function () {
     Route::get('list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\ActionController', 'list'])->middleware('auth');
+    Route::get('report/{history_id}/show', ['\App\Http\Controllers\Panel\Module\ActionController', 'listReport'])->middleware('auth');
 });
 
 //*credit

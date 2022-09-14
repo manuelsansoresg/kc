@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
+use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
@@ -26,7 +27,15 @@ class ActionController extends Controller
         
         return response()->json(['data' => $list]);
     }
-
+    
+    public function listReport($history_id)
+    {
+        $history = HistoryLog::find($history_id);
+        $credit = $history->historyCredit;
+        $product = $credit->creditProduct;
+        $client = $credit->creditClientPerson;
+        return view('panel.module.checkup.actions.report.list', compact('credit', 'product', 'client', 'history_id'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -61,7 +70,7 @@ class ActionController extends Controller
         $credit = $history->historyCredit;
         $client = $credit->creditClientPerson;
         $product = $credit->creditProduct;
-        return view('panel.module.checkup.actions.list', compact('history_id', 'product', 'credit', 'client'));
+        return view('panel.module.checkup.actions.credit_info.list', compact('history_id', 'product', 'credit', 'client'));
     }
 
     /**
