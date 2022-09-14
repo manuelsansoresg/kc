@@ -243,6 +243,8 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $max_hour       = 12;
         $hour           = Carbon::parse($credit->created_at)->hour;
         $menu_options   = self::menuOptionReportStep($history);
+        $advisor        = $credit->creditAdvisor;
+        $name_advisor   = $advisor->name.' '.$advisor->last_name;
 
         $color_desition   = 'success';
         if ($hour > 5) {
@@ -259,7 +261,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             'name' => 'Respuesta de módulo',
             'status' => 'Concluida',
             'deadline' => 'N/A',
-            'advisor' => '',
+            'advisor' => $name_advisor,
             'options' => $options_progress,
         );
         
@@ -267,7 +269,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             'name' => 'Decisión',
             'status' => $status_desition,
             'deadline' => $view_dead_line_desition,
-            'advisor' => '',
+            'advisor' => $name_advisor,
             'options' => $options_desition,
         );
 
