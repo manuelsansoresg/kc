@@ -236,6 +236,44 @@ class NewCreditStrategyTemplate implements TemplateInterface
         return $data;
     }
 
+    public function listStepReport($history_id)
+    {
+        $history        = HistoryLog::find($history_id);
+        $credit         = $history->historyCredit;
+        $max_hour       = 12;
+        $hour           = Carbon::parse($credit->created_at)->hour;
+        $menu_options   = self::menuOptionReportStep($history);
+
+        $color_desition   = 'success';
+        if ($hour > 5) {
+            $color_desition = ($hour >= $max_hour) ? 'danger' : 'warning';
+        }
+        
+        $view_dead_line_desition  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
+        $options_progress  = \View::make('panel.module.checkup.actions.credit_info.add_option_dt', ['options' => $menu_options['progress']])->render();
+        $options_desition  = \View::make('panel.module.checkup.actions.credit_info.add_option_dt', ['options' => $menu_options['desition']])->render();
+
+        $data = array();
+        $status_desition = 'En curso';
+        $data[] = array(
+            'name' => 'Respuesta de módulo',
+            'status' => 'Concluida',
+            'deadline' => 'N/A',
+            'advisor' => '',
+            'options' => $options_progress,
+        );
+        
+        $data[] = array(
+            'name' => 'Decisión',
+            'status' => $status_desition,
+            'deadline' => $view_dead_line_desition,
+            'advisor' => '',
+            'options' => $options_desition,
+        );
+
+        return $data;
+    }
+
     public function menuOptions($history)
     {
         $menu = array(
@@ -255,6 +293,27 @@ class NewCreditStrategyTemplate implements TemplateInterface
             )
         );
 
+        return $menu;
+    }
+
+    public function menuOptionReportStep($history)
+    {
+        $menu = array(
+            'progress' => array(
+                [
+                    'link' => '/panel/kc-check-up/report/answer_module/'.$history->id.'/show/',
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                ]
+            ),
+            'desition' => array(
+                [
+                    'link' => '/panel/action-form/newCredit/'.$history->id_rel.'/form',
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                ]
+            )
+        );
         return $menu;
     }
 

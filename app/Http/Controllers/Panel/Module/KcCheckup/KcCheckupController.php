@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Panel\Module;
+namespace App\Http\Controllers\Panel\Module\KcCheckup;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
@@ -8,7 +8,7 @@ use App\Models\HistoryLog;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
-class ActionController extends Controller
+class KcCheckupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,18 +17,25 @@ class ActionController extends Controller
      */
     public function index()
     {
-        //
+        return view('panel.module.checkup.list');
     }
 
-    public function list($history_id)
+    public function list()
+    {
+        $users = Credit::listDatatable();
+        return response()->json(['data' => $users]);
+    }
+    
+    public function listStep($history_id)
     {
         $actionStrategy   = TemplateValues::STRATEGY['newCredit'];
-        $list       = (new $actionStrategy)->listAction($history_id);
+        $list       = (new $actionStrategy)->listStep($history_id);
         
         return response()->json(['data' => $list]);
     }
-    
-    
+
+   
+
     /**
      * Show the form for creating a new resource.
      *
@@ -63,7 +70,7 @@ class ActionController extends Controller
         $credit = $history->historyCredit;
         $client = $credit->creditClientPerson;
         $product = $credit->creditProduct;
-        return view('panel.module.checkup.actions.credit_info.list', compact('history_id', 'product', 'credit', 'client'));
+        return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client'));
     }
 
     /**

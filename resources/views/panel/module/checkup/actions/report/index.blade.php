@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Acciones')
+@section('title', 'Etapas')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -8,14 +8,13 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Acciones/ Respuesta de módulo</h3>
+                                <h3 class="nk-block-title page-title">Acciones</h3>
                                 <div class="nk-block-des text-soft">
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
-                                            <li class="breadcrumb-item active"><a href="/panel/kc-check-up">KC- Check up</a>
-                                            <li class="breadcrumb-item active"><a
-                                                    href="/panel/kc-check-up">{{ $credit->id }} - REPORTE</a>
+                                            <li class="breadcrumb-item"><a href="/panel/kc-check-up">KC- Check up</a>
+                                            <li class="breadcrumb-item active"><a>Reporte</a>
                                             </li>
                                         </ul>
                                     </nav>
@@ -55,27 +54,21 @@
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" id="url_report" value="{{ asset('reporte/'.$credit->id ) }}">
                     <div class="nk-block nk-block-lg">
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
-                                <span class="preview-title-lg overline-title">Reporte:</span>
-                                <hr>
-                                <div class="row">
-                                    <div class="col-12 col-md-8">
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <a href="{{ asset('reporte/'.$credit->id ) }}" target="_blank">Ver reporte</a>
-                                            </div>
-                                            <div>
-                                                <a class="pointer" onclick="copyToClipBoardReport()">Copiar URL</a>
-                                            </div>
-                                            <div>
-                                                <a class="pointer">Descargar PDF</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <table id="dt-check-up-report-steps" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Acción</th>
+                                            <th>Estatus</th>
+                                            <th>Deadline</th>
+                                            <th>Asesor</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -84,5 +77,4 @@
         </div>
     </div>
     <input type="hidden" id="history_id" value="{{ $history_id }}">
-    <input type="hidden" id="refresh-dt" value="dt-lead">
 @endsection

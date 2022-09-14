@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Panel\Module;
+namespace App\Http\Controllers\Panel\Module\KcCheckup;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
@@ -8,7 +8,7 @@ use App\Models\HistoryLog;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
-class KcCheckupController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,24 +17,8 @@ class KcCheckupController extends Controller
      */
     public function index()
     {
-        return view('panel.module.checkup.list');
+        //
     }
-
-    public function list()
-    {
-        $users = Credit::listDatatable();
-        return response()->json(['data' => $users]);
-    }
-    
-    public function listStep($history_id)
-    {
-        $actionStrategy   = TemplateValues::STRATEGY['newCredit'];
-        $list       = (new $actionStrategy)->listStep($history_id);
-        
-        return response()->json(['data' => $list]);
-    }
-
-   
 
     /**
      * Show the form for creating a new resource.
@@ -63,14 +47,30 @@ class KcCheckupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($history_id)
     {
-        $history_id = $id;
-        $history = HistoryLog::find($id);
+        $history = HistoryLog::find($history_id);
         $credit = $history->historyCredit;
-        $client = $credit->creditClientPerson;
         $product = $credit->creditProduct;
-        return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client'));
+        $client = $credit->creditClientPerson;
+        return view('panel.module.checkup.actions.report.index', compact('credit', 'product', 'client', 'history_id'));
+    }
+
+    public function list($history_id)
+    {
+        $actionStrategy   = TemplateValues::STRATEGY['newCredit'];
+        $list       = (new $actionStrategy)->listStepReport($history_id);
+
+        return response()->json(['data' => $list]);
+    }
+
+    public function actionReport($history_id)
+    {
+        $history = HistoryLog::find($history_id);
+        $credit = $history->historyCredit;
+        $product = $credit->creditProduct;
+        $client = $credit->creditClientPerson;
+        return view('panel.module.checkup.actions.report.list', compact('credit', 'product', 'client', 'history_id'));
     }
 
     /**
