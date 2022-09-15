@@ -36,7 +36,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             2 => [
                 'name' => 'Recibo de nómina',
                 'comment' => 'Más reciente',
-                'is_required' => true,
+                'is_required' => false,
                 'is_date' => true,
                 'max_size' => 2,
                 'max_file' => 2,
@@ -143,7 +143,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $max_hour           = 12;
         $hour               = Carbon::parse($credit->created_at)->hour;
         $percent_form       = self::percentForm($history);
-        $percent_file       = self::percentFile($history->id_rel);
+        $percent_file       = 100;
         $color_inf_credit   = 'success';
         $color_report       = 'success';
         $total_percent = $percent_file + $percent_form;
@@ -198,9 +198,9 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
-        $percent_file   = self::percentFile($history->id_rel);
+        $percent_file   = 100;
         $percent_form   = self::percentForm($history);
-        $status_file    = $percent_file == 100 ? 'Concluido' : 'En curso';
+        $status_file    = 'Concluido';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $max_hour       = 12;
         $hour           = Carbon::parse($credit->created_at)->hour;
@@ -344,6 +344,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         return $percent;
     }
 
+    //*TODO: se deshabilito al ser opcional la caja de carga
     public function percentFile($id_rel)
     {
         $model = File::MODEL['newCredit'];
