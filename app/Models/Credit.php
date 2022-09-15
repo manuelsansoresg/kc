@@ -82,4 +82,9 @@ class Credit extends Model
     {
         return $this->hasOne(HistoryLog::class);
     }
+   
+    public function notification()
+    {
+        return $this->hasOne(Notification::class);
+    }
 }

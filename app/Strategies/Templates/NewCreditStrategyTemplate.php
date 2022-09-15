@@ -220,7 +220,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Carga',
             'status' => $status_file,
-            'deadline' => $view_dead_line_inf_credit,
+            'deadline' => 'N/A',
             'advisor' => $name_advisor,
             'options' => $file_option,
         );

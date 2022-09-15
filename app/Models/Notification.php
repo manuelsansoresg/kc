@@ -26,5 +26,10 @@ class Notification extends Model
         $notification = Notification::where(['model' => $model, 'status' => $status])->get();
         return $notification;
     }
+
+    public function notificationCredit()
+    {
+        return $this->belongsTo(Credit::class, 'id_rel');
+    }
     
 }

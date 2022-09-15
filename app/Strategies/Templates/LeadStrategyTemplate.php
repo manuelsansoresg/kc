@@ -16,6 +16,7 @@ class LeadStrategyTemplate implements TemplateInterface
     {
         $lead = Lead::find($id);
         if ($lead !== null) {
+            $product = $lead->productLead;
             //* add clientslog archive conversion
             $request = new stdClass();
             $request->data = array(
@@ -56,8 +57,15 @@ class LeadStrategyTemplate implements TemplateInterface
             HistoryLog::move($credit->id, HistoryLog::CREATE_CLIENT_PERSON, HistoryLog::CREATE_CLIENT_PERSON);
             //* enter module kc-checkup and list actions
             HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
-            HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
-            HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
+
+            if ($product->alias = 'Crédito nomina nuevo') {
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
+                //* Execute notification in new credit
+                $notification   = SendNotificationsValues::STRATEGY['newCredit'];
+                (new $notification)->send($credit->id);
+            } else {
+            }
         }
     }
 }

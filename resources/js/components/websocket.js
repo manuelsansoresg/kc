@@ -39,8 +39,6 @@ channel.bind('kaaxclub-event', function (data) {
                 let title       = element.title;
                 let body        = element.body;
                 let user_id     = element.user_id;
-                console.log(user_id);
-                console.log(my_user);
                 if (my_user == user_id) {
                     showToastDark(title, body, 'success');
                 }
