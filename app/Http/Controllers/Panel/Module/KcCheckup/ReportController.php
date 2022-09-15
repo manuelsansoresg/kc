@@ -73,6 +73,15 @@ class ReportController extends Controller
         return view('panel.module.checkup.actions.report.list', compact('credit', 'product', 'client', 'history_id'));
     }
 
+    public function desitionReport($history_id)
+    {
+        $history = HistoryLog::find($history_id);
+        $credit = $history->historyCredit;
+        $product = $credit->creditProduct;
+        $client = $credit->creditClientPerson;
+        return view('panel.module.checkup.actions.report.desition', compact('credit', 'product', 'client', 'history_id'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

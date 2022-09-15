@@ -8,7 +8,7 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Acciones/ Respuesta de módulo</h3>
+                                <h3 class="nk-block-title page-title">Acciones/ Decisión</h3>
                                 <div class="nk-block-des text-soft">
                                     <nav>
                                         <ul class="breadcrumb">
@@ -19,7 +19,7 @@
                                             </li>
                                         </ul>
                                     </nav>
-                                    
+                                    <p class="mt-2">Selecciona la desicíon del cliente.</p>
                                 </div>
                                 <div class=" d-block d-md-none">
                                     <div class="col-12">
@@ -60,19 +60,42 @@
                     <div class="nk-block nk-block-lg">
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
-                                <span class="preview-title-lg overline-title">Reporte:</span>
+                                <span class="preview-title-lg overline-title">Tramitar crédito con:</span>
                                 <hr>
                                 <div class="row">
                                     <div class="col-12 col-md-2">
-                                        <a class="btn btn-primary" href="{{ asset('reporte/'.$credit->id ) }}" target="_blank">Ver reporte</a>
+                                        <a class="pointer btn btn-primary mt-3" href="{{ asset('reporte/'.$credit->id ) }}" target="_blank">Financiera 1</a>
                                     </div>
                                     <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary" onclick="copyToClipBoardReport()">Copiar URL</a>
+                                        <a class="pointer btn btn-primary mt-3" onclick="copyToClipBoardReport()">Financiera 2</a>
                                     </div>
                                     <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary" btn btn-primary>Descargar PDF</a>
+                                        <a class="pointer btn btn-primary mt-3">Financiera 3</a>
                                     </div>
+                                    <div class="col-12 col-md-2">
+                                        <a class="pointer btn btn-primary mt-3">Financiera 4</a>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
+                                    </div>
+                                    <div class="col-12 col-md-2">
+                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
+                                    </div>
+                                    
                                 </div>
+                               
                             </div>
                         </div>
                     </div>

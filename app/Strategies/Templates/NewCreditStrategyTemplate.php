@@ -310,7 +310,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             ),
             'desition' => array(
                 [
-                    'link' => '/panel/action-form/newCredit/'.$history->id_rel.'/form',
+                    'link' => '/panel/kc-check-up/report/desition/'.$history->id.'/show/',
                     'onclick' => '',
                     'name' => 'Ver acción',
                 ]
