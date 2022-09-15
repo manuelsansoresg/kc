@@ -27,7 +27,6 @@ class ListStrategy implements ActionInterface
     {
         if ($list_actions === null) {
             $list_actions = [
-                HistoryLog::KC_CHECK_UP_ACTION_UPLOAD,
                 HistoryLog::KC_CHECK_UP_ACTION_FORM,
             ];
         }
