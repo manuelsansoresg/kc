@@ -49,11 +49,6 @@ class ReportController extends Controller
      */
     public function show($history_id)
     {
-        $history = HistoryLog::find($history_id);
-        $credit = $history->historyCredit;
-        $product = $credit->creditProduct;
-        $client = $credit->creditClientPerson;
-        return view('panel.module.checkup.actions.report.index', compact('credit', 'product', 'client', 'history_id'));
     }
 
     public function list($history_id)

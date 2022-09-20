@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Credit;
 
 use App\Http\Controllers\Controller;
+use App\Models\HistoryLog;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
@@ -13,9 +14,13 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($model, $id)
     {
-        //
+        $actionStrategy   = TemplateValues::STRATEGY[$model];
+        $files       = (new $actionStrategy)->configUpload();
+        $credit_id = $id;
+        $model = 'newCredit';
+        return view('panel.credit.files', compact('files', 'credit_id', 'model'));
     }
 
     /**
@@ -47,11 +52,7 @@ class DocumentController extends Controller
      */
     public function show($id)
     {
-        $actionStrategy   = TemplateValues::STRATEGY['newCredit'];
-        $files       = (new $actionStrategy)->configUpload();
-        $credit_id = $id;
-        $model = 'newCredit';
-        return view('panel.credit.files', compact('files', 'credit_id', 'model'));
+       
     }
 
     /**

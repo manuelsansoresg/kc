@@ -1,11 +1,14 @@
 <form method="post" id="{{ $name_form }}" action="">
     @csrf
-    <span class="preview-title-lg overline-title">Generales</span>
+   
     <div class="row gy-4">
         @foreach ($elements as $element)
         @php
             $indicator_required =  $element['is_required'] == true ? '*' : '';
         @endphp
+        @if ($element['title_section'] != '')
+            <span class="preview-title-lg overline-title">{{ $element['title_section'] }}</span>
+        @endif
         @if ($element['type'] == 'text')
         <div class="col-md-6">
             <div class="form-group">
@@ -29,7 +32,8 @@
         @endif
             @if ($element['type'] == 'select2')
                 @php
-                    $options = $element['options'];
+                    $options            = $element['options'];
+                    $is_option_array    = $element['is_option_array'];
                 @endphp
                 <div class="col-md-6">
                     <div class="form-group">
@@ -39,10 +43,20 @@
                             <select class="form-select js-select2" name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}"
                                 data-search="on">
                                 <option></option>
-                                @foreach ($options as $option)
-                                    <option value="{{ $option->id }}">{{ $option->name }}</option>
-                                @endforeach
-                                <option value="0">Otro</option>
+                                @if ($options != null && $is_option_array == false)
+                                    @foreach ($options as $option)
+                                        <option value="{{ $option->id }}">{{ $option->name }}</option>
+                                    @endforeach
+                                
+                                @endif
+                                @if ($options != null && $is_option_array == true)
+                                    @foreach ($options as $key => $option)
+                                        <option value="{{ $key}}"> {{ $option }}</option>
+                                    @endforeach
+                                @endif
+                                @if ($element['name_field'] == 'agreement_id')
+                                    <option value="0">Otro</option>
+                                @endif
                             </select>
                         </div>
                     </div>

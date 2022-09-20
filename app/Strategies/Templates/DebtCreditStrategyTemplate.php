@@ -13,7 +13,7 @@ use App\Strategies\Values\SendNotificationsValues;
 use Carbon\Carbon;
 use stdClass;
 
-class NewCreditStrategyTemplate implements TemplateInterface
+class DebtCreditStrategyTemplate implements TemplateInterface
 {
     public function move($id)
     {
@@ -34,10 +34,10 @@ class NewCreditStrategyTemplate implements TemplateInterface
             ],
 
             2 => [
-                'name' => 'Recibo de nómina',
+                'name' => 'Edo Cta financiera actual',
                 'comment' => 'Más reciente',
                 'is_required' => false,
-                'is_date' => true,
+                'is_date' => false,
                 'max_size' => 2,
                 'max_file' => 2,
                 'type' => 'image/*',
@@ -49,8 +49,9 @@ class NewCreditStrategyTemplate implements TemplateInterface
 
     public function configForm($id_rel)
     {
-        $name_form = 'frm-template_new_credit';
+        $name_form = 'frm-template_debt_credit';
         $options_agreement = Agreement::getAllActive();
+        $option_financials = config('financial_enums.periodicity_products');
         $elements = array(
             1 => [
                 'title_section' => 'Generales',
@@ -80,6 +81,19 @@ class NewCreditStrategyTemplate implements TemplateInterface
             ],
             3 => [
                 'title_section' => null,
+                'title' => 'Financiera',
+                'name_field' => 'financial_id',
+                'id_field' => 'lead-financial_id',
+                'comment_admin' => 'Financiera donde tiene su crédito el cliente.',
+                'comment_webApp' => 'Financiera con la que tienes tu crédito actual.',
+                'placeholder' => 'Escribe para buscar',
+                'type' => 'select2',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+            ],
+            4 => [
+                'title_section' => null,
                 'title' => 'Nombres',
                 'name_field' => 'name',
                 'id_field' => 'name',
@@ -91,7 +105,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => true,
             ],
-            4 => [
+            5 => [
                 'title_section' => null,
                 'title' => 'Primer apellido',
                 'name_field' => 'last_name',
@@ -104,7 +118,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => true,
             ],
-            5 => [
+            6 => [
                 'title_section' => null,
                 'title' => 'Segundo apellido',
                 'name_field' => 'second_last_name',
@@ -117,7 +131,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => false,
             ],
-            6 => [
+            7 => [
                 'title_section' => null,
                 'title' => 'Celular',
                 'name_field' => 'cellphone',
@@ -129,6 +143,97 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+            ],
+            8 => [
+                'title_section' => 'Crédito actual',
+                'title' => null,
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => null,
+            ],
+            9 => [
+                'title_section' => null,
+                'title' => 'pago actual',
+                'name_field' => 'current_payment',
+                'id_field' => 'current_payment',
+                'comment_admin' => 'Pago periódico actual del crédito',
+                'comment_webApp' => 'Pago periódico actual del crédito',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+            ],
+            10 => [
+                'title_section' => null,
+                'title' => 'Periodicidad actual',
+                'name_field' => 'current_periodicity',
+                'id_field' => 'current_periodicity',
+                'comment_admin' => 'Periodicidad del crédito actual del cliente',
+                'comment_webApp' => 'Periodicidad de tu crédito actual',
+                'placeholder' => null,
+                'type' => 'select2',
+                'is_option_array' => true,
+                'options' => $option_financials,
+                'is_required' => false,
+            ],
+            11 => [
+                'title_section' => null,
+                'title' => 'Crédito actual',
+                'name_field' => 'current_loan',
+                'id_field' => 'current_loan',
+                'comment_admin' => 'Préstamo otorgado al cliente',
+                'comment_webApp' => 'Préstamo que obtuviste con la financiera actual',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+            ],
+            12 => [
+                'title_section' => null,
+                'title' => 'Plazo actual',
+                'name_field' => 'current_term',
+                'id_field' => 'current_term',
+                'comment_admin' => 'Plazo del crédito',
+                'comment_webApp' => 'Plazo del crédito (número de pagos)',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+            ],
+            13 => [
+                'title_section' => null,
+                'title' => 'Saldo insoluto actual',
+                'name_field' => 'current_principal_balance',
+                'id_field' => 'current_principal_balance',
+                'comment_admin' => 'Saldo de capital',
+                'comment_webApp' => 'Saldo de capital pendiente (no incluye interés)',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+            ],
+            14 => [
+                'title_section' => null,
+                'title' => 'Saldo total actual',
+                'name_field' => 'current_total_balance',
+                'id_field' => 'current_total_balance',
+                'comment_admin' => 'Saldo del crédito',
+                'comment_webApp' => 'Saldo del crédito (total de los pagos pendientes)',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
             ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel])->render();
@@ -146,8 +251,15 @@ class NewCreditStrategyTemplate implements TemplateInterface
             $agreement_id = $agreement->id;
         }
 
-        $credit                 = Credit::find($id_rel);
-        $credit->agreement_id   = $agreement_id;
+        $credit                               = Credit::find($id_rel);
+        $credit->agreement_id                 = $agreement_id;
+        $credit->financial_id                 = $request->financial_id;
+        $credit->current_payment              = $request->current_payment * 100;
+        $credit->current_periodicity          = $request->current_periodicity;
+        $credit->current_loan                 = $request->current_loan * 100;
+        $credit->current_term                 = $request->current_term;
+        $credit->current_principal_balance    = $request->current_principal_balance * 100;
+        $credit->current_total_balance        = $request->current_total_balance * 100;
         $credit->update();
 
         $client                     = ClientPerson::find($credit->client_person_id);
@@ -161,18 +273,18 @@ class NewCreditStrategyTemplate implements TemplateInterface
 
     public function listStep($history_id)
     {
-        $history            = HistoryLog::find($history_id);
-        $credit             = $history->historyCredit;
-        $max_hour           = 12;
-        $hour               = Carbon::parse($credit->created_at)->hour;
-        $percent_form       = self::percentForm($history);
-        $percent_file       = 100;
-        $color_inf_credit   = 'success';
-        $color_report       = 'success';
-        $total_percent = $percent_file + $percent_form;
-        $total_credit_percent = $percent_file + $percent_form;
-        $status_report              = 'En espera';
-        $menu_options   = self::menuOptionsStep($history);
+        $history                = HistoryLog::find($history_id);
+        $credit                 = $history->historyCredit;
+        $max_hour               = 12;
+        $hour                   = Carbon::parse($credit->created_at)->hour;
+        $percent_form           = self::percentForm($history);
+        $percent_file           = 100;
+        $color_inf_credit       = 'success';
+        $color_report           = 'success';
+        $menu_options           = self::menuOptionsStep($history);
+        $total_percent          = $percent_file + $percent_form;
+        $total_credit_percent   = $percent_file + $percent_form;
+        $status_report          = 'En espera';
        
         $status_inf_credit = ($total_percent > 100) ? 'Cerrado' : 'Abierto';
         
@@ -186,16 +298,16 @@ class NewCreditStrategyTemplate implements TemplateInterface
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
         }
 
-        $option_inf_credit  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
-        $option_inf_report  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
 
-
+        $option_inf_credit          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
+        
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $total_credit_percent])->render();
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 1])->render();
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-
+        
         $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => 0])->render();
         $view_count_report          = \View::make('panel.module.view_count', ['number' => 2])->render();
+        $option_inf_report          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
         
 
         $data = array();
@@ -306,14 +418,14 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/template/action-document/newCredit/'.$history->id_rel,
+                    'link' => '/panel/template/action-document/debtCredit/'.$history->id_rel,
                     'onclick' => '',
                     'name' => 'Ver acción',
                 ]
             ),
             'file' => array(
                 [
-                    'link' => '/panel/action-form/newCredit/'.$history->id_rel.'/form',
+                    'link' => '/panel/action-form/debtCredit/'.$history->id_rel.'/form',
                     'onclick' => '',
                     'name' => 'Ver acción',
                 ]
@@ -323,19 +435,20 @@ class NewCreditStrategyTemplate implements TemplateInterface
         return $menu;
     }
 
+
     public function menuOptionsStep($history)
     {
         $menu = array(
             'actions' => array(
                 [
-                    'link' => '/panel/template/actions/newCredit/'.$history->id.'/show',
+                    'link' => '/panel/template/actions/debtCredit/'.$history->id.'/show',
                     'onclick' => '',
                     'name' => 'Ver acciones',
                 ]
             ),
             'reports' => array(
                 [
-                    'link' => '/panel/template/report/newCredit/'.$history->id.'/show',
+                    'link' => '/panel/template/report/debtCredit/'.$history->id.'/show',
                     'onclick' => '',
                     'name' => 'Ver acciones',
                 ]
@@ -395,7 +508,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
     //*TODO: se deshabilito al ser opcional la caja de carga
     public function percentFile($id_rel)
     {
-        $model = File::MODEL['newCredit'];
+        $model = File::MODEL['debtCredit'];
         $percent = 0;
         $total_valid = 0;
 

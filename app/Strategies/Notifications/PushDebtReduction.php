@@ -8,23 +8,23 @@ use App\Models\User;
 use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\SendNotificationsInterface;
 
-class PushnewCredit implements SendNotificationsInterface
+class PushDebtReduction implements SendNotificationsInterface
 {
     public function send($id, $type = 1)
     {
         $title = 'Acciones';
         $body = 'Tienes una nueva acción';
-        $model = HistoryLog::KC_CHECK_UP_ACTION_FORM;
+        $model = HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM;
         if ($type == 2) {
             $body = 'Se generó un reporte en KC - Check up';
-            $model = HistoryLog::KC_CHECK_UP_ACTION_REPORT;
+            $model = HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT;
         }
 
         $data_notification = array(
             'id_rel' => $id,
             'title' => $title,
             'body' => $body,
-            'model' => $model,
+            'model' => $model ,
         );
         Notification::create($data_notification);
         $push  = new Pusher;
@@ -33,7 +33,7 @@ class PushnewCredit implements SendNotificationsInterface
     
     public function get()
     {
-        $get_notifications = Notification::getByModel([HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_REPORT]);
+        $get_notifications = Notification::getByModel([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT]);
         $notifications = array();
         foreach ($get_notifications as $notification) {
             $credit = $notification->notificationCredit;
@@ -44,7 +44,6 @@ class PushnewCredit implements SendNotificationsInterface
                 'title' => $notification->title,
                 'body' => $notification->body,
             );
-            
 
             //*activate recieve push
             $get_notification = Notification::find($notification->id);

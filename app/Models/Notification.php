@@ -23,7 +23,9 @@ class Notification extends Model
 
     public static function getByModel($model, $status = 0)
     {
-        $notification = Notification::where(['model' => $model, 'status' => $status])->get();
+        $notification = Notification::where('status', $status)
+                        ->wherein('model', $model)
+                        ->get();
         return $notification;
     }
 

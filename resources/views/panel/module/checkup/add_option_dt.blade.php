@@ -5,7 +5,7 @@
 <div class="dropdown-menu dropdown-menu-end">
     <ul class="link-list-opt no-bdr">
         <li>
-            <a class="pointer" href="/panel/kc-check-up/{{ $id }}">
+            <a class="pointer" href="/panel/template/steps/{{ $route }}/{{ $id }}/show">
                 <em class="icon ni ni-card-view"></em><span>Ver etapas</span></a>
         </li>
         <li>

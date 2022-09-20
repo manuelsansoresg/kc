@@ -56,15 +56,24 @@ class LeadStrategyTemplate implements TemplateInterface
             //* create history in credit
             HistoryLog::move($credit->id, HistoryLog::CREATE_CLIENT_PERSON, HistoryLog::CREATE_CLIENT_PERSON);
             //* enter module kc-checkup and list actions
-            HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
+            
 
-            if ($product->alias = 'Crédito nomina nuevo') {
+            if ($product->c_product_id = 1 && $product->c_service_id == 1) {
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
                 //* Execute notification in new credit
                 $notification   = SendNotificationsValues::STRATEGY['newCredit'];
                 (new $notification)->send($credit->id);
-            } else {
+                (new $notification)->send($credit->id, 2);
+            } elseif ($product->c_product_id = 1 && $product->c_service_id == 2) {
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD);
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM);
+                //* Execute notification in new credit
+                $notification   = SendNotificationsValues::STRATEGY['debtReduction'];
+                (new $notification)->send($credit->id);
+                (new $notification)->send($credit->id, 2);
             }
         }
     }

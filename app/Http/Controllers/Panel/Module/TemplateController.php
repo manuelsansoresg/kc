@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
-use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
-class ActionController extends Controller
+class TemplateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,15 +19,43 @@ class ActionController extends Controller
         //
     }
 
-    public function list($model, $history_id)
+    public function viewStep($model, $history_id)
     {
-        $actionStrategy   = TemplateValues::STRATEGY[$model];
-        $list       = (new $actionStrategy)->listAction($history_id);
-        
-        return response()->json(['data' => $list]);
+        $history = HistoryLog::find($history_id);
+        $credit = $history->historyCredit;
+        $client = $credit->creditClientPerson;
+        $product = $credit->creditProduct;
+        return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client', 'model'));
     }
     
-    
+
+    public function listStep($model, $history_id)
+    {
+        $actionStrategy   = TemplateValues::STRATEGY[$model];
+        $list       = (new $actionStrategy)->listStep($history_id);
+        return response()->json(['data' => $list]);
+    }
+
+    public function viewAction($model, $history_id)
+    {
+        $history = HistoryLog::find($history_id);
+        $credit = $history->historyCredit;
+        $client = $credit->creditClientPerson;
+        $product = $credit->creditProduct;
+        $model = $model;
+        
+        return view('panel.module.checkup.actions.list', compact('history_id', 'product', 'credit', 'client', 'model'));
+    }
+
+    public function viewReport($model, $history_id)
+    {
+        $history = HistoryLog::find($history_id);
+        $credit = $history->historyCredit;
+        $product = $credit->creditProduct;
+        $client = $credit->creditClientPerson;
+        return view('panel.module.checkup.actions.report.index', compact('credit', 'product', 'client', 'history_id'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -58,12 +85,7 @@ class ActionController extends Controller
      */
     public function show($id)
     {
-        $history_id = $id;
-        $history = HistoryLog::find($id);
-        $credit = $history->historyCredit;
-        $client = $credit->creditClientPerson;
-        $product = $credit->creditProduct;
-        return view('panel.module.checkup.actions.credit_info.list', compact('history_id', 'product', 'credit', 'client'));
+        //
     }
 
     /**

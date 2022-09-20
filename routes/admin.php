@@ -130,7 +130,18 @@ Route::resource('client', '\App\Http\Controllers\Panel\Client\ClientPersonContro
 Route::resource('kc-check-up', '\App\Http\Controllers\Panel\Module\KcCheckup\KcCheckupController')->middleware('auth');
 Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\KcCheckupController', 'list'])->middleware('auth');
-    Route::get('list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\KcCheckupController', 'listStep'])->middleware('auth');
+    Route::get('/report/list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'list'])->middleware('auth');
+    Route::get('/report/answer_module/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'actionReport'])->middleware('auth');
+    
+    Route::get('/report/desition/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionReport'])->middleware('auth');
+});
+
+
+
+Route::resource('kc-check-up-debt-reduction', '\App\Http\Controllers\Panel\Module\KcCheckup\DebtReductionController')->middleware('auth');
+Route::group(['prefix' => 'kc-check-up-debt-reduction'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\DebtReductionController', 'list'])->middleware('auth');
+    Route::get('list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\DebtReductionController', 'listStep'])->middleware('auth');
     
     Route::resource('report', '\App\Http\Controllers\Panel\Module\KcCheckup\ReportController')->middleware('auth');
     Route::get('/report/list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'list'])->middleware('auth');
@@ -139,12 +150,9 @@ Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('/report/desition/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionReport'])->middleware('auth');
 });
 
+
 Route::resource('kc-check-up-actions', '\App\Http\Controllers\Panel\Module\ActionController')->middleware('auth');
-Route::group(['prefix' => 'kc-check-up-actions'], function () {
-    Route::get('list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\ActionController', 'list'])->middleware('auth');
-    
-    
-});
+
 
 //*credit
 Route::resource('credit', '\App\Http\Controllers\Panel\Credit\CreditController')->middleware('auth');
@@ -166,4 +174,19 @@ Route::resource('action-document', '\App\Http\Controllers\Panel\Credit\DocumentC
 
 Route::group(['prefix' => 'action-form'], function () {
     Route::get('{model}/{id_rel}/form', ['\App\Http\Controllers\Panel\Module\FormController', 'index'])->middleware('auth');
+});
+
+Route::group(['prefix' => 'template'], function () {
+    Route::get('list/{model}/{history_id}/show', ['\App\Http\Controllers\Panel\Module\TemplateController', 'listStep'])->middleware('auth');
+    Route::get('steps/{model}/{history_id}/show', ['\App\Http\Controllers\Panel\Module\TemplateController', 'viewStep'])->middleware('auth');
+    
+    Route::get('actions/{model}/{history_id}/show', ['\App\Http\Controllers\Panel\Module\TemplateController', 'viewAction'])->middleware('auth');
+    
+    Route::get('report/{model}/{history_id}/show', ['\App\Http\Controllers\Panel\Module\TemplateController', 'viewReport'])->middleware('auth');
+    Route::resource('report', '\App\Http\Controllers\Panel\Module\KcCheckup\ReportController')->middleware('auth');
+
+    
+    Route::get('action-document/{model}/{history_id}', ['\App\Http\Controllers\Panel\Credit\DocumentController', 'index'])->middleware('auth');
+    Route::get('actions/list/{model}/{history_id}/show', ['\App\Http\Controllers\Panel\Module\ActionController', 'list'])->middleware('auth');
+
 });

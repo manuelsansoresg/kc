@@ -20,20 +20,12 @@ class KcCheckupController extends Controller
         return view('panel.module.checkup.list');
     }
 
+   
     public function list()
     {
         $users = Credit::listDatatable();
         return response()->json(['data' => $users]);
     }
-    
-    public function listStep($history_id)
-    {
-        $actionStrategy   = TemplateValues::STRATEGY['newCredit'];
-        $list       = (new $actionStrategy)->listStep($history_id);
-        
-        return response()->json(['data' => $list]);
-    }
-
    
 
     /**
@@ -65,12 +57,13 @@ class KcCheckupController extends Controller
      */
     public function show($id)
     {
-        $history_id = $id;
+       /*  $history_id = $id;
         $history = HistoryLog::find($id);
         $credit = $history->historyCredit;
         $client = $credit->creditClientPerson;
         $product = $credit->creditProduct;
-        return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client'));
+        $model = 'newCredit';
+        return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client', 'model')); */
     }
 
     /**

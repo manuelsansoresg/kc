@@ -24,7 +24,7 @@ class PushLeadNewProspect implements SendNotificationsInterface
     
     public function get()
     {
-        $get_notifications = Notification::getByModel(Notification::CREATE_PROSPECT);
+        $get_notifications = Notification::getByModel([Notification::CREATE_PROSPECT]);
         $notifications = array();
         foreach ($get_notifications as $notification) {
             $users = User::getUserRole('Administrador');

@@ -1,6 +1,7 @@
 var history_id;
 if (document.getElementById('dt-check-up-steps')) {
     history_id = $('#history_id').val();
+    model = $('#model').val();
 }
 document.addEventListener('DOMContentLoaded', function () {
     let table = NioApp.DataTable('#dt-check-up-steps', {
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         
         },
-        ajax: '/panel/kc-check-up/list/'+history_id+'/show',
+        ajax: '/panel/template/list/'+model+'/'+history_id+'/show',
         columns: [
             { data: 'name'},
             { data: 'step' },

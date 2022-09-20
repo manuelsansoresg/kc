@@ -25,7 +25,7 @@ class PushLeadAddProspect implements SendNotificationsInterface
     
     public function get()
     {
-        $get_notifications = Notification::getByModel(Notification::ADD_PROSPECT);
+        $get_notifications = Notification::getByModel([Notification::ADD_PROSPECT]);
         $notifications = array();
         foreach ($get_notifications as $notification) {
             $lead     = Lead::find($notification->id_rel);
