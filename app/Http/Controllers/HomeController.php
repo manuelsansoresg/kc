@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Credit;
+use App\Models\HistoryLog;
 use App\Models\Lead;
 use Illuminate\Http\Request;
 
@@ -27,11 +28,15 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function report($credit_id)
+    public function report($history_id)
     {
-        $credit = Credit::find($credit_id);
+        $history = HistoryLog::find($history_id);
+        $credit = $history->historyCredit;
         $client = $credit->creditClientPerson;
-
+        $option = 2;
+        if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
+            return view('content_report_debt', compact('client', 'option'));
+        }
         return view('content_report', compact('client'));
     }
 }

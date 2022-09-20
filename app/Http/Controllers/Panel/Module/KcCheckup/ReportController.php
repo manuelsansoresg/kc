@@ -53,7 +53,9 @@ class ReportController extends Controller
 
     public function list($history_id)
     {
-        $actionStrategy   = TemplateValues::STRATEGY['newCredit'];
+        $get_history = HistoryLog::find($history_id);
+        $model = ($get_history != null && $get_history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
+        $actionStrategy   = TemplateValues::STRATEGY[$model];
         $list       = (new $actionStrategy)->listStepReport($history_id);
 
         return response()->json(['data' => $list]);

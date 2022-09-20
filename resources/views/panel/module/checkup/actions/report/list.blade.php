@@ -64,7 +64,7 @@
                                 <hr>
                                 <div class="row">
                                     <div class="col-12 col-md-2">
-                                        <a class="btn btn-primary" href="{{ asset('reporte/'.$credit->id ) }}" target="_blank">Ver reporte</a>
+                                        <a class="btn btn-primary" href="{{ asset('reporte/'.$history_id ) }}" target="_blank">Ver reporte</a>
                                     </div>
                                     <div class="col-12 col-md-2">
                                         <a class="pointer btn btn-primary" onclick="copyToClipBoardReport()">Copiar URL</a>
