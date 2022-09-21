@@ -67,7 +67,8 @@ class ReportController extends Controller
         $credit = $history->historyCredit;
         $product = $credit->creditProduct;
         $client = $credit->creditClientPerson;
-        return view('panel.module.checkup.actions.report.list', compact('credit', 'product', 'client', 'history_id'));
+        $model = ($history != null && $history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
+        return view('panel.module.checkup.actions.report.list', compact('credit', 'product', 'client', 'history_id', 'history', 'model'));
     }
 
     public function desitionReport($history_id)
@@ -76,7 +77,8 @@ class ReportController extends Controller
         $credit = $history->historyCredit;
         $product = $credit->creditProduct;
         $client = $credit->creditClientPerson;
-        return view('panel.module.checkup.actions.report.desition', compact('credit', 'product', 'client', 'history_id'));
+        $model = ($history != null && $history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
+        return view('panel.module.checkup.actions.report.desition', compact('credit', 'product', 'client', 'history_id', 'history', 'model'));
     }
 
     /**

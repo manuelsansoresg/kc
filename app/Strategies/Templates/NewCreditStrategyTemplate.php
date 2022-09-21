@@ -306,14 +306,14 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/template/action-document/newCredit/'.$history->id_rel,
+                    'link' => '/panel/template/action-document/newCredit/'.$history->id,
                     'onclick' => '',
                     'name' => 'Ver acción',
                 ]
             ),
             'file' => array(
                 [
-                    'link' => '/panel/action-form/newCredit/'.$history->id_rel.'/form',
+                    'link' => '/panel/action-form/newCredit/'.$history->id.'/form',
                     'onclick' => '',
                     'name' => 'Ver acción',
                 ]

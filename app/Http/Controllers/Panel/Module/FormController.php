@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Models\HistoryLog;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
@@ -14,14 +15,16 @@ class FormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($model, $id_rel)
+    public function index($model, $history_id)
     {
         $actionStrategy   = TemplateValues::STRATEGY[$model];
-        $form             = (new $actionStrategy)->configForm($id_rel);
-        $credit           = Credit::find($id_rel);
-        $client = $credit->creditClientPerson;
+        $history          = HistoryLog::find($history_id);
+        $credit           = $history->historyCredit;
+        $form             = (new $actionStrategy)->configForm($credit->id);
+        $client           = $credit->creditClientPerson;
         $product          = $credit->creditProduct;
-        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'product', 'credit', 'client'));
+        $id_rel           = $credit->id;
+        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'product', 'credit', 'client', 'history'));
     }
 
     /**

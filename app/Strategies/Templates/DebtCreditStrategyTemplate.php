@@ -418,14 +418,14 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/template/action-document/debtCredit/'.$history->id_rel,
+                    'link' => '/panel/template/action-document/debtCredit/'.$history->id,
                     'onclick' => '',
                     'name' => 'Ver acción',
                 ]
             ),
             'file' => array(
                 [
-                    'link' => '/panel/action-form/debtCredit/'.$history->id_rel.'/form',
+                    'link' => '/panel/action-form/debtCredit/'.$history->id.'/form',
                     'onclick' => '',
                     'name' => 'Ver acción',
                 ]

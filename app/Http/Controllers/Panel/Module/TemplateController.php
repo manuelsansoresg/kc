@@ -53,7 +53,7 @@ class TemplateController extends Controller
         $credit = $history->historyCredit;
         $product = $credit->creditProduct;
         $client = $credit->creditClientPerson;
-        return view('panel.module.checkup.actions.report.index', compact('credit', 'product', 'client', 'history_id'));
+        return view('panel.module.checkup.actions.report.index', compact('credit', 'product', 'client', 'history_id', 'history'));
     }
 
     /**

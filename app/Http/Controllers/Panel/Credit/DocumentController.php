@@ -15,17 +15,17 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($model, $id)
+    public function index($model, $history_id)
     {
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $files            = (new $actionStrategy)->configUpload();
-        $credit_id        = $id;
-        $credit           = Credit::find($id);
+        $history          = HistoryLog::find($history_id);
+        $credit           = $history->historyCredit;
+        $credit_id        = $credit->id;
         $client           = $credit->creditClientPerson;
         $product          = $credit->creditProduct;
-        $model            = 'newCredit';
 
-        return view('panel.credit.files', compact('files', 'credit_id', 'model', 'product', 'credit', 'client'));
+        return view('panel.credit.files', compact('files', 'credit_id', 'model', 'product', 'credit', 'client', 'history'));
     }
 
     /**

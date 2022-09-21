@@ -13,7 +13,8 @@
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
-                                            <li class="breadcrumb-item active"><a href="/panel/kc-check-up">KC- Check up</a>
+                                            <li class="breadcrumb-item "><a href="/panel/kc-check-up">KC- Check up</a>
+                                            <li class="breadcrumb-item active">Etapas
                                             </li>
                                         </ul>
                                     </nav>

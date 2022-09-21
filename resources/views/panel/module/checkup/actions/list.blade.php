@@ -14,7 +14,8 @@
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item active"><a href="/panel/kc-check-up">KC- Check up</a>
-                                            <li class="breadcrumb-item active"><a href="/panel/kc-check-up">Información</a>
+                                            <li class="breadcrumb-item active"><a href="/panel/template/steps/{{ Request::segment(4) }}/{{  $history_id }}/show">Etapas</a>
+                                            <li class="breadcrumb-item active">Acciones
                                             </li>
                                         </ul>
                                     </nav>

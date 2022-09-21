@@ -173,7 +173,7 @@ Route::resource('action-form', '\App\Http\Controllers\Panel\Module\FormControlle
 Route::resource('action-document', '\App\Http\Controllers\Panel\Credit\DocumentController')->middleware('auth');
 
 Route::group(['prefix' => 'action-form'], function () {
-    Route::get('{model}/{id_rel}/form', ['\App\Http\Controllers\Panel\Module\FormController', 'index'])->middleware('auth');
+    Route::get('{model}/{history_id}/form', ['\App\Http\Controllers\Panel\Module\FormController', 'index'])->middleware('auth');
 });
 
 Route::group(['prefix' => 'template'], function () {
