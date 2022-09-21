@@ -24,7 +24,7 @@ $().ready(function () {
                 .post("/panel/financial", data)
                 .then(function (response) {
                     let result = response.data;
-                    window.location = '/panel/financial/'+result.id+'/edit';
+                    window.location = '/panel/financial/'+result.id+'/edit?tab=privacidad_de_datos';
                 })
                 .catch(e => {
                     let response = e.response;

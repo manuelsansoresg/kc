@@ -11,12 +11,13 @@ return [
         2 => 'Fintech',
         3 => 'Inversión',
         4 => 'Crédito nómina',
+        5 => 'SOFOM',
     ),
     'regulator' => array(
         '' => 'Selecciona una opción',
         1 => 'CONDUSEF',
-        2 => 'PROFECTO',
-        3 => 'Descentralizada',
+        2 => 'PROFECO',
+        3 => 'DESCENTRALIZADA',
     ),
     'type_products' => array(
         '' => 'Selecciona una opción',
@@ -46,7 +47,7 @@ return [
    
     'principal_pays' => array(
         '' => 'Selecciona una opción',
-        1 => 'Descuento de nómina,',
+        1 => 'Descuento de nómina',
         2 => 'Domiciliación',
         3 => 'Efectivo',
         4 => 'Transferencia',

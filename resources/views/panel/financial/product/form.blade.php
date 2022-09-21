@@ -16,7 +16,7 @@
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item "> <a href="/panel/tag">Financiera</a> </li>
                                             <li class="breadcrumb-item "> <a
-                                                    href="/panel/financial/{{ $financial_id }}/edit">Formulario</a> </li>
+                                                    href="/panel/financial/{{ $financial_id }}/edit?tab=productos">Formulario</a> </li>
                                             <li class="breadcrumb-item active"> Formulario Producto </li>
                                         </ul>
                                     </nav>
@@ -134,6 +134,8 @@
                                                         $colateral_products = config('financial_enums.colateral_products');
                                                         $periodicity_products = config('financial_enums.periodicity_products');
                                                         $interes_rates = config('financial_enums.interes_rates');
+                                                        $principal_pays = config('financial_enums.principal_pays');
+                                                        
                                                         $collateral_id = $financial_product != null ? $financial_product->collateral_id : '';
                                                         $periodicity_id = $financial_product != null ? $financial_product->periodicity_id : '';
                                                         $max_credit_amount = $financial_product != null ? $financial_product->max_credit_amount : '';
@@ -266,10 +268,10 @@
                                                                     <div class="form-control-wrap">
                                                                         <select name="principal_pay" id=""
                                                                             class="form-select">
-                                                                            @foreach ($interes_rates as $key => $interes_rate)
+                                                                            @foreach ($principal_pays as $key => $principal_pays)
                                                                                 <option value="{{ $key }}"
                                                                                     {{ $principal_pay == $key ? ' selected' : '' }}>
-                                                                                    {{ $interes_rate }}
+                                                                                    {{ $principal_pays }}
                                                                                 </option>
                                                                             @endforeach
                                                                         </select>
@@ -344,10 +346,10 @@
                                                     <form method="post" id="frm-financial-comision" action="">
                                                         <div class="row gy-4">
                                                             @csrf
-                                                            <div class="col-12"><span class="preview-title-lg overline-title">Porcentaje de comisión por apertura</span></div>
+                                                            <div class="col-12"><span class="preview-title-lg overline-title">Comisión por apertura</span></div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Monto máximo de crédito</label>
+                                                                    <label class="form-label" for="frm-product-name">Porcentaje comisión por apertura</label>
                                                                     <div class="form-control-wrap">
                                                                         <input type="number" name="perc_opening_commission"
                                                                             class="form-control"
@@ -374,7 +376,7 @@
                                                             <div class="col-12"><span class="preview-title-lg overline-title">Seguro de vida</span></div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Monto máximo de crédito</label>
+                                                                    <label class="form-label" for="frm-product-name">Porcentaje seguro de vida</label>
                                                                     <div class="form-control-wrap">
                                                                         <input type="number" name="life_insurance_commission_perc"
                                                                             class="form-control"
@@ -401,7 +403,7 @@
                                                             <div class="col-12"><span class="preview-title-lg overline-title">Seguro de desempleo</span></div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Monto máximo de crédito</label>
+                                                                    <label class="form-label" for="frm-product-name">Porcentaje seguro de vida</label>
                                                                     <div class="form-control-wrap">
                                                                         <input type="number" name="unemploy_insurance_commission_perc"
                                                                             class="form-control"

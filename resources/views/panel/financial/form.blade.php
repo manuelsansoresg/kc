@@ -28,9 +28,9 @@
                                     <div class="preview-block">
                                         <div class="row gy-4">
                                             <ul class="nav nav-tabs">
-                                                <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab"
+                                                <li class="nav-item"> <a class="nav-link {{ (!isset($_GET['tab']))? 'active' : '' }}" data-bs-toggle="tab"
                                                         href="#tabGeneral">General</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'privacidad_de_datos')? 'active' : '' }}" data-bs-toggle="tab"
                                                         href="{{ $financial_id != null ? '#tabDataPrivacy' : '#' }}">Privacidad
                                                         de datos</a> </li>
 
@@ -39,7 +39,7 @@
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $financial_id != null ? '#tabBilling' : '#' }}">Datos
                                                         facturación</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'productos')? 'active' : '' }}" data-bs-toggle="tab"
                                                         href="{{ $financial_id != null ? '#tabProduct' : '#' }}">Productos</a>
                                                 </li>
                                             </ul>
@@ -51,7 +51,7 @@
                                                     $regulator = config('financial_enums.regulator');
                                                     $list_status = config('enums.status');
                                                 @endphp
-                                                <div class="tab-pane active" id="tabGeneral">
+                                                <div class="tab-pane {{ (!isset($_GET['tab']))? 'active' : '' }}" id="tabGeneral">
                                                     @php
                                                         $commercial_name = $financial != null ? $financial->commercial_name : '';
                                                         $company_name = $financial != null ? $financial->company_name : '';
@@ -273,7 +273,7 @@
                                                         </div>
                                                     </form>
                                                 </div>
-                                                <div class="tab-pane" id="tabDataPrivacy">
+                                                <div class="tab-pane {{ (isset($_GET['tab']) && $_GET['tab'] == 'privacidad_de_datos')? 'active' : '' }}" id="tabDataPrivacy">
                                                     @php
                                                         $privacy_notice = $financial != null ? $financial->privacy_notice : '';
                                                         $mkt_purposes = $financial != null ? $financial->mkt_purposes : '';
@@ -748,7 +748,7 @@
                                                         </div>
                                                     </form>
                                                 </div>
-                                                <div class="tab-pane" id="tabProduct">
+                                                <div class="tab-pane {{ (isset($_GET['tab']) && $_GET['tab'] == 'productos')? 'active' : '' }}" id="tabProduct">
                                                    <div class="py-2">
                                                         <div class="float-end">
                                                             <a href="/panel/financial-product/{{ $financial_id }}/create" class="btn btn-icon btn-primary"><em
