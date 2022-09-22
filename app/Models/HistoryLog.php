@@ -54,6 +54,8 @@ class HistoryLog extends Model
         11 => 'Carga',
         12 => 'Formulario',
         13 => 'Reporte',
+        14 => 'Decisión',
+        15 => 'Decisión',
     ];
 
     public static $name_model = [

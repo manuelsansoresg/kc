@@ -29,6 +29,8 @@ class ListStrategy implements ActionInterface
             $list_actions = [
                 HistoryLog::KC_CHECK_UP_ACTION_FORM,
                 HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
+                HistoryLog::KC_CHECK_UP_ACTION_DESITION,
+                HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
             ];
         }
 
@@ -42,7 +44,7 @@ class ListStrategy implements ActionInterface
             $credit         = $history_log->historyCredit;
             $client         = $credit->creditClientPerson;
             $advisor        = $credit->creditAdvisor;
-            $module         = ($history_log->status_id == 8 || $history_log->status_id == 12) ? 'KC- Check up' : '';
+            $module         = ($history_log->status_id == 8 || $history_log->status_id == 12 || $history_log->status_id == 14 || $history_log->status_id == 15) ? 'KC- Check up' : '';
             $name           = $credit->id.' '.$client->last_name.' '.$client->second_last_name.' '.$client->name;
             $name_advisor   = $advisor->name.' '.$advisor->last_name;
             $max_hour       = 12;
