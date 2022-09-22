@@ -174,7 +174,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $status_report              = 'En espera';
         $menu_options   = self::menuOptionsStep($history);
        
-        $status_inf_credit = ($total_percent > 100) ? 'Cerrado' : 'Abierto';
+        $status_inf_credit = ($total_percent > 100) ? 'Concluido' : 'En curso';
         
         $total_credit_percent = ($total_percent> 100) ? 100 : 50;
 

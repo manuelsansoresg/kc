@@ -286,7 +286,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         //$total_credit_percent   = $percent_file;
         $status_report          = 'En espera';
        
-        $status_inf_credit = ($total_percent > 100) ? 'Cerrado' : 'Abierto';
+        $status_inf_credit = ($total_percent > 100) ? 'Concluido' : 'En curso';
         
         $total_credit_percent = ($percent_form > 100) ? 100 : $percent_form;
 
