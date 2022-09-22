@@ -395,8 +395,9 @@ class NewCreditStrategyTemplate implements TemplateInterface
     //* get all percentages of the shares
     public function getPercent($history)
     {
-        $percent_form = self::percentForm($history);
-        $total_valid = ($percent_form / 1);
+        $percent_form = self::percentForm($history) / 2;
+        $percent_desition = 0;
+        $total_valid = $percent_form  + $percent_desition;
 
         $percent =  (100 / 100) * $total_valid;
         return $percent;

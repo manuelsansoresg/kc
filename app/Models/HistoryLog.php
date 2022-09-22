@@ -15,14 +15,19 @@ class HistoryLog extends Model
     const CREATE_PROSPECT                     = 3;
     const LEAD_CONVERT                        = 4;
     const CREATE_CLIENT_PERSON                = 5;
+    
     const KC_CHECK_UP                         = 6;
     const KC_CHECK_UP_ACTION_UPLOAD           = 7;
     const KC_CHECK_UP_ACTION_FORM             = 8;
     const KC_CHECK_UP_ACTION_REPORT           = 9;
+    const KC_CHECK_UP_ACTION_DESITION         = 14;
+
     const KC_CHECK_UP_DEBT_REDUCTION          = 10;
     const KC_CHECK_UP_DEBT_REDUCTION_UPLOAD   = 11;
     const KC_CHECK_UP_DEBT_REDUCTION_FORM     = 12;
     const KC_CHECK_UP_DEBT_REDUCTION_REPORT   = 13;
+    const KC_CHECK_UP_DEBT_REDUCTION_DESITION = 15;
+    
 
     protected $fillable = [
         'id_rel',
