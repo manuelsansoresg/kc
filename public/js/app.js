@@ -1058,7 +1058,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/financial", data).then(function (response) {
         var result = response.data;
-        window.location = '/panel/financial/' + result.id + '/edit';
+        window.location = '/panel/financial/' + result.id + '/edit?tab=privacidad_de_datos';
       })["catch"](function (e) {
         var response = e.response;
         var data_errors = response.data.errors;
@@ -2537,6 +2537,7 @@ function setDataUser(user_id) {
     $('#cellphone').val(result.cellphone);
     $('#email').val(result.email);
     $('#status option[value="' + result.status + '"]').attr("selected", "selected");
+    $('#is_access_config option[value="' + result.is_access_config + '"]').attr("selected", "selected");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });

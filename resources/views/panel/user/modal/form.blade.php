@@ -74,6 +74,21 @@
                                 <input type="password" class="form-control" name="pass_confirm" id="pass_confirm"
                                      value="" ></div>
                         </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group"><label class="form-label">Acceso a configuración</label>
+                                <div class="form-control-select">
+                                    <select
+                                        name="is_access_config"
+                                        class="form-control" 
+                                        id="is_access_config" >
+                                        <option value="">Selecciona una opción</option>
+                                        <option value="1">Sí</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <input type="hidden" id="user_id" name="user_id">
                         <input type="hidden" id="type_user" name="type_user">
                         

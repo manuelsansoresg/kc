@@ -55,6 +55,7 @@ function setDataUser(user_id) {
         $('#cellphone').val(result.cellphone);
         $('#email').val(result.email);
         $('#status option[value="'+result.status+'"]').attr("selected", "selected");
+        $('#is_access_config option[value="'+result.is_access_config+'"]').attr("selected", "selected");
         
 
     })

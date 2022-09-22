@@ -1,3 +1,4 @@
+@inject('m_user', 'App\Models\User')
 <!DOCTYPE html>
 <html lang="es" class="js">
 
@@ -39,57 +40,61 @@
                     <div class="nk-sidebar-content">
                         <div class="nk-sidebar-menu" data-simplebar>
                             <ul class="nk-menu">
-                                
-                                <li class="nk-menu-item has-sub">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-setting-alt-fill"></em></span>
-                                        <span class="nk-menu-text">Configuración</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
+                                @hasrole('Administrador')
+                                    @if ($m_user->getAccesConfig() == 1)
                                         <li class="nk-menu-item has-sub">
-                                            <a href="#" class="nk-menu-link nk-menu-toggle">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
-                                                <span class="nk-menu-text">Usuarios</span>
-                                            </a>
-                                            <ul class="nk-menu-sub">
-                                                <li class="nk-menu-item">
-                                                    <a href="/panel/user/administrador" class="nk-menu-link"><span class="nk-menu-text">Admin</span></a>
-                                                </li>
-                                                <li class="nk-menu-item">
-                                                    <a href="/panel/user/asesor" class="nk-menu-link"><span class="nk-menu-text">Asesores</span></a>
-                                                </li>
-                                                <li class="nk-menu-item">
-                                                    <a href="/panel/user/cliente-persona" class="nk-menu-link"><span class="nk-menu-text">Cliente persona</span></a>
-                                                </li>
-                                                <li class="nk-menu-item">
-                                                    <a href="/panel/user/cliente-financiera" class="nk-menu-link"><span class="nk-menu-text">Cliente financiera</span></a>
-                                                </li>
-        
-                                            </ul>
+                                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-setting-alt-fill"></em></span>
+                                            <span class="nk-menu-text">Configuración</span>
+                                        </a>
+                                        <ul class="nk-menu-sub">
+                                            <li class="nk-menu-item has-sub">
+                                                <a href="#" class="nk-menu-link nk-menu-toggle">
+                                                    <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
+                                                    <span class="nk-menu-text">Usuarios</span>
+                                                </a>
+                                                <ul class="nk-menu-sub">
+                                                    <li class="nk-menu-item">
+                                                        <a href="/panel/user/administrador" class="nk-menu-link"><span class="nk-menu-text">Admin</span></a>
+                                                    </li>
+                                                    <li class="nk-menu-item">
+                                                        <a href="/panel/user/asesor" class="nk-menu-link"><span class="nk-menu-text">Asesores</span></a>
+                                                    </li>
+                                                    <li class="nk-menu-item">
+                                                        <a href="/panel/user/cliente-persona" class="nk-menu-link"><span class="nk-menu-text">Cliente persona</span></a>
+                                                    </li>
+                                                    <li class="nk-menu-item">
+                                                        <a href="/panel/user/cliente-financiera" class="nk-menu-link"><span class="nk-menu-text">Cliente financiera</span></a>
+                                                    </li>
+            
+                                                </ul>
+                                            </li>
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/product" class="nk-menu-link">
+                                                    <span class="nk-menu-icon"><em class="icon ni ni-card-view"></em></span>
+                                                    <span class="nk-menu-text">Productos</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/agreement" class="nk-menu-link">
+                                                    <span class="nk-menu-icon"><em class="icon ni ni-card-view"></em></span>
+                                                    <span class="nk-menu-text">Convenios</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/financial" class="nk-menu-link">
+                                                    <span class="nk-menu-icon">
+                                                        <em class="icon ni ni-building"></em>
+                                                    </span>
+                                                    <span class="nk-menu-text">Financieras</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                        </ul>
+                                    
                                         </li>
-                                        <li class="nk-menu-item">
-                                            <a href="/panel/product" class="nk-menu-link">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-card-view"></em></span>
-                                                <span class="nk-menu-text">Productos</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                        <li class="nk-menu-item">
-                                            <a href="/panel/agreement" class="nk-menu-link">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-card-view"></em></span>
-                                                <span class="nk-menu-text">Convenios</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                        <li class="nk-menu-item">
-                                            <a href="/panel/financial" class="nk-menu-link">
-                                                <span class="nk-menu-icon">
-                                                    <em class="icon ni ni-building"></em>
-                                                </span>
-                                                <span class="nk-menu-text">Financieras</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                    </ul>
-                                   
-                                </li>
+                                    @endif
+                                @endhasrole
+
 
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
