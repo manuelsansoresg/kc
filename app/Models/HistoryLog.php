@@ -44,9 +44,11 @@ class HistoryLog extends Model
         6 => 'Entró a KC - Check up',
         7 => 'Carga',
         8 => 'Formulario',
-        9 => 'Crédito nómina reducción',
-        10 => 'Carga',
-        11 => 'Formulario',
+        9 => 'Reporte',
+        10 => 'Crédito nómina reducción',
+        11 => 'Carga',
+        12 => 'Formulario',
+        13 => 'Reporte',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null)

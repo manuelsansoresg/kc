@@ -225,7 +225,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $advisor        = $credit->creditAdvisor;
         $percent_file   = 100;
         $percent_form   = self::percentForm($history);
-        $status_file    = 'Concluido';
+        $status_file    = 'Opcional';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $max_hour       = 12;
         $hour           = Carbon::parse($credit->created_at)->hour;
