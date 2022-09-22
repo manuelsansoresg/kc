@@ -231,9 +231,15 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $hour           = Carbon::parse($credit->created_at)->hour;
         $name_advisor   = $advisor->name.' '.$advisor->last_name;
         $menu_options   = self::menuOptions($history);
-
         if ($hour > 5) {
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
+        }
+        
+        $hour = $hour.'Horas';
+
+        if ($percent_form === 100) {
+            $color_inf_credit = 'success';
+            $hour = $status_form;
         }
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();

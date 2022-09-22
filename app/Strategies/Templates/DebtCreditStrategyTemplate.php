@@ -294,11 +294,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
         }
 
-        if ($hour > 5) {
-            $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
-        }
-
-
+        
         $option_inf_credit          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
         
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $total_credit_percent])->render();
@@ -348,6 +344,13 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         if ($hour > 5) {
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
         }
+
+        $hour = $hour.' Horas';
+        if ($percent_form == 100) {
+            $color_inf_credit = 'success';
+            $hour = $status_form;
+        }
+
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
         $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
