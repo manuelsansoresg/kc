@@ -22,7 +22,7 @@ class LeadStrategyTemplate implements TemplateInterface
             $request->data = array(
                 'reason' => 4 //* enums reason_archive
             );
-            HistoryLog::move($lead->id, HistoryLog::LEAD_ARCHIVE, HistoryLog::LEAD_ARCHIVE, $request);
+            HistoryLog::move($lead->id, HistoryLog::LEAD_ARCHIVE, HistoryLog::CREATE_PROSPECT, $request);
 
             //* Execute notification in add lead
             $notification_add   = SendNotificationsValues::STRATEGY['btnNextLead'];

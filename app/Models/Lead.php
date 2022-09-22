@@ -32,44 +32,63 @@ class Lead extends Model
     {
        
         $is_asesor = Auth::user()->hasRole('Asesor');
-        if ($is_asesor === true) {
-            $get_list    = Lead::where('asesor_id', Auth::user()->id)->get();
-        } else { 
-            $get_list    = Lead::all();
-        }
+        
+        
 
+        $get_list = HistoryLog::getByStatus([HistoryLog::CREATE_PROSPECT]);
         //dd($get_list);
         $data        = array();
-        foreach ($get_list as $query) {
+        foreach ($get_list as $row) {
+            $query = $row->historyLead;
             
-            $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
-            $validate       = (new $leadStrategy)->getValidate($query->id);
-
-            $option = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'validate' => $validate])->render();
-            $lead = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
-            
-            $lbl_status = '<span class="text-success">Valido</span>';
-            
-            $product        = $query->productLead;
-            $user           = $query->advisorLead;
-
-            
-            if ($validate['error'] === true) {
-                $lbl_status = '<span class="text-danger">Invalido</span>';
+            if ($query != null) {
+                $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
+                $validate       = (new $leadStrategy)->getValidate($query->id);
+    
+                $option = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'validate' => $validate])->render();
+                $lead = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
+                
+                $lbl_status = '<span class="text-success">Valido</span>';
+                
+                $product        = $query->productLead;
+                $user           = $query->advisorLead;
+    
+                
+                if ($validate['error'] === true) {
+                    $lbl_status = '<span class="text-danger">Invalido</span>';
+                }
+                $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
+                $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
+                
+                if ($is_asesor === true &&  Auth::user()->id == $lead->asesor_id) {
+                    $data[] = array(
+                        'id' => $query->id,
+                        'name' => $lead,
+                        'date' => formatDateNameMonth($query->created_at),
+                        'product' => ($product != null) ? $product->alias : '',
+                        'origin' => $origin,
+                        'label' => $label,
+                        'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
+                        'status' => $lbl_status,
+                        'options' => $option
+                    );
+                } else {
+                    $data[] = array(
+                        'id' => $query->id,
+                        'name' => $lead,
+                        'date' => formatDateNameMonth($query->created_at),
+                        'product' => ($product != null) ? $product->alias : '',
+                        'origin' => $origin,
+                        'label' => $label,
+                        'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
+                        'status' => $lbl_status,
+                        'options' => $option
+                    );
+                }
+                
+                
             }
-            $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
-            $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
-            $data[] = array(
-                'id' => $query->id,
-                'name' => $lead,
-                'date' => formatDateNameMonth($query->created_at),
-                'product' => ($product != null) ? $product->alias : '',
-                'origin' => $origin,
-                'label' => $label,
-                'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
-                'status' => $lbl_status,
-                'options' => $option
-            );
+
         }
         return $data;
     }
