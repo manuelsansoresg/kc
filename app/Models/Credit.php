@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,11 +40,13 @@ class Credit extends Model
             $client           = $query->creditClientPerson;
             $advisor          = $query->creditAdvisor;
             $route = self::routeShowStep()[$history->status_id];
+            $model = HistoryLog::$name_model[$history->status_id];
+            $templateStrategy   = TemplateValues::STRATEGY[$model];
+            $percent   = (new $templateStrategy)->getPercent($history);
             
-
             $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'credit_id' => $history->id_rel, 'route' => $route])->render();
             $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
-            $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client])->render();
+            $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client, 'percent' => $percent])->render();
             $dead_line        = \View::make('panel.module.checkup.deadline', [ 'deadline' => $query])->render();
             $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
             

@@ -51,6 +51,11 @@ class HistoryLog extends Model
         13 => 'Reporte',
     ];
 
+    public static $name_model = [
+        6 => 'newCredit',
+        10 => 'debtCredit',
+    ];
+
     public static function move($id_rel, $status_id, $old_status_id, $request = null)
     {
         if ($request != null) {

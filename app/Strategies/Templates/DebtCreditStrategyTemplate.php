@@ -283,12 +283,12 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $color_report           = 'success';
         $menu_options           = self::menuOptionsStep($history);
         $total_percent          = $percent_file + $percent_form;
-        $total_credit_percent   = $percent_file + $percent_form;
+        //$total_credit_percent   = $percent_file;
         $status_report          = 'En espera';
        
         $status_inf_credit = ($total_percent > 100) ? 'Cerrado' : 'Abierto';
         
-        $total_credit_percent = ($total_percent> 100) ? 100 : 50;
+        $total_credit_percent = ($percent_form > 100) ? 100 : $percent_form;
 
         if ($hour > 5) {
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
@@ -343,6 +343,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $hour           = Carbon::parse($credit->created_at)->hour;
         $name_advisor   = $advisor->name.' '.$advisor->last_name;
         $menu_options   = self::menuOptions($history);
+        $color_inf_credit   = 'success';
 
         if ($hour > 5) {
             $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
@@ -506,6 +507,16 @@ class DebtCreditStrategyTemplate implements TemplateInterface
             $total_valid = $total_valid + 20;
         }
         $percent =  (100 / 100) * $total_valid;
+        return $percent;
+    }
+
+    //* get all percentages of the shares
+    public function getPercent($history)
+    {
+        $percent_form = self::percentForm($history);
+        /* $total_valid = ($percent_form / 1); */
+
+        $percent =  (100 / 100) * $percent_form;
         return $percent;
     }
 

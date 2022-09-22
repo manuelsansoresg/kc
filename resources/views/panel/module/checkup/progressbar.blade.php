@@ -1,6 +1,6 @@
 <div class="project-list-progress">
     <div class="progress progress-pill progress-md bg-light">
-        <div class="progress-bar" data-progress="93.5" style="width: 93.5%;"></div>
+        <div class="progress-bar" data-progress="{{ $percent }}" style="width: {{ $percent }}%;"></div>
     </div>
-    <div class="project-progress-percent">93.5%</div>
+    <div class="project-progress-percent">{{ $percent }}%</div>
 </div>
