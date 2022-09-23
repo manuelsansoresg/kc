@@ -284,9 +284,10 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $menu_options           = self::menuOptionsStep($history);
         $total_percent          = $percent_file + $percent_form;
         //$total_credit_percent   = $percent_file;
-        $status_report          = 'En espera';
        
         $status_inf_credit = ($total_percent > 100) ? 'Concluido' : 'En curso';
+        //TODO: change validation when the decision action is carried out in the report
+        $status_report = ($total_percent > 100) ? 'En curso' : 'En espera';
         
         $total_credit_percent = ($percent_form > 100) ? 100 : $percent_form;
 

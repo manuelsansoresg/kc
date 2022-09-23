@@ -175,6 +175,8 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $menu_options   = self::menuOptionsStep($history);
        
         $status_inf_credit = ($total_percent > 100) ? 'Concluido' : 'En curso';
+        //TODO: change validation when the decision action is carried out in the report
+        $status_report = ($total_percent > 100) ? 'En curso' : 'En espera';
         
         $total_credit_percent = ($total_percent> 100) ? 100 : 50;
 
