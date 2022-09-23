@@ -391,7 +391,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $menu_options   = self::menuOptionReportStep($history);
         $advisor        = $credit->creditAdvisor;
         $name_advisor   = $advisor->name.' '.$advisor->last_name;
-
+        $name_module_response   = 'KaaxClub';
         $color_desition   = 'success';
         if ($hour > 5) {
             $color_desition = ($hour >= $max_hour) ? 'danger' : 'warning';
@@ -407,7 +407,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
             'name' => 'Respuesta de módulo',
             'status' => 'Concluida',
             'deadline' => 'N/A',
-            'advisor' => $name_advisor,
+            'advisor' => $name_module_response,
             'options' => $options_progress,
         );
         
