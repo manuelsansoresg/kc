@@ -64,7 +64,7 @@
                                             <th>Acción</th>
                                             <th>Estatus</th>
                                             <th>Deadline</th>
-                                            <th>Asesor</th>
+                                            <th>Responsable</th>
                                             <th></th>
                                         </tr>
                                     </thead>

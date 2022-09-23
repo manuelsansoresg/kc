@@ -56,6 +56,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public static $alias_role = [
+        'Administrador' => 'Admin',
+        'Asesor' => 'Asesor',
+        'Cliente persona' => 'Cliente',
+        'Cliente financiera' => 'Financiera',
+        'Sistema' => 'KaaxClub',
+    ];
+
     public static function getUserRole($role)
     {
         $users =  User::select(

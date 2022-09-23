@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Credit extends Model
 {
@@ -51,16 +52,29 @@ class Credit extends Model
             $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
             
             $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
-
-            $users[] = array(
-                'id' => $query->id,
-                'product' => $content_product,
-                'client' => $content_client,
-                'advisor' => $name_advisor,
-                'progress' => $progress_bar,
-                'deadline' => $dead_line,
-                'options' => $option
-            );
+            $is_advisor     = Auth::user()->hasRole('Asesor');
+            if ($is_advisor === true && Auth::user()->id === $advisor->id) {
+                $users[] = array(
+                    'id' => $query->id,
+                    'product' => $content_product,
+                    'client' => $content_client,
+                    'advisor' => $name_advisor,
+                    'progress' => $progress_bar,
+                    'deadline' => $dead_line,
+                    'options' => $option
+                );
+            } else {
+                $users[] = array(
+                    'id' => $query->id,
+                    'product' => $content_product,
+                    'client' => $content_client,
+                    'advisor' => $name_advisor,
+                    'progress' => $progress_bar,
+                    'deadline' => $dead_line,
+                    'options' => $option
+                );
+            }
+            
         }
         return $users;
     }
