@@ -20,3 +20,30 @@ if (!function_exists('formatDateNameMonth')) {
         return $new_date;
     }
 }
+
+
+if (!function_exists('deadline')) {
+    function deadline($hour, $max_hour, $percent, $color)
+    {
+        $rest       = $max_hour - $hour;
+        $lbl_hour   = '';
+        $color      = 'success';
+
+        if ($rest == 0) { //*deadline end
+            $lbl_hour = 'Vencido';
+            $color      = 'danger';
+        } else {
+            $lbl_hour = '-'.$rest.' Horas';
+            if ($hour > 5) {
+                $color = ($hour >= $max_hour) ? 'danger' : 'warning';
+            }
+            if ($percent === 100) {
+                $hour = 'Concluido';
+                $color      = 'success';
+            }
+        }
+
+        $data = array('hour' => $hour, 'color' => $color, 'lbl_hour' => $lbl_hour);
+        return $data;
+    }
+}

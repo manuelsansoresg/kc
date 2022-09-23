@@ -178,13 +178,9 @@ class NewCreditStrategyTemplate implements TemplateInterface
         
         $total_credit_percent = ($total_percent> 100) ? 100 : 50;
 
-        if ($hour > 5) {
-            $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
-        }
-
-        if ($hour > 5) {
-            $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
-        }
+        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit = $data_deadline['color'];
+        $hour             = $data_deadline['hour'];
 
         $option_inf_credit  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
         $option_inf_report  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
@@ -231,16 +227,12 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $hour           = Carbon::parse($credit->created_at)->hour;
         $name_advisor   = $advisor->name.' '.$advisor->last_name;
         $menu_options   = self::menuOptions($history);
-        if ($hour > 5) {
-            $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
-        }
-        
-        $hour = $hour.'Horas';
+        $color_inf_credit = 'success';
 
-        if ($percent_form === 100) {
-            $color_inf_credit = 'success';
-            $hour = $status_form;
-        }
+        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit = $data_deadline['color'];
+        $hour             = $data_deadline['hour'];
+
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
         $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();

@@ -290,9 +290,9 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         
         $total_credit_percent = ($percent_form > 100) ? 100 : $percent_form;
 
-        if ($hour > 5) {
-            $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
-        }
+        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit = $data_deadline['color'];
+        $hour             = $data_deadline['hour'];
 
         
         $option_inf_credit          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
@@ -341,15 +341,10 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $menu_options   = self::menuOptions($history);
         $color_inf_credit   = 'success';
 
-        if ($hour > 5) {
-            $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
-        }
+        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit = $data_deadline['color'];
+        $hour             = $data_deadline['hour'];
 
-        $hour = $hour.' Horas';
-        if ($percent_form == 100) {
-            $color_inf_credit = 'success';
-            $hour = $status_form;
-        }
 
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
