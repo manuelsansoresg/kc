@@ -8,9 +8,11 @@ use App\Models\Credit;
 use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\Lead;
+use App\Models\User;
 use App\Strategies\TemplateInterface;
 use App\Strategies\Values\SendNotificationsValues;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use stdClass;
 
 class DebtCreditStrategyTemplate implements TemplateInterface
@@ -338,7 +340,12 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $max_hour       = 12;
         $hour           = Carbon::parse($credit->created_at)->hour;
-        $name_advisor   = $advisor->name.' '.$advisor->last_name;
+
+        $user = User::find($advisor->id);
+        $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+        
+        $name_advisor   = $role.' - '.$advisor->name.' '.$advisor->last_name;
+
         $menu_options   = self::menuOptions($history);
         $color_inf_credit   = 'success';
 
@@ -351,7 +358,9 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
         $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
-        //dd(json_encode($option_file));
+        if ($advisor->id == Auth::user()->id) {
+            $name_advisor = 'Tú';
+        }
 
         $data = array();
         $data[] = array(
