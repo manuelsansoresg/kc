@@ -40,7 +40,8 @@ class ListStrategy implements ActionInterface
         
         foreach ($history_logs as $history_log) {
             //*saber si el usuario es admin
-            $is_admin       = Auth::user()->hasRole('Administrador');
+            $is_admin   = Auth::user()->hasRole('Administrador');
+            $is_adviser = Auth::user()->hasRole('Asesor');
             $credit         = $history_log->historyCredit;
             $client         = $credit->creditClientPerson;
             $advisor        = $credit->creditAdvisor;
@@ -55,19 +56,28 @@ class ListStrategy implements ActionInterface
             $percent_file   = (new $templateStrategy)->percentFile($history_log->id_rel);
             $percent_form   = (new $templateStrategy)->percentForm($history_log);
 
-            
+            $user = User::find($advisor->id);
+            $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+
+            $name_responsable   = $role.' - '.$advisor->name.' '.$advisor->last_name;
+
+            if ($advisor->id == Auth::user()->id) {
+                $name_responsable = 'Tú';
+            }
 
             if ($hour > 5) {
                 $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
             }
+
             $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
             $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
             $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
             $option = ($history_log->status_id == 7) ? $file_option : $form_option;
 
-            if ($is_admin) {
+            //TODO:  si eres admin o asesor debes poder ver todos y si no solo puedes ver los tuyos como responsable revisar cual campo sera el responsable
 
+            if ($is_admin || $is_adviser) {
                 if ($name_status == 'completed' && ($percent_file == 100 || $percent_form == 100)) {
                     $data[] = array(
                         'action' => HistoryLog::$label_status[$history_log->status_id],
@@ -76,6 +86,7 @@ class ListStrategy implements ActionInterface
                         'deadline' => $view_dead_line_inf_credit,
                         'advisor' => $name_advisor,
                         'options' => $option,
+                        'responsable' => $name_responsable
                     );
                 } elseif ($name_status == 'in_progress' && ($percent_file < 100 || $percent_form < 100)) {
                     $data[] = array(
@@ -85,6 +96,7 @@ class ListStrategy implements ActionInterface
                         'deadline' => $view_dead_line_inf_credit,
                         'advisor' => $name_advisor,
                         'options' => $option,
+                        'responsable' => $name_responsable
                     );
                 }
             } else {
@@ -97,6 +109,7 @@ class ListStrategy implements ActionInterface
                             'deadline' => $view_dead_line_inf_credit,
                             'advisor' => $name_advisor,
                             'options' => $option,
+                            'responsable' => $name_responsable
                         );
                     } elseif ($name_status == 'in_progress' && ($percent_file < 100 || $percent_form < 100)) {
                         $data[] = array(
@@ -106,6 +119,7 @@ class ListStrategy implements ActionInterface
                             'deadline' => $view_dead_line_inf_credit,
                             'advisor' => $name_advisor,
                             'options' => $option,
+                            'responsable' => $name_responsable
                         );
                     }
                 }

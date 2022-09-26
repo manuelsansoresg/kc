@@ -546,6 +546,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'advisor'
     }, {
+      data: 'responsable'
+    }, {
       data: 'options',
       className: 'nk-tb-col-tools text-end'
     }],

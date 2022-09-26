@@ -33,6 +33,7 @@
                                             <th>Nombre</th>
                                             <th>Deadline</th>
                                             <th>Asesor</th>
+                                            <th>Responsable</th>
                                             <th></th>
                                         </tr>
                                     </thead>

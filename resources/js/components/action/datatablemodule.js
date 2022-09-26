@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'name' },
             { data: 'deadline' },
             { data: 'advisor' },
+            { data: 'responsable' },
             { data: 'options', className: 'nk-tb-col-tools text-end' }
         ],
         columnDefs: [
