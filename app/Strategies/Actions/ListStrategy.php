@@ -64,9 +64,18 @@ class ListStrategy implements ActionInterface
             if ($advisor->id == Auth::user()->id) {
                 $name_responsable = 'Tú';
             }
+            $color_inf_credit = 'success';
 
-            if ($hour > 5) {
-                $color_inf_credit = ($hour >= $max_hour) ? 'danger' : 'warning';
+            $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit = $data_deadline['color'];
+            $hour             = $data_deadline['hour'];
+
+            if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM) {
+                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+            }
+
+            if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_DESITION || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION) {
+                $status_form = 'En curso';
             }
 
             $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
@@ -86,7 +95,8 @@ class ListStrategy implements ActionInterface
                         'deadline' => $view_dead_line_inf_credit,
                         'advisor' => $name_advisor,
                         'options' => $option,
-                        'responsable' => $name_responsable
+                        'responsable' => $name_responsable,
+                        'status' => $status_form
                     );
                 } elseif ($name_status == 'in_progress' && ($percent_file < 100 || $percent_form < 100)) {
                     $data[] = array(
@@ -96,7 +106,8 @@ class ListStrategy implements ActionInterface
                         'deadline' => $view_dead_line_inf_credit,
                         'advisor' => $name_advisor,
                         'options' => $option,
-                        'responsable' => $name_responsable
+                        'responsable' => $name_responsable,
+                        'status' => $status_form
                     );
                 }
             } else {
@@ -109,7 +120,8 @@ class ListStrategy implements ActionInterface
                             'deadline' => $view_dead_line_inf_credit,
                             'advisor' => $name_advisor,
                             'options' => $option,
-                            'responsable' => $name_responsable
+                            'responsable' => $name_responsable,
+                            'status' => $status_form
                         );
                     } elseif ($name_status == 'in_progress' && ($percent_file < 100 || $percent_form < 100)) {
                         $data[] = array(
@@ -119,7 +131,8 @@ class ListStrategy implements ActionInterface
                             'deadline' => $view_dead_line_inf_credit,
                             'advisor' => $name_advisor,
                             'options' => $option,
-                            'responsable' => $name_responsable
+                            'responsable' => $name_responsable,
+                            'status' => $status_form
                         );
                     }
                 }

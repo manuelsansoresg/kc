@@ -61,7 +61,7 @@ class CreditController extends Controller
         return response()->json($tag);
     }
 
-    public function getNote($credit_id) 
+    public function getNote($credit_id)
     {
         $actionStrategy   = ActionValues::STRATEGY['credit'];
         $get_note         = (new $actionStrategy)->getNotes($credit_id);
@@ -72,8 +72,10 @@ class CreditController extends Controller
     {
         $leadStrategy   = ActionValues::STRATEGY['list'];
         $actions = [
-            HistoryLog::KC_CHECK_UP_ACTION_UPLOAD,
             HistoryLog::KC_CHECK_UP_ACTION_FORM,
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
+            HistoryLog::KC_CHECK_UP_ACTION_DESITION,
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
         ];
         
         $list       = (new $leadStrategy)->get('completed', $actions, $credit_id);

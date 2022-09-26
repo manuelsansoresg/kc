@@ -197,9 +197,9 @@
                                                         <tr>
                                                             <th>Acción</th>
                                                             <th>Módulo</th>
-                                                            <th>Nombre</th>
                                                             <th>Deadline</th>
-                                                            <th>Asesor</th>
+                                                            <th>Responsable</th>
+                                                            <th>Estatus</th>
                                                             <th></th>
                                                         </tr>
                                                     </thead>

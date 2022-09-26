@@ -678,6 +678,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var credit_id = $('#credit-profile-credit_id').val();
   var table = NioApp.DataTable('#dt-acctions-profile', {
     processing: true,
+    order: [[5, 'desc']],
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {
@@ -699,11 +700,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'module'
     }, {
-      data: 'name'
-    }, {
       data: 'deadline'
     }, {
-      data: 'advisor'
+      data: 'responsable'
+    }, {
+      data: 'status'
     }, {
       data: 'options',
       className: 'nk-tb-col-tools text-end'
