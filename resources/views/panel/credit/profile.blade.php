@@ -171,7 +171,7 @@
                                             </div>
                                             <div class="tab-pane" id="tabHistorial">
                                                 @php
-                                                    $histories = $m_history_log->getByStatus([5,6]);
+                                                    $histories = $m_history_log->getByStatus([5,6], $credit->id);
                                                     $leyend_status = $m_history_log::$label_status;
                                                 @endphp
                                                 @foreach ($histories as $history)
