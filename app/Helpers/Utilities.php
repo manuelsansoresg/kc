@@ -25,10 +25,9 @@ if (!function_exists('formatDateNameMonth')) {
 if (!function_exists('deadline')) {
     function deadline($date_init, $max_hour, $percent, $color)
     {
-        $date_init = new DateTime($date_init);//fecha inicial
-        $date_fin = new DateTime();//fecha de cierre
-        $interval = $date_init->diff($date_fin);
-        $hour = $interval->format('%H');
+        $date_init = strtotime($date_init);//fecha inicial
+        $date_fin = strtotime(date('Y-m-d H:i:s'));//fecha de cierre
+        $hour = abs($date_init - $date_fin)/3600;
         $rest = 0;
         if ($hour < $max_hour) {
             $rest       = $max_hour - $hour;
@@ -61,16 +60,15 @@ if (!function_exists('deadline')) {
 if (!function_exists('deadlineKc')) {
     function deadlineKc($date_init, $max_hour)
     {
-        $date_init = new DateTime($date_init);//fecha inicial
-        $date_fin = new DateTime();//fecha de cierre
-        $interval = $date_init->diff($date_fin);
-        $hour = $interval->format('%H');
+        $date_init = strtotime($date_init);//fecha inicial
+        $date_fin = strtotime(date('Y-m-d H:i:s'));//fecha de cierre
+        $hour = abs($date_init - $date_fin)/3600;
         $rest = 0;
         if ($hour < $max_hour) {
             $rest       = $max_hour - $hour;
         }
 
-        //dd($max_hour, $hour, $rest);
+        //dd($date_init, $date_fin, $max_hour, $hour, $rest);
         $lbl_hour   = '';
         $color      = 'success';
 
