@@ -65,10 +65,9 @@ if (!function_exists('deadlineKc')) {
         $hour = abs($date_init - $date_fin)/3600;
         $rest = 0;
         if ($hour < $max_hour) {
-            $new_hour   = $max_hour - $hour;
-            $rest       = isset(explode(".", $new_hour)[0])? explode(".", $new_hour)[0] : $new_hour;
+            $rest_hour   = explode('.', $max_hour - $hour);
+            $rest       = isset($rest_hour[0])? $rest_hour[0] : $rest_hour;
         }
-
         //dd($date_init, $date_fin, $max_hour, $hour, $rest);
         $lbl_hour   = '';
         $color      = 'success';
