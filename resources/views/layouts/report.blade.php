@@ -188,54 +188,34 @@
             'Financiera 4',
             'Financiera 5',
         ];
-
+        
         const data = {
             labels: labels,
             datasets: [{
                     label: 'Financiera1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [80, 0, 0, 0, 0],
-                    borderWidth: 2,
-                    borderRadius: Number.MAX_VALUE,
-                    borderSkipped: false,
+                    data: [80, 10, 20,40, 50],
+                    backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(255, 159, 64, 0.5)',
+                    'rgba(255, 205, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(201, 203, 207, 0.5)'
+                    ],
+                    borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 2,
                 },
-                {
-                    label: 'Financiera2',
-                    backgroundColor: 'rgb(255, 111, 0)',
-                    borderColor: 'rgb(255, 111, 0)',
-                    data: [0, 40, 0, 0, 0, 0],
-                    borderWidth: 2,
-                    borderRadius: Number.MAX_VALUE,
-                    borderSkipped: false,
-                },
-                {
-                    label: 'Financiera3',
-                    backgroundColor: 'rgb(0, 34, 255)',
-                    borderColor: 'rgb(0, 34, 255)',
-                    data: [0, 0, 150, 0, 0],
-                    borderWidth: 2,
-                    borderRadius: Number.MAX_VALUE,
-                    borderSkipped: false,
-                },
-                {
-                    label: 'Financiera4',
-                    backgroundColor: 'rgb(18, 255, 42)',
-                    borderColor: 'rgb(18, 255, 42)',
-                    data: [0, 0, 0, 100, 0],
-                    borderWidth: 2,
-                    borderRadius: Number.MAX_VALUE,
-                    borderSkipped: false,
-                },
-                {
-                    label: 'Financiera5',
-                    backgroundColor: 'rgb(185, 18, 255)',
-                    borderColor: 'rgb(185, 18, 255)',
-                    data: [0, 0, 0, 0, 90],
-                    borderWidth: 2,
-                    borderRadius: Number.MAX_VALUE,
-                    borderSkipped: false,
-                },
+                
             ]
         };
 
@@ -246,13 +226,12 @@
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'top',
+                        display: false,
                     },
                     title: {
-                        display: true,
-                        text: 'Chart.js Bar Chart'
+                        display: false,
                     }
-                }
+                },
             },
         };
         const myChart = new Chart(
