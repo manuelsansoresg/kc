@@ -30,7 +30,8 @@ if (!function_exists('deadline')) {
         $hour = abs($date_init - $date_fin)/3600;
         $rest = 0;
         if ($hour < $max_hour) {
-            $rest       = $max_hour - $hour;
+            $rest_hour   = explode('.', $max_hour - $hour);
+            $rest       = isset($rest_hour[0])? $rest_hour[0] : $rest_hour;
         }
 
         //dd($max_hour, $hour, $rest);
