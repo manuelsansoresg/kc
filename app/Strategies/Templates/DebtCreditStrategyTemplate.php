@@ -275,16 +275,16 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
     public function listStep($history_id)
     {
-        $history                = HistoryLog::find($history_id);
-        $credit                 = $history->historyCredit;
-        $max_hour               = 12;
-        $hour                   = Carbon::parse($credit->created_at)->hour;
-        $percent_form           = self::percentForm($history);
-        $percent_file           = 100;
-        $color_inf_credit       = 'success';
-        $color_report           = 'success';
-        $menu_options           = self::menuOptionsStep($history);
-        $total_percent          = $percent_file + $percent_form;
+        $history            = HistoryLog::find($history_id);
+        $credit             = $history->historyCredit;
+        $max_hour           = 12;
+        $hour               = $credit->created_at;
+        $percent_form       = self::percentForm($history);
+        $percent_file       = 100;
+        $color_inf_credit   = 'success';
+        $color_report       = 'success';
+        $menu_options       = self::menuOptionsStep($history);
+        $total_percent      = $percent_file + $percent_form;
         //$total_credit_percent   = $percent_file;
        
         $status_inf_credit = ($total_percent > 100) ? 'Concluido' : 'En curso';
@@ -295,7 +295,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
         $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit = $data_deadline['color'];
-        $hour             = $data_deadline['hour'];
+        $hour             = $data_deadline['lbl_hour'];
 
         
         $option_inf_credit          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
@@ -339,7 +339,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $status_file    = 'Opcional';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $max_hour       = 12;
-        $hour           = Carbon::parse($credit->created_at)->hour;
+        $hour           = $credit->created_at;
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -351,7 +351,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
         $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit = $data_deadline['color'];
-        $hour             = $data_deadline['hour'];
+        $hour             = $data_deadline['lbl_hour'];
 
 
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();

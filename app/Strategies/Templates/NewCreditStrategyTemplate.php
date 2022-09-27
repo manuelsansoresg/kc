@@ -166,7 +166,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $history            = HistoryLog::find($history_id);
         $credit             = $history->historyCredit;
         $max_hour           = 12;
-        $hour               = Carbon::parse($credit->created_at)->hour;
+        $hour           = $credit->created_at;
         $percent_form       = self::percentForm($history);
         $percent_file       = 100;
         $color_inf_credit   = 'success';
@@ -184,7 +184,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
 
         $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit = $data_deadline['color'];
-        $hour             = $data_deadline['hour'];
+        $hour             = $data_deadline['lbl_hour'];
 
         $option_inf_credit  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
         $option_inf_report  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
@@ -228,7 +228,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $status_file    = 'Opcional';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $max_hour       = 12;
-        $hour           = Carbon::parse($credit->created_at)->hour;
+        $hour           = $credit->created_at;
 
 
         $user = User::find($advisor->id);
@@ -240,7 +240,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
 
         $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit = $data_deadline['color'];
-        $hour             = $data_deadline['hour'];
+        $hour             = $data_deadline['lbl_hour'];
 
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();

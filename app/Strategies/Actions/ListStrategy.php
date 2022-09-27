@@ -49,7 +49,7 @@ class ListStrategy implements ActionInterface
             $name           = $credit->id.' '.$client->last_name.' '.$client->second_last_name.' '.$client->name;
             $name_advisor   = $advisor->name.' '.$advisor->last_name;
             $max_hour       = 12;
-            $hour           = Carbon::parse($credit->created_at)->hour;
+            $hour           = $credit->created_at;
             $templateStrategy   = TemplateValues::STRATEGY['newCredit']; //TODO: cambiar dinamico
             $menu_options   = (new $templateStrategy)->menuOptions($history_log);
             

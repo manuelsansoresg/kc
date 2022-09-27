@@ -23,24 +23,33 @@ if (!function_exists('formatDateNameMonth')) {
 
 
 if (!function_exists('deadline')) {
-    function deadline($hour, $max_hour, $percent, $color)
+    function deadline($date_init, $max_hour, $percent, $color)
     {
-        $rest       = $max_hour - $hour;
+        $date_init = new DateTime($date_init);//fecha inicial
+        $date_fin = new DateTime();//fecha de cierre
+        $interval = $date_init->diff($date_fin);
+        $hour = $interval->format('%H');
+        $rest = 0;
+        if ($hour < $max_hour) {
+            $rest       = $max_hour - $hour;
+        }
+
+        //dd($max_hour, $hour, $rest);
         $lbl_hour   = '';
         $color      = 'success';
 
-        if ($rest == 0) { //*deadline end
-            $lbl_hour = 'Vencido';
-            $color      = 'danger';
+        $lbl_hour = '- '.$rest.' Horas';
+        if ($percent === 100) {
+            $lbl_hour = 'Concluido';
+            $color      = 'success';
         } else {
-            $lbl_hour = '-'.$rest.' Horas';
-           
-            if ($percent === 100) {
-                $hour = 'Concluido';
-                $color      = 'success';
-            }
-            if ($hour > 5) {
-                $color = ($hour >= $max_hour) ? 'danger' : 'warning';
+            if ($rest == 0) { //*deadline end
+                $lbl_hour = 'Vencido';
+                $color      = 'danger';
+            } else {
+                if ($hour > 5) {
+                    $color = ($hour >= $max_hour) ? 'danger' : 'warning';
+                }
             }
         }
 
