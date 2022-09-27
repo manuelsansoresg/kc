@@ -57,3 +57,34 @@ if (!function_exists('deadline')) {
         return $data;
     }
 }
+
+if (!function_exists('deadlineKc')) {
+    function deadlineKc($date_init, $max_hour)
+    {
+        $date_init = new DateTime($date_init);//fecha inicial
+        $date_fin = new DateTime();//fecha de cierre
+        $interval = $date_init->diff($date_fin);
+        $hour = $interval->format('%H');
+        $rest = 0;
+        if ($hour < $max_hour) {
+            $rest       = $max_hour - $hour;
+        }
+
+        //dd($max_hour, $hour, $rest);
+        $lbl_hour   = '';
+        $color      = 'success';
+
+        $lbl_hour = '- '.$rest.' Horas';
+        if ($rest == 0) { //*deadline end
+            $lbl_hour = 'Vencido';
+            $color      = 'danger';
+        } else {
+            if ($hour > 5) {
+                $color = ($hour >= $max_hour) ? 'danger' : 'warning';
+            }
+        }
+
+        $data = array('hour' => $hour, 'color' => $color, 'lbl_hour' => $lbl_hour);
+        return $data;
+    }
+}

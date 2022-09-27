@@ -40,15 +40,22 @@ class Credit extends Model
             $alias_product    = $product !== null ? $product->alias : null;
             $client           = $query->creditClientPerson;
             $advisor          = $query->creditAdvisor;
-            $route = self::routeShowStep()[$history->status_id];
-            $model = HistoryLog::$name_model[$history->status_id];
-            $templateStrategy   = TemplateValues::STRATEGY[$model];
-            $percent   = (new $templateStrategy)->getPercent($history);
+            $route            = self::routeShowStep()[$history->status_id];
+            $model            = HistoryLog::$name_model[$history->status_id];
+            $templateStrategy = TemplateValues::STRATEGY[$model];
+            $percent          = (new $templateStrategy)->getPercent($history);
+
+            $hour             = $query->created_at;
+            $max_hour         = 24;
+
+            $data_deadline    = deadlineKc($hour, $max_hour);
+            $color_inf_credit = $data_deadline['color'];
+            $hour             = $data_deadline['lbl_hour'];
             
             $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'credit_id' => $history->id_rel, 'route' => $route])->render();
             $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
             $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client, 'percent' => $percent])->render();
-            $dead_line        = \View::make('panel.module.checkup.deadline', [ 'deadline' => $query])->render();
+            $dead_line        = \View::make('panel.module.checkup.deadline', [ 'hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
             $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
             
             $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
