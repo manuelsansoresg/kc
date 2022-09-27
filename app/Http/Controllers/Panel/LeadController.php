@@ -72,6 +72,13 @@ class LeadController extends Controller
         
         return response()->json(['data' => $archive]);
     }
+
+    public function product()
+    {
+        $status = HistoryLog::CREDIT_ARCHIVE;
+        return view('panel.credit.product.index', compact('status'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

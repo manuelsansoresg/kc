@@ -27,6 +27,10 @@ class HistoryLog extends Model
     const KC_CHECK_UP_DEBT_REDUCTION_FORM     = 12;
     const KC_CHECK_UP_DEBT_REDUCTION_REPORT   = 13;
     const KC_CHECK_UP_DEBT_REDUCTION_DESITION = 15;
+
+    const CREDIT_ARCHIVE                      = 16;
+    const CREDIT_CANCELED                     = 17;
+    const CREDIT_REJECTED                     = 18;
     
 
     protected $fillable = [

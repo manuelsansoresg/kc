@@ -67,6 +67,7 @@ Route::post('{model}/note', ['\App\Http\Controllers\Panel\PanelController', 'not
 Route::group(['prefix' => 'archive'], function () {
     Route::get('lead', ['\App\Http\Controllers\Panel\LeadController', 'archive'])->middleware('auth');
     Route::get('lead/list/show', ['\App\Http\Controllers\Panel\LeadController', 'listArchive'])->middleware('auth');
+    Route::get('product', ['\App\Http\Controllers\Panel\LeadController', 'product'])->middleware('auth');
 });
 
 Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\NotificationController', 'show'])->middleware('auth');
@@ -164,6 +165,9 @@ Route::group(['prefix' => 'credit'], function () {
 
     Route::get('note/{credit_id}/get-all', ['\App\Http\Controllers\Panel\Credit\CreditController', 'getNote'])->middleware('auth');
     Route::get('action/{credit_id}/list', ['\App\Http\Controllers\Panel\Credit\CreditController', 'getListAction'])->middleware('auth');
+    
+    Route::get('product/{status}', ['\App\Http\Controllers\Panel\Credit\CreditController', 'product'])->middleware('auth');
+    Route::get('product/{status}/list', ['\App\Http\Controllers\Panel\Credit\CreditController', 'productList'])->middleware('auth');
 
     
 });

@@ -82,6 +82,17 @@ class CreditController extends Controller
         return response()->json(['data' => $list]);
     }
 
+    public function product($status)
+    {
+        return view('panel.credit.product.index', compact('status'));
+    }
+
+    public function productList($status)
+    {
+        $list = Credit::listDatatableProduct([$status]);
+        return response()->json(['data' => $list]);
+    }
+
     /**
      * Display the specified resource.
      *

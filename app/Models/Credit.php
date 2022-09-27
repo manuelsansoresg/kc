@@ -74,9 +74,68 @@ class Credit extends Model
                     'options' => $option
                 );
             }
-            
         }
         return $users;
+    }
+
+    public static function listDatatableProduct($status)
+    {
+        $get_list    = HistoryLog::getByStatus([$status]);
+        
+        $users        = array();
+        foreach ($get_list as $history) {
+            $query            = Credit::find($history->id_rel);
+            $product          = $query->creditProduct;
+            $alias_product    = $product !== null ? $product->alias : null;
+            $client           = $query->creditClientPerson;
+            $advisor          = $query->creditAdvisor;
+            $menu_options   = self::menuOptionCredit($history);
+            $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['archive']])->render();
+            $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
+            $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
+            
+            $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
+            $is_advisor     = Auth::user()->hasRole('Asesor');
+            if ($is_advisor === true && Auth::user()->id === $advisor->id) {
+                $users[] = array(
+                    'id' => $query->id,
+                    'product' => $content_product,
+                    'client' => $content_client,
+                    'advisor' => $name_advisor,
+                    'options' => $option
+                );
+            } else {
+                $users[] = array(
+                    'id' => $query->id,
+                    'product' => $content_product,
+                    'client' => $content_client,
+                    'advisor' => $name_advisor,
+                    'options' => $option
+                );
+            }
+        }
+        return $users;
+    }
+
+    public function menuOptionCredit($history)
+    {
+        $menu = array(
+            'archive' => array(
+                [
+                    'link' => '/panel/credit/'.$history->id_rel,
+                    'onclick' => '',
+                    'name' => 'Ver perfíl crédito',
+                ]
+            ),
+            'desition' => array(
+                [
+                    'link' => '/panel/kc-check-up/report/desition/'.$history->id.'/show/',
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                ]
+            )
+        );
+        return $menu;
     }
 
     public function routeShowStep()
