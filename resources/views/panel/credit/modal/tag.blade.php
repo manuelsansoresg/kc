@@ -14,7 +14,7 @@
                     <div class="row gy-4">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label" for="frm-user-admin-name">Nota</label>
+                                <label class="form-label" for="frm-user-admin-name">Etiquetar</label>
                                 <div class="form-control-wrap">
                                     <select class="form-select select2multiple" multiple="multiple" id="modal-credit-tag-tag" name="tags[]"  data-search="on">
                                         @foreach ($tags as $tag)
