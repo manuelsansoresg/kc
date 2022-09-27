@@ -87,7 +87,7 @@ class ListStrategy implements ActionInterface
             //TODO:  si eres admin o asesor debes poder ver todos y si no solo puedes ver los tuyos como responsable revisar cual campo sera el responsable
 
             if ($is_admin) {
-                if ($name_status == 'completed' && ($percent_file == 100 || $percent_form == 100)) {
+                if ($name_status == 'completed' && ($percent_form == 100)) {
                     $data[] = array(
                         'action' => HistoryLog::$label_status[$history_log->status_id],
                         'module' => $module,
@@ -98,7 +98,7 @@ class ListStrategy implements ActionInterface
                         'responsable' => $name_responsable,
                         'status' => $status_form
                     );
-                } elseif ($name_status == 'in_progress' && ($percent_file < 100 || $percent_form < 100)) {
+                } elseif ($name_status == 'in_progress' && ($percent_form < 100)) {
                     $data[] = array(
                         'action' => HistoryLog::$label_status[$history_log->status_id],
                         'module' => $module,
@@ -112,7 +112,7 @@ class ListStrategy implements ActionInterface
                 }
             } else {
                 if (Auth::user()->id == $advisor->id) {
-                    if ($name_status == 'completed' && ($percent_file == 100 || $percent_form == 100)) {
+                    if ($name_status == 'completed' && ($percent_form == 100)) {
                         $data[] = array(
                             'action' => HistoryLog::$label_status[$history_log->status_id],
                             'module' => $module,
@@ -123,7 +123,7 @@ class ListStrategy implements ActionInterface
                             'responsable' => $name_responsable,
                             'status' => $status_form
                         );
-                    } elseif ($name_status == 'in_progress' && ($percent_file < 100 || $percent_form < 100)) {
+                    } elseif ($name_status == 'in_progress' && ($percent_form < 100)) {
                         $data[] = array(
                             'action' => HistoryLog::$label_status[$history_log->status_id],
                             'module' => $module,
