@@ -79,7 +79,7 @@ if (!function_exists('deadlineKc')) {
             $lbl_hour = 'Vencido';
             $color      = 'danger';
         } else {
-            if ($hour > 18) {
+            if ($hour > 15) {
                 $color = ($hour >= $max_hour) ? 'danger' : 'warning';
             }
         }
