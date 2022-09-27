@@ -34,12 +34,13 @@ if (!function_exists('deadline')) {
             $color      = 'danger';
         } else {
             $lbl_hour = '-'.$rest.' Horas';
-            if ($hour > 5) {
-                $color = ($hour >= $max_hour) ? 'danger' : 'warning';
-            }
+           
             if ($percent === 100) {
                 $hour = 'Concluido';
                 $color      = 'success';
+            }
+            if ($hour > 5) {
+                $color = ($hour >= $max_hour) ? 'danger' : 'warning';
             }
         }
 

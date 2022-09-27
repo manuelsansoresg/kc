@@ -64,7 +64,7 @@ class ListStrategy implements ActionInterface
             if ($advisor->id == Auth::user()->id) {
                 $name_responsable = 'Tú';
             }
-            $color_inf_credit = 'success';
+            $color_inf_credit = '';
 
             $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
             $color_inf_credit = $data_deadline['color'];
