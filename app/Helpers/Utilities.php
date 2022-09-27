@@ -66,7 +66,7 @@ if (!function_exists('deadlineKc')) {
         $interval = $date_init->diff($date_fin);
         $hour = $interval->format('%H');
         $rest = 0;
-        if ($hour < $max_hour) {
+        if ($hour <= $max_hour) {
             $rest       = $max_hour - $hour;
         }
 
