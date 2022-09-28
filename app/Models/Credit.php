@@ -17,7 +17,7 @@ class Credit extends Model
         'agreement_id',
         'origin_id',
         'channel_id',
-        'type_id',
+        'type_id', //*atención
         'asesor_id',
         'current_payment',//*save  * 100
         'current_periodicity',

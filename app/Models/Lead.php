@@ -24,7 +24,7 @@ class Lead extends Model
         'channel_id' ,
         'asesor_id' ,
         'temperature_id' ,
-        'type_id',
+        'type_id', //*atención
         'financial_id'
     ];
 

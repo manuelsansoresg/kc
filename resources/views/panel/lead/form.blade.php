@@ -34,22 +34,26 @@
                                                 <li class="breadcrumb-item active"><a href="/panel/lead">Prospecto</a></li>
                                             </ul>
                                         </nav>
+                                        
                                     </div>
                                    
                                 </div>
+                               
                             </div><!-- .nk-block-head -->
-                            <div class="nk-block nk-block-lg">
+                            <div class="nk-block nk-block-lg ">
+                                <p>* Campos obligatorios</p>
                                 <div class="card card-bordered card-preview">
                                     <div class="card-inner">
                                         <div class="preview-block">
                                             <div class="row gy-4">
                                                 <form method="post" id="frm-lead" action="">
                                                     @csrf
-                                                    <span class="preview-title-lg overline-title">Producto</span>
+                                                    <span class="preview-title-lg overline-title">Producto KC</span>
                                                     <div class="row gy-4">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-label">Organización</label>
+                                                                <p class="small">Institución o empresa donde labora el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                    
                                                                     <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement"  data-search="on">
@@ -73,7 +77,8 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Producto</label>
+                                                                <label class="form-label">Producto KC</label>
+                                                                <p class="small">Producto que desea el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                     <select class="form-select js-select2" name="data[product_id]" id="lead-product-id"  data-search="on">
                                                                         @if ($lead_id == null)
@@ -90,6 +95,7 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-label">Financiera</label>
+                                                                <p class="small">Financiera con la que el prospecto tiene un crédito</p>
                                                                 <div class="form-control-wrap">
                                                                     <select class="form-select js-select2" name="data[financial_id]" id="lead-financial_id"  data-search="on">
                                                                         <option value="">Escribe para buscar</option>
@@ -101,7 +107,7 @@
                                                         <span class="preview-title-lg overline-title">General</span>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Nombres</label>
+                                                                <label class="form-label">*Nombres</label>
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" name="data[name]" id="lead-name">
                                                                 </div>
@@ -109,7 +115,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Primer apellido</label>
+                                                                <label class="form-label">*Primer apellido</label>
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" name="data[last_name]"  id="lead-last_name">
                                                                 </div>
@@ -133,7 +139,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Email</label>
+                                                                <label class="form-label">*Email</label>
                                                                 <div class="form-control-wrap">
                                                                     <input type="email" class="form-control" name="data[email]" id="lead-email">
                                                                 </div>
@@ -141,7 +147,7 @@
                                                         </div>
                 
                                                         <hr class="preview-hr">
-                                                        <span class="preview-title-lg overline-title">Origen</span>
+                                                        <span class="preview-title-lg overline-title">*Origen</span>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-label">Origen</label>
@@ -160,7 +166,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Canal</label>
+                                                                <label class="form-label">*Canal</label>
                                                                 <div class="form-control-wrap">
                                                                     <select class="form-select js-select2" name="data[channel_id]" id="lead-channel"  data-search="on">
                                                                         <option></option>
@@ -193,10 +199,11 @@
                                                             </div>
                                                         </div>
                                                         <hr class="preview-hr">
-                                                        <span class="preview-title-lg overline-title">Servicio</span>
+                                                        <span class="preview-title-lg overline-title">Atención</span>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Tipo</label>
+                                                                <label class="form-label">Atención</label>
+                                                                <p class="small"> Tipo de atención que desea el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                     <select class="form-select js-select2" name="data[type_id]" id="lead-type_id"  data-search="on">
                                                                         @if ($lead == null)
