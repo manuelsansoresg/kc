@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         columns: [
             { data: 'id' },
             { data: 'product' },
+            { data: 'date' },
             { data: 'client' },
             { data: 'advisor' }, 
             { data: 'options', className: 'nk-tb-col-tools text-end' }

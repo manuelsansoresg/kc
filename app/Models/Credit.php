@@ -107,6 +107,7 @@ class Credit extends Model
                 $users[] = array(
                     'id' => $query->id,
                     'product' => $content_product,
+                    'date' => $history->created_at,
                     'client' => $content_client,
                     'advisor' => $name_advisor,
                     'options' => $option
@@ -115,6 +116,7 @@ class Credit extends Model
                 $users[] = array(
                     'id' => $query->id,
                     'product' => $content_product,
+                    'date' => $history->created_at,
                     'client' => $content_client,
                     'advisor' => $name_advisor,
                     'options' => $option

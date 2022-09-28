@@ -8,7 +8,7 @@
             <div class="kanban-item-title">
                 <h6 class="title">
                     <em class="{{ $icons[$action->type] }}"></em>
-                    {{ $enum_actions[$action->type] }}
+                    {{ $enum_actions[$action->type] }} 
                 </h6>
             </div>
             <div class="kanban-item-text">

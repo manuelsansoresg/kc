@@ -720,6 +720,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'product'
     }, {
+      data: 'date'
+    }, {
       data: 'client'
     }, {
       data: 'advisor'
