@@ -2,11 +2,11 @@
 if (!function_exists('formatDateNameMonth')) {
     function formatDateNameMonth($date, $is_time = true)
     {
-        $monhts = array('01' => 'Enero', '02' => 'Febrero', '03' => 'Marzo', '04' => 'Abril', '05' => 'Mayo',
-                    '06' => 'Junio', '07' => 'Julio', '08' => 'Agosto', '09' => 'Septiembre',
-                    '10' => 'Octubre', '11' => 'Noviembre', '12' => 'Diciembre'
+        $monhts = array('01' => 'Ene', '02' => 'Feb', '03' => 'Mar', '04' => 'Abr', '05' => 'May',
+                    '06' => 'Jun', '07' => 'Jul', '08' => 'Ago', '09' => 'Sep',
+                    '10' => 'Oct', '11' => 'Nov', '12' => 'Dic'
                 );
-        $format_date = date('d-m-Y h:i a', strtotime($date));
+        $format_date = date('d-m-y h:i a', strtotime($date));
         $day = substr($format_date, 0, 3);
         $month  = $monhts[substr($format_date, 3, 2)];
         $year_hour           = substr($format_date, 6);

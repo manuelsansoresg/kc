@@ -29,8 +29,7 @@
                                         <tr>
                                             <th>Tipo</th>
                                             <th>Asunto</th>
-                                            <th>Sección</th>
-                                            <th>Nombre</th>
+                                            <th>Prospecto</th>
                                             <th>Fecha inicio</th>
                                             <th>Fecha fin</th>
                                             <th>Asesor</th>
