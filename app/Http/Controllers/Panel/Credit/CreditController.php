@@ -78,7 +78,9 @@ class CreditController extends Controller
             HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
         ];
         
-        $list       = (new $leadStrategy)->get('completed', $actions, $credit_id);
+        $data_progress       = (new $leadStrategy)->get('in_progress', $actions, $credit_id);
+        $data_completed       = (new $leadStrategy)->get('completed', $actions, $credit_id);
+        $list = array_merge($data_progress, $data_completed);
         return response()->json(['data' => $list]);
     }
 

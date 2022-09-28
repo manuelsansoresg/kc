@@ -66,17 +66,20 @@ class ListStrategy implements ActionInterface
             }
             $color_inf_credit = '';
 
-            $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-            $color_inf_credit = $data_deadline['color'];
-            $hour             = $data_deadline['lbl_hour'];
-
             if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM) {
                 $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
             }
 
             if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_DESITION || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION) {
                 $status_form = 'En curso';
+                $percent_form = 0;
             }
+
+            $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit = $data_deadline['color'];
+            $hour             = $data_deadline['lbl_hour'];
+
+           
 
             $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
             $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
