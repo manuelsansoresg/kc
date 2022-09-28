@@ -122,16 +122,17 @@ class Lead extends Model
                 $user         = $lead != null ? $lead->advisorLead : null;
     
                 $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $lead])->render();
-    
+                $reason = (isset(config('enums.reason_archive')[$query->reason]))? config('enums.reason_archive')[$query->reason] : '';
                 $data[] = array(
                     'name' => $content_lead,
                     'date' => formatDateNameMonth($query->created_at),
                     'product' => ($product != null) ? $product->alias : '',
                     'origin' => config('enums.origin')[$lead->origin_id],
+                    'reason' => $reason,
                     'label' => config('enums.temperatures')[$lead->temperature_id],
                     'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
                     'status' => $lbl_status,
-                    'options' => $option
+                    'options' => $option,
                 );
             }
         }

@@ -32,9 +32,8 @@
                                             <th>Fecha</th>
                                             <th>Producto</th>
                                             <th>Origen</th>
-                                            <th>Etiqueta</th>
+                                            <th>Motivo</th>
                                             <th>Asesor</th>
-                                            <th>Estatus</th>
                                             <th></th>
                                         </tr>
                                     </thead>

@@ -1743,11 +1743,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'origin'
     }, {
-      data: 'label'
+      data: 'reason'
     }, {
       data: 'advisor'
-    }, {
-      data: 'status'
     }, {
       data: 'options'
     }],

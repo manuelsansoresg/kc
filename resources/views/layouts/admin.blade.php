@@ -125,7 +125,7 @@
                                         <li class="nk-menu-item">
                                             <a href="/panel/archive/lead" class="nk-menu-link">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
-                                                <span class="nk-menu-text">Persona</span>
+                                                <span class="nk-menu-text">Prospecto persona</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                         <li class="nk-menu-item">
