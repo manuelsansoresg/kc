@@ -59,7 +59,7 @@
                                             <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                     href="#tabHistorial">Historial</a> </li>
                                             <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                    href="#tabAction">Acciones</a> </li>
+                                                    href="#tabAction">Acciones contacto</a> </li>
                                             <li class="nav-item nav-item-trigger d-xxl-none">
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
                                                     <a href="#" class="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
@@ -180,8 +180,10 @@
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-sm nk-block-between">
                                                             <h5 class="title">Notas</h5>
-                                                            {{-- <a href="#" class="link link-sm">+ Add Note</a> --}}
+                                                           
+                                                           
                                                         </div><!-- .nk-block-head -->
+                                                        <p> <a class="link pointer" onclick="modalNote({{ $lead->id }}, 'lead')">Haz click para agregar notas</a> </p>
                                                         @if ($notes != null)
                                                             @foreach ($notes as $row_note)
                                                                 @php
@@ -210,7 +212,7 @@
                                             </div>
                                             <div class="tab-pane" id="tabHistorial">
                                                 @php
-                                                    $histories = $m_history_log->getByStatus([1, 2, 3]);
+                                                    $histories = $m_history_log->getByStatus([1, 2, 3], $lead->id);
                                                     $leyend_status = $m_history_log::$label_status;
                                                 @endphp
                                                 @foreach ($histories as $history)
@@ -285,7 +287,7 @@
                                                 @endphp
                                                 <div class="border-bottom text-center py-3">
                                                     <a class="pointer" onclick="actionModal({{ $lead->id }}, false)">Haz clic
-                                                        para agregar accion</a>
+                                                        para agregar acción contactar</a>
                                                 </div>
                                                 <input type="hidden" id="id-rel-action" value="{{ $lead->id }}">
                                                 <input type="hidden" id="model-action" value="{{ $model_action }}">
@@ -347,7 +349,7 @@
                                                 <span>{{ $channels[$lead->channel_id] }}</span>
                                             </div>
                                             <div class="col-6">
-                                                <span class="sub-text">Etatus:</span>
+                                                <span class="sub-text">Validaciones:</span>
                                                 @if ($validate['error'] === true)
                                                     <span class="lead-text text-success">Valido</span>
                                                     @else
@@ -361,7 +363,7 @@
                                         </div>
                                     </div><!-- .card-inner -->
                                     <div class="card-inner">
-                                        <h6 class="overline-title-alt mb-3">Etiquetas {{ $lead->temperature_id }} </h6>
+                                        <h6 class="overline-title-alt mb-3">Etiquetas</h6>
                                         <ul class="g-1">
                                             <li class="btn-group">
                                                 
@@ -391,5 +393,6 @@
     
     <input type="hidden" id="refresh-dt" value="null">
     @include('panel.action.modal.form')
+    @include('panel.modal.note')
     @include('panel.action.modal.register_action')
 @endsection
