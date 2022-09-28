@@ -58,7 +58,7 @@ class LeadController extends Controller
 
     public function moveArchive($id_rel, Request $request)
     {
-        $history = HistoryLog::move($id_rel, HistoryLog::LEAD_ARCHIVE, HistoryLog::LEAD_ARCHIVE, $request);
+        $history = HistoryLog::move($id_rel, HistoryLog::LEAD_ARCHIVE, HistoryLog::CREATE_PROSPECT, $request);
         return response()->json($history);
     }
 

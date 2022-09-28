@@ -65,7 +65,7 @@ class ListStrategy implements ActionInterface
                 $name_responsable = 'Tú';
             }
             $color_inf_credit = '';
-
+            //TODO: change when the decision develops 
             if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM) {
                 $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
             }
