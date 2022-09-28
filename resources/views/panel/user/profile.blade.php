@@ -1,6 +1,16 @@
 @extends('layouts.admin')
-@section('title', 'Perfíl')
+@section('title', 'Perfíl cliente persona')
+
+@inject('m_lead', 'App\Models\Lead')
+@inject('m_history_log', 'App\Models\HistoryLog')
+@inject('m_action', 'App\Models\Action')
+
+@php
+   
+@endphp
+
 @section('content')
+{{-- content --}}
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -8,185 +18,139 @@
                 <div class="nk-block-head nk-block-head-sm">
                     <div class="nk-block-between g-3">
                         <div class="nk-block-head-content">
-                            <h3 class="nk-block-title page-title">Usuario / <strong class="text-primary small"> {{ $user->last_name }} {{ $user->name }}</strong></h3>
+                            <h3 class="nk-block-title page-title"> Cliente persona / <strong class="text-primary small">
+                                    {{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }} </strong>
+                            </h3>
                             <div class="nk-block-des text-soft">
                                 <ul class="list-inline">
-                                    <li>User ID: <span class="text-base">UD003054</span></li>
-                                    <li>Last Login: <span class="text-base">15 Feb, 2019 01:02 PM</span></li>
+                                    <li>ID: <span class="text-base"> {{ $user->id }} </span></li>
+                                    <li>Creado: <span class="text-base"> {{ formatDateNameMonth($user->created_at) }} </span></li>
                                 </ul>
                             </div>
+                            
                         </div>
                         <div class="nk-block-head-content">
-                            <a href="html/user-list-regular.html" class="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em class="icon ni ni-arrow-left"></em><span>Back</span></a>
-                            <a href="html/user-list-regular.html" class="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em class="icon ni ni-arrow-left"></em></a>
+                            <a href="html/user-list-regular.html"
+                                class="btn btn-outline-light bg-white d-none d-sm-inline-flex"><em
+                                    class="icon ni ni-arrow-left"></em><span>Volver</span></a>
+                            <a href="html/user-list-regular.html"
+                                class="btn btn-icon btn-outline-light bg-white d-inline-flex d-sm-none"><em
+                                    class="icon ni ni-arrow-left"></em></a>
                         </div>
                     </div>
                 </div><!-- .nk-block-head -->
                 <div class="nk-block">
                     <div class="card card-bordered">
                         <div class="card-aside-wrap">
-                            <div class="card-content">
-                                <ul class="nav nav-tabs nav-tabs-mb-icon nav-tabs-card">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" href="#"><em class="icon ni ni-user-circle"></em><span>Cuenta</span></a>
-                                    </li>
-                                    {{-- <li class="nav-item">
-                                        <a class="nav-link" href="#"><em class="icon ni ni-repeat"></em><span>Transactions</span></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><em class="icon ni ni-file-text"></em><span>Documents</span></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><em class="icon ni ni-bell"></em><span>Notifications</span></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#"><em class="icon ni ni-activity"></em><span>Activities</span></a>
-                                    </li>
-                                    <li class="nav-item nav-item-trigger d-xxl-none">
-                                        <a href="#" class="toggle btn btn-icon btn-trigger" data-target="userAside"><em class="icon ni ni-user-list-fill"></em></a>
-                                    </li> --}}
-                                </ul><!-- .nav-tabs -->
-                                <div class="card-inner">
-                                    <div class="nk-block">
-                                        <div class="nk-block-head">
-                                            <h5 class="title">Cuenta</h5>
-                                            {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
-                                        </div><!-- .nk-block-head -->
-                                        <div class="profile-ud-list">
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Nombre</span>
-                                                    <span class="profile-ud-value">{{ $user->name }}</span>
+                            <div class="card-inner card-inner-lg">
+                                <div class="nk-block">
+                                    <div class="nk-data data-list">
+                                        
+                                        <ul class="nav nav-tabs">
+                                            <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab"
+                                                    href="#tabGeneral">General</a> </li>
+                                           
+                                            <li class="nav-item nav-item-trigger d-xxl-none">
+                                                <div class="nk-block-head-content align-self-start d-lg-none">
+                                                    <a href="#" class="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
                                                 </div>
+                                            </li>
+                                            
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="tabGeneral">
+                                                <div class="card-inner">
+                                                    <div class="nk-block">
+                                                        <div class="nk-block-head nk-block-head-line">
+                                                            <span class="preview-title-lg overline-title">General</span>
+                                                        </div><!-- .nk-block-head -->
+                                                        <div class="profile-ud-list">
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Nombres</span>
+                                                                    <span class="profile-ud-value"> {{ $user->name }} </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Primer apellido</span>
+                                                                    <span class="profile-ud-value"> {{ $user->last_name }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Segundo apellido</span>
+                                                                    <span class="profile-ud-value">
+                                                                        {{ $user->second_last_name }} </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Celular</span>
+                                                                    <span class="profile-ud-value"> {{ $user->cellphone }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Email</span>
+                                                                    <span class="profile-ud-value"> {{ $user->email }} </span>
+                                                                </div>
+                                                            </div>
+        
+                                                        </div><!-- .profile-ud-list -->
+                                                    </div><!-- .nk-block -->
+                                                    <div class="nk-divider divider md"></div>
+                                                    <div class="nk-block">
+                                                        <div class="nk-block-head nk-block-head-sm nk-block-between">
+                                                            <h5 class="title"></h5>
+                                                            {{-- <a href="#" class="link link-sm">+ Add Note</a> --}}
+                                                        </div><!-- .nk-block-head -->
+                                                        {{-- @if ($notes != null)
+                                                            @foreach ($notes as $row_note)
+                                                                @php
+                                                                    $get_note = $row_note->note;
+                                                                @endphp
+                                                                <div class="bq-note">
+                                                                    <div class="bq-note-item">
+                                                                        <div class="bq-note-text">
+                                                                            <p> {{ $get_note->description }}</p>
+                                                                        </div>
+                                                                        <div class="bq-note-meta">
+                                                                            <span class="bq-note-added">Agregado el <span
+                                                                                    class="date">
+                                                                                    {{ formatDateNameMonth($get_note->created_at) }}
+                                                                                </span> </span>
+                                                                      
+                                                                        </div>
+                                                                    </div><!-- .bq-note-item -->
+                                                                </div><!-- .bq-note -->
+                                                            @endforeach
+                                                        @endif --}}
+                                                    </div><!-- .nk-block -->
+                                                </div><!-- .card-inner -->
                                             </div>
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Primer apellido</span>
-                                                    <span class="profile-ud-value">{{ $user->last_name }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Segundo apellido</span>
-                                                    <span class="profile-ud-value">{{ $user->second_last_name }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Celular</span>
-                                                    <span class="profile-ud-value">{{ $user->cellphone }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Correo</span>
-                                                    <span class="profile-ud-value">{{ $user->email }}</span>
-                                                </div>
-                                            </div>
-                                            @php
-                                                $financiera = $user->financial;
-                                                $cliente_financiera = $user->hasRole('Cliente financiera');
-                                            @endphp
-                                            @if ($cliente_financiera === true)
-                                                <div class="profile-ud-item">
-                                                    <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">Financiera</span>
-                                                        
-                                                        <span class="profile-ud-value">
-                                                            @if ($financiera != null)
-                                                                {{ $financiera->name }}
-                                                            @endif
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                            @if ($cliente_financiera === true)
-                                                <div class="profile-ud-item">
-                                                    <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">Tipo persona</span>
-                                                        <span class="profile-ud-value">
-                                                            {{ config('enums.type_person')[$user->type_person] }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        </div><!-- .profile-ud-list -->
-                                    </div><!-- .nk-block -->
-                                    <div class="nk-block d-none">
-                                        <div class="nk-block-head nk-block-head-line">
-                                            <h6 class="title overline-title text-base">Additional Information</h6>
-                                        </div><!-- .nk-block-head -->
-                                        <div class="profile-ud-list">
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Joining Date</span>
-                                                    <span class="profile-ud-value">08-16-2018 09:04PM</span>
-                                                </div>
-                                            </div>
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Reg Method</span>
-                                                    <span class="profile-ud-value">Email</span>
-                                                </div>
-                                            </div>
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Country</span>
-                                                    <span class="profile-ud-value">United State</span>
-                                                </div>
-                                            </div>
-                                            <div class="profile-ud-item">
-                                                <div class="profile-ud wider">
-                                                    <span class="profile-ud-label">Nationality</span>
-                                                    <span class="profile-ud-value">United State</span>
-                                                </div>
-                                            </div>
-                                        </div><!-- .profile-ud-list -->
-                                    </div><!-- .nk-block -->
-                                    <div class="nk-divider divider md"></div>
-                                    <div class="nk-block d-none">
-                                        <div class="nk-block-head nk-block-head-sm nk-block-between">
-                                            <h5 class="title">Admin Note</h5>
-                                            <a href="#" class="link link-sm">+ Add Note</a>
-                                        </div><!-- .nk-block-head -->
-                                        <div class="bq-note">
-                                            <div class="bq-note-item">
-                                                <div class="bq-note-text">
-                                                    <p>Aproin at metus et dolor tincidunt feugiat eu id quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sollicitudin non nunc vel pharetra. </p>
-                                                </div>
-                                                <div class="bq-note-meta">
-                                                    <span class="bq-note-added">Added on <span class="date">November 18, 2019</span> at <span class="time">5:34 PM</span></span>
-                                                    <span class="bq-note-sep sep">|</span>
-                                                    <span class="bq-note-by">By <span>Softnio</span></span>
-                                                    <a href="#" class="link link-sm link-danger">Delete Note</a>
-                                                </div>
-                                            </div><!-- .bq-note-item -->
-                                            <div class="bq-note-item">
-                                                <div class="bq-note-text">
-                                                    <p>Aproin at metus et dolor tincidunt feugiat eu id quam. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean sollicitudin non nunc vel pharetra. </p>
-                                                </div>
-                                                <div class="bq-note-meta">
-                                                    <span class="bq-note-added">Added on <span class="date">November 18, 2019</span> at <span class="time">5:34 PM</span></span>
-                                                    <span class="bq-note-sep sep">|</span>
-                                                    <span class="bq-note-by">By <span>Softnio</span></span>
-                                                    <a href="#" class="link link-sm link-danger">Delete Note</a>
-                                                </div>
-                                            </div><!-- .bq-note-item -->
-                                        </div><!-- .bq-note -->
-                                    </div><!-- .nk-block -->
-                                </div><!-- .card-inner -->
-                            </div><!-- .card-content -->
-                            <div class="card-aside card-aside-right user-aside toggle-slide toggle-slide-right toggle-break-xxl" data-content="userAside" data-toggle-screen="xxl" data-toggle-overlay="true" data-toggle-body="true">
+                                        </div>
+                                       
+                                    </div><!-- data-list -->
+                                    
+                                </div><!-- .nk-block -->
+                            </div>
+                            <div class="card-aside card-aside-right user-aside toggle-slide toggle-slide-right toggle-break-lg" data-toggle-body="true" data-content="userAside" data-toggle-screen="lg" data-toggle-overlay="true">
                                 <div class="card-inner-group" data-simplebar>
                                     <div class="card-inner">
                                         <div class="user-card user-card-s2">
-                                            <div class="user-avatar lg bg-primary">
-                                                <span>AB</span>
-                                            </div>
+                                            <img class="logo-profile" src="{{ asset('images/logo_solo.png') }}" alt="">
                                             <div class="user-info">
-                                                <div class="badge bg-outline-light rounded-pill ucap">Investor</div>
-                                                <h5>Abu Bin Ishtiyak</h5>
-                                                <span class="sub-text">info@softnio.com</span>
+                                                <div class="badge bg-outline-light rounded-pill ucap">
+                                                    {{ Auth::user()->getRoleNames()[0]}}
+                                                </div>
+                                                <h5> {{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }} </h5>
+                                                <span class="sub-text">
+                                                    {{ $user->email }} <br>
+                                                   {{--  {{ $agreement->name }} --}}
+                                                </span>
                                             </div>
                                         </div>
                                     </div><!-- .card-inner -->
@@ -200,87 +164,38 @@
                                         </ul>
                                     </div><!-- .card-inner -->
                                     <div class="card-inner">
-                                        <div class="overline-title-alt mb-2">In Account</div>
-                                        <div class="profile-balance">
-                                            <div class="profile-balance-group gx-4">
-                                                <div class="profile-balance-sub">
-                                                    <div class="profile-balance-amount">
-                                                        <div class="number">2,500.00 <small class="currency currency-usd">USD</small></div>
-                                                    </div>
-                                                    <div class="profile-balance-subtitle">Invested Amount</div>
-                                                </div>
-                                                <div class="profile-balance-sub">
-                                                    <span class="profile-balance-plus text-soft"><em class="icon ni ni-plus"></em></span>
-                                                    <div class="profile-balance-amount">
-                                                        <div class="number">1,643.76</div>
-                                                    </div>
-                                                    <div class="profile-balance-subtitle">Profit Earned</div>
-                                                </div>
+                                        <h6 class="overline-title-alt mb-2">Otros</h6>
+                                        <div class="row g-3 d-none">
+                                            <div class="col-6">
+                                                <span class="sub-text">Origen:</span>
+                                                <span></span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span class="sub-text">Canal:</span>
+                                                <span></span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span class="sub-text">Etatus:</span>
+                                              
+                                            </div>
+                                            <div class="col-6">
+                                                <span class="sub-text">Asesor:</span>
+                                                <span> </span>
                                             </div>
                                         </div>
                                     </div><!-- .card-inner -->
                                     <div class="card-inner">
-                                        <div class="row text-center">
-                                            <div class="col-4">
-                                                <div class="profile-stats">
-                                                    <span class="amount">23</span>
-                                                    <span class="sub-text">Total Order</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="profile-stats">
-                                                    <span class="amount">20</span>
-                                                    <span class="sub-text">Complete</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="profile-stats">
-                                                    <span class="amount">3</span>
-                                                    <span class="sub-text">Progress</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div><!-- .card-inner -->
-                                    <div class="card-inner">
-                                        <h6 class="overline-title-alt mb-2">Additional</h6>
-                                        <div class="row g-3">
-                                            <div class="col-6">
-                                                <span class="sub-text">User ID:</span>
-                                                <span>UD003054</span>
-                                            </div>
-                                            <div class="col-6">
-                                                <span class="sub-text">Last Login:</span>
-                                                <span>15 Feb, 2019 01:02 PM</span>
-                                            </div>
-                                            <div class="col-6">
-                                                <span class="sub-text">KYC Status:</span>
-                                                <span class="lead-text text-success">Approved</span>
-                                            </div>
-                                            <div class="col-6">
-                                                <span class="sub-text">Register At:</span>
-                                                <span>Nov 24, 2019</span>
-                                            </div>
-                                        </div>
-                                    </div><!-- .card-inner -->
-                                    <div class="card-inner">
-                                        <h6 class="overline-title-alt mb-3">Groups</h6>
-                                        <ul class="g-1">
+                                        <h6 class="overline-title-alt mb-3">Etiquetas  </h6>
+                                        <ul class="g-1 d-none">
                                             <li class="btn-group">
-                                                <a class="btn btn-xs btn-light btn-dim" href="#">investor</a>
-                                                <a class="btn btn-xs btn-icon btn-light btn-dim" href="#"><em class="icon ni ni-cross"></em></a>
-                                            </li>
-                                            <li class="btn-group">
-                                                <a class="btn btn-xs btn-light btn-dim" href="#">support</a>
-                                                <a class="btn btn-xs btn-icon btn-light btn-dim" href="#"><em class="icon ni ni-cross"></em></a>
-                                            </li>
-                                            <li class="btn-group">
-                                                <a class="btn btn-xs btn-light btn-dim" href="#">another tag</a>
-                                                <a class="btn btn-xs btn-icon btn-light btn-dim" href="#"><em class="icon ni ni-cross"></em></a>
+                                                
+                                                <a class="btn btn-xs btn-light btn-dim" href="#"> </a>
+                                                <a class="btn btn-xs btn-icon btn-light btn-dim"><em class="icon ni ni-cross"></em></a>
                                             </li>
                                         </ul>
                                     </div><!-- .card-inner -->
-                                </div><!-- .card-inner -->
-                            </div><!-- .card-aside -->
+                                </div><!-- .card-inner-group -->
+                            </div><!-- card-aside -->
                         </div><!-- .card-aside-wrap -->
                     </div><!-- .card -->
                 </div><!-- .nk-block -->
@@ -288,4 +203,9 @@
         </div>
     </div>
 </div>
+{{-- content --}}
+    
+    <input type="hidden" id="refresh-dt" value="null">
+    @include('panel.action.modal.form')
+    @include('panel.action.modal.register_action')
 @endsection

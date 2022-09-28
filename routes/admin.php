@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 Route::resource('home', '\App\Http\Controllers\Panel\PanelController')->middleware('auth');
 
 
+//*client profile
+Route::resource('user-profile', '\App\Http\Controllers\Panel\User\ClientProfileController')->middleware('auth');
+
 Route::group(['prefix' => 'user'], function () {
     //*admin
     Route::resource('administrador', '\App\Http\Controllers\Panel\User\AdminController')->middleware('auth');
@@ -29,8 +32,7 @@ Route::group(['prefix' => 'user'], function () {
     //*esta ruta equivale tanto como administrador como asesor
     Route::get('administrador/{id}/delete', ['\App\Http\Controllers\Panel\User\AdminController', 'destroy'])->middleware('auth');
 
-    //*client profile
-    Route::resource('client-profile', '\App\Http\Controllers\Panel\User\ClientProfileController')->middleware('auth');
+    
 });
 
 Route::resource('product', '\App\Http\Controllers\Panel\ProductController')->middleware('auth');

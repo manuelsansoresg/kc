@@ -836,7 +836,7 @@
                                             </div>
                                             <div class="dropdown-inner">
                                                 <ul class="link-list">
-                                                    <li><a href="html/user-profile-regular.html"><em class="icon ni ni-user-alt"></em><span>Ver perfíl</span></a></li>
+                                                    <li><a href="/panel/user-profile/{{ Auth::user()->id }}"><em class="icon ni ni-user-alt"></em><span>Ver perfíl</span></a></li>
                                                     <li><a href="html/user-profile-setting.html"><em class="icon ni ni-setting-alt"></em><span>Configuración </span></a></li>
                                                     <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li>
                                                 </ul>
