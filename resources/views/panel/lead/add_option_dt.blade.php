@@ -4,6 +4,12 @@ $user = Auth::user();
 <div class="content-options">
     <ul class="nk-tb-actions gx-1">
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
+            <a  onclick="archiveModal({{ $id }})" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="Archivar">
+                <em class="icon ni ni-archive-fill"></em>
+            </a>
+        </li>
+        <li class="nk-tb-action-hidden d-sm-none d-md-block">
             <a href="/panel/lead/{{ $id }}/profile" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Perfíl">
                 <em class="icon ni ni-user-fill"></em>
             </a>
@@ -23,12 +29,7 @@ $user = Auth::user();
             @endif
         
         </li>
-        <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a  onclick="archiveModal({{ $id }})" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="Archivar">
-                <em class="icon ni ni-archive-fill"></em>
-            </a>
-        </li>
+       
         <li>
             <div class="drodown">
                 <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-bs-toggle="dropdown"><em
@@ -41,15 +42,15 @@ $user = Auth::user();
                         </li>
                         <li>
                             <a class="pointer" onclick="modalNote({{ $id }}, 'lead')">
-                                <em class="icon ni ni-edit"></em><span>Agregar nota</span></a>
+                                <em class="icon ni ni-note-add"></em><span>Agregar nota</span></a>
                         </li>
                         <li>
                             <a href="/panel/lead/{{ $id }}/profile">
-                                <em class="icon ni ni-users-fill"></em><span>Perfíl</span></a>
+                                <em class="icon ni ni-user-fill"></em><span>Perfíl</span></a>
                         </li>
                         <li>
                             <a class="pointer" onclick="createClientPerson({{ $id }})">
-                                <em class="icon ni ni-users-fill"></em><span>Crear cuenta</span></a>
+                                <em class="icon ni ni-user-add"></em><span>Crear cuenta</span></a>
                         </li>
                         <li>
                             <a class="pointer" onclick="modalTags({{ $id }})">
@@ -57,7 +58,7 @@ $user = Auth::user();
                         </li>
                         <li>
                             <a class="pointer" onclick="archiveModal({{ $id }})">
-                                <em class="icon ni ni-files"></em><span>Archivar</span></a>
+                                <em class="icon ni ni-archive"></em><span>Archivar</span></a>
                         </li>
                         <li>
                             <a class="pointer" onclick="actionModal({{ $id }}, true)">
@@ -66,7 +67,7 @@ $user = Auth::user();
                         @if ($user->hasRole('Asesor') != true)
                             <li>
                                 <a class="pointer" onclick="modalAdvisor({{ $id }})">
-                                    <em class="icon ni ni-users-fill"></em><span>Asignar asesor</span></a>
+                                    <em class="icon ni ni-headphone"></em><span>Asignar asesor</span></a>
                             </li>
                         @endif
                         <li>

@@ -13,7 +13,7 @@
                     <div class="row gy-4">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label" for="frm-user-admin-name">Motivo</label>
+                                <label class="form-label" for="frm-user-admin-name">Etiquetas</label>
                                 <div class="form-control-wrap">
                                     @php
                                         $reasons = config('enums.reason_archive');
