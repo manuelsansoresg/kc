@@ -189,11 +189,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 window.actionModal = function (id, is_new) {
-  if (document.getElementById('modal-action-id-rel-lead')) {
-    getPerson(id);
-  }
-
+  /*  if (document.getElementById('modal-action-id-rel-lead')) {
+       getPerson(id);
+    } */
   resetAction();
+  getAdvisorLead(id);
   $('#modal-action-id-rel').val(id);
 
   if (is_new == 'true') {
@@ -211,14 +211,33 @@ if (document.getElementById('frm-action')) {
   });
 }
 
-function getPerson(lead_id) {
+function getAdvisorLead(lead_id) {
   axios.get("/panel/lead/" + lead_id).then(function (response) {
     var result = response.data;
     var lead = result.lead;
-    var lead_name = lead.name + ' ' + lead.last_name;
-    $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+    var advisor = result.advisor;
+
+    if (advisor != null) {
+      var name_advisor = advisor.name + ' ' + advisor.last_name;
+      $("#lead-asesor-id").prepend("<option value='" + advisor.id + "' selected='selected'> " + name_advisor + "</option>");
+      $("#lead-asesor-id").prop("disabled", true);
+    }
   })["catch"](function (e) {});
 }
+/* function getPerson(lead_id) {
+    axios
+        .get("/panel/lead/" + lead_id)
+        .then(function (response) {
+            let result = response.data;
+            let lead = result.lead;
+            let lead_name = lead.name + ' ' + lead.last_name;
+            $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+        })
+        .catch(e => {
+
+        });
+} */
+
 
 $().ready(function () {
   $("#frm-action").validate({
@@ -278,6 +297,8 @@ function resetAction() {
   $('#modal-action-description').val('');
   $('#modal-action-id-action').val('null');
   $('#modal-action-complete-active').prop("checked", true);
+  $("#lead-asesor-id").val('').trigger('change');
+  $("#lead-asesor-id").prop("disabled", false);
 }
 
 function resetRegisterAction() {
@@ -412,11 +433,11 @@ window.setModalAction = function (action_id, disabled) {
       $("#modal-action-end_date").val(action.end_date);
       $("#modal-action-description").val(action.description);
       $("#modal-action-id-rel").val(action.id_rel);
-      $("#lead-asesor-id").val(advisor.id).trigger('change');
+      alert(action.id_rel); //$("#lead-asesor-id").val(advisor.id).trigger('change');
 
-      if (lead != null) {
-        $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
-      }
+      /* if (lead != null) {
+          $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+      }  */
 
       $('#modal-action').modal('show');
 

@@ -45,6 +45,7 @@ class Action extends Model
         $data['start_time'] = date('H:i:s', strtotime($data['start_time']));
         $data['end_time'] = date('H:i:s', strtotime($data['end_time']));
         $action = null;
+
         if ($request->action_id == 'null') {
             $action = Action::create($data);
         } else {
@@ -52,6 +53,15 @@ class Action extends Model
             $action->fill($data);
             $action->update();
         }
+
+        //*assign advisir if not exist in lead
+        $lead = Lead::find($data['id_rel']);
+        if ($lead != null && $lead->asesor_id == '') {
+            $lead->asesor_id = $data['advisor_id'];
+            $lead->update();
+            
+        }
+
         return $action;
     }
 

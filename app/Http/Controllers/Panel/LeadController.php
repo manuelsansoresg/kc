@@ -12,6 +12,7 @@ use App\Models\LeadNote;
 use App\Models\Note;
 use App\Models\File;
 use App\Models\FinancialAgreement;
+use App\Models\User;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
 use Illuminate\Http\Request;
@@ -134,12 +135,15 @@ class LeadController extends Controller
         $lead       = Lead::find($id);
         $channel    = Lead::getChanelByOrigin($lead->origin_id);
         $financials = null;
+        
+        $advisor    = $lead->advisorLead;
 
         if ($lead  != null) {
             $financials = FinancialAgreement::getList($lead->id);
         }
+
         
-        return response()->json(['lead' => $lead, 'channel' => $channel, 'financials' => $financials]);
+        return response()->json(['lead' => $lead, 'channel' => $channel, 'financials' => $financials, 'advisor' => $advisor]);
     }
 
     public function profile($lead_id)

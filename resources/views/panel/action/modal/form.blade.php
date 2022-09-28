@@ -11,17 +11,18 @@
                 </a>
                 @php
                     $types    = config('enums.type_actions');
-                    $advisors = $m_user->getUserRole('Asesor');
+                    $advisors = $m_user->getUserRole('Asesor'); 
                     $user     = Auth::user();
                     $sections = config('enums.status_actions');
                 @endphp
                 <div class="modal-body modal-body-md">
-                    <h5 class="modal-title">Acciones</h5>
+                    <h5 class="modal-title">Acción contacto</h5>
+                    <p>* Campos obligatorios</p>
                     <form id="frm-action" action="" class="mt-2">
                         <div class="row g-gs">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="create-task-name">Tipo</label>
+                                    <label class="form-label" for="create-task-name">*Tipo</label>
                                     <div class="form-control-wrap">
                                         <select class="form-select" name="data[type]" id="modal-action-type"  data-search="on">
                                             <option></option>
@@ -43,12 +44,24 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="edit-start-date">Fecha inicio</label>
+                                    <label class="form-label" for="edit-start-date">*Fecha inicio</label>
                                     <div class="form-control-wrap">
                                         <div class="form-icon form-icon-left">
                                             <em class="icon ni ni-calendar"></em>
                                         </div>
                                         <input type="text" id="modal-action-start_date"  name="data[start_date]" class="form-control date-picker" data-date-format="yyyy-mm-dd">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="edit-dead-date">Fecha fin</label>
+                                    <div class="form-control-wrap">
+                                        <div class="form-icon form-icon-left">
+                                            <em class="icon ni ni-calendar"></em>
+                                        </div>
+                                        <input type="text" id="modal-action-end_date" name="data[end_date]" class="form-control date-picker" data-date-format="yyyy-mm-dd">
                                     </div>
                                 </div>
                             </div>
@@ -65,17 +78,7 @@
                                 </div>
                             </div>
                            
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="edit-dead-date">Fecha fin</label>
-                                    <div class="form-control-wrap">
-                                        <div class="form-icon form-icon-left">
-                                            <em class="icon ni ni-calendar"></em>
-                                        </div>
-                                        <input type="text" id="modal-action-end_date" name="data[end_date]" class="form-control date-picker" data-date-format="yyyy-mm-dd">
-                                    </div>
-                                </div>
-                            </div>
+                            
                           
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -102,11 +105,10 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">Asesor</label>
+                                    <label class="form-label">*Asesor</label>
                                     <div class="form-control-wrap">
                                         @if ($user->hasRole('Asesor') == true)
                                             <select class="form-select" name="data[advisor_id]" id="lead-asesor-id"  data-search="on" disabled>
-                                                
                                                 @foreach ($advisors as $advisor)
                                                     <option value="{{ $advisor->id }}" {{ ($user->id == $advisor->id)? 'selected' : '' }} >{{ $advisor->name }} {{ $advisor->last_name }} {{ $advisor->second_last_name }}
                                                     </option>
@@ -126,9 +128,9 @@
                                 </div>
                             </div>
                             
-                            <div class="col-md-6">
+                           {{--  <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">Seccion</label>
+                                    <label class="form-label">*Seccion</label>
                                     <div class="form-control-wrap">
                                         <select class="form-select" id="lead-asesor-id"  data-search="on" disabled>
                                             @foreach ($sections as $key => $section)
@@ -139,11 +141,11 @@
                                         
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             {{-- posiblemente este campo sea dinamico de acuerdo al modelo --}}
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label">Nombre</label>
+                                    <label class="form-label">*Nombre</label>
                                     <div class="form-control-wrap">
                                         <select class="form-select" id="modal-action-id-rel-lead"  data-search="on" disabled>
                                             
@@ -151,7 +153,7 @@
                                         
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <input type="hidden" id="modal-action-id-rel" name="data[id_rel]" value="">
                             <input type="hidden" id="modal-action-id-action" name="action_id" value="null">

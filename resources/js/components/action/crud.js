@@ -2,11 +2,12 @@ import { showInfo, addEmptySelectSearch } from '../utilities';
 
 
 window.actionModal = function (id, is_new) {
-    if (document.getElementById('modal-action-id-rel-lead')) {
+   /*  if (document.getElementById('modal-action-id-rel-lead')) {
         getPerson(id);
 
-    }
+    } */
     resetAction();
+    getAdvisorLead(id);
     $('#modal-action-id-rel').val(id);
     if (is_new == 'true') {
         $('#modal-action-id-action').val(null);
@@ -26,8 +27,28 @@ if (document.getElementById('frm-action')) {
    
 }
 
+function getAdvisorLead(lead_id) {
+    axios
+        .get("/panel/lead/" + lead_id)
+        .then(function (response) {
+            let result              = response.data;
+            let lead                = result.lead;
+            let advisor             = result.advisor;
 
-function getPerson(lead_id) {
+            if (advisor != null) {
+                let name_advisor = advisor.name + ' ' + advisor.last_name;
+                $("#lead-asesor-id").prepend("<option value='" + advisor.id + "' selected='selected'> " + name_advisor + "</option>");
+                $("#lead-asesor-id").prop("disabled", true);
+
+            }
+            
+        })
+        .catch(e => {
+
+        });
+} 
+
+/* function getPerson(lead_id) {
     axios
         .get("/panel/lead/" + lead_id)
         .then(function (response) {
@@ -39,7 +60,7 @@ function getPerson(lead_id) {
         .catch(e => {
 
         });
-}
+} */
 
 $().ready(function () {
     $("#frm-action").validate({
@@ -102,6 +123,8 @@ function resetAction() {
     $('#modal-action-description').val('');
     $('#modal-action-id-action').val('null');
     $('#modal-action-complete-active').prop("checked", true);
+    $("#lead-asesor-id").val('').trigger('change');
+    $("#lead-asesor-id").prop("disabled", false);
     
 }
 
@@ -288,10 +311,11 @@ window.setModalAction = function (action_id, disabled) {
             $("#modal-action-end_date").val(action.end_date);
             $("#modal-action-description").val(action.description);
             $("#modal-action-id-rel").val(action.id_rel);
-            $("#lead-asesor-id").val(advisor.id).trigger('change');
-            if (lead != null) {
+            alert(action.id_rel);
+            //$("#lead-asesor-id").val(advisor.id).trigger('change');
+            /* if (lead != null) {
                 $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
-            } 
+            }  */
             $('#modal-action').modal('show');
             
             if (action.status == 1) {
