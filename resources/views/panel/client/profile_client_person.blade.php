@@ -137,7 +137,7 @@
                                             </div>
                                             <div class="tab-pane" id="tabHistorial">
                                                 @php
-                                                    $histories = $m_history_log->getByStatus([4]);
+                                                    $histories = $m_history_log->getByStatus([4], $client->id);
                                                     $leyend_status = $m_history_log::$label_status;
                                                 @endphp
                                                 @foreach ($histories as $history)
@@ -145,7 +145,7 @@
                                                         <div class="user-card mt-3">
                                                             <div class="user-info">
                                                                 <span class="tb-lead"> <em
-                                                                        class="icon ni ni-archive-fill"></em>
+                                                                        class="icon ni ni-clock"></em>
                                                                     {{ $leyend_status[$m_history_log::LEAD_CONVERT] }} <span
                                                                         class="dot dot-success d-md-none ms-1"></span>
                                                                     <p class="ms-1">

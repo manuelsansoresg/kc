@@ -179,7 +179,7 @@
                                                 <div class="user-card mt-3">
                                                     <div class="user-info">
                                                         <span class="tb-lead"> <em
-                                                                class="icon ni ni-archive-fill"></em>
+                                                                class="icon ni ni ni-clock"></em>
                                                             {{ $leyend_status[$history->status_id] }} <span
                                                                 class="dot dot-success d-md-none ms-1"></span>
                                                             <p class="ms-1">
