@@ -278,13 +278,19 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $hour           = Carbon::parse($credit->created_at)->hour;
         $menu_options   = self::menuOptionReportStep($history);
         $advisor        = $credit->creditAdvisor;
-        $name_advisor   = $advisor->name.' '.$advisor->last_name;
+        
         $name_module_response   = 'KaaxClub';
-
+        $user = User::find($advisor->id);
+        $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
         $color_desition   = 'success';
-        if ($hour > 5) {
+        $name_advisor   = $role.' - '.$advisor->name.' '.$advisor->last_name;
+        /* if ($hour > 5) {
             $color_desition = ($hour >= $max_hour) ? 'danger' : 'warning';
-        }
+        } */
+
+        $data_deadline    = deadline($hour, $max_hour, 0, 'success');
+        $color_desition = $data_deadline['color'];
+        $hour             = $data_deadline['lbl_hour'];
         
         $view_dead_line_desition  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
         $options_progress  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
@@ -366,7 +372,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                     'link' => '/panel/kc-check-up/report/answer_module/'.$history->id.'/show/',
                     'onclick' => '',
                     'name' => 'Ver acción',
-                    'icon' => 'icon ni ni-card-view',
+                    'icon' => 'icon ni ni-check-circle-cut',
                 ]
             ),
             'desition' => array(
@@ -374,7 +380,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                     'link' => '/panel/kc-check-up/report/desition/'.$history->id.'/show/',
                     'onclick' => '',
                     'name' => 'Ver acción',
-                    'icon' => 'icon ni ni-card-view',
+                    'icon' => 'icon ni ni-check-circle-cut',
                 ]
             )
         );

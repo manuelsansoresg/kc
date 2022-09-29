@@ -390,12 +390,13 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $hour           = Carbon::parse($credit->created_at)->hour;
         $menu_options   = self::menuOptionReportStep($history);
         $advisor        = $credit->creditAdvisor;
-        $name_advisor   = $advisor->name.' '.$advisor->last_name;
+        $user = User::find($advisor->id);
+        $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
         $name_module_response   = 'KaaxClub';
         $color_desition   = 'success';
-        if ($hour > 5) {
-            $color_desition = ($hour >= $max_hour) ? 'danger' : 'warning';
-        }
+        $data_deadline    = deadline($hour, $max_hour, 0, 'success');
+        $color_desition = $data_deadline['color'];
+        $hour             = $data_deadline['lbl_hour'];
         
         $view_dead_line_desition  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
         $options_progress  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
