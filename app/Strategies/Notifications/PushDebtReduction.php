@@ -4,7 +4,6 @@ namespace App\Strategies\Notifications;
 
 use App\Models\HistoryLog;
 use App\Models\Notification;
-use App\Models\User;
 use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\SendNotificationsInterface;
 
@@ -31,7 +30,7 @@ class PushDebtReduction implements SendNotificationsInterface
         $push->send(['model' => 'leadNewProspect']);
     }
     
-    public function get()
+    public function get($user_id = null, $status = 0)
     {
         $get_notifications = Notification::getByModel([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT]);
         $notifications = array();
@@ -39,11 +38,19 @@ class PushDebtReduction implements SendNotificationsInterface
             $credit = $notification->notificationCredit;
             $advisor = $credit->creditAdvisor;
 
-            $notifications[] = array(
+            $data_array = array(
                 'user_id' => $advisor->id,
                 'title' => $notification->title,
                 'body' => $notification->body,
+                'id' => $notification->id,
+                'created_at' => $notification->created_at,
             );
+
+            if ($user_id == null) {
+                $notifications[] = $data_array;
+            } elseif ($user_id != null && $user_id == $advisor->id) {
+                $notifications[] = $data_array;
+            }
 
             //*activate recieve push
             $get_notification = Notification::find($notification->id);

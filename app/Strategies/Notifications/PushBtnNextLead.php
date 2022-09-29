@@ -22,18 +22,26 @@ class PushBtnNextLead implements SendNotificationsInterface
         $push->send(['model' => 'btnNextLead']);
     }
     
-    public function get()
+    public function get($user_id = null, $status = 0)
     {
-        $get_notifications = Notification::getByModel([Notification::CREATE_PROSPECT]);
+        $get_notifications = Notification::getByModel([Notification::BTN_NEXT_LEAD], $status);
         $notifications = array();
         foreach ($get_notifications as $notification) {
             $users = User::getUserRole('Administrador');
             foreach ($users as $user) {
-                $notifications[] = array(
+                $data_array = array(
                     'user_id' => $user->id,
                     'title' => $notification->title,
                     'body' => $notification->body,
+                    'id' => $notification->id,
+                    'created_at' => $notification->created_at,
                 );
+                
+                if ($user_id == null) {
+                    $notifications[] = $data_array;
+                } elseif ($user_id != null && $user_id == $user->id) {
+                    $notifications[] = $data_array;
+                }
             }
             //*activate recieve push
             $get_notification = Notification::find($notification->id);

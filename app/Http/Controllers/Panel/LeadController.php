@@ -12,6 +12,7 @@ use App\Models\LeadNote;
 use App\Models\Note;
 use App\Models\File;
 use App\Models\FinancialAgreement;
+use App\Models\Notification;
 use App\Models\User;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;

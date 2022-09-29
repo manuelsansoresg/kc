@@ -4,9 +4,9 @@
 @inject('m_lead', 'App\Models\Lead')
 @inject('m_history_log', 'App\Models\HistoryLog')
 @inject('m_action', 'App\Models\Action')
-
+@inject('m_notification', 'App\Models\Notification')
 @php
-   
+    $notifications = $m_notification->getMyNotifications(6);
 @endphp
 
 @section('content')
@@ -18,7 +18,7 @@
                 <div class="nk-block-head nk-block-head-sm">
                     <div class="nk-block-between g-3">
                         <div class="nk-block-head-content">
-                            <h3 class="nk-block-title page-title"> Cliente persona / <strong class="text-primary small">
+                            <h3 class="nk-block-title page-title"> Usuario / <strong class="text-primary small">
                                     {{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }} </strong>
                             </h3>
                             <div class="nk-block-des text-soft">
@@ -47,8 +47,10 @@
                                     <div class="nk-data data-list">
                                         
                                         <ul class="nav nav-tabs">
-                                            <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab"
+                                            <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']))? '' : 'active' }}" data-bs-toggle="tab"
                                                     href="#tabGeneral">General</a> </li>
+                                            <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'notification')? 'active' : '' }}" data-bs-toggle="tab"
+                                                    href="#tabNotification">Notificaciones</a> </li>
                                            
                                             <li class="nav-item nav-item-trigger d-xxl-none">
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
@@ -58,7 +60,7 @@
                                             
                                         </ul>
                                         <div class="tab-content">
-                                            <div class="tab-pane active" id="tabGeneral">
+                                            <div class="tab-pane {{ (isset($_GET['tab']))? '' : 'active' }}" id="tabGeneral">
                                                 <div class="card-inner">
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-line">
@@ -130,6 +132,37 @@
                                                         @endif --}}
                                                     </div><!-- .nk-block -->
                                                 </div><!-- .card-inner -->
+                                            </div>
+
+                                            <div class="tab-pane {{ (isset($_GET['tab']) && $_GET['tab'] == 'notification')? 'active' : '' }}" id="tabNotification">
+                                                @foreach ($notifications as $notification)
+                                                <div class="card mt-3">
+                                                    <div class="kanban-item">
+                                                        <div class="kanban-item-title">
+                                                            <h6 class="title">
+                                                               {{--  <em class="{{ $icons[$action->type] }}"></em>
+                                                                {{ $enum_actions[$action->type] }}  --}}
+                                                                {{ $notification['title']}}
+                                                            </h6>
+                                                        </div>
+                                                        <div class="kanban-item-text">
+                                                            <p>{{ $notification['body']}}</p>
+                                                        </div>
+                                                        
+                                                        <div class="kanban-item-meta">
+                                                            <ul class="kanban-item-meta-list">
+                                                                
+                                            
+                                                            </ul>
+                                                            <ul class="kanban-item-meta-list">
+                                                                <li><em class="icon ni ni-calendar"></em><span>{{ $notification['created_at']->diffForHumans() }}</span>
+                                                                </li>
+                                                            </ul>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                        

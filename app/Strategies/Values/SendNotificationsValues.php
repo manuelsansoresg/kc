@@ -2,6 +2,7 @@
 
 namespace App\Strategies\Values;
 
+use App\Strategies\Notifications\Notification;
 use App\Strategies\Notifications\PushBtnNextLead;
 use App\Strategies\Notifications\PushDebtReduction;
 use App\Strategies\Notifications\PushLeadAddProspect;
