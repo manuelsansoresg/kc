@@ -6,19 +6,19 @@
     <ul class="link-list-opt no-bdr">
         <li>
             <a class="pointer" href="/panel/template/steps/{{ $route }}/{{ $id }}/show">
-                <em class="icon ni ni-card-view"></em><span>Ver etapas</span></a>
+                <em class="icon ni ni-list-thumb-fill"></em><span>Ver etapas</span></a>
         </li>
         <li>
             <a class="pointer" href="/panel/client/{{ $client->id }}">
-                <em class="icon ni ni-users-fill"></em><span>Ver perfil cliente</span></a>
+                <em class="icon ni ni-user-fill"></em><span>Ver perfil cliente</span></a>
         </li>
         <li>
             <a class="pointer" href="/panel/credit/{{ $credit_id }}">
-                <em class="icon ni ni-users-fill"></em><span>Ver perfil crédito</span></a>
+                <em class="icon ni ni-report-profit"></em><span>Ver perfil crédito</span></a>
         </li>
         <li>
             <a class="pointer">
-                <em class="icon ni ni-cross"></em><span>Cancelar</span></a>
+                <em class="icon ni ni-cross-circle-fill"></em><span>Cancelar</span></a>
         </li>
        
         <li>
