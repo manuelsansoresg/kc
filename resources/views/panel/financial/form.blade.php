@@ -40,7 +40,7 @@
                                                         href="{{ $financial_id != null ? '#tabBilling' : '#' }}">Datos
                                                         facturación</a> </li>
                                                 <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'productos')? 'active' : '' }}" data-bs-toggle="tab"
-                                                        href="{{ $financial_id != null ? '#tabProduct' : '#' }}">Productos</a>
+                                                        href="{{ $financial_id != null ? '#tabProduct' : '#' }}">Productos financieros</a>
                                                 </li>
                                             </ul>
                                             <div class="tab-content">
