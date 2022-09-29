@@ -452,14 +452,16 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/actions/debtCredit/'.$history->id.'/show',
                     'onclick' => '',
-                    'name' => 'Ver acciones',
+                    'name' => 'Lista de acciones',
+                    'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
             'reports' => array(
                 [
                     'link' => '/panel/template/report/debtCredit/'.$history->id.'/show',
                     'onclick' => '',
-                    'name' => 'Ver acciones',
+                    'name' => 'Lista de acciones',
+                    'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
            

@@ -64,7 +64,7 @@
                                             <th>Etapa</th>
                                             <th>Estatus</th>
                                             <th>Progreso</th>
-                                            <th>Deadline</th>
+                                            {{-- <th>Deadline</th> --}}
                                             <th></th>
                                         </tr>
                                     </thead>

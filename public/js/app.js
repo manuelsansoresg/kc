@@ -1970,9 +1970,9 @@ if (document.getElementById('dt-check-up-steps')) {
         data: 'status'
       }, {
         data: 'progress'
-      }, {
-        data: 'deadline'
-      }, {
+      },
+      /* { data: 'deadline'}, */
+      {
         data: 'options'
       }],
       columnDefs: [{

@@ -340,14 +340,16 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/actions/newCredit/'.$history->id.'/show',
                     'onclick' => '',
-                    'name' => 'Ver acciones',
+                    'name' => 'Lista de acciones',
+                    'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
             'reports' => array(
                 [
                     'link' => '/panel/template/report/newCredit/'.$history->id.'/show',
                     'onclick' => '',
-                    'name' => 'Ver acciones',
+                    'name' => 'Lista de acciones',
+                    'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
            
@@ -364,6 +366,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                     'link' => '/panel/kc-check-up/report/answer_module/'.$history->id.'/show/',
                     'onclick' => '',
                     'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-card-view',
                 ]
             ),
             'desition' => array(
@@ -371,6 +374,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                     'link' => '/panel/kc-check-up/report/desition/'.$history->id.'/show/',
                     'onclick' => '',
                     'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-card-view',
                 ]
             )
         );

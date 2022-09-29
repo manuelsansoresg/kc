@@ -42,7 +42,7 @@ if (document.getElementById('dt-check-up-steps')) {
                 { data: 'step' },
                 { data: 'status' },
                 { data: 'progress' },
-                { data: 'deadline'},
+                /* { data: 'deadline'}, */
                 { data: 'options'},
             ],
             columnDefs:[
