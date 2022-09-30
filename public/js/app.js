@@ -805,19 +805,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utilities */ "./resources/js/components/utilities.js");
 
 
-function move(id, path, route, form, modal, datatable, title, msg) {
+function move(id, form, modal, datatable, title, msg) {
   var new_form = document.getElementById(form);
   var data = new FormData(new_form);
-  axios.post("panel/" + path + "/" + id + "/move/" + route, data).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, datatable, title, msg);
+  var statusid = $('#statusid').val();
+  var old_status_id = $('#old_status_id').val();
+  axios.post("/panel/action/" + id + "/" + statusid + "/" + old_status_id + "/move", data).then(function (response) {
     $('#' + modal).modal('hide');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, datatable, title, msg);
   })["catch"](function (e) {});
 }
 
-window.archiveModal = function (id) {
+window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#frm-archive').trigger("reset");
   $('#id_rel').val(id);
-  $('#modal-archive-title').html('Archivar');
+  $('#statusid').val(statusid);
+  $('#old_status_id').val(old_status_id);
+  $('#dt').val(dt);
+  $('#modal-archive-title').html(title);
   $('#modal-archive').modal('show');
 };
 
@@ -830,8 +835,9 @@ if (document.getElementById('frm-archive')) {
 $("#frm-archive").submit(function (event) {
   event.preventDefault();
   var id_rel = $('#id_rel').val();
+  var dt = $('#dt').val();
   var msg = 'registro archivado exitosamente';
-  move(id_rel, 'lead', 'archive', 'frm-archive', 'modal-archive', 'dt-lead', 'Archivo', msg);
+  move(id_rel, 'frm-archive', 'modal-archive', dt, 'Registro', msg);
 });
 
 window.modalValidate = function (id, model) {

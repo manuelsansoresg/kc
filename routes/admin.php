@@ -58,7 +58,7 @@ Route::group(['prefix' => 'lead'], function () {
     Route::post('{lead_id}/tag/update', ['\App\Http\Controllers\Panel\LeadController', 'updateTag'])->middleware('auth');
 
     //* mover del lugar
-    Route::post('{id_rel}/move/archive', ['\App\Http\Controllers\Panel\LeadController', 'moveArchive'])->middleware('auth');
+    
     Route::get('financial/{lead_id}/show', ['\App\Http\Controllers\Panel\LeadController', 'listFinancial'])->middleware('auth');
 });
 
@@ -84,6 +84,8 @@ Route::group(['prefix' => 'action'], function () {
     Route::get('{status}/dt/show', ['\App\Http\Controllers\Panel\ActionController', 'list'])->middleware('auth');
     Route::get('module/{name_status}', ['\App\Http\Controllers\Panel\ActionController', 'viewModuleAction'])->middleware('auth');
     Route::get('module/{name_status}/list', ['\App\Http\Controllers\Panel\ActionController', 'listModuleAction'])->middleware('auth');
+
+    Route::post('{id_rel}/{status_id}/{old_status_id}/move', ['\App\Http\Controllers\Panel\ActionController', 'move'])->middleware('auth');
 });
 
 //*dropzone file

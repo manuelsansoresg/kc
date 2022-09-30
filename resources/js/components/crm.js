@@ -1,26 +1,32 @@
 
 import { showInfo } from './utilities';
 
-function move(id, path, route, form, modal, datatable, title, msg){
+function move(id, form, modal, datatable, title, msg){
 
     const new_form = document.getElementById(form);
     const data = new FormData(new_form);
+    
+    let statusid = $('#statusid').val();
+    let old_status_id = $('#old_status_id').val();
 
     axios
-    .post("panel/"+path+"/"+id+"/move/"+route, data)
+    .post("/panel/action/"+id+"/"+statusid+"/"+old_status_id+"/move", data)
     .then(function (response) {
-        showInfo(2, datatable, title, msg);
         $('#'+modal).modal('hide');
+        showInfo(2, datatable, title, msg);
     })
     .catch(e => {
         
     });
 }
 
-window.archiveModal = function(id) {
+window.moveModal = function(title, id, statusid, old_status_id, dt) {
     $('#frm-archive').trigger("reset");
     $('#id_rel').val(id);
-    $('#modal-archive-title').html('Archivar');
+    $('#statusid').val(statusid);
+    $('#old_status_id').val(old_status_id);
+    $('#dt').val(dt);
+    $('#modal-archive-title').html(title);
     $('#modal-archive').modal('show');
 }
 if (document.getElementById('frm-archive')) {
@@ -34,8 +40,9 @@ $( "#frm-archive" ).submit(function( event ) {
     event.preventDefault();
     
     let id_rel = $('#id_rel').val();
+    let dt = $('#dt').val();
     let msg = 'registro archivado exitosamente';
-    move(id_rel, 'lead', 'archive', 'frm-archive', 'modal-archive', 'dt-lead', 'Archivo', msg);
+    move(id_rel, 'frm-archive', 'modal-archive', dt, 'Registro', msg);
 });
 
 window.modalValidate = function(id, model){

@@ -51,8 +51,9 @@ class Credit extends Model
             $data_deadline    = deadlineKc($hour, $max_hour);
             $color_inf_credit = $data_deadline['color'];
             $hour             = $data_deadline['lbl_hour'];
+            $status_id        = $history->status_id;
             
-            $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'credit_id' => $history->id_rel, 'route' => $route])->render();
+            $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
             $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
             $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client, 'percent' => $percent])->render();
             $dead_line        = \View::make('panel.module.checkup.deadline', [ 'hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();

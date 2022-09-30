@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Action;
 use App\Models\File;
+use App\Models\HistoryLog;
 use App\Models\RegisterAction;
 use App\Models\TemplateFile;
 use App\Strategies\Values\ActionValues;
@@ -22,6 +23,12 @@ class ActionController extends Controller
     public function index()
     {
         //
+    }
+    
+    public function move($id_rel, $status_id, $old_status_id, Request $request)
+    {
+        $history = HistoryLog::move($id_rel, $status_id, $old_status_id, $request);
+        return response()->json($history);
     }
 
     /**

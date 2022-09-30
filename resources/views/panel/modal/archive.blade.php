@@ -32,6 +32,7 @@
                         </div>
                         
                         <input type="hidden" id="id_rel" name="id_rel">
+                       
                         
                         <div class="col-12">
                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
@@ -43,6 +44,9 @@
                         </div>
                     </div>
                 </form>
+                <input type="hidden" id="statusid">
+                <input type="hidden" id="old_status_id">
+                <input type="hidden" id="dt">
             </div>
         </div>
     </div>

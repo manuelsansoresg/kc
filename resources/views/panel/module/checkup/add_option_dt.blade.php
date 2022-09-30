@@ -1,3 +1,4 @@
+@inject('m_history', 'App\Models\HistoryLog')
 <div class="drodown"><a href="#"
     class="dropdown-toggle btn btn-icon btn-trigger"
     data-bs-toggle="dropdown"><em
@@ -17,16 +18,16 @@
                 <em class="icon ni ni-report-profit"></em><span>Ver perfil crédito</span></a>
         </li>
         <li>
-            <a class="pointer">
+            <a onclick="moveModal('Cancelar', {{ $credit_id }}, '{{ $m_history::CREDIT_CANCELED }}', '{{ $status_id }}', 'dt-check-up')" class="pointer">
                 <em class="icon ni ni-cross-circle-fill"></em><span>Cancelar</span></a>
         </li>
        
         <li>
-            <a class="pointer">
+            <a onclick="moveModal('Rechazar', {{ $credit_id }}, '{{ $m_history::CREDIT_REJECTED }}','{{ $status_id }}' , 'dt-check-up')" class="pointer">
                 <em class="icon ni ni-cross-round-fill"></em><span>Rechazar</span></a>
         </li>
         <li>
-            <a class="pointer">
+            <a onclick="moveModal('Archivar', {{ $credit_id }}, '{{ $m_history::CREDIT_ARCHIVE }}', '{{ $status_id }}' , 'dt-check-up')" class="pointer">
                 <em class="icon ni ni-archive-fill"></em><span>Archivar</span></a>
         </li>
       
