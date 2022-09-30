@@ -36,8 +36,8 @@
                     </div>
                     <div class="nk-sidebar-brand">
                         <a href="html/index.html" class="logo-link nk-sidebar-logo">
-                            <img class="logo-light logo-img" src="/assets_admin/images/logo.png" srcset="/assets_admin/images/logo2x.png 2x" alt="logo">
-                            <img class="logo-dark logo-img" src="/assets_admin/images/logo-dark.png" srcset="/assets_admin/images/logo-dark2x.png 2x" alt="logo-dark">
+                            <img class="logo-light logo-img" src="{{ asset('images/logo-dark-test.png') }}" srcset="{{ asset('images/logo-dark-test.png') }}" alt="logo">
+                            <img class="logo-dark logo-img" src="{{ asset('images/logo-dark-test.png') }}" srcset="{{ asset('images/logo-dark-test.png') }}" alt="logo-dark">
                         </a>
                     </div>
                 </div><!-- .nk-sidebar-element -->
