@@ -62,6 +62,10 @@ class HistoryLog extends Model
         13 => 'Reporte',
         14 => 'Decisión',
         15 => 'Decisión',
+        16 => 'Archivo',
+        17 => 'Cancelado',
+        18 => 'Rechazado',
+        19 => 'En curso',
     ];
 
     public static $name_model = [
@@ -120,8 +124,31 @@ class HistoryLog extends Model
         if ($id_rel != null) {
             $history->where('id_rel', $id_rel);
         }
-        $history = $history->where('status', 1)->get();
+        $history = $history->where('status', 1)
+                    ->orderBy('created_at', 'DESC')
+                    ->get();
         return $history;
+    }
+
+    //TODO:create a field in credit that is the name of the module and update that
+    public function getStatusCredit($credit_id)
+    {
+        $data_status = array(
+            HistoryLog::KC_CHECK_UP,
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION,
+            HistoryLog::CREDIT_ARCHIVE,
+            HistoryLog::CREDIT_CANCELED,
+            HistoryLog::CREDIT_REJECTED,
+        );
+        $status = self::getByStatus($data_status, $credit_id);
+        foreach ($status as $row_status) {
+            if ($row_status->status_id == HistoryLog::KC_CHECK_UP || $row_status->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
+                $status = 'En curso';
+            } else {
+                $status = HistoryLog::$label_status[$row_status->status_id];
+            }
+            return $status;
+        }
     }
 
     public function historyLead()

@@ -73,7 +73,7 @@
                                                 <div class="card-inner">
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-line">
-                                                            <span class="preview-title-lg overline-title">Crédito</span>
+                                                            <span class="preview-title-lg overline-title text-primary ">Crédito</span>
                                                         </div><!-- .nk-block-head -->
                                                         <div class="profile-ud-list">
                                                             <div class="profile-ud-item">
@@ -118,7 +118,7 @@
 
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-line">
-                                                            <span class="preview-title-lg overline-title">Cliente</span>
+                                                            <span class="preview-title-lg overline-title text-primary ">Cliente</span>
                                                         </div><!-- .nk-block-head -->
                                                         <div class="profile-ud-list">
                                                             <div class="profile-ud-item">
@@ -219,12 +219,15 @@
                                         <div class="user-card user-card-s2">
                                             <img class="logo-profile" src="{{ asset('images/logo_solo.png') }}" alt="">
                                             <div class="user-info">
-                                                <div class="badge bg-outline-light rounded-pill ucap">Cr;edito</div>
+                                                <div class="badge bg-outline-light rounded-pill ucap">Crédito</div>
                                                 <h5> {{ $client->name }} {{ $client->last_name }} {{ $client->second_last_name }} </h5>
                                                 <span class="sub-text">
                                                     {{ $client->email }} <br>
-                                                    {{ $product !== null ? $product->alias : null }}
+                                                   
                                                 </span>
+                                                <p class="profile-ud-value">
+                                                    {{ $product !== null ? $product->alias : null }}
+                                                </p>
                                             </div>
                                         </div>
                                     </div><!-- .card-inner -->
@@ -238,16 +241,16 @@
                                         </ul>
                                     </div><!-- .card-inner -->
                                     <div class="card-inner">
-                                        <h6 class="overline-title-alt mb-2">Otros</h6>
+                                        <h6 class="overline-title-alt mb-2 text-primary ">Otros</h6>
                                         <div class="row g-3">
                                             <div class="col-6">
                                                 <span class="sub-text">Origen:</span>
                                                 <span>{{ $origins[$credit->origin_id] }}</span>
                                             </div>
-                                            <div class="col-6">
+                                            {{-- <div class="col-6">
                                                 <span class="sub-text">Canal:</span>
                                                 <span>{{ $channel[$credit->channel_id] }}</span>
-                                            </div>
+                                            </div> --}}
                                             <div class="col-6 d-none">
                                                 <span class="sub-text">Etatus:</span>
                                               
@@ -260,10 +263,22 @@
                                                     </span>
                                                 @endif
                                             </div>
+
+                                            <div class="col-6">
+                                                <span class="sub-text">Estatus:</span>
+                                                <span>
+                                                    {{ $m_history_log->getStatusCredit($credit->id) }}
+                                                </span>
+                                            </div>
+
+                                            <div class="col-6">
+                                                <span class="sub-text">Módulo:</span>
+                                                <span>KC- Check up</span>
+                                            </div>
                                         </div>
                                     </div><!-- .card-inner -->
                                     <div class="card-inner">
-                                        <h6 class="overline-title-alt mb-3">Etiquetas  </h6>
+                                        <h6 class="overline-title-alt mb-3 text-primary ">Etiquetas  </h6>
                                         <p> <a class="link pointer" onclick="modalCreditTag({{ $credit->id}})">Haz click para agregar etiquetas</a> </p>
                                         <div id="content-tag"></div>
                                     </div><!-- .card-inner -->
