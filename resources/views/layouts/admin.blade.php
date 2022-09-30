@@ -201,6 +201,12 @@
                                     <ul class="nk-menu-sub">
                                         
                                         <li class="nk-menu-item">
+                                            <a href="/panel/credit/product/{{ $m_history::CREDIT_IN_PROGRESS }}" class="nk-menu-link">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-sign-usd-alt2"></em></span>
+                                                <span class="nk-menu-text">En curso</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                        <li class="nk-menu-item">
                                             <a href="/panel/credit/product/{{ $m_history::CREDIT_CANCELED }}" class="nk-menu-link">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-sign-usd-alt2"></em></span>
                                                 <span class="nk-menu-text">Cancelados</span>

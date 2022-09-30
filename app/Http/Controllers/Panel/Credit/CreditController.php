@@ -86,12 +86,28 @@ class CreditController extends Controller
 
     public function product($status)
     {
-        return view('panel.credit.product.index', compact('status'));
+        $titles = array(
+            HistoryLog::CREDIT_IN_PROGRESS => 'En curso',
+            HistoryLog::CREDIT_CANCELED => 'Cancelados',
+            HistoryLog::CREDIT_REJECTED => 'Rechazados',
+        );
+        $title = $titles[$status];
+        if ($status != HistoryLog::CREDIT_IN_PROGRESS) {
+            return view('panel.credit.product.index', compact('status', 'title'));
+        }
+        return view('panel.credit.product.in_progress', compact('status', 'title'));
     }
 
     public function productList($status)
     {
-        $list = Credit::listDatatableProduct([$status]);
+        
+        if ($status == HistoryLog::CREDIT_IN_PROGRESS) {
+            $list = Credit::listDatatableInProgress([$status]);
+        } else {
+            $list = Credit::listDatatableProduct([$status]);
+        }
+        
+
         return response()->json(['data' => $list]);
     }
 

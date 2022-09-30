@@ -55,9 +55,10 @@ class LeadStrategyTemplate implements TemplateInterface
             HistoryLog::move($client_person->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
             //* create history in credit
             HistoryLog::move($credit->id, HistoryLog::CREATE_CLIENT_PERSON, HistoryLog::CREATE_CLIENT_PERSON);
-            //* enter module kc-checkup and list actions
+            //*in progress
+            HistoryLog::move($credit->id, HistoryLog::CREDIT_IN_PROGRESS, HistoryLog::CREDIT_IN_PROGRESS);
             
-
+            //* enter module kc-checkup and list actions
             if ($product->c_product_id = 1 && $product->c_service_id == 1) {
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);

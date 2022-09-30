@@ -689,6 +689,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/credit/datatable_in_progress.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/credit/datatable_in_progress.js ***!
+  \*****************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var status = $('#status').val();
+  var table = NioApp.DataTable('#dt-in_progress', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3">' + '<td colspan="2" class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3">' + col.title + '</td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/credit/product/' + status + '/list',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'module'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/credit/product/datatable.js":
 /*!*************************************************************!*\
   !*** ./resources/js/components/credit/product/datatable.js ***!
@@ -3099,6 +3154,8 @@ __webpack_require__(/*! ./components/action/datatablemodule */ "./resources/js/c
 __webpack_require__(/*! ./components/credit/profile/datatable */ "./resources/js/components/credit/profile/datatable.js");
 
 __webpack_require__(/*! ./components/credit/product/datatable */ "./resources/js/components/credit/product/datatable.js");
+
+__webpack_require__(/*! ./components/credit/datatable_in_progress */ "./resources/js/components/credit/datatable_in_progress.js");
 
 window.moveElement = function (section, id, idDatatable) {
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {

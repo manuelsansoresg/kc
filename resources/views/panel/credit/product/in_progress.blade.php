@@ -1,5 +1,6 @@
 @extends('layouts.admin')
-@section('title', 'Lista de creditos')
+@section('title', 'KC- Check up')
+@inject('m_history', 'App\Models\HistoryLog')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -24,15 +25,16 @@
                     <div class="nk-block nk-block-lg">
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
-                                <table id="dt-product-credit" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
+                                <table id="dt-in_progress" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Producto</th>
-                                            <th>Motivo</th>
-                                            <th>Fecha</th>
+                                            <th>Modulo</th>
                                             <th>Cliente</th>
                                             <th>Asesor</th>
+                                            <th>Progreso</th>
+                                            <th>Deadline</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -45,7 +47,7 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="refresh-dt" value="null">
-    <input type="hidden" id="status" value="{{ $status }}">
-  
+    <input type="hidden" id="refresh-dt" value="dt-lead">
+    <input type="hidden" id="status" value="{{ $m_history::CREDIT_IN_PROGRESS }}">
+   
 @endsection

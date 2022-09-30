@@ -31,6 +31,8 @@ class HistoryLog extends Model
     const CREDIT_ARCHIVE                      = 16;
     const CREDIT_CANCELED                     = 17;
     const CREDIT_REJECTED                     = 18;
+    //* whenever a credit is in a module it must be in progress if it is archived, canceled or refuses to remove it
+    const CREDIT_IN_PROGRESS                  = 19;
     
 
     protected $fillable = [
@@ -78,6 +80,8 @@ class HistoryLog extends Model
         $data['old_status_id']    = $old_status_id;
         
         $get_status = HistoryLog::where($data)->first();
+
+        self::removeInProgress($id_rel, $status_id);
         
         //*validate if old status exist
         $data_old_status = array(
@@ -96,6 +100,17 @@ class HistoryLog extends Model
             $history = new HistoryLog($data);
             $history->save();
             return $history;
+        }
+    }
+
+    public function removeInProgress($id_rel, $status_id)
+    {
+        if ($status_id == HistoryLog::CREDIT_ARCHIVE || $status_id == HistoryLog::CREDIT_CANCELED || $status_id == HistoryLog::CREDIT_REJECTED) {
+            $where = array(
+                'id_rel' => $id_rel,
+                'status_id' => HistoryLog::CREDIT_IN_PROGRESS,
+            );
+            HistoryLog::where($where)->update(['status' => 0]);
         }
     }
 

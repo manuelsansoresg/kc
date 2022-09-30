@@ -133,6 +133,104 @@ class Credit extends Model
         return $users;
     }
 
+    public static function listDatatableInProgress()
+    {
+        $get_in_progress    = HistoryLog::getByStatus([HistoryLog::CREDIT_IN_PROGRESS]);
+        //$get_list    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION]);
+      
+        $users        = array();
+        foreach ($get_in_progress as $history_progress) {
+            $id_rel = $history_progress->id_rel;
+
+            $get_list    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION], $id_rel);
+
+            foreach ($get_list as $history) {
+                $query            = Credit::find($history->id_rel);
+                $product          = $query->creditProduct;
+                $alias_product    = $product !== null ? $product->alias : null;
+                $client           = $query->creditClientPerson;
+                $advisor          = $query->creditAdvisor;
+                $route            = self::routeShowStep()[$history->status_id];
+                $model            = HistoryLog::$name_model[$history->status_id];
+                $templateStrategy = TemplateValues::STRATEGY[$model];
+                $percent          = (new $templateStrategy)->getPercent($history);
+                
+                
+    
+                $hour             = $query->created_at;
+                $max_hour         = 24;
+    
+                $modulo           = 'KC- Check up';
+    
+                $data_deadline    = deadlineKc($hour, $max_hour);
+                $color_inf_credit = $data_deadline['color'];
+                $hour             = $data_deadline['lbl_hour'];
+                $status_id        = $history->status_id;
+                
+                $menu_options     = self::menuInProgressOptions($history);
+                $option           = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+                
+                $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
+                $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client, 'percent' => $percent])->render();
+                $dead_line        = \View::make('panel.module.checkup.deadline', [ 'hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+                $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
+                
+                $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
+                $is_advisor     = Auth::user()->hasRole('Asesor');
+                if ($is_advisor === true && Auth::user()->id === $advisor->id) {
+                    $users[] = array(
+                        'id' => $query->id,
+                        'product' => $content_product,
+                        'module' => $modulo,
+                        'client' => $content_client,
+                        'advisor' => $name_advisor,
+                        'progress' => $progress_bar,
+                        'deadline' => $dead_line,
+                        'options' => $option
+                    );
+                } else {
+                    $users[] = array(
+                        'id' => $query->id,
+                        'product' => $content_product,
+                        'module' => $modulo,
+                        'client' => $content_client,
+                        'advisor' => $name_advisor,
+                        'progress' => $progress_bar,
+                        'deadline' => $dead_line,
+                        'options' => $option
+                    );
+                }
+            }
+
+        }
+        return $users;
+    }
+
+    public function menuInProgressOptions($history)
+    {
+        $credit     = $history->historyCredit;
+        $client     = $credit->creditClientPerson;
+
+        $menu = array(
+            'options' => array(
+                [
+                    'link' => '/panel/client/'.$client->id,
+                    'onclick' => '',
+                    'name' => 'Ver perfil cliente',
+                    'icon' =>  'icon ni ni-user-fill'
+                ],
+                [
+                    'link' => '/panel/credit/'.$credit->id,
+                    'onclick' => '',
+                    'name' => 'Ver perfil crédito',
+                    'icon' => 'icon ni ni-report-profit'
+                ]
+            ),
+        );
+
+        return $menu;
+    }
+
     public function menuOptionCredit($history)
     {
         $menu = array(

@@ -74,7 +74,8 @@ class LeadController extends Controller
     public function product()
     {
         $status = HistoryLog::CREDIT_ARCHIVE;
-        return view('panel.credit.product.index', compact('status'));
+        $title = 'Archivo';
+        return view('panel.credit.product.index', compact('status', 'title'));
     }
 
     /**

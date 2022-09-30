@@ -172,6 +172,7 @@ Route::group(['prefix' => 'credit'], function () {
     
     Route::get('product/{status}', ['\App\Http\Controllers\Panel\Credit\CreditController', 'product'])->middleware('auth');
     Route::get('product/{status}/list', ['\App\Http\Controllers\Panel\Credit\CreditController', 'productList'])->middleware('auth');
+    
 
     
 });

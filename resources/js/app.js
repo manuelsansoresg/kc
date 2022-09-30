@@ -28,6 +28,7 @@ require('./components/module/kc_check_up/action/datatable_report');
 require('./components/action/datatablemodule');
 require('./components/credit/profile/datatable');
 require('./components/credit/product/datatable');
+require('./components/credit/datatable_in_progress');
 
 
 window.moveElement = function (section, id, idDatatable) {
