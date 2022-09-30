@@ -823,6 +823,7 @@ window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#old_status_id').val(old_status_id);
   $('#dt').val(dt);
   $('#modal-archive-title').html(title);
+  getReason(title);
   $('#modal-archive').modal('show');
 };
 
@@ -848,6 +849,22 @@ window.modalValidate = function (id, model) {
     $('#modal-validate').modal('show');
   })["catch"](function (e) {});
 };
+
+function getReason(type) {
+  $('#modal-reason-id').empty();
+  axios.get("/panel/reason/" + type + "/list").then(function (response) {
+    var reason = response.data;
+    var modal_reason_id = $('#modal-reason-id');
+
+    for (var key in reason) {
+      var element = reason[key];
+      var option = new Option(element, key, true, true);
+      modal_reason_id.append(option).trigger('change');
+    }
+
+    if (financials != null) {}
+  })["catch"](function (e) {});
+}
 
 /***/ }),
 

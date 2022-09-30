@@ -27,6 +27,7 @@ window.moveModal = function(title, id, statusid, old_status_id, dt) {
     $('#old_status_id').val(old_status_id);
     $('#dt').val(dt);
     $('#modal-archive-title').html(title);
+    getReason(title);
     $('#modal-archive').modal('show');
 }
 if (document.getElementById('frm-archive')) {
@@ -57,7 +58,25 @@ window.modalValidate = function(id, model){
     .catch(e => {
         
     });
+}
 
-    
-    
+function getReason(type) {
+    $('#modal-reason-id').empty();
+    axios
+    .get("/panel/reason/"+type+"/list")
+    .then(function (response) {
+        let reason = response.data;
+        var modal_reason_id = $('#modal-reason-id');
+        for (const key in reason) {
+            const element = reason[key];
+            var option = new Option(element, key, true, true);
+            modal_reason_id.append(option).trigger('change');
+            
+        }
+        if (financials != null) {
+        }
+    })
+    .catch(e => {
+        
+    });
 }

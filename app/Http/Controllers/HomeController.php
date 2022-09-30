@@ -39,4 +39,16 @@ class HomeController extends Controller
         }
         return view('content_report', compact('client'));
     }
+
+    /**
+     * type reason in modal archive, reject and cancel
+     *
+     * @param string $type
+     * @return void
+     */
+    public function reason($type)
+    {
+        $enums = array('Cancelar' => 'credit_reason_cancel', 'Rechazar' => 'credit_reason_reject', 'Archivar' => 'credit_reason_archive');
+        return response()->json(config('enums.'.$enums[$type]));
+    }
 }

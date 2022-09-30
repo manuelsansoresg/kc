@@ -42,6 +42,25 @@ return [
         3 => 'Otro',
         4 => 'Conversión',
     ),
+    
+    'credit_reason_archive' => array(
+        1 => 'Error de sistema',
+        2 => 'Otro',
+    ),
+    
+    'credit_reason_reject' => array(
+        1 => 'No viable',
+        2 => 'no sujeto de crédito',
+        3 => 'otro',
+    ),
+   
+    'credit_reason_cancel' => array(
+        1 => 'Decisión',
+        2 => 'cliente',
+        3 => 'otro',
+    ),
+
+
     'type_lead' => array(
         1 => 'Autoservicio',
         2 => 'Asistido',

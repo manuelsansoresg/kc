@@ -196,5 +196,6 @@ Route::group(['prefix' => 'template'], function () {
     
     Route::get('action-document/{model}/{history_id}', ['\App\Http\Controllers\Panel\Credit\DocumentController', 'index'])->middleware('auth');
     Route::get('actions/list/{model}/{history_id}/show', ['\App\Http\Controllers\Panel\Module\ActionController', 'list'])->middleware('auth');
-
 });
+
+Route::get('reason/{type}/list', ['\App\Http\Controllers\HomeController', 'reason'])->middleware('auth');

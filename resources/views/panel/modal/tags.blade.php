@@ -15,9 +15,6 @@
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Etiquetas</label>
                                 <div class="form-control-wrap">
-                                    @php
-                                        $reasons = config('enums.reason_archive');
-                                    @endphp
                                     <select class="form-select" name="data[temperature_id]" id="modal-tags-tag"  data-search="on">
                                         @foreach ($tags as $key => $tag)
                                             <option value="{{ $key }}">{{ $tag }}
