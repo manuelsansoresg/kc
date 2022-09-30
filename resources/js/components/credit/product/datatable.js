@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         columns: [
             { data: 'id' },
             { data: 'product' },
+            { data: 'reason' },
             { data: 'date' },
             { data: 'client' },
             { data: 'advisor' }, 

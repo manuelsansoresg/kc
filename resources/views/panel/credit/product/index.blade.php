@@ -22,10 +22,7 @@
                                     </nav>
                                 </div>
                             </div>
-                            <div class="nk-block-head-content">
-                                <a href="/panel/financial/create" class="btn btn-icon btn-primary"><em
-                                        class="icon ni ni-plus"></em></a>
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="nk-block nk-block-lg">
@@ -36,6 +33,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Producto</th>
+                                            <th>Motivo</th>
                                             <th>Fecha</th>
                                             <th>Cliente</th>
                                             <th>Asesor</th>

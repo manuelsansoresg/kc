@@ -98,6 +98,10 @@ class Credit extends Model
             $client           = $query->creditClientPerson;
             $advisor          = $query->creditAdvisor;
             $menu_options   = self::menuOptionCredit($history);
+
+            $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive');
+            $reason = config('enums.'.$reason_enums[$history->status_id])[$history->reason];
+
             $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['archive']])->render();
             $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
             $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
@@ -108,6 +112,7 @@ class Credit extends Model
                 $users[] = array(
                     'id' => $query->id,
                     'product' => $content_product,
+                    'reason' => $reason,
                     'date' => $history->created_at,
                     'client' => $content_client,
                     'advisor' => $name_advisor,
@@ -117,6 +122,7 @@ class Credit extends Model
                 $users[] = array(
                     'id' => $query->id,
                     'product' => $content_product,
+                    'reason' => $reason,
                     'date' => $history->created_at,
                     'client' => $content_client,
                     'advisor' => $name_advisor,
