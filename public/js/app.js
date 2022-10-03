@@ -884,6 +884,17 @@ window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#modal-archive').modal('show');
 };
 
+window.moveModalLead = function (title, id, statusid, old_status_id, dt) {
+  $('#frm-archive').trigger("reset");
+  $('#id_rel').val(id);
+  $('#statusid').val(statusid);
+  $('#old_status_id').val(old_status_id);
+  $('#dt').val(dt);
+  $('#modal-archive-title').html(title);
+  getReason('ArchivarLead');
+  $('#modal-archive').modal('show');
+};
+
 if (document.getElementById('frm-archive')) {
   NioApp.Select2('#modal-reason-id', {
     dropdownParent: $('#modal-archive')

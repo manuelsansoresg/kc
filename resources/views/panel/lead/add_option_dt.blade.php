@@ -5,7 +5,7 @@ $user = Auth::user();
 <div class="content-options">
     <ul class="nk-tb-actions gx-1">
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a onclick="moveModal('Archivar', {{ $id }}, '{{ $m_history::LEAD_ARCHIVE }}', '{{ $m_history::CREATE_PROSPECT }}', 'dt-lead')" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+            <a onclick="moveModalLead('Archivar', {{ $id }}, '{{ $m_history::LEAD_ARCHIVE }}', '{{ $m_history::CREATE_PROSPECT }}', 'dt-lead')" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="Archivar">
                 <em class="icon ni ni-archive-fill"></em>
             </a>
@@ -66,7 +66,7 @@ $user = Auth::user();
                                 <em class="icon ni ni-tag"></em><span>Etiquetas</span></a>
                         </li>
                         <li>
-                            <a class="pointer" onclick="moveModal('Archivar', {{ $id }}, '{{ $m_history::LEAD_ARCHIVE }}', '{{ $m_history::CREATE_PROSPECT }}', 'dt-lead')">
+                            <a class="pointer" onclick="moveModalLead('Archivar', {{ $id }}, '{{ $m_history::LEAD_ARCHIVE }}', '{{ $m_history::CREATE_PROSPECT }}', 'dt-lead')">
                                 <em class="icon ni ni-archive"></em><span>Archivar</span></a>
                         </li>
                         <li>

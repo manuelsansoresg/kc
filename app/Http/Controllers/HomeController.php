@@ -48,7 +48,7 @@ class HomeController extends Controller
      */
     public function reason($type)
     {
-        $enums = array('Cancelar' => 'credit_reason_cancel', 'Rechazar' => 'credit_reason_reject', 'Archivar' => 'credit_reason_archive');
+        $enums = array('Cancelar' => 'credit_reason_cancel', 'Rechazar' => 'credit_reason_reject', 'Archivar' => 'credit_reason_archive', 'ArchivarLead' => 'reason_archive');
         return response()->json(config('enums.'.$enums[$type]));
     }
 }
