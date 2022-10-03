@@ -826,7 +826,7 @@
                                                     <em class="icon ni ni-user-alt"></em>
                                                 </div>
                                                 <div class="user-info d-none d-md-block">
-                                                    <div class="user-status">Administrator</div>
+                                                    <div class="user-status"> {{ Auth::user()->getRoleNames()[0]}}</div>
                                                     <div class="user-name dropdown-indicator"> {{ Auth::user()->name }}</div>
                                                 </div>
                                             </div>
