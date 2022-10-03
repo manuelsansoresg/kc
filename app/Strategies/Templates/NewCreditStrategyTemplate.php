@@ -275,7 +275,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $max_hour       = 12;
-        $hour           = Carbon::parse($credit->created_at)->hour;
+        $hour           = $credit->created_at;
         $menu_options   = self::menuOptionReportStep($history);
         $advisor        = $credit->creditAdvisor;
         
@@ -284,10 +284,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
         $color_desition   = 'success';
         $name_advisor   = $role.' - '.$advisor->name.' '.$advisor->last_name;
-        /* if ($hour > 5) {
-            $color_desition = ($hour >= $max_hour) ? 'danger' : 'warning';
-        } */
-
+        
         $data_deadline    = deadline($hour, $max_hour, 0, 'success');
         $color_desition = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
