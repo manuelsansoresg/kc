@@ -50,7 +50,9 @@ class ListStrategy implements ActionInterface
             $name_advisor   = $advisor->name.' '.$advisor->last_name;
             $max_hour       = 12;
             $hour           = $credit->created_at;
-            $templateStrategy   = TemplateValues::STRATEGY['newCredit']; //TODO: cambiar dinamico
+            $model = ($history_log->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
+
+            $templateStrategy   = TemplateValues::STRATEGY[$model];
             $menu_options   = (new $templateStrategy)->menuOptions($history_log);
             
             $percent_file   = (new $templateStrategy)->percentFile($history_log->id_rel);
@@ -60,6 +62,9 @@ class ListStrategy implements ActionInterface
             $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
 
             $name_responsable   = $role.' - '.$advisor->name.' '.$advisor->last_name;
+
+            $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
+            $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
             if ($advisor->id == Auth::user()->id) {
                 $name_responsable = 'Tú';
@@ -73,6 +78,8 @@ class ListStrategy implements ActionInterface
             if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_DESITION || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION) {
                 $status_form = 'En curso';
                 $percent_form = 0;
+                $menu_options   = (new $templateStrategy)->menuOptionReportStep($history_log);
+                $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
             }
 
             $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
@@ -82,8 +89,7 @@ class ListStrategy implements ActionInterface
            
 
             $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-            $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-            $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+           
 
             $option = ($history_log->status_id == 7) ? $file_option : $form_option;
 
