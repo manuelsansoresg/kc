@@ -46,7 +46,7 @@ class Lead extends Model
                 $validate       = (new $leadStrategy)->getValidate($query->id);
     
                 $option = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'validate' => $validate])->render();
-                $lead = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
+                $lead_view = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
                 
                 $lbl_status = '<span class="text-success">Valido</span>';
                 
@@ -60,10 +60,10 @@ class Lead extends Model
                 $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
                 $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
                 
-                if ($is_asesor === true &&  Auth::user()->id == $lead->asesor_id) {
+                if ($is_asesor === true &&  Auth::user()->id == $query->asesor_id) {
                     $data[] = array(
                         'id' => $query->id,
-                        'name' => $lead,
+                        'name' => $lead_view,
                         'date' => formatDateNameMonth($query->created_at),
                         'product' => ($product != null) ? $product->alias : '',
                         'origin' => $origin,
@@ -75,7 +75,7 @@ class Lead extends Model
                 } else {
                     $data[] = array(
                         'id' => $query->id,
-                        'name' => $lead,
+                        'name' => $lead_view,
                         'date' => formatDateNameMonth($query->created_at),
                         'product' => ($product != null) ? $product->alias : '',
                         'origin' => $origin,
