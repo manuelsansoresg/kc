@@ -13,6 +13,7 @@
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
+                                            <li class="breadcrumb-item">Créditos</li>
                                             <li class="breadcrumb-item active">{{ $title }}</li>
                                         </ul>
                                     </nav>
