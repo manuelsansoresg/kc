@@ -80,7 +80,7 @@ class LeadStrategy implements ActionInterface
             'name' => $name_lead,
             'date_in' => formatDateNameMonth($model_action->start_date),
             'date_fin' => formatDateNameMonth($model_action->end_date),
-            'advisor' => $advisor->name,
+            'advisor' => ($advisor!= null)?$advisor->name : '',
             'options' => $option
         );
         return $data;
