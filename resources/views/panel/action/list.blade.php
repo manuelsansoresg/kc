@@ -27,7 +27,7 @@
                                 <table id="dt-acctions" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Tipo</th>
+                                            <th>Contacto</th>
                                             <th>Asunto</th>
                                             <th>Prospecto</th>
                                             <th>Fecha inicio</th>
