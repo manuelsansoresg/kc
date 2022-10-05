@@ -285,9 +285,10 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $color_report       = 'success';
         $menu_options       = self::menuOptionsStep($history);
         $total_percent      = $percent_file + $percent_form;
+        $percent_form = $percent_form;
         //$total_credit_percent   = $percent_file;
        
-        $status_inf_credit = ($total_percent > 100) ? 'Concluido' : 'En curso';
+        $status_inf_credit = ($percent_form > 100) ? 'Concluido' : 'En curso';
         //TODO: change validation when the decision action is carried out in the report
         $status_report = ($total_percent > 100) ? 'En curso' : 'En espera';
         
@@ -300,7 +301,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         
         $option_inf_credit          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
         
-        $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $total_credit_percent])->render();
+        $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 1])->render();
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         
