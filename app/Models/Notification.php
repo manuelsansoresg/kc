@@ -30,6 +30,7 @@ class Notification extends Model
         if ($status != null) {
             $notification->where('status', $status);
         }
+        $notification->orderBy('created_at', 'desc');
         return $notification->get();
     }
 
@@ -47,7 +48,7 @@ class Notification extends Model
 
         $lead_add_prospect        = SendNotificationsValues::STRATEGY['leadAddProspect'];
         $list_lead_add_prospect   = (new $lead_add_prospect)->get($user_id, null);
-        
+
         $btn_next_lead            = SendNotificationsValues::STRATEGY['btnNextLead'];
         $list_btn_next_lead       = (new $btn_next_lead)->get($user_id, null);
         

@@ -161,7 +161,7 @@ class Lead extends Model
             $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
             (new $notification)->send($lead->id);
 
-            if ($is_asesor === true) {
+            if ($data['asesor_id'] != null) {
                 $lead_advisor = LeadAdvisor::create([ 'lead_id' => $lead->id, 'advisor_id' => Auth::user()->id]);
                 HistoryLog::move($lead_advisor->id, HistoryLog::ADD_PROSPECT, HistoryLog::ADD_PROSPECT);
                 //* Execute notification in add lead

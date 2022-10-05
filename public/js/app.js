@@ -3034,8 +3034,9 @@ channel.bind('kaaxclub-event', function (data) {
       var title = element.title;
       var body = element.body;
       var user_id = element.user_id;
+      var is_add_adviser = element.is_add_adviser;
 
-      if (my_user == user_id) {
+      if (my_user == user_id && is_add_adviser == false) {
         showToastDark(title, body, 'success');
       }
     }

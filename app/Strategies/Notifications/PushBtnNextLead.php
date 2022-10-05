@@ -35,6 +35,7 @@ class PushBtnNextLead implements SendNotificationsInterface
                     'body' => $notification->body,
                     'id' => $notification->id,
                     'created_at' => $notification->created_at,
+                    'is_add_adviser' => false,
                 );
                 
                 if ($user_id == null) {

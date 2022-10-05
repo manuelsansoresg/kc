@@ -35,13 +35,15 @@ class PushLeadAddProspect implements SendNotificationsInterface
                     'body' => $notification->body,
                     'id' => $notification->id,
                     'created_at' => $notification->created_at,
+                    'is_add_adviser' => true,
                 );
                 if ($user_id == null) {
                     $notifications[] = $data_array;
-                } elseif ($user_id != null && $user_id == $lead->id) {
+                } elseif ($user_id != null && $user_id == $lead->asesor_id) {
                     $notifications[] = $data_array;
                 }
             }
+            
             //*activate recieve push
             $get_notification = Notification::find($notification->id);
             $get_notification->status = 1;
