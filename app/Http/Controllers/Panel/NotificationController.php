@@ -48,7 +48,7 @@ class NotificationController extends Controller
     public function show($model)
     {
         $notification       = SendNotificationsValues::STRATEGY[$model];
-        $get_notification   = (new $notification)->get();
+        $get_notification   = (new $notification)->get(null, 0);
         return response()->json($get_notification);
     }
 

@@ -13,36 +13,39 @@ class PushBtnNextLead implements SendNotificationsInterface
     {
         $data_notification = array(
             'id_rel' => $id,
-            'title' => 'Prospectos',
+            'title' => 'Créditos',
             'body' => 'Se ha creado un nuevo crédito',
             'model' => Notification::BTN_NEXT_LEAD,
         );
-        Notification::create($data_notification);
-        $push  = new Pusher;
-        $push->send(['model' => 'btnNextLead']);
+        $is_exist = Notification::where($data_notification)->count();
+        
+        if ($is_exist == 0) {
+            Notification::create($data_notification);
+            $push  = new Pusher;
+            $push->send(['model' => 'btnNextLead']);
+        }
     }
     
     public function get($user_id = null, $status = 0)
     {
-        $get_notifications = Notification::getByModel([Notification::BTN_NEXT_LEAD], $status);
+        $get_notifications = Notification::getByModel([Notification::BTN_NEXT_LEAD]);
         $notifications = array();
         foreach ($get_notifications as $notification) {
             $users = User::getUserRole('Administrador');
             foreach ($users as $user) {
+
+                $toast  = \View::make('panel.toast', ['title' => $notification->title, 'body' => $notification->body])->render();
                 $data_array = array(
                     'user_id' => $user->id,
                     'title' => $notification->title,
                     'body' => $notification->body,
+                    'toast' => $toast,
                     'id' => $notification->id,
                     'created_at' => $notification->created_at,
                     'is_add_adviser' => false,
                 );
                 
-                if ($user_id == null) {
-                    $notifications[] = $data_array;
-                } elseif ($user_id != null && $user_id == $user->id) {
-                    $notifications[] = $data_array;
-                }
+                $notifications[] = $data_array;
             }
             //*activate recieve push
             $get_notification = Notification::find($notification->id);

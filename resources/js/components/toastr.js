@@ -116,14 +116,42 @@
   window.showToast = function (title, description, type) {
     toastr.clear();
     NioApp.Toast('<h5>'+title+'</h5><p>'+description+'</p>', ''+type+'', {
-        position: 'top-right'
+        position: 'top-right',
       });
   }
   window.showToastDark = function (title, description, type) {
     toastr.clear();
     NioApp.Toast('<h5>'+title+'</h5><p>'+description+'</p>', ''+type+'', {
         position: 'top-right',
-        ui: 'is-dark'
+        ui: 'is-dark',
+        timeOut: 10000
       });
   }
+
+  /* toast */
+  
+
+/*   window.openToast = function (title, body, class_toast, subtitle) {
+    $.toast({
+      type: class_toast,
+      title: title,
+      subtitle: subtitle,
+      content: body,
+      delay: 5000,
+      
+      
+  });
+  } */
+
+  /* var toastTrigger = document.getElementsByClassName('toasts')
+  var toastLiveExample = document.getElementById('liveToast')
+  var toast = new bootstrap.Toast(toastLiveExample) */
+
+  
+
+
 })(NioApp, jQuery);
+
+$(document).ready(function(){
+  $(".toast").toast({autohide: false});
+});

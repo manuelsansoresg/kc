@@ -64,19 +64,11 @@ class LeadStrategyTemplate implements TemplateInterface
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION);
-                //* Execute notification in new credit
-                $notification   = SendNotificationsValues::STRATEGY['newCredit'];
-                (new $notification)->send($credit->id);
-                (new $notification)->send($credit->id, 2);
             } elseif ($product->c_product_id = 1 && $product->c_service_id == 2) {
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION);
-                //* Execute notification in new credit
-                $notification   = SendNotificationsValues::STRATEGY['debtReduction'];
-                (new $notification)->send($credit->id);
-                (new $notification)->send($credit->id, 2);
             }
         }
     }

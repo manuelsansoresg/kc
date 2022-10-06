@@ -2626,10 +2626,35 @@ document.addEventListener('DOMContentLoaded', function () {
     toastr.clear();
     NioApp.Toast('<h5>' + title + '</h5><p>' + description + '</p>', '' + type + '', {
       position: 'top-right',
-      ui: 'is-dark'
+      ui: 'is-dark',
+      timeOut: 10000
     });
   };
+  /* toast */
+
+  /*   window.openToast = function (title, body, class_toast, subtitle) {
+      $.toast({
+        type: class_toast,
+        title: title,
+        subtitle: subtitle,
+        content: body,
+        delay: 5000,
+        
+        
+    });
+    } */
+
+  /* var toastTrigger = document.getElementsByClassName('toasts')
+  var toastLiveExample = document.getElementById('liveToast')
+  var toast = new bootstrap.Toast(toastLiveExample) */
+
 })(NioApp, jQuery);
+
+$(document).ready(function () {
+  $(".toast").toast({
+    autohide: false
+  });
+});
 
 /***/ }),
 
@@ -3024,7 +3049,11 @@ var pusher = new Pusher('cb2d06fb80592c4ce5f2', {
 });
 var channel = pusher.subscribe('kaaxclub');
 channel.bind('kaaxclub-event', function (data) {
-  var model = data.model;
+  var model = data.model; //$('#content-toast').empty();
+
+  $(".toast").toast({
+    autohide: false
+  });
   axios.get('/panel/notification/' + model + '/show').then(function (response) {
     var result = response.data;
     var my_user = $('#user_id').val();
@@ -3035,11 +3064,14 @@ channel.bind('kaaxclub-event', function (data) {
       var body = element.body;
       var user_id = element.user_id;
       var is_add_adviser = element.is_add_adviser;
+      var toast = element.toast;
 
       if (my_user == user_id && is_add_adviser == false) {
-        showToastDark(title, body, 'success');
+        $('#content-toast').empty().append(toast);
       }
     }
+
+    $(".toast").toast("show");
   });
 });
 

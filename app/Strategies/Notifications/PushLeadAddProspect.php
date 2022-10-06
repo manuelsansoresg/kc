@@ -17,9 +17,14 @@ class PushLeadAddProspect implements SendNotificationsInterface
             'body' => 'Se te ha asignado un prospecto persona',
             'model' => Notification::ADD_PROSPECT,
         );
-        Notification::create($data_notification);
-        $push  = new Pusher;
-        $push->send(['model' => 'leadAddProspect']);
+
+        $is_exist = Notification::where($data_notification)->count();
+        
+        if ($is_exist == 0) {
+            Notification::create($data_notification);
+            $push  = new Pusher;
+            $push->send(['model' => 'leadAddProspect']);
+        }
     }
     
     public function get($user_id = null, $status = 0)
@@ -29,10 +34,13 @@ class PushLeadAddProspect implements SendNotificationsInterface
         foreach ($get_notifications as $notification) {
             $lead     = Lead::find($notification->id_rel);
             if ($lead != null) {
+                $toast  = \View::make('panel.toast', ['title' => $notification->title, 'body' => $notification->body])->render();
+
                 $data_array = array(
                     'user_id' => $lead->asesor_id,
                     'title' => $notification->title,
                     'body' => $notification->body,
+                    'toast' => $toast,
                     'id' => $notification->id,
                     'created_at' => $notification->created_at,
                     'is_add_adviser' => true,

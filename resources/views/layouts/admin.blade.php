@@ -903,8 +903,50 @@
                 </div>
                 <!-- main header @e -->
                 <!-- content @s -->
-                
+                <div aria-live="polite" aria-atomic="true" class="position-relative">
+                    <!-- Position it: -->
+                    <!-- - `.toast-container` for spacing between toasts -->
+                    <!-- - `.position-absolute`, `top-0` & `end-0` to position the toasts in the upper right corner -->
+                    <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
+                    <div class="toast-container position-absolute top-0 end-0 p-3" style="z-index: 9999">
+                  
+                      <!-- Then put toasts within -->
+                      <div id="content-toast"></div>
+                      {{-- <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header bg-primary text-dark">
+                          <img src="..." class="rounded me-2" alt="...">
+                          <strong class="me-auto">Bootstrap</strong>
+                          <small class=" text-dark">just now</small>
+                          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                          See? Just like this.
+                        </div>
+                      </div> --}}
+                  
+                      {{-- <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                          <img src="..." class="rounded me-2" alt="...">
+                          <strong class="me-auto">Bootstrap</strong>
+                          <small class="text-muted">2 seconds ago</small>
+                          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                          Heads up, toasts will stack automatically
+                        </div>
+                      </div> --}}
+
+                    </div>
+                  </div>
                 @yield('content')
+
+
+                
+                
+                  
+                  
+
+
                 <!-- content @e -->
                 <!-- footer @s -->
                 <div class="nk-footer">
@@ -1090,12 +1132,15 @@
     {{-- <script type="text/javascript" src="/vendor/jquery-validation/dist/jquery.validate.js"></script> --}}
     <script type="text/javascript" src="/vendor/jquery-validation/dist/localization/messages_es.min.js"></script>
     <script type="text/javascript" src="/vendor/toastr/build/toastr.min.js"></script>
+    {{-- <script type="text/javascript" src="/vendor/Toast/toast.js"></script> --}}
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
 
     <script type="text/javascript" src="/js/app.js"></script>
+
+    
 </body>
 
 </html>

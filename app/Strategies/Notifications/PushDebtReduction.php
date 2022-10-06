@@ -25,9 +25,13 @@ class PushDebtReduction implements SendNotificationsInterface
             'body' => $body,
             'model' => $model ,
         );
-        Notification::create($data_notification);
-        $push  = new Pusher;
-        $push->send(['model' => 'leadNewProspect']);
+
+        $is_exist = Notification::where($data_notification)->count();
+        if ($is_exist == 0) {
+            Notification::create($data_notification);
+            $push  = new Pusher;
+            $push->send(['model' => 'leadNewProspect']);
+        }
     }
     
     public function get($user_id = null, $status = 0)
@@ -37,11 +41,12 @@ class PushDebtReduction implements SendNotificationsInterface
         foreach ($get_notifications as $notification) {
             $credit = $notification->notificationCredit;
             $advisor = $credit->creditAdvisor;
-
+            $toast  = \View::make('panel.toast', ['title' => $notification->title, 'body' => $notification->body])->render();
             $data_array = array(
                 'user_id' => $advisor->id,
                 'title' => $notification->title,
                 'body' => $notification->body,
+                'toast' => $toast,
                 'id' => $notification->id,
                 'created_at' => $notification->created_at,
                 'is_add_adviser' => false,
