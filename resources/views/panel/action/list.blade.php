@@ -32,7 +32,7 @@
                                             <th>Prospecto</th>
                                             <th>Fecha inicio</th>
                                             <th>Fecha fin</th>
-                                            <th>Asesor</th>
+                                            <th>Responsable</th>
                                             <th></th>
                                         </tr>
                                     </thead>

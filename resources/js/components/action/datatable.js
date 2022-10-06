@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         columns: [
             { data: 'type' },
             { data: 'subject' },
-            { data: 'section' },
+            /* { data: 'section' }, */
             { data: 'name' },
             { data: 'date_in' },
             { data: 'date_fin' },

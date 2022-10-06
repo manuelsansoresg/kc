@@ -504,9 +504,9 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'type'
     }, {
       data: 'subject'
-    }, {
-      data: 'section'
-    }, {
+    },
+    /* { data: 'section' }, */
+    {
       data: 'name'
     }, {
       data: 'date_in'
