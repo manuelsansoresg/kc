@@ -49,7 +49,7 @@ class PushDebtReduction implements SendNotificationsInterface
                 'toast' => $toast,
                 'id' => $notification->id,
                 'created_at' => $notification->created_at,
-                'is_add_adviser' => false,
+                'status' => $notification->status,
             );
 
             if ($user_id == null) {
@@ -59,9 +59,9 @@ class PushDebtReduction implements SendNotificationsInterface
             }
 
             //*activate recieve push
-            $get_notification = Notification::find($notification->id);
+           /*  $get_notification = Notification::find($notification->id);
             $get_notification->status = 1;
-            $get_notification->update();
+            $get_notification->update(); */
         }
         return $notifications;
     }

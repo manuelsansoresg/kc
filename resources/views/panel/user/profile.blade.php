@@ -6,7 +6,7 @@
 @inject('m_action', 'App\Models\Action')
 @inject('m_notification', 'App\Models\Notification')
 @php
-    $notifications = $m_notification->getMyNotifications();
+    $notifications = $m_notification->getMyNotifications()['list'];
 @endphp
 
 @section('content')

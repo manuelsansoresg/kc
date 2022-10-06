@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Models\Lead;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -38,6 +39,12 @@ class HomeController extends Controller
             return view('content_report_debt', compact('client', 'option'));
         }
         return view('content_report', compact('client'));
+    }
+
+    public function showNotification()
+    {
+        $notifications = Notification::showMyNotification(6);
+        return response()->json($notifications);
     }
 
     /**

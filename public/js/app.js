@@ -3060,7 +3060,6 @@ channel.bind('kaaxclub-event', function (data) {
       var title = element.title;
       var body = element.body;
       var user_id = element.user_id;
-      var is_add_adviser = element.is_add_adviser;
       var toast = element.toast;
       $('#content-toast').empty().append(toast);
     }
@@ -3069,6 +3068,7 @@ channel.bind('kaaxclub-event', function (data) {
       autohide: false
     });
     $(".toast").toast("show");
+    showNotification();
   });
 });
 
@@ -3136,6 +3136,18 @@ var __webpack_exports__ = {};
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
+window.showNotification = function () {
+  $('#content-notification').html('');
+  axios.get("/panel/notification/show").then(function (response) {
+    var result = response.data;
+    $('#content-notification').html(result.list);
+  })["catch"](function (e) {});
+};
+
+$().ready(function () {
+  showNotification();
+});
+
 __webpack_require__(/*! ./components/datatable */ "./resources/js/components/datatable.js");
 
 __webpack_require__(/*! ./components/user/crud */ "./resources/js/components/user/crud.js");

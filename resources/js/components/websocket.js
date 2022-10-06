@@ -40,7 +40,6 @@ channel.bind('kaaxclub-event', function (data) {
                 let title             = element.title;
                 let body              = element.body;
                 let user_id           = element.user_id;
-                let is_add_adviser    = element.is_add_adviser;
                 let toast    = element.toast;
                 $('#content-toast').empty().append(toast);
                
@@ -48,5 +47,6 @@ channel.bind('kaaxclub-event', function (data) {
             }
             $(".toast").toast({autohide: false});
             $(".toast").toast("show");
+            showNotification();
         })
 });

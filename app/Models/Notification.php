@@ -15,7 +15,7 @@ class Notification extends Model
         'title',
         'body',
         'model',
-        'status' //* 0 = enviado pero no recibido 1 = enviado y recibido
+        'status' //* 0 = enviado pero no leido 1 = enviado y leido
     ];
 
     //* constante para modelos
@@ -34,29 +34,35 @@ class Notification extends Model
         return $notification->get();
     }
 
-    public function notificationCredit()
+    public static function showMyNotification($limit)
     {
-        return $this->belongsTo(Credit::class, 'id_rel');
+        $notifications = self::getMyNotifications($limit);
+        $list = $notifications['list'];
+        $content_notification   = \View::make('panel.notification', [ 'notifications' => $list])->render();
+        $data = array('list' => $content_notification, 'is_notification' => $notifications['is_notification']);
+        return $data;
     }
     
+
     public static function getMyNotifications($limit = null)
     {
         $user_id = Auth::user()->id;
+        $is_notification = 0;
         
         $lead_new_prospect        = SendNotificationsValues::STRATEGY['leadNewProspect'];
-        $list_lead_new_prospect   = (new $lead_new_prospect)->get($user_id, null);
+        $list_lead_new_prospect   = (new $lead_new_prospect)->get($user_id, 0);
 
         $lead_add_prospect        = SendNotificationsValues::STRATEGY['leadAddProspect'];
-        $list_lead_add_prospect   = (new $lead_add_prospect)->get($user_id, null);
+        $list_lead_add_prospect   = (new $lead_add_prospect)->get($user_id, 0);
 
         $btn_next_lead            = SendNotificationsValues::STRATEGY['btnNextLead'];
-        $list_btn_next_lead       = (new $btn_next_lead)->get($user_id, null);
+        $list_btn_next_lead       = (new $btn_next_lead)->get($user_id, 0);
         
         $newCredit                = SendNotificationsValues::STRATEGY['newCredit'];
-        $list_newCredit           = (new $newCredit)->get($user_id, null);
+        $list_newCredit           = (new $newCredit)->get($user_id, 0);
         
         $debt_reduction           = SendNotificationsValues::STRATEGY['debtReduction'];
-        $list_debt_reduction      = (new $debt_reduction)->get($user_id, null);
+        $list_debt_reduction      = (new $debt_reduction)->get($user_id, 0);
 
         $list_notificacions = array_merge(
             $list_lead_new_prospect,
@@ -74,9 +80,18 @@ class Notification extends Model
             if ($limit != null  && $limit == $cont) {
                 break;
             }
+            if ($is_notification == 0 && $notification['status'] == 0) {
+                $is_notification = 1;
+            }
             $new_list[$notification['id']] = $notification;
         }
-        arsort($new_list);
-        return $new_list;
+        krsort($new_list);
+        $data = array('list' => $new_list, 'is_notification' => $is_notification);
+        return $data;
+    }
+
+    public function notificationCredit()
+    {
+        return $this->belongsTo(Credit::class, 'id_rel');
     }
 }

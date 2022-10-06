@@ -1,3 +1,20 @@
+window.showNotification = function() {
+    $('#content-notification').html('');
+
+    axios
+    .get("/panel/notification/show")
+    .then(function (response) {
+        let result = response.data;
+        $('#content-notification').html(result.list);
+    })
+    .catch(e => {
+    });
+}
+
+$().ready(function () {
+    showNotification();
+});
+
 require('./components/datatable');
 require('./components/user/crud');
 require('./components/user/datatable_admin');

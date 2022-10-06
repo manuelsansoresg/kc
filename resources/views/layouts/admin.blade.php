@@ -2,7 +2,7 @@
 @inject('m_history', 'App\Models\HistoryLog')
 @inject('m_notification', 'App\Models\Notification')
 @php
-    $notifications = $m_notification->getMyNotifications(6);
+    $notifications = $m_notification->getMyNotifications(6)['list'];
 @endphp
 <!DOCTYPE html>
 <html lang="es" class="js">
@@ -885,20 +885,9 @@
                                                 <a href="#">Marcar como leidas</a>
                                             </div>
                                             <div class="dropdown-body">
-                                                <div class="nk-notification">
+                                                <div class="nk-notification" id="content-notification">
                                                     
                                                     
-                                                    @foreach ($notifications as $row_notification)
-                                                    <div class="nk-notification-item dropdown-inner">
-                                                        <div class="nk-notification-icon">
-                                                            <em class="icon icon-circle bg-warning-dim ni ni-curve-down-right"></em>
-                                                        </div>
-                                                        <div class="nk-notification-content">
-                                                            <div class="nk-notification-text">{{ $row_notification['body'] }}</div>
-                                                            <div class="nk-notification-time">{{ $row_notification['created_at']->diffForHumans() }}</div>
-                                                        </div>
-                                                    </div>
-                                                    @endforeach
                                                     
                                                     
                                                 </div><!-- .nk-notification -->
