@@ -311,7 +311,6 @@ window.setModalAction = function (action_id, disabled) {
             $("#modal-action-end_date").val(action.end_date);
             $("#modal-action-description").val(action.description);
             $("#modal-action-id-rel").val(action.id_rel);
-            alert(action.id_rel);
             //$("#lead-asesor-id").val(advisor.id).trigger('change');
             /* if (lead != null) {
                 $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
