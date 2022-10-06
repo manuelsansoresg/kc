@@ -1666,7 +1666,7 @@ window.createClientPerson = function (lead_id) {
     var result = response.data;
     (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Cuenta creada');
   })["catch"](function (e) {
-    showToast('prospecto', 'Revisar que el email sea unico', 'warning');
+    showToast('prospecto', 'Este email ya está registrado', 'warning');
   });
 };
 
