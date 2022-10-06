@@ -877,12 +877,12 @@
                                     </li><!-- .dropdown -->
                                     <li class="dropdown notification-dropdown me-n1">
                                         <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-bs-toggle="dropdown">
-                                            <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em></div>
+                                            <div class="icon-status icon-status-off" id="icon-status-notification"><em class="icon ni ni-bell"></em></div>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-xl dropdown-menu-end dropdown-menu-s1">
                                             <div class="dropdown-head">
                                                 <span class="sub-title nk-dropdown-title">Notificaciónes</span>
-                                                <a href="#">Marcar como leidas</a>
+                                                <a class="pointer" onclick="readAllNotification()">Marcar como leidas</a>
                                             </div>
                                             <div class="dropdown-body">
                                                 <div class="nk-notification" id="content-notification">

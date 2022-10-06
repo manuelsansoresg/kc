@@ -42,6 +42,18 @@ class Notification extends Model
         $data = array('list' => $content_notification, 'is_notification' => $notifications['is_notification']);
         return $data;
     }
+
+    public static function readAllMyNotification()
+    {
+        $notifications = self::getMyNotifications();
+        $list = $notifications['list'];
+        foreach ($list as $notification) {
+            $id = $notification['id'];
+            $getNotification = Notification::find($id);
+            $getNotification->status = 1;
+            $getNotification->update();
+        }
+    }
     
 
     public static function getMyNotifications($limit = null)

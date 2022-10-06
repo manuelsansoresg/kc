@@ -47,6 +47,11 @@ class HomeController extends Controller
         return response()->json($notifications);
     }
 
+    public function readNotification()
+    {
+        $notifications = Notification::readAllMyNotification();
+    }
+
     /**
      * type reason in modal archive, reject and cancel
      *

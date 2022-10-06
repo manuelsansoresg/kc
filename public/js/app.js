@@ -2205,6 +2205,43 @@ function saveForm(id_form, model) {
 
 /***/ }),
 
+/***/ "./resources/js/components/notification/utilities.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/notification/utilities.js ***!
+  \***********************************************************/
+/***/ (() => {
+
+window.showNotification = function () {
+  $('#content-notification').html('');
+  $('#icon-status-notification').removeClass('icon-status-off');
+  $('#icon-status-notification').removeClass('icon-status-info');
+  axios.get("/panel/notification/show").then(function (response) {
+    var result = response.data;
+    var is_notification = result.is_notification;
+    $('#content-notification').html(result.list);
+
+    if (is_notification == 1) {
+      $('#icon-status-notification').addClass('icon-status-info');
+    } else {
+      $('#icon-status-notification').addClass('icon-status-off');
+    }
+  })["catch"](function (e) {});
+};
+
+window.readAllNotification = function () {
+  $('#icon-status-notification').removeClass('icon-status-info');
+  axios.get("/panel/notification/read").then(function (response) {
+    var result = response.data;
+    $('#icon-status-notification').addClass('icon-status-off');
+  })["catch"](function (e) {});
+};
+
+$().ready(function () {
+  showNotification();
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/product/crud.js":
 /*!*************************************************!*\
   !*** ./resources/js/components/product/crud.js ***!
@@ -3136,17 +3173,7 @@ var __webpack_exports__ = {};
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-window.showNotification = function () {
-  $('#content-notification').html('');
-  axios.get("/panel/notification/show").then(function (response) {
-    var result = response.data;
-    $('#content-notification').html(result.list);
-  })["catch"](function (e) {});
-};
-
-$().ready(function () {
-  showNotification();
-});
+__webpack_require__(/*! ./components/notification/utilities */ "./resources/js/components/notification/utilities.js");
 
 __webpack_require__(/*! ./components/datatable */ "./resources/js/components/datatable.js");
 
