@@ -29,7 +29,7 @@ var channel = pusher.subscribe('kaaxclub');
 channel.bind('kaaxclub-event', function (data) {
     let model = data.model;
     //$('#content-toast').empty();
-    $(".toast").toast({autohide: false});
+    
     axios.get('/panel/notification/' + model + '/show')
         .then(function (response) {
             let result = response.data;
@@ -46,6 +46,7 @@ channel.bind('kaaxclub-event', function (data) {
                
                 
             }
+            $(".toast").toast({autohide: false});
             $(".toast").toast("show");
         })
 });

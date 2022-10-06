@@ -3051,9 +3051,6 @@ var channel = pusher.subscribe('kaaxclub');
 channel.bind('kaaxclub-event', function (data) {
   var model = data.model; //$('#content-toast').empty();
 
-  $(".toast").toast({
-    autohide: false
-  });
   axios.get('/panel/notification/' + model + '/show').then(function (response) {
     var result = response.data;
     var my_user = $('#user_id').val();
@@ -3068,6 +3065,9 @@ channel.bind('kaaxclub-event', function (data) {
       $('#content-toast').empty().append(toast);
     }
 
+    $(".toast").toast({
+      autohide: false
+    });
     $(".toast").toast("show");
   });
 });
