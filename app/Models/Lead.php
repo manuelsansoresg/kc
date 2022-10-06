@@ -85,10 +85,7 @@ class Lead extends Model
                         'options' => $option
                     );
                 }
-                
-                
             }
-
         }
         return $data;
     }

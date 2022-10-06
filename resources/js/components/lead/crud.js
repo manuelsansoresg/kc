@@ -172,7 +172,7 @@ window.createClientPerson = function(lead_id) {
         showInfo(2, 'dt-lead', 'Datos actualizados', 'Cuenta creada');
     })
     .catch(e => {
-        
+        showToast('prospecto', 'Revisar que el email sea unico', 'danger');
     });
 }
 
