@@ -292,7 +292,6 @@ window.setModalAction = function (action_id, disabled) {
     .then(function (response) {
         
         let result = response.data;
-        console.log(result);
         let action = result.action;
         let advisor = result.advisor;
         let lead = result.lead;

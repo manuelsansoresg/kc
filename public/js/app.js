@@ -415,7 +415,6 @@ window.setModalAction = function (action_id, disabled) {
 
   axios.get("/panel/action/" + action_id).then(function (response) {
     var result = response.data;
-    console.log(result);
     var action = result.action;
     var advisor = result.advisor;
     var lead = result.lead; //*set value form action
