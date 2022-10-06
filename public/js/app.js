@@ -3065,10 +3065,7 @@ channel.bind('kaaxclub-event', function (data) {
       var user_id = element.user_id;
       var is_add_adviser = element.is_add_adviser;
       var toast = element.toast;
-
-      if (my_user == user_id && is_add_adviser == false) {
-        $('#content-toast').empty().append(toast);
-      }
+      $('#content-toast').empty().append(toast);
     }
 
     $(".toast").toast("show");

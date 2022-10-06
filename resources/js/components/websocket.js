@@ -42,9 +42,8 @@ channel.bind('kaaxclub-event', function (data) {
                 let user_id           = element.user_id;
                 let is_add_adviser    = element.is_add_adviser;
                 let toast    = element.toast;
-                if (my_user == user_id && is_add_adviser == false) {
-                    $('#content-toast').empty().append(toast);
-                }
+                $('#content-toast').empty().append(toast);
+               
                 
             }
             $(".toast").toast("show");
