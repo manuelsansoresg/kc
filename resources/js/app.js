@@ -1,5 +1,6 @@
 
 
+require('./components/toastr');
 require('./components/notification/utilities');
 require('./components/datatable');
 require('./components/user/crud');
@@ -17,7 +18,7 @@ require('./components/financial/datatable');
 require('./components/financial/crud');
 require('./components/financial/product/datatable');
 require('./components/financial/product/crud');
-require('./components/toastr');
+
 require('./components/crm');
 require('./components/action/datatable');
 require('./components/action/crud');

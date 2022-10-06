@@ -1666,7 +1666,7 @@ window.createClientPerson = function (lead_id) {
     var result = response.data;
     (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Cuenta creada');
   })["catch"](function (e) {
-    showToast('prospecto', 'Revisar que el email sea unico', 'danger');
+    showToast('prospecto', 'Revisar que el email sea unico', 'warning');
   });
 };
 
@@ -3175,6 +3175,8 @@ var __webpack_exports__ = {};
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
+__webpack_require__(/*! ./components/toastr */ "./resources/js/components/toastr.js");
+
 __webpack_require__(/*! ./components/notification/utilities */ "./resources/js/components/notification/utilities.js");
 
 __webpack_require__(/*! ./components/datatable */ "./resources/js/components/datatable.js");
@@ -3208,8 +3210,6 @@ __webpack_require__(/*! ./components/financial/crud */ "./resources/js/component
 __webpack_require__(/*! ./components/financial/product/datatable */ "./resources/js/components/financial/product/datatable.js");
 
 __webpack_require__(/*! ./components/financial/product/crud */ "./resources/js/components/financial/product/crud.js");
-
-__webpack_require__(/*! ./components/toastr */ "./resources/js/components/toastr.js");
 
 __webpack_require__(/*! ./components/crm */ "./resources/js/components/crm.js");
 
