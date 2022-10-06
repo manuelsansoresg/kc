@@ -404,6 +404,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $options_progress  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
         $options_desition  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
 
+        
         $data = array();
         $status_desition = 'En curso';
         $data[] = array(
