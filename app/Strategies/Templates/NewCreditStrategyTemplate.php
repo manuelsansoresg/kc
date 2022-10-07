@@ -322,6 +322,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                     'link' => '/panel/template/action-document/newCredit/'.$history->id,
                     'onclick' => '',
                     'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
             'file' => array(
@@ -329,6 +330,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                     'link' => '/panel/action-form/newCredit/'.$history->id.'/form',
                     'onclick' => '',
                     'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
                 ]
             )
         );

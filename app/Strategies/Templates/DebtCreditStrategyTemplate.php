@@ -434,6 +434,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                     'link' => '/panel/template/action-document/debtCredit/'.$history->id,
                     'onclick' => '',
                     'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
             'file' => array(
@@ -441,6 +442,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                     'link' => '/panel/action-form/debtCredit/'.$history->id.'/form',
                     'onclick' => '',
                     'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
                 ]
             )
         );
