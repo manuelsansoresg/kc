@@ -1535,11 +1535,16 @@ $('.select2multiple').select2({
 });
 $("#lead-agreement").change(function () {
   var lead_agreement = $("#lead-agreement").val();
-  getFinancial(lead_agreement);
   $('#lead-content-agreement').hide();
 
   if (lead_agreement == 0) {
     $('#lead-content-agreement').show('slow');
+  }
+
+  if (typeof lead_agreement === 'string' && lead_agreement.trim().length == 0) {
+    $('#lead-content-agreement').hide();
+  } else {
+    getFinancial(lead_agreement);
   }
 });
 
