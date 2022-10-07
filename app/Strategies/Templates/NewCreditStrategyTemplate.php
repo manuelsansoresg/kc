@@ -178,7 +178,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
        
         $status_inf_credit = ($percent_form >= 100) ? 'Concluido' : 'En curso';
         //TODO: change validation when the decision action is carried out in the report
-        $status_report = ($total_percent > 100) ? 'En curso' : 'En espera';
+        $status_report = ($percent_form > 100) ? 'En curso' : 'En espera';
         
         $total_credit_percent = ($total_percent> 100) ? 100 : 50;
 
