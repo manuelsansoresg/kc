@@ -24,10 +24,6 @@ class LeadStrategyTemplate implements TemplateInterface
             );
             HistoryLog::move($lead->id, HistoryLog::LEAD_ARCHIVE, HistoryLog::CREATE_PROSPECT, $request);
 
-            //* Execute notification in add lead
-           /*  $notification_add   = SendNotificationsValues::STRATEGY['btnNextLead'];
-            (new $notification_add)->send($lead->id); */
-
             //* create client_person
             $data_client_person = array(
                 'name' => $lead->name,

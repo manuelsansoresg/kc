@@ -15,9 +15,9 @@ final class SendNotificationsValues
     const STRATEGY = [
         'leadNewProspect' => PushLeadNewProspect::class,
         'leadAddProspect' => PushLeadAddProspect::class,
-        'btnNextLead' => PushBtnNextLead::class,
-        'newCredit' => PushnewCredit::class,
-        'debtReduction' => PushDebtReduction::class,
-        'pushNewCreditKcCheckUp' => PushNewCreditKcCheckUp::class,
+        'btnNextLead' => PushBtnNextLead::class, // P03
+        'newCredit' => PushnewCredit::class, // A01, A03
+        'debtReduction' => PushDebtReduction::class, // A01, A03
+        'pushNewCreditKcCheckUp' => PushNewCreditKcCheckUp::class, // M01, M02
     ];
 }
