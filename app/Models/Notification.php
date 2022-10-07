@@ -75,6 +75,9 @@ class Notification extends Model
         
         $debt_reduction           = SendNotificationsValues::STRATEGY['debtReduction'];
         $list_debt_reduction      = (new $debt_reduction)->get($user_id, 0);
+       
+        $new_kc_check_up           = SendNotificationsValues::STRATEGY['pushNewCreditKcCheckUp'];
+        $list_new_kc_check_up      = (new $new_kc_check_up)->get($user_id, 0);
 
         $list_notificacions = array_merge(
             $list_lead_new_prospect,
@@ -82,6 +85,7 @@ class Notification extends Model
             $list_btn_next_lead,
             $list_newCredit,
             $list_debt_reduction,
+            $list_new_kc_check_up,
         );
         
         $new_list = array();

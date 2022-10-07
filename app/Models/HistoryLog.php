@@ -34,6 +34,8 @@ class HistoryLog extends Model
     //* whenever a credit is in a module it must be in progress if it is archived, canceled or refuses to remove it
     const CREDIT_IN_PROGRESS                  = 19;
     
+    const NEW_CREDIT_KC_CHECK_UP              = 20;
+    
 
     protected $fillable = [
         'id_rel',
@@ -66,6 +68,7 @@ class HistoryLog extends Model
         17 => 'Cancelado',
         18 => 'Rechazado',
         19 => 'En curso',
+        20 => 'Nuevo crédito en KC - Check up',
     ];
 
     public static $name_model = [

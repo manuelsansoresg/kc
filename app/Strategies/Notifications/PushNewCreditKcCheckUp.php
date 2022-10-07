@@ -2,40 +2,43 @@
 
 namespace App\Strategies\Notifications;
 
+use App\Models\HistoryLog;
 use App\Models\Notification;
 use App\Models\User;
 use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\SendNotificationsInterface;
 use Illuminate\Support\Facades\Auth;
 
-class PushBtnNextLead implements SendNotificationsInterface
+class PushNewCreditKcCheckUp implements SendNotificationsInterface
 {
     public function send($id)
     {
         $data_notification = array(
             'id_rel' => $id,
-            'title' => 'Créditos',
-            'body' => 'Se ha creado un nuevo crédito',
-            'model' => Notification::BTN_NEXT_LEAD,
+            'title' => 'Crédito',
+            'body' => 'Nuevo crédito en KC - Check up',
+            'model' => HistoryLog::NEW_CREDIT_KC_CHECK_UP,
         );
         $is_exist = Notification::where($data_notification)->count();
         
         if ($is_exist == 0) {
             Notification::create($data_notification);
             $push  = new Pusher;
-            $push->send(['model' => 'btnNextLead']);
+            $push->send(['model' => 'pushNewCreditKcCheckUp']);
         }
     }
     
     public function get($user_id = null, $status = 0)
     {
-        $get_notifications = Notification::getByModel([Notification::BTN_NEXT_LEAD]);
+        $get_notifications = Notification::getByModel([HistoryLog::NEW_CREDIT_KC_CHECK_UP]);
         $notifications = array();
         foreach ($get_notifications as $notification) {
             $users = User::getUserRole('Administrador');
+            $credit = $notification->notificationCredit;
+            $advisor = $credit->creditAdvisor;
+            $toast  = \View::make('panel.toast', ['title' => $notification->title, 'body' => $notification->body])->render();
+            
             foreach ($users as $user) {
-
-                $toast  = \View::make('panel.toast', ['title' => $notification->title, 'body' => $notification->body])->render();
                 $data_array = array(
                     'user_id' => $user->id,
                     'title' => $notification->title,
@@ -45,14 +48,23 @@ class PushBtnNextLead implements SendNotificationsInterface
                     'created_at' => $notification->created_at,
                     'status' => $notification->status,
                 );
+                //dd($user->id, Auth::user()->id);
                 if ($user->id == Auth::user()->id) {
                     $notifications[] = $data_array;
                 }
             }
-            //*activate recieve push
-          /*   $get_notification = Notification::find($notification->id);
-            $get_notification->status = 1;
-            $get_notification->update(); */
+            if ($advisor->id == Auth::user()->id) {
+                $data_array = array(
+                    'user_id' => $advisor->id,
+                    'title' => $notification->title,
+                    'body' => $notification->body,
+                    'toast' => $toast,
+                    'id' => $notification->id,
+                    'created_at' => $notification->created_at,
+                    'status' => $notification->status,
+                );
+                $notifications[] = $data_array;
+            }
         }
         return $notifications;
     }

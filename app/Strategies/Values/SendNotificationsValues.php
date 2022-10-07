@@ -8,6 +8,7 @@ use App\Strategies\Notifications\PushDebtReduction;
 use App\Strategies\Notifications\PushLeadAddProspect;
 use App\Strategies\Notifications\PushLeadNewProspect;
 use App\Strategies\Notifications\PushnewCredit;
+use App\Strategies\Notifications\PushNewCreditKcCheckUp;
 
 final class SendNotificationsValues
 {
@@ -17,5 +18,6 @@ final class SendNotificationsValues
         'btnNextLead' => PushBtnNextLead::class,
         'newCredit' => PushnewCredit::class,
         'debtReduction' => PushDebtReduction::class,
+        'pushNewCreditKcCheckUp' => PushNewCreditKcCheckUp::class,
     ];
 }

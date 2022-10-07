@@ -3093,8 +3093,7 @@ var pusher = new Pusher('cb2d06fb80592c4ce5f2', {
 });
 var channel = pusher.subscribe('kaaxclub');
 channel.bind('kaaxclub-event', function (data) {
-  var model = data.model; //$('#content-toast').empty();
-
+  var model = data.model;
   axios.get('/panel/notification/' + model + '/show').then(function (response) {
     var result = response.data;
     var my_user = $('#user_id').val();

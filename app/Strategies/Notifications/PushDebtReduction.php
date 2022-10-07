@@ -6,6 +6,7 @@ use App\Models\HistoryLog;
 use App\Models\Notification;
 use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\SendNotificationsInterface;
+use Illuminate\Support\Facades\Auth;
 
 class PushDebtReduction implements SendNotificationsInterface
 {
@@ -51,13 +52,13 @@ class PushDebtReduction implements SendNotificationsInterface
                 'created_at' => $notification->created_at,
                 'status' => $notification->status,
             );
-
-            if ($user_id == null) {
-                $notifications[] = $data_array;
-            } elseif ($user_id != null && $user_id == $advisor->id) {
-                $notifications[] = $data_array;
+            if ($advisor->id == Auth::user()->id) {
+                if ($user_id == null) {
+                    $notifications[] = $data_array;
+                } elseif ($user_id != null && $user_id == $advisor->id) {
+                    $notifications[] = $data_array;
+                }
             }
-
             //*activate recieve push
            /*  $get_notification = Notification::find($notification->id);
             $get_notification->status = 1;

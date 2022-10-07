@@ -6,6 +6,7 @@ use App\Models\Notification;
 use App\Models\User;
 use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\SendNotificationsInterface;
+use Illuminate\Support\Facades\Auth;
 
 class PushLeadNewProspect implements SendNotificationsInterface
 {
@@ -46,10 +47,13 @@ class PushLeadNewProspect implements SendNotificationsInterface
                     'created_at' => $notification->created_at,
                     'status' => $notification->status,
                 );
-                if ($user_id == null) {
-                    $notifications[] = $data_array;
-                } elseif ($user_id != null && $user_id == $user->id) {
-                    $notifications[] = $data_array;
+
+                if ($user->id == Auth::user()->id) {
+                    if ($user_id == null) {
+                        $notifications[] = $data_array;
+                    } elseif ($user_id != null && $user_id == $user->id) {
+                        $notifications[] = $data_array;
+                    }
                 }
             }
             //*activate recieve push

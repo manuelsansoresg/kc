@@ -100,7 +100,7 @@ class Credit extends Model
             $menu_options   = self::menuOptionCredit($history);
 
             $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive');
-            $reason = config('enums.'.$reason_enums[$history->status_id])[$history->reason];
+            $reason = isset(config('enums.'.$reason_enums[$history->status_id])[$history->reason]) ? config('enums.'.$reason_enums[$history->status_id])[$history->reason] : null;;
 
             $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['archive']])->render();
             $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();

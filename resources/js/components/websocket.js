@@ -28,7 +28,6 @@ var pusher = new Pusher('cb2d06fb80592c4ce5f2', {
 var channel = pusher.subscribe('kaaxclub');
 channel.bind('kaaxclub-event', function (data) {
     let model = data.model;
-    //$('#content-toast').empty();
     
     axios.get('/panel/notification/' + model + '/show')
         .then(function (response) {
@@ -42,7 +41,6 @@ channel.bind('kaaxclub-event', function (data) {
                 let user_id           = element.user_id;
                 let toast    = element.toast;
                 $('#content-toast').empty().append(toast);
-               
                 
             }
             $(".toast").toast({autohide: false});
