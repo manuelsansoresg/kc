@@ -875,6 +875,7 @@ window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#frm-archive').trigger("reset");
   $('#id_rel').val(id);
   $('#statusid').val(statusid);
+  $('#title').val('Crédito');
   $('#old_status_id').val(old_status_id);
   $('#dt').val(dt);
   $('#modal-archive-title').html(title);
@@ -886,6 +887,7 @@ window.moveModalLead = function (title, id, statusid, old_status_id, dt) {
   $('#frm-archive').trigger("reset");
   $('#id_rel').val(id);
   $('#statusid').val(statusid);
+  $('#title').val('Prospecto');
   $('#old_status_id').val(old_status_id);
   $('#dt').val(dt);
   $('#modal-archive-title').html(title);
@@ -903,8 +905,9 @@ $("#frm-archive").submit(function (event) {
   event.preventDefault();
   var id_rel = $('#id_rel').val();
   var dt = $('#dt').val();
-  var msg = 'registro archivado exitosamente';
-  move(id_rel, 'frm-archive', 'modal-archive', dt, 'Registro', msg);
+  var msg = 'Cambios aplicados correctamente';
+  var title = $('#title').val();
+  move(id_rel, 'frm-archive', 'modal-archive', dt, title, msg);
 });
 
 window.modalValidate = function (id, model) {
@@ -927,6 +930,8 @@ function getReason(type) {
       var option = new Option(element, key, true, true);
       modal_reason_id.append(option).trigger('change');
     }
+
+    $('#modal-reason-id').val('').trigger('change');
 
     if (financials != null) {}
   })["catch"](function (e) {});

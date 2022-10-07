@@ -47,6 +47,7 @@
                 <input type="hidden" id="statusid">
                 <input type="hidden" id="old_status_id">
                 <input type="hidden" id="dt">
+                <input type="hidden" id="title">
             </div>
         </div>
     </div>

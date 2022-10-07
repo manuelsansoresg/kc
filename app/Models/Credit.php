@@ -113,7 +113,7 @@ class Credit extends Model
                     'id' => $query->id,
                     'product' => $content_product,
                     'reason' => $reason,
-                    'date' => $history->created_at,
+                    'date' => formatDateNameMonth($history->created_at),
                     'client' => $content_client,
                     'advisor' => $name_advisor,
                     'options' => $option
@@ -123,7 +123,7 @@ class Credit extends Model
                     'id' => $query->id,
                     'product' => $content_product,
                     'reason' => $reason,
-                    'date' => $history->created_at,
+                    'date' => formatDateNameMonth($history->created_at),
                     'client' => $content_client,
                     'advisor' => $name_advisor,
                     'options' => $option

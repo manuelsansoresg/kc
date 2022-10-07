@@ -55,8 +55,7 @@ return [
     ),
    
     'credit_reason_cancel' => array(
-        1 => 'Decisión',
-        2 => 'cliente',
+        1 => 'Decisión cliente',
         3 => 'otro',
     ),
 
