@@ -171,6 +171,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $percent_file       = 100;
         $color_inf_credit   = 'success';
         $color_report       = 'success';
+        $option_inf_report = null;
         $total_percent = $percent_file + $percent_form;
         //$percent_form = $percent_form;
         $status_report              = 'En espera';
@@ -178,7 +179,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
        
         $status_inf_credit = ($percent_form >= 100) ? 'Concluido' : 'En curso';
         //TODO: change validation when the decision action is carried out in the report
-        $status_report = ($percent_form > 100) ? 'En curso' : 'En espera';
+        $status_report = ($percent_form >= 100) ? 'En curso' : 'En espera';
         
         $total_credit_percent = ($total_percent> 100) ? 100 : 50;
 
@@ -187,7 +188,9 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $hour             = $data_deadline['lbl_hour'];
 
         $option_inf_credit  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
-        $option_inf_report  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
+        if ($status_report == 'En curso') {
+            $option_inf_report  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
+        }
 
 
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
