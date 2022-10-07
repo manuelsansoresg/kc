@@ -1551,6 +1551,8 @@ function getFinancial(lead_id) {
         var option = new Option(element.commercial_name, element.id, true, true);
         lead_financial.append(option).trigger('change');
       }
+
+      $('#lead-financial_id').val(null).trigger('change');
     }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();

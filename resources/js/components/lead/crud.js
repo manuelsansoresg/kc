@@ -33,6 +33,7 @@ $('.select2multiple').select2({
                     lead_financial.append(option).trigger('change');
                     
                 }
+                $('#lead-financial_id').val(null).trigger('change');
             }
         })
     .catch(e => {
