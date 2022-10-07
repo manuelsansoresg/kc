@@ -147,10 +147,10 @@
                                                         </div>
                 
                                                         <hr class="preview-hr">
-                                                        <span class="preview-title-lg overline-title">*Origen</span>
+                                                        <span class="preview-title-lg overline-title">Origen</span>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Origen</label>
+                                                                <label class="form-label">*Origen</label>
                                                                 <div class="form-control-wrap">
                                                                     <select class="form-control js-select2" name="data[origin_id]" id="lead-origin"  data-search="on">
                                                                         @if ($lead == null)
