@@ -26,7 +26,7 @@ $user = Auth::user();
                 <a class="btn btn-trigger btn-icon" onclick="moveElement('lead', {{ $id }})" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="Siguiente">
                 <em class="icon ni ni-arrow-right-circle"></em>
-        </a>
+            </a>
             @endif
         
         </li>
@@ -39,12 +39,22 @@ $user = Auth::user();
                 </a>
                
                 <a href="#" class="dropdown-toggle btn btn-primary  d-block d-md-none" data-bs-toggle="dropdown">
-                    <em
-                        class="icon ni ni-more-h"></em>
+                    <em class="icon ni ni-more-h"></em>
                 </a>
 
                 <div class="dropdown-menu dropdown-menu-end">
                     <ul class="link-list-opt no-bdr">
+                        @if ($validate['error'] === true)
+                            <li>
+                                <a class="pointer" onclick="modalValidate({{ $id }}, 'lead', 'dt-lead')">
+                                    <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
+                            </li>
+                        @else
+                            <li>
+                                <a class="pointer"  onclick="moveElement('lead', {{ $id }})">
+                                    <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
+                            </li>
+                        @endif
                         <li>
                             <a class="pointer" href="/panel/lead/{{ $id }}/edit">
                                 <em class="icon ni ni-edit"></em><span>Editar</span></a>
