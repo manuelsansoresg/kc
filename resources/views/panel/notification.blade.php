@@ -6,7 +6,7 @@
     </div>
     <div class="nk-notification-content">
         <div class="nk-notification-text">{{ $row_notification['body'] }}</div>
-        <div class="nk-notification-time">{{ $row_notification['created_at']->diffForHumans() }}</div>
+        <div class="nk-notification-time">{{ $row_notification['date']->diffForHumans() }}</div>
     </div>
 </div>
 @endforeach

@@ -76,20 +76,25 @@ class Notification extends Model
             $list_new_kc_check_up,
         );
         
+        $list_no_order = array();
         $new_list = array();
-        $cont = 0;
+        $cont = -1;
         
-        foreach ($list_notificacions as $notification) {
+        foreach ($list_notificacions as $notification_no_order) {
+            $list_no_order[$notification_no_order['created_at'].$notification_no_order['id']] = $notification_no_order;
+        }
+        krsort($list_no_order);
+        foreach ($list_no_order as $notification) {
             $cont = $cont + 1;
             if ($limit != null  && $limit == $cont) {
                 break;
             }
-            if ($is_notification == 0 && $notification['status'] == 0) {
+            if ($notification['status'] == 0) {
                 $is_notification = 1;
             }
-            $new_list[$notification['id']] = $notification;
+            $new_list[$notification['id'] ] = $notification;
         }
-        krsort($new_list);
+        //dd($list_no_order, $new_list);
         $data = array('list' => $new_list, 'is_notification' => $is_notification);
         return $data;
     }

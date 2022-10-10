@@ -155,7 +155,7 @@
                                             
                                                             </ul>
                                                             <ul class="kanban-item-meta-list">
-                                                                <li><em class="icon ni ni-calendar"></em><span>{{ $notification['created_at']->diffForHumans() }}</span>
+                                                                <li><em class="icon ni ni-calendar"></em><span>{{ $notification['date']->diffForHumans() }}</span>
                                                                 </li>
                                                             </ul>
                                                             

@@ -44,7 +44,8 @@ class PushLeadNewProspect implements SendNotificationsInterface
                     'body' => $notification->body,
                     'toast' => $toast,
                     'id' => $notification->id,
-                    'created_at' => $notification->created_at,
+                    'created_at' => date('Y-m-d H:i:s', strtotime($notification->created_at)),
+                    'date' => $notification->created_at,
                     'status' => $notification->status,
                 );
 
