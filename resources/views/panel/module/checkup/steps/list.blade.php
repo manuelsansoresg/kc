@@ -60,7 +60,7 @@
                                 <table id="dt-check-up-steps" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            <th>#</th>
                                             <th>Etapa</th>
                                             <th>Estatus</th>
                                             <th>Progreso</th>

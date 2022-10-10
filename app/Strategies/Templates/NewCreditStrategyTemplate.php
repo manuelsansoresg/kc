@@ -194,11 +194,11 @@ class NewCreditStrategyTemplate implements TemplateInterface
 
 
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
-        $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 1])->render();
+        $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
 
         $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => 0])->render();
-        $view_count_report          = \View::make('panel.module.view_count', ['number' => 2])->render();
+        $view_count_report          = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
         
 
         $data = array();
