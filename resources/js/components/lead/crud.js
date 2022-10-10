@@ -23,6 +23,7 @@ $('.select2multiple').select2({
         $('#lead-content-agreement').hide();
     } else {
         getFinancial(lead_agreement);
+        
     }
   });
 
@@ -49,7 +50,16 @@ $('.select2multiple').select2({
                     lead_financial.append(option).trigger('change');
                     
                 }
-                $('#lead-financial_id').val(null).trigger('change');
+                
+                let lead_id = $("#lead_id" ).val();
+                if (lead_id != null) {
+                    setData(false, false);
+                } else {
+                    $('#lead-financial_id').val(null).trigger('change');
+                }
+
+                //console.log('test');
+                //setData(false);
             }
         })
     .catch(e => {
@@ -77,7 +87,7 @@ $('.select2multiple').select2({
             }
             
             if (lead_id != null) {
-                setData(false);
+                setData(false, false);
             } else {
                 $('#lead-channel').val(null).trigger('change');
             }
@@ -88,7 +98,7 @@ $('.select2multiple').select2({
         });
   });
 
-function setData(is_change_origen) {
+function setData(is_change_origen, is_change_organization) {
     let lead_id = $('#lead_id').val();
     
     axios
@@ -99,9 +109,10 @@ function setData(is_change_origen) {
             let channel       = result.channel;
             let financials    = result.financials;
             let product_id = lead.product_id;
-            
-            $('#lead-agreement').val(lead.agreement_id);
-            $('#lead-agreement').trigger("change");
+            if (is_change_organization == true) {
+                $('#lead-agreement').val(lead.agreement_id);
+                $('#lead-agreement').trigger("change");
+            }
             if (is_change_origen == true) {
                 $('#lead-origin').val(lead.origin_id);
                 $('#lead-origin').trigger("change");
@@ -141,6 +152,7 @@ function setData(is_change_origen) {
             console.log(lead.channel_id);
             $('#lead-channel').val(lead.channel_id).trigger("change");
             $('#lead-financial_id').val(lead.financial_id).trigger("change");
+            console.log('lead.financial_id');
             $('#lead-temperature-id').val(lead.financial_id).trigger("change");
         })
         .catch(e => {
@@ -300,7 +312,7 @@ window.modalRegisterAction = function (id_rel) {
 
   $(document).ready(function(){
     if (document.getElementById('lead-channel')) {
-        setData(true);
+        setData(true, true);
     }
     
   })

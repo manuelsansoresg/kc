@@ -1570,7 +1570,15 @@ function getFinancial(lead_id) {
         lead_financial.append(option).trigger('change');
       }
 
-      $('#lead-financial_id').val(null).trigger('change');
+      var _lead_id = $("#lead_id").val();
+
+      if (_lead_id != null) {
+        setData(false, false);
+      } else {
+        $('#lead-financial_id').val(null).trigger('change');
+      } //console.log('test');
+      //setData(false);
+
     }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
@@ -1597,7 +1605,7 @@ $("#lead-origin").change(function () {
     }
 
     if (lead_id != null) {
-      setData(false);
+      setData(false, false);
     } else {
       $('#lead-channel').val(null).trigger('change');
     }
@@ -1606,7 +1614,7 @@ $("#lead-origin").change(function () {
   });
 });
 
-function setData(is_change_origen) {
+function setData(is_change_origen, is_change_organization) {
   var lead_id = $('#lead_id').val();
   axios.get("/panel/lead/" + lead_id).then(function (response) {
     var result = response.data;
@@ -1614,8 +1622,11 @@ function setData(is_change_origen) {
     var channel = result.channel;
     var financials = result.financials;
     var product_id = lead.product_id;
-    $('#lead-agreement').val(lead.agreement_id);
-    $('#lead-agreement').trigger("change");
+
+    if (is_change_organization == true) {
+      $('#lead-agreement').val(lead.agreement_id);
+      $('#lead-agreement').trigger("change");
+    }
 
     if (is_change_origen == true) {
       $('#lead-origin').val(lead.origin_id);
@@ -1653,6 +1664,7 @@ function setData(is_change_origen) {
     console.log(lead.channel_id);
     $('#lead-channel').val(lead.channel_id).trigger("change");
     $('#lead-financial_id').val(lead.financial_id).trigger("change");
+    console.log('lead.financial_id');
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
@@ -1782,7 +1794,7 @@ window.modalRegisterAction = function (id_rel) {
 
 $(document).ready(function () {
   if (document.getElementById('lead-channel')) {
-    setData(true);
+    setData(true, true);
   }
 });
 $(document).on("select2:open", function () {
