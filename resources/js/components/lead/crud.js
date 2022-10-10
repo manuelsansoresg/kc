@@ -26,6 +26,14 @@ $('.select2multiple').select2({
     }
   });
 
+  $("#lead-product-id" ).change(function() {
+    let product_id = $("#lead-product-id" ).val();
+    $('#content-financial').hide();
+    if (product_id == 2) {
+        $('#content-financial').show();
+    }
+  });
+
   function getFinancial(lead_id) {
     $('#lead-financial_id').empty();
     axios
@@ -34,6 +42,7 @@ $('.select2multiple').select2({
             let result = response.data;
             if (result != null) {
                 var lead_financial = $('#lead-financial_id');
+                
                 for (const key in result) {
                     const element = result[key];
                     var option = new Option(element.commercial_name, element.id, true, true);
@@ -85,6 +94,7 @@ function setData() {
             let lead          = result.lead;
             let channel       = result.channel;
             let financials    = result.financials;
+            let product_id = lead.product_id;
             
             $('#lead-agreement').val(lead.agreement_id);
             $('#lead-agreement').trigger("change");
@@ -129,6 +139,10 @@ function setData() {
                     lead_financial.append(option).trigger('change');
                     
                 }
+            }
+            $('#content-financial').hide();
+            if (product_id == 2) {
+                $('#content-financial').show();
             }
 
             $('#lead-channel').val(lead.channel_id).trigger("change");

@@ -92,7 +92,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6" id="content-financial" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Financiera</label>
                                                                 <p class="small">Financiera con la que el prospecto tiene un crédito</p>

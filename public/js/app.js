@@ -1547,6 +1547,14 @@ $("#lead-agreement").change(function () {
     getFinancial(lead_agreement);
   }
 });
+$("#lead-product-id").change(function () {
+  var product_id = $("#lead-product-id").val();
+  $('#content-financial').hide();
+
+  if (product_id == 2) {
+    $('#content-financial').show();
+  }
+});
 
 function getFinancial(lead_id) {
   $('#lead-financial_id').empty();
@@ -1600,6 +1608,7 @@ function setData() {
     var lead = result.lead;
     var channel = result.channel;
     var financials = result.financials;
+    var product_id = lead.product_id;
     $('#lead-agreement').val(lead.agreement_id);
     $('#lead-agreement').trigger("change");
     $('#lead-product-id').val(lead.product_id);
@@ -1638,6 +1647,12 @@ function setData() {
         var option = new Option(_element.commercial_name, _element.id, true, true);
         lead_financial.append(option).trigger('change');
       }
+    }
+
+    $('#content-financial').hide();
+
+    if (product_id == 2) {
+      $('#content-financial').show();
     }
 
     $('#lead-channel').val(lead.channel_id).trigger("change");
