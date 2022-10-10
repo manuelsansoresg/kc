@@ -59,6 +59,7 @@ $('.select2multiple').select2({
   
   $("#lead-origin" ).change(function() {
     let origin_id = $("#lead-origin" ).val();
+    let lead_id = $("#lead_id" ).val();
     $('#lead-channel').empty();
     var lead_channel = $('#lead-channel');
     axios
@@ -72,19 +73,22 @@ $('.select2multiple').select2({
                         var option = new Option(element, key, true, true);
                         lead_channel.append(option).trigger('change');
                     }
-                    
                 }
-              
-              
             }
-            $('#lead-channel').val(null).trigger('change');
+            
+            if (lead_id != null) {
+                setData(false);
+            } else {
+                $('#lead-channel').val(null).trigger('change');
+            }
+
         })
         .catch(e => {
             $('#admin_email-error-exist').show();
         });
   });
 
-function setData() {
+function setData(is_change_origen) {
     let lead_id = $('#lead_id').val();
     
     axios
@@ -98,12 +102,15 @@ function setData() {
             
             $('#lead-agreement').val(lead.agreement_id);
             $('#lead-agreement').trigger("change");
+            if (is_change_origen == true) {
+                $('#lead-origin').val(lead.origin_id);
+                $('#lead-origin').trigger("change");
+            }
             
             $('#lead-product-id').val(lead.product_id);
             $('#lead-product-id').trigger("change");
             
-            $('#lead-origin').val(lead.origin_id);
-            $('#lead-origin').trigger("change");
+            
             
             $('#lead-asesor-id').val(lead.asesor_id);
             $('#lead-asesor-id').trigger("change");
@@ -118,19 +125,6 @@ function setData() {
             $('#lead-cellphone').val(lead.cellphone); 
             $('#lead-email').val(lead.email); 
 
-            if (channel != null) {
-                $('#lead-channel').empty();
-                var lead_channel = $('#lead-channel');
-                for (const key in channel) {
-                    const element = channel[key];
-                    if (element != 'Selecciona una opción') {
-                       /*  var option = new Option(element, key, true, true);
-                        lead_channel.append(option).trigger('change'); */
-                    }
-                    
-                }
-            }
-
             if (financials != null) {
                 var lead_financial = $('#lead-financial_id');
                 for (const key in result) {
@@ -144,7 +138,7 @@ function setData() {
             if (product_id == 2) {
                 $('#content-financial').show();
             }
-
+            console.log(lead.channel_id);
             $('#lead-channel').val(lead.channel_id).trigger("change");
             $('#lead-financial_id').val(lead.financial_id).trigger("change");
             $('#lead-temperature-id').val(lead.financial_id).trigger("change");
@@ -306,7 +300,7 @@ window.modalRegisterAction = function (id_rel) {
 
   $(document).ready(function(){
     if (document.getElementById('lead-channel')) {
-        setData();
+        setData(true);
     }
     
   })

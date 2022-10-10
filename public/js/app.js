@@ -1579,6 +1579,7 @@ function getFinancial(lead_id) {
 
 $("#lead-origin").change(function () {
   var origin_id = $("#lead-origin").val();
+  var lead_id = $("#lead_id").val();
   $('#lead-channel').empty();
   var lead_channel = $('#lead-channel');
   axios.get("/panel/lead/" + origin_id + "/origin/").then(function (response) {
@@ -1595,13 +1596,17 @@ $("#lead-origin").change(function () {
       }
     }
 
-    $('#lead-channel').val(null).trigger('change');
+    if (lead_id != null) {
+      setData(false);
+    } else {
+      $('#lead-channel').val(null).trigger('change');
+    }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
 });
 
-function setData() {
+function setData(is_change_origen) {
   var lead_id = $('#lead_id').val();
   axios.get("/panel/lead/" + lead_id).then(function (response) {
     var result = response.data;
@@ -1611,10 +1616,14 @@ function setData() {
     var product_id = lead.product_id;
     $('#lead-agreement').val(lead.agreement_id);
     $('#lead-agreement').trigger("change");
+
+    if (is_change_origen == true) {
+      $('#lead-origin').val(lead.origin_id);
+      $('#lead-origin').trigger("change");
+    }
+
     $('#lead-product-id').val(lead.product_id);
     $('#lead-product-id').trigger("change");
-    $('#lead-origin').val(lead.origin_id);
-    $('#lead-origin').trigger("change");
     $('#lead-asesor-id').val(lead.asesor_id);
     $('#lead-asesor-id').trigger("change");
     $('#lead-type_id').val(lead.type_id);
@@ -1625,26 +1634,12 @@ function setData() {
     $('#lead-cellphone').val(lead.cellphone);
     $('#lead-email').val(lead.email);
 
-    if (channel != null) {
-      $('#lead-channel').empty();
-      var lead_channel = $('#lead-channel');
-
-      for (var key in channel) {
-        var element = channel[key];
-
-        if (element != 'Selecciona una opción') {
-          /*  var option = new Option(element, key, true, true);
-           lead_channel.append(option).trigger('change'); */
-        }
-      }
-    }
-
     if (financials != null) {
       var lead_financial = $('#lead-financial_id');
 
-      for (var _key in result) {
-        var _element = result[_key];
-        var option = new Option(_element.commercial_name, _element.id, true, true);
+      for (var key in result) {
+        var element = result[key];
+        var option = new Option(element.commercial_name, element.id, true, true);
         lead_financial.append(option).trigger('change');
       }
     }
@@ -1655,6 +1650,7 @@ function setData() {
       $('#content-financial').show();
     }
 
+    console.log(lead.channel_id);
     $('#lead-channel').val(lead.channel_id).trigger("change");
     $('#lead-financial_id').val(lead.financial_id).trigger("change");
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
@@ -1786,7 +1782,7 @@ window.modalRegisterAction = function (id_rel) {
 
 $(document).ready(function () {
   if (document.getElementById('lead-channel')) {
-    setData();
+    setData(true);
   }
 });
 $(document).on("select2:open", function () {
