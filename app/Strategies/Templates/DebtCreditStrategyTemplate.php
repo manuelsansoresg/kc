@@ -303,11 +303,11 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $option_inf_credit          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
         
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
-        $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 1])->render();
+        $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         
         $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => 0])->render();
-        $view_count_report          = \View::make('panel.module.view_count', ['number' => 2])->render();
+        $view_count_report          = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
         if ($status_report == 'En curso') {
             $option_inf_report          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
         }
@@ -401,6 +401,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $data_deadline    = deadline($hour, $max_hour, 0, 'success');
         $color_desition = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
+
         
         $view_dead_line_desition  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
         $options_progress  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
