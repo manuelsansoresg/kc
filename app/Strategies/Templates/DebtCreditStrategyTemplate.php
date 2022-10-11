@@ -390,7 +390,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $max_hour       = 12;
-        $hour           = Carbon::parse($credit->created_at)->hour;
+        $hour           = $credit->created_at;
         $menu_options   = self::menuOptionReportStep($history);
         $advisor        = $credit->creditAdvisor;
         $user = User::find($advisor->id);
