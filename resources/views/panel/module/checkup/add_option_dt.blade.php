@@ -10,6 +10,12 @@
 </a>
 <div class="dropdown-menu dropdown-menu-end">
     <ul class="link-list-opt no-bdr">
+        @if ($percent_form == 100)
+            <li>
+                <a class="pointer" href="/reporte/{{ $credit_id }}">
+                    <em class="icon ni ni-reports"></em><span>Ver reporte</span></a>
+            </li>
+        @endif
         <li>
             <a class="pointer" href="/panel/template/steps/{{ $route }}/{{ $id }}/show">
                 <em class="icon ni ni-list-thumb-fill"></em><span>Ver etapas</span></a>

@@ -44,7 +44,7 @@ class Credit extends Model
             $model            = HistoryLog::$name_model[$history->status_id];
             $templateStrategy = TemplateValues::STRATEGY[$model];
             $percent          = (new $templateStrategy)->getPercent($history);
-
+            $percent_form          = (new $templateStrategy)->percentForm($history);
             $hour             = $query->created_at;
             $max_hour         = 24;
 
@@ -53,7 +53,7 @@ class Credit extends Model
             $hour             = $data_deadline['lbl_hour'];
             $status_id        = $history->status_id;
             
-            $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
+            $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
             $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
             $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client, 'percent' => $percent])->render();
             $dead_line        = \View::make('panel.module.checkup.deadline', [ 'hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
