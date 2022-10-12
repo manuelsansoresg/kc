@@ -40,7 +40,7 @@
 
                                 </div>
                             </div>
-                            <div class="mt-12 mt-md-0 col-md-6 col-lg-5 mx-auto">
+                            <div class="col-md-6 col-lg-5 mx-auto" id="hero-img">
                                 
                                 <img class="img-fluid" src="https://kaaxclub.com/images/thumb/item-detail.jpg"
                                 alt="">
