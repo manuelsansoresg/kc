@@ -24,6 +24,7 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
     <!--:Main style:-->
     <link rel="stylesheet" href="{{ asset('/assets_report/css/theme.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/assets_report/css/app.css') }}">
 </head>
 
 <body class="dark-mode">
