@@ -52,7 +52,7 @@
                     </ul>
                     <ul class="navbar-nav ms-xl-auto">
                         <li class="nav-item mb-3 mb-lg-0"><a class="btn btn-warning btn-sm hover-lift"
-                                href="demo-request.html">Request Demo<span
+                                href="demo-request.html">Continuar<span
                                     class="align-middle material-symbols-rounded fs-5 ms-1 d-none d-xl-inline-block">arrow_forward</span></a>
                         </li>
                         <li
@@ -74,7 +74,7 @@
 
     @yield('content')
 
-    
+
     {{-- kc score --}}
     <!--:Footer:-->
     <footer class="footer bg-dark text-white position-relative overflow-hidden">
@@ -82,7 +82,8 @@
             <div class="row">
                 <div class="col-md-6 col-lg-3 mb-5">
                     <div class="mb-4"><a class="text-reset d-table width-120" href="/">
-                            <img src="{{ asset('/assets_report/img/logo-white.svg') }}" class="img-fluid" alt="">
+                            <img src="{{ asset('/assets_report/img/logo-white.svg') }}" class="img-fluid"
+                                alt="">
                         </a>
                     </div>
                     <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pellentesque
@@ -152,12 +153,32 @@
 
     <!--:Page scripts:-->
     <script src="{{ asset('/assets_report/vendor/node_modules/js/swiper-bundle.min.js') }}"></script>
+    <script
+			  src="https://code.jquery.com/jquery-3.6.1.min.js"
+			  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+			  crossorigin="anonymous"></script>
+		
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
         integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
     <script>
+
+        var inView = false;
+
+        function isScrolledIntoView(elem)
+        {
+            var docViewTop = $(window).scrollTop();
+            var docViewBottom = docViewTop + $(window).height();
+
+            var elemTop = $(elem).offset().top;
+            var elemBottom = elemTop + $(elem).height();
+
+            return ((elemTop <= docViewBottom) && (elemBottom >= docViewTop));
+        }
+
         document.body.classList.add("dark-mode");
-        checkbox.checked = true;
         sessionStorage.setItem("mode", "dark");
 
         var swiper = new Swiper(".swiper-partners", {
@@ -188,34 +209,35 @@
             'Financiera 4',
             'Financiera 5',
         ];
-        
+
         const data = {
             labels: labels,
             datasets: [{
                     label: 'Financiera1',
-                    data: [80, 10, 20,40, 50],
+                    data: [80, 10, 20, 40, 50],
                     backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(255, 159, 64, 0.5)',
-                    'rgba(255, 205, 86, 0.5)',
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(153, 102, 255, 0.5)',
-                    'rgba(201, 203, 207, 0.5)'
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(255, 205, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(201, 203, 207, 0.5)'
                     ],
                     borderColor: [
-                    'rgb(255, 99, 132)',
-                    'rgb(255, 159, 64)',
-                    'rgb(255, 205, 86)',
-                    'rgb(75, 192, 192)',
-                    'rgb(54, 162, 235)',
-                    'rgb(153, 102, 255)',
-                    'rgb(201, 203, 207)'
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
                     ],
+                    color: ['#fff'],
                     borderWidth: 1,
                     borderRadius: 2,
                 },
-                
+
             ]
         };
 
@@ -224,21 +246,78 @@
             data: data,
             options: {
                 responsive: true,
+                animation: {
+                    delay: (context) => {
+                        let delay = 0;
+                        if (context.type === 'data') {
+                            delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                        }
+                        return delay;
+                    },
+                },
+
                 plugins: {
                     legend: {
                         display: false,
                     },
                     title: {
                         display: false,
+                    },
+                    datalabels: {
+                        formatter: function(value, context) {
+                            return value + '%';
+                        }
+                    },
+                    
+
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        ticks: {
+                            color: 'white',
+                            font: {
+                                weight: 'bold',
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        stacked: true,
+                        ticks: {
+                            color: 'white',
+                            font: {
+                                weight: 'bold',
+                            },
+                            display: false
+                        }
                     }
                 },
+
             },
         };
-        const myChart = new Chart(
-            document.getElementById('myChart'),
-            config
-        );
+        Chart.register(ChartDataLabels);
+        Chart.defaults.set('plugins.datalabels', {
+            color: '#FFF',
+            font: {
+                weight: 'bold',
+            }
+        });
 
+        
+
+        $(window).scroll(function() {
+            if (isScrolledIntoView('#myChart')) {
+                if (inView) { return; }
+                inView = true;
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+            } else {
+                inView = false;  
+            }
+        });
         /*  intereses */
         const labels_interes = [
             'Financiera 1',
