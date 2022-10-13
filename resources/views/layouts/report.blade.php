@@ -93,7 +93,7 @@
                 <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
                         <li><a href="#">Home</a></li>
-                        <li><a href="#">Metodologia</a></li>
+                        <li><a href="#">Metodología</a></li>
                         <li><a href="#">Ayuda</a></li>
                         <li><a href="#">Privacidad</a></li>
                     </ul>
