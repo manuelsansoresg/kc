@@ -139,7 +139,7 @@
                                             datos: 4.3<span class="text-sm text-muted">/5</span></span> </li>
                                     </ul>
                                     <div class="text-center mt-3">
-                                        <a href="">Ver simulación</a>
+                                        <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver simulación</a>
                                     </div>
                                 </div>
                             </div>
@@ -531,6 +531,7 @@
 
 
     {{-- intereses --}}
+    <a name="section-simulacion"/>
     <section class="position-relative  bg-style-1">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
             <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">

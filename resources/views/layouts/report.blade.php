@@ -84,27 +84,24 @@
             <div class="row">
                 <div class="col-md-6 col-lg-3 mb-5">
                     <div class="mb-4"><a class="text-reset d-table width-120" href="/">
-                            <img src="{{ asset('/assets_report/img/logo-white.svg') }}" class="img-fluid"
-                                alt="">
+                        <img src="{{ asset('images/logo-dark.png') }}" class="img-fluid" alt="">
                         </a>
                     </div>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pellentesque
-                        efficitur turpis, vitae dictum dolor tristique in.</p>
+                    <p class="text-muted">Te ayudamos a elegir y tramitar el mejor crédito. </p>
+                    <p class="text-muted">Si ya tienes un crédito , te ayudamos a reducir tu deuda. </p>
                 </div>
                 <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Career</a></li>
-                        <li><a href="#">Terms</a></li>
-                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Metodologia</a></li>
+                        <li><a href="#">Ayuda</a></li>
+                        <li><a href="#">Privacidad</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Press Kit</a></li>
-                        <li><a href="#">Support</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">App</a></li>
+                        <li><a href="#">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4 mb-5">
@@ -135,15 +132,9 @@
                                     d="M391.17,103.47H352.54v109.7h38.63ZM285,103H246.37V212.75H285ZM120.83,0,24.31,91.42V420.58H140.14V512l96.53-91.42h77.25L487.69,256V0ZM449.07,237.75l-77.22,73.12H294.61l-67.6,64v-64H140.14V36.58H449.07Z">
                                 </path>
                             </svg></a></div>
-                    <h6 class="mb-4 text-capitalize fw-bold">Subscribe to newsletter</h6>
-                    <form class="mb-3">
-                        <div class="mb-2"><input type="text"
-                                class="form-control border-0 bg-white text-secondary"
-                                placeholder="Enter your email address"></div>
-                        <div class="d-grid"><button type="submit" class="btn btn-cta btn-primary">Subscribe</button>
-                        </div>
+               
                     </form><small class="text-muted">
-                        © Copyright 2022. Saasley inc. </small>
+                        © Yalkú Servicios. </small>
                 </div>
             </div>
         </div>
@@ -459,6 +450,10 @@
             },
         };
         
+        function scrollToAnchor(aid){
+            var aTag = $("a[name='"+ aid +"']");
+            $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+        }
 
         $(window).scroll(function() {
             if (isScrolledIntoView('#myChart')) {
