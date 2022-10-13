@@ -12,7 +12,7 @@
     <ul class="link-list-opt no-bdr">
         @if ($percent_form == 100)
             <li>
-                <a class="pointer" href="/reporte/{{ $credit_id }}">
+                <a class="pointer" href="/reporte/{{ $id }}">
                     <em class="icon ni ni-reports"></em><span>Ver reporte</span></a>
             </li>
         @endif
