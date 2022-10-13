@@ -588,6 +588,7 @@
                                                     <form method="post" id="frm-financial-contact" action="">
                                                         <div class="row gy-4">
                                                             @csrf
+                                                            <div class="col-12"><span class="preview-title-lg overline-title">registro de contrato de adhesión</span></div>
                                                             <div class="col-md-6">
                                                                 <div class="preview-block">
                                                                     <span class="preview-title  form-label">RECA</span>
@@ -660,7 +661,7 @@
 
                                                             <div class="col-md-6">
                                                                 <div class="preview-block">
-                                                                    <span class="preview-title  form-label">Permite pagos anticipados</span>
+                                                                    <span class="preview-title  form-label">Permite terminación anticipada</span>
 
                                                                     <div class="custom-control custom-radio"><input
                                                                             type="radio" id="allows_early_term_contract1"
@@ -682,7 +683,7 @@
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Procedimiento pagos anticipados</label>
+                                                                    <label class="form-label" for="frm-product-name">Procedimiento terminación anticipada</label>
                                                                     <div class="form-control-wrap">
                                                                         <input type="number" name="procedure_early_term_contract"
                                                                             class="form-control"
@@ -690,10 +691,10 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-
+                                                            <div class="col-12"><span class="preview-title-lg overline-title">Otros</span></div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Medio de pago principal</label>
+                                                                    <label class="form-label" for="frm-product-name">Tipo de firma</label>
                                                                     <div class="form-control-wrap">
                                                                         <select name="type_signature_id" id=""
                                                                             class="form-select">
