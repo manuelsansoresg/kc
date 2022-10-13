@@ -168,6 +168,7 @@
     <script>
 
         var inView = false;
+        var inViewPlazo = false;
 
         function isScrolledIntoView(elem)
         {
@@ -308,18 +309,7 @@
 
         
 
-        $(window).scroll(function() {
-            if (isScrolledIntoView('#myChart')) {
-                if (inView) { return; }
-                inView = true;
-                const myChart = new Chart(
-                    document.getElementById('myChart'),
-                    config
-                );
-            } else {
-                inView = false;  
-            }
-        });
+        
         /*  intereses */
         const labels_interes = [
             'Financiera 1',
@@ -421,30 +411,78 @@
             data: data_plazo,
             options: {
                 responsive: true,
+                animation: {
+                    delay: (context) => {
+                        let delay = 0;
+                        if (context.type === 'data') {
+                            delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                        }
+                        return delay;
+                    },
+                },
                 indexAxis: 'y',
                 plugins: {
                     legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Chart.js Bar Chart'
-                    }
+                            display: false,
+                        },
+                        title: {
+                            display: false,
+                        },
+                        datalabels: {
+                            formatter: function(value, context) {
+                                return value + ' años';
+                            }
+                        },
                 },
                 scales: {
                     x: {
                         stacked: true,
+                        ticks: {
+                            color: 'white',
+                            font: {
+                                weight: 'bold',
+                            },
+                            display: false
+                        }
                     },
                     y: {
-                        stacked: true
+                        stacked: true,
+                        ticks: {
+                            color: 'white',
+                            font: {
+                                weight: 'bold',
+                            },
+                            
+                        }
                     }
                 }
             },
         };
-        const myChart_plazo = new Chart(
-            document.getElementById('myChartPlazo'),
-            config_plazo
-        );
+        
+
+        $(window).scroll(function() {
+            if (isScrolledIntoView('#myChart')) {
+                if (inView) { return; }
+                inView = true;
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+            } else {
+                inView = false;  
+            }
+            
+            if (isScrolledIntoView('#myChartPlazo')) {
+                if (inView) { return; }
+                inViewPlazo = true;
+                const myChart_plazo = new Chart(
+                    document.getElementById('myChartPlazo'),
+                    config_plazo
+                );
+            } else {
+                inViewPlazo = false;  
+            }
+        });
     </script>
 
 </body>
