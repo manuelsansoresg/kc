@@ -134,3 +134,6 @@
 }
 /* mediaquery */
 /* animate apple commercial */
+.text-sm {
+  font-size: 12px !important;
+}

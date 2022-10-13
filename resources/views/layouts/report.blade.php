@@ -31,7 +31,8 @@
     <nav class="navbar navbar-expand-lg navbar-transparent navbar-sticky navbar-dark">
         <div class="container-fluid position-relative">
             <a class="navbar-brand" href="index.html">
-                <img src="{{ asset('/assets_report/img/logo-white.svg') }}" class="img-fluid" alt="">
+                <img src="{{ asset('images/logo-dark.png') }}" class="img-fluid" alt="">
+
             </a><button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasNavbarDefault" aria-controls="offcanvasNavbarDefault" aria-expanded="false"
                 aria-label="Toggle navigation"><span class="material-symbols-rounded align-middle">menu</span></button>
