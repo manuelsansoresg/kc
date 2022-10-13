@@ -359,7 +359,7 @@
                                                             </div>    
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Medio de pago principal</label>
+                                                                    <label class="form-label" for="frm-product-name">Medio de pago</label>
                                                                     <div class="form-control-wrap">
                                                                         <select name="means_pay_arrangement_id" id=""
                                                                             class="form-select">
@@ -386,7 +386,7 @@
                                                             </div>    
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Medio de pago principal</label>
+                                                                    <label class="form-label" for="frm-product-name">Medio de pago</label>
                                                                     <div class="form-control-wrap">
                                                                         <select name="means_pay_life_insurance_id" id=""
                                                                             class="form-select">
@@ -403,7 +403,7 @@
                                                             <div class="col-12"><span class="preview-title-lg overline-title">Seguro de desempleo</span></div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Porcentaje seguro de vida</label>
+                                                                    <label class="form-label" for="frm-product-name">Porcentaje seguro de desempleo</label>
                                                                     <div class="form-control-wrap">
                                                                         <input type="number" name="unemploy_insurance_commission_perc"
                                                                             class="form-control"
@@ -413,7 +413,7 @@
                                                             </div>    
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Medio de pago principal</label>
+                                                                    <label class="form-label" for="frm-product-name">Medio de pago</label>
                                                                     <div class="form-control-wrap">
                                                                         <select name="means_pay_unemploy_insurance_id" id=""
                                                                             class="form-select">
@@ -528,7 +528,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            {{-- <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="frm-product-name">Medio de pago principal</label>
                                                                     <div class="form-control-wrap">
@@ -543,7 +543,7 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
-                                                            </div> 
+                                                            </div>  --}}
                                                             <input type="hidden" id="financial_id" name="financial_id"
                                                             value="{{ $financial_id }}">
                                                             <input type="hidden" id="product_id" name="product_id"
