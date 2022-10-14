@@ -1,5 +1,5 @@
 @extends('layouts.report')
-
+@section('title', 'Reporte')
 @section('content')
 
 {{-- hero --}}

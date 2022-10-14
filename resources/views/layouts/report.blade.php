@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte</title>
+    <title>@yield('title')</title>
 
     <!--:Page styles:-->
     <link rel="stylesheet" href="{{ asset('/assets_report/vendor/node_modules/css/glightbox.min.css') }}">
@@ -46,8 +46,11 @@
                         <li class="nav-item dropdown"><a class="nav-link dropdown-arrow" href="#"
                                 data-bs-toggle="dropdown">Opciones<span
                                     class="material-symbols-rounded align-middle lh-1 dropdown-arrow-icon">expand_more</span></a>
-                            <div class="dropdown-menu"><a class="dropdown-item" href="index.html">Regresar</a><a
-                                    class="dropdown-item" href="index-signup.html">Continuar</a></div>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="index.html">Regresar</a>
+                                <a class="dropdown-item" href="/reporte/{{ $history_id }}/metodologia">Metodología</a>
+                                <a class="dropdown-item" href="index-signup.html">Continuar</a>
+                            </div>
                         </li>
 
 

@@ -36,9 +36,14 @@ class HomeController extends Controller
         $client = $credit->creditClientPerson;
         $option = 2;
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
-            return view('content_report_debt', compact('client', 'option'));
+            return view('content_report_debt', compact('client', 'option', 'history_id'));
         }
-        return view('content_report', compact('client'));
+        return view('content_report', compact('client', 'history_id'));
+    }
+
+    public function method($history_id)
+    {
+        return view('content_report_metodologia', compact('history_id'));
     }
 
     public function showNotification()

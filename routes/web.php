@@ -37,3 +37,4 @@ Route::get('/condiciones', function () {
 });
 
 Route::get('reporte/{history_id}', ['\App\Http\Controllers\HomeController', 'report']);
+Route::get('reporte/{history_id}/metodologia', ['\App\Http\Controllers\HomeController', 'method']);
