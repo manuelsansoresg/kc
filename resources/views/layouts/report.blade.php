@@ -25,6 +25,7 @@
     <!--:Main style:-->
     <link rel="stylesheet" href="{{ asset('/assets_report/css/theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets_report/css/app.css') }}">
+    <link href="{{ asset('images/favicon.ico') }}" rel="icon">
 </head>
 
 <body class="dark-mode">
