@@ -160,6 +160,7 @@
 
         var inView = false;
         var inViewPlazo = false;
+        var inViewInteres = false;
 
         function isScrolledIntoView(elem)
         {
@@ -313,37 +314,25 @@
         const data_interes = {
             labels: labels_interes,
             datasets: [{
-                    label: 'Financiera1',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: [4000, 0, 0, 0, 0],
+                    label: 'Prestamo',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                    data: [10000,10000, 10000,10000,10000],
 
                 },
                 {
-                    label: 'Financiera2',
-                    backgroundColor: 'rgb(255, 111, 0)',
-                    borderColor: 'rgb(255, 111, 0)',
-                    data: [80, 40, 0, 0, 0, 0],
+                    label: 'Interés',
+                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                    borderColor: 'rgba(255, 205, 86, 0.5)',
+                    data: [4000, 5000 , 4500,5500,4250],
                 },
                 {
-                    label: 'Financiera3',
-                    backgroundColor: 'rgb(0, 34, 255)',
-                    borderColor: 'rgb(0, 34, 255)',
-                    data: [0, 0, 150, 0, 0],
+                    label: 'Comisión por apertura',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5',
+                    borderColor: 'rgba(75, 192, 192, 0.5',
+                    data: [500, 0 , 300,0,0],
                 },
-                {
-                    label: 'Financiera4',
-                    backgroundColor: 'rgb(18, 255, 42)',
-                    borderColor: 'rgb(18, 255, 42)',
-                    data: [0, 0, 0, 100, 0],
-                },
-                {
-                    label: 'Financiera5',
-                    backgroundColor: 'rgb(185, 18, 255)',
-                    borderColor: 'rgb(185, 18, 255)',
-                    data: [0, 0, 0, 0, 90],
-                },
-            ]
+            ] 
         };
 
         const config_interes = {
@@ -351,30 +340,59 @@
             data: data_interes,
             options: {
                 responsive: true,
+                animation: {
+                    delay: (context) => {
+                        let delay = 0;
+                        if (context.type === 'data') {
+                            delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                        }
+                        return delay;
+                    },
+                },
                 indexAxis: 'y',
                 plugins: {
                     legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Chart.js Bar Chart'
-                    }
+                            display: true,
+                            labels: {
+                                color: "white",
+                                font: {
+                                    weight: 'bold',
+                                },
+                            }
+                        },
+                        title: {
+                            display: false,
+                        },
+                        datalabels: {
+                            display: false,
+                            
+                        },
                 },
                 scales: {
                     x: {
-                        stacked: true,
-                    },
-                    y: {
-                        stacked: true
-                    }
+            stacked: true,
+            ticks: {
+                color: 'white',
+                font: {
+                    weight: 'bold',
+                },
+                display: true
+            }
+        },
+        y: {
+            stacked: true,
+            ticks: {
+                color: 'white',
+                font: {
+                    weight: 'bold',
+                },
+                
+            }
+        }
                 }
             },
         };
-        const myChart_interes = new Chart(
-            document.getElementById('myChartInteres'),
-            config_interes
-        );
+        
         /* plazo */
         const labels_plazo = [
             'Financiera 1',
@@ -388,8 +406,8 @@
             labels: labels_plazo,
             datasets: [{
                     label: 'Años',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor:   'rgba(255, 99, 132, 0.5)',
                     data: [2, 2.5, 3, 3.5, 3],
 
                 },
@@ -476,6 +494,16 @@
                 );
             } else {
                 inViewPlazo = false;  
+            }
+            if (isScrolledIntoView('#myChartInteres')) {
+                if (inView) { return; }
+                inViewInteres = true;
+                const myChart_interes = new Chart(
+                    document.getElementById('myChartInteres'),
+                    config_interes
+                );
+            } else {
+                inViewInteres = false;  
             }
         });
     </script>

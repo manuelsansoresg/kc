@@ -549,45 +549,16 @@
                                     <div class="row align-items-center">
                                         <div class="col-12">
                                             <h2 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4"
-                                                data-aos="fade-up"> Pago de interés
+                                                data-aos="fade-up"> Simulación
                                             </h2>
                                             <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                                El interés es el costo del dinero. Aquí te decimos cuánto interés se
-                                                paga para el siguiente ejemplo:
+                                                El interés es el costo del dinero. Aquí te decimos cuánto interés y cuánta comisión  se paga en un sencillo ejemplo.
+
                                             </p>
                                             <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                                Para un crédito de $10,000 a 1 año; pagarías el siguiente interés.
+                                                Para un crédito de <b class="h3">$10,000 a 1 año</b>
                                             </p>
-
-                                            <ul class="list-unstyled mb-4 mb-lg-5" data-aos="fade-up"
-                                                data-aos-delay="200">
-                                                <li class="d-flex mb-3 align-items-start"><span
-                                                        class="material-symbols-rounded align-middle text-warning fs-4 me-3">check_circle</span>Financiera
-                                                    1: $4,000 de interés.
-
-                                                </li>
-                                                <li class="d-flex mb-3 align-items-start"><span
-                                                        class="material-symbols-rounded align-middle text-warning fs-4 me-3">check_circle</span>Financiera
-                                                    2: $4,900 de interés.
-                                                </li>
-                                                <li class="d-flex mb-3 align-items-start"><span
-                                                        class="material-symbols-rounded align-middle text-warning fs-4 me-3">check_circle</span>Financiera
-                                                    3: $6,000 de interés.
-
-                                                </li>
-                                                <li class="d-flex mb-3 align-items-start"><span
-                                                        class="material-symbols-rounded align-middle text-warning fs-4 me-3">check_circle</span>Financiera
-                                                    4: $5,900 de interés.
-
-
-                                                </li>
-                                                <li class="d-flex mb-3 align-items-start"><span
-                                                        class="material-symbols-rounded align-middle text-warning fs-4 me-3">check_circle</span>Financiera
-                                                    5: $7,000 de interés.
-
-
-                                                </li>
-                                            </ul>
+                                           
 
                                         </div>
 
