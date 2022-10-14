@@ -99,44 +99,37 @@
                                         class="text-muted font-monospace mb-4 d-block"></small><button type="button"
                                         class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
-                                        <li class="d-flex align-items-center mb-2"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                             <span>CAT REAL: 4.7</span><span class="text-sm text-muted">/5 </span>
-                                                <a href=""> <span
-                                                        class="material-symbols-rounded align-middle text-warning fs-4 me-3">link</span></a>
-                                            </span>
-                                        </li>
-                                        <li class="d-flex align-items-center mb-2">
+                                        <li class="mb-2">
                                             <span
                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span>Comisiones:
-                                                    5</span><span class="text-sm text-muted">/5 </span>
-                                            <a href=""> <span
-                                                    class="material-symbols-rounded align-middle text-warning fs-4">chevron_right</span>Ver</a>
+                                                <span>CAT REAL: 4.7</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
+                                           
                                         </li>
-                                        <li class="d-flex align-items-center mb-2">
+                                        <li class="mb-2">
                                             <span
-                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>Plazo
-                                            maximo: 5 <span class="text-sm text-muted">/5</span> 
-                                            <a href="">&nbsp; Ver</a>
-                                        </li>
-                                        <li class="align-items-center mb-2">
-                                           <div class="row">
-                                             <div class="col-12 col-md-9 align-self-center">
-                                                <span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>Plazo
-                                                maximo: 5 <span class="text-sm text-muted">/5</span>
-                                            </div>
-                                            <div class="col-12 col-md-2 align-self-center">
-                                                <span><a href="" class="text-sm">&nbsp; Ver</a></span>
-                                            </div>
-                                           </div>
-                                        </li>
-                                        <li class="d-flex align-items-center mb-2"><span
                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span class="text-decoration-underline">Privacidad
-                                                
-                                            datos: 4.3<span class="text-sm text-muted">/5</span></span> </li>
+                                                <span>Comisiones: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Plazo maximo: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-plazo-maximo')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Contrato: 4</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
+                                        </li>
+                                       
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Priv. datos: 4.3</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
                                     </ul>
                                     <div class="text-center mt-3">
                                         <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver simulación</a>
@@ -157,21 +150,41 @@
                                         class="text-muted font-monospace mb-4 d-block"></small><button type="button"
                                         class="w-100 btn btn-lg btn-gradient-primary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>CAT
-                                            REAL: 5<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Comisiones:
-                                            5<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Plaxo
-                                            maximo: 5<span class="small">/5</span> </li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Contrato
-                                            5<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Privacidad
-                                            datos: 5<span class="small">/5</span></li>
+                                        <li class="mb-2">
+                                            <span
+                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                <span>CAT REAL: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
+                                           
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                <span>Comisiones: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Plazo maximo: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-plazo-maximo')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Contrato: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
+                                        </li>
+                                       
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Priv. datos: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver simulación</a>
+                                    </div>
                                     </ul>
                                 </div>
                             </div>
@@ -188,21 +201,41 @@
                                         class="text-muted font-monospace mb-4 d-block"></small><button type="button"
                                         class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>CAT
-                                            REAL: 3<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Comisiones:
-                                            3.2<span class="small">/5</span><span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Plaxo
-                                            maximo: 5<span class="small">/5</span><span class="small">/5</span> </li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Contrato
-                                            3<span class="small">/5</span><span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Privacidad
-                                            datos: 3<span class="small">/5</span><span class="small">/5</span></li>
+                                        <li class="mb-2">
+                                            <span
+                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                <span>CAT REAL: 3</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
+                                           
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                <span>Comisiones: 3.2</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Plazo maximo: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-plazo-maximo')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Contrato: 3</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
+                                        </li>
+                                       
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Priv. datos: 4.3</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver simulación</a>
+                                    </div>
                                     </ul>
                                 </div>
                             </div>
@@ -219,21 +252,41 @@
                                         class="text-muted font-monospace mb-4 d-block"></small><button type="button"
                                         class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>CAT
-                                            REAL: 2<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Comisiones:
-                                            3.2<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Plaxo
-                                            maximo: 5<span class="small">/5</span> </li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Contrato
-                                            3<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Privacidad
-                                            datos: 3<span class="small">/5</span></li>
+                                        <li class="mb-2">
+                                            <span
+                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                <span>CAT REAL: 2</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
+                                           
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                <span>Comisiones: 3.3</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Plazo maximo: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-plazo-maximo')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Contrato: 3</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
+                                        </li>
+                                       
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Priv. datos: 2</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver simulación</a>
+                                    </div>
                                     </ul>
                                 </div>
                             </div>
@@ -250,21 +303,41 @@
                                         class="text-muted font-monospace mb-4 d-block"></small><button type="button"
                                         class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>CAT
-                                            REAL: 2<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Comisiones:
-                                            2<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Plaxo
-                                            maximo: 5<span class="small">/5</span> </li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Contrato
-                                            3<span class="small">/5</span></li>
-                                        <li class="d-flex align-items-center mb-3"><span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">circle</span>Privacidad
-                                            datos: 3<span class="small">/5</span></li>
+                                        <li class="mb-2">
+                                            <span
+                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                <span>CAT REAL: 2</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
+                                           
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                <span>Comisiones: 2</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Plazo maximo: 3</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-plazo-maximo')"> &nbsp; Ver</a>
+                                        </li>
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Contrato: 2</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
+                                        </li>
+                                       
+                                        <li class="mb-2">
+                                            <span
+                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                            <span>Priv. datos: 2</span><span class="text-sm text-muted">/5 </span>
+                                            <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver simulación</a>
+                                    </div>
                                     </ul>
                                 </div>
                             </div>
@@ -277,6 +350,7 @@
     </section>
 
     {{-- cat real --}}
+    <a name="section-cat-real"/>
     <section class="position-relative bg-style-1">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
             <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
@@ -328,7 +402,7 @@
         </div>
     </section>
     {{-- cat real --}}
-
+    <a name="section-comisiones"/>
     <section class="position-relative bg-dark">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
             <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
@@ -416,7 +490,7 @@
     </section>
 
     {{-- comisiones --}}
-
+    <a name="section-plazo-maximo"/>
     {{-- plazo --}}
     <section class="position-relative bg-style-1">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
@@ -446,19 +520,14 @@
                                         En ocasiones, una buena estrategia para adquirir un crédito es solicitar el
                                         plazo máximo para obtener un pago menor y realizar pagos anticipados (abono a
                                         capital) cada vez que sea posible. De ese modo, pagarás menos interés.
-
-
                                     </p>
                                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
                                         Si tienes dudas sobre cómo realizar pagos adelantados (abono a capital),
                                         contacta un asesor. Con gusto atenderá.
-
                                     </p>
                                 </div>
                             </div>
                         </div>
-
-
                         <div></div>
                     </div>
                 </div>
@@ -468,6 +537,7 @@
     {{-- plazo --}}
 
     {{-- contrato --}}
+    <a name="section-contrato"/>
     <section class="bg-dark position-relative">
         <div class="bg-blur position-absolute start-0 top-0 w-100 h-100 opacity-25"></div><svg
             class="position-absolute start-0 bottom-0 w-100 fill-body-bg" height="40%" preserveAspectRatio="none"
@@ -496,6 +566,7 @@
     {{-- contrato --}}
 
     {{-- privacidad de datos --}}
+    <a name="section-priv-datos"/>
     <section class="bg-dark position-relative">
         <div class="bg-blur position-absolute start-0 top-0 w-100 h-100 opacity-25"></div><svg
             class="position-absolute start-0 bottom-0 w-100 fill-body-bg" height="40%" preserveAspectRatio="none"
@@ -525,10 +596,6 @@
         </div>
     </section>
     {{-- privacidad de datos --}}
-
-
-
-
 
     {{-- intereses --}}
     <a name="section-simulacion"/>

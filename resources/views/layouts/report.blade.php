@@ -211,11 +211,11 @@
                     label: 'Financiera1',
                     data: [80, 10, 20, 40, 50],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(255, 159, 64, 0.5)',
-                        'rgba(255, 205, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 99, 132, 0.5)', //rojo
+                        'rgba(255, 159, 64, 0.5)',// cafe
+                        'rgba(255, 205, 86, 0.5)', // marron
+                        'rgba(75, 192, 192, 0.5)', //verde
+                        'rgba(54, 162, 235, 0.5)', // azul
                         'rgba(153, 102, 255, 0.5)',
                         'rgba(201, 203, 207, 0.5)'
                     ],
@@ -315,21 +315,21 @@
             labels: labels_interes,
             datasets: [{
                     label: 'Prestamo',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 0.5)',
                     data: [10000,10000, 10000,10000,10000],
 
                 },
                 {
                     label: 'Interés',
-                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
-                    borderColor: 'rgba(255, 205, 86, 0.5)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 0.5)',
                     data: [4000, 5000 , 4500,5500,4250],
                 },
                 {
                     label: 'Comisión por apertura',
-                    backgroundColor: 'rgba(75, 192, 192, 0.5',
-                    borderColor: 'rgba(75, 192, 192, 0.5',
+                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                    borderColor: 'rgba(255, 205, 86, 0.5)',
                     data: [500, 0 , 300,0,0],
                 },
             ] 
