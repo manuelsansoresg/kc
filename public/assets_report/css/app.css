@@ -403,7 +403,7 @@
 @media (max-width: 576px) {
   .animated-title {
     width: 100%;
-    top: 10%;
+    top: 6%;
     transform: translate(0%, -10%);
   }
   .animated-title .h4 {
@@ -416,14 +416,14 @@
     width: 99%;
   }
   .particletext {
-    margin-top: 42px;
+    margin-top: 45px;
   }
   .debt .particletext {
     font-size: calc(1.375rem + 1.5vw) !important;
     font-weight: 500 !important;
   }
   .text-debt-bottom {
-    bottom: -79px !important;
+    bottom: -90px !important;
   }
   .debt #hero-img {
     margin-top: 50%;
