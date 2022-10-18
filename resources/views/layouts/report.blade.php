@@ -147,19 +147,17 @@
 
     <!--:Theme script:-->
     <script src="{{ asset('/assets_report/js/theme.bundle.js') }}"></script>
+    
 
     <!--:Page scripts:-->
     <script src="{{ asset('/assets_report/vendor/node_modules/js/swiper-bundle.min.js') }}"></script>
-    <script
-			  src="https://code.jquery.com/jquery-3.6.1.min.js"
-			  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-			  crossorigin="anonymous"></script>
-		
+    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
-        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-
+    <script src="{{ asset('/js/report_app.js') }}"></script>
+    
     <script>
 
         var inView = false;
@@ -410,9 +408,10 @@
             labels: labels_plazo,
             datasets: [{
                     label: 'Años',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor:   'rgba(255, 99, 132, 0.5)',
+                    backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 205, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(54, 162, 235, 0.5)'],
+                    borderColor:   ['rgba(255, 99, 132, 2)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 205, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(54, 162, 235, 0.5)'],
                     data: [2, 2.5, 3, 3.5, 3],
+                    borderWidth: 2,
 
                 },
 
@@ -510,6 +509,8 @@
                 inViewInteres = false;  
             }
         });
+
+        
     </script>
 
 </body>

@@ -33,10 +33,12 @@ class HomeController extends Controller
     {
         $history = HistoryLog::find($history_id);
         $credit = $history->historyCredit;
+        $financial = $credit->creditFinancial;
         $client = $credit->creditClientPerson;
         $option = 2;
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
-            return view('content_report_debt', compact('client', 'option', 'history_id'));
+            $is_best = false;
+            return view('content_report_debt', compact('client', 'financial', 'option', 'history_id', 'is_best'));
         }
         return view('content_report', compact('client', 'history_id'));
     }

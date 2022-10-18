@@ -69,6 +69,18 @@
   transform: translate(0, -100%);
 }
 
+/* animation confeti */
+.animated-title > div.textcontainer {
+  bottom: -48px;
+}
+
+.text-debt-bottom{
+  bottom: -115px !important;
+}
+
+
+/* animation confeti */
+
 /* mediaquery */
 @media (max-width: 576px) {
     .animated-title {
