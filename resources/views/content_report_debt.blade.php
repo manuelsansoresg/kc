@@ -26,7 +26,7 @@
                                             <div class="text-bottom">
                                                 <div>
                                                     <div class="textcontainer">
-                                                        <span class="particletext confetti h4">FELICIDADES</span>
+                                                        <span class="particletext confetti h1">FELICIDADES</span>
                                                     </div>
                                                     <span class="h4"> Estas son las alternativas a tu crédito actual para ti que laboras en la SEP Yucatán.
                                                     </span>
