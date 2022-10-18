@@ -2,7 +2,7 @@
 
 @section('content')
     <!--::Hero Default::-->
-    <section class="position-relative bg-style-1">
+    <section class="position-relative bg-style-1 debt">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
             <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
             </div>
@@ -13,7 +13,9 @@
                             <div class="row align-items-center">
                                 <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0" data-aos="fade-up"
                                     data-aos-delay="100">
+                                  
                                     <div class="row align-items-center">
+                                        
                                         <div class="animated-title">
                                             <div class="text-top">
                                                 <div>
@@ -23,6 +25,9 @@
                                             </div>
                                             <div class="text-bottom">
                                                 <div>
+                                                    <div class="textcontainer">
+                                                        <span class="particletext confetti h4">FELICIDADES</span>
+                                                    </div>
                                                     <span class="h4"> Estas son las alternativas a tu crédito actual para ti que laboras en la SEP Yucatán.
                                                     </span>
                                                 </div>
