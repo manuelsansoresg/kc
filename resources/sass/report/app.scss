@@ -287,8 +287,15 @@
     }
 
     .particletext {
-      margin-top: 54px;
+      margin-top: 42px;
+      
     }
+
+    .debt .particletext{
+      font-size: calc(1.375rem + 1.5vw) !important;
+      font-weight: 500 !important;
+    }
+
     .text-debt-bottom {
       bottom: -79px !important;
     }
