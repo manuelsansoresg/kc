@@ -87,6 +87,11 @@
                         *Basado en un crédito de $25,000 a 2 años.
 
                     </p>
+
+                    @if ($is_best == false)
+                        <canvas id="chartOption" class="pb-5"></canvas>
+                    @endif
+
                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
                         <a class="btn btn-warning btn-sm hover-lift me-3" href="/features/animations#">
                             @if ($is_best == true)

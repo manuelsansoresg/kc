@@ -138,7 +138,8 @@
                             </svg></a></div>
                
                     </form><small class="text-muted">
-                        © Yalkú Servicios. </small>
+                        © Yalkú Servicios. 
+                    </small>
                 </div>
             </div>
         </div>
@@ -160,9 +161,10 @@
     
     <script>
 
-        var inView = false;
-        var inViewPlazo = false;
+        var inView        = false;
+        var inViewPlazo   = false;
         var inViewInteres = false;
+        var inViewOption   = false;
 
         function isScrolledIntoView(elem)
         {
@@ -470,6 +472,95 @@
                 }
             },
         };
+
+        /* option */
+        const labels_options = [
+            'Financiera 1 (Tu crédito)',
+            'Financiera 2 (Mejor opción)',
+        ];
+
+        const data_options = {
+            labels: labels_options,
+            datasets: [{
+                    label: 'Prestamo',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 0.5)',
+                    data: [20000,20000],
+
+                },
+                {
+                    label: 'Interés',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                    data: [9000, 1000],
+                },
+                {
+                    label: 'Comisión por apertura',
+                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                    borderColor: 'rgba(255, 205, 86, 0.5)',
+                    data: [600, 0],
+                },
+            ] 
+        };
+
+        const config_options = {
+            type: 'bar',
+            data: data_options,
+            options: {
+                responsive: true,
+                animation: {
+                    delay: (context) => {
+                        let delay = 0;
+                        if (context.type === 'data') {
+                            delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                        }
+                        return delay;
+                    },
+                },
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                            display: true,
+                            labels: {
+                                color: "white",
+                                font: {
+                                    weight: 'bold',
+                                },
+                            }
+                        },
+                        title: {
+                            display: false,
+                        },
+                        datalabels: {
+                            display: false,
+                            
+                        },
+                },
+                scales: {
+                    x: {
+            stacked: true,
+            ticks: {
+                color: 'white',
+                font: {
+                    weight: 'bold',
+                },
+                display: true
+            }
+        },
+        y: {
+            stacked: true,
+            ticks: {
+                color: 'white',
+                font: {
+                    weight: 'bold',
+                },
+                
+            }
+        }
+                }
+            },
+        };
+        /* option */
         
         function scrollToAnchor(aid){
             var aTag = $("a[name='"+ aid +"']");
@@ -507,6 +598,17 @@
                 );
             } else {
                 inViewInteres = false;  
+            }
+            
+            if (isScrolledIntoView('#chartOption')) {
+                if (inView) { return; }
+                inViewOption = true;
+                const myChart_option = new Chart(
+                    document.getElementById('chartOption'),
+                    config_options
+                );
+            } else {
+                inViewOption = false;  
             }
         });
 

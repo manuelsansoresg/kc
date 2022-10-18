@@ -38,7 +38,34 @@ class HomeController extends Controller
         $option = 2;
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             $is_best = false;
-            return view('content_report_debt', compact('client', 'financial', 'option', 'history_id', 'is_best'));
+            $chart['Financiera x1'] = array(
+                'prestamo' => 20000,
+                'interes' => 8000,
+                'comision_apertura' => 1000
+            );
+            $chart['Financiera x2'] = array(
+                'prestamo' => 20000,
+                'interes' => 1000,
+                'comision_apertura' => 0
+            );
+            $chart['Financiera x3'] = array(
+                'prestamo' => 20000,
+                'interes' => 9000,
+                'comision_apertura' => 600
+            );
+            $chart['Financiera x4'] = array(
+                'prestamo' => 20000,
+                'interes' => 11000,
+                'comision_apertura' => 0
+            );
+            $chart['Financiera x5'] = array(
+                'prestamo' => 20000,
+                'interes' => 8500,
+                'comision_apertura' => 0
+            );
+
+            $get_chart = $chart[$financial->commercial_name];
+            return view('content_report_debt', compact('client', 'financial', 'get_chart', 'option', 'history_id', 'is_best'));
         }
         return view('content_report', compact('client', 'history_id'));
     }
