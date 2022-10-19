@@ -61,7 +61,7 @@ class AgreementController extends Controller
     {
         $agreement = Agreement::find($id);
         $get_financials = $agreement->financialAgreement;
-        //$financials = '';
+        $financials = array();
         foreach ($get_financials as $financial) {
             $financials[]= $financial->financial_id;
         }
