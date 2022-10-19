@@ -136,7 +136,7 @@ function setData(is_change_origen, is_change_organization) {
             $('#lead-cellphone').val(lead.cellphone); 
             $('#lead-email').val(lead.email); 
 
-            if (financials != null) {
+            /* if (financials != null) {
                 var lead_financial = $('#lead-financial_id');
                 for (const key in result) {
                     const element = result[key];
@@ -144,15 +144,13 @@ function setData(is_change_origen, is_change_organization) {
                     lead_financial.append(option).trigger('change');
                     
                 }
-            }
+            } */
             $('#content-financial').hide();
             if (product_id == 2) {
                 $('#content-financial').show();
             }
-            console.log(lead.channel_id);
             $('#lead-channel').val(lead.channel_id).trigger("change");
             $('#lead-financial_id').val(lead.financial_id).trigger("change");
-            console.log('lead.financial_id');
             $('#lead-temperature-id').val(lead.financial_id).trigger("change");
         })
         .catch(e => {

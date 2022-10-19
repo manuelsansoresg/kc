@@ -1644,16 +1644,15 @@ function setData(is_change_origen, is_change_organization) {
     $('#lead-second_last_name').val(lead.second_last_name);
     $('#lead-cellphone').val(lead.cellphone);
     $('#lead-email').val(lead.email);
-
-    if (financials != null) {
-      var lead_financial = $('#lead-financial_id');
-
-      for (var key in result) {
-        var element = result[key];
-        var option = new Option(element.commercial_name, element.id, true, true);
-        lead_financial.append(option).trigger('change');
-      }
-    }
+    /* if (financials != null) {
+        var lead_financial = $('#lead-financial_id');
+        for (const key in result) {
+            const element = result[key];
+            var option = new Option(element.commercial_name, element.id, true, true);
+            lead_financial.append(option).trigger('change');
+            
+        }
+    } */
 
     $('#content-financial').hide();
 
@@ -1661,10 +1660,8 @@ function setData(is_change_origen, is_change_organization) {
       $('#content-financial').show();
     }
 
-    console.log(lead.channel_id);
     $('#lead-channel').val(lead.channel_id).trigger("change");
     $('#lead-financial_id').val(lead.financial_id).trigger("change");
-    console.log('lead.financial_id');
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
