@@ -64,7 +64,7 @@ class HomeController extends Controller
                 'comision_apertura' => 0
             );
 
-            $get_chart = $chart[$financial->commercial_name];
+            $get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: 'Financiera x1';
             return view('content_report_debt', compact('client', 'financial', 'get_chart', 'option', 'history_id', 'is_best'));
         }
         return view('content_report', compact('client', 'history_id'));
