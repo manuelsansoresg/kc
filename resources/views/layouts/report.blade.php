@@ -161,10 +161,16 @@
     
     <script>
 
-        var inView        = false;
-        var inViewPlazo   = false;
-        var inViewInteres = false;
-        var inViewOption   = false;
+        let inView        = false;
+        let inViewPlazo   = false;
+        let inViewInteres = false;
+        let inViewOption  = false;
+        let titulo        = '{{ trim($financial->commercial_name) }}'
+        let color_financiera1 = (titulo == 'Financiera 1')? '#4B3BB6' : 'white';
+        let color_financiera2 = (titulo == 'Financiera 2')? '#4B3BB6' : 'white';
+        let color_financiera3 = (titulo == 'Financiera 3')? '#4B3BB6' : 'white';
+        let color_financiera4 = (titulo == 'Financiera 4')? '#4B3BB6' : 'white';
+        let color_financiera5 = (titulo == 'Financiera 5')? '#4B3BB6' : 'white';
 
         function isScrolledIntoView(elem)
         {
@@ -274,9 +280,10 @@
                     x: {
                         stacked: true,
                         ticks: {
-                            color: 'white',
+                            color: [color_financiera1, color_financiera2, color_financiera3, color_financiera4, color_financiera5],
                             font: {
                                 weight: 'bold',
+                                size: '13'
                             }
                         }
                     },
@@ -386,9 +393,10 @@
         y: {
             stacked: true,
             ticks: {
-                color: 'white',
+                color: [color_financiera1, color_financiera2, color_financiera3, color_financiera4, color_financiera5],
                 font: {
                     weight: 'bold',
+                    size: '13'
                 },
                 
             }
@@ -462,9 +470,10 @@
                     y: {
                         stacked: true,
                         ticks: {
-                            color: 'white',
+                            color: [color_financiera1, color_financiera2, color_financiera3, color_financiera4, color_financiera5],
                             font: {
                                 weight: 'bold',
+                                size: '13'
                             },
                             
                         }
@@ -474,8 +483,9 @@
         };
 
         /* option */
+       
         const labels_options = [
-            'Financiera 1 (Tu crédito)',
+            titulo+'(Tu crédito)',
             'Financiera 2 (Mejor opción)',
         ];
 
@@ -485,20 +495,23 @@
                     label: 'Prestamo',
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 0.5)',
-                    data: [20000,20000],
+                    data: [{{ $get_chart['prestamo'] }},20000],
+                    borderWidth: 1,
 
                 },
                 {
                     label: 'Interés',
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor: 'rgba(255, 99, 132, 0.5)',
-                    data: [9000, 1000],
+                    borderColor: 'rgba(255, 99, 132, 0.5)', 
+                    data: [{{ $get_chart['interes'] }}, 1000],
+                    borderWidth: 1,
                 },
                 {
                     label: 'Comisión por apertura',
                     backgroundColor: 'rgba(255, 205, 86, 0.5)',
-                    borderColor: 'rgba(255, 205, 86, 0.5)',
-                    data: [600, 0],
+                    borderColor:'rgba(255, 205, 86, 0.5)',
+                    data: [{{ $get_chart['comision_apertura'] }}, 0],
+                    borderWidth: 1,
                 },
             ] 
         };
@@ -525,6 +538,7 @@
                                 color: "white",
                                 font: {
                                     weight: 'bold',
+                                    size: '13'
                                 },
                             }
                         },
@@ -541,6 +555,7 @@
             stacked: true,
             ticks: {
                 color: 'white',
+                
                 font: {
                     weight: 'bold',
                 },
@@ -550,9 +565,11 @@
         y: {
             stacked: true,
             ticks: {
-                color: 'white',
+                color: [color_financiera1, color_financiera2],
+                
                 font: {
                     weight: 'bold',
+                    size: '13'
                 },
                 
             }

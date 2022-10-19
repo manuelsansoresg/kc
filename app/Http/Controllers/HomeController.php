@@ -38,27 +38,27 @@ class HomeController extends Controller
         $option = 2;
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             $is_best = false;
-            $chart['Financiera x1'] = array(
+            $chart['Financiera 1'] = array(
                 'prestamo' => 20000,
                 'interes' => 8000,
                 'comision_apertura' => 1000
             );
-            $chart['Financiera x2'] = array(
+            $chart['Financiera 2'] = array(
                 'prestamo' => 20000,
                 'interes' => 1000,
                 'comision_apertura' => 0
             );
-            $chart['Financiera x3'] = array(
+            $chart['Financiera 3'] = array(
                 'prestamo' => 20000,
                 'interes' => 9000,
                 'comision_apertura' => 600
             );
-            $chart['Financiera x4'] = array(
+            $chart['Financiera 4'] = array(
                 'prestamo' => 20000,
                 'interes' => 11000,
                 'comision_apertura' => 0
             );
-            $chart['Financiera x5'] = array(
+            $chart['Financiera 5'] = array(
                 'prestamo' => 20000,
                 'interes' => 8500,
                 'comision_apertura' => 0
