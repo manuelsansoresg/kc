@@ -78,8 +78,13 @@
                         Puedes renovar tu crédito. Nosotros te apoyamos con el trámite.
                     </h1>
                     @else
+                    @php
+                        $financiera1 = 20000 + 9000 + 600;
+                        $financiera2 = 20000 + 1000 + 0;
+                        $resta = $financiera1 - $financiera2;
+                    @endphp
                     <h1 class="mb-4" data-aos="fade-uh1" data-aos-delay="100">
-                        Si te cambias de crédito; te ahorrarías el equivalente a 500 tacos.
+                        Si te cambias de crédito; te ahorrarías ${{ format_price($resta) }} pesos.
                     </h1>
                     @endif
                     
@@ -89,7 +94,11 @@
                     </p>
 
                     @if ($is_best == false)
-                        <canvas id="chartOption" class="pb-5"></canvas>
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-6">
+                                <canvas id="chartOption" class="pb-5"></canvas>
+                            </div>
+                        </div>
                     @endif
 
                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
