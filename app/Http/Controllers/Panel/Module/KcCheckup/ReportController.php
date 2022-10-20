@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel\Module\KcCheckup;
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\HistoryLog;
+use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
@@ -92,6 +93,8 @@ class ReportController extends Controller
             $credit->applied_financial = $financial_id;
             $credit->update();
             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CHECK_UP);
+            $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
+            (new $notification_add)->send($credit->id);
         }
         return response()->json('ok');
     }
