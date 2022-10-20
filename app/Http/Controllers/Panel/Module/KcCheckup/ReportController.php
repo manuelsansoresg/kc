@@ -73,12 +73,27 @@ class ReportController extends Controller
 
     public function desitionReport($history_id)
     {
-        $history = HistoryLog::find($history_id);
-        $credit = $history->historyCredit;
-        $product = $credit->creditProduct;
-        $client = $credit->creditClientPerson;
-        $model = ($history != null && $history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
-        return view('panel.module.checkup.actions.report.desition', compact('credit', 'product', 'client', 'history_id', 'history', 'model'));
+        $history    = HistoryLog::find($history_id);
+        $credit     = $history->historyCredit;
+        $product    = $credit->creditProduct;
+        $client     = $credit->creditClientPerson;
+        $agreement  = $credit->creditAgreement;
+        $financials = $agreement != null ? $agreement->financialAgreement : null;
+        $model      = ($history != null && $history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
+
+        return view('panel.module.checkup.actions.report.desition', compact('credit', 'product', 'financials', 'client', 'history_id', 'history', 'model'));
+    }
+
+    public function desitionAccept($credit_id, $financial_id)
+    {
+       
+        $credit     = Credit::find($credit_id);
+        if ($credit != null) {
+            $credit->applied_financial = $financial_id;
+            $credit->update();
+            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CHECK_UP);
+        }
+        return response()->json('ok');
     }
 
     /**

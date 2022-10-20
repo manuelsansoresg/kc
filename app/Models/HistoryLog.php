@@ -35,6 +35,8 @@ class HistoryLog extends Model
     const CREDIT_IN_PROGRESS                  = 19;
     
     const NEW_CREDIT_KC_CHECK_UP              = 20;
+
+    const KC_CONTROL_DESK                     = 21;
     
 
     protected $fillable = [
@@ -69,6 +71,7 @@ class HistoryLog extends Model
         18 => 'Rechazado',
         19 => 'En curso',
         20 => 'Nuevo crédito en KC - Check up',
+        20 => 'Entró a KC - Control desk',
     ];
 
     public static $name_model = [

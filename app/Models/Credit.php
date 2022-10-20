@@ -25,6 +25,43 @@ class Credit extends Model
         'current_term',
         'current_principal_balance',//*save  * 100
         'current_total_balance',//*save  * 100
+        'applied_financial',
+        'applied_financial_product',
+        'applied_loan_type',
+        'applied_sign_type',
+        'applied_import',//*save  * 100
+        'applied_term',
+        'applied_periodicity',
+        'applied_payment',//*save  * 100
+        'applied_loan_total_amount',//*save  * 100
+        'applied_delivery_method',
+        'applied_loan_motive',
+        'payment_capacity_period',
+        'payment_capacity',
+        'applied_interest_rate',
+        'applied_CAT',
+        'opening_Commission_percentage',
+        'client_public_servant',
+        'client_public_servant_position',
+        'client_public_servant_period',
+        'relative_public_servant',
+        'relative_public_servant_lastname',
+        'relative_public_servant_second_lastname',
+        'relative_public_servant_names',
+        'relative_public_servant_relationship',
+        'relative_public_servant_position',
+        'relative_public_servant_period',
+        'client_public_servant',
+        'prepad_method',
+        'prepaid_frequency',
+        'prepaid_source',
+        'endorsement',
+        'real_beneficiary',
+        'soruce_provider',
+        'real_propetary',
+        'applied_loan_discount',
+        'statement_delivery_method',
+        'notes',
     ];
 
     public static function listDatatable()

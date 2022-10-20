@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 @section('title', 'Acciones')
+@inject('financial', 'App\Models\Financial')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -65,36 +66,18 @@
                                 <span class="preview-title-lg overline-title">Tramitar crédito con:</span>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3" href="{{ asset('reporte/'.$credit->id ) }}" target="_blank">Financiera 1</a>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3" onclick="copyToClipBoardReport()">Financiera 2</a>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3">Financiera 3</a>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3">Financiera 4</a>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
-                                    </div>
-                                    <div class="col-12 col-md-2">
-                                        <a class="pointer btn btn-primary mt-3">Financiera 5</a>
-                                    </div>
+                                    @if ($financials != null)
+                                        @foreach ($financials as $get_financial)
+                                        @php
+                                            $financial = $get_financial->financial;
+                                        @endphp
+                                        <div class="col-12 col-md-2">
+                                            <a class="pointer btn btn-primary mt-3" onclick="desition({{ $credit->id }}, {{ $financial->id }})" target="_blank">{{ $financial->commercial_name }}</a>
+                                        </div>
+                                        @endforeach
+                                    @endif
+                                   
+                                  
                                     
                                 </div>
                                

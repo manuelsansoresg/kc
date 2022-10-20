@@ -919,6 +919,23 @@ window.modalValidate = function (id, model) {
   })["catch"](function (e) {});
 };
 
+window.desition = function (credit_id, financial_id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/accept").then(function (response) {
+        var reason = response.data;
+        window.location = '/panel/kc-check-up';
+      })["catch"](function (e) {});
+    }
+  });
+};
+
 function getReason(type) {
   $('#modal-reason-id').empty();
   axios.get("/panel/reason/" + type + "/list").then(function (response) {
