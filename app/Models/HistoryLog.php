@@ -77,6 +77,7 @@ class HistoryLog extends Model
     public static $name_model = [
         6 => 'newCredit',
         10 => 'debtCredit',
+        21 => 'debtCredit',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null)

@@ -24,11 +24,14 @@ require('./components/action/datatable');
 require('./components/action/crud');
 require('./components/action/credit');
 require('./components/general');
+
 require('./components/module/datatable');
 require('./components/module/template');
 require('./components/module/kc_check_up/datatable');
 require('./components/module/kc_check_up/action/datatable');
 require('./components/module/kc_check_up/action/datatable_report');
+require('./components/module/kc_control_desk/datatable');
+
 require('./components/action/datatablemodule');
 require('./components/credit/profile/datatable');
 require('./components/credit/product/datatable');

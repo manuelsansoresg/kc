@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Panel\Module\KcCheckup;
+namespace App\Http\Controllers\Panel\Module\KcControlDesk;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\HistoryLog;
-use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
-class KcCheckupController extends Controller
+class KcControlDeskController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,16 +16,14 @@ class KcCheckupController extends Controller
      */
     public function index()
     {
-        return view('panel.module.checkup.list');
+        return view('panel.module.control_desk.list');
     }
 
-   
     public function list()
     {
-        $users = Credit::listDatatable([HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION]);
+        $users = Credit::listDatatable([HistoryLog::KC_CONTROL_DESK]);
         return response()->json(['data' => $users]);
     }
-   
 
     /**
      * Show the form for creating a new resource.
@@ -57,13 +54,7 @@ class KcCheckupController extends Controller
      */
     public function show($id)
     {
-       /*  $history_id = $id;
-        $history = HistoryLog::find($id);
-        $credit = $history->historyCredit;
-        $client = $credit->creditClientPerson;
-        $product = $credit->creditProduct;
-        $model = 'newCredit';
-        return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client', 'model')); */
+        //
     }
 
     /**

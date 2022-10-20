@@ -142,6 +142,10 @@ Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('/report/desition/{credit_id}/{financial_id}/accept', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionAccept'])->middleware('auth');
 });
 
+Route::resource('kc-control-desk', '\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController')->middleware('auth');
+Route::group(['prefix' => 'kc-control-desk'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'list'])->middleware('auth');
+});
 
 
 Route::resource('kc-check-up-debt-reduction', '\App\Http\Controllers\Panel\Module\KcCheckup\DebtReductionController')->middleware('auth');

@@ -930,7 +930,7 @@ window.desition = function (credit_id, financial_id) {
     if (result.value) {
       axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/accept").then(function (response) {
         var reason = response.data;
-        window.location = '/panel/kc-check-up';
+        window.location = '/panel/kc-control-desk';
       })["catch"](function (e) {});
     }
   });
@@ -2128,6 +2128,58 @@ if (document.getElementById('dt-check-up-steps')) {
 
 /***/ }),
 
+/***/ "./resources/js/components/module/kc_control_desk/datatable.js":
+/*!*********************************************************************!*\
+  !*** ./resources/js/components/module/kc_control_desk/datatable.js ***!
+  \*********************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-control-desk', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-control-desk/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/module/template.js":
 /*!****************************************************!*\
   !*** ./resources/js/components/module/template.js ***!
@@ -3276,6 +3328,8 @@ __webpack_require__(/*! ./components/module/kc_check_up/datatable */ "./resource
 __webpack_require__(/*! ./components/module/kc_check_up/action/datatable */ "./resources/js/components/module/kc_check_up/action/datatable.js");
 
 __webpack_require__(/*! ./components/module/kc_check_up/action/datatable_report */ "./resources/js/components/module/kc_check_up/action/datatable_report.js");
+
+__webpack_require__(/*! ./components/module/kc_control_desk/datatable */ "./resources/js/components/module/kc_control_desk/datatable.js");
 
 __webpack_require__(/*! ./components/action/datatablemodule */ "./resources/js/components/action/datatablemodule.js");
 

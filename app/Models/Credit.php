@@ -64,11 +64,11 @@ class Credit extends Model
         'notes',
     ];
 
-    public static function listDatatable()
+    public static function listDatatable($status)
     {
        
         
-        $get_list    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION]);
+        $get_list    = HistoryLog::getByStatus($status);
         
         $users        = array();
         foreach ($get_list as $history) {
@@ -294,6 +294,8 @@ class Credit extends Model
         $routes = array(
             6 => 'newCredit',
             10 => 'debtCredit',
+            21 => '',
+
         );
         return $routes;
     }
