@@ -91,7 +91,7 @@ class ReportController extends Controller
        
         $credit     = Credit::find($credit_id);
         if ($credit != null) {
-            File::updateModel($credit->id, HistoryLog::KC_CONTROL_DESK);
+            File::updateModel($credit->id, HistoryLog::KC_CONTROL_DESK, [HistoryLog::KC_CHECK_UP, HistoryLog::ADD_PROSPECT]);
 
             $credit->applied_financial = $financial_id;
             $credit->update();

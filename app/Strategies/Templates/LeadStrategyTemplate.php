@@ -4,6 +4,7 @@ namespace App\Strategies\Templates;
 
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Strategies\TemplateInterface;
