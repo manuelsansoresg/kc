@@ -117,5 +117,6 @@ return [
     'is_required' => array(
         true => 'Obligatorio',
         false => 'Opcional',
-    )
+    ),
+    
 ];

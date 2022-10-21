@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -44,16 +45,24 @@ class File extends Model
         }
     }
 
-   /*  public function FunctionName(Type $var = null)
-    {
-        # code...
-    } */
-
     public static function getAll($model, $id_rel)
     {
         $files = File::where(['model' => $model, 'id_rel' => $id_rel])->get();
         $view_files = \View::make('panel.action.dropzone_preview', ['files' => $files, 'model' => $model])->render();
         return $view_files;
+    }
+    
+    public static function getByIdRelandModel($id_rel, $models)
+    {
+        //dd($models);
+        $files = File::where(['id_rel' => $id_rel])->whereIn('model', $models)->get();
+        $new_file = array();
+        foreach ($files as $file) {
+            $fileStrategy   = TemplateValues::STRATEGY[HistoryLog::$name_model[$file->model]];
+            $get_file       = (new $fileStrategy)->getFile($file->template_config_id);
+            $new_file[] = array('name_template' => $get_file['name'], 'name' => $file->name);
+        }
+        return $new_file;
     }
 
     public static function getAllTemplate($model, $id_rel)

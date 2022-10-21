@@ -446,6 +446,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $percent;
     }
 
+    public function getFile($template_config_id)
+    {
+        $config = self::configUpload()[$template_config_id];
+        return $config;
+    }
+
     //*TODO: se deshabilito al ser opcional la caja de carga
     public function percentFile($id_rel)
     {
