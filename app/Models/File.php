@@ -21,6 +21,7 @@ class File extends Model
     const MODEL = [
         'lead' => 1,
         'newCredit' => 2,
+        'controlDesk' => 21,
     ];
 
     public static function upload($model, $id_rel, $request, $template_config_id = null)
@@ -80,6 +81,14 @@ class File extends Model
             $get_file = File::find($file->id);
             $get_file->delete();
         }
-        
+    }
+
+    public static function updateModel($id_rel, $model)
+    {
+        $get_files = File::where([
+            'id_rel' => $id_rel,
+            'model' => $model
+        ])->update(['model' => $model]);
+        return $get_files;
     }
 }

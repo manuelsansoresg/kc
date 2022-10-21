@@ -294,7 +294,7 @@ class Credit extends Model
         $routes = array(
             6 => 'newCredit',
             10 => 'debtCredit',
-            21 => '',
+            21 => 'controlDesk',
 
         );
         return $routes;
