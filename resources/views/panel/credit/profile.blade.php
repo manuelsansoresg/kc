@@ -68,6 +68,8 @@
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabActions">Acciónes</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                        href="#tabRequest">Solicitud</a> </li>
+                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabDocs">Docs</a> </li>
                                                 <li class="nav-item nav-item-trigger d-xxl-none">
                                                     <div class="nk-block-head-content align-self-start d-lg-none">
@@ -232,7 +234,54 @@
 
                                                     </table>
                                                 </div>
+                                                <div class="tab-pane" id="tabRequest">
+                                                    <div class="nk-block-head nk-block-head-line">
+                                                        <span class="preview-title-lg overline-title text-primary ">Viabilidad</span>
+                                                    </div>
+                                                    <div class="profile-ud-list">
+                                                        <div class="profile-ud-item">
+                                                            <div class="profile-ud wider">
+                                                                <span class="profile-ud-label">Fecha</span>
+                                                                <span class="profile-ud-value">
+                                                                    {{ $credit !== null ? formatDateNameMonth($credit->payment_capacity_period, false) : null }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-ud-item">
+                                                            <div class="profile-ud wider">
+                                                                <span class="profile-ud-label">Capacidad de pago</span>
+                                                                <span class="profile-ud-value">
+                                                                    {{ $credit !== null ? $credit->payment_capacity : null }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-ud-item">
+                                                            <div class="profile-ud wider">
+                                                                <span class="profile-ud-label">Fecha de nacimiento</span>
+                                                                <span class="profile-ud-value">
+                                                                    {{ $client !== null ? formatDateNameMonth($client->birth_date, false) : null }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-ud-item">
+                                                            <div class="profile-ud wider">
+                                                                <span class="profile-ud-label">Antigüedad laboral</span>
+                                                                <span class="profile-ud-value">
+                                                                    {{ $client !== null ? $client->labor_old : null }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-ud-item">
+                                                            <div class="profile-ud wider">
+                                                                <span class="profile-ud-label">Categoría</span>
+                                                                <span class="profile-ud-value">
+                                                                    {{ $client !== null ? $client->employee_category : null }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
+                                                </div>
                                                 <div class="tab-pane" id="tabDocs">
                                                     <table class="table table-tranx">
                                                         <thead>

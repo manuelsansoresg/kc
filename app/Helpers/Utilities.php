@@ -10,7 +10,7 @@ if (!function_exists('formatDateNameMonth')) {
         $day = substr($format_date, 0, 3);
         $month  = $monhts[substr($format_date, 3, 2)];
         $year_hour           = substr($format_date, 6);
-        $year           = substr($format_date, 6, 4);
+        $year           = substr($format_date, 6, 3);
         
         $new_date =$day.$month.'-'.$year_hour;
 
