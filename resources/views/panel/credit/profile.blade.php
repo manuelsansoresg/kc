@@ -255,30 +255,7 @@
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                        <div class="profile-ud-item">
-                                                            <div class="profile-ud wider">
-                                                                <span class="profile-ud-label">Fecha de nacimiento</span>
-                                                                <span class="profile-ud-value">
-                                                                    {{ $client !== null ? formatDateNameMonth($client->birth_date, false) : null }}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="profile-ud-item">
-                                                            <div class="profile-ud wider">
-                                                                <span class="profile-ud-label">Antigüedad laboral</span>
-                                                                <span class="profile-ud-value">
-                                                                    {{ $client !== null ? $client->labor_old : null }}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="profile-ud-item">
-                                                            <div class="profile-ud wider">
-                                                                <span class="profile-ud-label">Categoría</span>
-                                                                <span class="profile-ud-value">
-                                                                    {{ $client !== null ? $client->employee_category : null }}
-                                                                </span>
-                                                            </div>
-                                                        </div>
+                                                        
                                                     </div>
 
                                                 </div>
