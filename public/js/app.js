@@ -2263,30 +2263,71 @@ $().ready(function () {
       event.preventDefault();
       saveForm('frm-template_debt_credit', 'debtCredit');
     }
+  }); //* save form  control desk step 1
+
+  $("#frm-template_control_desk_step1").validate({
+    rules: {
+      'credit[payment_capacity_period]': {
+        required: true
+      },
+      'credit[payment_capacity]': {
+        required: true
+      },
+      'client_person[birth_date]': {
+        required: true
+      },
+      'client_person[labor_old]': {
+        required: true
+      },
+      'client_person[employee_category]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step1', 'controlDesk');
+    }
   }); //*get data
 
   if (document.getElementById('id_rel')) {
     var id_rel = $('#id_rel').val();
+    var type_form = $('#type_form').val();
 
     if (id_rel != '') {
       axios.get("/panel/action-form/" + id_rel).then(function (response) {
         var result = response.data;
         var credit = result.credit;
         var client = result.client;
-        $('#lead-agreement').val(credit.agreement_id).trigger("change");
-        $('#name').val(client.name);
-        $('#last_name').val(client.last_name);
-        $('#second_last_name').val(client.second_last_name);
-        $('#cellphone').val(client.cellphone);
 
-        if (document.getElementById('current_principal_balance')) {
-          $('#current_payment').val(credit.current_payment / 100);
-          $('#current_periodicity').val(credit.current_periodicity).trigger("change");
-          $('#current_loan').val(credit.current_loan / 100);
-          $('#current_term').val(credit.current_term);
-          $('#current_principal_balance').val(credit.current_principal_balance / 100);
-          $('#current_total_balance').val(credit.current_total_balance / 100);
+        if (type_form == 8) {
+          //checkup
+          $('#lead-agreement').val(credit.agreement_id).trigger("change");
+          $('#name').val(client.name);
+          $('#last_name').val(client.last_name);
+          $('#second_last_name').val(client.second_last_name);
+          $('#cellphone').val(client.cellphone);
         }
+
+        if (type_form == 12) //reduccion
+          {
+            $('#lead-agreement').val(credit.agreement_id).trigger("change");
+            $('#lead-financial_id').val(credit.financial_id).trigger("change");
+            $('#current_payment').val(credit.current_payment / 100);
+            $('#current_periodicity').val(credit.current_periodicity).trigger("change");
+            $('#current_loan').val(credit.current_loan / 100);
+            $('#current_term').val(credit.current_term);
+            $('#current_principal_balance').val(credit.current_principal_balance / 100);
+            $('#current_total_balance').val(credit.current_total_balance / 100);
+          }
+
+        if (type_form == 23) //form kc-desktop step1
+          {
+            $('#payment_capacity_period').val(credit.payment_capacity_period);
+            $('#payment_capacity').val(credit.payment_capacity);
+            $('#birth_date').val(client.birth_date);
+            $('#labor_old').val(client.labor_old);
+            $('#employee_category').val(client.employee_category);
+          }
       })["catch"](function (e) {});
     }
   }

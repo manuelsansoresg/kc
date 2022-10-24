@@ -52,6 +52,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
     public function configForm($id_rel)
     {
         $name_form = 'frm-template_new_credit';
+        $type_form = HistoryLog::KC_CHECK_UP_ACTION_FORM;
         $options_agreement = Agreement::getAllActive();
         $elements = array(
             1 => [
@@ -133,7 +134,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'is_required' => true,
             ],
         );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
 

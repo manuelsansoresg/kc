@@ -71,11 +71,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function configForm($id_rel)
     {
-        $name_form = 'frm-template_new_credit';
-        $options_agreement = Agreement::getAllActive();
+        $name_form = 'frm-template_control_desk_step1';
+        $type_form = HistoryLog::KC_CONTROL_DESK_FORM;
+
         $elements = array(
             1 => [
-                'title_section' => 'Generales',
+                'title_section' => 'Viabilidad',
                 'title' => null,
                 'name_field' => null,
                 'id_field' => null,
@@ -89,61 +90,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             2 => [
                 'title_section' => null,
-                'title' => 'Organización',
-                'name_field' => 'agreement_id',
-                'id_field' => 'lead-agreement',
-                'comment_admin' => ' Empresa donde labora el cliente',
-                'comment_webApp' => ' Empresa donde laboras',
-                'placeholder' => 'Escribe para buscar',
-                'type' => 'select2',
+                'title' => 'Periodo CP',
+                'name_field' => 'credit[payment_capacity_period]',
+                'id_field' => 'payment_capacity_period',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'date',
                 'is_option_array' => false,
-                'options' => $options_agreement,
+                'options' => null,
                 'is_required' => true,
             ],
             3 => [
                 'title_section' => null,
-                'title' => 'Nombres',
-                'name_field' => 'name',
-                'id_field' => 'name',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-            ],
-            4 => [
-                'title_section' => null,
-                'title' => 'Primer apellido',
-                'name_field' => 'last_name',
-                'id_field' => 'last_name',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-            ],
-            5 => [
-                'title_section' => null,
-                'title' => 'Segundo apellido',
-                'name_field' => 'second_last_name',
-                'id_field' => 'second_last_name',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-            ],
-            6 => [
-                'title_section' => null,
-                'title' => 'Celular',
-                'name_field' => 'cellphone',
-                'id_field' => 'cellphone',
+                'title' => 'Capacidad de pago',
+                'name_field' => 'credit[payment_capacity]',
+                'id_field' => 'payment_capacity',
                 'comment_admin' => null,
                 'comment_webApp' => null,
                 'placeholder' => null,
@@ -152,32 +114,62 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => true,
             ],
+            4 => [
+                'title_section' => null,
+                'title' => 'Fecha de nacimiento',
+                'name_field' => 'client_person[birth_date]',
+                'id_field' => 'birth_date',
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => 'date',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+            ],
+            5 => [
+                'title_section' => null,
+                'title' => 'Antigüedad laboral',
+                'name_field' => 'client_person[labor_old]',
+                'id_field' => 'labor_old',
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+            ],
+            6 => [
+                'title_section' => null,
+                'title' => 'Categoría',
+                'name_field' => 'client_person[employee_category]',
+                'id_field' => 'employee_category',
+                'comment_admin' => 'Ej. Base, confianza etc..',
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => 'text',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+            ],
         );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
 
     public function saveForm($request)
     {
-        $id_rel         = $request->id_rel;
-        $agreement_id   = $request->agreement_id;
+        $id_rel               = $request->id_rel;
+        $data_credit          = $request->credit;
+        $data_client_person   = $request->client_person;
 
-        if (isset($request->agreement_id) && $request->agreement_id == 0) { //si es  0 se insertara el nuevo agreement
-            $agreement = new Agreement(['name' => $request->new_agreement, 'status' => 1]);
-            $agreement->save();
-            $agreement_id = $agreement->id;
-        }
-
-        $credit                 = Credit::find($id_rel);
-        $credit->agreement_id   = $agreement_id;
+        $credit               = Credit::find($id_rel);
+        $credit->fill($data_credit);
         $credit->update();
 
-        $client                     = ClientPerson::find($credit->client_person_id);
-        $client->agreement_id       = $agreement_id;
-        $client->name               = $request->name;
-        $client->last_name          = $request->last_name;
-        $client->second_last_name   = $request->second_last_name;
-        $client->cellphone          = $request->cellphone;
+        $client               = ClientPerson::find($credit->client_person_id);
+        $client->fill($data_client_person);
         $client->update();
     }
 
