@@ -236,7 +236,7 @@
                                                 </div>
                                                 <div class="tab-pane" id="tabRequest">
                                                     <div class="nk-block-head nk-block-head-line">
-                                                        <span class="preview-title-lg overline-title text-primary ">Viabilidad</span>
+                                                        <span class="preview-title-lg overline-title text-primary ">Crédito Solicitado</span>
                                                     </div>
                                                     <div class="profile-ud-list">
                                                         <div class="profile-ud-item">

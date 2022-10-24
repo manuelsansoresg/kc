@@ -66,7 +66,7 @@
                                                 <div class="card-inner">
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-line">
-                                                            <span class="preview-title-lg overline-title">General</span>
+                                                            <span class="preview-title-lg overline-title text-primary">General</span>
                                                         </div><!-- .nk-block-head -->
                                                         <div class="profile-ud-list">
                                                             <div class="profile-ud-item">
@@ -104,13 +104,53 @@
                                                             </div>
         
                                                         </div><!-- .profile-ud-list -->
+                                                        
                                                     </div><!-- .nk-block -->
+                                                    
+                                                    <div class="nk-block">
+                                                        <div class="profile-ud-list">
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Fecha de nacimiento</span>
+                                                                    <span class="profile-ud-value">
+                                                                        {{ $client !== null ? formatDateNameMonth($client->birth_date, false) : null }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
                                                     <div class="nk-divider divider md"></div>
                                                     <div class="nk-block">
-                                                        <div class="nk-block-head nk-block-head-sm nk-block-between">
-                                                            <h5 class="title">Notas</h5>
-                                                            {{-- <a href="#" class="link link-sm">+ Add Note</a> --}}
+                                                        <div class="nk-block-head nk-block-head-line">
+                                                            <span class="preview-title-lg overline-title text-primary">LABORAL</span>
                                                         </div><!-- .nk-block-head -->
+                                                        <div class="profile-ud-list">
+                                                           
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Antigüedad laboral</span>
+                                                                    <span class="profile-ud-value">
+                                                                        {{ $client !== null ? $client->labor_old : null }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Categoría</span>
+                                                                    <span class="profile-ud-value">
+                                                                        {{ $client !== null ? $client->employee_category : null }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="nk-block">
+                                                      {{--   <div class="nk-block-head nk-block-head-sm nk-block-between">
+                                                            <h5 class="preview-title-lg overline-title text-primary">Notas</h5>
+                                                            <a href="#" class="link link-sm">+ Add Note</a>
+                                                        </div> --}}
+                                                        <!-- .nk-block-head -->
                                                         {{-- @if ($notes != null)
                                                             @foreach ($notes as $row_note)
                                                                 @php
@@ -231,7 +271,7 @@
                                         </ul>
                                     </div><!-- .card-inner -->
                                     <div class="card-inner">
-                                        <h6 class="overline-title-alt mb-2">Otros</h6>
+                                        <h6 class="overline-title-alt mb-2 text-primary">Otros</h6>
                                         <div class="row g-3 d-none">
                                             <div class="col-6">
                                                 <span class="sub-text">Origen:</span>
@@ -252,7 +292,7 @@
                                         </div>
                                     </div><!-- .card-inner -->
                                     <div class="card-inner">
-                                        <h6 class="overline-title-alt mb-3">Etiquetas  </h6>
+                                        <h6 class="overline-title-alt mb-3 text-primary">Etiquetas  </h6>
                                         <ul class="g-1 d-none">
                                             <li class="btn-group">
                                                 
