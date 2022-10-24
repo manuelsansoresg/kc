@@ -404,26 +404,30 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function percentForm($history)
     {
         $percent = 0;
-        /* $credit     = $history->historyCredit;
+        $credit     = $history->historyCredit;
         $client     = $credit->creditClientPerson;
         
         $total_valid = 0;
-        if ($credit != null && $credit->agreement_id != '' && $client != null && $client->agreement_id != '') {
-            $total_valid = $total_valid + 25;
+        if ($credit != null && $credit->payment_capacity_period != '') {
+            $total_valid = $total_valid + 20;
         }
 
-        if ($client != null && $client->name != null) {
-            $total_valid = $total_valid + 25;
+        if ($credit != null && $credit->payment_capacity != null) {
+            $total_valid = $total_valid + 20;
         }
 
-        if ($client != null && $client->last_name != null) {
-            $total_valid = $total_valid + 25;
+        if ($client != null && $client->birth_date != null) {
+            $total_valid = $total_valid + 20;
         }
 
-        if ($client != null && $client->cellphone != null) {
-            $total_valid = $total_valid + 25;
+        if ($client != null && $client->labor_old != null) {
+            $total_valid = $total_valid + 20;
         }
-        $percent =  (100 / 100) * $total_valid; */
+        
+        if ($client != null && $client->employee_category != null) {
+            $total_valid = $total_valid + 20;
+        }
+        $percent =  (100 / 100) * $total_valid;
         return $percent;
     }
 
