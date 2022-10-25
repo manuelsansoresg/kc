@@ -6,8 +6,10 @@ use App\Models\Agreement;
 use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\File;
+use App\Models\Financial;
 use App\Models\HistoryLog;
 use App\Models\Lead;
+use App\Models\Product;
 use App\Models\User;
 use App\Strategies\TemplateInterface;
 use App\Strategies\Values\SendNotificationsValues;
@@ -71,9 +73,19 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function configForm($id_rel)
     {
+        $step = isset($_GET['step'])? $_GET['step'] : null;
+      
+        if ($step == 1) {
+            return self::configFormStep1($id_rel);
+        } elseif ($step == 2) {
+            return self::configFormstep2($id_rel);
+        }
+    }
+
+    public function configFormStep1($id_rel)
+    {
         $name_form = 'frm-template_control_desk_step1';
         $type_form = HistoryLog::KC_CONTROL_DESK_FORM;
-
         $elements = array(
             1 => [
                 'title_section' => 'Viabilidad',
@@ -87,6 +99,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => null,
+                'is_disabled' => null
             ],
             2 => [
                 'title_section' => null,
@@ -100,6 +113,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             3 => [
                 'title_section' => null,
@@ -113,6 +127,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             4 => [
                 'title_section' => null,
@@ -126,6 +141,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             5 => [
                 'title_section' => null,
@@ -139,6 +155,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             6 => [
                 'title_section' => null,
@@ -152,6 +169,207 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
+            ],
+        );
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        return $list;
+    }
+
+
+    public function configFormstep2($id_rel)
+    {
+        $name_form = 'frm-template_control_desk_step2';
+        $type_form = HistoryLog::KC_CONTROL_DESK_FORM_STEP_2;
+        $financial = Financial::select('id', 'commercial_name as name')->get();
+        $product = Product::select('id', 'alias as name')->get();
+        $loan_type = config('enums.loan_type');
+        $sign_type = config('enums.sign_type');
+        $periodicity = config('enums.periodicity');
+
+        $elements = array(
+            1 => [
+                'title_section' => 'Crédito solicitado',
+                'title' => null,
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => null,
+                'is_disabled' => null
+            ],
+            2 => [
+                'title_section' => null,
+                'title' => 'Financiera',
+                'name_field' => 'credit[applied_financial]',
+                'id_field' => 'applied_financial',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'select2',
+                'is_option_array' => false,
+                'options' => $financial,
+                'is_required' => true,
+                'is_disabled' => 'disabled'
+            ],
+            3 => [
+                'title_section' => null,
+                'title' => 'Producto financiero',
+                'name_field' => 'credit[applied_financial_product]',
+                'id_field' => 'applied_financial_product',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'select2',
+                'is_option_array' => false,
+                'options' => $product,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            4 => [
+                'title_section' => null,
+                'title' => 'Tipo de trámite',
+                'name_field' => 'credit[applied_loan_type]',
+                'id_field' => 'applied_loan_type',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'select2',
+                'is_option_array' => true,
+                'options' => $loan_type,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            5 => [
+                'title_section' => null,
+                'title' => 'Promoción',
+                'name_field' => 'credit[applied_loan_discount]',
+                'id_field' => 'applied_loan_discount',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => null
+            ],
+            
+            6 => [
+                'title_section' => null,
+                'title' => 'Tipo de firma',
+                'name_field' => 'credit[applied_sign_type]',
+                'id_field' => 'applied_sign_type',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'select2',
+                'is_option_array' => true,
+                'options' => $sign_type,
+                'is_required' => false,
+                'is_disabled' => null
+            ],
+            7 => [
+                'title_section' => null,
+                'title' => 'Importe solicitado',
+                'name_field' => 'credit[applied_import]',
+                'id_field' => 'applied_import',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            8 => [
+                'title_section' => null,
+                'title' => 'Plazo solcitado',
+                'name_field' => 'credit[applied_term]',
+                'id_field' => 'applied_term',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            9 => [
+                'title_section' => null,
+                'title' => 'Periodicidad solicitada',
+                'name_field' => 'credit[applied_periodicity]',
+                'id_field' => 'applied_periodicity',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'select2',
+                'is_option_array' => true,
+                'options' => $periodicity,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            10 => [
+                'title_section' => null,
+                'title' => 'Pago solicitado',
+                'name_field' => 'credit[applied_payment]',
+                'id_field' => 'applied_payment',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            11 => [
+                'title_section' => null,
+                'title' => 'Monto total del crédito',
+                'name_field' => 'credit[applied_loan_total_amount]',
+                'id_field' => 'applied_loan_total_amount',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            12 => [
+                'title_section' => null,
+                'title' => 'Tasa de interés',
+                'name_field' => 'credit[applied_interest_rate]',
+                'id_field' => 'applied_interest_rate',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            13 => [
+                'title_section' => null,
+                'title' => 'CAT',
+                'name_field' => 'credit[applied_CAT]',
+                'id_field' => 'applied_CAT',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
             ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -162,20 +380,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     {
         $id_rel               = $request->id_rel;
         $data_credit          = $request->credit;
-        $data_client_person   = $request->client_person;
+        
 
         $credit               = Credit::find($id_rel);
         $credit->fill($data_credit);
         $credit->update();
 
         $client               = ClientPerson::find($credit->client_person_id);
-        $client->fill($data_client_person);
-        $client->update();
+        if ($request->client_person) {
+            $data_client_person   = $request->client_person;
+            $client->fill($data_client_person);
+            $client->update();
+        }
     }
 
     public function listStep($history_id)
     {
         $history            = HistoryLog::find($history_id);
+        
         $credit             = $history->historyCredit;
         $max_hour           = 12;
         $hour               = $credit->created_at;
@@ -199,9 +421,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $color_inf_credit = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
 
-        $option_inf_credit  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
+        $option_inf_credit  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
         if ($status_report == 'En curso') {
-            $option_inf_report  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
+            $option_inf_report  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         }
 
 
@@ -222,18 +444,27 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_inf_credit,
             'options' => $option_inf_credit,
         );
-       /*  $data[] = array(
+        $data[] = array(
             'name' => $view_count_report,
-            'step' => 'Reporte',
+            'step' => 'Características del crédito',
             'status' => $status_report,
             'progress' => $view_percent_report,
             'deadline' => '',
             'options' => $option_inf_report,
-        ); */
+        );
         return $data;
     }
 
     public function listAction($history_id)
+    {
+        $step = isset($_GET['step'])? $_GET['step'] : null;
+        if ($step == 1) {
+            return self::actionStep1($history_id);
+        }
+        return self::actionStep2($history_id);
+    }
+
+    public function actionStep1($history_id)
     {
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
@@ -242,14 +473,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_form   = self::percentForm($history);
         $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $max_hour       = 12;
+        $max_hour       = 6;
         $hour           = $history->created_at;
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role.' - '.$advisor->name.' '.$advisor->last_name;
-        $menu_options   = self::menuOptions($history);
+        $menu_options   = self::menuOptions($history, 1);
         $color_inf_credit = 'success';
 
         $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
@@ -258,8 +489,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
        
 
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -273,6 +504,51 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'advisor' => $name_advisor,
             'options' => $file_option,
         );
+        
+        $data[] = array(
+            'name' => 'Formulario',
+            'status' => $status_form,
+            'deadline' => $view_dead_line_inf_credit,
+            'advisor' => $name_advisor,
+            'options' => $form_option,
+        );
+
+        return $data;
+    }
+    
+    public function actionStep2($history_id)
+    {
+        
+        $history        = HistoryLog::find($history_id);
+        $credit         = $history->historyCredit;
+        $advisor        = $credit->creditAdvisor;
+        $percent_file   = self::percentFile($credit->id);
+        $percent_form   = self::percentForm($history);
+        $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
+        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $max_hour       = 6;
+        $hour           = $history->created_at;
+
+        $user = User::find($advisor->id);
+        $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+
+        $name_advisor   = $role.' - '.$advisor->name.' '.$advisor->last_name;
+        $menu_options   = self::menuOptions($history, 2);
+        $color_inf_credit = 'success';
+
+        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit = $data_deadline['color'];
+        $hour             = $data_deadline['lbl_hour'];
+       
+
+        $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+
+        if ($advisor->id == Auth::user()->id) {
+            $name_advisor = 'Tú';
+        }
+
+        $data = array();
         
         $data[] = array(
             'name' => 'Formulario',
@@ -329,12 +605,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $data;
     }
 
-    public function menuOptions($history)
+    public function menuOptions($history, $step)
     {
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/template/action-document/controlDesk/'.$history->id,
+                    'link' => '/panel/action-form/controlDesk/'.$history->id.'/form?step='.$step,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -342,11 +618,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ),
             'file' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/'.$history->id.'/form',
+                    'link' => '/panel/template/action-document/controlDesk/'.$history->id,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
                 ]
+              
             )
         );
 
@@ -356,17 +633,17 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function menuOptionsStep($history)
     {
         $menu = array(
-            'actions' => array(
+            'actionstep1' => array(
                 [
-                    'link' => '/panel/template/actions/controlDesk/'.$history->id.'/show',
+                    'link' => '/panel/template/actions/controlDesk/'.$history->id.'/show?step=1',
                     'onclick' => '',
                     'name' => 'Lista de acciones',
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
-            'reports' => array(
+            'actionstep2' => array(
                 [
-                    'link' => '/panel/template/report/controlDesk/'.$history->id.'/show',
+                    'link' => '/panel/template/actions/controlDesk/'.$history->id.'/show?step=2',
                     'onclick' => '',
                     'name' => 'Lista de acciones',
                     'icon' => 'icon ni ni-view-list-wd',

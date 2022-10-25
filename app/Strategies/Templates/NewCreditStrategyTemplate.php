@@ -67,6 +67,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => null,
+                'is_disabled' => null
             ],
             2 => [
                 'title_section' => null,
@@ -80,6 +81,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => $options_agreement,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             3 => [
                 'title_section' => null,
@@ -93,6 +95,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             4 => [
                 'title_section' => null,
@@ -106,6 +109,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             5 => [
                 'title_section' => null,
@@ -119,6 +123,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => false,
+                'is_disabled' => null
             ],
             6 => [
                 'title_section' => null,
@@ -132,6 +137,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();

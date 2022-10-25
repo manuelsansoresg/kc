@@ -40,6 +40,8 @@ class HistoryLog extends Model
     const KC_CONTROL_DESK_UPLOAD              = 22;
     const KC_CONTROL_DESK_FORM                = 23;
     
+    const KC_CONTROL_DESK_FORM_STEP_2         = 24;
+    
 
     protected $fillable = [
         'id_rel',
@@ -77,6 +79,7 @@ class HistoryLog extends Model
         21 => 'Control desk',
         22 => 'Carga',
         23 => 'Formulario',
+        24 => 'Formulario',
     ];
 
     public static $name_model = [

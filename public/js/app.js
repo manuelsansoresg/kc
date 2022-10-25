@@ -1961,10 +1961,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 var history_id;
 var model;
+var step;
 
 if (document.getElementById('dt-check-up-actions')) {
   history_id = $('#history_id').val();
   model = $('#model').val();
+  step = $('#step').val();
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1988,7 +1990,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     },
-    ajax: '/panel/template/actions/list/' + model + '/' + history_id + '/show',
+    ajax: '/panel/template/actions/list/' + model + '/' + history_id + '/show?step=' + step,
     columns: [{
       data: 'name'
     }, {
@@ -2287,6 +2289,41 @@ $().ready(function () {
       event.preventDefault();
       saveForm('frm-template_control_desk_step1', 'controlDesk');
     }
+  });
+  $("#frm-template_control_desk_step2").validate({
+    rules: {
+      'credit[applied_financial_product]': {
+        required: true
+      },
+      'credit[applied_loan_type]': {
+        required: true
+      },
+      'credit[applied_import]': {
+        required: true
+      },
+      'credit[applied_term]': {
+        required: true
+      },
+      'credit[applied_periodicity]': {
+        required: true
+      },
+      'credit[applied_payment]': {
+        required: true
+      },
+      'credit[applied_loan_total_amount]': {
+        required: true
+      },
+      'credit[applied_interest_rate]': {
+        required: true
+      },
+      'credit[applied_CAT]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step2', 'controlDesk');
+    }
   }); //*get data
 
   if (document.getElementById('id_rel')) {
@@ -2327,6 +2364,22 @@ $().ready(function () {
             $('#birth_date').val(client.birth_date);
             $('#labor_old').val(client.labor_old);
             $('#employee_category').val(client.employee_category);
+          }
+
+        if (type_form == 24) //form kc-desktop step2
+          {
+            $('#applied_financial').val(credit.applied_financial).trigger("change");
+            $('#applied_financial_product').val(credit.applied_financial_product).trigger("change");
+            $('#applied_loan_type').val(credit.applied_loan_type).trigger("change");
+            $('#applied_loan_discount').val(credit.applied_loan_discount);
+            $('#applied_sign_type').val(credit.applied_sign_type).trigger("change");
+            $('#applied_import').val(credit.applied_import);
+            $('#applied_term').val(credit.applied_term);
+            $('#applied_periodicity').val(credit.applied_periodicity).trigger("change");
+            $('#applied_payment').val(credit.applied_payment);
+            $('#applied_loan_total_amount').val(credit.applied_loan_total_amount);
+            $('#applied_interest_rate').val(credit.applied_interest_rate);
+            $('#applied_CAT').val(credit.applied_CAT);
           }
       })["catch"](function (e) {});
     }

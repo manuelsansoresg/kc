@@ -79,5 +79,6 @@
     </div>
     <input type="hidden" id="history_id" value="{{ $history_id }}">
     <input type="hidden" id="model" value="{{ $model }}">
+    <input type="hidden" id="step" value="{{ isset($_GET['step'])? $_GET['step'] : null }}">
     <input type="hidden" id="refresh-dt" value="dt-lead">
 @endsection

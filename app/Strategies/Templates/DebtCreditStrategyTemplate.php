@@ -68,6 +68,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => null,
+                'is_disabled' => null
             ],
             2 => [
                 'title_section' => null,
@@ -81,6 +82,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => $options_agreement,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             3 => [
                 'title_section' => null,
@@ -94,6 +96,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             4 => [
                 'title_section' => null,
@@ -107,6 +110,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             5 => [
                 'title_section' => null,
@@ -120,6 +124,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             6 => [
                 'title_section' => null,
@@ -133,6 +138,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => false,
+                'is_disabled' => null
             ],
             7 => [
                 'title_section' => null,
@@ -146,6 +152,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
+                'is_disabled' => null
             ],
             8 => [
                 'title_section' => 'Crédito actual',
@@ -159,6 +166,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => null,
+                'is_disabled' => null
             ],
             9 => [
                 'title_section' => null,
@@ -172,6 +180,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => false,
+                'is_disabled' => null
             ],
             10 => [
                 'title_section' => null,
@@ -185,6 +194,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => true,
                 'options' => $option_financials,
                 'is_required' => false,
+                'is_disabled' => null
             ],
             11 => [
                 'title_section' => null,
@@ -198,6 +208,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => false,
+                'is_disabled' => null
             ],
             12 => [
                 'title_section' => null,
@@ -211,6 +222,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => false,
+                'is_disabled' => null
             ],
             13 => [
                 'title_section' => null,
@@ -224,6 +236,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => false,
+                'is_disabled' => null
             ],
             14 => [
                 'title_section' => null,
@@ -237,6 +250,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => false,
+                'is_disabled' => null
             ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();

@@ -118,5 +118,25 @@ return [
         true => 'Obligatorio',
         false => 'Opcional',
     ),
+
+    'loan_type' => array(
+        1 => 'Nuevo',
+        2 => 'Adicional',
+        3 => 'Refinanciamiento',
+        4 => 'Recompra',
+    ),
+    
+    'sign_type' => array(
+        1 => 'Física',
+        2 => 'Digital',
+        
+    ),
+    
+    'periodicity' => array(
+        1 => 'Mensual',
+        2 => 'Quincenal',
+        3 => 'Catorcenal',
+        
+    ),
     
 ];

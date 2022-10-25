@@ -14,7 +14,7 @@
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" name="{{ $element['name_field'] }}"
+                            <input type="text" class="form-control" {{ $element['is_disabled'] }} name="{{ $element['name_field'] }}"
                                 placeholder="{{ $element['placeholder'] }}" id="{{ $element['id_field'] }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
@@ -32,7 +32,7 @@
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
-                            <input type="number" class="form-control" name="{{ $element['name_field'] }}"
+                            <input type="number" class="form-control" {{ $element['is_disabled'] }} name="{{ $element['name_field'] }}"
                                 id="{{ $element['id_field'] }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
@@ -49,7 +49,7 @@
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
-                            <input type="date" class="form-control" name="{{ $element['name_field'] }}"
+                            <input type="date" class="form-control" {{ $element['is_disabled'] }} name="{{ $element['name_field'] }}"
                                 id="{{ $element['id_field'] }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
@@ -71,7 +71,7 @@
                         <label class="form-label"> {{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
 
-                            <select class="form-select js-select2" name="{{ $element['name_field'] }}"
+                            <select class="form-select js-select2" {{ $element['is_disabled'] }} name="{{ $element['name_field'] }}"
                                 id="{{ $element['id_field'] }}" data-search="on">
                                 <option></option>
                                 @if ($options != null && $is_option_array == false)
