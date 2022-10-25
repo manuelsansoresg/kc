@@ -314,10 +314,20 @@ class Credit extends Model
     {
         return $this->belongsTo(Financial::class, 'financial_id');
     }
+   
+    public function creditAppliedFinancial()
+    {
+        return $this->belongsTo(Financial::class, 'applied_financial');
+    }
 
     public function creditProduct()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+    
+    public function creditAppliedProduct()
+    {
+        return $this->belongsTo(Product::class, 'applied_financial_product');
     }
 
     public function creditAdvisor()

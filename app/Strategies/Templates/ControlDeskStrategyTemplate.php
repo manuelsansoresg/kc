@@ -396,24 +396,28 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function listStep($history_id)
     {
-        $history            = HistoryLog::find($history_id);
+        $history              = HistoryLog::find($history_id);
         
-        $credit             = $history->historyCredit;
-        $max_hour           = 12;
-        $hour               = $credit->created_at;
-        $percent_form       = self::percentForm($history);
-        $percent_file       = 100;
-        $color_inf_credit   = 'success';
-        $color_report       = 'success';
-        $option_inf_report  = null;
-        $total_percent      = $percent_file + $percent_form;
+        $credit               = $history->historyCredit;
+        $max_hour             = 12;
+        $hour                 = $credit->created_at;
+        $percent_form         = self::percentForm($history);
+        $percent_form_step2   = self::percentFormStep2($history);
+        $percent_file         = 100;
+        $color_inf_credit     = 'success';
+        $color_report         = 'success';
+        $option_inf_report    = null;
+        $total_percent        = $percent_file + $percent_form;
         //$percent_form = $percent_form;
-        $status_report      = 'En espera';
-        $menu_options       = self::menuOptionsStep($history);
+        $status_report        = 'En espera';
+        $menu_options         = self::menuOptionsStep($history);
+        $status_step2 = 'En espera';
        
         $status_inf_credit = ($percent_form >= 100) ? 'Concluido' : 'En curso';
         //TODO: change validation when the decision action is carried out in the report
-        $status_report = ($percent_form >= 100) ? 'En curso' : 'En espera';
+        if ($status_inf_credit == 'Concluido') {
+            $status_step2 = ($percent_form_step2 >= 100) ? 'Concluido' : 'En espera';
+        }
         
         $total_credit_percent = ($total_percent> 100) ? 100 : 50;
 
@@ -422,12 +426,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $hour             = $data_deadline['lbl_hour'];
 
         $option_inf_credit  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
-        if ($status_report == 'En curso') {
+        if ($status_inf_credit != 'En curso') {
             $option_inf_report  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         }
 
 
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
+        $view_percent_step2    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
 
@@ -447,8 +452,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => $view_count_report,
             'step' => 'Características del crédito',
-            'status' => $status_report,
-            'progress' => $view_percent_report,
+            'status' => $status_step2,
+            'progress' => $view_percent_step2,
             'deadline' => '',
             'options' => $option_inf_report,
         );
@@ -522,11 +527,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
-        $percent_file   = self::percentFile($credit->id);
-        $percent_form   = self::percentForm($history);
-        $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
+        $percent_form   = self::percentFormStep2($history);
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $max_hour       = 6;
+        $max_hour       = 3;
         $hour           = $history->created_at;
 
         $user = User::find($advisor->id);
@@ -703,6 +706,51 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         if ($client != null && $client->employee_category != null) {
             $total_valid = $total_valid + 20;
+        }
+        $percent =  (100 / 100) * $total_valid;
+        return $percent;
+    }
+   
+    public function percentFormStep2($history)
+    {
+        $percent = 0;
+        $credit     = $history->historyCredit;
+        $client     = $credit->creditClientPerson;
+        
+        $total_valid = 0;
+        if ($credit != null && $credit->applied_financial != '') {
+            $total_valid = $total_valid + 10;
+        }
+
+        if ($credit != null && $credit->applied_financial_product != null) {
+            $total_valid = $total_valid + 10;
+        }
+
+        if ($credit != null && $credit->applied_loan_type != null) {
+            $total_valid = $total_valid + 10;
+        }
+
+        if ($credit != null && $credit->applied_import != null) {
+            $total_valid = $total_valid + 10;
+        }
+        
+        if ($credit != null && $credit->applied_term != null) {
+            $total_valid = $total_valid + 10;
+        }
+        if ($credit != null && $credit->applied_periodicity != null) {
+            $total_valid = $total_valid + 10;
+        }
+        if ($credit != null && $credit->applied_payment != null) {
+            $total_valid = $total_valid + 10;
+        }
+        if ($credit != null && $credit->applied_loan_total_amount != null) {
+            $total_valid = $total_valid + 10;
+        }
+        if ($credit != null && $credit->applied_interest_rate != null) {
+            $total_valid = $total_valid + 10;
+        }
+        if ($credit != null && $credit->applied_CAT != null) {
+            $total_valid = $total_valid + 10;
         }
         $percent =  (100 / 100) * $total_valid;
         return $percent;
