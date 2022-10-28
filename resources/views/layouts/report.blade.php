@@ -158,14 +158,117 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="{{ asset('/js/report_app.js') }}"></script>
-    
     <script>
+    let titulo        = ''    
+    </script>
+    @if ($status_id == 10)
+    <script>
+    let titulo        = '{{ trim($financial->commercial_name) }}'
+     const labels_options = [
+            titulo+'(Tu crédito)',
+            'Financiera 2 (Mejor opción)',
+        ];
 
+        const data_options = {
+            labels: labels_options,
+            datasets: [{
+                    label: 'Prestamo',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 0.5)',
+                    data: [{{ $get_chart['prestamo'] }},20000],
+                    borderWidth: 1,
+
+                },
+                {
+                    label: 'Interés',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 0.5)', 
+                    data: [{{ $get_chart['interes'] }}, 1000],
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Comisión por apertura',
+                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                    borderColor:'rgba(255, 205, 86, 0.5)',
+                    data: [{{ $get_chart['comision_apertura'] }}, 0],
+                    borderWidth: 1,
+                },
+            ] 
+        };
+         /* option */
+       
+       
+
+         const config_options = {
+            type: 'bar',
+            data: data_options,
+            options: {
+                responsive: true,
+                animation: {
+                    delay: (context) => {
+                        let delay = 0;
+                        if (context.type === 'data') {
+                            delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                        }
+                        return delay;
+                    },
+                },
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                            display: true,
+                            labels: {
+                                color: "white",
+                                font: {
+                                    weight: 'bold',
+                                    size: '13'
+                                },
+                            }
+                        },
+                        title: {
+                            display: false,
+                        },
+                        datalabels: {
+                            display: false,
+                            
+                        },
+                },
+                scales: {
+                    x: {
+            stacked: true,
+            ticks: {
+                color: 'white',
+                
+                font: {
+                    weight: 'bold',
+                },
+                display: true
+            }
+        },
+        y: {
+            stacked: true,
+            ticks: {
+                color: [color_financiera1, color_financiera2],
+                
+                font: {
+                    weight: 'bold',
+                    size: '13'
+                },
+                
+            }
+        }
+                }
+            },
+        };
+        /* option */
+    </script>
+    @endif
+    <script>
         let inView        = false;
         let inViewPlazo   = false;
         let inViewInteres = false;
         let inViewOption  = false;
-        let titulo        = '{{ trim($financial->commercial_name) }}'
+        
         let color_financiera1 = (titulo == 'Financiera 1')? '#4B3BB6' : 'white';
         let color_financiera2 = (titulo == 'Financiera 2')? '#4B3BB6' : 'white';
         let color_financiera3 = (titulo == 'Financiera 3')? '#4B3BB6' : 'white';
@@ -482,102 +585,7 @@
             },
         };
 
-        /* option */
        
-        const labels_options = [
-            titulo+'(Tu crédito)',
-            'Financiera 2 (Mejor opción)',
-        ];
-
-        const data_options = {
-            labels: labels_options,
-            datasets: [{
-                    label: 'Prestamo',
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 0.5)',
-                    data: [{{ $get_chart['prestamo'] }},20000],
-                    borderWidth: 1,
-
-                },
-                {
-                    label: 'Interés',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor: 'rgba(255, 99, 132, 0.5)', 
-                    data: [{{ $get_chart['interes'] }}, 1000],
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Comisión por apertura',
-                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
-                    borderColor:'rgba(255, 205, 86, 0.5)',
-                    data: [{{ $get_chart['comision_apertura'] }}, 0],
-                    borderWidth: 1,
-                },
-            ] 
-        };
-
-        const config_options = {
-            type: 'bar',
-            data: data_options,
-            options: {
-                responsive: true,
-                animation: {
-                    delay: (context) => {
-                        let delay = 0;
-                        if (context.type === 'data') {
-                            delay = context.dataIndex * 300 + context.datasetIndex * 100;
-                        }
-                        return delay;
-                    },
-                },
-                indexAxis: 'y',
-                plugins: {
-                    legend: {
-                            display: true,
-                            labels: {
-                                color: "white",
-                                font: {
-                                    weight: 'bold',
-                                    size: '13'
-                                },
-                            }
-                        },
-                        title: {
-                            display: false,
-                        },
-                        datalabels: {
-                            display: false,
-                            
-                        },
-                },
-                scales: {
-                    x: {
-            stacked: true,
-            ticks: {
-                color: 'white',
-                
-                font: {
-                    weight: 'bold',
-                },
-                display: true
-            }
-        },
-        y: {
-            stacked: true,
-            ticks: {
-                color: [color_financiera1, color_financiera2],
-                
-                font: {
-                    weight: 'bold',
-                    size: '13'
-                },
-                
-            }
-        }
-                }
-            },
-        };
-        /* option */
         
         function scrollToAnchor(aid){
             var aTag = $("a[name='"+ aid +"']");

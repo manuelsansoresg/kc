@@ -31,11 +31,12 @@ class HomeController extends Controller
 
     public function report($history_id)
     {
-        $history = HistoryLog::find($history_id);
-        $credit = $history->historyCredit;
-        $financial = $credit->creditFinancial;
-        $client = $credit->creditClientPerson;
-        $option = 2;
+        $history    = HistoryLog::find($history_id);
+        $credit     = $history->historyCredit;
+        $financial  = $credit->creditFinancial;
+        $client     = $credit->creditClientPerson;
+        $option     = 2;
+        $status_id  = $history->status_id;
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             $is_best = false;
             $chart['Financiera 1'] = array(
@@ -64,10 +65,10 @@ class HomeController extends Controller
                 'comision_apertura' => 0
             );
 
-            $get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: 'Financiera x1';
-            return view('content_report_debt', compact('client', 'financial', 'get_chart', 'option', 'history_id', 'is_best'));
+            $get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: $chart['Financiera 1'];
+            return view('content_report_debt', compact('client', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id'));
         }
-        return view('content_report', compact('client', 'history_id'));
+        return view('content_report', compact('client', 'history_id', 'status_id'));
     }
 
     public function method($history_id)
