@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Models\CreditReference;
 use App\Models\HistoryLog;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
@@ -20,12 +21,14 @@ class FormController extends Controller
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $history          = HistoryLog::find($history_id);
         $credit           = $history->historyCredit;
-        $form             = (new $actionStrategy)->configForm($credit->id);
+        $form             = (new $actionStrategy)->configForm($credit->id, $history_id);
         $client           = $credit->creditClientPerson;
         $product          = $credit->creditProduct;
         $id_rel           = $credit->id;
         return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'product', 'credit', 'client', 'history'));
     }
+
+   
 
     /**
      * Show the form for creating a new resource.

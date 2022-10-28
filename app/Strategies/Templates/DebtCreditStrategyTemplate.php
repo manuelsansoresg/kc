@@ -49,7 +49,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         return $elements;
     }
 
-    public function configForm($id_rel)
+    public function configForm($id_rel, $history_id = null)
     {
         $name_form = 'frm-template_debt_credit';
         $type_form = HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM;
@@ -253,7 +253,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_disabled' => null
             ],
         );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'name_form' => $name_form, 'history_id' => $history_id, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
 

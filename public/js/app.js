@@ -2179,6 +2179,122 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+/*  reference */
+
+document.addEventListener('DOMContentLoaded', function () {
+  var history_id = $('#history_id').val();
+  var table = NioApp.DataTable('#dt-credit-reference', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/reference/' + history_id + '/list',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'names'
+    }, {
+      data: 'last_name'
+    }, {
+      data: 'second_lastname'
+    }, {
+      data: 'relation'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/module/kc_control_desk/reference.js":
+/*!*********************************************************************!*\
+  !*** ./resources/js/components/module/kc_control_desk/reference.js ***!
+  \*********************************************************************/
+/***/ (() => {
+
+$().ready(function () {
+  $("#frm-credit-reference").validate({
+    rules: {
+      'data_reference[last_name]': {
+        required: true
+      },
+      'data_reference[second_lastname]': {
+        required: true
+      },
+      'data_reference[names]': {
+        required: true
+      },
+      'data_reference[relationship_time_years]': {
+        number: true
+      },
+      'data_reference[relationship_time_months]': {
+        number: true
+      },
+      'data_reference[cel_phone]': {
+        required: true,
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'data_reference[local_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'data_reference[postal_code]': {
+        number: true,
+        minlength: 5,
+        maxlength: 5
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frm-credit-reference");
+      var data = new FormData(new_form);
+      var history_id = $('#history_id').val();
+      var reference_id = $('#reference_id').val();
+      axios.post("/panel/reference/" + history_id + "/storeReference", data).then(function (response) {
+        window.history.back();
+      })["catch"](function (e) {});
+    }
+  });
+
+  window.deleteReference = function (reference_id) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, elimina',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        axios["delete"]("/panel/reference/" + reference_id + "/delete/").then(function (response) {
+          location.reload();
+        })["catch"](function (e) {});
+      }
+    });
+  };
+});
 
 /***/ }),
 
@@ -2324,6 +2440,207 @@ $().ready(function () {
       event.preventDefault();
       saveForm('frm-template_control_desk_step2', 'controlDesk');
     }
+  });
+  $("#frm-template_control_desk_step3_1").validate({
+    rules: {
+      'client_person[sex]': {
+        required: true
+      },
+      'client_person[rfc]': {
+        required: true,
+        minlength: 13,
+        maxlength: 13
+      },
+      'client_person[nationality]': {
+        required: true
+      },
+      'client_person[birth_state]': {
+        required: true
+      },
+      'client_person[curp]': {
+        required: true,
+        minlength: 13,
+        maxlength: 13
+      },
+      'client_person[client_postal_code]': {
+        required: true,
+        number: true,
+        minlength: 5,
+        maxlength: 5
+      },
+      'client_person[client_street]': {
+        required: true
+      },
+      'client_person[client_home_external_number]': {
+        required: true
+      },
+      'client_person[client_home_internal_number]': {
+        required: true
+      },
+      'client_person[client_colony]': {
+        required: true
+      },
+      'client_person[client_city]': {
+        required: true
+      },
+      'client_person[client_state]': {
+        required: true
+      },
+      'client_person[client_country]': {
+        required: true
+      },
+      'client_person[bank_card_number]': {
+        number: true,
+        minlength: 16,
+        maxlength: 16
+      },
+      'client_person[bank_acount_number]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[bank_clabe]': {
+        number: true,
+        minlength: 18,
+        maxlength: 18
+      },
+      'client_person[monthly_income]': {
+        required: true,
+        number: true
+      },
+      'client_person[workplace_postal_code]': {
+        required: true,
+        number: true,
+        minlength: 5,
+        maxlength: 5
+      },
+      'client_person[workplace_street]': {
+        required: true
+      },
+      'client_person[workplace_home_external_number]': {
+        required: true
+      },
+      'client_person[workplace_home_internal_number]': {
+        required: true
+      },
+      'client_person[workplace_colony]': {
+        required: true
+      },
+      'client_person[workplace_city]': {
+        required: true
+      },
+      'client_person[workplace_state]': {
+        required: true
+      },
+      'client_person[workplace_country]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step3_1', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step3_2").validate({
+    rules: {
+      'client_person[marital_status]': {
+        required: true
+      },
+      'client_person[relative_local_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[relative_cel_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[home_time_living]': {
+        number: true
+      },
+      'client_person[propety_ownnership_amount]': {
+        number: true
+      },
+      'client_person[propety_ownnership_value]': {
+        number: true
+      },
+      'client_person[vehicle_ownnership_amount]': {
+        number: true
+      },
+      'client_person[vehicle_ownnership_value]': {
+        number: true
+      },
+      'client_person[economic_dependents]': {
+        number: true
+      },
+      'client_person[aditional_labor_income]': {
+        number: true
+      },
+      'client_person[workplace_local_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[workplace_cel_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[workplace_local_phone_extension]': {
+        number: true
+      },
+      'client_person[bank_card_number]': {
+        number: true,
+        minlength: 16,
+        maxlength: 16
+      },
+      'client_person[bank_acount_number]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[bank_clabe]': {
+        number: true,
+        minlength: 18,
+        maxlength: 18
+      },
+      'client_person[monthly_income]': {
+        required: true,
+        number: true
+      },
+      'client_person[workplace_postal_code]': {
+        required: true,
+        number: true,
+        minlength: 5,
+        maxlength: 5
+      },
+      'client_person[workplace_street]': {
+        required: true
+      },
+      'client_person[workplace_home_external_number]': {
+        required: true
+      },
+      'client_person[workplace_home_internal_number]': {
+        required: true
+      },
+      'client_person[workplace_colony]': {
+        required: true
+      },
+      'client_person[workplace_city]': {
+        required: true
+      },
+      'client_person[workplace_state]': {
+        required: true
+      },
+      'client_person[workplace_country]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step3_2', 'controlDesk');
+    }
   }); //*get data
 
   if (document.getElementById('id_rel')) {
@@ -2381,10 +2698,113 @@ $().ready(function () {
             $('#applied_interest_rate').val(credit.applied_interest_rate);
             $('#applied_CAT').val(credit.applied_CAT);
           }
+
+        if (type_form == 26) //form kc-desktop step3 - 1
+          {
+            $('#work_email').val(client.work_email);
+            $('#sex').val(client.sex).trigger("change");
+            $('#rfc').val(client.rfc);
+            $('#nationality').val(client.nationality);
+            $('#birth_state').val(client.birth_state);
+            $('#curp').val(client.curp);
+            $('#client_postal_code').val(client.client_postal_code);
+            $('#client_street').val(client.client_street);
+            $('#client_home_external_number').val(client.client_home_external_number);
+            $('#client_home_internal_number').val(client.client_home_internal_number);
+            $('#client_colony').val(client.client_colony);
+            $('#client_city').val(client.client_city);
+            $('#client_state').val(client.client_state);
+            $('#client_country').val(client.client_country);
+            $('#bank_name').val(client.bank_name);
+            $('#bank_card_number').val(client.bank_card_number);
+            $('#bank_acount_number').val(client.bank_acount_number);
+            $('#bank_clabe').val(client.bank_clabe);
+            $('#employee_number').val(client.employee_number);
+            $('#monthly_income').val(client.monthly_income);
+            $('#workplace_postal_code').val(client.workplace_postal_code);
+            $('#workplace_street').val(client.workplace_street);
+            $('#workplace_home_external_number').val(client.workplace_home_external_number);
+            $('#workplace_home_internal_number').val(client.workplace_home_internal_number);
+            $('#workplace_colony').val(client.workplace_colony);
+            $('#workplace_city').val(client.workplace_city);
+            $('#workplace_state').val(client.workplace_state);
+            $('#workplace_country').val(client.workplace_country);
+          }
+
+        if (type_form == 27) //form kc-desktop step3 - 2
+          {
+            $('#marital_status').val(client.marital_status).trigger("change");
+            $('#education_level').val(client.education_level).trigger("change");
+            $('#profession').val(client.profession);
+            $('#client_contact_time').val(client.client_contact_time);
+            $('#relative_lastname').val(client.relative_lastname);
+            $('#relative_second_lastname').val(client.relative_second_lastname);
+            $('#relative_names').val(client.relative_names);
+            $('#relative_local_phone').val(client.relative_local_phone);
+            $('#relative_cel_phone').val(client.relative_cel_phone);
+            $('#relative_contact_time').val(client.relative_contact_time);
+            $('#home_type').val(client.home_type).trigger("change");
+            $('#home_time_living').val(client.home_time_living);
+            $('#home_note').val(client.home_note);
+            $('#propety_ownnership_amount').val(client.propety_ownnership_amount);
+            $('#propety_ownnership_value').val(client.propety_ownnership_value);
+            $('#vehicle_ownnership_amount').val(client.vehicle_ownnership_amount);
+            $('#vehicle_ownnership_value').val(client.vehicle_ownnership_value);
+            $('#economic_dependents').val(client.economic_dependents);
+            $('#workplace_name').val(client.workplace_name);
+            $('#admission_date').val(client.admission_date);
+            $('#employee_area').val(client.employee_area);
+            $('#employee_position').val(client.employee_position);
+            $('#aditional_labor_source').val(client.aditional_labor_source);
+            $('#aditional_labor_income').val(client.aditional_labor_income);
+            $('#workplace_local_phone').val(client.workplace_local_phone);
+            $('#workplace_cel_phone').val(client.workplace_cel_phone);
+            $('#workplace_code').val(client.workplace_code);
+            $('#workplace_local_phone_extension').val(client.workplace_local_phone_extension);
+            selectRadio(credit.client_public_servant, 'client_public_servant');
+            $('#client_public_servant_position').val(credit.client_public_servant_position);
+            $('#client_public_servant_period').val(credit.client_public_servant_period);
+            selectRadio(credit.relative_public_servant, 'relative_public_servant');
+            $('#relative_public_servant_lastname').val(credit.relative_public_servant_lastname);
+            $('#relative_public_servant_second_lastname').val(credit.relative_public_servant_second_lastname);
+            $('#relative_public_servant_names').val(credit.relative_public_servant_names);
+            $('#relative_public_servant_relationship').val(credit.relative_public_servant_relationship);
+            $('#relative_public_servant_position').val(credit.relative_public_servant_position);
+            $('#relative_public_servant_period').val(credit.relative_public_servant_period);
+            selectRadio(credit.prepaid, 'prepaid');
+            selectPrepadMethod(credit.prepad_method, 'prepad_method');
+            $('#prepaid_frequency').val(credit.prepaid_frequency);
+            $('#prepaid_source').val(credit.prepaid_source);
+            selectRadio(credit.endorsement, 'endorsement');
+            selectRadio(credit.real_beneficiary, 'real_beneficiary');
+            selectRadio(credit.soruce_provider, 'soruce_provider');
+            selectRadio(credit.real_propetary, 'real_propetary');
+            $('#notes').val(credit.notes);
+          }
       })["catch"](function (e) {});
     }
   }
 });
+
+function selectRadio(val, id) {
+  if (val == 1) {
+    document.querySelector('#' + id + '_1').checked = true;
+  } else {
+    document.querySelector('#' + id + '_2').checked = true;
+  }
+}
+
+function selectPrepadMethod(val, id) {
+  if (val == 1) {
+    document.querySelector('#' + id + '_1').checked = true;
+  } else if (val == 2) {
+    document.querySelector('#' + id + '_2').checked = true;
+  } else if (val == 3) {
+    document.querySelector('#' + id + '_3').checked = true;
+  } else if (val == 4) {
+    document.querySelector('#' + id + '_4').checked = true;
+  }
+}
 
 function saveForm(id_form, model) {
   var new_form = document.getElementById(id_form);
@@ -3424,6 +3844,8 @@ __webpack_require__(/*! ./components/module/kc_check_up/action/datatable */ "./r
 __webpack_require__(/*! ./components/module/kc_check_up/action/datatable_report */ "./resources/js/components/module/kc_check_up/action/datatable_report.js");
 
 __webpack_require__(/*! ./components/module/kc_control_desk/datatable */ "./resources/js/components/module/kc_control_desk/datatable.js");
+
+__webpack_require__(/*! ./components/module/kc_control_desk/reference */ "./resources/js/components/module/kc_control_desk/reference.js");
 
 __webpack_require__(/*! ./components/action/datatablemodule */ "./resources/js/components/action/datatablemodule.js");
 

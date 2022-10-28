@@ -139,4 +139,31 @@ return [
         
     ),
     
+    'sex' => array(
+        1 => 'Hombre',
+        2 => 'Mujer',
+    ),
+   
+    'marital_status' => array(
+        1 => 'Soltero',
+        2 => 'Divorciado',
+        3 => 'Viduo',
+        4 => 'Union libre',
+        5 => 'Otro',
+    ),
+    'education_level' => array(
+        1 => 'Ninguno',
+        2 => 'Primaria',
+        3 => 'Secundaria',
+        4 => 'Preparatoria',
+        5 => 'Licenciatura',
+    ),
+    'home_type' => array(
+        1 => 'Propia',
+        2 => 'Rentada',
+        3 => 'Familiares',
+        4 => 'Hipotecada',
+        5 => 'Otro',
+    ),
+    
 ];

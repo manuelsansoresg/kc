@@ -14,8 +14,28 @@
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" {{ $element['is_disabled'] }} name="{{ $element['name_field'] }}"
-                                placeholder="{{ $element['placeholder'] }}" id="{{ $element['id_field'] }}">
+                            <input type="text" class="form-control" {{ $element['is_disabled'] }}
+                                name="{{ $element['name_field'] }}" placeholder="{{ $element['placeholder'] }}"
+                                id="{{ $element['id_field'] }}">
+                            @if ($element['comment_admin'] != null)
+                                <small>{{ $element['comment_admin'] }}</small>
+                            @endif
+                            @if ($element['comment_webApp'] != null)
+                                <small>{{ $element['comment_webApp'] }}</small>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
+            
+            @if ($element['type'] == 'textarea')
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
+                    <div class="form-group">
+                        <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                        <div class="form-control-wrap">
+                            <textarea type="text" class="form-control" {{ $element['is_disabled'] }}
+                                name="{{ $element['name_field'] }}" placeholder="{{ $element['placeholder'] }}"
+                                id="{{ $element['id_field'] }}"> </textarea>
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
                             @endif
@@ -32,8 +52,8 @@
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
-                            <input type="number" class="form-control" {{ $element['is_disabled'] }} name="{{ $element['name_field'] }}"
-                                id="{{ $element['id_field'] }}">
+                            <input type="number" class="form-control" {{ $element['is_disabled'] }}
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
                             @endif
@@ -49,8 +69,8 @@
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
-                            <input type="date" class="form-control" {{ $element['is_disabled'] }} name="{{ $element['name_field'] }}"
-                                id="{{ $element['id_field'] }}">
+                            <input type="date" class="form-control" {{ $element['is_disabled'] }}
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
                             @endif
@@ -61,6 +81,42 @@
                     </div>
                 </div>
             @endif
+
+            @if ($element['type'] == 'email')
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                        <div class="form-control-wrap">
+                            <input type="email" class="form-control" {{ $element['is_disabled'] }}
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}">
+                            @if ($element['comment_admin'] != null)
+                                <small>{{ $element['comment_admin'] }}</small>
+                            @endif
+                            @if ($element['comment_webApp'] != null)
+                                <small>{{ $element['comment_webApp'] }}</small>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @if ($element['type'] == 'switch')
+                @php
+                    $options_switch = $element['options'];
+                @endphp
+                <div class="col-md-6">
+                    <div class="preview-block"><span class="preview-title form-label">{{ $element['title'] }}</span>
+                        @foreach ($options_switch as $key => $option_switch)
+                            <div class="custom-control custom-radio"><input type="radio" id="{{ $element['id_field'] }}_{{ $key }}"
+                                    name="{{ $element['name_field'] }}" class="custom-control-input" value="{{ $key }}"
+                                    ><label
+                                    class="custom-control-label" for="{{ $element['id_field'] }}_{{ $key }}">{{ $option_switch }}
+                                    &nbsp;</label>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+
             @if ($element['type'] == 'select2')
                 @php
                     $options = $element['options'];
@@ -71,8 +127,8 @@
                         <label class="form-label"> {{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
 
-                            <select class="form-select js-select2" {{ $element['is_disabled'] }} name="{{ $element['name_field'] }}"
-                                id="{{ $element['id_field'] }}" data-search="on">
+                            <select class="form-select js-select2" {{ $element['is_disabled'] }}
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" data-search="on">
                                 <option></option>
                                 @if ($options != null && $is_option_array == false)
                                     @foreach ($options as $option)
@@ -111,11 +167,40 @@
                         </div>
                     @endif
 
+
+
+                </div>
+            @endif
+            @if ($element['title_section'] == 'Referencias')
+                <div class="py-2">
+                    <div class="float-end">
+                        <a href="/panel/reference/controlDesk/{{ $history_id }}/form?step={{ isset($_GET['step']) ? '?step=' . $_GET['step'] : null }}"
+                            class="btn btn-icon btn-primary"><em class="icon ni ni-plus"></em></a>
+                    </div>
+                    <div class="row gy-4 mt-3">
+
+
+
+                        <table id="dt-credit-reference" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido paterno</th>
+                                    <th>Apellido materno</th>
+                                    <th>Relación</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
                 </div>
             @endif
         @endforeach
-        
+
         <input type="hidden" id="type_form" value="{{ $type_form }}">
+        <input type="hidden" id="history_id" value="{{ $history_id }}">
 
         <div class="col-12">
             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">

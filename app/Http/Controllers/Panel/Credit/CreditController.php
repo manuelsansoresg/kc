@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Credit;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Models\CreditReference;
 use App\Models\HistoryLog;
 use App\Strategies\Values\ActionValues;
 use Illuminate\Http\Request;
@@ -39,6 +40,41 @@ class CreditController extends Controller
     public function store(Request $request)
     {
         //
+    }
+
+    public function reference($model, $history_id)
+    {
+        $reference_id = null;
+        return view('panel.credit.reference.form', compact('history_id', 'reference_id'));
+    }
+    
+    public function storeReference($history_id, Request $request)
+    {
+        $history            = HistoryLog::find($history_id);
+        $credit             = $history->historyCredit;
+        $credit_reference   = CreditReference::saveEdit($credit->id, $request);
+        return response()->json($credit_reference);
+    }
+
+    public function listReference($history_id)
+    {
+        $history    = HistoryLog::find($history_id);
+        $credit     = $history->historyCredit;
+        $list       = CreditReference::list($history, $credit->id);
+        return response()->json(['data' => $list]);
+    }
+
+    public function editReference($history_id, $reference_id)
+    {
+        $reference =  CreditReference::find($reference_id);
+        return view('panel.credit.reference.form', compact('history_id', 'reference_id', 'reference'));
+    }
+
+    public function deleteReference($reference_id)
+    {
+        $reference = CreditReference::find($reference_id);
+        $reference->delete();
+        return response()->json($reference);
     }
 
     public function storeTag(Request $request)

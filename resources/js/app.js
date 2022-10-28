@@ -31,6 +31,7 @@ require('./components/module/kc_check_up/datatable');
 require('./components/module/kc_check_up/action/datatable');
 require('./components/module/kc_check_up/action/datatable_report');
 require('./components/module/kc_control_desk/datatable');
+require('./components/module/kc_control_desk/reference');
 
 require('./components/action/datatablemodule');
 require('./components/credit/profile/datatable');

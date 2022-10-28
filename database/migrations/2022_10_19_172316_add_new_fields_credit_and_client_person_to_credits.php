@@ -66,8 +66,8 @@ class AddNewFieldsCreditAndClientPersonToCredits extends Migration
             $table->string('relationship')->nullable();
             $table->integer('relationship_time_years')->nullable();
             $table->integer('relationship_time_months')->nullable();
-            $table->integer('cel_phone')->nullable();
-            $table->integer('local_phone')->nullable();
+            $table->string('cel_phone')->nullable();
+            $table->string('local_phone')->nullable();
             $table->string('contact_time')->nullable();
             $table->integer('postal_code')->nullable();
             $table->string('street')->nullable();
@@ -86,7 +86,7 @@ class AddNewFieldsCreditAndClientPersonToCredits extends Migration
             $table->string('work_email')->nullable()->after('agreement_id');
             $table->date('birth_date')->nullable()->after('work_email');
             $table->smallInteger('sex')->nullable()->after('birth_date');
-            $table->integer('rfc')->nullable()->after('sex');
+            $table->string('rfc')->nullable()->after('sex');
             $table->string('nationality')->nullable()->after('rfc');
             $table->string('birth_state')->nullable()->after('nationality');
             $table->string('curp')->nullable()->after('birth_state');
@@ -98,8 +98,8 @@ class AddNewFieldsCreditAndClientPersonToCredits extends Migration
             $table->string('relative_lastname')->nullable()->after('client_contact_time');
             $table->string('relative_second_lastname')->nullable()->after('relative_lastname');
             $table->string('relative_names')->nullable()->after('relative_second_lastname');
-            $table->integer('relative_local_phone')->nullable()->after('relative_names');
-            $table->integer('relative_cel_phone')->nullable()->after('relative_local_phone');
+            $table->string('relative_local_phone')->nullable()->after('relative_names');
+            $table->string('relative_cel_phone')->nullable()->after('relative_local_phone');
             $table->string('relative_contact_time')->nullable()->after('relative_cel_phone');
 
             $table->integer('client_postal_code')->nullable()->after('relative_contact_time');
@@ -120,9 +120,9 @@ class AddNewFieldsCreditAndClientPersonToCredits extends Migration
             $table->integer('economic_dependents')->nullable()->after('vehicle_ownnership_value');
 
             $table->string('bank_name')->nullable()->after('economic_dependents');
-            $table->integer('bank_card_number')->nullable()->after('bank_name');
-            $table->integer('bank_acount_number')->nullable()->after('bank_card_number');
-            $table->integer('bank_clabe')->nullable()->after('bank_acount_number');
+            $table->string('bank_card_number')->nullable()->after('bank_name');
+            $table->string('bank_acount_number')->nullable()->after('bank_card_number');
+            $table->string('bank_clabe')->nullable()->after('bank_acount_number');
             
            
             $table->string('profession')->nullable()->after('bank_clabe');

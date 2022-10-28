@@ -188,6 +188,17 @@ Route::resource('action-document', '\App\Http\Controllers\Panel\Credit\DocumentC
 
 Route::group(['prefix' => 'action-form'], function () {
     Route::get('{model}/{history_id}/form', ['\App\Http\Controllers\Panel\Module\FormController', 'index'])->middleware('auth');
+    
+    
+
+});
+//*route form add references to credit in control desk step 3_2 
+Route::group(['prefix' => 'reference'], function () {
+    Route::get('{model}/{history_id}/form', ['\App\Http\Controllers\Panel\Credit\CreditController', 'reference'])->middleware('auth');
+    Route::post('{history_id}/storeReference', ['\App\Http\Controllers\Panel\Credit\CreditController', 'storeReference'])->middleware('auth');
+    Route::get('{history_id}/list', ['\App\Http\Controllers\Panel\Credit\CreditController', 'listReference'])->middleware('auth');
+    Route::get('{history_id}/{reference_id}/edit', ['\App\Http\Controllers\Panel\Credit\CreditController', 'editReference'])->middleware('auth');
+    Route::delete('{reference_id}/delete', ['\App\Http\Controllers\Panel\Credit\CreditController', 'deleteReference'])->middleware('auth');
 });
 
 Route::group(['prefix' => 'template'], function () {
