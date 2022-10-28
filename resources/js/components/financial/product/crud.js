@@ -18,7 +18,8 @@ $().ready(function () {
                 .post("/panel/financial-product", data)
                 .then(function (response) {
                     let result = response.data;
-                    window.location = '/panel/financial-product/'+result.id+'/edit';
+                    //window.location = '/panel/financial/'+result.id+'/edit';
+                    window.history.back();
                 })
                 .catch(e => {
                     let response = e.response;

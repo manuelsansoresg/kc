@@ -1373,8 +1373,9 @@ $().ready(function () {
       var new_form = document.getElementById("frm-product-info");
       var data = new FormData(new_form);
       axios.post("/panel/financial-product", data).then(function (response) {
-        var result = response.data;
-        window.location = '/panel/financial-product/' + result.id + '/edit';
+        var result = response.data; //window.location = '/panel/financial/'+result.id+'/edit';
+
+        window.history.back();
       })["catch"](function (e) {
         var response = e.response;
         var data_errors = response.data.errors;
@@ -2289,7 +2290,7 @@ $().ready(function () {
     }).then(function (result) {
       if (result.value) {
         axios["delete"]("/panel/reference/" + reference_id + "/delete/").then(function (response) {
-          location.reload();
+          window.history.back();
         })["catch"](function (e) {});
       }
     });

@@ -63,6 +63,8 @@ class Product extends Model
         return $users;
     }
     
+    
+
     public function catalogProduct()
     {
         return $this->belongsTo(CProduct::class, 'c_product_id');

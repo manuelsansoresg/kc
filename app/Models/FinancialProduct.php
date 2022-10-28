@@ -82,4 +82,10 @@ class FinancialProduct extends Model
         }
         return $financial_product;
     }
+
+    public static function getProductByFinancial($financial_id)
+    {
+        $products = FinancialProduct::where('financial_id', $financial_id)->get();
+        return $products;
+    }
 }

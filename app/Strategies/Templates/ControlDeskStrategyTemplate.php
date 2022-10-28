@@ -7,6 +7,7 @@ use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\File;
 use App\Models\Financial;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Product;
@@ -210,10 +211,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function configFormstep2($id_rel, $history_id)
     {
+        $credit =Credit::find($id_rel);
         $name_form = 'frm-template_control_desk_step2';
         $type_form = HistoryLog::KC_CONTROL_DESK_FORM_STEP_2;
         $financial = Financial::select('id', 'commercial_name as name')->get();
-        $product = Product::select('id', 'alias as name')->get();
+        $product = FinancialProduct::getProductByFinancial($credit->applied_financial);
         $loan_type = config('enums.loan_type');
         $sign_type = config('enums.sign_type');
         $periodicity = config('enums.periodicity');

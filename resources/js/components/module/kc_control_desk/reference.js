@@ -67,7 +67,7 @@ $().ready(function () {
                 axios
                     .delete("/panel/reference/"+reference_id+"/delete/")
                     .then(function (response) {
-                        location.reload();
+                        window.history.back();
                     })
                     .catch(e => {
                     });
