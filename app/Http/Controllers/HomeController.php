@@ -66,7 +66,7 @@ class HomeController extends Controller
             );
 
             $get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: $chart['Financiera 1'];
-            return view('content_report_debt', compact('client', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id'));
+            return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id'));
         }
         return view('content_report', compact('client', 'history_id', 'status_id'));
     }

@@ -52,7 +52,8 @@ $('.select2multiple').select2({
                 }
                 
                 let lead_id = $("#lead_id" ).val();
-                if (lead_id != null) {
+                let history_id = $("#history_id" ).val();
+                if (lead_id != null || history_id != null) {
                     setData(false, false);
                 } else {
                     $('#lead-financial_id').val(null).trigger('change');

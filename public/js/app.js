@@ -1590,7 +1590,9 @@ function getFinancial(lead_id) {
 
       var _lead_id = $("#lead_id").val();
 
-      if (_lead_id != null) {
+      var history_id = $("#history_id").val();
+
+      if (_lead_id != null || history_id != null) {
         setData(false, false);
       } else {
         $('#lead-financial_id').val(null).trigger('change');
@@ -2666,6 +2668,10 @@ $().ready(function () {
         if (type_form == 12) //reduccion
           {
             $('#lead-agreement').val(credit.agreement_id).trigger("change");
+            $('#name').val(client.name);
+            $('#last_name').val(client.last_name);
+            $('#second_last_name').val(client.second_last_name);
+            $('#cellphone').val(client.cellphone);
             $('#lead-financial_id').val(credit.financial_id).trigger("change");
             $('#current_payment').val(credit.current_payment / 100);
             $('#current_periodicity').val(credit.current_periodicity).trigger("change");

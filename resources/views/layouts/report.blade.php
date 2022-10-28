@@ -160,10 +160,10 @@
     <script src="{{ asset('/js/report_app.js') }}"></script>
     <script>
     let titulo        = ''    
+    let titulo        = '{{isset($financial->commercial_name)?trim($financial->commercial_name): 'Financiera 1' }}'
     </script>
     @if ($status_id == 10)
     <script>
-    let titulo        = '{{ trim($financial->commercial_name) }}'
      const labels_options = [
             titulo+'(Tu crédito)',
             'Financiera 2 (Mejor opción)',

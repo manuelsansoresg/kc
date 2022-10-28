@@ -380,6 +380,10 @@ $().ready(function () {
                     if (type_form == 12) //reduccion
                     {
                         $('#lead-agreement').val(credit.agreement_id).trigger("change");
+                        $('#name').val(client.name);
+                        $('#last_name').val(client.last_name);
+                        $('#second_last_name').val(client.second_last_name);
+                        $('#cellphone').val(client.cellphone);
                         $('#lead-financial_id').val(credit.financial_id).trigger("change");
                         $('#current_payment').val(credit.current_payment / 100);
                         $('#current_periodicity').val(credit.current_periodicity).trigger("change");
