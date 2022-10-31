@@ -2644,6 +2644,21 @@ $().ready(function () {
       event.preventDefault();
       saveForm('frm-template_control_desk_step3_2', 'controlDesk');
     }
+  });
+  $("#frm-template_control_desk_step5").validate({
+    rules: {
+      'credit[financial_user_assigned]': {
+        required: true
+      },
+      'credit[commission]': {
+        required: true,
+        number: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step5', 'controlDesk');
+    }
   }); //*get data
 
   if (document.getElementById('id_rel')) {
@@ -2787,6 +2802,13 @@ $().ready(function () {
             selectRadio(credit.soruce_provider, 'soruce_provider');
             selectRadio(credit.real_propetary, 'real_propetary');
             $('#notes').val(credit.notes);
+          }
+
+        if (type_form == 29) //form kc-desktop step 5
+          {
+            $('#financial_user_assigned').val(credit.financial_user_assigned).trigger("change");
+            $('#commission').val(credit.commission);
+            $('#commission_note').val(credit.commission_note);
           }
       })["catch"](function (e) {});
     }

@@ -62,6 +62,9 @@ class Credit extends Model
         'applied_loan_discount',
         'statement_delivery_method',
         'notes',
+        'financial_user_assigned',
+        'commission',//*save  * 100
+        'commission_note',
     ];
 
     public static function listDatatable($status)

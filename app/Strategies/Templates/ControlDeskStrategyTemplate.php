@@ -113,6 +113,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             return self::configFormstep3_2($id_rel, $history_id);
         } elseif ($step == '4') {
             return self::configFormstep4($id_rel, $history_id);
+        } elseif ($step == '5') {
+            return self::configFormstep5($id_rel, $history_id);
         }
     }
 
@@ -1677,6 +1679,86 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
+    public function configFormstep5($id_rel, $history_id)
+    {
+        $name_form        = 'frm-template_control_desk_step5';
+        $type_form        = HistoryLog::KC_CONTROL_DESK_FORM_STEP_5;
+        $credit = Credit::find($id_rel);
+        $user_financials = User::getUserRole('Cliente financiera');
+        $option_user_financial = array();
+        foreach ($user_financials as $user) {
+            $name = $user->name.' '.$user->last_name.' '.$user->second_last_name;
+            $option_user_financial[$user->id] = $name;
+        }
+
+        $elements = array(
+            1 => [
+                'title_section' => 'Asignar usuario financiera',
+                'title' => null,
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => null,
+                'is_disabled' => null
+            ],
+            //*TODO: Verificar la accion al guardar para los nombres de campos
+            2 => [
+                'title_section' => null,
+                'title' => 'Usuario financiera',
+                'name_field' => 'credit[financial_user_assigned]',
+                'id_field' => 'financial_user_assigned',
+                'comment_admin' => 'Selecciona un usuario financiera',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'select2',
+                'is_option_array' => true,
+                'options' => $option_user_financial,
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => null
+            ],
+            3 => [
+                'title_section' => null,
+                'title' => 'Comisión',
+                'name_field' => 'credit[commission]',
+                'id_field' => 'commission',
+                'comment_admin' => ' Indica el importe de la comisión',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => null
+            ],
+            
+            4 => [
+                'title_section' => null,
+                'title' => 'Comentario',
+                'name_field' => 'credit[commission_note]',
+                'id_field' => 'commission_note',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'textarea',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => null,
+                'col' => 'col-12'
+            ],
+            
+        );
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        return $list;
+    }
 
     public function saveForm($request)
     {
@@ -1711,6 +1793,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $percent_form_step3_1   = self::percentFormStep3_1($history); //etapa 3
         $percent_form_step3_2 = self::percentFormStep3_2($history); //etapa 3
+        $percent_form_step5 = self::percentFormStep5($history); //etapa 3
         
         
         $percent_form_step3 = $percent_form_step3_1 + $percent_form_step3_2;
@@ -1728,12 +1811,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $menu_options         = self::menuOptionsStep($history);
         $status_step2         = 'En espera';
         $status_step3         = 'En espera';
+        $status_step5         = 'En espera';
 
         $status_step1 = ($percent_form >= 100) ? 'Concluido' : 'En curso';
         //TODO: change validation when the decision action is carried out in the report
         if ($status_step1 == 'Concluido') {
-            $status_step2 = ($percent_form_step2 >= 100) ? 'Concluido' : 'En espera';
-            $status_step3 = ($percent_form_step3 >= 100) ? 'Concluido' : 'En espera';
+            $status_step2 = ($percent_form_step2 >= 100) ? 'Concluido' : 'En curso';
+            $status_step3 = ($percent_form_step3 >= 100) ? 'Concluido' : 'En curso';
+            $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
         }
 
         $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
@@ -1751,15 +1836,18 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
         
         $option_step4  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
+        $option_step5  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep5']])->render();
 
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
         $view_percent_step2    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
         $view_percent_step3    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step3])->render();
+        $view_percent_step5    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step5])->render();
 
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_step2          = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
         $view_count_step3          = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
-        $view_count_step3          = \View::make('panel.module.view_count', ['number' => 'Cuatro'])->render();
+        $view_count_step4          = \View::make('panel.module.view_count', ['number' => 'Cuatro'])->render();
+        $view_count_step5          = \View::make('panel.module.view_count', ['number' => 'Cinco'])->render();
 
 
         $data = array();
@@ -1790,12 +1878,21 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         );
         
         $data[] = array(
-            'name' => $view_count_step3,
+            'name' => $view_count_step4,
             'step' => 'KYC',
             'status' => 'Opcional',
             'progress' => 'N/A',
             'deadline' => '',
             'options' => $option_step4,
+        );
+        
+        $data[] = array(
+            'name' => $view_count_step5,
+            'step' => 'Asignar usuario financiera',
+            'status' => $status_step5,
+            'progress' => $view_percent_step5,
+            'deadline' => '',
+            'options' => $option_step5,
         );
         return $data;
     }
@@ -1809,6 +1906,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             return self::actionStep3($history_id);
         } elseif ($step == 4) {
             return self::actionStep4($history_id);
+        } elseif ($step == 5) {
+            return self::actionStep5($history_id);
         }
         return self::actionStep1($history_id);
     }
@@ -2000,6 +2099,42 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         return $data;
     }
+    
+    public function actionStep5($history_id)
+    {
+        $history        = HistoryLog::find($history_id);
+        $credit         = $history->historyCredit;
+        $advisor        = $credit->creditAdvisor;
+
+        $user = User::find($advisor->id);
+        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+
+        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        $menu_options   = self::menuOptionsStep5($history);
+
+        $percent_form_step5 = self::percentFormStep5($history); //etapa 3
+        $status_step5         = 'En espera';
+        $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
+
+        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+
+        if ($advisor->id == Auth::user()->id) {
+            $name_advisor = 'Tú';
+        }
+
+        $data = array();
+        
+
+        $data[] = array(
+            'name' => 'Formulario',
+            'status' =>  $status_step5,
+            'deadline' => 'N/A',
+            'advisor' => $name_advisor,
+            'options' => $form_option,
+        );
+
+        return $data;
+    }
 
     public function listStepReport($history_id)
     {
@@ -2118,6 +2253,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         return $menu;
     }
+    
+    public function menuOptionsStep5($history)
+    {
+        $menu = array(
+            'form' => array(
+                [
+                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=5',
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+            ),
+        );
+
+        return $menu;
+    }
 
     public function menuOptionsStep($history)
     {
@@ -2149,6 +2300,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'actionstep4' => array(
                 [
                     'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=4',
+                    'onclick' => '',
+                    'name' => 'Lista de acciones',
+                    'icon' => 'icon ni ni-view-list-wd',
+                ]
+            ),
+            'actionstep5' => array(
+                [
+                    'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=5',
                     'onclick' => '',
                     'name' => 'Lista de acciones',
                     'icon' => 'icon ni ni-view-list-wd',
@@ -2348,6 +2507,19 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $total_valid = 0;
         if ($client != null && $client->marital_status != '') {
+            $total_valid = 100;
+        }
+        $percent =  (100 / 100) * $total_valid;
+        return $percent;
+    }
+    
+    public function percentFormStep5($history)
+    {
+        $percent = 0;
+        $credit     = $history->historyCredit;
+
+        $total_valid = 0;
+        if ($credit != null && $credit->financial_user_assigned != '' && $credit->commission != '') {
             $total_valid = 100;
         }
         $percent =  (100 / 100) * $total_valid;
