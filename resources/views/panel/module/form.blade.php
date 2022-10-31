@@ -5,6 +5,7 @@
         @foreach ($elements as $element)
             @php
                 $indicator_required = $element['is_required'] == true ? '*' : '';
+                $value = isset($element['value'])? $element['value'] : null;
             @endphp
             @if ($element['title_section'] != '')
                 <span class="preview-title-lg overline-title">{{ $element['title_section'] }}</span>
@@ -16,7 +17,7 @@
                         <div class="form-control-wrap">
                             <input type="text" class="form-control" {{ $element['is_disabled'] }}
                                 name="{{ $element['name_field'] }}" placeholder="{{ $element['placeholder'] }}"
-                                id="{{ $element['id_field'] }}">
+                                id="{{ $element['id_field'] }}" value="{{ $value }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
                             @endif

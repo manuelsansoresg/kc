@@ -111,6 +111,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             return self::configFormstep3_1($id_rel, $history_id);
         } elseif ($step == '3_2') {
             return self::configFormstep3_2($id_rel, $history_id);
+        } elseif ($step == '4') {
+            return self::configFormstep4($id_rel, $history_id);
         }
     }
 
@@ -1627,6 +1629,54 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
+    
+    public function configFormstep4($id_rel, $history_id)
+    {
+        $name_form        = 'frm-template_control_desk_step4';
+        $type_form        = HistoryLog::KC_CONTROL_DESK_FORM_STEP_4;
+        $marital_status   = config('enums.marital_status');
+        $education_level  = config('enums.education_level');
+        $home_type        = config('enums.home_type');
+        $option_switch    = array(1 => 'Sí', 2 => 'No');
+        $prepad_method          = array(1 => 'Efectivo', 2 => 'cheque', 3 => 'transferencia', 4 => 'otro');
+        $credit = Credit::find($id_rel);
+        $client_person = $credit->creditClientPerson;
+        $curp = $client_person != null ? $client_person->curp : null;
+        $elements = array(
+            1 => [
+                'title_section' => 'Generales',
+                'title' => null,
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => null,
+                'is_disabled' => null
+            ],
+            2 => [
+                'title_section' => null,
+                'title' => 'Validar CURP',
+                'name_field' => 'client_person[curp]',
+                'id_field' => 'curp',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => $curp
+            ],
+            
+        );
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        return $list;
+    }
 
     public function saveForm($request)
     {
@@ -1661,6 +1711,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $percent_form_step3_1   = self::percentFormStep3_1($history); //etapa 3
         $percent_form_step3_2 = self::percentFormStep3_2($history); //etapa 3
+        
+        
         $percent_form_step3 = $percent_form_step3_1 + $percent_form_step3_2;
         if ($percent_form_step3 == 200) {
             $percent_form_step3 = 100;
@@ -1697,17 +1749,17 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($status_step2 == 'Concluido') {
             $option_step3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
         }
-
+        
+        $option_step4  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
 
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
         $view_percent_step2    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
         $view_percent_step3    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step3])->render();
-        $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
-        $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
 
-        $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => 0])->render();
+        $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_step2          = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
         $view_count_step3          = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
+        $view_count_step3          = \View::make('panel.module.view_count', ['number' => 'Cuatro'])->render();
 
 
         $data = array();
@@ -1716,7 +1768,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'step' => 'Viabilidad',
             'status' => $status_step1,
             'progress' => $view_percent_inf_credit,
-            'deadline' => $view_dead_line_inf_credit,
+            'deadline' => '',
             'options' => $option_inf_credit,
         );
         $data[] = array(
@@ -1736,6 +1788,15 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => '',
             'options' => $option_step3,
         );
+        
+        $data[] = array(
+            'name' => $view_count_step3,
+            'step' => 'KYC',
+            'status' => 'Opcional',
+            'progress' => 'N/A',
+            'deadline' => '',
+            'options' => $option_step4,
+        );
         return $data;
     }
 
@@ -1746,6 +1807,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             return self::actionStep2($history_id);
         } elseif ($step == 3) {
             return self::actionStep3($history_id);
+        } elseif ($step == 4) {
+            return self::actionStep4($history_id);
         }
         return self::actionStep1($history_id);
     }
@@ -1905,6 +1968,38 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         return $data;
     }
+    
+    public function actionStep4($history_id)
+    {
+        $history        = HistoryLog::find($history_id);
+        $credit         = $history->historyCredit;
+        $advisor        = $credit->creditAdvisor;
+
+        $user = User::find($advisor->id);
+        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+
+        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        $menu_options   = self::menuOptionsStep4($history);
+
+        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+
+        if ($advisor->id == Auth::user()->id) {
+            $name_advisor = 'Tú';
+        }
+
+        $data = array();
+        
+
+        $data[] = array(
+            'name' => 'Formulario',
+            'status' =>  'Opcional',
+            'deadline' => 'N/A',
+            'advisor' => $name_advisor,
+            'options' => $form_option,
+        );
+
+        return $data;
+    }
 
     public function listStepReport($history_id)
     {
@@ -2007,6 +2102,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         return $menu;
     }
+    
+    public function menuOptionsStep4($history)
+    {
+        $menu = array(
+            'form' => array(
+                [
+                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=4',
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+            ),
+        );
+
+        return $menu;
+    }
 
     public function menuOptionsStep($history)
     {
@@ -2030,6 +2141,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'actionstep3' => array(
                 [
                     'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=3',
+                    'onclick' => '',
+                    'name' => 'Lista de acciones',
+                    'icon' => 'icon ni ni-view-list-wd',
+                ]
+            ),
+            'actionstep4' => array(
+                [
+                    'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=4',
                     'onclick' => '',
                     'name' => 'Lista de acciones',
                     'icon' => 'icon ni ni-view-list-wd',
