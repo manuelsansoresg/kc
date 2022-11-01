@@ -65,7 +65,8 @@ if (document.getElementById('action-model')) {
   //* get data saved 
   var getData = function getData() {
     clearPreviewFiles();
-    axios.get("/panel/files/template/" + model + "/" + id_rel + "/show").then(function (response) {
+    var step = $('#step').val();
+    axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
       var result = response.data;
       var files = result.files;
       var file_dates = result.file_date;
@@ -87,7 +88,8 @@ if (document.getElementById('action-model')) {
   };
 
   var clearPreviewFiles = function clearPreviewFiles() {
-    axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config').then(function (response) {
+    var step = $('#step').val();
+    axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
       var result = response.data;
       var config_files = result.config_files;
 
@@ -103,13 +105,14 @@ if (document.getElementById('action-model')) {
 
   var model = $('#action-model').val();
   var id_rel = $('#action-id_rel').val();
+  var step = $('#step').val();
 
   if (model == '') {
     model = null;
   } //*get configuration in template
 
 
-  axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config').then(function (response) {
+  axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
     var result = response.data;
     var config_files = result.config_files;
 

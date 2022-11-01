@@ -82,15 +82,16 @@ window.deleteTag = function (tag_id) {
 
 if (document.getElementById('action-model')) {
 
-    let model = $('#action-model').val();
-    let id_rel = $('#action-id_rel').val();
+    let model   = $('#action-model').val();
+    let id_rel  = $('#action-id_rel').val();
+    let step    = $('#step').val();
 
     if (model == '') {
         model = null;
     }
     //*get configuration in template
     axios
-        .get("/panel/files/images/" + model + '/' + id_rel + '/get/config')
+        .get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step='+step)
         .then(function (response) {
             let result = response.data;
             let config_files = result.config_files;
@@ -144,8 +145,9 @@ if (document.getElementById('action-model')) {
     //* get data saved 
     function getData() {
         clearPreviewFiles();
+        let step    = $('#step').val();
         axios
-            .get("/panel/files/template/" + model + "/" + id_rel + "/show")
+            .get("/panel/files/template/" + model + "/" + id_rel + "/show?step="+step)
             .then(function (response) {
                 let result = response.data;
                 let files = result.files;
@@ -172,8 +174,9 @@ if (document.getElementById('action-model')) {
     }
 
     function clearPreviewFiles() {
+        let step    = $('#step').val();
         axios
-            .get("/panel/files/images/" + model + '/' + id_rel + '/get/config')
+            .get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step='+step)
             .then(function (response) {
                 let result = response.data;
                 let config_files = result.config_files;

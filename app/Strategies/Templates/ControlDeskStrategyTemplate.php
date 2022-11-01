@@ -1803,11 +1803,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_form_step3_2 = self::percentFormStep3_2($history); //etapa 3
         $percent_form_step5 = self::percentFormStep5($history); //etapa 5
         
+        $new_step3_1 = $percent_form_step3_1 == 100 ? 50 : 0;
+        $new_step3_2 = $percent_form_step3_2 == 100 ? 50 : 0;
         
-        $percent_form_step3 = $percent_form_step3_1 + $percent_form_step3_2;
-        if ($percent_form_step3 == 200) {
-            $percent_form_step3 = 100;
-        }
+        $percent_form_step3 = $new_step3_1 + $new_step3_2;
 
         $percent_file         = 100;
         $color_inf_credit     = 'success';
