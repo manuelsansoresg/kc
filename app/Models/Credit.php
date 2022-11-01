@@ -333,6 +333,11 @@ class Credit extends Model
     {
         return $this->belongsTo(Product::class, 'applied_financial_product');
     }
+   
+    public function creditUserFinancial()
+    {
+        return $this->belongsTo(User::class, 'financial_user_assigned');
+    }
 
     public function creditAdvisor()
     {

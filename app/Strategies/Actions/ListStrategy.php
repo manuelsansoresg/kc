@@ -31,6 +31,16 @@ class ListStrategy implements ActionInterface
                 HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
                 HistoryLog::KC_CHECK_UP_ACTION_DESITION,
                 HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
+
+                HistoryLog::KC_CONTROL_DESK_UPLOAD,
+                HistoryLog::KC_CONTROL_DESK_FORM,
+                HistoryLog::KC_CONTROL_DESK_FORM_STEP_2,
+                HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1,
+                HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
+                HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
+                HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
+                HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
+
             ];
         }
 

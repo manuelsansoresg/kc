@@ -96,7 +96,7 @@ class ReportController extends Controller
             $credit->applied_financial = $financial_id;
             $credit->update();
             
-            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CHECK_UP);
+            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CONTROL_DESK);
             $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
             (new $notification_add)->send($credit->id);
         }

@@ -201,7 +201,7 @@
         @endforeach
 
         <input type="hidden" id="type_form" value="{{ $type_form }}">
-        <input type="hidden" id="history_id" value="{{ $history_id }}">
+        <input type="hidden" id="history_id" name="history_id" value="{{ $history_id }}">
 
         <div class="col-12">
             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">

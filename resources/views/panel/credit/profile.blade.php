@@ -76,6 +76,8 @@
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabRequest">Solicitud</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                        href="#tabComision">Comisión</a> </li>
+                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabDocs">Docs</a> </li>
                                                 <li class="nav-item nav-item-trigger d-xxl-none">
                                                     <div class="nk-block-head-content align-self-start d-lg-none">
@@ -290,7 +292,7 @@
                                                             <div class="profile-ud wider">
                                                                 <span class="profile-ud-label">Promoción</span>
                                                                 <span class="profile-ud-value">
-                                                                    {{ $credit !== null ? $product_applied->applied_loan_discount : null }}
+                                                                    {{ $credit !== null ? $credit->applied_loan_discount : null }}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -368,6 +370,42 @@
                                                         
                                                     </div>
 
+                                                </div>
+                                                <div class="tab-pane" id="tabComision">
+                                                    <div class="nk-block-head nk-block-head-line">
+                                                        <span class="preview-title-lg overline-title text-primary ">Crédito Solicitado</span>
+                                                    </div>
+                                                    <div class="profile-ud-list">
+                                                        <div class="profile-ud-item">
+                                                            @php
+                                                                $user_financial = $credit->creditUserFinancial;
+                                                                $name = $user_financial != null ? $user_financial->name.' '.$user_financial->last_name.' '.$user_financial->second_last_name :  null;
+                                                            @endphp
+                                                            <div class="profile-ud wider">
+                                                                <span class="profile-ud-label">Usuario financiera</span>
+                                                                <span class="profile-ud-value">
+                                                                    {{ $name }}
+                                                                </span>
+                                                            </div>
+                                                          
+                                                        </div>
+                                                        <div class="profile-ud-item">
+                                                            <div class="profile-ud wider">
+                                                                <span class="profile-ud-label">Comisión</span>
+                                                                <span class="profile-ud-value">
+                                                                    {{ $credit != null ? $credit->commission : null }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-ud-item">
+                                                            <div class="profile-ud wider">
+                                                                <span class="profile-ud-label">Comentario</span>
+                                                                <span class="profile-ud-value">
+                                                                    {{ $credit != null ? $credit->commission_note : null }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="tab-pane" id="tabDocs">
                                                     <table class="table table-tranx">

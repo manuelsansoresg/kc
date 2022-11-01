@@ -27,10 +27,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function configUpload()
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
-        if ($step == 1) {
-            return self::uploadStep1();
+        if ($step == 3) {
+            return self::uploadStep3();
         }
-        return self::uploadStep3();
+        return self::uploadStep1();
     }
 
     public function uploadStep1()
@@ -1762,8 +1762,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function saveForm($request)
     {
-        $id_rel               = $request->id_rel;
-        $credit               = Credit::find($id_rel);
+        $id_rel   = $request->id_rel;
+        $credit   = Credit::find($id_rel);
+        $history  = HistoryLog::find($request->history_id);
 
         if ($request->credit) {
             $data_credit = $request->credit;
@@ -1777,6 +1778,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $client->fill($data_client_person);
             $client->update();
         }
+        if ($history != null) {
+            $percent_form_step5 = self::percentFormStep5($history);
+            if ($percent_form_step5 == 100) {
+                HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK);
+            }
+        }
+        
     }
 
     public function listStep($history_id)
@@ -1793,7 +1801,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $percent_form_step3_1   = self::percentFormStep3_1($history); //etapa 3
         $percent_form_step3_2 = self::percentFormStep3_2($history); //etapa 3
-        $percent_form_step5 = self::percentFormStep5($history); //etapa 3
+        $percent_form_step5 = self::percentFormStep5($history); //etapa 5
         
         
         $percent_form_step3 = $percent_form_step3_1 + $percent_form_step3_2;
@@ -1806,6 +1814,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $color_report         = 'success';
         $option_step2         = null;
         $option_step3         = null;
+        $option_step4         = null;
+        $option_step5         = null;
         $total_percent        = $percent_file + $percent_form;
         //$percent_form = $percent_form;
         $menu_options         = self::menuOptionsStep($history);
@@ -1834,9 +1844,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($status_step2 == 'Concluido') {
             $option_step3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
         }
+       
+        if ($status_step3 == 'Concluido') {
+            $option_step4  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
+            $option_step5  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep5']])->render();
+        }
         
-        $option_step4  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
-        $option_step5  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep5']])->render();
 
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
         $view_percent_step2    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
