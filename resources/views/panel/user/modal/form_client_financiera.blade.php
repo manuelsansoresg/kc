@@ -101,17 +101,7 @@
                                             encuentra registrado.</span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group"><label class="form-label">Status</label>
-                                        <div class="form-control-select">
-                                            <select name="status" class="form-control" id="status">
-                                                <option value="">Selecciona una opción</option>
-                                                <option value="1">Activo</option>
-                                                <option value="0">Inactivo</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+                               
                                 <div class="col-md-6" id="content-password" style="display: none">
                                     <div class="form-group">
                                         <label class="form-label" for="frm-user-admin-pass">*Contraseña</label>

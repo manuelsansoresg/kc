@@ -3371,7 +3371,17 @@ window.modalUser = function (type, user_id) {
     $('#user_id').val(null);
     $('#type_user').val(route_datatable);
   } else {
-    $('#user-admin-title').html('Editar usuario ' + route_datatable);
+    var lbluser = route_datatable;
+
+    if (route_datatable == 'cliente-financiera') {
+      lbluser = 'cliente financiera';
+    }
+
+    if (route_datatable == 'cliente-persona') {
+      lbluser = 'cliente persona';
+    }
+
+    $('#user-admin-title').html('Editar usuario ' + lbluser);
     $('#content-pass_confirm').hide();
     $('#content-password').hide();
     $('#user_id').val(user_id);
