@@ -932,8 +932,7 @@ window.desition = function (credit_id, financial_id) {
   }).then(function (result) {
     if (result.value) {
       axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/accept").then(function (response) {
-        var reason = response.data;
-        window.location = '/panel/kc-control-desk';
+        var reason = response.data; //window.location = '/panel/kc-control-desk';
       })["catch"](function (e) {});
     }
   });

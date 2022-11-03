@@ -89,7 +89,7 @@ window.desition = function(credit_id, financial_id) {
             .get("/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+"/accept")
             .then(function (response) {
                 let reason = response.data;
-                window.location = '/panel/kc-control-desk';
+                //window.location = '/panel/kc-control-desk';
             })
             .catch(e => {
                 

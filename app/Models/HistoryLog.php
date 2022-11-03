@@ -45,6 +45,7 @@ class HistoryLog extends Model
     const KC_CONTROL_DESK_UPLOAD_3_1          = 25;
     const KC_CONTROL_DESK_FORM_STEP_3_1       = 26;
     const KC_CONTROL_DESK_FORM_STEP_3_2       = 27;
+    
     const KC_CONTROL_DESK_FORM_STEP_4         = 28;
     const KC_CONTROL_DESK_FORM_STEP_5         = 29;
     
@@ -85,21 +86,38 @@ class HistoryLog extends Model
         20 => 'Nuevo crédito en KC - Check up',
         20 => 'Entró a KC - Control desk',
         21 => 'Control desk',
-        22 => 'Carga',
-        23 => 'Formulario',
-        24 => 'Formulario',
-        25 => 'Carga',
-        26 => 'Formulario',
-        27 => 'Formulario',
-        28 => 'Formulario',
-        29 => 'Formulario',
+        22 => 'Carga (etapa1)',
+        23 => 'Formulario (etapa1)',
+        24 => 'Formulario (etapa 2)',
+        25 => 'Carga (etapa 3)',
+        26 => 'Formulario (etapa 3)',
+        27 => 'Formulario (etapa 3)',
+        28 => 'Formulario (etapa 4)',
+        29 => 'Formulario (etapa 5)',
         30 => 'Entró a KC - Delivery',
     ];
 
     public static $name_model = [
         6 => 'newCredit',
+        7 => 'newCredit',
+        8 => 'newCredit',
+        9 => 'newCredit',
         10 => 'debtCredit',
+        11 => 'debtCredit',
+        12 => 'debtCredit',
+        13 => 'debtCredit',
+        14 => 'debtCredit',
+        15 => 'debtCredit',
         21 => 'controlDesk',
+        22 => 'controlDesk',
+        23 => 'controlDesk',
+        24 => 'controlDesk',
+        25 => 'controlDesk',
+        26 => 'controlDesk',
+        27 => 'controlDesk',
+        28 => 'controlDesk',
+        29 => 'controlDesk',
+        30 => 'controlDesk',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $is_subprocess = false)
@@ -111,7 +129,6 @@ class HistoryLog extends Model
         $data['id_rel']           = $id_rel;
         $data['status_id']        = $status_id;
         $data['old_status_id']    = $old_status_id;
-        
         $get_status = HistoryLog::where($data)->first();
 
         self::removeInProgress($id_rel, $status_id);
@@ -128,6 +145,7 @@ class HistoryLog extends Model
             $get_old_status->update(['status' => 0]);
         }
         //* if new status and old status don't exist create status
+        
         if ($get_status === null) {
             $data['user_id']    = Auth::user()->id;
             $history = new HistoryLog($data);
@@ -141,14 +159,14 @@ class HistoryLog extends Model
     public function subHistories($id_rel, $status_id, $old_status_id)
     {
         if ($status_id == HistoryLog::KC_CONTROL_DESK) {
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD, $old_status_id);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM, $old_status_id);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $old_status_id);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, $old_status_id);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, $old_status_id);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, $old_status_id);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $old_status_id);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $old_status_id);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD, HistoryLog::KC_CONTROL_DESK_UPLOAD);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5);
         }
     }
 

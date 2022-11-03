@@ -34,34 +34,35 @@ class ListStrategy implements ActionInterface
 
                 HistoryLog::KC_CONTROL_DESK_UPLOAD,
                 HistoryLog::KC_CONTROL_DESK_FORM,
+
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_2,
-                HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1,
+
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
+                
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
-
             ];
         }
 
         $history_logs = HistoryLog::getByStatus($list_actions, $id_rel);
 
         $data = array();
-        
+        $array_model = array('newCredit' => 'KC- Check up', 'debtCredit' => 'KC- Check up', 'controlDesk' => 'KC- Control desk');
+
         foreach ($history_logs as $history_log) {
             //*saber si el usuario es admin
-            $is_admin   = Auth::user()->hasRole('Administrador');
-            $is_adviser = Auth::user()->hasRole('Asesor');
+            $is_admin       = Auth::user()->hasRole('Administrador');
+            $is_adviser     = Auth::user()->hasRole('Asesor');
             $credit         = $history_log->historyCredit;
             $client         = $credit->creditClientPerson;
             $advisor        = $credit->creditAdvisor;
-            $module         = ($history_log->status_id == 8 || $history_log->status_id == 12 || $history_log->status_id == 14 || $history_log->status_id == 15) ? 'KC- Check up' : '';
+            $model          = HistoryLog::$name_model[$history_log->status_id];
+            $module         = $array_model[$model];
             $name           = $credit->id.' '.$client->last_name.' '.$client->second_last_name.' '.$client->name;
             $name_advisor   = $advisor->name.' '.$advisor->last_name;
             $max_hour       = 12;
             $hour           = $credit->created_at;
-            $model = ($history_log->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
-
+            
             $templateStrategy   = TemplateValues::STRATEGY[$model];
             $menu_options   = (new $templateStrategy)->menuOptions($history_log);
             
@@ -81,30 +82,72 @@ class ListStrategy implements ActionInterface
             }
             $color_inf_credit = '';
             //TODO: change when the decision develops 
-            if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM) {
-                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-            }
+            $status_form                  = $percent_form == 100 ? 'Concluido' : 'En curso';
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+
+           /*  if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM) {
+            } */
 
             if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_DESITION || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION) {
-                $status_form = 'En curso';
-                $percent_form = 0;
+                $status_form =  $credit->applied_financial != '' ? 'Concluido' : 'En curso';
+                $percent_form = $credit->applied_financial != '' ? 100 : 0;
                 $menu_options   = (new $templateStrategy)->menuOptionReportStep($history_log);
                 $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
             }
 
-            $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-            $color_inf_credit = $data_deadline['color'];
-            $hour             = $data_deadline['lbl_hour'];
+            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_UPLOAD) {
+                $percent_form   = (new $templateStrategy)->percentFile($credit->id);
+                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineUploadStep1($history_log);
+            }
+            
+            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM) {
+                $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep1($history_log);
+            }
+            
+            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_2) {
+                $percent_form   = (new $templateStrategy)->percentFormStep2($history_log);
+                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+                $menu_options   = (new $templateStrategy)->menuOptions($history_log, 2);
+                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep2($history_log);
+            }
 
+            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1) {
+                $percent_form   = (new $templateStrategy)->percentFormStep3_1($history_log);
+                $menu_options   = (new $templateStrategy)->menuOptionsStep3($history_log);
+                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+                $form_option    = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep3($history_log);
+            }
            
-
-            $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2) {
+                $percent_form   = (new $templateStrategy)->percentFormStep3_2($history_log);
+                $menu_options   = (new $templateStrategy)->menuOptionsStep3($history_log);
+                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+                $form_option    = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
+                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep3($history_log);
+            }
+            
+            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_5) {
+                $percent_form   = (new $templateStrategy)->percentFormStep5($history_log);
+                $menu_options   = (new $templateStrategy)->menuOptionsStep5($history_log);
+                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+                $form_option    = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+                $view_dead_line_inf_credit =  'N/A';
+            }
+           
+            
            
 
             $option = ($history_log->status_id == 7) ? $file_option : $form_option;
 
             //TODO:  si eres admin o asesor debes poder ver todos y si no solo puedes ver los tuyos como responsable revisar cual campo sera el responsable
-
+            
             if ($is_admin) {
                 if ($name_status == 'completed' && ($percent_form == 100)) {
                     $data[] = array(

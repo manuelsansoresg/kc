@@ -20,6 +20,10 @@ use stdClass;
 
 class ControlDeskStrategyTemplate implements TemplateInterface
 {
+    const HOUR_STEP_1  = 6;
+    const HOUR_STEP_2  = 3;
+    const HOUR_STEP_3  = 6;
+
     public function move($id)
     {
     }
@@ -1924,6 +1928,33 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return self::actionStep1($history_id);
     }
 
+    public function deadLineUploadStep1($history)
+    {
+        $credit         = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_form                 = self::percentFile($credit->id);
+        $max_hour                     = self::HOUR_STEP_1;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
+    }
+    
+    public function deadLineStep1($history)
+    {
+        $color_inf_credit             = 'success';
+        $percent_form                 = self::percentForm($history);
+        $max_hour                     = self::HOUR_STEP_1;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
+    }
+
     public function actionStep1($history_id)
     {
         $history        = HistoryLog::find($history_id);
@@ -1933,22 +1964,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_form   = self::percentForm($history);
         $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $max_hour       = 6;
-        $hour           = $history->created_at;
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptions($history, 1);
-        $color_inf_credit = 'success';
 
-        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit = $data_deadline['color'];
-        $hour             = $data_deadline['lbl_hour'];
+        $view_dead_line_upload  = self::deadLineUploadStep1($history);
+        $view_dead_line_form  = self::deadLineStep1($history);
 
-
-        $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
 
@@ -1960,7 +1985,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Carga',
             'status' => $status_file,
-            'deadline' => $view_dead_line_inf_credit,
+            'deadline' => $view_dead_line_upload,
             'advisor' => $name_advisor,
             'options' => $file_option,
         );
@@ -1968,12 +1993,25 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'status' => $status_form,
-            'deadline' => $view_dead_line_inf_credit,
+            'deadline' => $view_dead_line_form,
             'advisor' => $name_advisor,
             'options' => $form_option,
         );
 
         return $data;
+    }
+
+    public function deadLineStep2($history)
+    {
+        $color_inf_credit             = 'success';
+        $percent_form                 = self::percentFormStep2($history);
+        $max_hour                     = self::HOUR_STEP_2;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
     }
 
     public function actionStep2($history_id)
@@ -1984,22 +2022,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $advisor        = $credit->creditAdvisor;
         $percent_form   = self::percentFormStep2($history);
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $max_hour       = 3;
-        $hour           = $history->created_at;
-
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptions($history, 2);
-        $color_inf_credit = 'success';
-
-        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit = $data_deadline['color'];
-        $hour             = $data_deadline['lbl_hour'];
-
-
-        $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        $view_dead_line_inf_credit  = self::deadLineStep2($history);
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
         if ($advisor->id == Auth::user()->id) {
@@ -2019,31 +2047,52 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $data;
     }
 
+    public function deadLineStep3($history)
+    {
+        $color_inf_credit             = 'success';
+        $percent_form1   = self::percentFormStep3_1($history);
+        $percent_form2   = self::percentFormStep3_2($history);
+
+        $new_percent_form1 = ($percent_form1 == 100) ? 50 : $percent_form1;
+        $new_percent_form2 = ($percent_form2 == 100) ? 50 : $percent_form2;
+
+        $percent_form = $new_percent_form1 + $new_percent_form2;
+
+        $max_hour                     = self::HOUR_STEP_3;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
+    }
+
     public function actionStep3($history_id)
     {
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
-        $percent_file   = self::percentFile($credit->id);
-        $percent_form   = self::percentForm($history);
+        $percent_file   = 100;
+        $percent_form1   = self::percentFormStep3_1($history);
+        $percent_form2   = self::percentFormStep3_2($history);
+
+        $new_percent_form1 = ($percent_form1 == 100) ? 50 : $percent_form1;
+        $new_percent_form2 = ($percent_form2 == 100) ? 50 : $percent_form2;
+
+        $percent_form = $new_percent_form1 + $new_percent_form2;
+
         $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $max_hour       = 6;
-        $hour           = $history->created_at;
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptionsStep3($history);
-        $color_inf_credit = 'success';
-
-        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit = $data_deadline['color'];
-        $hour             = $data_deadline['lbl_hour'];
 
 
-        $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+
+        $view_dead_line_inf_credit  =self::deadLineStep3($history);
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         $form_option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
         $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
@@ -2192,7 +2241,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $data;
     }
 
-    public function menuOptions($history, $step)
+    public function menuOptions($history, $step = 1)
     {
         $menu = array(
             'form' => array(
@@ -2282,14 +2331,15 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $menu;
     }
 
-    public function menuOptionsStep($history)
+    public function menuOptionsStep($history, $type_lbl = 1)
     {
+        $lbl_action = $type_lbl === 1 ? 'Lista de acciones' : 'Ver acción';
         $menu = array(
             'actionstep1' => array(
                 [
                     'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=1',
                     'onclick' => '',
-                    'name' => 'Lista de acciones',
+                    'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
@@ -2297,7 +2347,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=2',
                     'onclick' => '',
-                    'name' => 'Lista de acciones',
+                    'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
@@ -2305,7 +2355,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=3',
                     'onclick' => '',
-                    'name' => 'Lista de acciones',
+                    'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
@@ -2313,7 +2363,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=4',
                     'onclick' => '',
-                    'name' => 'Lista de acciones',
+                    'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
@@ -2321,7 +2371,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=5',
                     'onclick' => '',
-                    'name' => 'Lista de acciones',
+                    'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
