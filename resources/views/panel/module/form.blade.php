@@ -198,6 +198,9 @@
                     </div>
                 </div>
             @endif
+            @if ($element['type'] == 'hidden')
+            <input type="hidden" class="form-control" name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}">
+            @endif
         @endforeach
 
         <input type="hidden" id="type_form" value="{{ $type_form }}">

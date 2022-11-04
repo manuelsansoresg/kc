@@ -239,6 +239,12 @@
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
+                                    <a href="/panel/kc-delivery" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
+                                        <span class="nk-menu-text">KC- Delivery</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
                                     <a href="html/hotel/index.html" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-building"></em></span>
                                         <span class="nk-menu-text">Hotel Management</span><span class="nk-menu-badge">HOT</span>

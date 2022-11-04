@@ -553,16 +553,24 @@ function selectPrepadMethod(val, id) {
 }
 
 function saveForm(id_form, model) {
-    const new_form = document.getElementById(id_form);
-    const data = new FormData(new_form);
-    let id_rel = $('#id_rel').val();
+    const new_form    = document.getElementById(id_form);
+    const data        = new FormData(new_form);
+    let id_rel        = $('#id_rel').val();
+    let url_redirect  = null;
+
+    if (document.getElementById('url_redirect')) {
+        url_redirect = $('#url_redirect').val();
+    }
     data.append('model', model);
     data.append('id_rel', id_rel);
     axios
         .post("/panel/action-form", data)
         .then(function (response) {
             let result = response.data;
-            window.history.back();
+            if (url_redirect == null) {
+                window.history.back();
+            }
+            window.location = url_redirect;
         })
         .catch(e => {
         });

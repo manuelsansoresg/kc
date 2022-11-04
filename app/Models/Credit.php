@@ -90,6 +90,9 @@ class Credit extends Model
 
             $data_deadline    = deadlineKc($hour, $max_hour);
             $color_inf_credit = $data_deadline['color'];
+            if ($history->status_id === HistoryLog::KC_DELIVERY) {
+                $hour = 8;
+            }
             $hour             = $data_deadline['lbl_hour'];
             $status_id        = $history->status_id;
             
@@ -298,6 +301,7 @@ class Credit extends Model
             6 => 'newCredit',
             10 => 'debtCredit',
             21 => 'controlDesk',
+            30 => 'delivery',
 
         );
         return $routes;

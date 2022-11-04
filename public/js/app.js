@@ -2228,6 +2228,49 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-delivery', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-delivery/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
 
 /***/ }),
 
@@ -2841,11 +2884,22 @@ function saveForm(id_form, model) {
   var new_form = document.getElementById(id_form);
   var data = new FormData(new_form);
   var id_rel = $('#id_rel').val();
+  var url_redirect = null;
+
+  if (document.getElementById('url_redirect')) {
+    url_redirect = $('#url_redirect').val();
+  }
+
   data.append('model', model);
   data.append('id_rel', id_rel);
   axios.post("/panel/action-form", data).then(function (response) {
     var result = response.data;
-    window.history.back();
+
+    if (url_redirect == null) {
+      window.history.back();
+    }
+
+    window.location = url_redirect;
   })["catch"](function (e) {});
 }
 

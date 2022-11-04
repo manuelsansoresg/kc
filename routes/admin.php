@@ -147,6 +147,10 @@ Route::group(['prefix' => 'kc-control-desk'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'list'])->middleware('auth');
 });
 
+Route::resource('kc-delivery', '\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController')->middleware('auth');
+Route::group(['prefix' => 'kc-delivery'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController', 'list'])->middleware('auth');
+});
 
 Route::resource('kc-check-up-debt-reduction', '\App\Http\Controllers\Panel\Module\KcCheckup\DebtReductionController')->middleware('auth');
 Route::group(['prefix' => 'kc-check-up-debt-reduction'], function () {
