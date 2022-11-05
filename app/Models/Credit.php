@@ -116,7 +116,7 @@ class Credit extends Model
                 );
             } else {
                 $users[] = array(
-                    'id' => $query->id,
+                    'id' => $history->id,
                     'product' => $content_product,
                     'client' => $content_client,
                     'advisor' => $name_advisor,

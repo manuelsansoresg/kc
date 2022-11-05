@@ -1816,27 +1816,30 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $max_hour             = 12;
         $hour                 = $credit->created_at;
         
+        $percent_file         = self::percentFile($credit->id);
         $percent_form         = self::percentForm($history); // etapa 1
-        
+        $file                 = $percent_file == 100 ? 50 : 0;
+        $form                 = $percent_form == 100 ? 50 : 0;
+        $total_percent        = $file + $form;
+
         $percent_form_step2   = self::percentFormStep2($history); // etapa 2
 
-        $percent_form_step3_1   = self::percentFormStep3_1($history); //etapa 3
+        $percent_form_step3_1 = self::percentFormStep3_1($history); //etapa 3
         $percent_form_step3_2 = self::percentFormStep3_2($history); //etapa 3
-        $percent_form_step5 = self::percentFormStep5($history); //etapa 5
+        $percent_form_step5   = self::percentFormStep5($history); //etapa 5
         
         $new_step3_1 = $percent_form_step3_1 == 100 ? 50 : 0;
         $new_step3_2 = $percent_form_step3_2 == 100 ? 50 : 0;
         
         $percent_form_step3 = $new_step3_1 + $new_step3_2;
 
-        $percent_file         = 100;
         $color_inf_credit     = 'success';
         $color_report         = 'success';
         $option_step2         = null;
         $option_step3         = null;
         $option_step4         = null;
         $option_step5         = null;
-        $total_percent        = $percent_file + $percent_form;
+        
         //$percent_form = $percent_form;
         $menu_options         = self::menuOptionsStep($history);
         $status_step2         = 'En espera';
@@ -1851,7 +1854,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
         }
 
-        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $data_deadline    = deadline($hour, $max_hour, $total_percent, $color_inf_credit);
         $color_inf_credit = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
 
@@ -1871,7 +1874,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
         
 
-        $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
+        $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $total_percent])->render();
         $view_percent_step2    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
         $view_percent_step3    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step3])->render();
         $view_percent_step5    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step5])->render();
@@ -2506,16 +2509,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($client != null && $client->sex != '') {
             $total_valid = $total_valid + 5;
         }
-
+        //dd($history->id, $client);
         if ($client != null && $client->rfc != null) {
             $total_valid = $total_valid + 5;
         }
 
         if ($client != null && $client->nationality != null) {
-            $total_valid = $total_valid + 5;
-        }
-
-        if ($client != null && $client->birth_state != null) {
             $total_valid = $total_valid + 5;
         }
 
@@ -2608,10 +2607,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     //* get all percentages of the shares
     public function getPercent($history)
     {
-        $percent_form = self::percentForm($history) / 2;
-        $percent_desition = 0;
-        $total_valid = $percent_form  + $percent_desition;
+        $credit   = $history->historyCredit;
+        $file1    = self::percentFile($credit->id) == 100 ? 50 :  self::percentFile($credit->id) ;
+        $form1    = self::percentForm($history) == 100 ? 50 : self::percentForm($history); // etapa 1
+        $total1   = $file1 + $form1;
+        $percent1  = $total1 == 100 ? 25 : 0;
+        
+        $percent_form_step2   = self::percentFormStep2($history) == 100 ? 25 : 0; // etapa 2
 
+        $form_step3_1         = self::percentFormStep3_1($history) == 100 ? 50 :  self::percentFormStep3_1($history); //etapa 3
+        $form_step3_2         = self::percentFormStep3_2($history) == 100 ? 50 :  self::percentFormStep3_1($history); //etapa 3
+        $totalform_step3   = $form_step3_1 + $form_step3_2;
+        $percent3  = $totalform_step3 == 100 ? 25 : 0;
+
+        $percent_form_step5   = self::percentFormStep5($history)  == 100 ? 25 : 0; //etapa 5
+
+        $total_valid = $percent1 + $percent_form_step2 + $percent3 + $percent_form_step5;
         $percent =  (100 / 100) * $total_valid;
         return $percent;
     }
