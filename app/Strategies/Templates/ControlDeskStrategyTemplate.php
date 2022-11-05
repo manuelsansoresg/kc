@@ -1803,6 +1803,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $percent_form_step5 = self::percentFormStep5($history);
             if ($percent_form_step5 == 100) {
                 HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK);
+                $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
+                (new $notification_add)->send($credit->id);
             }
         }
         

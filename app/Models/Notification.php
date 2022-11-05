@@ -72,12 +72,16 @@ class Notification extends Model
         
         $new_kc_control_desk           = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
         $list_new_kc_control_desk      = (new $new_kc_control_desk)->get($user_id, 0);
+        
+        $new_kc_delivery           = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
+        $list_new_new_kc_delivery      = (new $new_kc_delivery)->get($user_id, 0);
 
         $list_notificacions = array_merge(
             $list_lead_new_prospect,
             $list_lead_add_prospect,
             $list_new_kc_check_up,
-            $list_new_kc_control_desk
+            $list_new_kc_control_desk,
+            $list_new_new_kc_delivery
         );
         
         $list_no_order = array();

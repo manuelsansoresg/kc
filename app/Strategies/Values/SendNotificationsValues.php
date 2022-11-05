@@ -5,6 +5,7 @@ namespace App\Strategies\Values;
 use App\Strategies\Notifications\Notification;
 use App\Strategies\Notifications\PushBtnNextLead;
 use App\Strategies\Notifications\PushCreditKcControlDesk;
+use App\Strategies\Notifications\PushCreditKcDelivery;
 use App\Strategies\Notifications\PushDebtReduction;
 use App\Strategies\Notifications\PushLeadAddProspect;
 use App\Strategies\Notifications\PushLeadNewProspect;
@@ -21,5 +22,6 @@ final class SendNotificationsValues
         'debtReduction' => PushDebtReduction::class, // A01, A03
         'pushNewCreditKcCheckUp' => PushNewCreditKcCheckUp::class, // M01, M02
         'pushCreditKcControlDesk' => PushCreditKcControlDesk::class, // M03, M04
+        'pushCreditKcDelivery' => PushCreditKcDelivery::class, // M05, M06
     ];
 }
