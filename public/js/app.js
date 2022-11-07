@@ -2704,6 +2704,17 @@ $().ready(function () {
       event.preventDefault();
       saveForm('frm-template_control_desk_step5', 'controlDesk');
     }
+  });
+  $("#frm-template_delivery_step2").validate({
+    rules: {
+      'credit[changed_commission]': {
+        number: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_delivery_step2', 'delivery');
+    }
   }); //*get data
 
   if (document.getElementById('id_rel')) {
@@ -2854,6 +2865,12 @@ $().ready(function () {
             $('#financial_user_assigned').val(credit.financial_user_assigned).trigger("change");
             $('#commission').val(credit.commission);
             $('#commission_note').val(credit.commission_note);
+          }
+
+        if (type_form == 32) //form kc-ddelivery step 2
+          {
+            $('#changed_commission').val(credit.changed_commission / 100);
+            $('#changed_commission_note').val(credit.changed_commission_note);
           }
       })["catch"](function (e) {});
     }

@@ -21,7 +21,7 @@ use stdClass;
 class DeliveryStrategyTemplate implements TemplateInterface
 {
     const HOUR_STEP_1  = 6;
-    const HOUR_STEP_2  = 3;
+    const HOUR_STEP_2  = 192;
     const HOUR_STEP_3  = 6;
 
     public function move($id)
@@ -34,53 +34,24 @@ class DeliveryStrategyTemplate implements TemplateInterface
         if ($step == 3) {
             return self::uploadStep3();
         }
-        return self::uploadStep1();
+        return self::uploadStep2();
     }
 
-    public function uploadStep1()
+    public function uploadStep2()
     {
         $elements = array(
             1 => [
-                'name' => 'Identificación oficial',
-                'comment' => 'INE vigente',
+                'name' => 'Comprobante de pago',
+                'comment' => '',
                 'is_required' => true,
-                'is_date' => false,
+                'is_date' => true,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
-                'type' => 'image/*',
+                'type' => 'image/*, .pdf',
                 'comment_date' => null
             ],
 
-            2 => [
-                'name' => 'Recibo de nómina',
-                'comment' => 'Más reciente',
-                'is_required' => true,
-                'is_date' => true,
-                'max_size' => 2,
-                'max_file' => 2,
-                'type' => 'image/*',
-                'comment_date' => 'Establece la fecha del comprobante más antigüo'
-            ],
-            3 => [
-                'name' => 'Comprobante de domicilio',
-                'comment' => 'Más reciente',
-                'is_required' => true,
-                'is_date' => true,
-                'max_size' => 2,
-                'max_file' => 2,
-                'type' => 'image/*',
-                'comment_date' => 'Fecha del documento'
-            ],
-            4 => [
-                'name' => 'Comprobante de capacidad de pago',
-                'comment' => 'Evidencia de capacidad de pago',
-                'is_required' => true,
-                'is_date' => false,
-                'max_size' => 2,
-                'max_file' => 2,
-                'type' => 'image/*',
-                'comment_date' => null
-            ],
+            
         );
         return $elements;
     }
@@ -125,7 +96,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
     public function configFormStep1($id_rel, $history_id)
     {
         $name_form    = 'frm-template_control_desk_step1';
-        $type_form    = HistoryLog::KC_MODULE_RESPONSE;
+        $type_form    = HistoryLog::KC_DELIVERY_FORM;
         $credit       = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
 
@@ -207,8 +178,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
     public function configFormstep2($id_rel, $history_id)
     {
         $credit = Credit::find($id_rel);
-        $name_form = 'frm-template_control_desk_step2';
-        $type_form = HistoryLog::KC_CONTROL_DESK_FORM_STEP_2;
+        $name_form = 'frm-template_delivery_step2';
+        $type_form = HistoryLog::KC_DELIVERY_FORM_STEP_2;
         $financial = Financial::select('id', 'commercial_name as name')->get();
         $product = FinancialProduct::getProductByFinancial($credit->applied_financial);
         $loan_type = config('enums.loan_type');
@@ -217,7 +188,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $elements = array(
             1 => [
-                'title_section' => 'Crédito solicitado',
+                'title_section' => 'Cambios en la comisión',
                 'title' => null,
                 'name_field' => null,
                 'id_field' => null,
@@ -232,173 +203,34 @@ class DeliveryStrategyTemplate implements TemplateInterface
             ],
             2 => [
                 'title_section' => null,
-                'title' => 'Financiera',
-                'name_field' => 'credit[applied_financial]',
-                'id_field' => 'applied_financial',
+                'title' => 'Nueva comisión',
+                'name_field' => 'credit[changed_commission]',
+                'id_field' => 'changed_commission',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'select2',
+                'type' => 'number',
                 'is_option_array' => false,
-                'options' => $financial,
+                'options' => null,
                 'is_required' => true,
-                'is_disabled' => 'disabled'
+                'is_disabled' => null
             ],
             3 => [
                 'title_section' => null,
-                'title' => 'Producto financiero',
-                'name_field' => 'credit[applied_financial_product]',
-                'id_field' => 'applied_financial_product',
+                'title' => 'Comentario',
+                'name_field' => 'credit[changed_commission_note]',
+                'id_field' => 'changed_commission_note',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => false,
-                'options' => $product,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            4 => [
-                'title_section' => null,
-                'title' => 'Tipo de trámite',
-                'name_field' => 'credit[applied_loan_type]',
-                'id_field' => 'applied_loan_type',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $loan_type,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            5 => [
-                'title_section' => null,
-                'title' => 'Promoción',
-                'name_field' => 'credit[applied_loan_discount]',
-                'id_field' => 'applied_loan_discount',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-
-            6 => [
-                'title_section' => null,
-                'title' => 'Tipo de firma',
-                'name_field' => 'credit[applied_sign_type]',
-                'id_field' => 'applied_sign_type',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $sign_type,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            7 => [
-                'title_section' => null,
-                'title' => 'Importe solicitado',
-                'name_field' => 'credit[applied_import]',
-                'id_field' => 'applied_import',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
+                'type' => 'textarea',
+                'col' => 'col-12',
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null
             ],
-            8 => [
-                'title_section' => null,
-                'title' => 'Plazo solcitado',
-                'name_field' => 'credit[applied_term]',
-                'id_field' => 'applied_term',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            9 => [
-                'title_section' => null,
-                'title' => 'Periodicidad solicitada',
-                'name_field' => 'credit[applied_periodicity]',
-                'id_field' => 'applied_periodicity',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $periodicity,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            10 => [
-                'title_section' => null,
-                'title' => 'Pago solicitado',
-                'name_field' => 'credit[applied_payment]',
-                'id_field' => 'applied_payment',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            11 => [
-                'title_section' => null,
-                'title' => 'Monto total del crédito',
-                'name_field' => 'credit[applied_loan_total_amount]',
-                'id_field' => 'applied_loan_total_amount',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            12 => [
-                'title_section' => null,
-                'title' => 'Tasa de interés',
-                'name_field' => 'credit[applied_interest_rate]',
-                'id_field' => 'applied_interest_rate',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            13 => [
-                'title_section' => null,
-                'title' => 'CAT',
-                'name_field' => 'credit[applied_CAT]',
-                'id_field' => 'applied_CAT',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
+            
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -1776,6 +1608,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         if ($request->credit) {
             $data_credit = $request->credit;
+            $data_credit['changed_commission'] = $data_credit['changed_commission'] * 100;
             $credit->fill($data_credit);
             $credit->update();
         }
@@ -1811,7 +1644,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $form                 = $percent_form == 100 ? 50 : 0;
         $total_percent        = $file + $form;
 
-        $percent_form_step2   = self::percentFormStep2($history); // etapa 2
+        $percent_form_step2   = self::percentUploadStep2($history); // etapa 2
 
         $percent_form_step3_1 = self::percentFormStep3_1($history); //etapa 3
         $percent_form_step3_2 = self::percentFormStep3_2($history); //etapa 3
@@ -1848,10 +1681,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $hour             = $data_deadline['lbl_hour'];
 
         $option_step1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
-
-        if ($status_step1 == 'Concluido') {
-            $option_step2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
-        }
+        $option_step2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
 
         if ($status_step2 == 'Concluido') {
             $option_step3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
@@ -1884,14 +1714,15 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'deadline' => '',
             'options' => $option_step1,
         );
-        /* $data[] = array(
+        $data[] = array(
             'name' => $view_count_step2,
-            'step' => 'Características del crédito',
+            'step' => 'Comprobar pago',
             'status' => $status_step2,
             'progress' => $view_percent_step2,
             'deadline' => '',
             'options' => $option_step2,
         );
+        /* 
 
         $data[] = array(
             'name' => $view_count_step3,
@@ -1986,8 +1817,9 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
     public function deadLineStep2($history)
     {
+        $credit         = $history->historyCredit;
         $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep2($history);
+        $percent_form                 = self::percentFile($credit->id);
         $max_hour                     = self::HOUR_STEP_2;
         $hour                         = $history->created_at;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
@@ -2003,15 +1835,18 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
-        $percent_form   = self::percentFormStep2($history);
+        $percent_form   = self::percentFile($credit->id);
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptions($history, 2);
-        $view_dead_line_inf_credit  = self::deadLineStep2($history);
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        
+        $view_dead_line_step2  = self::deadLineStep2($history);
+
+        $view_dead_line_inf_credit  = 'N/A';
+        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -2020,8 +1855,16 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data = array();
 
         $data[] = array(
-            'name' => 'Formulario',
+            'name' => 'Carga',
             'status' => $status_form,
+            'deadline' => $view_dead_line_step2,
+            'advisor' => $name_advisor,
+            'options' => $form_option,
+        );
+        
+        $data[] = array(
+            'name' => 'Formulario',
+            'status' =>  'Opcional',
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -2235,6 +2078,14 @@ class DeliveryStrategyTemplate implements TemplateInterface
                     'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
+            'form2' => array(
+                [
+                    'link' => '/panel/template/action-document/delivery/' . $history->id . '?step='.$step,
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+            ),
         );
 
         return $menu;
@@ -2408,7 +2259,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return $percent;
     }
 
-    public function percentFormStep2($history)
+    public function percentUploadStep2($history)
     {
         $percent = 0;
         $credit     = $history->historyCredit;
@@ -2567,7 +2418,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $total1   = $file1 + $form1;
         $percent1  = $total1 == 100 ? 25 : 0;
         
-        $percent_form_step2   = self::percentFormStep2($history) == 100 ? 25 : 0; // etapa 2
+        $percent_form_step2   = self::percentUploadStep2($history) == 100 ? 25 : 0; // etapa 2
 
         $form_step3_1         = self::percentFormStep3_1($history) == 100 ? 50 :  self::percentFormStep3_1($history); //etapa 3
         $form_step3_2         = self::percentFormStep3_2($history) == 100 ? 50 :  self::percentFormStep3_1($history); //etapa 3
@@ -2590,13 +2441,13 @@ class DeliveryStrategyTemplate implements TemplateInterface
     //*TODO: se deshabilito al ser opcional la caja de carga
     public function percentFile($id_rel)
     {
-        $model = File::MODEL['controlDesk'];
+        $model = File::MODEL['delivery'];
         $percent = 0;
-        $total_valid = 4;
+        $total_valid = 1;
         $count_file = 0;
         $percent_file = 0;
         $config_files = self::configUpload();
-
+        
         foreach ($config_files as $key => $config_file) {
             $file = File::where([
                 'model' => $model,
@@ -2604,9 +2455,9 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'template_config_id' => $key,
             ])
                 ->first();
-            if ($file != null) {
+            if ($file != null && $config_file['is_required'] == true) {
                 $count_file = $count_file + 1;
-                $percent_file = $percent_file + 25;
+                $percent_file = $percent_file + 100;
             }
         }
 
@@ -2663,6 +2514,40 @@ class DeliveryStrategyTemplate implements TemplateInterface
          return $breadcumbs;
     }
 
+    public function optionSteps($history)
+    {
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+
+        $breadcumbs = array(
+            0 => array(
+             'title' => 'Inicio',
+             'link' => '/panel/home',
+             'active' => null
+            ),
+            1 => array(
+             'title' => 'KC - Delivery',
+             'link' => '/panel/delivery',
+             'active' => null
+            ),
+            2 => array(
+             'title' => 'etapas',
+             'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+             'active' => null
+            ),
+            3 => array(
+             'title' => 'acciones',
+             'link' => '/panel/template/actions/delivery/'.$history->id.'/show?step='.$step,
+             'active' => null
+            ),
+            4 => array(
+             'title' => 'entrega',
+             'link' => null,
+             'active' => true
+            ),
+         );
+         return $breadcumbs;
+    }
+
     public function breadcrumb($history, $type = null)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
@@ -2672,34 +2557,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         if ($type == 2) {
             $breadcumbs = self::optionBreadcumblistAction($history);
         } else {
-            if ($step == 1) {
-                $breadcumbs = array(
-                    0 => array(
-                     'title' => 'Inicio',
-                     'link' => '/panel/home',
-                     'active' => null
-                    ),
-                    1 => array(
-                     'title' => 'KC - Delivery',
-                     'link' => '/panel/delivery',
-                     'active' => null
-                    ),
-                    2 => array(
-                     'title' => 'etapas',
-                     'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
-                     'active' => null
-                    ),
-                    3 => array(
-                     'title' => 'acciones',
-                     'link' => '/panel/template/actions/delivery/'.$history->id.'/show?step=1',
-                     'active' => null
-                    ),
-                    4 => array(
-                     'title' => 'entrega',
-                     'link' => null,
-                     'active' => true
-                    ),
-                 );
+            if ($step == 1 || $step == 2) {
+                $breadcumbs = self::optionSteps($history);
             }
         }
 

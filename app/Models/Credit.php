@@ -65,6 +65,8 @@ class Credit extends Model
         'financial_user_assigned',
         'commission',//*save  * 100
         'commission_note',
+        'changed_commission', //* save * 100
+        'changed_commission_note',
     ];
 
     public static function listDatatable($status)

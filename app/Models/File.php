@@ -24,6 +24,7 @@ class File extends Model
         'newCredit' => 2,
         'controlDesk' => 21,
         'debtCredit' => 10,
+        'delivery' => 30,
     ];
 
     public static function upload($model, $id_rel, $request, $template_config_id = null)
