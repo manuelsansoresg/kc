@@ -22,10 +22,11 @@ class FormController extends Controller
         $history          = HistoryLog::find($history_id);
         $credit           = $history->historyCredit;
         $form             = (new $actionStrategy)->configForm($credit->id, $history_id);
+        $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
         $client           = $credit->creditClientPerson;
         $product          = $credit->creditProduct;
         $id_rel           = $credit->id;
-        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'product', 'credit', 'client', 'history'));
+        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'product', 'credit', 'client', 'history', 'breadcrumb'));
     }
 
    

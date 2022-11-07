@@ -50,6 +50,7 @@ class HistoryLog extends Model
     const KC_CONTROL_DESK_FORM_STEP_5         = 29;
     
     const KC_DELIVERY                         = 30;
+    const KC_MODULE_RESPONSE                  = 31;
     
 
     protected $fillable = [
@@ -95,6 +96,7 @@ class HistoryLog extends Model
         28 => 'Formulario (etapa 4)',
         29 => 'Formulario (etapa 5)',
         30 => 'Entró a KC - Delivery',
+        31 => 'Respuesta del módulo',
     ];
 
     public static $name_model = [
@@ -118,6 +120,7 @@ class HistoryLog extends Model
         28 => 'controlDesk',
         29 => 'controlDesk',
         30 => 'controlDesk',
+        31 => 'delivery',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $is_subprocess = false)

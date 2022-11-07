@@ -47,6 +47,16 @@
                     </div>
                 </div>
             @endif
+           
+            @if ($element['type'] == 'href')
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
+                    <div class="form-group">
+                        <div class="form-control-wrap">
+                           <a target="{{ $element['target'] }}" class="{{ isset($element['class']) && $element['class'] != null? $element['class'] : '' }}" {{ isset($element['link']) && $element['link'] != null? 'href='. $element['link'].'' : '' }}>{{ $element['title'] }}</a>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
             @if ($element['type'] == 'number')
                 <div class="col-md-6">
@@ -205,7 +215,7 @@
 
         <input type="hidden" id="type_form" value="{{ $type_form }}">
         <input type="hidden" id="history_id" name="history_id" value="{{ $history_id }}">
-
+        @if ($type_form != 31)
         <div class="col-12">
             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                 <li>
@@ -214,5 +224,7 @@
                 </li>
             </ul>
         </div>
+            
+        @endif
     </div>
 </form>

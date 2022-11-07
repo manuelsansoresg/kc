@@ -18,7 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use stdClass;
 
-class ControlDeskStrategyTemplate implements TemplateInterface
+class DeliveryStrategyTemplate implements TemplateInterface
 {
     const HOUR_STEP_1  = 6;
     const HOUR_STEP_2  = 3;
@@ -124,11 +124,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function configFormStep1($id_rel, $history_id)
     {
-        $name_form = 'frm-template_control_desk_step1';
-        $type_form = HistoryLog::KC_CONTROL_DESK_FORM;
+        $name_form    = 'frm-template_control_desk_step1';
+        $type_form    = HistoryLog::KC_MODULE_RESPONSE;
+        $credit       = Credit::find($id_rel);
+        $client_person = $credit->creditClientPerson;
+
         $elements = array(
             1 => [
-                'title_section' => 'Viabilidad',
+                'title_section' => 'Entrega',
                 'title' => null,
                 'name_field' => null,
                 'id_field' => null,
@@ -143,73 +146,57 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             2 => [
                 'title_section' => null,
-                'title' => 'Periodo CP',
-                'name_field' => 'credit[payment_capacity_period]',
-                'id_field' => 'payment_capacity_period',
+                'title' => 'Ver perfíl de crédito',
+                'name_field' => null,
+                'id_field' => null,
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'date',
+                'type' => 'href',
+                'link' => '/panel/credit/'.$credit->id,
+                'class' => 'btn btn-primary',
+                'target' => '_blank',
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
-                'is_disabled' => null
+                'is_disabled' => null,
+                'col' => 'col-12 col-md-4'
             ],
             3 => [
                 'title_section' => null,
-                'title' => 'Capacidad de pago',
-                'name_field' => 'credit[payment_capacity]',
-                'id_field' => 'payment_capacity',
+                'title' => 'Ver perfíl de cliente',
+                'name_field' => null,
+                'id_field' => null,
                 'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => 'number',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'href',
+                'link' => '/panel/client/'.$client_person->id,
+                'class' => 'btn btn-primary',
+                'target' => '_blank',
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
-                'is_disabled' => null
+                'is_disabled' => null,
+                'col' => 'col-12 col-md-4'
             ],
             4 => [
                 'title_section' => null,
-                'title' => 'Fecha de nacimiento',
-                'name_field' => 'client_person[birth_date]',
-                'id_field' => 'birth_date',
+                'title' => 'Descargar',
+                'name_field' => null,
+                'id_field' => null,
                 'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => 'date',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'href',
+                'link' => null,
+                'class' => 'btn btn-primary',
+                'target' => '_blank',
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
-                'is_disabled' => null
-            ],
-            5 => [
-                'title_section' => null,
-                'title' => 'Antigüedad laboral',
-                'name_field' => 'client_person[labor_old]',
-                'id_field' => 'labor_old',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            6 => [
-                'title_section' => null,
-                'title' => 'Categoría',
-                'name_field' => 'client_person[employee_category]',
-                'id_field' => 'employee_category',
-                'comment_admin' => 'Ej. Base, confianza etc..',
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
+                'is_disabled' => null,
+                'col' => 'col-12 col-md-4'
             ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -219,7 +206,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function configFormstep2($id_rel, $history_id)
     {
-        $credit =Credit::find($id_rel);
+        $credit = Credit::find($id_rel);
         $name_form = 'frm-template_control_desk_step2';
         $type_form = HistoryLog::KC_CONTROL_DESK_FORM_STEP_2;
         $financial = Financial::select('id', 'commercial_name as name')->get();
@@ -1848,7 +1835,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $status_step3         = 'En espera';
         $status_step5         = 'En espera';
 
-        $status_step1 = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+        $status_step1 = 'Concluida';
         //TODO: change validation when the decision action is carried out in the report
         if ($status_step1 == 'Concluido') {
             $status_step2 = ($percent_form_step2 >= 100) ? 'Concluido' : 'En curso';
@@ -1860,7 +1847,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $color_inf_credit = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
 
-        $option_inf_credit  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
+        $option_step1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
 
         if ($status_step1 == 'Concluido') {
             $option_step2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
@@ -1876,7 +1863,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
         
 
-        $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $total_percent])->render();
+        $view_percent_inf_credit    = 'N/A';
         $view_percent_step2    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
         $view_percent_step3    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step3])->render();
         $view_percent_step5    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step5])->render();
@@ -1891,13 +1878,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data = array();
         $data[] = array(
             'name' => $view_count_inf_credit,
-            'step' => 'Viabilidad',
+            'step' => 'Entrega',
             'status' => $status_step1,
             'progress' => $view_percent_inf_credit,
             'deadline' => '',
-            'options' => $option_inf_credit,
+            'options' => $option_step1,
         );
-        $data[] = array(
+        /* $data[] = array(
             'name' => $view_count_step2,
             'step' => 'Características del crédito',
             'status' => $status_step2,
@@ -1931,7 +1918,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'progress' => $view_percent_step5,
             'deadline' => '',
             'options' => $option_step5,
-        );
+        ); */
         return $data;
     }
 
@@ -1950,19 +1937,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return self::actionStep1($history_id);
     }
 
-    public function deadLineUploadStep1($history)
-    {
-        $credit         = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFile($credit->id);
-        $max_hour                     = self::HOUR_STEP_1;
-        $hour                         = $history->created_at;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
-    }
+    
     
     public function deadLineStep1($history)
     {
@@ -1982,10 +1957,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
-        $percent_file   = self::percentFile($credit->id);
-        $percent_form   = self::percentForm($history);
-        $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
-        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $status_file    = 'Concluida';
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -1993,11 +1965,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptions($history, 1);
 
-        $view_dead_line_upload  = self::deadLineUploadStep1($history);
-        $view_dead_line_form  = self::deadLineStep1($history);
+        $view_dead_line_upload  = 'N/A';
 
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
+        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -2005,21 +1975,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data = array();
         $data[] = array(
-            'name' => 'Carga',
+            'name' => 'Respuesta de módulo',
             'status' => $status_file,
             'deadline' => $view_dead_line_upload,
             'advisor' => $name_advisor,
             'options' => $file_option,
         );
-
-        $data[] = array(
-            'name' => 'Formulario',
-            'status' => $status_form,
-            'deadline' => $view_dead_line_form,
-            'advisor' => $name_advisor,
-            'options' => $form_option,
-        );
-
         return $data;
     }
 
@@ -2268,21 +2229,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=' . $step,
+                    'link' => '/panel/action-form/delivery/' . $history->id . '/form?step=' . $step,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
-            'file' => array(
-                [
-                    'link' => '/panel/template/action-document/controlDesk/' . $history->id . '?step=' . $step,
-                    'onclick' => '',
-                    'name' => 'Ver acción',
-                    'icon' => 'icon ni ni-check-circle-cut'
-                ]
-
-            )
         );
 
         return $menu;
@@ -2359,7 +2311,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $menu = array(
             'actionstep1' => array(
                 [
-                    'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=1',
+                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=1',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
@@ -2367,7 +2319,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ),
             'actionstep2' => array(
                 [
-                    'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=2',
+                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=2',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
@@ -2375,7 +2327,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ),
             'actionstep3' => array(
                 [
-                    'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=3',
+                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=3',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
@@ -2383,7 +2335,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ),
             'actionstep4' => array(
                 [
-                    'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=4',
+                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=4',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
@@ -2391,7 +2343,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ),
             'actionstep5' => array(
                 [
-                    'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=5',
+                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=5',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
@@ -2661,8 +2613,99 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent =  (100 / 100) * $percent_file;
         return $percent;
     }
+
+    public function optionBreadcumbStep($history)
+    {
+        $breadcumbs = array(
+            0 => array(
+             'title' => 'Inicio',
+             'link' => '/panel/home',
+             'active' => null
+            ),
+            1 => array(
+             'title' => 'KC - Delivery',
+             'link' => '/panel/delivery',
+             'active' => null
+            ),
+            2 => array(
+             'title' => 'etapas',
+             'link' => null,
+             'active' => true
+            ),
+         );
+         return $breadcumbs;
+    }
+    
+    public function optionBreadcumblistAction($history)
+    {
+        $breadcumbs = array(
+            0 => array(
+             'title' => 'Inicio',
+             'link' => '/panel/home',
+             'active' => null
+            ),
+            1 => array(
+             'title' => 'KC - Delivery',
+             'link' => '/panel/delivery',
+             'active' => null
+            ),
+            2 => array(
+                'title' => 'etapas',
+                'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+                'active' => true
+            ),
+            3 => array(
+                'title' => 'acciones',
+                'link' => null,
+                'active' => true
+               ),
+         );
+         return $breadcumbs;
+    }
+
     public function breadcrumb($history, $type = null)
     {
-        return null;
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+        if ($step == null) {
+            $breadcumbs = self::optionBreadcumbStep($history);
+        }
+        if ($type == 2) {
+            $breadcumbs = self::optionBreadcumblistAction($history);
+        } else {
+            if ($step == 1) {
+                $breadcumbs = array(
+                    0 => array(
+                     'title' => 'Inicio',
+                     'link' => '/panel/home',
+                     'active' => null
+                    ),
+                    1 => array(
+                     'title' => 'KC - Delivery',
+                     'link' => '/panel/delivery',
+                     'active' => null
+                    ),
+                    2 => array(
+                     'title' => 'etapas',
+                     'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+                     'active' => null
+                    ),
+                    3 => array(
+                     'title' => 'acciones',
+                     'link' => '/panel/template/actions/delivery/'.$history->id.'/show?step=1',
+                     'active' => null
+                    ),
+                    4 => array(
+                     'title' => 'entrega',
+                     'link' => null,
+                     'active' => true
+                    ),
+                 );
+            }
+        }
+
+        
+        
+        $view_breadcumb    = \View::make('panel.module.breadcumb', ['breadcumbs' => $breadcumbs])->render();
+        return $view_breadcumb;
     }
 }

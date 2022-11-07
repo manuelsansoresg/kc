@@ -25,7 +25,10 @@ class TemplateController extends Controller
         $credit = $history->historyCredit;
         $client = $credit->creditClientPerson;
         $product = $credit->creditProduct;
-        return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client', 'model'));
+        $actionStrategy   = TemplateValues::STRATEGY[$model];
+        $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
+
+        return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb'));
     }
     
 
@@ -43,8 +46,9 @@ class TemplateController extends Controller
         $client = $credit->creditClientPerson;
         $product = $credit->creditProduct;
         $model = $model;
-        
-        return view('panel.module.checkup.actions.list', compact('history_id', 'product', 'credit', 'client', 'model'));
+        $actionStrategy   = TemplateValues::STRATEGY[$model];
+        $breadcrumb       = (new $actionStrategy)->breadcrumb($history, 2);
+        return view('panel.module.checkup.actions.list', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb'));
     }
 
     public function viewReport($model, $history_id)

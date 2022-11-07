@@ -75,4 +75,9 @@ class LeadStrategyTemplate implements TemplateInterface
             }
         }
     }
+
+    public function breadcrumb($history, $type = null)
+    {
+        return null;
+    }
 }

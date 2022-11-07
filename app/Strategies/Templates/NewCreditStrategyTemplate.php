@@ -459,4 +459,8 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $percent =  (100 / 100) * $total_valid;
         return $percent;
     }
+    public function breadcrumb($history, $type = null)
+    {
+        return null;
+    }
 }
