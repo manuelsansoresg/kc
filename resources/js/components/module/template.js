@@ -384,6 +384,18 @@ $().ready(function () {
             saveForm('frm-template_delivery_step2', 'delivery');
         }
     });
+    
+    $("#frm-template_delivery_step3").validate({
+        rules: {
+            'credit[payment_check]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_delivery_step3', 'delivery');
+        }
+    });
 
     //*get data
     if (document.getElementById('id_rel')) {
@@ -541,6 +553,11 @@ $().ready(function () {
                     {
                         $('#changed_commission').val(credit.changed_commission/100);
                         $('#changed_commission_note').val(credit.changed_commission_note);
+                    }
+                    if (type_form == 34) //form kc-ddelivery step 3
+                    {
+                        $('#payment_check').val(credit.payment_check).trigger("change");
+                        $('#payment_check_note').val(credit.payment_check_note);
                     }
 
                 })

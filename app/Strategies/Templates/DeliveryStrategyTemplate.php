@@ -22,7 +22,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 {
     const HOUR_STEP_1  = 6;
     const HOUR_STEP_2  = 192;
-    const HOUR_STEP_3  = 6;
+    const HOUR_STEP_3  = 2;
 
     public function move($id)
     {
@@ -56,7 +56,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return $elements;
     }
 
-    public function Uploadstep3()
+    public function uploadstep3()
     {
         $elements = array(
             5 => [
@@ -82,10 +82,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
             return self::configFormStep1($id_rel, $history_id);
         } elseif ($step == 2) {
             return self::configFormstep2($id_rel, $history_id);
-        } elseif ($step == '3_1') {
-            return self::configFormstep3_1($id_rel, $history_id);
-        } elseif ($step == '3_2') {
-            return self::configFormstep3_2($id_rel, $history_id);
+        } elseif ($step == '3') {
+            return self::configFormstep3($id_rel, $history_id);
         } elseif ($step == '4') {
             return self::configFormstep4($id_rel, $history_id);
         } elseif ($step == '5') {
@@ -236,15 +234,15 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return $list;
     }
 
-    public function configFormstep3_1($id_rel, $history_id)
+    public function configFormstep3($id_rel, $history_id)
     {
-        $name_form    = 'frm-template_control_desk_step3_1';
-        $type_form    = HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1;
-        $sex = config('enums.sex');
+        $name_form    = 'frm-template_delivery_step3';
+        $type_form    = HistoryLog::KC_DELIVERY_FORM_STEP_3;
+        $option_payment    = array(1 => 'Sí', 2 => 'No');
 
         $elements = array(
             1 => [
-                'title_section' => 'Generales',
+                'title_section' => 'Verificar pago',
                 'title' => null,
                 'name_field' => null,
                 'id_field' => null,
@@ -259,1201 +257,41 @@ class DeliveryStrategyTemplate implements TemplateInterface
             ],
             2 => [
                 'title_section' => null,
-                'title' => 'Email laboral',
-                'name_field' => 'client_person[work_email]',
-                'id_field' => 'work_email',
+                'title' => 'Comprobar pago',
+                'name_field' => 'credit[payment_check]',
+                'id_field' => 'payment_check',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'email',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
+                'type' => 'select2',
+                'is_option_array' => true,
+                'options' => $option_payment,
+                'col' =>  'col-12 col-md-6',
+                'is_required' => true,
                 'is_disabled' => null
             ],
+            
             3 => [
                 'title_section' => null,
-                'title' => 'Sexo',
-                'name_field' => 'client_person[sex]',
-                'id_field' => 'sex',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $sex,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            4 => [
-                'title_section' => null,
-                'title' => 'RFC',
-                'name_field' => 'client_person[rfc]',
-                'id_field' => 'rfc',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            5 => [
-                'title_section' => null,
-                'title' => 'Nacionalidad',
-                'name_field' => 'client_person[nationality]',
-                'id_field' => 'nationality',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            6 => [
-                'title_section' => null,
-                'title' => 'Estado de nacimiento',
-                'name_field' => 'client_person[birth_state]',
-                'id_field' => 'birth_state',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            6 => [
-                'title_section' => null,
-                'title' => 'CURP',
-                'name_field' => 'client_person[curp]',
-                'id_field' => 'curp',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            7 => [
-                'title_section' => 'Domicilio',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            8 => [
-                'title_section' => null,
-                'title' => 'Código postal',
-                'name_field' => 'client_person[client_postal_code]',
-                'id_field' => 'client_postal_code',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            9 => [
-                'title_section' => null,
-                'title' => 'Calle',
-                'name_field' => 'client_person[client_street]',
-                'id_field' => 'client_street',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            10 => [
-                'title_section' => null,
-                'title' => 'Número exterior',
-                'name_field' => 'client_person[client_home_external_number]',
-                'id_field' => 'client_home_external_number',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            11 => [
-                'title_section' => null,
-                'title' => 'Número interior',
-                'name_field' => 'client_person[client_home_internal_number]',
-                'id_field' => 'client_home_internal_number',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            12 => [
-                'title_section' => null,
-                'title' => 'Colonia',
-                'name_field' => 'client_person[client_colony]',
-                'id_field' => 'client_colony',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            13 => [
-                'title_section' => null,
-                'title' => 'Municipio',
-                'name_field' => 'client_person[client_city]',
-                'id_field' => 'client_city',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            14 => [
-                'title_section' => null,
-                'title' => 'Estado',
-                'name_field' => 'client_person[client_state]',
-                'id_field' => 'client_state',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            15 => [
-                'title_section' => null,
-                'title' => 'País',
-                'name_field' => 'client_person[client_country]',
-                'id_field' => 'client_country',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            16 => [
-                'title_section' => 'Banco',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            15 => [
-                'title_section' => null,
-                'title' => 'Nombre del banco',
-                'name_field' => 'client_person[bank_name]',
-                'id_field' => 'bank_name',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            16 => [
-                'title_section' => null,
-                'title' => 'Número de tarjeta',
-                'name_field' => 'client_person[bank_card_number]',
-                'id_field' => 'bank_card_number',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            17 => [
-                'title_section' => null,
-                'title' => 'Número de cuenta',
-                'name_field' => 'client_person[bank_acount_number]',
-                'id_field' => 'bank_acount_number',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            18 => [
-                'title_section' => null,
-                'title' => 'CLABE interbancaria',
-                'name_field' => 'client_person[bank_clabe]',
-                'id_field' => 'bank_clabe',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            19 => [
-                'title_section' => 'Laboral',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            20 => [
-                'title_section' => null,
-                'title' => 'Número de empleado',
-                'name_field' => 'client_person[employee_number]',
-                'id_field' => 'employee_number',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            21 => [
-                'title_section' => null,
-                'title' => 'Ingreso mensual',
-                'name_field' => 'client_person[monthly_income]',
-                'id_field' => 'monthly_income',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            22 => [
-                'title_section' => null,
-                'title' => 'Código postal',
-                'name_field' => 'client_person[workplace_postal_code]',
-                'id_field' => 'workplace_postal_code',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            23 => [
-                'title_section' => null,
-                'title' => 'Calle',
-                'name_field' => 'client_person[workplace_street]',
-                'id_field' => 'workplace_street',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            24 => [
-                'title_section' => null,
-                'title' => 'Número exterior',
-                'name_field' => 'client_person[workplace_home_external_number]',
-                'id_field' => 'workplace_home_external_number',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            25 => [
-                'title_section' => null,
-                'title' => 'Número interior',
-                'name_field' => 'client_person[workplace_home_internal_number]',
-                'id_field' => 'workplace_home_internal_number',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            26 => [
-                'title_section' => null,
-                'title' => 'Colonia',
-                'name_field' => 'client_person[workplace_colony]',
-                'id_field' => 'workplace_colony',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            27 => [
-                'title_section' => null,
-                'title' => 'Municipio',
-                'name_field' => 'client_person[workplace_city]',
-                'id_field' => 'workplace_city',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            28 => [
-                'title_section' => null,
-                'title' => 'Estado',
-                'name_field' => 'client_person[workplace_state]',
-                'id_field' => 'workplace_state',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            29 => [
-                'title_section' => null,
-                'title' => 'País',
-                'name_field' => 'client_person[workplace_country]',
-                'id_field' => 'workplace_country',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-        );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
-        return $list;
-    }
-
-    public function configFormstep3_2($id_rel, $history_id)
-    {
-        $name_form        = 'frm-template_control_desk_step3_2';
-        $type_form        = HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2;
-        $marital_status   = config('enums.marital_status');
-        $education_level  = config('enums.education_level');
-        $home_type        = config('enums.home_type');
-        $option_switch    = array(1 => 'Sí', 2 => 'No');
-        $prepad_method          = array(1 => 'Efectivo', 2 => 'cheque', 3 => 'transferencia', 4 => 'otro');
-
-        $elements = array(
-            1 => [
-                'title_section' => 'Generales',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            2 => [
-                'title_section' => null,
-                'title' => 'Estado civil',
-                'name_field' => 'client_person[marital_status]',
-                'id_field' => 'marital_status',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $marital_status,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            3 => [
-                'title_section' => null,
-                'title' => 'Nivel educativo',
-                'name_field' => 'client_person[education_level]',
-                'id_field' => 'education_level',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $education_level,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            4 => [
-                'title_section' => null,
-                'title' => 'Ocupación',
-                'name_field' => 'client_person[profession]',
-                'id_field' => 'profession',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            5 => [
-                'title_section' => null,
-                'title' => 'Horio de contacto',
-                'name_field' => 'client_person[client_contact_time]',
-                'id_field' => 'client_contact_time',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            6 => [
-                'title_section' => 'Familiares',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            7 => [
-                'title_section' => null,
-                'title' => 'Primer apellido',
-                'name_field' => 'client_person[relative_lastname]',
-                'id_field' => 'relative_lastname',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            8 => [
-                'title_section' => null,
-                'title' => 'Segundo Apellido',
-                'name_field' => 'client_person[relative_second_lastname]',
-                'id_field' => 'relative_second_lastname',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            9 => [
-                'title_section' => null,
-                'title' => 'Nombres',
-                'name_field' => 'client_person[relative_names]',
-                'id_field' => 'relative_names',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            10 => [
-                'title_section' => null,
-                'title' => 'Tel. Fijo',
-                'name_field' => 'client_person[relative_local_phone]',
-                'id_field' => 'relative_local_phone',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            11 => [
-                'title_section' => null,
-                'title' => 'Tel. Celular',
-                'name_field' => 'client_person[relative_cel_phone]',
-                'id_field' => 'relative_cel_phone',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            12 => [
-                'title_section' => null,
-                'title' => 'Horario de contacto',
-                'name_field' => 'client_person[relative_contact_time]',
-                'id_field' => 'relative_contact_time',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            13 => [
-                'title_section' => null,
-                'title' => 'Tipo vivienda',
-                'name_field' => 'client_person[home_type]',
-                'id_field' => 'home_type',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $home_type,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            14 => [
-                'title_section' => null,
-                'title' => 'Tiempo de vivir ahí',
-                'name_field' => 'client_person[home_time_living]',
-                'id_field' => 'home_time_living',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            15 => [
-                'title_section' => null,
-                'title' => 'Comentarios vivienda',
-                'name_field' => 'client_person[home_note]',
-                'id_field' => 'home_note',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            16 => [
-                'title_section' => null,
-                'title' => 'Número de propiedades',
-                'name_field' => 'client_person[propety_ownnership_amount]',
-                'id_field' => 'propety_ownnership_amount',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            17 => [
-                'title_section' => null,
-                'title' => 'Varlos estimado de propiedades',
-                'name_field' => 'client_person[propety_ownnership_value]',
-                'id_field' => 'propety_ownnership_value',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            18 => [
-                'title_section' => null,
-                'title' => 'Número de vehículos propios',
-                'name_field' => 'client_person[vehicle_ownnership_amount]',
-                'id_field' => 'vehicle_ownnership_amount',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            19 => [
-                'title_section' => null,
-                'title' => 'Varlos estimado de vehículos',
-                'name_field' => 'client_person[vehicle_ownnership_value]',
-                'id_field' => 'vehicle_ownnership_value',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            20 => [
-                'title_section' => null,
-                'title' => 'Número de dependientes económicos',
-                'name_field' => 'client_person[economic_dependents]',
-                'id_field' => 'economic_dependents',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            21 => [
-                'title_section' => 'Laboral',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            22 => [
-                'title_section' => null,
-                'title' => 'Centro de trabajo',
-                'name_field' => 'client_person[workplace_name]',
-                'id_field' => 'workplace_name',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            23 => [
-                'title_section' => null,
-                'title' => 'Fecha de ingreso',
-                'name_field' => 'client_person[admission_date]',
-                'id_field' => 'admission_date',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'date',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            24 => [
-                'title_section' => null,
-                'title' => 'Área',
-                'name_field' => 'client_person[employee_area]',
-                'id_field' => 'employee_area',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            25 => [
-                'title_section' => null,
-                'title' => 'Puesto',
-                'name_field' => 'client_person[employee_position]',
-                'id_field' => 'employee_position',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            26 => [
-                'title_section' => null,
-                'title' => 'Fuente de ingresos adicionales',
-                'name_field' => 'client_person[aditional_labor_source]',
-                'id_field' => 'aditional_labor_source',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            27 => [
-                'title_section' => null,
-                'title' => 'Ingresos adicionales',
-                'name_field' => 'client_person[aditional_labor_income]',
-                'id_field' => 'aditional_labor_income',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            27 => [
-                'title_section' => null,
-                'title' => 'Tel fijo',
-                'name_field' => 'client_person[workplace_local_phone]',
-                'id_field' => 'workplace_local_phone',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            27 => [
-                'title_section' => null,
-                'title' => 'Tel celular',
-                'name_field' => 'client_person[workplace_cel_phone]',
-                'id_field' => 'workplace_cel_phone',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            27 => [
-                'title_section' => null,
-                'title' => 'Clave centro trabajo',
-                'name_field' => 'client_person[workplace_code]',
-                'id_field' => 'workplace_code',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            27 => [
-                'title_section' => null,
-                'title' => 'Extensión',
-                'name_field' => 'client_person[workplace_local_phone_extension]',
-                'id_field' => 'workplace_local_phone_extension',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            28 => [
-                'title_section' => 'Referencias',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            29 => [
-                'title_section' => 'PLD',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            30 => [
-                'title_section' => null,
-                'title' => 'Cliente funcionario público',
-                'name_field' => 'credit[client_public_servant]',
-                'id_field' => 'client_public_servant',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' =>  'switch',
-                'is_option_array' => false,
-                'options' => $option_switch,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            31 => [
-                'title_section' => null,
-                'title' => 'Puesto',
-                'name_field' => 'credit[client_public_servant_position]',
-                'id_field' => 'client_public_servant_position',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            32 => [
-                'title_section' => null,
-                'title' => 'Período',
-                'name_field' => 'credit[client_public_servant_period]',
-                'id_field' => 'client_public_servant_period',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            33 => [
-                'title_section' => null,
-                'title' => 'Familiar funcionario público',
-                'name_field' => 'credit[relative_public_servant]',
-                'id_field' => 'relative_public_servant',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' =>  'switch',
-                'is_option_array' => false,
-                'options' => $option_switch,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            34 => [
-                'title_section' => null,
-                'title' => 'Primer apellido',
-                'name_field' => 'credit[relative_public_servant_lastname]',
-                'id_field' => 'relative_public_servant_lastname',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            35 => [
-                'title_section' => null,
-                'title' => 'Segundo apellido',
-                'name_field' => 'credit[relative_public_servant_second_lastname]',
-                'id_field' => 'relative_public_servant_second_lastname',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            35 => [
-                'title_section' => null,
-                'title' => 'Segundo apellido',
-                'name_field' => 'credit[relative_public_servant_names]',
-                'id_field' => 'relative_public_servant_names',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            35 => [
-                'title_section' => null,
-                'title' => 'Segundo apellido',
-                'name_field' => 'credit[relative_public_servant_relationship]',
-                'id_field' => 'relative_public_servant_relationship',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            35 => [
-                'title_section' => null,
-                'title' => 'Segundo apellido',
-                'name_field' => 'credit[relative_public_servant_position]',
-                'id_field' => 'relative_public_servant_position',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            35 => [
-                'title_section' => null,
-                'title' => 'Segundo apellido',
-                'name_field' => 'credit[relative_public_servant_period]',
-                'id_field' => 'relative_public_servant_period',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            36 => [
-                'title_section' => null,
-                'title' => 'Pagos anticipados',
-                'name_field' => 'credit[prepaid]',
-                'id_field' => 'prepaid',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' =>  'switch',
-                'is_option_array' => false,
-                'options' => $option_switch,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            37 => [
-                'title_section' => null,
-                'title' => 'Método de pago',
-                'name_field' => 'credit[prepad_method]',
-                'id_field' => 'prepad_method',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' =>  'switch',
-                'is_option_array' => false,
-                'options' => $prepad_method,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            38 => [
-                'title_section' => null,
-                'title' => 'Frecuencia de pago',
-                'name_field' => 'credit[prepaid_frequency]',
-                'id_field' => 'prepaid_frequency',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            39 => [
-                'title_section' => null,
-                'title' => 'Origen de recursos',
-                'name_field' => 'credit[prepaid_source]',
-                'id_field' => 'prepaid_source',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            40 => [
-                'title_section' => 'Otros datos',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            41 => [
-                'title_section' => null,
-                'title' => 'Aval',
-                'name_field' => 'credit[endorsement]',
-                'id_field' => 'endorsement',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' =>  'switch',
-                'is_option_array' => false,
-                'options' => $option_switch,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            42 => [
-                'title_section' => null,
-                'title' => 'Beneficiario real',
-                'name_field' => 'credit[real_beneficiary]',
-                'id_field' => 'real_beneficiary',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' =>  'switch',
-                'is_option_array' => false,
-                'options' => $option_switch,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            43 => [
-                'title_section' => null,
-                'title' => 'Proveedor de recursos',
-                'name_field' => 'credit[soruce_provider]',
-                'id_field' => 'soruce_provider',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' =>  'switch',
-                'is_option_array' => false,
-                'options' => $option_switch,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            44 => [
-                'title_section' => null,
-                'title' => 'Propietario real',
-                'name_field' => 'credit[real_propetary]',
-                'id_field' => 'real_propetary',
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' =>  'switch',
-                'is_option_array' => false,
-                'options' => $option_switch,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            45 => [
-                'title_section' => null,
-                'title' => 'Comentarios',
-                'name_field' => 'credit[notes]',
-                'id_field' => 'notes',
+                'title' => 'Comentario',
+                'name_field' => 'credit[payment_check_note]',
+                'id_field' => 'payment_check_note',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
                 'type' => 'textarea',
+                'col' => 'col-12',
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => false,
-                'is_disabled' => null,
-                'col' => 'col-md-12'
+                'is_disabled' => null
             ],
+            
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
+    
     
     public function configFormstep4($id_rel, $history_id)
     {
@@ -1502,103 +340,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
-    public function configFormstep5($id_rel, $history_id)
-    {
-        $name_form        = 'frm-template_control_desk_step5';
-        $type_form        = HistoryLog::KC_CONTROL_DESK_FORM_STEP_5;
-        $credit = Credit::find($id_rel);
-        $user_financials = User::getUserRole('Cliente financiera');
-        $option_user_financial = array();
-        foreach ($user_financials as $user) {
-            $name = $user->name.' '.$user->last_name.' '.$user->second_last_name;
-            $option_user_financial[$user->id] = $name;
-        }
-
-        $elements = array(
-            1 => [
-                'title_section' => 'Asignar usuario financiera',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            //*TODO: Verificar la accion al guardar para los nombres de campos
-            2 => [
-                'title_section' => null,
-                'title' => 'Usuario financiera',
-                'name_field' => 'credit[financial_user_assigned]',
-                'id_field' => 'financial_user_assigned',
-                'comment_admin' => 'Selecciona un usuario financiera',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $option_user_financial,
-                'is_required' => true,
-                'is_disabled' => null,
-                'value' => null
-            ],
-            3 => [
-                'title_section' => null,
-                'title' => 'Comisión',
-                'name_field' => 'credit[commission]',
-                'id_field' => 'commission',
-                'comment_admin' => ' Indica el importe de la comisión',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => true,
-                'is_disabled' => null,
-                'value' => null
-            ],
-            
-            4 => [
-                'title_section' => null,
-                'title' => 'Comentario',
-                'name_field' => 'credit[commission_note]',
-                'id_field' => 'commission_note',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'textarea',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => null,
-                'col' => 'col-12'
-            ],
-            
-            5 => [
-                'title_section' => null,
-                'title' => null,
-                'name_field' => 'url_redirect',
-                'id_field' => 'url_redirect',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'hidden',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => '/panel/kc-delivery',
-                'col' => 'col-12'
-            ],
-            
-        );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
-        return $list;
-    }
+    
 
     public function saveForm($request)
     {
@@ -1608,7 +350,9 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         if ($request->credit) {
             $data_credit = $request->credit;
-            $data_credit['changed_commission'] = $data_credit['changed_commission'] * 100;
+            if (isset($data_credit['changed_commission'])) {
+                $data_credit['changed_commission'] = $data_credit['changed_commission'] * 100;
+            }
             $credit->fill($data_credit);
             $credit->update();
         }
@@ -1638,71 +382,44 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $max_hour             = 12;
         $hour                 = $credit->created_at;
         
-        $percent_file         = self::percentFile($credit->id);
-        $percent_form         = self::percentForm($history); // etapa 1
-        $file                 = $percent_file == 100 ? 50 : 0;
-        $form                 = $percent_form == 100 ? 50 : 0;
-        $total_percent        = $file + $form;
-
-        $percent_form_step2   = self::percentUploadStep2($history); // etapa 2
-
-        $percent_form_step3_1 = self::percentFormStep3_1($history); //etapa 3
-        $percent_form_step3_2 = self::percentFormStep3_2($history); //etapa 3
-        $percent_form_step5   = self::percentFormStep5($history); //etapa 5
         
-        $new_step3_1 = $percent_form_step3_1 == 100 ? 50 : 0;
-        $new_step3_2 = $percent_form_step3_2 == 100 ? 50 : 0;
-        
-        $percent_form_step3 = $new_step3_1 + $new_step3_2;
+        $percent_file_step2         = self::percentFile($credit->id);
+        $percent_form   = self::percentFormStep3($history);
 
         $color_inf_credit     = 'success';
-        $color_report         = 'success';
         $option_step2         = null;
         $option_step3         = null;
-        $option_step4         = null;
-        $option_step5         = null;
         
         //$percent_form = $percent_form;
         $menu_options         = self::menuOptionsStep($history);
         $status_step2         = 'En espera';
         $status_step3         = 'En espera';
-        $status_step5         = 'En espera';
 
-        $status_step1 = 'Concluida';
+        $status_step1 = 'Concluido';
         //TODO: change validation when the decision action is carried out in the report
         if ($status_step1 == 'Concluido') {
-            $status_step2 = ($percent_form_step2 >= 100) ? 'Concluido' : 'En curso';
-            $status_step3 = ($percent_form_step3 >= 100) ? 'Concluido' : 'En curso';
-            $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
+            $status_step2 = ($percent_file_step2 >= 100) ? 'Concluido' : 'En curso';
+            $option_step2               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         }
-
-        $data_deadline    = deadline($hour, $max_hour, $total_percent, $color_inf_credit);
-        $color_inf_credit = $data_deadline['color'];
-        $hour             = $data_deadline['lbl_hour'];
-
-        $option_step1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
-        $option_step2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
-
         if ($status_step2 == 'Concluido') {
-            $option_step3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
+            $status_step3 = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+            $option_step3               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
         }
-       
-        if ($status_step3 == 'Concluido') {
-            $option_step4  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
-            $option_step5  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep5']])->render();
-        }
+
+        $data_deadline              = deadline($hour, $max_hour, $percent_file_step2, $color_inf_credit);
+        $color_inf_credit           = $data_deadline['color'];
+        $hour                       = $data_deadline['lbl_hour'];
+
+        $option_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
+        
         
 
         $view_percent_inf_credit    = 'N/A';
-        $view_percent_step2    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
-        $view_percent_step3    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step3])->render();
-        $view_percent_step5    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step5])->render();
+        $view_percent_step2         = \View::make('panel.module.view_percent', ['percent' => $percent_file_step2])->render();
 
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
-        $view_count_step2          = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
-        $view_count_step3          = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
-        $view_count_step4          = \View::make('panel.module.view_count', ['number' => 'Cuatro'])->render();
-        $view_count_step5          = \View::make('panel.module.view_count', ['number' => 'Cinco'])->render();
+        $view_count_step2           = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
+        $view_count_step3           = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
 
 
         $data = array();
@@ -1722,34 +439,27 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'deadline' => '',
             'options' => $option_step2,
         );
-        /* 
-
+       
         $data[] = array(
             'name' => $view_count_step3,
-            'step' => 'Captura de información',
+            'step' => 'Verificar pago',
             'status' => $status_step3,
-            'progress' => $view_percent_step3,
+            'progress' => $view_percent_step2,
             'deadline' => '',
             'options' => $option_step3,
         );
-        
-        $data[] = array(
-            'name' => $view_count_step4,
-            'step' => 'KYC',
-            'status' => 'Opcional',
-            'progress' => 'N/A',
-            'deadline' => '',
-            'options' => $option_step4,
-        );
-        
-        $data[] = array(
-            'name' => $view_count_step5,
-            'step' => 'Asignar usuario financiera',
-            'status' => $status_step5,
-            'progress' => $view_percent_step5,
-            'deadline' => '',
-            'options' => $option_step5,
-        ); */
+
+        if ($percent_file_step2 == 'Concluido') {
+            $data[] = array(
+                'name' => $view_count_step3,
+                'step' => 'Captura de información',
+                'status' => $status_step3,
+                'progress' => $view_percent_step2,
+                'deadline' => '',
+                'options' => $option_step3,
+            );
+        }
+       
         return $data;
     }
 
@@ -1762,8 +472,6 @@ class DeliveryStrategyTemplate implements TemplateInterface
             return self::actionStep3($history_id);
         } elseif ($step == 4) {
             return self::actionStep4($history_id);
-        } elseif ($step == 5) {
-            return self::actionStep5($history_id);
         }
         return self::actionStep1($history_id);
     }
@@ -1876,14 +584,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
     public function deadLineStep3($history)
     {
         $color_inf_credit             = 'success';
-        $percent_form1   = self::percentFormStep3_1($history);
-        $percent_form2   = self::percentFormStep3_2($history);
-
-        $new_percent_form1 = ($percent_form1 == 100) ? 50 : $percent_form1;
-        $new_percent_form2 = ($percent_form2 == 100) ? 50 : $percent_form2;
-
-        $percent_form = $new_percent_form1 + $new_percent_form2;
-
+        $percent_form   = self::percentFormStep3($history);
         $max_hour                     = self::HOUR_STEP_3;
         $hour                         = $history->created_at;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
@@ -1898,17 +599,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
-        $percent_file   = 100;
-        $percent_form1   = self::percentFormStep3_1($history);
-        $percent_form2   = self::percentFormStep3_2($history);
-
-        $new_percent_form1 = ($percent_form1 == 100) ? 50 : $percent_form1;
-        $new_percent_form2 = ($percent_form2 == 100) ? 50 : $percent_form2;
-
-        $percent_form = $new_percent_form1 + $new_percent_form2;
-
-        $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
-        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $percent_form   = self::percentFormStep3($history);
+        $status_form    =  $percent_form == 100 ? 'Concluido' : 'En curso';
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -1916,12 +608,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptionsStep3($history);
 
-
-
         $view_dead_line_inf_credit  =self::deadLineStep3($history);
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-        $form_option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
-        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -1929,14 +617,14 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $data = array();
         $data[] = array(
-            'name' => 'Carga',
-            'status' => $status_file,
+            'name' => 'Formulario',
+            'status' => $status_form,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
-            'options' => $file_option,
+            'options' => $form_option,
         );
 
-        $data[] = array(
+        /* $data[] = array(
             'name' => 'Formulario',
             'status' => $status_form,
             'deadline' => $view_dead_line_inf_credit,
@@ -1950,7 +638,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option2,
-        );
+        ); */
 
         return $data;
     }
@@ -2096,7 +784,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=3_1',
+                    'link' => '/panel/action-form/delivery/' . $history->id . '/form?step=3',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -2104,7 +792,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
             ),
             'form2' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=3_2',
+                    'link' => '/panel/action-form/delivery/' . $history->id . '/form?step=3_2',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -2112,7 +800,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
             ),
             'file' => array(
                 [
-                    'link' => '/panel/template/action-document/controlDesk/' . $history->id . '?step=3',
+                    'link' => '/panel/template/action-document/delivery/' . $history->id . '?step=3',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -2304,7 +992,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return $percent;
     }
 
-    public function percentFormStep3_1($history)
+    public function percentFormStep3($history)
     {
         $percent = 0;
         $credit     = $history->historyCredit;
@@ -2420,8 +1108,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         
         $percent_form_step2   = self::percentUploadStep2($history) == 100 ? 25 : 0; // etapa 2
 
-        $form_step3_1         = self::percentFormStep3_1($history) == 100 ? 50 :  self::percentFormStep3_1($history); //etapa 3
-        $form_step3_2         = self::percentFormStep3_2($history) == 100 ? 50 :  self::percentFormStep3_1($history); //etapa 3
+        $form_step3_1         = self::percentFormStep3($history) == 100 ? 50 :  self::percentFormStep3($history); //etapa 3
+        $form_step3_2         = self::percentFormStep3_2($history) == 100 ? 50 :  self::percentFormStep3($history); //etapa 3
         $totalform_step3   = $form_step3_1 + $form_step3_2;
         $percent3  = $totalform_step3 == 100 ? 25 : 0;
 
@@ -2557,7 +1245,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         if ($type == 2) {
             $breadcumbs = self::optionBreadcumblistAction($history);
         } else {
-            if ($step == 1 || $step == 2) {
+            if ($step == 1 || $step == 2 || $step == 3) {
                 $breadcumbs = self::optionSteps($history);
             }
         }

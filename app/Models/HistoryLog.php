@@ -54,6 +54,8 @@ class HistoryLog extends Model
     
     const KC_DELIVERY_FORM_STEP_2             = 32;
     const KC_DELIVERY_UPLOAD_STEP_2           = 33;
+
+    const KC_DELIVERY_FORM_STEP_3             = 34;
     
 
     protected $fillable = [
@@ -102,6 +104,7 @@ class HistoryLog extends Model
         31 => 'Respuesta del módulo',
         32 => 'Formulario (etapa 2)',
         33 => 'Carga (etapa 2)',
+        34 => 'Formulario (etapa 3)',
     ];
 
     public static $name_model = [
@@ -128,6 +131,7 @@ class HistoryLog extends Model
         31 => 'delivery',
         32 => 'delivery',
         33 => 'delivery',
+        34 => 'delivery',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $is_subprocess = false)

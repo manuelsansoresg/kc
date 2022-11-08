@@ -11,7 +11,7 @@
                 <span class="preview-title-lg overline-title">{{ $element['title_section'] }}</span>
             @endif
             @if ($element['type'] == 'text')
-                <div class="col-md-6">
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
@@ -59,7 +59,7 @@
             @endif
 
             @if ($element['type'] == 'number')
-                <div class="col-md-6">
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
@@ -76,7 +76,7 @@
                 </div>
             @endif
             @if ($element['type'] == 'date')
-                <div class="col-md-6">
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
@@ -94,7 +94,7 @@
             @endif
 
             @if ($element['type'] == 'email')
-                <div class="col-md-6">
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
@@ -114,8 +114,8 @@
                 @php
                     $options_switch = $element['options'];
                 @endphp
-                <div class="col-md-6">
-                    <div class="preview-block"><span class="preview-title form-label">{{ $element['title'] }}</span>
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
+                    <div class="preview-block"><span class="preview-title form-label"> {{ $indicator_required }} {{ $element['title'] }}</span>
                         @foreach ($options_switch as $key => $option_switch)
                             <div class="custom-control custom-radio"><input type="radio" id="{{ $element['id_field'] }}_{{ $key }}"
                                     name="{{ $element['name_field'] }}" class="custom-control-input" value="{{ $key }}"
@@ -133,7 +133,7 @@
                     $options = $element['options'];
                     $is_option_array = $element['is_option_array'];
                 @endphp
-                <div class="col-md-6">
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label"> {{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">

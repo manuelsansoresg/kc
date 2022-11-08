@@ -67,6 +67,8 @@ class Credit extends Model
         'commission_note',
         'changed_commission', //* save * 100
         'changed_commission_note',
+        'payment_check',
+        'payment_check_note',
     ];
 
     public static function listDatatable($status)
@@ -74,7 +76,6 @@ class Credit extends Model
        
         
         $get_list    = HistoryLog::getByStatus($status);
-        
         $users        = array();
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);
