@@ -58,6 +58,8 @@ class HistoryLog extends Model
     const KC_DELIVERY_FORM_STEP_3             = 34;
     
     const CREDITS_PAID                        = 35;
+
+    const KC_AFTER_MARKET                     = 36;
     
 
     protected $fillable = [
@@ -108,6 +110,7 @@ class HistoryLog extends Model
         33 => 'Carga (etapa 2)',
         34 => 'Formulario (etapa 3)',
         35 => 'Créditos pagados',
+        36 => 'Entró a KC - After market',
     ];
 
     public static $name_model = [
@@ -135,6 +138,7 @@ class HistoryLog extends Model
         32 => 'delivery',
         33 => 'delivery',
         34 => 'delivery',
+        36 => 'afterMarket',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $is_subprocess = false)
@@ -190,6 +194,8 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2);
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2);
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3);
+            
+            HistoryLog::move($id_rel, HistoryLog::KC_AFTER_MARKET, HistoryLog::KC_AFTER_MARKET);
         }
         if ($status_id == HistoryLog::CREDITS_PAID) {
             self::updateReason($history, 'pagado');

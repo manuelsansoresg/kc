@@ -2,6 +2,7 @@
 
 namespace App\Strategies\Values;
 
+use App\Strategies\Templates\AfterMarketStrategyTemplate;
 use App\Strategies\Templates\ControlDeskStrategyTemplate;
 use App\Strategies\Templates\DebtCreditStrategyTemplate;
 use App\Strategies\Templates\DeliveryStrategyTemplate;
@@ -16,5 +17,6 @@ final class TemplateValues
         'debtCredit' =>DebtCreditStrategyTemplate::class,
         'controlDesk' =>ControlDeskStrategyTemplate::class,
         'delivery' => DeliveryStrategyTemplate::class,
+        'afterMarket' => AfterMarketStrategyTemplate::class,
     ];
 }

@@ -319,6 +319,7 @@ class Credit extends Model
             10 => 'debtCredit',
             21 => 'controlDesk',
             30 => 'delivery',
+            36 => 'afterMarket',
 
         );
         return $routes;
