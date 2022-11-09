@@ -49,7 +49,6 @@ class ListStrategy implements ActionInterface
         }
 
         $history_logs = HistoryLog::getByStatus($list_actions, $id_rel);
-
         $data = array();
         $array_model = array('newCredit' => 'KC- Check up', 'debtCredit' => 'KC- Check up', 'controlDesk' => 'KC- Control desk', 'delivery' => 'Delivery');
 

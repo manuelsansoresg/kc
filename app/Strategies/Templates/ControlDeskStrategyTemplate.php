@@ -2645,7 +2645,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function getFile($template_config_id)
     {
-        $config = self::configUpload()[$template_config_id];
+        try {
+            $config = self::configUpload()[$template_config_id];
+        } catch (\Exception $th) {
+            $config = self::uploadStep3()[$template_config_id];
+        }
+
         return $config;
     }
 

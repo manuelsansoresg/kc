@@ -112,8 +112,20 @@ class CreditController extends Controller
             HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
             HistoryLog::KC_CHECK_UP_ACTION_DESITION,
             HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
+
+            HistoryLog::KC_CONTROL_DESK_UPLOAD,
+            HistoryLog::KC_CONTROL_DESK_FORM,
+
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_2,
+            
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
+            
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
+            
+            HistoryLog::KC_DELIVERY_UPLOAD_STEP_2,
+            HistoryLog::KC_DELIVERY_FORM_STEP_3,
         ];
-        
         $data_progress       = (new $leadStrategy)->get('in_progress', $actions, $credit_id);
         $data_completed       = (new $leadStrategy)->get('completed', $actions, $credit_id);
         $list = array_merge($data_progress, $data_completed);
