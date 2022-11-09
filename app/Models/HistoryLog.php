@@ -57,6 +57,8 @@ class HistoryLog extends Model
 
     const KC_DELIVERY_FORM_STEP_3             = 34;
     
+    const CREDITS_PAID                        = 35;
+    
 
     protected $fillable = [
         'id_rel',
@@ -105,6 +107,7 @@ class HistoryLog extends Model
         32 => 'Formulario (etapa 2)',
         33 => 'Carga (etapa 2)',
         34 => 'Formulario (etapa 3)',
+        35 => 'Créditos pagados',
     ];
 
     public static $name_model = [
@@ -127,7 +130,7 @@ class HistoryLog extends Model
         27 => 'controlDesk',
         28 => 'controlDesk',
         29 => 'controlDesk',
-        30 => 'controlDesk',
+        30 => 'delivery',
         31 => 'delivery',
         32 => 'delivery',
         33 => 'delivery',
@@ -170,7 +173,7 @@ class HistoryLog extends Model
         }
     }
 
-    public function subHistories($id_rel, $status_id, $old_status_id)
+    public function subHistories($id_rel, $status_id, $history)
     {
         if ($status_id == HistoryLog::KC_CONTROL_DESK) {
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD, HistoryLog::KC_CONTROL_DESK_UPLOAD);
@@ -181,6 +184,9 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2);
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4);
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5);
+        }
+        if ($status_id == HistoryLog::CREDITS_PAID) {
+            self::updateReason($history, 'pagado');
         }
     }
 
@@ -193,6 +199,13 @@ class HistoryLog extends Model
             );
             HistoryLog::where($where)->update(['status' => 0]);
         }
+    }
+
+    public function updateReason($history, $reason)
+    {
+        $history = HistoryLog::find($history->id);
+        $history->reason = $reason;
+        $history->update();
     }
 
     public static function getByStatus($status_id, $id_rel = null)

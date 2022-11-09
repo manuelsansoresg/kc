@@ -59,6 +59,10 @@ return [
         3 => 'otro',
     ),
 
+    'pagado' => array(
+        1 => 'Pagado'
+    ),
+
 
     'type_lead' => array(
         1 => 'Autoservicio',

@@ -87,12 +87,12 @@ class Credit extends Model
             $model            = HistoryLog::$name_model[$history->status_id];
             $templateStrategy = TemplateValues::STRATEGY[$model];
             $percent          = (new $templateStrategy)->getPercent($history);
-            $percent_form          = (new $templateStrategy)->percentForm($history);
+            $percent_form     = (new $templateStrategy)->percentForm($history);
             $hour             = $query->created_at;
             $max_hour         = 24;
-
             $data_deadline    = deadlineKc($hour, $max_hour);
             $color_inf_credit = $data_deadline['color'];
+
             if ($history->status_id === HistoryLog::KC_DELIVERY) {
                 $hour = 8;
             }
@@ -145,8 +145,8 @@ class Credit extends Model
             $advisor          = $query->creditAdvisor;
             $menu_options   = self::menuOptionCredit($history);
 
-            $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive');
-            $reason = isset(config('enums.'.$reason_enums[$history->status_id])[$history->reason]) ? config('enums.'.$reason_enums[$history->status_id])[$history->reason] : null;;
+            $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive', 35 => 'pagado');
+            $reason = isset(config('enums.'.$reason_enums[$history->status_id])[$history->reason]) ? config('enums.'.$reason_enums[$history->status_id])[$history->reason] : null;
 
             $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['archive']])->render();
             $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
@@ -247,7 +247,6 @@ class Credit extends Model
                     );
                 }
             }
-
         }
         return $users;
     }

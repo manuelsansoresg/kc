@@ -286,6 +286,22 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
+            4 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/credit/product/35',
+                'col' => 'col-12'
+            ],
             
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -364,11 +380,11 @@ class DeliveryStrategyTemplate implements TemplateInterface
             $client->update();
         }
         if ($history != null) {
-            $percent_form_step5 = self::percentFormStep5($history);
+            $percent_form_step5 = self::percentFormStep3($history);
             if ($percent_form_step5 == 100) {
-                HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK);
-                $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
-                (new $notification_add)->send($credit->id);
+                HistoryLog::move($credit->id, HistoryLog::CREDITS_PAID, HistoryLog::KC_CONTROL_DESK);
+               /*  $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
+                (new $notification_add)->send($credit->id); */
             }
         }
         
@@ -383,8 +399,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $hour                 = $credit->created_at;
         
         
-        $percent_file_step2         = self::percentFile($credit->id);
-        $percent_form   = self::percentFormStep3($history);
+        $percent_file_step2   = self::percentFile($credit->id);
+        $percent_form         = self::percentFormStep3($history);
 
         $color_inf_credit     = 'success';
         $option_step2         = null;
@@ -416,10 +432,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $view_percent_inf_credit    = 'N/A';
         $view_percent_step2         = \View::make('panel.module.view_percent', ['percent' => $percent_file_step2])->render();
+        $view_percent_step3         = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
 
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_step2           = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
         $view_count_step3           = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
+        $view_count_step4           = \View::make('panel.module.view_count', ['number' => 'Cuatro'])->render();
 
 
         $data = array();
@@ -444,19 +462,19 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'name' => $view_count_step3,
             'step' => 'Verificar pago',
             'status' => $status_step3,
-            'progress' => $view_percent_step2,
+            'progress' => $view_percent_step3,
             'deadline' => '',
             'options' => $option_step3,
         );
 
-        if ($percent_file_step2 == 'Concluido') {
+        if ($percent_form == 100) {
             $data[] = array(
-                'name' => $view_count_step3,
+                'name' => $view_count_step4,
                 'step' => 'Captura de información',
                 'status' => $status_step3,
-                'progress' => $view_percent_step2,
+                'progress' => $view_percent_step3,
                 'deadline' => '',
-                'options' => $option_step3,
+                'options' => null,
             );
         }
        
@@ -623,23 +641,6 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'advisor' => $name_advisor,
             'options' => $form_option,
         );
-
-        /* $data[] = array(
-            'name' => 'Formulario',
-            'status' => $status_form,
-            'deadline' => $view_dead_line_inf_credit,
-            'advisor' => $name_advisor,
-            'options' => $form_option,
-        );
-
-        $data[] = array(
-            'name' => 'Formulario',
-            'status' => $status_form,
-            'deadline' => $view_dead_line_inf_credit,
-            'advisor' => $name_advisor,
-            'options' => $form_option2,
-        ); */
-
         return $data;
     }
     
@@ -872,22 +873,6 @@ class DeliveryStrategyTemplate implements TemplateInterface
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
-            'actionstep4' => array(
-                [
-                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=4',
-                    'onclick' => '',
-                    'name' => $lbl_action,
-                    'icon' => 'icon ni ni-view-list-wd',
-                ]
-            ),
-            'actionstep5' => array(
-                [
-                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=5',
-                    'onclick' => '',
-                    'name' => $lbl_action,
-                    'icon' => 'icon ni ni-view-list-wd',
-                ]
-            ),
 
         );
 
@@ -999,124 +984,31 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $client     = $credit->creditClientPerson;
 
         $total_valid = 0;
-        if ($client != null && $client->sex != '') {
-            $total_valid = $total_valid + 5;
-        }
-        //dd($history->id, $client);
-        if ($client != null && $client->rfc != null) {
-            $total_valid = $total_valid + 5;
-        }
-
-        if ($client != null && $client->nationality != null) {
-            $total_valid = $total_valid + 5;
-        }
-
-        if ($client != null && $client->curp != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->client_postal_code != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->client_street != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->client_home_external_number != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->client_home_internal_number != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->client_colony != null) {
-            $total_valid = $total_valid + 5;
-        }
         
-        if ($client != null && $client->client_city != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->client_state != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->client_country != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->monthly_income != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->workplace_postal_code != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->workplace_street != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->workplace_home_external_number != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->workplace_home_internal_number != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->workplace_colony != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->workplace_city != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->workplace_state != null) {
-            $total_valid = $total_valid + 5;
-        }
-        if ($client != null && $client->workplace_country != null) {
-            $total_valid = $total_valid + 5;
-        }
-        $percent =  (100 / 100) * $total_valid;
-        return $percent;
-    }
-
-    public function percentFormStep3_2($history)
-    {
-        $percent = 0;
-        $credit     = $history->historyCredit;
-        $client     = $credit->creditClientPerson;
-
-        $total_valid = 0;
-        if ($client != null && $client->marital_status != '') {
+        if ($credit != null && $credit->payment_check != null) {
             $total_valid = 100;
         }
+
+        
         $percent =  (100 / 100) * $total_valid;
         return $percent;
     }
+
     
-    public function percentFormStep5($history)
-    {
-        $percent = 0;
-        $credit     = $history->historyCredit;
-
-        $total_valid = 0;
-        if ($credit != null && $credit->financial_user_assigned != '' && $credit->commission != '') {
-            $total_valid = 100;
-        }
-        $percent =  (100 / 100) * $total_valid;
-        return $percent;
-    }
 
     //* get all percentages of the shares
     public function getPercent($history)
     {
-        $credit   = $history->historyCredit;
-        $file1    = self::percentFile($credit->id) == 100 ? 50 :  self::percentFile($credit->id) ;
-        $form1    = self::percentForm($history) == 100 ? 50 : self::percentForm($history); // etapa 1
-        $total1   = $file1 + $form1;
-        $percent1  = $total1 == 100 ? 25 : 0;
+        $credit       = $history->historyCredit;
         
-        $percent_form_step2   = self::percentUploadStep2($history) == 100 ? 25 : 0; // etapa 2
+        $file1        = self::percentFile($credit->id);
+        $percent1     = $file1 == 100 ? 50 : 0;
+        $form_step3   = self::percentFormStep3($history); //etapa 3
+        $percent3     = $form_step3 == 100 ? 50 : 0;
 
-        $form_step3_1         = self::percentFormStep3($history) == 100 ? 50 :  self::percentFormStep3($history); //etapa 3
-        $form_step3_2         = self::percentFormStep3_2($history) == 100 ? 50 :  self::percentFormStep3($history); //etapa 3
-        $totalform_step3   = $form_step3_1 + $form_step3_2;
-        $percent3  = $totalform_step3 == 100 ? 25 : 0;
 
-        $percent_form_step5   = self::percentFormStep5($history)  == 100 ? 25 : 0; //etapa 5
-
-        $total_valid = $percent1 + $percent_form_step2 + $percent3 + $percent_form_step5;
-        $percent =  (100 / 100) * $total_valid;
+        $total_valid  = $percent1 + $percent3;
+        $percent      = (100 / 100) * $total_valid;
         return $percent;
     }
 

@@ -141,9 +141,9 @@ class ListStrategy implements ActionInterface
                 $view_dead_line_inf_credit =  'N/A';
             }
            
+            /* if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_5) {
             
-           
-
+            } */
             $option = ($history_log->status_id == 7) ? $file_option : $form_option;
 
             //TODO:  si eres admin o asesor debes poder ver todos y si no solo puedes ver los tuyos como responsable revisar cual campo sera el responsable
