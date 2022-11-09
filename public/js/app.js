@@ -1942,6 +1942,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'progress'
     }, {
+      data: 'in_progress'
+    }, {
       data: 'deadline'
     }, {
       data: 'options'

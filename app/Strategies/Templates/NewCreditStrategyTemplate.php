@@ -422,13 +422,25 @@ class NewCreditStrategyTemplate implements TemplateInterface
     }
 
     //* get all percentages of the shares
-    public function getPercent($history)
+    public function getPercent($history, $show_current_show = false)
     {
-        $percent_form = self::percentForm($history) / 2;
-        $percent_desition = 0;
-        $total_valid = $percent_form  + $percent_desition;
+        $credit     = $history->historyCredit;
+        $percent_desition = Credit::percentApplyDecision($credit->id);
+        $percent_form = self::percentForm($history);
+        
+        $new_percent_form = $percent_desition == 100 ? 50 : 0;
+        $new_percent_desition = $percent_form == 100 ? 50 : 0;
+
+        $total_valid = $new_percent_form  + $new_percent_desition;
 
         $percent =  (100 / 100) * $total_valid;
+        
+        $current_show = $new_percent_desition < 100 ? 'Información del crédito': 'Reporte';
+
+        if ($show_current_show == true) {
+            return $current_show;
+        }
+        
         return $percent;
     }
 

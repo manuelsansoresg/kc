@@ -148,7 +148,7 @@ class ListStrategy implements ActionInterface
             }
             
             if ($history_log->status_id === HistoryLog::KC_DELIVERY_UPLOAD_STEP_2) {
-                $percent_form   = (new $templateStrategy)->percentFile($history_log);
+                $percent_form   = (new $templateStrategy)->percentFile($credit->id);
                 $menu_options   = (new $templateStrategy)->menuOptions($history_log, 2);
                 $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
                 $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
@@ -156,7 +156,7 @@ class ListStrategy implements ActionInterface
             }
            
             if ($history_log->status_id === HistoryLog::KC_DELIVERY_FORM_STEP_3) {
-                $percent_form   = (new $templateStrategy)->percentFile($history_log);
+                $percent_form   = (new $templateStrategy)->percentFormStep3($history_log);
                 $menu_options   = (new $templateStrategy)->menuOptionsStep3($history_log);
                 $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
                 $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();

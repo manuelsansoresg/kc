@@ -2607,7 +2607,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     }
 
     //* get all percentages of the shares
-    public function getPercent($history)
+    public function getPercent($history, $show_current_show = false)
     {
         $credit   = $history->historyCredit;
         $file1    = self::percentFile($credit->id) == 100 ? 50 :  self::percentFile($credit->id) ;

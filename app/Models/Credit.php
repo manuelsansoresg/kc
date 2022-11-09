@@ -92,10 +92,16 @@ class Credit extends Model
             $max_hour         = 24;
             $data_deadline    = deadlineKc($hour, $max_hour);
             $color_inf_credit = $data_deadline['color'];
+            $in_progress      = null;
 
             if ($history->status_id === HistoryLog::KC_DELIVERY) {
                 $hour = 8;
             }
+            
+            if ($history->status_id === HistoryLog::KC_CHECK_UP || $history->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) { //*model new credit
+                $in_progress = (new $templateStrategy)->getPercent($history, true);
+            }
+            
             $hour             = $data_deadline['lbl_hour'];
             $status_id        = $history->status_id;
             
@@ -114,6 +120,7 @@ class Credit extends Model
                     'client' => $content_client,
                     'advisor' => $name_advisor,
                     'progress' => $progress_bar,
+                    'in_progress' => $in_progress,
                     'deadline' => $dead_line,
                     'options' => $option
                 );
@@ -124,12 +131,20 @@ class Credit extends Model
                     'client' => $content_client,
                     'advisor' => $name_advisor,
                     'progress' => $progress_bar,
+                    'in_progress' => $in_progress,
                     'deadline' => $dead_line,
                     'options' => $option
                 );
             }
         }
         return $users;
+    }
+
+    public static function percentApplyDecision($credit_id)
+    {
+        $credit   = Credit::find($credit_id);
+        $desition = $credit->applied_financial != null ? 100 : 0;
+        return $desition;
     }
 
     public static function listDatatableProduct($status)

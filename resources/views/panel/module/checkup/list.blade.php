@@ -35,6 +35,7 @@
                                             <th>Cliente</th>
                                             <th>Asesor</th>
                                             <th>Progreso</th>
+                                            <th>En curso</th>
                                             <th>Deadline</th>
                                             <th></th>
                                         </tr>

@@ -86,8 +86,6 @@ class DeliveryStrategyTemplate implements TemplateInterface
             return self::configFormstep3($id_rel, $history_id);
         } elseif ($step == '4') {
             return self::configFormstep4($id_rel, $history_id);
-        } elseif ($step == '5') {
-            return self::configFormstep5($id_rel, $history_id);
         }
     }
 
@@ -387,7 +385,6 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 (new $notification_add)->send($credit->id); */
             }
         }
-        
     }
 
     public function listStep($history_id)
@@ -676,41 +673,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return $data;
     }
     
-    public function actionStep5($history_id)
-    {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
-
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptionsStep5($history);
-
-        $percent_form_step5 = self::percentFormStep5($history); //etapa 3
-        $status_step5         = 'En espera';
-        $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
-
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
-
-        $data = array();
-        
-
-        $data[] = array(
-            'name' => 'Formulario',
-            'status' =>  $status_step5,
-            'deadline' => 'N/A',
-            'advisor' => $name_advisor,
-            'options' => $form_option,
-        );
-
-        return $data;
-    }
+    
 
     public function listStepReport($history_id)
     {
@@ -1005,7 +968,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
     
 
     //* get all percentages of the shares
-    public function getPercent($history)
+    public function getPercent($history, $show_current_show = false)
     {
         $credit       = $history->historyCredit;
         
@@ -1013,10 +976,15 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $percent1     = $file1 == 100 ? 50 : 0;
         $form_step3   = self::percentFormStep3($history); //etapa 3
         $percent3     = $form_step3 == 100 ? 50 : 0;
+        $current_show = $form_step3 < 100 ? 'Comprobar pago': 'Verificar pago';
 
 
         $total_valid  = $percent1 + $percent3;
         $percent      = (100 / 100) * $total_valid;
+        
+        if ($show_current_show == true) {
+            return $current_show;
+        }
         return $percent;
     }
 
