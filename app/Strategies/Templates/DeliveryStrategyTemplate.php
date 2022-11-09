@@ -21,7 +21,7 @@ use stdClass;
 class DeliveryStrategyTemplate implements TemplateInterface
 {
     const HOUR_STEP_1  = 6;
-    const HOUR_STEP_2  = 192;
+    const HOUR_STEP_2  = 72;
     const HOUR_STEP_3  = 2;
 
     public function move($id)
@@ -773,6 +773,14 @@ class DeliveryStrategyTemplate implements TemplateInterface
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
+                ]
+            ),
+            'file' => array(
+                [
+                    'link' => null,
+                    'onclick' => null,
+                    'name' => null,
+                    'icon' => null
                 ]
             ),
         );

@@ -185,6 +185,12 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4);
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5);
         }
+        if ($status_id == HistoryLog::KC_DELIVERY) {
+            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
+            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2);
+            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2);
+            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3);
+        }
         if ($status_id == HistoryLog::CREDITS_PAID) {
             self::updateReason($history, 'pagado');
         }
