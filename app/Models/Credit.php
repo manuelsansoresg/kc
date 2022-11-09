@@ -98,7 +98,7 @@ class Credit extends Model
                 $hour = 8;
             }
             
-            if ($history->status_id === HistoryLog::KC_CHECK_UP || $history->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) { //*model new credit
+            if ($history->status_id === HistoryLog::KC_CHECK_UP || $history->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION || $history->status_id === HistoryLog::KC_CONTROL_DESK || $history->status_id === HistoryLog::KC_DELIVERY) { //*model new credit
                 $in_progress = (new $templateStrategy)->getPercent($history, true);
             }
             

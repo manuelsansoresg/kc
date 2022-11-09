@@ -2616,16 +2616,30 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent1  = $total1 == 100 ? 25 : 0;
         
         $percent_form_step2   = self::percentFormStep2($history) == 100 ? 25 : 0; // etapa 2
+        
+        $current_show = $percent_form_step2 == 25 ? 'Características del crédito': 'Viabilidad';
 
         $form_step3_1         = self::percentFormStep3_1($history) == 100 ? 50 :  self::percentFormStep3_1($history); //etapa 3
         $form_step3_2         = self::percentFormStep3_2($history) == 100 ? 50 :  self::percentFormStep3_1($history); //etapa 3
         $totalform_step3   = $form_step3_1 + $form_step3_2;
         $percent3  = $totalform_step3 == 100 ? 25 : 0;
 
+        if ($percent3 == 25) {
+            $current_show = $percent3 == 25 ? 'Captura de información': 'Características del crédito';
+        }
+
         $percent_form_step5   = self::percentFormStep5($history)  == 100 ? 25 : 0; //etapa 5
+
+        if ($percent_form_step5 == 25) {
+            $current_show = $percent_form_step5 == 25 ? 'Asignar usuario financiera': 'Captura de información';
+        }
 
         $total_valid = $percent1 + $percent_form_step2 + $percent3 + $percent_form_step5;
         $percent =  (100 / 100) * $total_valid;
+        
+        if ($show_current_show == true) {
+            return $current_show;
+        }
         return $percent;
     }
 

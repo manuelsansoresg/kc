@@ -2173,6 +2173,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'progress'
     }, {
+      data: 'in_progress'
+    }, {
       data: 'deadline'
     }, {
       data: 'options'
@@ -2259,6 +2261,8 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'advisor'
     }, {
       data: 'progress'
+    }, {
+      data: 'in_progress'
     }, {
       data: 'deadline'
     }, {
