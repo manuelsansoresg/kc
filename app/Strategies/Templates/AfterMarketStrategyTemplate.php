@@ -20,7 +20,7 @@ use stdClass;
 
 class AfterMarketStrategyTemplate implements TemplateInterface
 {
-    const HOUR_STEP_1  = 6;
+    const HOUR_STEP_1  = 72;
     const HOUR_STEP_2  = 72;
     const HOUR_STEP_3  = 2;
 
@@ -82,10 +82,6 @@ class AfterMarketStrategyTemplate implements TemplateInterface
             return self::configFormStep1($id_rel, $history_id);
         } elseif ($step == 2) {
             return self::configFormstep2($id_rel, $history_id);
-        } elseif ($step == '3') {
-            return self::configFormstep3($id_rel, $history_id);
-        } elseif ($step == '4') {
-            return self::configFormstep4($id_rel, $history_id);
         }
     }
 
@@ -232,128 +228,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         return $list;
     }
 
-    public function configFormstep3($id_rel, $history_id)
-    {
-        $name_form    = 'frm-template_delivery_step3';
-        $type_form    = HistoryLog::KC_DELIVERY_FORM_STEP_3;
-        $option_payment    = array(1 => 'Sí', 2 => 'No');
-
-        $elements = array(
-            1 => [
-                'title_section' => 'Verificar pago',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            2 => [
-                'title_section' => null,
-                'title' => 'Comprobar pago',
-                'name_field' => 'credit[payment_check]',
-                'id_field' => 'payment_check',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $option_payment,
-                'col' =>  'col-12 col-md-6',
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            
-            3 => [
-                'title_section' => null,
-                'title' => 'Comentario',
-                'name_field' => 'credit[payment_check_note]',
-                'id_field' => 'payment_check_note',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'textarea',
-                'col' => 'col-12',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => false,
-                'is_disabled' => null
-            ],
-            4 => [
-                'title_section' => null,
-                'title' => null,
-                'name_field' => 'url_redirect',
-                'id_field' => 'url_redirect',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'hidden',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => '/panel/credit/product/35',
-                'col' => 'col-12'
-            ],
-            
-        );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
-        return $list;
-    }
     
-    
-    public function configFormstep4($id_rel, $history_id)
-    {
-        $name_form        = 'frm-template_control_desk_step4';
-        $type_form        = HistoryLog::KC_CONTROL_DESK_FORM_STEP_4;
-        $marital_status   = config('enums.marital_status');
-        $education_level  = config('enums.education_level');
-        $home_type        = config('enums.home_type');
-        $option_switch    = array(1 => 'Sí', 2 => 'No');
-        $prepad_method          = array(1 => 'Efectivo', 2 => 'cheque', 3 => 'transferencia', 4 => 'otro');
-        $credit = Credit::find($id_rel);
-        $client_person = $credit->creditClientPerson;
-        $curp = $client_person != null ? $client_person->curp : null;
-        $elements = array(
-            1 => [
-                'title_section' => 'Generales',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-            2 => [
-                'title_section' => null,
-                'title' => 'Validar CURP',
-                'name_field' => 'client_person[curp]',
-                'id_field' => 'curp',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => true,
-                'is_disabled' => null,
-                'value' => $curp
-            ],
-            
-        );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
-        return $list;
-    }
     
 
     public function saveForm($request)
@@ -409,15 +284,6 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $status_step3         = 'En espera';
 
         $status_step1 = 'Concluido';
-        //TODO: change validation when the decision action is carried out in the report
-        if ($status_step1 == 'Concluido') {
-            $status_step2 = ($percent_file_step2 >= 100) ? 'Concluido' : 'En curso';
-            $option_step2               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
-        }
-        if ($status_step2 == 'Concluido') {
-            $status_step3 = ($percent_form >= 100) ? 'Concluido' : 'En curso';
-            $option_step3               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
-        }
 
         $data_deadline              = deadline($hour, $max_hour, $percent_file_step2, $color_inf_credit);
         $color_inf_credit           = $data_deadline['color'];
@@ -425,55 +291,21 @@ class AfterMarketStrategyTemplate implements TemplateInterface
 
         $option_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
         
-        
-
         $view_percent_inf_credit    = 'N/A';
-        $view_percent_step2         = \View::make('panel.module.view_percent', ['percent' => $percent_file_step2])->render();
         $view_percent_step3         = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
-
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
-        $view_count_step2           = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
-        $view_count_step3           = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
-        $view_count_step4           = \View::make('panel.module.view_count', ['number' => 'Cuatro'])->render();
 
 
         $data = array();
         $data[] = array(
             'name' => $view_count_inf_credit,
-            'step' => 'Entrega',
+            'step' => 'En curso',
             'status' => $status_step1,
             'progress' => $view_percent_inf_credit,
             'deadline' => '',
             'options' => $option_step1,
         );
-        $data[] = array(
-            'name' => $view_count_step2,
-            'step' => 'Comprobar pago',
-            'status' => $status_step2,
-            'progress' => $view_percent_step2,
-            'deadline' => '',
-            'options' => $option_step2,
-        );
-       
-        $data[] = array(
-            'name' => $view_count_step3,
-            'step' => 'Verificar pago',
-            'status' => $status_step3,
-            'progress' => $view_percent_step3,
-            'deadline' => '',
-            'options' => $option_step3,
-        );
-
-        if ($percent_form == 100) {
-            $data[] = array(
-                'name' => $view_count_step4,
-                'step' => 'Captura de información',
-                'status' => $status_step3,
-                'progress' => $view_percent_step3,
-                'deadline' => '',
-                'options' => null,
-            );
-        }
+        
        
         return $data;
     }
@@ -493,47 +325,57 @@ class AfterMarketStrategyTemplate implements TemplateInterface
 
     
     
-    public function deadLineStep1($history)
+    public function deadLineStep1($history, $percent, $show_max_hour = false)
     {
         $color_inf_credit             = 'success';
-        $percent_form                 = self::percentForm($history);
+        $percent_form                 = $percent; //TODO: calculate after create and save form
         $max_hour                     = self::HOUR_STEP_1;
         $hour                         = $history->created_at;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit, $show_max_hour);
         $color_inf_credit             = $data_deadline['color'];
         $hour                         = $data_deadline['lbl_hour'];
         $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        if ($show_max_hour == true) {
+            return $data_deadline['lbl_hour'];
+        }
         return $view_dead_line_inf_credit;
     }
 
     public function actionStep1($history_id)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
-        $status_file    = 'Concluida';
+        $history                = HistoryLog::find($history_id);
+        $credit                 = $history->historyCredit;
+        $advisor                = $credit->creditAdvisor;
+        $status_file            = 'Concluida';
+        $hour                   = $history->created_at;
+        //$percent_form   = self::percentForm($history);
+        $percent_form           = self::percentForm($history);
 
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        $user                   = User::find($advisor->id);
+        $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptions($history, 1);
+        $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        $menu_options           = self::menuOptions($history, 1);
 
-        $view_dead_line_upload  = 'N/A';
-
-        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $view_dead_line_step1   = self::deadLineStep1($history, 0);
+        $get_hour               = self::deadLineStep1($history, 0, true);
+        $option                 = null;
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
+        }
+
+        if ($get_hour == self::HOUR_STEP_1) {
+            $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         }
 
         $data = array();
         $data[] = array(
             'name' => 'Respuesta de módulo',
             'status' => $status_file,
-            'deadline' => $view_dead_line_upload,
+            'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
-            'options' => $file_option,
+            'options' => $option,
         );
         return $data;
     }
@@ -559,6 +401,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
         $percent_form   = self::percentFile($credit->id);
+        
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -596,154 +439,48 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         return $data;
     }
 
-    public function deadLineStep3($history)
-    {
-        $color_inf_credit             = 'success';
-        $percent_form   = self::percentFormStep3($history);
-        $max_hour                     = self::HOUR_STEP_3;
-        $hour                         = $history->created_at;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
-    }
-
-    public function actionStep3($history_id)
-    {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
-        $percent_form   = self::percentFormStep3($history);
-        $status_form    =  $percent_form == 100 ? 'Concluido' : 'En curso';
-
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptionsStep3($history);
-
-        $view_dead_line_inf_credit  =self::deadLineStep3($history);
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
-
-        $data = array();
-        $data[] = array(
-            'name' => 'Formulario',
-            'status' => $status_form,
-            'deadline' => $view_dead_line_inf_credit,
-            'advisor' => $name_advisor,
-            'options' => $form_option,
-        );
-        return $data;
-    }
-    
-    public function actionStep4($history_id)
-    {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
-
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptionsStep4($history);
-
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
-
-        $data = array();
-        
-
-        $data[] = array(
-            'name' => 'Formulario',
-            'status' =>  'Opcional',
-            'deadline' => 'N/A',
-            'advisor' => $name_advisor,
-            'options' => $form_option,
-        );
-
-        return $data;
-    }
-    
     
 
-    public function listStepReport($history_id)
+    public function menuPrincipalOptions($history)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $max_hour       = 12;
-        $hour           = $credit->created_at;
-        $menu_options   = self::menuOptionReportStep($history);
-        $advisor        = $credit->creditAdvisor;
+        $credit     = $history->historyCredit;
+        $client     = $credit->creditClientPerson;
 
-        $name_module_response   = 'KaaxClub';
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-        $color_desition   = 'success';
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-
-        $data_deadline    = deadline($hour, $max_hour, 0, 'success');
-        $color_desition = $data_deadline['color'];
-        $hour             = $data_deadline['lbl_hour'];
-
-        $view_dead_line_desition  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
-        $options_progress  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
-        $options_desition  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
-
-        $data = array();
-        $status_desition = 'En curso';
-        $data[] = array(
-            'name' => 'Respuesta de módulo',
-            'status' => 'Concluida',
-            'deadline' => 'N/A',
-            'advisor' => $name_module_response,
-            'options' => $options_progress,
+        $menu = array(
+            'options' => array(
+                [
+                    'link' => '/panel/client/'.$client->id,
+                    'onclick' => '',
+                    'name' => 'Ver perfil cliente',
+                    'icon' => 'icon ni ni-user-fill'
+                ],
+                [
+                    'link' => '/panel/credit/'.$credit->id,
+                    'onclick' => '',
+                    'name' => 'Ver perfil crédito',
+                    'icon' => 'icon ni ni-report-profit'
+                ],
+                [
+                    'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
+                    'onclick' => '',
+                    'name' => 'Ver etapas',
+                    'icon' => 'icon ni ni-list-thumb-fill'
+                ]
+            ),
         );
 
-        $data[] = array(
-            'name' => 'Decisión',
-            'status' => $status_desition,
-            'deadline' => $view_dead_line_desition,
-            'advisor' => $name_advisor,
-            'options' => $options_desition,
-        );
-
-        return $data;
+        return $menu;
     }
-
+    
     public function menuOptions($history, $step = 1)
     {
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/action-form/delivery/' . $history->id . '/form?step=' . $step,
+                    'link' => '/panel/action-form/afterMarket/' . $history->id . '/form?step=' . $step,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
-                ]
-            ),
-            'form2' => array(
-                [
-                    'link' => '/panel/template/action-document/delivery/' . $history->id . '?step='.$step,
-                    'onclick' => '',
-                    'name' => 'Ver acción',
-                    'icon' => 'icon ni ni-check-circle-cut'
-                ]
-            ),
-            'file' => array(
-                [
-                    'link' => null,
-                    'onclick' => null,
-                    'name' => null,
-                    'icon' => null
                 ]
             ),
         );
@@ -822,29 +559,12 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $menu = array(
             'actionstep1' => array(
                 [
-                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=1',
+                    'link' => '/panel/template/actions/afterMarket/' . $history->id . '/show?step=1',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
-            'actionstep2' => array(
-                [
-                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=2',
-                    'onclick' => '',
-                    'name' => $lbl_action,
-                    'icon' => 'icon ni ni-view-list-wd',
-                ]
-            ),
-            'actionstep3' => array(
-                [
-                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=3',
-                    'onclick' => '',
-                    'name' => $lbl_action,
-                    'icon' => 'icon ni ni-view-list-wd',
-                ]
-            ),
-
         );
 
         return $menu;
@@ -1030,8 +750,8 @@ class AfterMarketStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             1 => array(
-             'title' => 'KC - Delivery',
-             'link' => '/panel/delivery',
+             'title' => 'KC - Aftermarket',
+             'link' => '/panel/kc-aftermarket',
              'active' => null
             ),
             2 => array(
@@ -1052,13 +772,13 @@ class AfterMarketStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             1 => array(
-             'title' => 'KC - Delivery',
-             'link' => '/panel/delivery',
+             'title' => 'KC - Aftermarket',
+             'link' => '/panel/kc-aftermarket',
              'active' => null
             ),
             2 => array(
                 'title' => 'etapas',
-                'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+                'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
                 'active' => true
             ),
             3 => array(

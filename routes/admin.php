@@ -152,7 +152,7 @@ Route::group(['prefix' => 'kc-delivery'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController', 'list'])->middleware('auth');
 });
 
-Route::resource('kc-after-market', '\App\Http\Controllers\Panel\Module\KcAfterMarketController')->middleware('auth');
+Route::resource('kc-aftermarket', '\App\Http\Controllers\Panel\Module\KcAfterMarketController')->middleware('auth');
 Route::group(['prefix' => 'kc-after-market'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcAfterMarketController', 'list'])->middleware('auth');
 });

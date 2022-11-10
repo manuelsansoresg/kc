@@ -23,7 +23,7 @@ if (!function_exists('formatDateNameMonth')) {
 
 
 if (!function_exists('deadline')) {
-    function deadline($date_init, $max_hour, $percent, $color)
+    function deadline($date_init, $max_hour, $percent, $color, $show_max_hour = false)
     {
         $date_init = strtotime($date_init);//fecha inicial
         $date_fin = strtotime(date('Y-m-d H:i:s'));//fecha de cierre
@@ -51,6 +51,9 @@ if (!function_exists('deadline')) {
                     $color = ($hour >= $max_hour) ? 'danger' : 'warning';
                 }
             }
+        }
+        if ($show_max_hour == true) {
+            $lbl_hour = $rest;
         }
 
         $data = array('hour' => $hour, 'color' => $color, 'lbl_hour' => $lbl_hour);
