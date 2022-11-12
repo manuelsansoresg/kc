@@ -15,6 +15,7 @@ mix
     .js('resources/js/bootstrap.js', 'public/js')
     .js('resources/js/app.js', 'public/js')
     .js('resources/js/report/report_app.js', 'public/js')
+    .js('resources/js/survey.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/report/app.scss', 'public/assets_report/css')
     /* .postCss('resources/css/app.css', 'public/css', [

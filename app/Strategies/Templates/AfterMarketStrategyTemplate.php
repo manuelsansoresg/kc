@@ -11,6 +11,7 @@ use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Product;
+use App\Models\Survey;
 use App\Models\User;
 use App\Strategies\TemplateInterface;
 use App\Strategies\Values\SendNotificationsValues;
@@ -94,7 +95,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
 
         $elements = array(
             1 => [
-                'title_section' => 'Entrega',
+                'title_section' => 'Encuesta',
                 'title' => null,
                 'name_field' => null,
                 'id_field' => null,
@@ -109,43 +110,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
             ],
             2 => [
                 'title_section' => null,
-                'title' => 'Ver perfíl de crédito',
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'href',
-                'link' => '/panel/credit/'.$credit->id,
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
-            ],
-            3 => [
-                'title_section' => null,
-                'title' => 'Ver perfíl de cliente',
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'href',
-                'link' => '/panel/client/'.$client_person->id,
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
-            ],
-            4 => [
-                'title_section' => null,
-                'title' => 'Descargar',
+                'title' => 'Enviar por email',
                 'name_field' => null,
                 'id_field' => null,
                 'comment_admin' => null,
@@ -161,6 +126,46 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
                 'col' => 'col-12 col-md-4'
             ],
+            3 => [
+                'title_section' => null,
+                'title' => 'Copiar URL',
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'href',
+                'link' => null,
+                'onclick' => 'copyToClipBoardReport()',
+                'class' => 'btn btn-primary',
+                'target' => '_blank',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+                'col' => 'col-12 col-md-4'
+            ],
+            4 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => null,
+                'id_field' => 'url_report',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'link' => null,
+                'value' => asset('/survey/'.$credit->id),
+                
+                'class' => 'btn btn-primary',
+                'target' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+                'col' => null
+            ],
+            
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -299,7 +304,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $data = array();
         $data[] = array(
             'name' => $view_count_inf_credit,
-            'step' => 'En curso',
+            'step' => 'Encuesta',
             'status' => $status_step1,
             'progress' => $view_percent_inf_credit,
             'deadline' => '',
@@ -357,16 +362,16 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options           = self::menuOptions($history, 1);
 
-        $view_dead_line_step1   = self::deadLineStep1($history, 0);
-        $get_hour               = self::deadLineStep1($history, 0, true);
+        $view_dead_line_step1   = self::deadLineStep1($history, 100);
+        $get_hour               = self::deadLineStep1($history, 100, true);
         $option                 = null;
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }
 
+        $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         if ($get_hour == self::HOUR_STEP_1) {
-            $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         }
 
         $data = array();
@@ -691,16 +696,13 @@ class AfterMarketStrategyTemplate implements TemplateInterface
     public function getPercent($history, $show_current_show = false)
     {
         $credit       = $history->historyCredit;
+        $get_survey   = $credit->survey;
         
-        $file1        = self::percentFile($credit->id);
-        $percent1     = $file1 == 100 ? 50 : 0;
-        $form_step3   = self::percentFormStep3($history); //etapa 3
-        $percent3     = $form_step3 == 100 ? 50 : 0;
-        $current_show = $form_step3 < 100 ? 'Comprobar pago': 'Verificar pago';
+        $percent1     = $get_survey == null ? 0 : 100;
+        $current_show = 'Encuesta';
 
 
-        $total_valid  = $percent1 + $percent3;
-        $percent      = (100 / 100) * $total_valid;
+        $percent      = (100 / 100) * $percent1;
         
         if ($show_current_show == true) {
             return $current_show;

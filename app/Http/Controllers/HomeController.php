@@ -87,6 +87,11 @@ class HomeController extends Controller
         $notifications = Notification::readAllMyNotification();
     }
 
+    public function survey($credit_id)
+    {
+        
+    }
+
     /**
      * type reason in modal archive, reject and cancel
      *

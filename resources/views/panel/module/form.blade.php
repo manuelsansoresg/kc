@@ -52,7 +52,9 @@
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <div class="form-control-wrap">
-                           <a target="{{ $element['target'] }}" class="{{ isset($element['class']) && $element['class'] != null? $element['class'] : '' }}" {{ isset($element['link']) && $element['link'] != null? 'href='. $element['link'].'' : '' }}>{{ $element['title'] }}</a>
+                           <a target="{{ $element['target'] }}" class="{{ isset($element['class']) && $element['class'] != null? $element['class'] : '' }}" 
+                           {{ isset($element['onclick']) && $element['onclick'] != null? 'onclick='. $element['onclick'].'' : '' }}
+                           {{ isset($element['link']) && $element['link'] != null? 'href='. $element['link'].'' : '' }}>{{ $element['title'] }}</a>
                         </div>
                     </div>
                 </div>
