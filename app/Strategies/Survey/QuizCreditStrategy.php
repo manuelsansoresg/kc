@@ -27,7 +27,31 @@ class QuizCreditStrategy implements SurveyInterface
             'id_survey' => 1,
             'origin' => 1,
         );
-        $survey = new Survey($data_survey);
-        $survey->save();
+        
+        $get_survey = Survey::where($data_survey)->count();
+        if ($get_survey == 0) {
+            $survey = new Survey($data_survey);
+            $survey->save();
+        }
+    }
+
+    public function get($credit_id)
+    {
+        $data_survey = array(
+            'credit_id' => $credit_id,
+            'id_survey' => 1,
+            'origin' => 1,
+        );
+        $get_survey = Survey::where($data_survey)->first();
+        if ($get_survey != null) {
+            $answer = json_decode($get_survey->answer);
+            return array(
+                'surevey_credit_delivery' => $answer->surevey_credit_delivery,
+                'surevey_kc_attention' => $answer->surevey_kc_attention,
+                'surevey_financial_attention' => $answer->surevey_financial_attention,
+                'survey_note' => $answer->survey_note,
+            );
+        }
+        return null;
     }
 }

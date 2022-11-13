@@ -5,6 +5,7 @@
 @inject('m_history_log', 'App\Models\HistoryLog')
 @inject('m_action', 'App\Models\Action')
 @inject('m_file', 'App\Models\File')
+@inject('m_survey', 'App\Models\Survey')
 
 @php
     
@@ -25,6 +26,8 @@
     //TODO: hacer que al pasar de prospecto a credito cambiar el model
     $files = $m_file->getByIdRelandModel($credit->id, [$m_history_log::KC_CHECK_UP, $m_history_log::KC_CONTROL_DESK, $m_history_log::KC_CHECK_UP_DEBT_REDUCTION]);
     $path = $m_file::PATH;
+    
+   
 @endphp
 
 @section('content')
@@ -79,6 +82,8 @@
                                                         href="#tabComision">Comisión</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabDocs">Docs</a> </li>
+                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                        href="#survey">Encuesta</a> </li>
                                                 <li class="nav-item nav-item-trigger d-xxl-none">
                                                     <div class="nk-block-head-content align-self-start d-lg-none">
                                                         <a href="#" class="toggle btn btn-icon btn-trigger mt-n1"
@@ -432,6 +437,61 @@
                                                             @endforeach
                                                         </tbody>
                                                     </table>
+                                                </div>
+
+                                                <div class="tab-pane" id="survey">
+                                                    @php
+                                                        $get_survey                 = $m_survey->getQuiz($credit->id);
+                                                        $enum_credit_delivery       = isset(config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']])? config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']] :  null;
+                                                        $enum_kc_attention          = isset(config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']])? config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']] :  null;
+                                                        $enum_financial_attention   = isset(config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']])? config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']] :  null;
+                                                        $comment                    = isset($get_survey['survey_note'])? $get_survey['survey_note'] :  null;
+                                                    @endphp     
+                                                    <div class="nk-block">
+                                                        <div class="nk-block-head nk-block-head-line">
+                                                            <span
+                                                                class="preview-title-lg overline-title text-primary "></span>
+                                                        </div><!-- .nk-block-head -->
+                                                        <div class="profile-ud-list">
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">¿Recibiste el crédito?</span>
+                                                                    <span class="profile-ud-value"> {{ $enum_credit_delivery }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">¿Cómo calificarías la atención que recibiste en KaaxClub?</span>
+                                                                    <span class="profile-ud-value">
+                                                                        @if ($enum_kc_attention != null)
+                                                                            <img src="{{ asset($enum_kc_attention) }}" alt="">
+                                                                        @endif
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">¿Cómo calificarías la atención la financiera que te otorgó el crédito?</span>
+                                                                    <span class="profile-ud-value">
+                                                                        @if ($enum_financial_attention != null)
+                                                                            <img src="{{ asset($enum_financial_attention) }}" alt="">
+                                                                        @endif
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                           
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">¿Tienes algún comentario?</span>
+                                                                    <span class="profile-ud-value">
+                                                                        {{ $comment }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- .profile-ud-list -->
+                                                    </div><!-- .nk-block -->
                                                 </div>
 
                                             </div>
