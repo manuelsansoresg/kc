@@ -922,7 +922,7 @@ window.modalValidate = function (id, model) {
   })["catch"](function (e) {});
 };
 
-window.desition = function (credit_id, financial_id) {
+window.desition = function (credit_id, financial_id, type) {
   Swal.fire({
     title: '¿Estás seguro?',
     icon: 'warning',
@@ -931,8 +931,14 @@ window.desition = function (credit_id, financial_id) {
     cancelButtonText: 'Mejor no'
   }).then(function (result) {
     if (result.value) {
-      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/accept").then(function (response) {
-        var reason = response.data; //window.location = '/panel/kc-control-desk';
+      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
+        var reason = response.data;
+
+        if (type == 1) {
+          window.location = '/panel/kc-control-desk';
+        }
+
+        window.location = '/panel/kc-swap';
       })["catch"](function (e) {});
     }
   });
@@ -2296,6 +2302,51 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     },
     ajax: '/panel/kc-after-market/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-kc-swap', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-swap/list/show',
     columns: [{
       data: 'id'
     }, {

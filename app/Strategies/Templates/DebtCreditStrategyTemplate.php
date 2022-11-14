@@ -506,7 +506,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
             ),
             'desition' => array(
                 [
-                    'link' => '/panel/kc-check-up/report/desition/'.$history->id.'/show/',
+                    'link' => '/panel/kc-check-up/report/desition/'.$history->id.'/show?type=2',
                     'onclick' => '',
                     'name' => 'Ver acción',
                 ]

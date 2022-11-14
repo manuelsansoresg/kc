@@ -22,5 +22,22 @@ jQuery.rnd = function (m, n) {
 $(document).ready(function () {
   confetti();
 });
+
+window.desition = function (credit_id, financial_id, type) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/accept").then(function (response) {
+        var reason = response.data; 
+        window.location = '/panel/kc-control-desk';
+      })["catch"](function (e) {});
+    }
+  });
+};
 /******/ })()
 ;

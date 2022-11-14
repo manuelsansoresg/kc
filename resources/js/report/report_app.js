@@ -17,3 +17,26 @@ function confetti() {
  $( document ).ready(function() {
     confetti();
 });
+
+
+window.desition = function(credit_id, financial_id) {
+   Swal.fire({
+       title: '¿Estás seguro?',
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonText: 'Sí',
+       cancelButtonText: 'Mejor no'
+   }).then(function (result) {
+       if (result.value) {
+           axios
+           .get("/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+"/accept")
+           .then(function (response) {
+               let reason = response.data;
+               //window.location = '/panel/kc-control-desk';
+           })
+           .catch(e => {
+               
+           });
+       }
+   });
+}

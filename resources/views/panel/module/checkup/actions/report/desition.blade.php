@@ -66,13 +66,17 @@
                                 <span class="preview-title-lg overline-title">Tramitar crédito con:</span>
                                 <hr>
                                 <div class="row">
+                                    @php
+                                        $values_type = array(1 => 1 , 2 => 2);
+                                        $type = isset($_GET['type']) && $values_type[$_GET['type']] ? $_GET['type'] : 1;
+                                    @endphp
                                     @if ($financials != null)
                                         @foreach ($financials as $get_financial)
                                         @php
                                             $financial = $get_financial->financial;
                                         @endphp
                                         <div class="col-12 col-md-2">
-                                            <a class="pointer btn btn-primary mt-3" onclick="desition({{ $credit->id }}, {{ $financial->id }})" target="_blank">{{ $financial->commercial_name }}</a>
+                                            <a class="pointer btn btn-primary mt-3" onclick="desition({{ $credit->id }}, {{ $financial->id }}, {{ $type }})" target="_blank">{{ $financial->commercial_name }}</a>
                                         </div>
                                         @endforeach
                                     @endif

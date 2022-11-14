@@ -8,6 +8,7 @@ use App\Strategies\Templates\DebtCreditStrategyTemplate;
 use App\Strategies\Templates\DeliveryStrategyTemplate;
 use App\Strategies\Templates\LeadStrategyTemplate;
 use App\Strategies\Templates\NewCreditStrategyTemplate;
+use App\Strategies\Templates\SwaptStrategyTemplate;
 
 final class TemplateValues
 {
@@ -18,5 +19,6 @@ final class TemplateValues
         'controlDesk' =>ControlDeskStrategyTemplate::class,
         'delivery' => DeliveryStrategyTemplate::class,
         'afterMarket' => AfterMarketStrategyTemplate::class,
+        'swap' => SwaptStrategyTemplate::class,
     ];
 }

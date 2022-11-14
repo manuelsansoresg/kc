@@ -33,7 +33,7 @@ class HomeController extends Controller
     {
         $history    = HistoryLog::find($history_id);
         $credit     = $history->historyCredit;
-        $financial  = $credit->creditFinancial;
+        $financial  = $credit->creditFinancial; //financiera transferente
         $client     = $credit->creditClientPerson;
         $option     = 2;
         $status_id  = $history->status_id;

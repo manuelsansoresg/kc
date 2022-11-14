@@ -86,19 +86,26 @@ class ReportController extends Controller
         return view('panel.module.checkup.actions.report.desition', compact('credit', 'product', 'financials', 'client', 'history_id', 'history', 'model'));
     }
 
-    public function desitionAccept($credit_id, $financial_id)
+    public function desitionAccept($credit_id, $financial_id, $type)
     {
        
         $credit     = Credit::find($credit_id);
         if ($credit != null) {
-            File::updateModel($credit->id, HistoryLog::KC_CONTROL_DESK, [HistoryLog::KC_CHECK_UP, HistoryLog::ADD_PROSPECT]);
-
-            $credit->applied_financial = $financial_id;
-            $credit->update();
-            
-            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CONTROL_DESK);
-            $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
-            (new $notification_add)->send($credit->id);
+            if ($type == 1) { // credito nuevo
+                File::updateModel($credit->id, HistoryLog::KC_CONTROL_DESK, [HistoryLog::KC_CHECK_UP, HistoryLog::ADD_PROSPECT]);
+    
+                $credit->applied_financial = $financial_id;
+                $credit->update();
+                
+                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CONTROL_DESK);
+                $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
+                (new $notification_add)->send($credit->id);
+            } else {//reduccion
+                File::updateModel($credit->id, HistoryLog::KC_SWAP, [HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::ADD_PROSPECT]);
+                $credit->applied_financial = $financial_id;
+                $credit->update();
+                HistoryLog::move($credit->id, HistoryLog::KC_SWAP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
+            }
         }
         return response()->json('ok');
     }

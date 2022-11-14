@@ -61,6 +61,8 @@ class HistoryLog extends Model
 
     const KC_AFTER_MARKET                     = 36;
     
+    const KC_SWAP                             = 37;
+    
 
     protected $fillable = [
         'id_rel',
@@ -111,6 +113,7 @@ class HistoryLog extends Model
         34 => 'Formulario (etapa 3)',
         35 => 'Créditos pagados',
         36 => 'Entró a KC - After market',
+        37 => 'Entró a KC - Swap',
     ];
 
     public static $name_model = [
@@ -139,6 +142,7 @@ class HistoryLog extends Model
         33 => 'delivery',
         34 => 'delivery',
         36 => 'afterMarket',
+        37 => 'swap',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $is_subprocess = false)

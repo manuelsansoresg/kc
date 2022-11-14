@@ -76,7 +76,7 @@ window.modalValidate = function(id, model){
     });
 }
 
-window.desition = function(credit_id, financial_id) {
+window.desition = function(credit_id, financial_id, type) {
     Swal.fire({
         title: '¿Estás seguro?',
         icon: 'warning',
@@ -86,10 +86,13 @@ window.desition = function(credit_id, financial_id) {
     }).then(function (result) {
         if (result.value) {
             axios
-            .get("/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+"/accept")
+            .get("/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept")
             .then(function (response) {
                 let reason = response.data;
-                //window.location = '/panel/kc-control-desk';
+                if (type == 1) {
+                    window.location = '/panel/kc-control-desk';
+                }
+                window.location = '/panel/kc-swap';
             })
             .catch(e => {
                 

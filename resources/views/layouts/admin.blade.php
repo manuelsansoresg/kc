@@ -239,6 +239,12 @@
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
+                                    <a href="/panel/kc-swap" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-swap-alt"></em></span>
+                                        <span class="nk-menu-text">KC- Swap</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
                                     <a href="/panel/kc-control-desk" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
                                         <span class="nk-menu-text">KC- Control desk</span>
