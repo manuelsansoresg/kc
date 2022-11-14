@@ -9,28 +9,28 @@ use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\SendNotificationsInterface;
 use Illuminate\Support\Facades\Auth;
 
-class PushCreditKcDelivery implements SendNotificationsInterface
+class PushCreditKcSwap implements SendNotificationsInterface
 {
     public function send($id)
     {
         $data_notification = array(
             'id_rel' => $id,
             'title' => 'Crédito',
-            'body' => 'Nuevo crédito en KC-Delivery',
-            'model' => HistoryLog::KC_DELIVERY,
+            'body' => 'Nuevo crédito en KC-Swap',
+            'model' => HistoryLog::KC_SWAP,
         );
         $is_exist = Notification::where($data_notification)->count();
         
         if ($is_exist == 0) {
             Notification::create($data_notification);
             $push  = new Pusher;
-            $push->send(['model' => 'pushCreditKcDelivery']);
+            $push->send(['model' => 'pushCreditKcSwap']);
         }
     }
     
     public function get($user_id = null, $status = 0)
     {
-        $get_notifications = Notification::getByModel([HistoryLog::KC_DELIVERY]);
+        $get_notifications = Notification::getByModel([HistoryLog::KC_SWAP]);
         $notifications = array();
         foreach ($get_notifications as $notification) {
             $users = User::getUserRole('Administrador');

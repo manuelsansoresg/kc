@@ -98,13 +98,19 @@ class ReportController extends Controller
                 $credit->update();
                 
                 HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CONTROL_DESK);
+                
                 $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
                 (new $notification_add)->send($credit->id);
             } else {//reduccion
                 File::updateModel($credit->id, HistoryLog::KC_SWAP, [HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::ADD_PROSPECT]);
+                
                 $credit->applied_financial = $financial_id;
                 $credit->update();
+
                 HistoryLog::move($credit->id, HistoryLog::KC_SWAP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
+                
+                $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcSwap'];
+                (new $notification_add)->send($credit->id);
             }
         }
         return response()->json('ok');
