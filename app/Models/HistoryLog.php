@@ -62,6 +62,8 @@ class HistoryLog extends Model
     const KC_AFTER_MARKET                     = 36;
     
     const KC_SWAP                             = 37;
+    const KC_SWAP_UPLOAD                      = 38;
+    const KC_SWAP_FORM                        = 39;
     
 
     protected $fillable = [
@@ -114,6 +116,8 @@ class HistoryLog extends Model
         35 => 'Créditos pagados',
         36 => 'Entró a KC - After market',
         37 => 'Entró a KC - Swap',
+        38 => 'Carga (etapa1)',
+        39 => 'Formulario (etapa 1)',
     ];
 
     public static $name_model = [

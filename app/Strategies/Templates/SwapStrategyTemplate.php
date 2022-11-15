@@ -19,9 +19,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use stdClass;
 
-class SwaptStrategyTemplate implements TemplateInterface
+class SwapStrategyTemplate implements TemplateInterface
 {
-    const HOUR_STEP_1  = 72;
+    const HOUR_STEP_1  = 6;
     const HOUR_STEP_2  = 72;
     const HOUR_STEP_3  = 2;
 
@@ -29,23 +29,37 @@ class SwaptStrategyTemplate implements TemplateInterface
     {
     }
 
-    public function configUpload()
+    public function configUpload($set_step = null)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
-        if ($step == 3) {
-            return self::uploadStep3();
+        if ($set_step != null) {
+            $step = $set_step;
         }
-        return self::uploadStep2();
+
+        if ($step == '1_2') {
+            return self::uploadStep2();
+        }
+        return self::uploadStep1();
     }
 
-    public function uploadStep2()
+    public function uploadStep1()
     {
         $elements = array(
             1 => [
-                'name' => 'Comprobante de pago',
-                'comment' => '',
+                'name' => 'Identificación oficial',
+                'comment' => 'INE vigente',
                 'is_required' => true,
-                'is_date' => true,
+                'is_date' => false,
+                'max_size' => 2, //* size in MB
+                'max_file' => 2,
+                'type' => 'image/*, .pdf',
+                'comment_date' => null
+            ],
+            2 => [
+                'name' => 'Identificación oficial',
+                'comment' => 'INE vigente',
+                'is_required' => false,
+                'is_date' => false,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
                 'type' => 'image/*, .pdf',
@@ -57,13 +71,13 @@ class SwaptStrategyTemplate implements TemplateInterface
         return $elements;
     }
 
-    public function uploadstep3()
+    public function uploadstep2()
     {
         $elements = array(
-            5 => [
-                'name' => 'Edo Cta bancario',
-                'comment' => 'Último estado de cuenta',
-                'is_required' => false,
+            3 => [
+                'name' => 'Solicitud de terminación anticipada de contrato',
+                'comment' => null,
+                'is_required' => true,
                 'is_date' => false,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
@@ -88,14 +102,14 @@ class SwaptStrategyTemplate implements TemplateInterface
 
     public function configFormStep1($id_rel, $history_id)
     {
-        $name_form    = 'frm-template_control_desk_step1';
-        $type_form    = HistoryLog::KC_DELIVERY_FORM;
+        $name_form    = 'frm-template_swap_step1';
+        $type_form    = HistoryLog::KC_SWAP_FORM;
         $credit       = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
 
         $elements = array(
             1 => [
-                'title_section' => 'Encuesta',
+                'title_section' => 'Generales',
                 'title' => null,
                 'name_field' => null,
                 'id_field' => null,
@@ -110,61 +124,125 @@ class SwaptStrategyTemplate implements TemplateInterface
             ],
             2 => [
                 'title_section' => null,
-                'title' => 'Enviar por email',
-                'name_field' => null,
-                'id_field' => null,
+                'title' => 'Nombres',
+                'name_field' => 'client_person[name]',
+                'id_field' => 'name',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'href',
+                'type' => 'text',
                 'link' => null,
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
             ],
             3 => [
                 'title_section' => null,
-                'title' => 'Copiar URL',
-                'name_field' => null,
-                'id_field' => null,
+                'title' => 'Primer apellido',
+                'name_field' => 'client_person[last_name]',
+                'id_field' => 'last_name',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'href',
+                'type' => 'text',
                 'link' => null,
-                'onclick' => 'copyToClipBoardReport()',
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
             ],
             4 => [
                 'title_section' => null,
-                'title' => null,
-                'name_field' => null,
-                'id_field' => 'url_report',
+                'title' => 'Segundo apellido',
+                'name_field' => 'client_person[second_last_name]',
+                'id_field' => 'second_last_name',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'hidden',
+                'type' => 'text',
                 'link' => null,
-                'value' => asset('/survey/'.$credit->id),
-                
-                'class' => 'btn btn-primary',
-                'target' => null,
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null,
-                'col' => null
             ],
+            5 => [
+                'title_section' => null,
+                'title' => 'Celular',
+                'name_field' => 'client_person[cellphone]',
+                'id_field' => 'cellphone',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'link' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+            ],
+            6 => [
+                'title_section' => null,
+                'title' => 'Email',
+                'name_field' => 'client_person[email]',
+                'id_field' => 'email',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'email',
+                'link' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+            ],
+            7 => [
+                'title_section' => null,
+                'title' => 'RFC',
+                'name_field' => 'client_person[rfc]',
+                'id_field' => 'rfc',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'link' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+            ],
+            8 => [
+                'title_section' => null,
+                'title' => 'Número ID',
+                'name_field' => 'credit[id_number]',
+                'id_field' => 'id_number',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'link' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+            ],
+            9 => [
+                'title_section' => null,
+                'title' => 'Folio crédito actual',
+                'name_field' => 'credit[current_credit_number]',
+                'id_field' => 'current_credit_number',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'link' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => null,
+            ],
+            
             
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -269,48 +347,35 @@ class SwaptStrategyTemplate implements TemplateInterface
 
     public function listStep($history_id)
     {
-        $history              = HistoryLog::find($history_id);
-
-        $credit               = $history->historyCredit;
-        $max_hour             = 12;
-        $hour                 = $credit->created_at;
+        $history            = HistoryLog::find($history_id);
+        $credit             = $history->historyCredit;
         
+        $percent_file       = self::percentFile($credit->id);
+        $percent_file_2     = self::percentFile($credit->id, '1_2');
+        $percent_form       = self::percentForm($history);
+        $new_percent_file   = $percent_file == 100 ? 33 : $percent_file;
+        $new_percent_file2  = $percent_file_2 == 100 ? 33 : $percent_file_2;
+        $new_percent_form   = $percent_form == 100 ? 34 : $percent_form;
         
-        $percent_file_step2   = self::percentFile($credit->id);
-        $percent_form         = self::percentFormStep3($history);
+        $total_percent      = $new_percent_file + $new_percent_file2 + $new_percent_form;
+        $status_step1       = ($total_percent >= 100) ? 'Concluido' : 'En curso';
 
-        $color_inf_credit     = 'success';
-        $option_step2         = null;
-        $option_step3         = null;
-        
-        //$percent_form = $percent_form;
-        $menu_options         = self::menuOptionsStep($history);
-        $status_step2         = 'En espera';
-        $status_step3         = 'En espera';
+        $menu_options       = self::menuOptionsStep($history);
 
-        $status_step1 = 'Concluido';
 
-        $data_deadline              = deadline($hour, $max_hour, $percent_file_step2, $color_inf_credit);
-        $color_inf_credit           = $data_deadline['color'];
-        $hour                       = $data_deadline['lbl_hour'];
-
-        $option_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
-        
-        $view_percent_inf_credit    = 'N/A';
-        $view_percent_step3         = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
-        $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
-
+        $option_step1   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
+        $view_count_1   = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
+        $view_percent   = \View::make('panel.module.view_percent', ['percent' => $total_percent])->render();
 
         $data = array();
         $data[] = array(
-            'name' => $view_count_inf_credit,
-            'step' => 'Encuesta',
+            'name' => $view_count_1,
+            'step' => 'Información de crédito actual',
             'status' => $status_step1,
-            'progress' => $view_percent_inf_credit,
+            'progress' => $view_percent,
             'deadline' => '',
             'options' => $option_step1,
         );
-        
        
         return $data;
     }
@@ -320,41 +385,80 @@ class SwaptStrategyTemplate implements TemplateInterface
         $step = isset($_GET['step']) ? $_GET['step'] : null;
         if ($step == 2) {
             return self::actionStep2($history_id);
-        } elseif ($step == 3) {
-            return self::actionStep3($history_id);
-        } elseif ($step == 4) {
-            return self::actionStep4($history_id);
         }
-        return self::actionStep1($history_id);
+        return self::listActionStep1($history_id);
     }
 
     
     
-    public function deadLineStep1($history, $percent, $show_max_hour = false)
+    public function deadLineStep1($history, $show_max_hour = false)
     {
-        $color_inf_credit             = 'success';
-        $percent_form                 = $percent; //TODO: calculate after create and save form
+        $credit             = $history->historyCredit;
+        $color_inf_credit   = 'success';
+        $percent_file       = self::percentFile($credit->id);
+
+
+
         $max_hour                     = self::HOUR_STEP_1;
         $hour                         = $history->created_at;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit, $show_max_hour);
+        $data_deadline                = deadline($hour, $max_hour, $percent_file, $color_inf_credit, $show_max_hour);
         $color_inf_credit             = $data_deadline['color'];
         $hour                         = $data_deadline['lbl_hour'];
         $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        
         if ($show_max_hour == true) {
             return $data_deadline['lbl_hour'];
         }
         return $view_dead_line_inf_credit;
     }
 
-    public function actionStep1($history_id)
+    public function deadLineStep1_2($history, $show_max_hour = false)
+    {
+        $credit                       = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_file                 = self::percentFile($credit->id, '1_2');
+        $max_hour                     = self::HOUR_STEP_1;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_file, $color_inf_credit, $show_max_hour);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        
+        if ($show_max_hour == true) {
+            return $data_deadline['lbl_hour'];
+        }
+        return $view_dead_line_inf_credit;
+    }
+    
+    public function deadLineStep1_3($history, $show_max_hour = false)
+    {
+        $credit                       = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_file                 = self::percentForm($history);
+        $max_hour                     = self::HOUR_STEP_1;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_file, $color_inf_credit, $show_max_hour);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        
+        if ($show_max_hour == true) {
+            return $data_deadline['lbl_hour'];
+        }
+        return $view_dead_line_inf_credit;
+    }
+
+    public function listActionStep1($history_id)
     {
         $history                = HistoryLog::find($history_id);
         $credit                 = $history->historyCredit;
         $advisor                = $credit->creditAdvisor;
-        $status_file            = 'Concluida';
-        $hour                   = $history->created_at;
-        //$percent_form   = self::percentForm($history);
-        $percent_form           = self::percentForm($history);
+        $status_file            = 'En espera';
+
+        $percent_file       = self::percentFile($credit->id);
+        $percent_file_2     = self::percentFile($credit->id, '1_2');
+        $percent_form       = self::percentForm($history);
+        
 
         $user                   = User::find($advisor->id);
         $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -362,25 +466,51 @@ class SwaptStrategyTemplate implements TemplateInterface
         $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options           = self::menuOptions($history, 1);
 
-        $view_dead_line_step1   = self::deadLineStep1($history, 100);
-        $get_hour               = self::deadLineStep1($history, 100, true);
-        $option                 = null;
+        $view_dead_line_step1   = self::deadLineStep1($history);
+        $view_dead_line_step2   = self::deadLineStep1_2($history);
+        $view_dead_line_step3   = self::deadLineStep1_3($history);
+
+        $option2 = null;
+        $option3 = null;
+
+        $status_file = ($percent_file >= 100) ? 'Concluido' : 'En curso';
+        $status_file_2 = ($percent_file_2 >= 100) ? 'Concluido' : 'En curso';
+        $status_form = ($percent_form >= 100) ? 'Concluido' : 'En curso';
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }
 
-        $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-        if ($get_hour == self::HOUR_STEP_1) {
+        $option1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
+        if ($percent_file == 100) {
+            $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         }
+        if ($percent_file_2 == 100) {
+            $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file2']])->render();
+        }
+       
 
         $data = array();
         $data[] = array(
-            'name' => 'Respuesta de módulo',
+            'name' => 'Carga',
             'status' => $status_file,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
-            'options' => $option,
+            'options' => $option1,
+        );
+        $data[] = array(
+            'name' => 'Formulario',
+            'status' => $status_form,
+            'deadline' => $view_dead_line_step2,
+            'advisor' => $name_advisor,
+            'options' => $option2,
+        );
+        $data[] = array(
+            'name' => 'Carga',
+            'status' => $status_file_2,
+            'deadline' => $view_dead_line_step3,
+            'advisor' => $name_advisor,
+            'options' => $option3,
         );
         return $data;
     }
@@ -390,6 +520,7 @@ class SwaptStrategyTemplate implements TemplateInterface
         $credit         = $history->historyCredit;
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFile($credit->id);
+        
         $max_hour                     = self::HOUR_STEP_2;
         $hour                         = $history->created_at;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
@@ -417,7 +548,7 @@ class SwaptStrategyTemplate implements TemplateInterface
         $view_dead_line_step2  = self::deadLineStep2($history);
 
         $view_dead_line_inf_credit  = 'N/A';
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
+        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -466,7 +597,7 @@ class SwaptStrategyTemplate implements TemplateInterface
                     'icon' => 'icon ni ni-report-profit'
                 ],
                 [
-                    'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
+                    'link' => '/panel/template/steps/swap/'.$history->id.'/show',
                     'onclick' => '',
                     'name' => 'Ver etapas',
                     'icon' => 'icon ni ni-list-thumb-fill'
@@ -480,14 +611,32 @@ class SwaptStrategyTemplate implements TemplateInterface
     public function menuOptions($history, $step = 1)
     {
         $menu = array(
+            'file' => array(
+                [
+                    'link' => '/panel/template/action-document/swap/' . $history->id . '?step=' . $step,
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+
+                ),
             'form' => array(
                 [
-                    'link' => '/panel/action-form/afterMarket/' . $history->id . '/form?step=' . $step,
+                    'link' => '/panel/action-form/swap/' . $history->id . '/form?step=' . $step,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
+            'file2' => array(
+                [
+                    'link' => '/panel/template/action-document/swap/' . $history->id . '?step=1_2',
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+
+                ),
         );
 
         return $menu;
@@ -564,7 +713,23 @@ class SwaptStrategyTemplate implements TemplateInterface
         $menu = array(
             'actionstep1' => array(
                 [
-                    'link' => '/panel/template/actions/afterMarket/' . $history->id . '/show?step=1',
+                    'link' => '/panel/template/actions/swap/' . $history->id . '/show?step=1',
+                    'onclick' => '',
+                    'name' => $lbl_action,
+                    'icon' => 'icon ni ni-view-list-wd',
+                ]
+            ),
+            'actionstep2' => array(
+                [
+                    'link' => '/panel/template/actions/swap/' . $history->id . '/show?step=2',
+                    'onclick' => '',
+                    'name' => $lbl_action,
+                    'icon' => 'icon ni ni-view-list-wd',
+                ]
+            ),
+            'actionstep3' => array(
+                [
+                    'link' => '/panel/template/actions/swap/' . $history->id . '/show?step=3',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
@@ -605,25 +770,35 @@ class SwaptStrategyTemplate implements TemplateInterface
         $client     = $credit->creditClientPerson;
 
         $total_valid = 0;
-        if ($credit != null && $credit->payment_capacity_period != '') {
-            $total_valid = $total_valid + 20;
+        if ($client != null && $client->name != '') {
+            $total_valid = $total_valid + 14;
         }
 
-        if ($credit != null && $credit->payment_capacity != null) {
-            $total_valid = $total_valid + 20;
+        if ($client != null && $client->last_name != null) {
+            $total_valid = $total_valid + 14;
         }
 
-        if ($client != null && $client->birth_date != null) {
-            $total_valid = $total_valid + 20;
+        if ($client != null && $client->second_last_name != null) {
+            $total_valid = $total_valid + 14;
         }
 
-        if ($client != null && $client->labor_old != null) {
-            $total_valid = $total_valid + 20;
+        if ($client != null && $client->cellphone != null) {
+            $total_valid = $total_valid + 14;
         }
 
-        if ($client != null && $client->employee_category != null) {
-            $total_valid = $total_valid + 20;
+        if ($client != null && $client->email != null) {
+            $total_valid = $total_valid + 14;
         }
+       
+        if ($client != null && $client->rfc != null) {
+            $total_valid = $total_valid + 14;
+        }
+        
+        if ($credit != null && $credit->id_number != null) {
+            $total_valid = $total_valid + 16;
+        }
+        
+     
         $percent =  (100 / 100) * $total_valid;
         return $percent;
     }
@@ -696,13 +871,21 @@ class SwaptStrategyTemplate implements TemplateInterface
     public function getPercent($history, $show_current_show = false)
     {
         $credit       = $history->historyCredit;
-        $get_survey   = $credit->survey;
         
-        $percent1     = $get_survey == null ? 0 : 100;
-        $current_show = 'Encuesta';
+        $current_show = 'Información de crédito actual';
 
+        $credit             = $history->historyCredit;
+        $percent_file       = self::percentFile($credit->id);
+        $percent_file_2     = self::percentFile($credit->id, '1_2');
+        $percent_form       = self::percentForm($history);
 
-        $percent      = (100 / 100) * $percent1;
+        $new_percent_file = $percent_file == 100 ? 33 : $percent_file;
+        $new_percent_file2 = $percent_file_2 == 100 ? 33 : $percent_file_2;
+        $new_percent_form = $percent_form == 100 ? 34 : $percent_form;
+        
+        $total_percent = $new_percent_file + $new_percent_file2 + $new_percent_form;
+
+        $percent      = (100 / 100) * $total_percent;
         
         if ($show_current_show == true) {
             return $current_show;
@@ -717,7 +900,7 @@ class SwaptStrategyTemplate implements TemplateInterface
     }
 
     //*TODO: se deshabilito al ser opcional la caja de carga
-    public function percentFile($id_rel)
+    public function percentFile($id_rel, $step = null)
     {
         $model = File::MODEL['delivery'];
         $percent = 0;
@@ -774,13 +957,13 @@ class SwaptStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             1 => array(
-             'title' => 'KC - Aftermarket',
-             'link' => '/panel/kc-aftermarket',
+             'title' => 'KC - Swap',
+             'link' => '/panel/swap',
              'active' => null
             ),
             2 => array(
                 'title' => 'etapas',
-                'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
+                'link' => '/panel/template/steps/swap/'.$history->id.'/show',
                 'active' => true
             ),
             3 => array(
@@ -803,18 +986,18 @@ class SwaptStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             1 => array(
-             'title' => 'KC - Delivery',
-             'link' => '/panel/delivery',
+             'title' => 'KC - Swap',
+             'link' => '/panel/swap',
              'active' => null
             ),
             2 => array(
              'title' => 'etapas',
-             'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+             'link' => '/panel/template/steps/swap/'.$history->id.'/show',
              'active' => null
             ),
             3 => array(
              'title' => 'acciones',
-             'link' => '/panel/template/actions/delivery/'.$history->id.'/show?step='.$step,
+             'link' => '/panel/template/actions/swap/'.$history->id.'/show?step='.$step,
              'active' => null
             ),
             4 => array(

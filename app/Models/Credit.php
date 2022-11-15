@@ -69,6 +69,8 @@ class Credit extends Model
         'changed_commission_note',
         'payment_check',
         'payment_check_note',
+        'id_number',
+        'current_credit_number',
     ];
 
     public static function listDatatable($status)
@@ -107,6 +109,11 @@ class Credit extends Model
             $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
 
             if ($history->status_id === HistoryLog::KC_AFTER_MARKET) {
+                $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
+                $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+            }
+
+            if ($history->status_id === HistoryLog::KC_SWAP) {
                 $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
                 $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
             }

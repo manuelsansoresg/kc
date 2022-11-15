@@ -396,6 +396,38 @@ $().ready(function () {
             saveForm('frm-template_delivery_step3', 'delivery');
         }
     });
+   
+    $("#frm-template_swap_step1").validate({
+        rules: {
+            'client_person[name]': {
+                required: true,
+            },
+            'client_person[last_name]': {
+                required: true,
+            },
+            'client_person[second_last_name]': {
+                required: true,
+            },
+            'client_person[cellphone]': {
+                required: true,
+            },
+            'client_person[email]': {
+                required: true,
+            },
+            'client_person[rfc]': {
+                required: true,
+                minlength: 13,
+                maxlength:13
+            },
+            'credit[id_number]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_swap_step1', 'swap');
+        }
+    });
 
     //*get data
     if (document.getElementById('id_rel')) {
@@ -558,6 +590,18 @@ $().ready(function () {
                     {
                         $('#payment_check').val(credit.payment_check).trigger("change");
                         $('#payment_check_note').val(credit.payment_check_note);
+                    }
+                    
+                    if (type_form == 39) //form kc-ddelivery step 3
+                    {
+                        $('#name').val(client.name);
+                        $('#last_name').val(client.last_name);
+                        $('#second_last_name').val(client.second_last_name);
+                        $('#cellphone').val(client.cellphone);
+                        $('#email').val(client.email);
+                        $('#rfc').val(client.rfc);
+                        $('#id_number').val(credit.id_number);
+                        $('#current_credit_number').val(credit.current_credit_number);
                     }
 
                 })
