@@ -9,4 +9,7 @@ class Sendgridtest extends Model
 {
     use HasFactory;
     protected $table = 'sendgridtests';
+    protected $fillable = [
+        'body'
+    ];
 }
