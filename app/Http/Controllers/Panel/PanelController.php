@@ -25,6 +25,11 @@ class PanelController extends Controller
         /* $nubarium = new CNubarium();
         $curp = $nubarium->validateCurp('RAZR811011HVZMPB01');
         dd($curp); */
+       /*  $send_grid = new Csendgrid('manuelsansoresg@gmail.com', 'creacion cuenta', ' ', 'manuel@kaaxclub.com', '', '23-bf86690d3a7bc5cc3d672a8f0b37b86f-700.jpg');
+        $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
+        $send_grid->setParams(['first_name'=> 'Manuel']);
+        $send_grid->send(); */
+        //$send_grid->createSender('manu', 'irmalorenasosa@kaaxclub.com', 'irmalorenasosa@gmail.com');
         return view('panel.index');
     }
 

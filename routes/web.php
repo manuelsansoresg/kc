@@ -40,5 +40,3 @@ Route::get('reporte/{history_id}', ['\App\Http\Controllers\HomeController', 'rep
 Route::get('reporte/{history_id}/metodologia', ['\App\Http\Controllers\HomeController', 'method']);
 
 Route::resource('survey', '\App\Http\Controllers\Panel\Module\SurveyController');
-
-Route::get('sendgrid', ['\App\Http\Controllers\HomeController', 'sendgrid']);

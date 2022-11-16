@@ -77,13 +77,6 @@ class HomeController extends Controller
         return view('content_report_metodologia', compact('history_id'));
     }
 
-    public function sendgrid(Request $request)
-    {
-        $data = json_encode($request->all());
-        $sendgrid = new Sendgridtest(['body' => $data]);
-        $sendgrid->save();
-    }
-
     public function showNotification()
     {
         $notifications = Notification::showMyNotification(6);
