@@ -6,6 +6,7 @@ use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Notification;
+use App\Models\Sendgridtest;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -74,6 +75,13 @@ class HomeController extends Controller
     public function method($history_id)
     {
         return view('content_report_metodologia', compact('history_id'));
+    }
+
+    public function sendgrid(Request $request)
+    {
+        $data = json_encode($request->all());
+        $sendgrid = new Sendgridtest(['body' => $data]);
+        $sendgrid->save();
     }
 
     public function showNotification()
