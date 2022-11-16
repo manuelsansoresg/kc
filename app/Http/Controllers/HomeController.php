@@ -79,7 +79,7 @@ class HomeController extends Controller
 
     public function sendgrid(Request $request)
     {
-        $data = json_encode($request->all());
+        $data = ($request->all());
         $sendgrid = new Sendgridtest(['body' => $data]);
         $sendgrid->save();
     }
