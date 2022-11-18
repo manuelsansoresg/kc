@@ -2,6 +2,7 @@
 
 namespace App\Lib;
 
+use App\Models\Credit;
 use Error;
 
 require '../vendor/autoload.php';
@@ -67,6 +68,7 @@ class Csendgrid
 
         try {
             $response = $this->sendgrid->send($email);
+            return $response;
         } catch (\Exception $e) {
             return 500;
         }
@@ -95,30 +97,55 @@ class Csendgrid
         }
     }
 
-    public function createSender($nick_name, $email, $email_reply)
+    public function createEmail($credit_id)
     {
+        $nick_name = self::createNick($credit_id);
+        $new_email = $nick_name.'@kaaxclub.com';
+        return $new_email;
+    }
+
+    public function createNick($credit_id)
+    {
+        $credit         = Credit::find($credit_id);
+        $client         = $credit->creditClientPerson;
+        $email          = $client->email;
+        $explode_email = explode('@', $email);
+        $nick_name = $explode_email[0];
+        return $nick_name;
+    }
+
+    public function createSender($credit_id)
+    {
+        $credit         = Credit::find($credit_id);
+        $client         = $credit->creditClientPerson;
+        $client_name    = $client->last_name.' '.$client->second_last_name.' '.$client->name;
+
+        $nick_name = self::createNick($credit_id);
+        $new_email = self::createEmail($credit_id);
+
         $request_body = json_decode('{
             "nickname": "' . $nick_name . '",
             "from": {
-                "email": "' . $email . '",
-                "name": "Example Orders"
+                "email": "' . $new_email . '",
+                "name": "'.$client_name.'"
             },
             "reply_to": {
-                "email": "' . $email_reply . '",
-                "name": "Example Support"
+                "email": "solicitudes@kaaxclub.com",
+                "name": "kaaxclub"
             },
-            "address": "1234 Fake St.",
+            "address": "23 210 Garcia Gineres",
             "address_2": "",
-            "city": "San Francisco",
-            "state": "CA",
-            "zip": "94105",
-            "country": "United States"
+            "city": "Merida",
+            "state": "Yucatan",
+            "zip": "97070",
+            "country": "Mexico"
         }');
 
         try {
             $response = $this->sendgrid->client->marketing()->senders()->post($request_body);
+            return $new_email;
         } catch (Error $err) {
-            return 500;
+            return null;
         }
     }
 }

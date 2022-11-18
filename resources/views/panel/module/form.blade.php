@@ -1,5 +1,8 @@
 <form method="post" id="{{ $name_form }}" action="">
     @csrf
+    @php
+        $name_button = isset($name_button)? $name_button : 'Guardar';
+    @endphp
 
     <div class="row gy-4">
         @foreach ($elements as $element)
@@ -101,7 +104,7 @@
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
                             <input type="email" class="form-control" {{ $element['is_disabled'] }}
-                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}">
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}"  value="{{ $value }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
                             @endif
@@ -222,7 +225,7 @@
             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                 <li>
                     {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
-                    <button class="btn btn-primary">Guardar</button>
+                    <button class="btn btn-primary">{{ $name_button }}</button>
                 </li>
             </ul>
         </div>

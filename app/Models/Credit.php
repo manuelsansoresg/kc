@@ -71,6 +71,9 @@ class Credit extends Model
         'payment_check_note',
         'id_number',
         'current_credit_number',
+        'url_sign',
+        'signed',
+        'termination_email_sent',
     ];
 
     public static function listDatatable($status)

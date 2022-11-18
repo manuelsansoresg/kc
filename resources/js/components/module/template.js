@@ -428,6 +428,43 @@ $().ready(function () {
             saveForm('frm-template_swap_step1', 'swap');
         }
     });
+    
+    $("#frm-template_swap_step2").validate({
+        rules: {
+            'credit[url_sign]': {
+                required: true,
+                url: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_swap_step2', 'swap');
+        }
+    });
+    
+    $("#frm-template_swap_step2-2").validate({
+        rules: {
+            'credit[signed]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_swap_step2-2', 'swap');
+        }
+    });
+    
+    $("#frm-template_swap_step2-3").validate({
+        rules: {
+            'financial[email]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_swap_step2-3', 'swap');
+        }
+    });
 
     //*get data
     if (document.getElementById('id_rel')) {
@@ -592,7 +629,7 @@ $().ready(function () {
                         $('#payment_check_note').val(credit.payment_check_note);
                     }
                     
-                    if (type_form == 39) //form kc-ddelivery step 3
+                    if (type_form == 39) //form kc-swap step 1
                     {
                         $('#name').val(client.name);
                         $('#last_name').val(client.last_name);
@@ -602,6 +639,16 @@ $().ready(function () {
                         $('#rfc').val(client.rfc);
                         $('#id_number').val(credit.id_number);
                         $('#current_credit_number').val(credit.current_credit_number);
+                    }
+
+                    if (type_form == 40) //form kc-swap step 2
+                    {
+                        $('#url_sign').val(credit.url_sign);
+                    }
+                    
+                    if (type_form == 41) //form kc-swap step 2 form 2
+                    {
+                        $('#signed').val(credit.signed).trigger("change");
                     }
 
                 })
