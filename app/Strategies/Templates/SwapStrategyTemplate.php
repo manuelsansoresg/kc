@@ -26,6 +26,7 @@ class SwapStrategyTemplate implements TemplateInterface
     const HOUR_STEP_2   = 1;
     const HOUR_STEP_2_2 = 2;
     const HOUR_STEP_2_3 = 1;
+    const HOUR_STEP_2_4 = 1;
     const HOUR_STEP_3   = 1;
 
     public function move($id)
@@ -535,6 +536,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_file       = self::percentFile($credit->id);
         $percent_file_1_2   = self::percentFile($credit->id, '1_2');
         $percent_form       = self::percentForm($history);
+        
         $new_percent_file   = $percent_file == 100 ? 33 : $percent_file;
         $new_percent_file2  = $percent_file_1_2 == 100 ? 33 : $percent_file_1_2;
         $new_percent_form   = $percent_form == 100 ? 34 : $percent_form;
@@ -547,6 +549,13 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form_2_2   = self::percentFormStep2_2($history);
         $percent_file_2_1   = self::percentFile($credit->id, '2');
 
+        $new_percent_form_2 = $percent_form_2  == 100 ? 33 : $percent_form_2;
+        $new_percent_form_2_2 = $percent_form_2_2  == 100 ? 33 : $percent_form_2_2;
+        $new_percent_file_2_1 = $percent_file_2_1  == 100 ? 34 : $percent_file_2_1;
+        $total_percent2      = $new_percent_form_2 + $new_percent_form_2_2 + $new_percent_file_2_1;
+
+        $status_step2       = ($total_percent2 >= 100) ? 'Concluido' : 'En curso';
+
         $menu_options       = self::menuOptionsStep($history);
 
 
@@ -555,6 +564,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $view_count_1   = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_2   = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
         $view_percent   = \View::make('panel.module.view_percent', ['percent' => $total_percent])->render();
+        $view_percent2   = \View::make('panel.module.view_percent', ['percent' => $total_percent2])->render();
 
         $data = array();
         $data[] = array(
@@ -569,8 +579,8 @@ class SwapStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => $view_count_2,
             'step' => ' Firmar Solicitud de terminación anticipada',
-            'status' => $status_step1,
-            'progress' => $view_percent,
+            'status' => $status_step2,
+            'progress' => $view_percent2,
             'deadline' => '',
             'options' => $option_step2,
         );
@@ -831,6 +841,21 @@ class SwapStrategyTemplate implements TemplateInterface
         $credit         = $history->historyCredit;
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFile($credit->id);
+        
+        $max_hour                     = self::HOUR_STEP_2_3;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
+    }
+   
+    public function deadLineFileStep2_4($history)
+    {
+        $credit         = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_form                 = self::percentFormStep2_3($credit->id);
         
         $max_hour                     = self::HOUR_STEP_2_3;
         $hour                         = $history->created_at;
