@@ -74,6 +74,15 @@ class Credit extends Model
         'url_sign',
         'signed',
         'termination_email_sent',
+        'termination_number',
+        'termination_bank_name',
+        'termination_bank_account_holder',
+        'termination_bank_account_number',
+        'termination_bank_clabe',
+        'termination_bank_reference',
+        'termination_note',
+        'termination_amount',
+        'termination_deadline'
     ];
 
     public static function listDatatable($status)

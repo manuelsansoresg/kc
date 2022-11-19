@@ -122,3 +122,12 @@ function getReason(type) {
         
     });
 }
+
+$(document).ready(function(){
+    var pathArray = window.location;
+    const params = new URLSearchParams(pathArray.search)
+    let param_cancel = params.get("swap_cancel");
+    if (param_cancel != null) {
+        moveModal('Cancelar', param_cancel, 17, 37, 'dt-product-credit');
+    }
+})

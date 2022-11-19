@@ -28,6 +28,7 @@ class SwapStrategyTemplate implements TemplateInterface
     const HOUR_STEP_2_3 = 1;
     const HOUR_STEP_2_4 = 1;
     const HOUR_STEP_3   = 1;
+    const HOUR_STEP_3_2   = 24;
 
     public function move($id)
     {
@@ -41,11 +42,13 @@ class SwapStrategyTemplate implements TemplateInterface
         }
         if ($step == '1_2') {
             return self::uploadStep1_2();
+        } elseif ($step == '2') {
+            return self::uploadStep2();
+        } elseif ($step == '3') {
+            return self::uploadStep3();
         }
         
-        if ($step == '2') {
-            return self::uploadStep2();
-        }
+       
         return self::uploadStep1();
     }
 
@@ -113,6 +116,23 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         return $elements;
     }
+    public function uploadStep3()
+    {
+        $elements = array(
+            4 => [
+                'name' => 'Cotización de liquidación',
+                'comment' => null,
+                'is_required' => true,
+                'is_date' => false,
+                'max_size' => 2, //* size in MB
+                'max_file' => 2,
+                'type' => 'image/*, .pdf',
+                'comment_date' => null
+            ],
+
+        );
+        return $elements;
+    }
 
     public function configForm($id_rel, $history_id = null)
     {
@@ -125,6 +145,10 @@ class SwapStrategyTemplate implements TemplateInterface
             return self::configFormstep2_2($id_rel, $history_id);
         } elseif ($step == '2_3') {
             return self::configFormstep2_3($id_rel, $history_id);
+        } elseif ($step == '3') {
+            return self::configFormstep3($id_rel, $history_id);
+        } elseif ($step == '3_2') {
+            return self::configFormstep3_2($id_rel, $history_id);
         }
     }
 
@@ -471,6 +495,214 @@ class SwapStrategyTemplate implements TemplateInterface
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_button' => $name_button, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
+    
+    public function configFormstep3($id_rel, $history_id)
+    {
+        $credit = Credit::find($id_rel);
+        $client_person = $credit->creditClientPerson;
+        $name_form = 'frm-template_swap_step3';
+        $type_form = HistoryLog::KC_SWAP_FORM_STEP_3;
+        $client_name = $client_person->last_name.' '.$client_person->second_last_name.' '.$client_person->name;
+        $id_number = $credit->id_number;
+        $rfc = $client_person->rfc;
+        $current_credit_number = $credit->current_credit_number;
+        $current_loan = $credit->current_loan;
+        $name_button = 'Enviar';
+
+        $elements = array(
+            1 => [
+                'title_section' => null,
+                'title' => 'Folio liquidación',
+                'name_field' => 'credit[termination_number]',
+                'id_field' => 'termination_number',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => $credit->termination_number
+            ],
+            2 => [
+                'title_section' => null,
+                'title' => 'Banco',
+                'name_field' => 'credit[termination_bank_name]',
+                'id_field' => 'termination_bank_name',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => $credit->termination_bank_name,
+            ],
+            3 => [
+                'title_section' => null,
+                'title' => 'Titular',
+                'name_field' => 'credit[termination_bank_account_holder]',
+                'id_field' => 'termination_bank_account_holder',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => $credit->termination_bank_account_holder
+            ],
+            4 => [
+                'title_section' => null,
+                'title' => 'Cuenta',
+                'name_field' => 'credit[termination_bank_account_number]',
+                'id_field' => 'termination_bank_account_number',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => $credit->termination_bank_account_number,
+            ],
+            5 => [
+                'title_section' => null,
+                'title' => 'CLABE',
+                'name_field' => 'credit[termination_bank_clabe]',
+                'id_field' => 'termination_bank_clabe',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => false,
+                'value' => $credit->termination_bank_clabe,
+            ],
+            6 => [
+                'title_section' => null,
+                'title' => 'Referencia',
+                'name_field' => 'credit[termination_bank_reference]',
+                'id_field' => 'termination_bank_reference',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => false,
+                'value' => $credit->termination_bank_reference,
+            ],
+            7 => [
+                'title_section' => null,
+                'title' => 'Comentario',
+                'name_field' => 'credit[termination_note]',
+                'id_field' => 'termination_note',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => $credit->termination_note,
+            ],
+            8 => [
+                'title_section' => null,
+                'title' => 'Importe',
+                'name_field' => 'credit[termination_amount]',
+                'id_field' => 'termination_amount',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => $credit->termination_amount,
+            ],
+            9 => [
+                'title_section' => null,
+                'title' => 'Fecha límite para liquidar',
+                'name_field' => 'credit[termination_deadline]',
+                'id_field' => 'termination_deadline',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'date',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => false,
+                'value' => $credit->termination_deadline,
+            ],
+            
+        );
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'name_button' => $name_button, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        return $list;
+    }
+    
+    public function configFormstep3_2($id_rel, $history_id)
+    {
+        $credit = Credit::find($id_rel);
+        $name_form    = 'frm-template_swap_step3';
+        $type_form    = HistoryLog::KC_SWAP_FORM_STEP_3;
+        $name_button  = 'Enviar';
+        $show_btn     = false;
+
+        $elements = array(
+            1 => [
+                'title_section' => null,
+                'title' => 'Continuar',
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'href',
+                'link' => null,
+                'class' => 'btn btn-primary',
+                'target' => '_blank',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+                'col' => 'col-12 col-md-4',
+                'onclick' => 'swapCreditContinue('.$credit->id.')'
+            ],
+            2 => [
+                'title_section' => null,
+                'title' => 'Cancelar',
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'href',
+                'link' => '/panel/credit/product/17?swap_cancel='.$credit->id,
+                'class' => 'btn btn-primary',
+                'target' => '_blank',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+                'col' => 'col-12 col-md-4',
+            ],
+            
+            
+        );
+        $list = \View::make('panel.module.form', [ 'show_btn' => $show_btn, 'elements' => $elements, 'name_button' => $name_button, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        return $list;
+    }
 
     
     
@@ -561,8 +793,10 @@ class SwapStrategyTemplate implements TemplateInterface
 
         $option_step1   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
         $option_step2   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
+        $option_step3   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
         $view_count_1   = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_2   = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
+        $view_count_3   = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
         $view_percent   = \View::make('panel.module.view_percent', ['percent' => $total_percent])->render();
         $view_percent2   = \View::make('panel.module.view_percent', ['percent' => $total_percent2])->render();
 
@@ -578,11 +812,20 @@ class SwapStrategyTemplate implements TemplateInterface
         
         $data[] = array(
             'name' => $view_count_2,
-            'step' => ' Firmar Solicitud de terminación anticipada',
+            'step' => 'Firmar Solicitud de terminación anticipada',
             'status' => $status_step2,
             'progress' => $view_percent2,
             'deadline' => '',
             'options' => $option_step2,
+        );
+        
+        $data[] = array(
+            'name' => $view_count_3,
+            'step' => 'Cotización de liquidación',
+            'status' => $status_step2,
+            'progress' => $view_percent2,
+            'deadline' => '',
+            'options' => $option_step3,
         );
        
         return $data;
@@ -593,6 +836,10 @@ class SwapStrategyTemplate implements TemplateInterface
         $step = isset($_GET['step']) ? $_GET['step'] : null;
         if ($step == 2) {
             return self::listActionStep2($history_id);
+        }
+        
+        if ($step == 3) {
+            return self::listActionStep3($history_id);
         }
         return self::listActionStep1($history_id);
     }
@@ -805,6 +1052,81 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         return $data;
     }
+    
+    public function listActionStep3($history_id)
+    {
+        $history                = HistoryLog::find($history_id);
+        $credit                 = $history->historyCredit;
+        $advisor                = $credit->creditAdvisor;
+        $status_file            = 'En espera';
+
+        $percent_file         = self::percentFile($credit->id, '3');
+
+        $percent_form           = self::percentFormStep3($history);
+        $percent_form_2         = self::percentFormStep3_2($history);
+        
+
+        $user                   = User::find($advisor->id);
+        $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+
+        $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        $menu_options           = self::menuOptionsStep3($history, 3);
+
+        $view_dead_line_step1   = self::deadLineFormStep3($history);
+        $view_dead_line_step2   = self::deadLineFormStep3_2($history);
+        $view_dead_line_step3   = self::deadLineFormStep3_3($history);
+
+        $option2                = null;
+        $option3                = null;
+        $option4                = null;
+        
+        $status_file            = ($percent_file >= 100) ? 'Concluido' : 'En curso';
+        $status_form            = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+        $status_form_2          = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
+
+        if ($advisor->id == Auth::user()->id) {
+            $name_advisor = 'Tú';
+        }
+
+        $option1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
+        if ($percent_file == 100) {
+            $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        }
+        if ($percent_form == 100) {
+            $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
+        }
+       
+       
+
+        $data = array();
+        $data[] = array(
+            'name' => 'Carga',
+            'description' => 'Preparar documento',
+            'status' => $status_file,
+            'deadline' => $view_dead_line_step1,
+            'advisor' => $name_advisor,
+            'options' => $option1,
+        );
+        $data[] = array(
+            'name' => 'Formulario',
+            'description' => 'Solicitar firma',
+            'status' => $status_form,
+            'deadline' => $view_dead_line_step2,
+            'advisor' => $name_advisor,
+            'options' => $option2,
+        );
+        $data[] = array(
+            'name' => 'Decisión',
+            'description' => 'Documento firmado',
+            'status' => $status_form_2,
+            'deadline' => $view_dead_line_step3,
+            'advisor' => $name_advisor,
+            'options' => $option3,
+        );
+        
+        
+        return $data;
+    }
 
     public function deadLineFormStep2($history)
     {
@@ -843,6 +1165,51 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form                 = self::percentFile($credit->id);
         
         $max_hour                     = self::HOUR_STEP_2_3;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
+    }
+    
+    public function deadLineFormStep3($history)
+    {
+        $credit         = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_form                 = self::percentFile($credit->id);
+        
+        $max_hour                     = self::HOUR_STEP_3;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
+    }
+    
+    public function deadLineFormStep3_2($history)
+    {
+        $credit         = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_form                 = self::percentFormStep3($history);
+        
+        $max_hour                     = self::HOUR_STEP_3_2;
+        $hour                         = $history->created_at;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
+    }
+    
+    public function deadLineFormStep3_3($history)
+    {
+        $credit         = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_form                 = self::percentFormStep3($history);
+        
+        $max_hour                     = self::HOUR_STEP_3_2;
         $hour                         = $history->created_at;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
@@ -1010,6 +1377,40 @@ class SwapStrategyTemplate implements TemplateInterface
             'form3' => array(
                 [
                     'link' => '/panel/action-form/swap/' . $history->id . '/form?step=2_3',
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+
+                ),
+        );
+
+        return $menu;
+    }
+    
+    public function menuOptionsStep3($history, $step = 2)
+    {
+        $menu = array(
+            'file' => array(
+                [
+                    'link' => '/panel/template/action-document/swap/' . $history->id . '?step=' . $step,
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+
+                ),
+            'form' => array(
+                [
+                    'link' => '/panel/action-form/swap/' . $history->id . '/form?step=' . $step,
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+            ),
+            'form2' => array(
+                [
+                    'link' => '/panel/action-form/swap/' . $history->id . '/form?step=3_2',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -1250,8 +1651,61 @@ class SwapStrategyTemplate implements TemplateInterface
 
         $total_valid = 0;
         
-        if ($credit != null && $credit->payment_check != null) {
-            $total_valid = 100;
+        if ($credit != null && $credit->termination_number != null) {
+            $total_valid = 14;
+        }
+        if ($credit != null && $credit->termination_bank_name != null) {
+            $total_valid = $total_valid + 14;
+        }
+        if ($credit != null && $credit->termination_bank_account_holder != null) {
+            $total_valid = $total_valid + 14;
+        }
+        if ($credit != null && $credit->termination_bank_clabe != null) {
+            $total_valid = $total_valid + 14;
+        }
+        if ($credit != null && $credit->termination_bank_reference != null) {
+            $total_valid = $total_valid + 14;
+        }
+        if ($credit != null && $credit->termination_amount != null) {
+            $total_valid = $total_valid + 14;
+        }
+        if ($credit != null && $credit->termination_deadline != null) {
+            $total_valid = $total_valid + 16;
+        }
+
+        
+        $percent =  (100 / 100) * $total_valid;
+        return $percent;
+    }
+    
+    public function percentFormStep3_2($history)
+    {
+        $percent = 0;
+        $credit     = $history->historyCredit;
+        $client     = $credit->creditClientPerson;
+
+        $total_valid = 0;
+        
+        if ($credit != null && $credit->termination_number != null) {
+            $total_valid = 14;
+        }
+        if ($credit != null && $credit->termination_bank_name != null) {
+            $total_valid = 14;
+        }
+        if ($credit != null && $credit->termination_bank_account_holder != null) {
+            $total_valid = 14;
+        }
+        if ($credit != null && $credit->termination_bank_clabe != null) {
+            $total_valid = 14;
+        }
+        if ($credit != null && $credit->termination_bank_reference != null) {
+            $total_valid = 14;
+        }
+        if ($credit != null && $credit->termination_amount != null) {
+            $total_valid = 14;
+        }
+        if ($credit != null && $credit->termination_deadline != null) {
+            $total_valid = 16;
         }
 
         

@@ -70,6 +70,9 @@ class HistoryLog extends Model
     const KC_SWAP_UPLOAD_STEP_2_3             = 42;
     const KC_SWAP_FORM_STEP_2_3               = 43;
     
+    const KC_SWAP_UPLOAD_STEP_3               = 44;
+    const KC_SWAP_FORM_STEP_3                 = 45;
+    
 
     protected $fillable = [
         'id_rel',
@@ -127,6 +130,8 @@ class HistoryLog extends Model
         41 => 'Formulario (etapa 2)',
         42 => 'Carga (etapa 2)',
         43 => 'Formulario (etapa 2)',
+        44 => 'Carga (etapa 3)',
+        45 => 'Formulario (etapa 3)',
     ];
 
     public static $name_model = [
@@ -162,6 +167,8 @@ class HistoryLog extends Model
         41 => 'swap',
         42 => 'swap',
         43 => 'swap',
+        44 => 'swap',
+        45 => 'swap',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $is_subprocess = false)

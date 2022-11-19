@@ -48,5 +48,5 @@
     </div>
     <input type="hidden" id="refresh-dt" value="null">
     <input type="hidden" id="status" value="{{ $status }}">
-  
+    @include('panel.modal.archive')
 @endsection

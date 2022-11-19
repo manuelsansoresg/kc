@@ -465,6 +465,36 @@ $().ready(function () {
             saveForm('frm-template_swap_step2-3', 'swap');
         }
     });
+   
+    $("#frm-template_swap_step3").validate({
+        rules: {
+            'credit[termination_number]': {
+                required: true,
+            },
+            'credit[termination_bank_name]': {
+                required: true,
+            },
+            'credit[termination_bank_account_holder]': {
+                required: true,
+            },
+            'credit[termination_bank_clabe]': {
+                required: true,
+            },
+            'credit[termination_bank_reference]': {
+                required: true,
+            },
+            'credit[termination_amount]': {
+                required: true,
+            },
+            'credit[termination_deadline]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_swap_step3', 'swap');
+        }
+    });
 
     //*get data
     if (document.getElementById('id_rel')) {
@@ -676,6 +706,26 @@ function selectPrepadMethod(val, id) {
    } else if(val == 4){
         document.querySelector('#'+id+'_4').checked = true;
     }
+}
+
+window.swapContinue = function (credit_id) {
+    axios
+        .get("/panel/action-form")
+        .then(function (response) {
+            let result = response.data;
+        })
+        .catch(e => {
+        });
+}
+
+window.swapCancel = function (id_form, model) {
+    axios
+        .get("/panel/action-form")
+        .then(function (response) {
+            let result = response.data;
+        })
+        .catch(e => {
+        });
 }
 
 function saveForm(id_form, model) {

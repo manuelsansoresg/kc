@@ -962,6 +962,16 @@ function getReason(type) {
   })["catch"](function (e) {});
 }
 
+$(document).ready(function () {
+  var pathArray = window.location;
+  var params = new URLSearchParams(pathArray.search);
+  var param_cancel = params.get("swap_cancel");
+
+  if (param_cancel != null) {
+    moveModal('Cancelar', param_cancel, 17, 37, 'dt-product-credit');
+  }
+});
+
 /***/ }),
 
 /***/ "./resources/js/components/datatable.js":
@@ -2893,6 +2903,35 @@ $().ready(function () {
       event.preventDefault();
       saveForm('frm-template_swap_step2-3', 'swap');
     }
+  });
+  $("#frm-template_swap_step3").validate({
+    rules: {
+      'credit[termination_number]': {
+        required: true
+      },
+      'credit[termination_bank_name]': {
+        required: true
+      },
+      'credit[termination_bank_account_holder]': {
+        required: true
+      },
+      'credit[termination_bank_clabe]': {
+        required: true
+      },
+      'credit[termination_bank_reference]': {
+        required: true
+      },
+      'credit[termination_amount]': {
+        required: true
+      },
+      'credit[termination_deadline]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_swap_step3', 'swap');
+    }
   }); //*get data
 
   if (document.getElementById('id_rel')) {
@@ -3102,6 +3141,18 @@ function selectPrepadMethod(val, id) {
     document.querySelector('#' + id + '_4').checked = true;
   }
 }
+
+window.swapContinue = function (credit_id) {
+  axios.get("/panel/action-form").then(function (response) {
+    var result = response.data;
+  })["catch"](function (e) {});
+};
+
+window.swapCancel = function (id_form, model) {
+  axios.get("/panel/action-form").then(function (response) {
+    var result = response.data;
+  })["catch"](function (e) {});
+};
 
 function saveForm(id_form, model) {
   var new_form = document.getElementById(id_form);

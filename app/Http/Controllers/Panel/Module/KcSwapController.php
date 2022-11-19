@@ -24,6 +24,16 @@ class KcSwapController extends Controller
         $users = Credit::listDatatable([HistoryLog::KC_SWAP]);
         return response()->json(['data' => $users]);
     }
+    public function cancel()
+    {
+        $users = Credit::listDatatable([HistoryLog::KC_SWAP]);
+        return response()->json(['data' => $users]);
+    }
+    public function continue()
+    {
+        $users = Credit::listDatatable([HistoryLog::KC_SWAP]);
+        return response()->json(['data' => $users]);
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -39,7 +39,7 @@
                         <div class="form-control-wrap">
                             <textarea type="text" class="form-control" {{ $element['is_disabled'] }}
                                 name="{{ $element['name_field'] }}" placeholder="{{ $element['placeholder'] }}"
-                                id="{{ $element['id_field'] }}"> </textarea>
+                                id="{{ $element['id_field'] }}">{{ $value }}</textarea>
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
                             @endif
@@ -69,7 +69,7 @@
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
                             <input type="number" class="form-control" {{ $element['is_disabled'] }}
-                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}">
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
                             @endif
@@ -86,7 +86,7 @@
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
                             <input type="date" class="form-control" {{ $element['is_disabled'] }}
-                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}">
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
                             @endif
@@ -221,14 +221,16 @@
         <input type="hidden" id="type_form" value="{{ $type_form }}">
         <input type="hidden" id="history_id" name="history_id" value="{{ $history_id }}">
         @if ($type_form != 31)
-        <div class="col-12">
-            <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                <li>
-                    {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
-                    <button class="btn btn-primary">{{ $name_button }}</button>
-                </li>
-            </ul>
-        </div>
+        @if (!isset($show_btn))
+            <div class="col-12">
+                <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                    <li>
+                        {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
+                        <button class="btn btn-primary">{{ $name_button }}</button>
+                    </li>
+                </ul>
+            </div>
+        @endif
             
         @endif
     </div>
