@@ -2037,7 +2037,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $view_dead_line_inf_credit;
     }
 
-    public function actionStep2($history_id)
+    public function actionStep2($history_id, $step_origin = null)
     {
 
         $history        = HistoryLog::find($history_id);
@@ -2049,7 +2049,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptions($history, 2);
+        $menu_options   = self::menuOptions($history, 2, $step_origin);
         $view_dead_line_inf_credit  = self::deadLineStep2($history);
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
@@ -2090,7 +2090,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $view_dead_line_inf_credit;
     }
 
-    public function actionStep3($history_id)
+    public function actionStep3($history_id, $step_origin = null)
     {
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
@@ -2111,7 +2111,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptionsStep3($history);
+        $menu_options   = self::menuOptionsStep3($history, $step_origin);
 
 
 
@@ -2152,7 +2152,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $data;
     }
     
-    public function actionStep4($history_id)
+    public function actionStep4($history_id, $step_origin = null)
     {
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
@@ -2162,7 +2162,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptionsStep4($history);
+        $menu_options   = self::menuOptionsStep4($history, $step_origin);
 
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
@@ -2184,7 +2184,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $data;
     }
     
-    public function actionStep5($history_id)
+    public function actionStep5($history_id, $step_origin = null)
     {
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
@@ -2196,7 +2196,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptionsStep5($history);
 
-        $percent_form_step5 = self::percentFormStep5($history); //etapa 3
+        $percent_form_step5 = self::percentFormStep5($history, $step_origin); //etapa 3
         $status_step5         = 'En espera';
         $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
 
@@ -2289,12 +2289,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $menu;
     }
 
-    public function menuOptionsStep3($history)
+    public function menuOptionsStep3($history, $step_origin = null)
     {
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=3_1',
+                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=3_1'.'&step_origin=' . $step_origin,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -2302,7 +2302,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ),
             'form2' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=3_2',
+                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=3_2'.'&step_origin=' . $step_origin,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -2310,7 +2310,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ),
             'file' => array(
                 [
-                    'link' => '/panel/template/action-document/controlDesk/' . $history->id . '?step=3',
+                    'link' => '/panel/template/action-document/controlDesk/' . $history->id . '?step=3'.'&step_origin=' . $step_origin,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -2322,12 +2322,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $menu;
     }
     
-    public function menuOptionsStep4($history)
+    public function menuOptionsStep4($history, $step_origin = null)
     {
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=4',
+                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=4'.'&step_origin=' . $step_origin,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -2338,12 +2338,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $menu;
     }
     
-    public function menuOptionsStep5($history)
+    public function menuOptionsStep5($history, $step_origin = null)
     {
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=5',
+                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=5'.'&step_origin=' . $step_origin,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -2467,11 +2467,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($credit != null && $credit->applied_financial != '') {
             $total_valid = $total_valid + 10;
         }
-
+        
         if ($credit != null && $credit->applied_financial_product != null) {
             $total_valid = $total_valid + 10;
         }
-
         if ($credit != null && $credit->applied_loan_type != null) {
             $total_valid = $total_valid + 10;
         }
