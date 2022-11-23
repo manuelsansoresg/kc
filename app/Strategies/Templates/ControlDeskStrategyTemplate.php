@@ -1977,11 +1977,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $view_dead_line_inf_credit;
     }
 
-    public function actionStep1($history_id)
+    public function actionStep1($history_id, $step_origin = null)
     {
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
+        
         $percent_file   = self::percentFile($credit->id);
         $percent_form   = self::percentForm($history);
         $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
@@ -1991,7 +1992,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptions($history, 1);
+        $menu_options   = self::menuOptions($history, 1, $step_origin);
 
         $view_dead_line_upload  = self::deadLineUploadStep1($history);
         $view_dead_line_form  = self::deadLineStep1($history);
@@ -2263,12 +2264,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $data;
     }
 
-    public function menuOptions($history, $step = 1)
+    public function menuOptions($history, $step = 1, $step_origin = null)
     {
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=' . $step,
+                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=' . $step.'&step_origin=' . $step_origin,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -2276,7 +2277,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ),
             'file' => array(
                 [
-                    'link' => '/panel/template/action-document/controlDesk/' . $history->id . '?step=' . $step,
+                    'link' => '/panel/template/action-document/controlDesk/' . $history->id . '?step=' . $step.'&step_origin=' . $step_origin,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'

@@ -16,6 +16,7 @@ use App\Models\Survey;
 use App\Models\User;
 use App\Strategies\TemplateInterface;
 use App\Strategies\Values\SendNotificationsValues;
+use App\Strategies\Values\TemplateValues;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use stdClass;
@@ -149,7 +150,11 @@ class SwapStrategyTemplate implements TemplateInterface
             return self::configFormstep3($id_rel, $history_id);
         } elseif ($step == '3_2') {
             return self::configFormstep3_2($id_rel, $history_id);
-        }
+        }/*  elseif ($step == '4') {
+            dd('test');
+            $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
+            return $actionStrategy->actionStep1($history_id);
+        } */
     }
 
     public function configFormStep1($id_rel, $history_id)
@@ -762,31 +767,57 @@ class SwapStrategyTemplate implements TemplateInterface
 
     public function listStep($history_id)
     {
-        $history            = HistoryLog::find($history_id);
-        $credit             = $history->historyCredit;
+        $history                    = HistoryLog::find($history_id);
+        $credit                     = $history->historyCredit;
+
+        $status_step2               = 'En espera';
+        $status_step3               = 'En espera';
+        $status_step4               = 'En espera';
         
-        $percent_file       = self::percentFile($credit->id);
-        $percent_file_1_2   = self::percentFile($credit->id, '1_2');
-        $percent_form       = self::percentForm($history);
+        $percent_file               = self::percentFile($credit->id);
+        $percent_file_1_2           = self::percentFile($credit->id, '1_2');
+        $percent_form               = self::percentForm($history);
         
-        $new_percent_file   = $percent_file == 100 ? 33 : $percent_file;
-        $new_percent_file2  = $percent_file_1_2 == 100 ? 33 : $percent_file_1_2;
-        $new_percent_form   = $percent_form == 100 ? 34 : $percent_form;
+        $new_percent_file           = $percent_file == 100 ? 33 : $percent_file;
+        $new_percent_file2          = $percent_file_1_2 == 100 ? 33 : $percent_file_1_2;
+        $new_percent_form           = $percent_form == 100 ? 34 : $percent_form;
         
-        $total_percent      = $new_percent_file + $new_percent_file2 + $new_percent_form;
-        $status_step1       = ($total_percent >= 100) ? 'Concluido' : 'En curso';
+        $total_percent              = $new_percent_file + $new_percent_file2 + $new_percent_form;
+        $status_step1               = ($total_percent >= 100) ? 'Concluido' : 'En curso';
 
 
-        $percent_form_2     = self::percentFormStep2($history);
-        $percent_form_2_2   = self::percentFormStep2_2($history);
-        $percent_file_2_1   = self::percentFile($credit->id, '2');
+        $percent_form_2             = self::percentFormStep2($history);
+        $percent_form_2_2           = self::percentFormStep2_2($history);
+        $percent_file_2_1           = self::percentFile($credit->id, '2');
 
-        $new_percent_form_2 = $percent_form_2  == 100 ? 33 : $percent_form_2;
-        $new_percent_form_2_2 = $percent_form_2_2  == 100 ? 33 : $percent_form_2_2;
-        $new_percent_file_2_1 = $percent_file_2_1  == 100 ? 34 : $percent_file_2_1;
-        $total_percent2      = $new_percent_form_2 + $new_percent_form_2_2 + $new_percent_file_2_1;
+        $new_percent_form_2         = $percent_form_2  == 100 ? 33 : $percent_form_2;
+        $new_percent_form_2_2       = $percent_form_2_2  == 100 ? 33 : $percent_form_2_2;
+        $new_percent_file_2_1       = $percent_file_2_1  == 100 ? 34 : $percent_file_2_1;
+        $total_percent2             = $new_percent_form_2 + $new_percent_form_2_2 + $new_percent_file_2_1;
 
+        $percent_file_step3         = self::percentFile($credit->id, '3');
+        $percent_form_step3         = self::percentFormStep3($history);
+        $percent_form_2_step3       = self::percentFormStep3_2($history);
+        $new_percent_form_step3_1   = $percent_file_step3  == 100 ? 33 : $percent_file_step3;
+        $new_percent_form_step3_2   = $percent_form_step3  == 100 ? 33 : $percent_form_step3;
+        $new_percent_file_step3_3   = $percent_form_2_step3  == 100 ? 34 : $percent_form_2_step3;
+        $total_percent2_step3       = $new_percent_form_step3_1 + $new_percent_form_step3_2 + $new_percent_file_step3_3;
+
+        $template_control_desk      = TemplateValues::STRATEGY['controlDesk'];
+        $ck_percent_file            = (new $template_control_desk)->percentFile($credit->id);
+        $ck_percent_form            = (new $template_control_desk)->percentForm($history); // etapa 1
+        $ck_file                    = $ck_percent_file == 100 ? 50 : 0;
+        $ck_form                    = $ck_percent_form == 100 ? 50 : 0;
+        $kc_total_percent_step4     = $ck_file + $ck_form;
+
+        $status_step4            = ($kc_total_percent_step4 >= 100) ? 'Concluido' : 'En curso';
+
+      
+
+        //TODO: Porcentaje etapa 3
+        //dd($percent_file_step3, $percent_form_step3, $percent_form_2_step3);
         $status_step2       = ($total_percent2 >= 100) ? 'Concluido' : 'En curso';
+        $status_step3       = ($total_percent2_step3 >= 100) ? 'Concluido' : 'En curso';
 
         $menu_options       = self::menuOptionsStep($history);
 
@@ -794,9 +825,13 @@ class SwapStrategyTemplate implements TemplateInterface
         $option_step1   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
         $option_step2   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         $option_step3   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
+        $option_step4   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
+        
         $view_count_1   = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_2   = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
         $view_count_3   = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
+        $view_count_4   = \View::make('panel.module.view_count', ['number' => 'Cuatro'])->render();
+        
         $view_percent   = \View::make('panel.module.view_percent', ['percent' => $total_percent])->render();
         $view_percent2   = \View::make('panel.module.view_percent', ['percent' => $total_percent2])->render();
 
@@ -822,10 +857,19 @@ class SwapStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => $view_count_3,
             'step' => 'Cotización de liquidación',
-            'status' => $status_step2,
+            'status' => $status_step3,
             'progress' => $view_percent2,
             'deadline' => '',
             'options' => $option_step3,
+        );
+        
+        $data[] = array(
+            'name' => $view_count_4,
+            'step' => 'Viabilidad',
+            'status' => $status_step4,
+            'progress' => $view_percent2,
+            'deadline' => '',
+            'options' => $option_step4,
         );
        
         return $data;
@@ -836,10 +880,13 @@ class SwapStrategyTemplate implements TemplateInterface
         $step = isset($_GET['step']) ? $_GET['step'] : null;
         if ($step == 2) {
             return self::listActionStep2($history_id);
-        }
-        
-        if ($step == 3) {
+        } elseif ($step == 3) {
             return self::listActionStep3($history_id);
+        } elseif ($step == 4) {
+            //*execute function in template controldeskstrategy
+            $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
+            $list       = (new $actionStrategy)->actionStep1($history_id, 1);
+            return $list;
         }
         return self::listActionStep1($history_id);
     }
@@ -1482,6 +1529,15 @@ class SwapStrategyTemplate implements TemplateInterface
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
+            //*step control desk clone    
+            'actionstep4' => array(
+                [
+                    'link' => '/panel/template/actions/swap/' . $history->id . '/show?step=4',
+                    'onclick' => '',
+                    'name' => $lbl_action,
+                    'icon' => 'icon ni ni-view-list-wd',
+                ]
+            ),
         );
 
         return $menu;
@@ -1710,7 +1766,7 @@ class SwapStrategyTemplate implements TemplateInterface
 
         
         $percent =  (100 / 100) * $total_valid;
-        return $percent;
+        return 100;
     }
 
     

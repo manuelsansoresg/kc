@@ -81,7 +81,7 @@ class Credit extends Model
         'termination_bank_clabe',
         'termination_bank_reference',
         'termination_note',
-        'termination_amount',
+        'termination_amount', //* save * 100
         'termination_deadline'
     ];
 
