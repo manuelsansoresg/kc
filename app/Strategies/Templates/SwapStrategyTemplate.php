@@ -1067,9 +1067,9 @@ class SwapStrategyTemplate implements TemplateInterface
             $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file2']])->render();
         }
        
-        $subject1 = null;
-        $subject2 = null;
-        $subject3 = null;
+        $subject1 = HistoryLog::$label_subject[38];
+        $subject2 = HistoryLog::$label_subject[39];
+        $subject3 = HistoryLog::$label_subject[46];
 
         $data = array();
         $data[] = array(
@@ -1082,7 +1082,7 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         $data[] = array(
             'name' => 'Formulario',
-            'subject' => $subject1,
+            'subject' => $subject2,
             'status' => $status_form,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
@@ -1090,7 +1090,7 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         $data[] = array(
             'name' => 'Carga',
-            'subject' => $subject1,
+            'subject' => $subject3,
             'status' => $status_file_2,
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
@@ -1147,10 +1147,10 @@ class SwapStrategyTemplate implements TemplateInterface
 
         $data = array();
 
-        $subject1 = null;
-        $subject2 = null;
-        $subject3 = null;
-        $subject4 = null;
+        $subject1 = HistoryLog::$label_subject[40];
+        $subject2 = HistoryLog::$label_subject[41];
+        $subject3 = HistoryLog::$label_subject[42];
+        $subject4 = HistoryLog::$label_subject[43];
 
         $data[] = array(
             'name' => 'Firma',
@@ -1239,9 +1239,9 @@ class SwapStrategyTemplate implements TemplateInterface
 
         $data = array();
 
-        $subject1 = null;
-        $subject2 = null;
-        $subject3 = null;
+        $subject1 = HistoryLog::$label_subject[44];
+        $subject2 = HistoryLog::$label_subject[45];
+        $subject3 = HistoryLog::$label_subject[47];
 
         $data[] = array(
             'name' => 'Carga',

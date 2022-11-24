@@ -60,10 +60,12 @@ class HistoryLog extends Model
     const CREDITS_PAID                        = 35;
 
     const KC_AFTER_MARKET                     = 36;
+    const KC_AFTER_FORM                       = 48;
     
     const KC_SWAP                             = 37;
     const KC_SWAP_UPLOAD                      = 38;
     const KC_SWAP_FORM                        = 39;
+    const KC_SWAP_UPLOAD_2                    = 46;
     
     const KC_SWAP_FORM_STEP_2                 = 40;
     const KC_SWAP_FORM_STEP_2_2               = 41;
@@ -72,6 +74,7 @@ class HistoryLog extends Model
     
     const KC_SWAP_UPLOAD_STEP_3               = 44;
     const KC_SWAP_FORM_STEP_3                 = 45;
+    const KC_SWAP_FORM_STEP_3_2               = 47;
     
 
     protected $fillable = [
@@ -132,6 +135,9 @@ class HistoryLog extends Model
         43 => 'Formulario (etapa 2)',
         44 => 'Carga (etapa 3)',
         45 => 'Formulario (etapa 3)',
+        46 => 'Carga (etapa 1)',
+        47 => 'Formulario',
+        48 => 'Formulario',
     ];
     
     public static $label_subject = [
@@ -156,22 +162,25 @@ class HistoryLog extends Model
         27 => 'Entrevista',
         28 => 'Análisis KYC',
         29 => 'Contactar financiera',
-       /*  30 => 'Entró a KC - Delivery',
-        31 => 'Respuesta del módulo',
-        32 => 'Formulario (etapa 2)',
-        33 => 'Carga (etapa 2)',
-        34 => 'Formulario (etapa 3)',
+        //30 => 'Entró a KC - Delivery',
+        31 => 'Información del crédito',
+        32 => 'Cambios en comisión',
+        33 => 'Comprobante de pago',
+        34 => 'Verificar pago',
         35 => 'Créditos pagados',
         36 => 'Entró a KC - After market',
         37 => 'Entró a KC - Swap',
-        38 => 'Carga (etapa1)',
-        39 => 'Formulario (etapa 1)',
-        40 => 'Formulario (etapa 2)',
-        41 => 'Formulario (etapa 2)',
-        42 => 'Carga (etapa 2)',
-        43 => 'Formulario (etapa 2)',
-        44 => 'Carga (etapa 3)',
-        45 => 'Formulario (etapa 3)', */
+        38 => 'Documentos cliente',
+        39 => 'Información laboral y contacto',
+        46 => 'Solicitud de terminación',
+        40 => 'Preparar documento',
+        41 => 'Solcitar firma',
+        42 => 'Documento firmado',
+        43 => 'Enviar solicitud',
+        44 => 'Cotización terminación',
+        45 => 'Cotización terminación',
+        47 => '¿Continuar?',
+        48 => 'Calidad de servicio',
     ];
 
     public static $name_model = [
@@ -199,6 +208,7 @@ class HistoryLog extends Model
         32 => 'delivery',
         33 => 'delivery',
         34 => 'delivery',
+        48 => 'delivery',
         36 => 'afterMarket',
         37 => 'swap',
         38 => 'swap',
@@ -209,6 +219,8 @@ class HistoryLog extends Model
         43 => 'swap',
         44 => 'swap',
         45 => 'swap',
+        46 => 'swap',
+        47 => 'swap',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $is_subprocess = false)

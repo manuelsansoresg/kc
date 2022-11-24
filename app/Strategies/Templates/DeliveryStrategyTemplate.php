@@ -529,7 +529,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $data = array();
 
-        $subject1 = null;
+        $subject1 = HistoryLog::$label_subject[31];
 
         $data[] = array(
             'name' => 'Respuesta de módulo',
@@ -581,8 +581,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $data = array();
 
-        $subject1 = null;
-        $subject2 = null;
+        $subject1 = HistoryLog::$label_subject[32];
+        $subject2 = HistoryLog::$label_subject[33];
 
         $data[] = array(
             'name' => 'Carga',
@@ -640,7 +640,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         }
 
         $data = array();
-        $subject1 = null;
+        $subject1 = HistoryLog::$label_subject[34];
         
         $data[] = array(
             'name' => 'Formulario',

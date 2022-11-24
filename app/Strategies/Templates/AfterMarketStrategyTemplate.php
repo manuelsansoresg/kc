@@ -375,7 +375,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         }
 
         $data = array();
-        $subject1 = null;
+        $subject1 = HistoryLog::$label_subject[48];
 
         $data[] = array(
             'name' => 'Respuesta de módulo',
