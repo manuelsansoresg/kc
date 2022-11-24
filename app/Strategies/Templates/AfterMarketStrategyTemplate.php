@@ -320,11 +320,11 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $step = isset($_GET['step']) ? $_GET['step'] : null;
         if ($step == 2) {
             return self::actionStep2($history_id);
-        } elseif ($step == 3) {
+        } /* elseif ($step == 3) {
             return self::actionStep3($history_id);
         } elseif ($step == 4) {
             return self::actionStep4($history_id);
-        }
+        } */
         return self::actionStep1($history_id);
     }
 
@@ -375,8 +375,11 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         }
 
         $data = array();
+        $subject1 = null;
+
         $data[] = array(
             'name' => 'Respuesta de módulo',
+            'subject' => $subject1,
             'status' => $status_file,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
@@ -425,8 +428,12 @@ class AfterMarketStrategyTemplate implements TemplateInterface
 
         $data = array();
 
+        $subject1 = null;
+        $subject2 = null;
+
         $data[] = array(
             'name' => 'Carga',
+            'subject' => $subject1,
             'status' => $status_form,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
@@ -435,6 +442,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject2,
             'status' =>  'Opcional',
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,

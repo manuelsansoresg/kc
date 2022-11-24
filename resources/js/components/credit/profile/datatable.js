@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
         ajax: '/panel/credit/action/'+credit_id+'/list',
         columns: [
             { data: 'action' },
+            { data: 'subject' },
             { data: 'module' },
             { data: 'deadline' },
-            { data: 'responsable' }, 
             { data: 'status' , orderData: 'desc'}, 
             { data: 'options', className: 'nk-tb-col-tools text-end' }
         ],

@@ -1067,10 +1067,14 @@ class SwapStrategyTemplate implements TemplateInterface
             $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file2']])->render();
         }
        
+        $subject1 = null;
+        $subject2 = null;
+        $subject3 = null;
 
         $data = array();
         $data[] = array(
             'name' => 'Carga',
+            'subject' => $subject1,
             'status' => $status_file,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
@@ -1078,6 +1082,7 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject1,
             'status' => $status_form,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
@@ -1085,6 +1090,7 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         $data[] = array(
             'name' => 'Carga',
+            'subject' => $subject1,
             'status' => $status_file_2,
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
@@ -1140,8 +1146,15 @@ class SwapStrategyTemplate implements TemplateInterface
        
 
         $data = array();
+
+        $subject1 = null;
+        $subject2 = null;
+        $subject3 = null;
+        $subject4 = null;
+
         $data[] = array(
             'name' => 'Firma',
+            'subject' => $subject1,
             'description' => 'Preparar documento',
             'status' => $status_form,
             'deadline' => $view_dead_line_step1,
@@ -1150,6 +1163,7 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         $data[] = array(
             'name' => 'Firma',
+            'subject' => $subject2,
             'description' => 'Solicitar firma',
             'status' => $status_form_2,
             'deadline' => $view_dead_line_step2,
@@ -1158,6 +1172,7 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         $data[] = array(
             'name' => 'Carga',
+            'subject' => $subject3,
             'description' => 'Documento firmado',
             'status' => $status_file,
             'deadline' => $view_dead_line_step3,
@@ -1167,6 +1182,7 @@ class SwapStrategyTemplate implements TemplateInterface
         
         $data[] = array(
             'name' => 'Email',
+            'subject' => $subject4,
             'description' => 'Enviar solicitud',
             'status' => $status_file,
             'deadline' => $view_dead_line_step3,
@@ -1222,8 +1238,14 @@ class SwapStrategyTemplate implements TemplateInterface
        
 
         $data = array();
+
+        $subject1 = null;
+        $subject2 = null;
+        $subject3 = null;
+
         $data[] = array(
             'name' => 'Carga',
+            'subject' => $subject1,
             'description' => 'Preparar documento',
             'status' => $status_file,
             'deadline' => $view_dead_line_step1,
@@ -1232,6 +1254,7 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject2,
             'description' => 'Solicitar firma',
             'status' => $status_form,
             'deadline' => $view_dead_line_step2,
@@ -1240,6 +1263,7 @@ class SwapStrategyTemplate implements TemplateInterface
         );
         $data[] = array(
             'name' => 'Decisión',
+            'subject' => $subject3,
             'description' => 'Documento firmado',
             'status' => $status_form_2,
             'deadline' => $view_dead_line_step3,

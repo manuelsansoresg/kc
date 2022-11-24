@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ajax: '/panel/kc-check-up/report/list/'+history_id+'/show',
         columns: [
             { data: 'name'},
+            { data: 'subject'},
             { data: 'status' },
             { data: 'deadline' },
             { data: 'advisor'},

@@ -147,6 +147,12 @@ class ActionController extends Controller
         $title = ($status == 'in_progress')? 'En curso': 'Concluidas';
         return view('panel.action.list', compact('title', 'status'));
     }
+   
+    public function viewActionLead($status)
+    {
+        $title = ($status == 'in_progress')? 'En curso': 'Concluidas';
+        return view('panel.action.list_lead', compact('title', 'status'));
+    }
     
     /**
      * Use list action programmed and complete

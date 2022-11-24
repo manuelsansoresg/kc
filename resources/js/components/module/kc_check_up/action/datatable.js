@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ajax: '/panel/template/actions/list/'+model+ '/'+history_id+ '/show?step='+step,
         columns: [
             { data: 'name'},
+            { data: 'subject'},
             { data: 'status' },
             { data: 'deadline'},
             { data: 'advisor'},

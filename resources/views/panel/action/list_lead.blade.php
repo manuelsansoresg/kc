@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Lista de acciones '.$title)
+@section('title', 'Lista de acciones'.$title)
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -13,27 +13,25 @@
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
-                                            <li class="breadcrumb-item"><a class="pointer">ACCIONES MÓDULOS</a></li>
                                             <li class="breadcrumb-item active">{{ strtoupper($title) }}</li>
+                                            
                                         </ul>
                                     </nav>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <input type="hidden" name="name_status" id="name_status" value="{{ $name_status }}">
+                    <input type="hidden" id="dt-action-status" value="{{ $status }}">
                     <div class="nk-block nk-block-lg">
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
-                                <table id="dt-acctions-module" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
+                                <table id="dt-lead-acctions" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Acción</th>
-                                            <th>Asunto</th>
-                                            <th>Módulo</th>
-                                            <th>Nombre</th>
-                                            <th>Deadline</th>
-                                            <th>Asesor</th>
+                                            <th>Contacto</th>
+                                            <th>Prospecto</th>
+                                            <th>Fecha inicio</th>
+                                            <th>Fecha fin</th>
                                             <th>Responsable</th>
                                             <th></th>
                                         </tr>
@@ -47,6 +45,7 @@
             </div>
         </div>
     </div>
-    
-   
+    <input type="hidden" id="refresh-dt" value="dt-acctions">
+    @include('panel.action.modal.form')
+    @include('panel.action.modal.register_action')
 @endsection

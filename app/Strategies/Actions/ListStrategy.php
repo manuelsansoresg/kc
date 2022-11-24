@@ -168,11 +168,12 @@ class ListStrategy implements ActionInterface
             $option = ($history_log->status_id == 7) ? $file_option : $form_option;
 
             //TODO:  si eres admin o asesor debes poder ver todos y si no solo puedes ver los tuyos como responsable revisar cual campo sera el responsable
-            
+            $subject = isset(HistoryLog::$label_subject[$history_log->status_id])? HistoryLog::$label_subject[$history_log->status_id] : null;
             if ($is_admin) {
                 if ($name_status == 'completed' && ($percent_form == 100)) {
                     $data[] = array(
                         'action' => HistoryLog::$label_status[$history_log->status_id],
+                        'subject' => $subject,
                         'module' => $module,
                         'name' => $name,
                         'deadline' => $view_dead_line_inf_credit,
@@ -184,6 +185,7 @@ class ListStrategy implements ActionInterface
                 } elseif ($name_status == 'in_progress' && ($percent_form < 100)) {
                     $data[] = array(
                         'action' => HistoryLog::$label_status[$history_log->status_id],
+                        'subject' => $subject,
                         'module' => $module,
                         'name' => $name,
                         'deadline' => $view_dead_line_inf_credit,
@@ -198,6 +200,7 @@ class ListStrategy implements ActionInterface
                     if ($name_status == 'completed' && ($percent_form == 100)) {
                         $data[] = array(
                             'action' => HistoryLog::$label_status[$history_log->status_id],
+                            'subject' => $subject,
                             'module' => $module,
                             'name' => $name,
                             'deadline' => $view_dead_line_inf_credit,
@@ -209,6 +212,7 @@ class ListStrategy implements ActionInterface
                     } elseif ($name_status == 'in_progress' && ($percent_form < 100)) {
                         $data[] = array(
                             'action' => HistoryLog::$label_status[$history_log->status_id],
+                            'subject' => $subject,
                             'module' => $module,
                             'name' => $name,
                             'deadline' => $view_dead_line_inf_credit,

@@ -528,8 +528,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
         }
 
         $data = array();
+
+        $subject1 = null;
+
         $data[] = array(
             'name' => 'Respuesta de módulo',
+            'subject' => $subject1,
             'status' => $status_file,
             'deadline' => $view_dead_line_upload,
             'advisor' => $name_advisor,
@@ -577,8 +581,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $data = array();
 
+        $subject1 = null;
+        $subject2 = null;
+
         $data[] = array(
             'name' => 'Carga',
+            'subject' => $subject1,
             'status' => $status_form,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
@@ -587,6 +595,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject2,
             'status' =>  'Opcional',
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
@@ -631,8 +640,11 @@ class DeliveryStrategyTemplate implements TemplateInterface
         }
 
         $data = array();
+        $subject1 = null;
+        
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject1,
             'status' => $status_form,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
@@ -661,9 +673,11 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $data = array();
         
+        $subject1 = null;
 
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject1,
             'status' =>  'Opcional',
             'deadline' => 'N/A',
             'advisor' => $name_advisor,

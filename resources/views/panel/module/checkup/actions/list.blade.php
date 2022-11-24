@@ -67,6 +67,7 @@
                                     <thead>
                                         <tr>
                                             <th>Acción</th>
+                                            <th>Asunto</th>
                                             <th>Estatus</th>
                                             <th>Deadline</th>
                                             <th>Responsable</th>

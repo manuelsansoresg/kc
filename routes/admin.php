@@ -80,7 +80,10 @@ Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\Notificati
 Route::resource('action', '\App\Http\Controllers\Panel\ActionController')->middleware('auth');
 Route::group(['prefix' => 'action'], function () {
     Route::get('list/{id}/{model}/{status}', ['\App\Http\Controllers\Panel\ActionController', 'listAction'])->middleware('auth');
+    
     Route::get('{status}/view', ['\App\Http\Controllers\Panel\ActionController', 'viewAction'])->middleware('auth');
+    Route::get('{status}/lead/view', ['\App\Http\Controllers\Panel\ActionController', 'viewActionLead'])->middleware('auth');
+    
     Route::get('{status}/dt/show', ['\App\Http\Controllers\Panel\ActionController', 'list'])->middleware('auth');
     Route::get('module/{name_status}', ['\App\Http\Controllers\Panel\ActionController', 'viewModuleAction'])->middleware('auth');
     Route::get('module/{name_status}/list', ['\App\Http\Controllers\Panel\ActionController', 'listModuleAction'])->middleware('auth');

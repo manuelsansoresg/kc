@@ -237,9 +237,9 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>Acción</th>
+                                                                <th>Asunto</th>
                                                                 <th>Módulo</th>
                                                                 <th>Deadline</th>
-                                                                <th>Responsable</th>
                                                                 <th>Estatus</th>
                                                                 <th></th>
                                                             </tr>
@@ -442,10 +442,10 @@
                                                 <div class="tab-pane" id="survey">
                                                     @php
                                                         $get_survey                 = $m_survey->getQuiz($credit->id);
-                                                        $enum_credit_delivery       = isset(config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']])? config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']] :  null;
-                                                        $enum_kc_attention          = isset(config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']])? config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']] :  null;
-                                                        $enum_financial_attention   = isset(config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']])? config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']] :  null;
-                                                        $comment                    = isset($get_survey['survey_note'])? $get_survey['survey_note'] :  null;
+                                                        $enum_credit_delivery       = $get_survey != null && isset(config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']])? config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']] :  null;
+                                                        $enum_kc_attention          = $get_survey != null && isset(config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']])? config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']] :  null;
+                                                        $enum_financial_attention   = $get_survey != null && isset(config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']])? config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']] :  null;
+                                                        $comment                    = $get_survey != null && isset($get_survey['survey_note'])? $get_survey['survey_note'] :  null;
                                                     @endphp     
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-line">

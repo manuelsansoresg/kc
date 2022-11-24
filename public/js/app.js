@@ -528,6 +528,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+document.addEventListener('DOMContentLoaded', function () {
+  var status = $('#dt-action-status').val();
+  var table = NioApp.DataTable('#dt-lead-acctions', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/action/' + status + '/dt/show',
+    columns: [{
+      data: 'type'
+    },
+    /* { data: 'section' }, */
+    {
+      data: 'name'
+    }, {
+      data: 'date_in'
+    }, {
+      data: 'date_fin'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options',
+      className: 'nk-tb-col-tools text-end'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+});
 
 /***/ }),
 
@@ -559,6 +604,8 @@ document.addEventListener('DOMContentLoaded', function () {
     ajax: '/panel/action/module/' + name_status + '/list',
     columns: [{
       data: 'action'
+    }, {
+      data: 'subject'
     }, {
       data: 'module'
     }, {
@@ -828,11 +875,11 @@ document.addEventListener('DOMContentLoaded', function () {
     columns: [{
       data: 'action'
     }, {
+      data: 'subject'
+    }, {
       data: 'module'
     }, {
       data: 'deadline'
-    }, {
-      data: 'responsable'
     }, {
       data: 'status',
       orderData: 'desc'
@@ -2017,6 +2064,8 @@ document.addEventListener('DOMContentLoaded', function () {
     columns: [{
       data: 'name'
     }, {
+      data: 'subject'
+    }, {
       data: 'status'
     }, {
       data: 'deadline'
@@ -2073,6 +2122,8 @@ document.addEventListener('DOMContentLoaded', function () {
     ajax: '/panel/kc-check-up/report/list/' + history_id + '/show',
     columns: [{
       data: 'name'
+    }, {
+      data: 'subject'
     }, {
       data: 'status'
     }, {

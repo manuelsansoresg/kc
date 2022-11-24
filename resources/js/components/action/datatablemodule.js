@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ajax: '/panel/action/module/'+name_status+'/list',
         columns: [
             { data: 'action' },
+            { data: 'subject' },
             { data: 'module' },
             { data: 'name' },
             { data: 'deadline' },

@@ -2005,8 +2005,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
 
         $data = array();
+        
+        $subject1 = HistoryLog::$label_subject[22];
+        $subject2 = HistoryLog::$label_subject[23];
+
         $data[] = array(
             'name' => 'Carga',
+            'subject' => $subject1,
             'status' => $status_file,
             'deadline' => $view_dead_line_upload,
             'advisor' => $name_advisor,
@@ -2015,6 +2020,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject2,
             'status' => $status_form,
             'deadline' => $view_dead_line_form,
             'advisor' => $name_advisor,
@@ -2059,8 +2065,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data = array();
 
+        $subject1 = HistoryLog::$label_subject[24];
+
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject1,
             'status' => $status_form,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
@@ -2125,8 +2134,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
 
         $data = array();
+
+        $subject1 = HistoryLog::$label_subject[25];
+        $subject2 = HistoryLog::$label_subject[26];
+        $subject3 = HistoryLog::$label_subject[27];
+
         $data[] = array(
             'name' => 'Carga',
+            'subject' => $subject1,
             'status' => $status_file,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
@@ -2135,6 +2150,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject2,
             'status' => $status_form,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
@@ -2143,6 +2159,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject3,
             'status' => $status_form,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
@@ -2172,9 +2189,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data = array();
         
+        $subject1 = HistoryLog::$label_subject[28];
 
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject1,
             'status' =>  'Opcional',
             'deadline' => 'N/A',
             'advisor' => $name_advisor,
@@ -2208,9 +2227,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data = array();
         
+        $subject1 = HistoryLog::$label_subject[29];
 
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject1,
             'status' =>  $status_step5,
             'deadline' => 'N/A',
             'advisor' => $name_advisor,

@@ -149,13 +149,13 @@
                                     <ul class="nk-menu-sub">
                                         
                                         <li class="nk-menu-item">
-                                            <a href="/panel/action/in_progress/view" class="nk-menu-link">
+                                            <a href="/panel/action/in_progress/lead/view" class="nk-menu-link">
                                                 <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
                                                 <span class="nk-menu-text">En curso</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                         <li class="nk-menu-item">
-                                            <a href="/panel/action/completed/view" class="nk-menu-link">
+                                            <a href="/panel/action/completed/lead/view" class="nk-menu-link">
                                                 <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
                                                 <span class="nk-menu-text">Concluidas</span>
                                             </a>

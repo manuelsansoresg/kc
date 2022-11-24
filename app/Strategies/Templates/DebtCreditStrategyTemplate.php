@@ -380,9 +380,13 @@ class DebtCreditStrategyTemplate implements TemplateInterface
             $name_advisor = 'Tú';
         }
 
+        $subject1 = HistoryLog::$label_subject[11];
+        $subject2 = HistoryLog::$label_subject[12];
+
         $data = array();
         $data[] = array(
             'name' => 'Carga',
+            'subject' => $subject1,
             'status' => $status_file,
             'deadline' => 'N/A',
             'advisor' => $name_advisor,
@@ -391,6 +395,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         
         $data[] = array(
             'name' => 'Formulario',
+            'subject' => $subject2,
             'status' => $status_form,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
@@ -425,8 +430,13 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         
         $data = array();
         $status_desition = 'En curso';
+        
+        $subject1 = HistoryLog::$label_subject[13];
+        $subject2 = HistoryLog::$label_subject[15];
+
         $data[] = array(
             'name' => 'Respuesta de módulo',
+            'subject' => $subject1,
             'status' => 'Concluida',
             'deadline' => 'N/A',
             'advisor' => $name_module_response,
@@ -435,6 +445,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         
         $data[] = array(
             'name' => 'Decisión',
+            'subject' => $subject2,
             'status' => $status_desition,
             'deadline' => $view_dead_line_desition,
             'advisor' => $name_advisor,
