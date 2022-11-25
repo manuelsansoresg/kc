@@ -85,7 +85,9 @@ class HistoryLog extends Model
         'file',
         'comment',
         'status',
-        'user_id'
+        'user_id',
+        'status_progress', //* 0 en curso 1 finalizada
+        'date_status_progress' //* fecha en que se actualiza el status
     ];
 
     public static $label_status = [
@@ -261,6 +263,21 @@ class HistoryLog extends Model
 
     public function subHistories($id_rel, $status_id, $history)
     {
+
+        if ($status_id == HistoryLog::KC_CHECK_UP) {
+            HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
+            HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
+            HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_REPORT, HistoryLog::KC_CHECK_UP_ACTION_REPORT);
+            HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION);
+        }
+        
+        if ($status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
+            HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD);
+            HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM);
+            HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT);
+            HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION);
+        }
+
         if ($status_id == HistoryLog::KC_CONTROL_DESK) {
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD, HistoryLog::KC_CONTROL_DESK_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM);
@@ -300,6 +317,16 @@ class HistoryLog extends Model
         $history = HistoryLog::find($history->id);
         $history->reason = $reason;
         $history->update();
+    }
+    
+    public static function updateStatusProgress($status_id, $id_rel, $status_progress)
+    {
+        $history = HistoryLog::where('status_id', $status_id)
+                    ->where('id_rel', $id_rel)
+                    ->where('status', 1);
+        $history->update(['status_progress' => $status_progress, 'date_status_progress' => date('Y-m-d H:i:s')]);
+        $get_history = HistoryLog::find($history->first()->id);
+        return $get_history;
     }
 
     public static function getByStatus($status_id, $id_rel = null)

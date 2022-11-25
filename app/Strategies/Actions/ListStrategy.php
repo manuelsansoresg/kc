@@ -27,9 +27,10 @@ class ListStrategy implements ActionInterface
     {
         if ($list_actions === null) {
             $list_actions = [
+
                 HistoryLog::KC_CHECK_UP_ACTION_FORM,
-                HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
                 HistoryLog::KC_CHECK_UP_ACTION_DESITION,
+                HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
                 HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
 
                 HistoryLog::KC_CONTROL_DESK_UPLOAD,
@@ -96,6 +97,10 @@ class ListStrategy implements ActionInterface
 
            /*  if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM) {
             } */
+
+            if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_DESITION || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION) {
+                $view_dead_line_inf_credit =  (new $templateStrategy)->dinamicDeadline($history_log);
+            }
 
             if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_DESITION || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION) {
                 $status_form =  $credit->applied_financial != '' ? 'Concluido' : 'En curso';

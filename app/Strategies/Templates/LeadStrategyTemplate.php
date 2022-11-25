@@ -58,17 +58,11 @@ class LeadStrategyTemplate implements TemplateInterface
             //* enter module kc-checkup and list actions
             if ($product->c_product_id = 1 && $product->c_service_id == 1) {
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION);
                 //* Execute notification in new credit
                 $notification   = SendNotificationsValues::STRATEGY['pushNewCreditKcCheckUp'];
                 (new $notification)->send($credit->id);
             } elseif ($product->c_product_id = 1 && $product->c_service_id == 2) {
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD);
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM);
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION);
                 //* Execute notification in new credit
                 $notification   = SendNotificationsValues::STRATEGY['pushNewCreditKcCheckUp'];
                 (new $notification)->send($credit->id);

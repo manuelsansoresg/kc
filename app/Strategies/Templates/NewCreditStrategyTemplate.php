@@ -148,6 +148,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
     {
         $id_rel         = $request->id_rel;
         $agreement_id   = $request->agreement_id;
+        $history        = HistoryLog::find($request->history_id);
 
         if (isset($request->agreement_id) && $request->agreement_id == 0) { //si es  0 se insertara el nuevo agreement
             $agreement = new Agreement(['name' => $request->new_agreement, 'status' => 1]);
@@ -166,36 +167,43 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $client->second_last_name   = $request->second_last_name;
         $client->cellphone          = $request->cellphone;
         $client->update();
+        
+        if ($history != null) {
+            $percent_form   = self::percentForm($history);
+            if ($percent_form == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $credit->id, 1); //*marcar como completada la tarea
+            }
+        }
+        
     }
 
     public function listStep($history_id)
     {
-        $history            = HistoryLog::find($history_id);
-        $credit             = $history->historyCredit;
-        $max_hour           = 12;
-        $hour           = $credit->created_at;
-        $percent_form       = self::percentForm($history);
-        $percent_file       = 100;
-        $color_inf_credit   = 'success';
-        $color_report       = 'success';
-        $option_inf_report = null;
-        $total_percent = $percent_file + $percent_form;
+        $history              = HistoryLog::find($history_id);
+        $credit               = $history->historyCredit;
+        $max_hour             = 12;
+        $hour                 = $credit->created_at;
+        $percent_form         = self::percentForm($history);
+        $percent_form_step2   = self::percentDesition($history);
+        $percent_file         = 100;
+        $color_inf_credit     = 'success';
+        $color_report         = 'success';
+        $option_inf_report    = null;
+        $total_percent        = $percent_file + $percent_form;
         //$percent_form = $percent_form;
-        $status_report              = 'En espera';
-        $menu_options   = self::menuOptionsStep($history);
+        $status_report        = 'En espera';
+        $menu_options         = self::menuOptionsStep($history);
        
-        $status_inf_credit = ($percent_form >= 100) ? 'Concluido' : 'En curso';
-        //TODO: change validation when the decision action is carried out in the report
-        $status_report = ($percent_form >= 100) ? 'En curso' : 'En espera';
+        $status_inf_credit    = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+        $status_report        = ($percent_form_step2 >= 100) ? 'En curso' : 'En espera';
         
         $total_credit_percent = ($total_percent> 100) ? 100 : 50;
 
-        $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit = $data_deadline['color'];
-        $hour             = $data_deadline['lbl_hour'];
-
+        $data_deadline        = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $color_inf_credit     = $data_deadline['color'];
+        $hour                 = $data_deadline['lbl_hour'];
         $option_inf_credit  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actions']])->render();
-        if ($status_report == 'En curso') {
+        if ($status_inf_credit == 'Concluido') {
             $option_inf_report  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
         }
 
@@ -204,7 +212,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
 
-        $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => 0])->render();
+        $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
         $view_count_report          = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
         
 
@@ -235,11 +243,15 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $advisor        = $credit->creditAdvisor;
         $percent_file   = 100;
         $percent_form   = self::percentForm($history);
-        $status_file    = 'Opcional';
-        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $status[]       = 'Opcional';
+        $status[]       = $percent_form == 100 ? 'Concluido' : 'En curso';
         $max_hour       = 12;
-        $hour           = $credit->created_at;
 
+        if ($percent_form < 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $credit->id, 0);
+        }
+        $in_progress    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_ACTION_FORM], $credit->id)[0];
+        $hour           = $in_progress->date_status_progress;
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -252,45 +264,53 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $color_inf_credit = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
 
-        $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $deadline[]  = 'N/A';
+        $deadline[]  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }
-
-        $subject1 = HistoryLog::$label_subject[7];
-        $subject2 = HistoryLog::$label_subject[8];
-
-        $data = array();
-        $data[] = array(
-            'name' => 'Carga',
-            'subject' => $subject1,
-            'status' => $status_file,
-            'deadline' => 'N/A',
-            'advisor' => $name_advisor,
-            'options' => $file_option,
-        );
         
-        $data[] = array(
-            'name' => 'Formulario',
-            'subject' => $subject2,
-            'status' => $status_form,
-            'deadline' => $view_dead_line_inf_credit,
-            'advisor' => $name_advisor,
-            'options' => $form_option,
-        );
+        $name[] = 'Carga';
+        $name[] = 'Formulario';
 
+        $subject[] = HistoryLog::$label_subject[7];
+        $subject[] = HistoryLog::$label_subject[8];
+
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP_ACTION_UPLOAD,
+            HistoryLog::KC_CHECK_UP_ACTION_FORM,
+        );
+      
+        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+        foreach ($get_actions as $key => $get_action) {
+            $data[] = array(
+                'name' =>  $name[$key],
+                'subject' => $subject[$key],
+                'status' => $status[$key],
+                'deadline' => $deadline[$key],
+                'advisor' => $name_advisor,
+                'options' => $option[$key],
+            );
+        }
         return $data;
     }
 
     public function listStepReport($history_id)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $max_hour       = 12;
-        $hour           = $credit->created_at;
+        $history            = HistoryLog::find($history_id);
+        $credit             = $history->historyCredit;
+        $max_hour           = 12;
+        $percent_desition   = self::percentDesition($history);
+
+        if ($percent_desition < 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_DESITION, $credit->id, 0);
+        }
+        $in_progress    =  HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_ACTION_DESITION], $credit->id)[0];
+        $hour           = $in_progress->date_status_progress;
+
         $menu_options   = self::menuOptionReportStep($history);
         $advisor        = $credit->creditAdvisor;
         
@@ -304,34 +324,63 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $color_desition = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
         
-        $view_dead_line_desition  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
-        $options_progress  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
-        $options_desition  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
+        $deadline[]  = 'N/A';
+        $deadline[]  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
+
+        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
+        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
 
         $data = array();
-        $status_desition = 'En curso';
-        $subject1 = HistoryLog::$label_subject[9];
-        $subject2 = HistoryLog::$label_subject[14];
+        $status[] = 'Concluida';
+        $status[]       = $percent_desition == 100 ? 'Concluido' : 'En curso';
 
-        $data[] = array(
-            'name' => 'Respuesta de módulo',
-            'subject' => $subject1,
-            'status' => 'Concluida',
-            'deadline' => 'N/A',
-            'advisor' => $name_module_response,
-            'options' => $options_progress,
+        $name[] = 'Respuesta de módulo';
+        $name[] = 'Decisión';
+
+        $subject[] = HistoryLog::$label_subject[9];
+        $subject[] = HistoryLog::$label_subject[14];
+
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP_ACTION_REPORT,
+            HistoryLog::KC_CHECK_UP_ACTION_DESITION,
         );
-        
-        $data[] = array(
-            'name' => 'Decisión',
-            'subject' => $subject2,
-            'status' => $status_desition,
-            'deadline' => $view_dead_line_desition,
-            'advisor' => $name_advisor,
-            'options' => $options_desition,
-        );
+      
+        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+
+        foreach ($get_actions as $key => $get_action) {
+            $data[] = array(
+                'name' =>  $name[$key],
+                'subject' => $subject[$key],
+                'status' => $status[$key],
+                'deadline' => $deadline[$key],
+                'advisor' => $name_advisor,
+                'options' => $option[$key],
+            );
+        }
 
         return $data;
+    }
+
+    public function dinamicDeadline($history)
+    {
+        $percent            = self::percentDesition($history);
+        $status_id          = $history->status_id;
+        $credit             = $history->historyCredit;
+        $in_progress        = HistoryLog::getByStatus([$status_id], $credit->id)[0];
+        $hour               = $in_progress->date_status_progress;
+        $max_hour           = 12;
+        $color_inf_credit   = '';
+
+        if ($status_id == HistoryLog::KC_CHECK_UP_ACTION_FORM) {
+            $percent = self::percentForm($history);
+        }
+
+        $data_deadline  = deadline($hour, $max_hour, $percent, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
     }
 
     public function menuOptions($history)
@@ -431,21 +480,36 @@ class NewCreditStrategyTemplate implements TemplateInterface
         return $percent;
     }
 
+    public function percentDesition($history)
+    {
+        $credit = $history->historyCredit;
+        $percent = 0;
+        if ($credit->applied_financial != null) {
+            $percent = 100;
+        }
+        return $percent;
+    }
+
+    
+
     //* get all percentages of the shares
     public function getPercent($history, $show_current_show = false)
     {
         $credit     = $history->historyCredit;
-        $percent_desition = Credit::percentApplyDecision($credit->id);
-        $percent_form = self::percentForm($history);
-        
-        $new_percent_form = $percent_desition == 100 ? 50 : 0;
-        $new_percent_desition = $percent_form == 100 ? 50 : 0;
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP_ACTION_FORM,
+            HistoryLog::KC_CHECK_UP_ACTION_DESITION,
+        );
+        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+        $status_progress = 0;
+        $current_show = null;
+        foreach ($get_actions as $key => $get_action) {
+            $status = $get_action->status_progress;
+            $status_progress += $status != null ? $status : 0;
+            $current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_CHECK_UP_ACTION_FORM ? 'Información del crédito': 'Reporte';
+        }
 
-        $total_valid = $new_percent_form  + $new_percent_desition;
-
-        $percent =  (100 / 100) * $total_valid;
-        
-        $current_show = $new_percent_desition < 100 ? 'Información del crédito': 'Reporte';
+        $percent =  (($status_progress) / 2) * 100;
 
         if ($show_current_show == true) {
             return $current_show;

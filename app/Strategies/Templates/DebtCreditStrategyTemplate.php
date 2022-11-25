@@ -295,6 +295,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $max_hour           = 12;
         $hour               = $credit->created_at;
         $percent_form       = self::percentForm($history);
+        $percent_form_step2   = self::percentDesition($history);
         $percent_file       = 100;
         $color_inf_credit   = 'success';
         $color_report       = 'success';
@@ -304,9 +305,8 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         //$percent_form = $percent_form;
         //$total_credit_percent   = $percent_file;
        
-        $status_inf_credit = ($percent_form >= 100) ? 'Concluido' : 'En curso';
-        //TODO: change validation when the decision action is carried out in the report
-        $status_report = ($percent_form >= 100) ? 'En curso' : 'En espera';
+        $status_inf_credit    = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+        $status_report        = ($percent_form_step2 >= 100) ? 'En curso' : 'En espera';
         
         $total_credit_percent = ($percent_form >= 100) ? 100 : $percent_form;
 
@@ -354,10 +354,15 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $advisor        = $credit->creditAdvisor;
         $percent_file   = 100;
         $percent_form   = self::percentForm($history);
-        $status_file    = 'Opcional';
-        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $status[]       = 'Opcional';
+        $status[]       = $percent_form == 100 ? 'Concluido' : 'En curso';
         $max_hour       = 12;
-        $hour           = $credit->created_at;
+
+        if ($percent_form < 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, $credit->id, 0);
+        }
+        $in_progress    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM], $credit->id)[0];
+        $hour           = $in_progress->date_status_progress;
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -371,37 +376,38 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $color_inf_credit = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
 
+        $deadline[]  = 'N/A';
+        $deadline[]  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
 
-        $view_dead_line_inf_credit  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }
 
-        $subject1 = HistoryLog::$label_subject[11];
-        $subject2 = HistoryLog::$label_subject[12];
+        $name[] = 'Carga';
+        $name[] = 'Formulario';
 
-        $data = array();
-        $data[] = array(
-            'name' => 'Carga',
-            'subject' => $subject1,
-            'status' => $status_file,
-            'deadline' => 'N/A',
-            'advisor' => $name_advisor,
-            'options' => $file_option,
-        );
-        
-        $data[] = array(
-            'name' => 'Formulario',
-            'subject' => $subject2,
-            'status' => $status_form,
-            'deadline' => $view_dead_line_inf_credit,
-            'advisor' => $name_advisor,
-            'options' => $form_option,
-        );
+        $subject[] = HistoryLog::$label_subject[11];
+        $subject[] = HistoryLog::$label_subject[12];
 
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD,
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
+        );
+      
+        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+        foreach ($get_actions as $key => $get_action) {
+            $data[] = array(
+                'name' =>  $name[$key],
+                'subject' => $subject[$key],
+                'status' => $status[$key],
+                'deadline' => $deadline[$key],
+                'advisor' => $name_advisor,
+                'options' => $option[$key],
+            );
+        }
         return $data;
     }
 
@@ -410,7 +416,14 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $max_hour       = 12;
-        $hour           = $credit->created_at;
+        $percent_desition   = self::percentDesition($history);
+
+        if ($percent_desition < 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, $credit->id, 0);
+        }
+        $in_progress    =  HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION], $credit->id)[0];
+        $hour           = $in_progress->date_status_progress;
+
         $menu_options   = self::menuOptionReportStep($history);
         $advisor        = $credit->creditAdvisor;
         $user = User::find($advisor->id);
@@ -422,37 +435,63 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $color_desition = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
 
-        
-        $view_dead_line_desition  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
-        $options_progress  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
-        $options_desition  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
+        $deadline[]  = 'N/A';
+        $deadline[]  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
+
+        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
+        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
 
         
         $data = array();
-        $status_desition = 'En curso';
-        
-        $subject1 = HistoryLog::$label_subject[13];
-        $subject2 = HistoryLog::$label_subject[15];
+        $status[] = 'Concluida';
+        $status[]       = $percent_desition == 100 ? 'Concluido' : 'En curso';
 
-        $data[] = array(
-            'name' => 'Respuesta de módulo',
-            'subject' => $subject1,
-            'status' => 'Concluida',
-            'deadline' => 'N/A',
-            'advisor' => $name_module_response,
-            'options' => $options_progress,
-        );
-        
-        $data[] = array(
-            'name' => 'Decisión',
-            'subject' => $subject2,
-            'status' => $status_desition,
-            'deadline' => $view_dead_line_desition,
-            'advisor' => $name_advisor,
-            'options' => $options_desition,
-        );
+        $name[] = 'Respuesta de módulo';
+        $name[] = 'Decisión';
 
+        $subject[] = HistoryLog::$label_subject[13];
+        $subject[] = HistoryLog::$label_subject[15];
+
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP_ACTION_REPORT,
+            HistoryLog::KC_CHECK_UP_ACTION_DESITION,
+        );
+      
+        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+
+        foreach ($get_actions as $key => $get_action) {
+            $data[] = array(
+                'name' =>  $name[$key],
+                'subject' => $subject[$key],
+                'status' => $status[$key],
+                'deadline' => $deadline[$key],
+                'advisor' => $name_advisor,
+                'options' => $option[$key],
+            );
+        }
         return $data;
+    }
+
+    public function dinamicDeadline($history)
+    {
+        $percent            = self::percentDesition($history);
+        $status_id          = $history->status_id;
+        $credit             = $history->historyCredit;
+        $in_progress        = HistoryLog::getByStatus([$status_id], $credit->id)[0];
+        $hour               = $in_progress->date_status_progress;
+        $max_hour           = 12;
+        $color_inf_credit   = '';
+
+        if ($status_id == HistoryLog::KC_CHECK_UP_ACTION_FORM) {
+            $percent = self::percentForm($history);
+        }
+
+        $data_deadline  = deadline($hour, $max_hour, $percent, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_dead_line_inf_credit;
     }
 
     public function menuOptions($history)
@@ -526,6 +565,16 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         return $menu;
     }
 
+    public function percentDesition($history)
+    {
+        $credit = $history->historyCredit;
+        $percent = 0;
+        if ($credit->applied_financial != null) {
+            $percent = 100;
+        }
+        return $percent;
+    }
+
     public function percentForm($history)
     {
         $credit     = $history->historyCredit;
@@ -559,21 +608,25 @@ class DebtCreditStrategyTemplate implements TemplateInterface
     public function getPercent($history, $show_current_show = false)
     {
         $credit     = $history->historyCredit;
-        $percent_desition = Credit::percentApplyDecision($credit->id);
-        $percent_form = self::percentForm($history);
-        
-        $new_percent_form = $percent_desition == 100 ? 50 : 0;
-        $new_percent_desition = $percent_form == 100 ? 50 : 0;
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
+        );
+        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+        $status_progress = 0;
+        $current_show = null;
+        foreach ($get_actions as $key => $get_action) {
+            $status = $get_action->status_progress;
+            $status_progress += $status != null ? $status : 0;
+            $current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM ? 'Información del crédito': 'Reporte';
+        }
 
-        $total_valid = $new_percent_form  + $new_percent_desition;
-
-        $percent =  (100 / 100) * $total_valid;
-        
-        $current_show = $new_percent_desition < 100 ? 'Información del crédito': 'Reporte';
+        $percent =  (($status_progress) / 2) * 100;
 
         if ($show_current_show == true) {
             return $current_show;
         }
+        
         return $percent;
     }
 
