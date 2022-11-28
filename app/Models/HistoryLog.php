@@ -269,6 +269,9 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_REPORT, HistoryLog::KC_CHECK_UP_ACTION_REPORT);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION);
+
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, $id_rel, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $id_rel, 0);
         }
         
         if ($status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
@@ -276,6 +279,9 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION);
+            
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, $id_rel, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, $id_rel, 0);
         }
 
         if ($status_id == HistoryLog::KC_CONTROL_DESK) {
@@ -287,6 +293,8 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2);
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4);
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5);
+
+            
         }
         if ($status_id == HistoryLog::KC_DELIVERY) {
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
@@ -321,11 +329,15 @@ class HistoryLog extends Model
     
     public static function updateStatusProgress($status_id, $id_rel, $status_progress)
     {
+        //dd($status_id, $id_rel, $status_progress);
         $history = HistoryLog::where('status_id', $status_id)
                     ->where('id_rel', $id_rel)
                     ->where('status', 1);
         $history->update(['status_progress' => $status_progress, 'date_status_progress' => date('Y-m-d H:i:s')]);
-        $get_history = HistoryLog::find($history->first()->id);
+        $get_history = null;
+        if ($history->first() != null) {
+            $get_history = HistoryLog::find($history->first()->id);
+        }
         return $get_history;
     }
 

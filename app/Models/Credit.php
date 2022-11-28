@@ -113,7 +113,7 @@ class Credit extends Model
             }
             
             if ($history->status_id === HistoryLog::KC_CHECK_UP || $history->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION || $history->status_id === HistoryLog::KC_CONTROL_DESK || $history->status_id === HistoryLog::KC_DELIVERY || $history->status_id === HistoryLog::KC_AFTER_MARKET) { //*model new credit
-                $in_progress = (new $templateStrategy)->getPercent($history, true);
+                $in_progress = json_encode((new $templateStrategy)->getPercent($history, true));
             }
             
             $hour             = $data_deadline['lbl_hour'];

@@ -261,6 +261,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
     {
         $id_rel         = $request->id_rel;
         $agreement_id   = $request->agreement_id;
+        $history        = HistoryLog::find($request->history_id);
 
         if (isset($request->agreement_id) && $request->agreement_id == 0) { //si es  0 se insertara el nuevo agreement
             $agreement = new Agreement(['name' => $request->new_agreement, 'status' => 1]);
@@ -286,6 +287,16 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $client->second_last_name   = $request->second_last_name;
         $client->cellphone          = $request->cellphone;
         $client->update();
+
+        if ($history != null) {
+            $percent_form   = self::percentForm($history);
+            if ($percent_form == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, $credit->id, 1);//*marcar como completada la tarea
+                //*inicializar las acciones de la siguiente etapa en curso
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, $credit->id, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, $credit->id, 0);
+            }
+        }
     }
 
     public function listStep($history_id)
@@ -357,10 +368,6 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $status[]       = 'Opcional';
         $status[]       = $percent_form == 100 ? 'Concluido' : 'En curso';
         $max_hour       = 12;
-
-        if ($percent_form < 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, $credit->id, 0);
-        }
         $in_progress    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM], $credit->id)[0];
         $hour           = $in_progress->date_status_progress;
 
@@ -413,51 +420,47 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
     public function listStepReport($history_id)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $max_hour       = 12;
-        $percent_desition   = self::percentDesition($history);
+        $history                = HistoryLog::find($history_id);
+        $credit                 = $history->historyCredit;
+        $max_hour               = 12;
+        $percent_desition       = self::percentDesition($history);
+        $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION], $credit->id)[0];
+        $hour                   = $in_progress->date_status_progress;
 
-        if ($percent_desition < 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, $credit->id, 0);
-        }
-        $in_progress    =  HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION], $credit->id)[0];
-        $hour           = $in_progress->date_status_progress;
-
-        $menu_options   = self::menuOptionReportStep($history);
-        $advisor        = $credit->creditAdvisor;
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+        $menu_options           = self::menuOptionReportStep($history);
+        $advisor                = $credit->creditAdvisor;
+        $user                   = User::find($advisor->id);
+        $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
         $name_module_response   = 'KaaxClub';
-        $color_desition   = 'success';
-        $name_advisor   = $role.' - '.$advisor->name.' '.$advisor->last_name;
-        $data_deadline    = deadline($hour, $max_hour, 0, 'success');
-        $color_desition = $data_deadline['color'];
-        $hour             = $data_deadline['lbl_hour'];
+        $color_desition         = 'success';
+        $name_advisor           = $role.' - '.$advisor->name.' '.$advisor->last_name;
+        $data_deadline          = deadline($hour, $max_hour, 0, 'success');
+        $color_desition         = $data_deadline['color'];
+        $hour                   = $data_deadline['lbl_hour'];
 
-        $deadline[]  = 'N/A';
-        $deadline[]  = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
+        $deadline[]   = 'N/A';
+        $deadline[]   = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
 
-        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
-        $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
+        $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
+        $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
 
         
-        $data = array();
-        $status[] = 'Concluida';
+        $data           = array();
+        $status[]       = 'Concluida';
         $status[]       = $percent_desition == 100 ? 'Concluido' : 'En curso';
 
-        $name[] = 'Respuesta de módulo';
-        $name[] = 'Decisión';
+        $name[]         = 'Respuesta de módulo';
+        $name[]         = 'Decisión';
 
-        $subject[] = HistoryLog::$label_subject[13];
-        $subject[] = HistoryLog::$label_subject[15];
+        $subject[]      = HistoryLog::$label_subject[13];
+        $subject[]      = HistoryLog::$label_subject[15];
 
-        $data_actions = array(
+        $data_actions   = array(
             HistoryLog::KC_CHECK_UP_ACTION_REPORT,
             HistoryLog::KC_CHECK_UP_ACTION_DESITION,
         );
       
-        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+        $get_actions    = HistoryLog::getByStatus($data_actions, $credit->id);
 
         foreach ($get_actions as $key => $get_action) {
             $data[] = array(

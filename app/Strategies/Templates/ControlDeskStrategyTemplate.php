@@ -1955,8 +1955,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit         = $history->historyCredit;
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFile($credit->id);
+        
+        if ($percent_form < 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $credit->id, 0);
+        }
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD], $credit->id)[0];
+        $hour                         = $in_progress->date_status_progress;
         $max_hour                     = self::HOUR_STEP_1;
-        $hour                         = $history->created_at;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
         $hour                         = $data_deadline['lbl_hour'];
@@ -1966,10 +1971,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     
     public function deadLineStep1($history)
     {
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentForm($history);
+        $color_inf_credit   = 'success';
+        $percent_form       = self::percentForm($history);
+        $credit             = $history->historyCredit;
+
+        if ($percent_form < 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 0);
+        }
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM], $credit->id)[0];
+        $hour                         = $in_progress->date_status_progress;
         $max_hour                     = self::HOUR_STEP_1;
-        $hour                         = $history->created_at;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
         $hour                         = $data_deadline['lbl_hour'];
@@ -1987,28 +1998,28 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_form   = self::percentForm($history);
         $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-
+        
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-
+        
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptions($history, 1, $step_origin);
-
+        
         $view_dead_line_upload  = self::deadLineUploadStep1($history);
         $view_dead_line_form  = self::deadLineStep1($history);
-
+        
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-
+        
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }
-
+        
         $data = array();
         
         $subject1 = HistoryLog::$label_subject[22];
         $subject2 = HistoryLog::$label_subject[23];
-
+        
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject1,
