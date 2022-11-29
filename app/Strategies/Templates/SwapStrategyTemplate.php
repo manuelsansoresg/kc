@@ -974,11 +974,14 @@ class SwapStrategyTemplate implements TemplateInterface
         $credit             = $history->historyCredit;
         $color_inf_credit   = 'success';
         $percent_file       = self::percentFile($credit->id);
-
-
-
+        
+        if ($percent_file == 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD, $credit->id, 1);
+        }
+        
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD], $credit->id)[0];
         $max_hour                     = self::HOUR_STEP_1;
-        $hour                         = $history->created_at;
+        $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_file, $color_inf_credit, $show_max_hour);
         $color_inf_credit             = $data_deadline['color'];
         $hour                         = $data_deadline['lbl_hour'];

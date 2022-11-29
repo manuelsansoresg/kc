@@ -2865,40 +2865,28 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     //* get all percentages of the shares
     public function getPercent($history, $show_current_show = false)
     {
-        $credit   = $history->historyCredit;
-        $step1    = self::percentFile($credit->id) == 100 ? 1 :  self::percentFile($credit->id) ;
-        $step1_2    = self::percentForm($history) == 100 ? 1 : self::percentForm($history); // etapa 1
-
-        $total_step1   = $step1 + $step1;
+        $credit     = $history->historyCredit;
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP_ACTION_FORM,
+            HistoryLog::KC_CHECK_UP_ACTION_DESITION,
+        );
         
-        $percent_form_step2   = self::percentFormStep2($history) == 100 ? 1 : 0; // etapa 2
-        
-        $current_show = $total_step1 == 2 ? 'Características del crédito': 'Viabilidad';
+        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+        $status_progress = 0;
+        $current_show = null;
 
-        $form_step3   = (self::percentFile($credit->id, 3) == 100) ? 1 : self::percentFile($credit->id, 3);
-        $form_step3_1 = self::percentFormStep3_1($history) == 100 ? 1 :  self::percentFormStep3_1($history); //etapa 3
-        $form_step3_2 = self::percentFormStep3_2($history) == 100 ? 1 :  self::percentFormStep3_1($history); //etapa 3
-
-        $totalform_step3   = $form_step3 + $form_step3_1 + $form_step3_2;
-
-        if ($totalform_step3 == 3) {
-            $current_show = $totalform_step3 == 3 ? 'Captura de información': 'Características del crédito';
+        foreach ($get_actions as $key => $get_action) {
+            $status = $get_action->status_progress;
+            $status_progress += $status != null ? $status : 0;
+            $current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_CHECK_UP_ACTION_FORM ? 'Información del crédito': 'Reporte';
         }
 
-        $form_step4 = self::percentFormStep4($history) == 100 ? 1 :  self::percentFormStep4($history); //etapa 3
-        $current_show = $form_step4 == 1 ? 'Asignar usuario financiera': 'KYC';
+        $percent =  (($status_progress) / 2) * 100;
 
-        $percent_form_step5   = self::percentFormStep5($history)  == 100 ? 1 : 0; //etapa 5
-
-        if ($percent_form_step5 == 25) {
-            $current_show = $percent_form_step5 == 1 ? 'Asignar usuario financiera': 'KYC';
-        }
-
-        $total_valid = ($step1 + $step1_2 + $form_step3 + $form_step3_1 + $form_step3_2 + $form_step4 + $percent_form_step5)/ 7 * 100;
-        
         if ($show_current_show == true) {
             return $current_show;
         }
+        
         return $percent;
     }
 

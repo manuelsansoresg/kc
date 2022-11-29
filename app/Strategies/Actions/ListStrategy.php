@@ -38,9 +38,11 @@ class ListStrategy implements ActionInterface
 
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_2,
 
+                HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1,
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
                 
+                HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
                 
                 HistoryLog::KC_DELIVERY_UPLOAD_STEP_2,
@@ -123,8 +125,6 @@ class ListStrategy implements ActionInterface
                     $percent_form = $get_dinamic_percent['percent'];
                     $form_option = $get_dinamic_percent['menu'];
                     $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-                    //$percent_form   = (new $templateStrategy)->percentFile($credit->id);
-                    //$view_dead_line_inf_credit =  (new $templateStrategy)->deadLineUploadStep1($history_log);
             }
             
             /* if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM) {
