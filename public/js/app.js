@@ -3226,7 +3226,15 @@ function saveForm(id_form, model) {
 
     window.location = url_redirect;
   })["catch"](function (e) {});
-}
+} //TODO: alerta si detecto kyc
+
+
+window.kycCreditHistory = function (history_id) {
+  axios.get("/panel/kc-control-desk/kc/" + history_id + "/validate").then(function (response) {
+    var result = response.data;
+    window.history.back();
+  })["catch"](function (e) {});
+};
 
 /***/ }),
 

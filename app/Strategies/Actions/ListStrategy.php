@@ -109,13 +109,25 @@ class ListStrategy implements ActionInterface
                 $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
             }
 
-            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_UPLOAD) {
-                $percent_form   = (new $templateStrategy)->percentFile($credit->id);
-                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineUploadStep1($history_log);
+            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_UPLOAD
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_2
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_4
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_5
+                ) {
+                    $get_dinamic_percent =  (new $templateStrategy)->dinamicDeadline($history_log);
+                    $view_dead_line_inf_credit = $get_dinamic_percent['deadline'];
+                    $percent_form = $get_dinamic_percent['percent'];
+                    $form_option = $get_dinamic_percent['menu'];
+                    $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+                    //$percent_form   = (new $templateStrategy)->percentFile($credit->id);
+                    //$view_dead_line_inf_credit =  (new $templateStrategy)->deadLineUploadStep1($history_log);
             }
             
-            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM) {
+            /* if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM) {
                 $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
                 $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep1($history_log);
             }
@@ -149,7 +161,7 @@ class ListStrategy implements ActionInterface
                 $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
                 $form_option    = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
                 $view_dead_line_inf_credit =  'N/A';
-            }
+            } */
             
             if ($history_log->status_id === HistoryLog::KC_DELIVERY_UPLOAD_STEP_2) {
                 $percent_form   = (new $templateStrategy)->percentFile($credit->id);

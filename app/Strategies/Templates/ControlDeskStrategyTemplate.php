@@ -23,14 +23,21 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     const HOUR_STEP_1  = 6;
     const HOUR_STEP_2  = 3;
     const HOUR_STEP_3  = 6;
+    const HOUR_STEP_4  = 1;
+    const HOUR_STEP_5  = 4;
 
     public function move($id)
     {
     }
 
-    public function configUpload()
+    public function configUpload($set_step = null)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
+        
+        if ($set_step != null) {
+            $step = $set_step;
+        }
+
         if ($step == 3) {
             return self::uploadStep3();
         }
@@ -1648,6 +1655,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
         $curp = $client_person != null ? $client_person->curp : null;
+        $show_btn = false;
         $elements = array(
             1 => [
                 'title_section' => 'Generales',
@@ -1678,9 +1686,26 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
                 'value' => $curp
             ],
+            3 => [
+                'title_section' => null,
+                'title' => 'Guardar',
+                'name_field' => null,
+                'id_field' => null,
+                'col' => 'col-12',
+                'class' => 'btn btn-primary',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'href',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => true,
+                'is_disabled' => null,
+                'onclick' => 'kycCreditHistory('.$history_id.')'
+            ],
             
         );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'show_btn' => $show_btn, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
     public function configFormstep5($id_rel, $history_id)
@@ -1800,40 +1825,79 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $client->update();
         }
         if ($history != null) {
-            $percent_form_step5 = self::percentFormStep5($history);
+            $percent_form_step1   = self::percentForm($history);
+            $percent_form_step2   = self::percentFormStep2($history);
+            $percent_form_step3   = self::percentFormStep3_1($history);
+            $percent_form_step3_2   = self::percentFormStep3_2($history);
+
+            $percent_form_step5   = self::percentFormStep5($history);
+            
+            
+            if ($percent_form_step1 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 1);
+                 //*inicializar las acciones de la siguiente etapa en curso
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $credit->id, 0);
+            }
+            
+            if ($percent_form_step2 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $credit->id, 1);
+                 //*inicializar las acciones de la siguiente etapa en curso
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, $credit->id, 0);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, $credit->id, 0);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, $credit->id, 0);
+            }
+
+            if ($percent_form_step3 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, $credit->id, 1);
+            }
+            
+            if ($percent_form_step3_2 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, $credit->id, 1);
+            }
+            
+            if ($percent_form_step3 == 100 && $percent_form_step3_2 == 100) {
+                 //*inicializar las acciones de la siguiente etapa en curso
+                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $credit->id, 0);
+            }
+
             if ($percent_form_step5 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
                 HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK);
                 $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
                 (new $notification_add)->send($credit->id);
             }
         }
-        
     }
 
     public function listStep($history_id)
     {
-        $history              = HistoryLog::find($history_id);
+        $history                      = HistoryLog::find($history_id);
 
-        $credit               = $history->historyCredit;
-        $max_hour             = 12;
-        $hour                 = $credit->created_at;
+        $credit                       = $history->historyCredit;
+        $max_hour                     = 12;
+        $hour                         = $credit->created_at;
         
-        $percent_file         = self::percentFile($credit->id);
-        $percent_form         = self::percentForm($history); // etapa 1
-        $file                 = $percent_file == 100 ? 50 : 0;
-        $form                 = $percent_form == 100 ? 50 : 0;
-        $total_percent        = $file + $form;
+        $percent_file                 = self::percentFile($credit->id);
+        $percent_form                 = self::percentForm($history); // etapa 1
+        $file                         = $percent_file == 100 ? 50 : 0;
+        $form                         = $percent_form == 100 ? 50 : 0;
+        $total_percent                = $file + $form;
 
-        $percent_form_step2   = self::percentFormStep2($history); // etapa 2
+        $percent_form_step2           = self::percentFormStep2($history); // etapa 2
 
-        $percent_form_step3_1 = self::percentFormStep3_1($history); //etapa 3
-        $percent_form_step3_2 = self::percentFormStep3_2($history); //etapa 3
-        $percent_form_step5   = self::percentFormStep5($history); //etapa 5
+        $percent_form_step3_upload    = self::percentFile($credit->id, 3);
+        $percent_form_step3_1         = self::percentFormStep3_1($history); //etapa 3
+        $percent_form_step3_2         = self::percentFormStep3_2($history); //etapa 3
         
-        $new_step3_1 = $percent_form_step3_1 == 100 ? 50 : 0;
-        $new_step3_2 = $percent_form_step3_2 == 100 ? 50 : 0;
+        $percent_form_step4           = self::percentFormStep4($history); //etapa 4
+
+        $percent_form_step5           = self::percentFormStep5($history); //etapa 5
         
-        $percent_form_step3 = $new_step3_1 + $new_step3_2;
+        $new_step3 = $percent_form_step3_upload == 100 ? 1 : 0;
+        $new_step3_1 = $percent_form_step3_1 == 100 ? 1 : 0;
+        $new_step3_2 = $percent_form_step3_2 == 100 ? 1 : 0;
+        
+        $percent_form_step3 = ($new_step3 + $new_step3_1 + $new_step3_2) / 3* 100;
 
         $color_inf_credit     = 'success';
         $color_report         = 'success';
@@ -1846,6 +1910,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $menu_options         = self::menuOptionsStep($history);
         $status_step2         = 'En espera';
         $status_step3         = 'En espera';
+        $status_step4         = 'En espera';
         $status_step5         = 'En espera';
 
         $status_step1 = ($percent_form >= 100) ? 'Concluido' : 'En curso';
@@ -1853,6 +1918,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($status_step1 == 'Concluido') {
             $status_step2 = ($percent_form_step2 >= 100) ? 'Concluido' : 'En curso';
             $status_step3 = ($percent_form_step3 >= 100) ? 'Concluido' : 'En curso';
+            $status_step4 = ($percent_form_step4 >= 100) ? 'Concluido' : 'En curso';
             $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
         }
 
@@ -1872,6 +1938,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
        
         if ($status_step3 == 'Concluido') {
             $option_step4  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
+        }
+        if ($status_step4 == 'Concluido') {
             $option_step5  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep5']])->render();
         }
         
@@ -1879,6 +1947,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $view_percent_inf_credit    = \View::make('panel.module.view_percent', ['percent' => $total_percent])->render();
         $view_percent_step2    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
         $view_percent_step3    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step3])->render();
+        $view_percent_step4    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step4])->render();
         $view_percent_step5    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step5])->render();
 
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
@@ -1918,9 +1987,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => $view_count_step4,
             'step' => 'KYC',
-            'status' => 'Opcional',
-            'progress' => 'N/A',
-            'deadline' => '',
+            'status' => $status_step4,
+            'progress' => $view_percent_step4,
+            'deadline' => null,
             'options' => $option_step4,
         );
         
@@ -1950,14 +2019,82 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return self::actionStep1($history_id);
     }
 
+    public function dinamicDeadline($history)
+    {
+        $credit                       = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percents                     = array(
+            HistoryLog::KC_CONTROL_DESK_UPLOAD => self::percentFile($credit->id),
+            HistoryLog::KC_CONTROL_DESK_FORM => self::percentForm($history),
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_2 => self::percentFormStep2($history),
+            HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1 => self::percentFile($credit->id, 3),
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1 => self::percentFormStep3_1($history),
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2 => self::percentFormStep3_2($history),
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_4 => self::percentFormStep4($history),
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_5 => self::percentFormStep5($history),
+        );
+        $hours = array(
+            HistoryLog::KC_CONTROL_DESK_UPLOAD => self::HOUR_STEP_1,
+            HistoryLog::KC_CONTROL_DESK_FORM => self::HOUR_STEP_1,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_2 => self::HOUR_STEP_2,
+            HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1 => self::HOUR_STEP_3,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1 => self::HOUR_STEP_3,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2 => self::HOUR_STEP_3,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_4 => self::HOUR_STEP_4,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_5 => self::HOUR_STEP_5,
+        );
+        $menus = self::menuOptions($history);
+        $menu_step2   = self::menuOptions($history, 2);
+        $menu_step3   = self::menuOptionsStep3($history, 3);
+        $menu_step4   = self::menuOptionsStep4($history);
+        $menu_step5   = self::menuOptionsStep5($history);
+
+        $option_step1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menus['file']])->render();
+        $option_step1_2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menus['form']])->render();
+        
+        $option_step2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_step2['form']])->render();
+        
+        $option_step3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_step3['file']])->render();
+        $option_step3_1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_step3['form']])->render();
+        $option_step3_2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_step3['form2']])->render();
+
+
+        $option_step4  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_step4['form']])->render();
+        
+        $option_step5  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_step5['form']])->render();
+        
+        $menu_options = array(
+            HistoryLog::KC_CONTROL_DESK_UPLOAD => $option_step1,
+            HistoryLog::KC_CONTROL_DESK_FORM => $option_step1_2,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_2 => $option_step2,
+            HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1 => $option_step3,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1 => $option_step3_1,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2 => $option_step3_2,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_4 => $option_step4,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_5 => $option_step5,
+        );
+
+        $menu               = $menu_options[$history->status_id];
+        $percent            = $percents[$history->status_id];
+        $in_progress        = HistoryLog::getByStatus([$history->status_id], $credit->id)[0];
+        $hour               = $in_progress->date_status_progress;
+        $max_hour           = $hours[$history->status_id];
+        $data_deadline      = deadline($hour, $max_hour, $percent, $color_inf_credit);
+        $color_inf_credit   = $data_deadline['color'];
+        $hour               = $data_deadline['lbl_hour'];
+        $view_dead_line     = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        
+        return array('deadline' => $view_dead_line, 'percent' => $percent, 'menu' => $menu);
+    }
+
     public function deadLineUploadStep1($history)
     {
         $credit         = $history->historyCredit;
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFile($credit->id);
         
-        if ($percent_form < 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $credit->id, 0);
+        if ($percent_form == 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $credit->id, 1);
         }
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
@@ -1975,9 +2112,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_form       = self::percentForm($history);
         $credit             = $history->historyCredit;
 
-        if ($percent_form < 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 0);
-        }
+       
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
         $max_hour                     = self::HOUR_STEP_1;
@@ -2041,12 +2176,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $data;
     }
 
+    
+
     public function deadLineStep2($history)
     {
+        $credit         = $history->historyCredit;
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFormStep2($history);
         $max_hour                     = self::HOUR_STEP_2;
-        $hour                         = $history->created_at;
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM_STEP_2], $credit->id)[0];
+        $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
         $hour                         = $data_deadline['lbl_hour'];
@@ -2090,32 +2229,64 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $data;
     }
 
-    public function deadLineStep3($history)
+    public function deadLineUploadStep3($history)
     {
+        $credit         = $history->historyCredit;
         $color_inf_credit             = 'success';
-        $percent_form1   = self::percentFormStep3_1($history);
-        $percent_form2   = self::percentFormStep3_2($history);
-
-        $new_percent_form1 = ($percent_form1 == 100) ? 50 : $percent_form1;
-        $new_percent_form2 = ($percent_form2 == 100) ? 50 : $percent_form2;
-
-        $percent_form = $new_percent_form1 + $new_percent_form2;
-
+        $percent_file   = self::percentFile($credit->id, 3);
+        
+        if ($percent_file == 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, $credit->id, 1);
+        }
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1], $credit->id)[0];
+        $hour                         = $in_progress->date_status_progress;
         $max_hour                     = self::HOUR_STEP_3;
-        $hour                         = $history->created_at;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        $data_deadline                = deadline($hour, $max_hour, $percent_file, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
         $hour                         = $data_deadline['lbl_hour'];
         $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
         return $view_dead_line_inf_credit;
     }
 
+    public function deadLineStep3($history)
+    {
+        $credit                       = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_form1                = self::percentFormStep3_1($history);
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1], $credit->id)[0];
+        $max_hour                     = self::HOUR_STEP_3;
+        $hour                         = $in_progress->date_status_progress;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form1, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+
+        return $view_dead_line_inf_credit;
+    }
+    
+    public function deadLineStep3_2($history)
+    {
+        $credit                       = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_form1                = self::percentFormStep3_2($history);
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1], $credit->id)[0];
+        $max_hour                     = self::HOUR_STEP_3;
+        $hour                         = $in_progress->date_status_progress;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form1, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+
+        return $view_dead_line_inf_credit;
+    }
+    
+
     public function actionStep3($history_id, $step_origin = null)
     {
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
-        $percent_file   = 100;
+        $percent_file   = self::percentFile($credit->id, 3);
         $percent_form1   = self::percentFormStep3_1($history);
         $percent_form2   = self::percentFormStep3_2($history);
 
@@ -2134,11 +2305,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $menu_options   = self::menuOptionsStep3($history, $step_origin);
 
 
+        $view_dead_line1  = self::deadLineUploadStep3($history);
+        $view_dead_line2  = self::deadLineStep3($history);
+        $view_dead_line3  = self::deadLineStep3_2($history);
 
         $view_dead_line_inf_credit  =self::deadLineStep3($history);
+        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         $form_option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
-        $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -2154,7 +2328,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'name' => 'Carga',
             'subject' => $subject1,
             'status' => $status_file,
-            'deadline' => $view_dead_line_inf_credit,
+            'deadline' => $view_dead_line1,
             'advisor' => $name_advisor,
             'options' => $file_option,
         );
@@ -2163,7 +2337,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'name' => 'Formulario',
             'subject' => $subject2,
             'status' => $status_form,
-            'deadline' => $view_dead_line_inf_credit,
+            'deadline' => $view_dead_line2,
             'advisor' => $name_advisor,
             'options' => $form_option,
         );
@@ -2172,13 +2346,30 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'name' => 'Formulario',
             'subject' => $subject3,
             'status' => $status_form,
-            'deadline' => $view_dead_line_inf_credit,
+            'deadline' => $view_dead_line3,
             'advisor' => $name_advisor,
             'options' => $form_option2,
         );
 
         return $data;
     }
+
+    public function deadLineStep4($history)
+    {
+        $credit                       = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_form1                = self::percentFormStep4($history);
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1], $credit->id)[0];
+        $max_hour                     = self::HOUR_STEP_4;
+        $hour                         = $in_progress->date_status_progress;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form1, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+
+        return $view_dead_line_inf_credit;
+    }
+    
     
     public function actionStep4($history_id, $step_origin = null)
     {
@@ -2193,6 +2384,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $menu_options   = self::menuOptionsStep4($history, $step_origin);
 
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $view_dead_line1  = self::deadLineStep4($history);
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -2206,29 +2398,47 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'name' => 'Formulario',
             'subject' => $subject1,
             'status' =>  'Opcional',
-            'deadline' => 'N/A',
+            'deadline' => $view_dead_line1,
             'advisor' => $name_advisor,
             'options' => $form_option,
         );
 
         return $data;
     }
+
+    public function deadLineStep5($history)
+    {
+        $credit                       = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent_form1                = self::percentFormStep5($history);
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM_STEP_5], $credit->id)[0];
+        $max_hour                     = self::HOUR_STEP_5;
+        $hour                         = $in_progress->date_status_progress;
+        $data_deadline                = deadline($hour, $max_hour, $percent_form1, $color_inf_credit);
+        $color_inf_credit             = $data_deadline['color'];
+        $hour                         = $data_deadline['lbl_hour'];
+        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+
+        return $view_dead_line_inf_credit;
+    }
     
     public function actionStep5($history_id, $step_origin = null)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
+        $history              = HistoryLog::find($history_id);
+        $credit               = $history->historyCredit;
+        $advisor              = $credit->creditAdvisor;
+        
+        $user                 = User::find($advisor->id);
+        $role                 = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        $name_advisor         = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        $menu_options         = self::menuOptionsStep5($history);
 
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptionsStep5($history);
-
-        $percent_form_step5 = self::percentFormStep5($history, $step_origin); //etapa 3
+        $percent_form_step5   = self::percentFormStep5($history, $step_origin); //etapa 3
         $status_step5         = 'En espera';
-        $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
+        $status_step5         = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
+        
+        $view_dead_line1  = self::deadLineStep5($history);
 
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
@@ -2244,7 +2454,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'name' => 'Formulario',
             'subject' => $subject1,
             'status' =>  $status_step5,
-            'deadline' => 'N/A',
+            'deadline' => $view_dead_line1,
             'advisor' => $name_advisor,
             'options' => $form_option,
         );
@@ -2625,6 +2835,20 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $percent;
     }
     
+    public function percentFormStep4($history)
+    {
+        $percent = 0;
+        $credit     = $history->historyCredit;
+        $client     = $credit->creditClientPerson;
+
+        $total_valid = 0;
+        if ($client != null && $client->kyc_done == 0) {
+            $total_valid = 100;
+        }
+        $percent =  (100 / 100) * $total_valid;
+        return $percent;
+    }
+    
     public function percentFormStep5($history)
     {
         $percent = 0;
@@ -2687,14 +2911,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     }
 
     //*TODO: se deshabilito al ser opcional la caja de carga
-    public function percentFile($id_rel)
+    public function percentFile($id_rel, $step = null)
     {
         $model = File::MODEL['controlDesk'];
         $percent = 0;
-        $total_valid = 4;
+        
+        $total_valid = $step == null? 4 : 1;
+
         $count_file = 0;
         $percent_file = 0;
-        $config_files = self::configUpload();
+        $config_files = self::configUpload($step);
 
         foreach ($config_files as $key => $config_file) {
             $file = File::where([
@@ -2705,11 +2931,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 ->first();
             if ($file != null) {
                 $count_file = $count_file + 1;
-                $percent_file = $percent_file + 25;
+                //$percent_file = $percent_file + 25;
             }
         }
 
-        $percent =  (100 / 100) * $percent_file;
+        //$percent =  (100 / 100) * $percent_file;
+        $percent = ($count_file / $total_valid) * 100;
         return $percent;
     }
     public function breadcrumb($history, $type = null)

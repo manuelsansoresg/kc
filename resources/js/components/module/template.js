@@ -751,3 +751,14 @@ function saveForm(id_form, model) {
         .catch(e => {
         });
 }
+//TODO: alerta si detecto kyc
+window.kycCreditHistory = function(history_id) {
+    axios
+        .get("/panel/kc-control-desk/kc/"+history_id+"/validate")
+        .then(function (response) {
+            let result = response.data;
+            window.history.back();
+        })
+        .catch(e => {
+        });
+}

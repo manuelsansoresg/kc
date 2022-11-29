@@ -25,6 +25,20 @@ class KcControlDeskController extends Controller
         return response()->json(['data' => $users]);
     }
 
+    public function validateKyc($history_id)
+    {
+        $history = HistoryLog::find($history_id);
+
+        $get_credit = Credit::find($history->id_rel);
+        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $get_credit->id, 1); //* marcar como finalizada la accion
+        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $get_credit->id, 0);
+
+        $get_credit->kyc_done = 0;
+        $get_credit->update();
+
+        return response()->json(0);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

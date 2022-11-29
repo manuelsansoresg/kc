@@ -52,11 +52,18 @@
             @endif
            
             @if ($element['type'] == 'href')
+                @php
+                    $onclick = isset($element['onclick']) && $element['onclick'] != null ? $element['onclick'] : null;
+                @endphp
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <div class="form-control-wrap">
-                           <a target="{{ $element['target'] }}" class="{{ isset($element['class']) && $element['class'] != null? $element['class'] : '' }}" 
-                           {{ isset($element['onclick']) && $element['onclick'] != null? 'onclick='. $element['onclick'].'' : '' }}
+                           <a 
+                           {{ isset($element['target']) && $element['target'] != null? 'target='. $element['target'].'' : '' }}
+                           class="{{ isset($element['class']) && $element['class'] != null? $element['class'] : '' }}" 
+                           @if ($onclick != null)
+                               onclick="{{ $onclick}}"
+                           @endif
                            {{ isset($element['link']) && $element['link'] != null? 'href='. $element['link'].'' : '' }}>{{ $element['title'] }}</a>
                         </div>
                     </div>
