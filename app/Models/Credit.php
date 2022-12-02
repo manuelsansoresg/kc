@@ -106,16 +106,8 @@ class Credit extends Model
             $hour             = $query->created_at;
             $max_hour         = 24;
             $data_deadline    = deadlineKc($hour, $max_hour);
-            $color_inf_credit = $data_deadline['color'];
-            $in_progress      = null;
-            
-            if ($history->status_id === HistoryLog::KC_DELIVERY) {
-                $hour = 8;
-            }
-            
-            if ($history->status_id === HistoryLog::KC_CHECK_UP || $history->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION || $history->status_id === HistoryLog::KC_CONTROL_DESK || $history->status_id === HistoryLog::KC_DELIVERY || $history->status_id === HistoryLog::KC_AFTER_MARKET) { //*model new credit
-                $in_progress = json_encode((new $templateStrategy)->getPercent($history, true));
-            }
+            $in_progress      = json_encode((new $templateStrategy)->getPercent($history, true));
+            $dead_line        = json_encode((new $templateStrategy)->moduleDeadline($history));
             
             $hour             = $data_deadline['lbl_hour'];
             $status_id        = $history->status_id;
@@ -133,7 +125,6 @@ class Credit extends Model
 
             $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
             $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client, 'percent' => $percent])->render();
-            $dead_line        = \View::make('panel.module.checkup.deadline', [ 'hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
             $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
             
             $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;

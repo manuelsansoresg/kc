@@ -236,6 +236,19 @@ class NewCreditStrategyTemplate implements TemplateInterface
         return $data;
     }
 
+    public function moduleDeadline($history)
+    {
+        $max_hour           = 24;
+        $percent            = self::getPercent($history);
+        $color_inf_credit   = 'success';
+        $hour               = $history->created_at;
+        $data_deadline      = deadline($hour, $max_hour, $percent, $color_inf_credit);
+        $color_inf_credit   = $data_deadline['color'];
+        $hour               = $data_deadline['lbl_hour'];
+        $view_deadline      = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return $view_deadline;
+    }
+
     public function listAction($history_id)
     {
         $history        = HistoryLog::find($history_id);

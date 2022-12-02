@@ -150,12 +150,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
             $client->update();
         }
         if ($history != null) {
-            $percent_form_step5 = self::percentFormStep3($history);
-            if ($percent_form_step5 == 100) {
-                HistoryLog::move($credit->id, HistoryLog::CREDITS_PAID, HistoryLog::KC_CONTROL_DESK);
-               /*  $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
-                (new $notification_add)->send($credit->id); */
-            }
+            
         }
     }
 
@@ -186,6 +181,12 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         
        
         return $data;
+    }
+
+    public function moduleDeadline($history)
+    {
+        
+        return 'N/A';
     }
 
     public function listAction($history_id)
