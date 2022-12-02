@@ -762,3 +762,14 @@ window.kycCreditHistory = function(history_id) {
         .catch(e => {
         });
 }
+
+window.swapCreditContinue = function(history_id) {
+    axios
+        .get("/panel/kc-swap/credit/"+history_id+"/continue")
+        .then(function (response) {
+            let result = response.data;
+            window.history.back();
+        })
+        .catch(e => {
+        });
+}

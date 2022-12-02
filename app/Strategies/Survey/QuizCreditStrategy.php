@@ -2,6 +2,7 @@
 
 namespace App\Strategies\Survey;
 
+use App\Models\HistoryLog;
 use App\Models\Survey;
 use App\Strategies\SurveyInterface;
 
@@ -32,6 +33,7 @@ class QuizCreditStrategy implements SurveyInterface
         if ($get_survey == 0) {
             $survey = new Survey($data_survey);
             $survey->save();
+            HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $request->credit_id, 1);
         }
     }
 

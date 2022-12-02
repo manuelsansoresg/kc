@@ -21,7 +21,7 @@ use stdClass;
 class DeliveryStrategyTemplate implements TemplateInterface
 {
     const HOUR_STEP_1  = 6;
-    const HOUR_STEP_2  = 72;
+    const HOUR_STEP_2  = 192;
     const HOUR_STEP_3  = 2;
 
     public function move($id)
@@ -377,10 +377,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
             $client->fill($data_client_person);
             $client->update();
         }
+        
         if ($history != null) {
-            $percent_form_step5 = self::percentFormStep3($history);
-            if ($percent_form_step5 == 100) {
+            $percent_form_step3 = self::percentFormStep3($history);
+            if ($percent_form_step3 == 100) {
                 HistoryLog::move($credit->id, HistoryLog::CREDITS_PAID, HistoryLog::KC_CONTROL_DESK);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $id_rel, 1);
                /*  $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
                 (new $notification_add)->send($credit->id); */
             }
@@ -547,8 +549,13 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $credit         = $history->historyCredit;
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFile($credit->id);
+        if ($percent_form == 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, $credit->id, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit->id, 0);
+        }
         $max_hour                     = self::HOUR_STEP_2;
-        $hour                         = $history->created_at;
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_UPLOAD_STEP_2], $credit->id)[0];
+        $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
         $hour                         = $data_deadline['lbl_hour'];
@@ -574,6 +581,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $view_dead_line_inf_credit  = 'N/A';
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
+        $form_option_2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -583,34 +591,37 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $subject1 = HistoryLog::$label_subject[32];
         $subject2 = HistoryLog::$label_subject[33];
-
+        
+        $data[] = array(
+            'name' => 'Formulario',
+            'subject' => $subject1,
+            'status' =>  'Opcional',
+            'deadline' => $view_dead_line_inf_credit,
+            'advisor' => $name_advisor,
+            'options' => $form_option_2,
+        );
         $data[] = array(
             'name' => 'Carga',
-            'subject' => $subject1,
+            'subject' => $subject2,
             'status' => $status_form,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $form_option,
         );
         
-        $data[] = array(
-            'name' => 'Formulario',
-            'subject' => $subject2,
-            'status' =>  'Opcional',
-            'deadline' => $view_dead_line_inf_credit,
-            'advisor' => $name_advisor,
-            'options' => $form_option,
-        );
+        
 
         return $data;
     }
 
     public function deadLineStep3($history)
     {
+        $credit                       = $history->historyCredit;
         $color_inf_credit             = 'success';
-        $percent_form   = self::percentFormStep3($history);
+        $percent_form                 = self::percentFormStep3($history);
         $max_hour                     = self::HOUR_STEP_3;
-        $hour                         = $history->created_at;
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM_STEP_3], $credit->id)[0];
+        $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
         $hour                         = $data_deadline['lbl_hour'];
@@ -731,6 +742,28 @@ class DeliveryStrategyTemplate implements TemplateInterface
         );
 
         return $data;
+    }
+
+    public function dinamicDeadline($history)
+    {
+        $credit                       = $history->historyCredit;
+        $color_inf_credit             = 'success';
+        $percent   = self::percentFile($credit->id);
+        $in_progress        = HistoryLog::getByStatus([$history->status_id], $credit->id)[0];
+        $hour               = $in_progress->date_status_progress;
+
+        $menu_options   = self::menuOptions($history, 2);
+        $menu  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
+        
+
+        if ($history->status_id == HistoryLog::KC_DELIVERY_FORM_STEP_3) {
+            $percent         = self::percentFormStep3($history);
+            $menu_options   = self::menuOptionsStep3($history);
+            $menu  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        }
+
+        $view_dead_line     = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        return array('deadline' => $view_dead_line, 'percent' => $percent, 'menu' => $menu);
     }
 
     public function menuOptions($history, $step = 1)
@@ -984,21 +1017,28 @@ class DeliveryStrategyTemplate implements TemplateInterface
     //* get all percentages of the shares
     public function getPercent($history, $show_current_show = false)
     {
-        $credit       = $history->historyCredit;
+        $credit     = $history->historyCredit;
+        $data_actions = array(
+            HistoryLog::KC_DELIVERY_UPLOAD_STEP_2,
+            HistoryLog::KC_DELIVERY_FORM_STEP_3,
+        );
         
-        $file1        = self::percentFile($credit->id);
-        $percent1     = $file1 == 100 ? 50 : 0;
-        $form_step3   = self::percentFormStep3($history); //etapa 3
-        $percent3     = $form_step3 == 100 ? 50 : 0;
-        $current_show = $form_step3 < 100 ? 'Comprobar pago': 'Verificar pago';
+        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+        $status_progress = 0;
+        $current_show = null;
 
+        foreach ($get_actions as $key => $get_action) {
+            $status = $get_action->status_progress;
+            $status_progress += $status != null ? $status : 0;
+            $current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
+        }
 
-        $total_valid  = $percent1 + $percent3;
-        $percent      = (100 / 100) * $total_valid;
-        
+        $percent =  (($status_progress) / 2) * 100;
+
         if ($show_current_show == true) {
             return $current_show;
         }
+        
         return $percent;
     }
 

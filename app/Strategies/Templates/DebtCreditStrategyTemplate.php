@@ -317,7 +317,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         //$total_credit_percent   = $percent_file;
        
         $status_inf_credit    = ($percent_form >= 100) ? 'Concluido' : 'En curso';
-        $status_report        = ($percent_form_step2 >= 100) ? 'En curso' : 'En espera';
+        $status_report        = ($percent_form_step2 >= 100) ? 'Concluido' : 'En curso';
         
         $total_credit_percent = ($percent_form >= 100) ? 100 : $percent_form;
 
@@ -334,7 +334,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         
         $view_percent_report        = \View::make('panel.module.view_percent', ['percent' => 0])->render();
         $view_count_report          = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
-        if ($status_report == 'En curso') {
+        if ($status_inf_credit == 'Concluido') {
             $option_inf_report          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
         }
 
@@ -456,8 +456,8 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $subject[]      = HistoryLog::$label_subject[15];
 
         $data_actions   = array(
-            HistoryLog::KC_CHECK_UP_ACTION_REPORT,
-            HistoryLog::KC_CHECK_UP_ACTION_DESITION,
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT,
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
         );
       
         $get_actions    = HistoryLog::getByStatus($data_actions, $credit->id);

@@ -24,15 +24,18 @@ class KcSwapController extends Controller
         $users = Credit::listDatatable([HistoryLog::KC_SWAP]);
         return response()->json(['data' => $users]);
     }
+    //TODO: MAKE FUNCTION
     public function cancel()
     {
         $users = Credit::listDatatable([HistoryLog::KC_SWAP]);
         return response()->json(['data' => $users]);
     }
-    public function continue()
+    public function continue($history_id)
     {
-        $users = Credit::listDatatable([HistoryLog::KC_SWAP]);
-        return response()->json(['data' => $users]);
+        $history = HistoryLog::find($history_id);
+        HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3_2, $history->id_rel, 1);
+        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $history->id_rel, 0);
+        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $history->id_rel, 0);
     }
 
     /**

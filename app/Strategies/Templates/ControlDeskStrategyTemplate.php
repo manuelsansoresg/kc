@@ -1715,6 +1715,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit = Credit::find($id_rel);
         $user_financials = User::getUserRole('Cliente financiera');
         $option_user_financial = array();
+        $step_origin    = isset($_GET['step_origin']) ? $_GET['step_origin'] : null;
+
         foreach ($user_financials as $user) {
             $name = $user->name.' '.$user->last_name.' '.$user->second_last_name;
             $option_user_financial[$user->id] = $name;
@@ -1801,6 +1803,23 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'col' => 'col-12'
             ],
             
+            6 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'step_origin',
+                'id_field' => null,
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => $step_origin,
+                'col' => 'col-12'
+            ],
+            
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -1808,9 +1827,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function saveForm($request)
     {
-        $id_rel   = $request->id_rel;
-        $credit   = Credit::find($id_rel);
-        $history  = HistoryLog::find($request->history_id);
+        $id_rel         = $request->id_rel;
+        $credit         = Credit::find($id_rel);
+        $history        = HistoryLog::find($request->history_id);
+        $step_origin    = isset($request->step_origin) ? $request->step_origin : null;
 
         if ($request->credit) {
             $data_credit = $request->credit;
@@ -1865,6 +1885,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK);
                 $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
                 (new $notification_add)->send($credit->id);
+                if ($step_origin == 1) { //* comes from swap, create the next stages
+                    
+                }
             }
         }
     }
@@ -2095,6 +2118,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         if ($percent_form == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $credit->id, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $credit->id, 1);
         }
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
@@ -2128,7 +2152,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
-        
         $percent_file   = self::percentFile($credit->id);
         $percent_form   = self::percentForm($history);
         $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
@@ -2139,7 +2162,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptions($history, 1, $step_origin);
-        
         $view_dead_line_upload  = self::deadLineUploadStep1($history);
         $view_dead_line_form  = self::deadLineStep1($history);
         
@@ -2424,6 +2446,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     
     public function actionStep5($history_id, $step_origin = null)
     {
+        
         $history              = HistoryLog::find($history_id);
         $credit               = $history->historyCredit;
         $advisor              = $credit->creditAdvisor;
@@ -2432,13 +2455,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $role                 = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor         = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options         = self::menuOptionsStep5($history);
+        $menu_options         = self::menuOptionsStep5($history, $step_origin);
 
-        $percent_form_step5   = self::percentFormStep5($history, $step_origin); //etapa 3
+        $percent_form_step5   = self::percentFormStep5($history); //etapa 3
         $status_step5         = 'En espera';
         $status_step5         = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
         
-        $view_dead_line1  = self::deadLineStep5($history);
+        $view_dead_line1      = self::deadLineStep5($history);
 
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 

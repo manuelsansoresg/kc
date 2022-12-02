@@ -44,16 +44,31 @@ class ListStrategy implements ActionInterface
                 
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
+
+                HistoryLog::KC_SWAP_UPLOAD,
+                HistoryLog::KC_SWAP_FORM,
+                HistoryLog::KC_SWAP_UPLOAD_2,
+                
+                HistoryLog::KC_SWAP_FORM_STEP_2,
+                HistoryLog::KC_SWAP_FORM_STEP_2_2,
+                HistoryLog::KC_SWAP_UPLOAD_STEP_2_3,
+                HistoryLog::KC_SWAP_FORM_STEP_2_3,
+                
+                HistoryLog::KC_SWAP_UPLOAD_STEP_3,
+                HistoryLog::KC_SWAP_FORM_STEP_3,
+                HistoryLog::KC_SWAP_FORM_STEP_3_2,
                 
                 HistoryLog::KC_DELIVERY_UPLOAD_STEP_2,
                 HistoryLog::KC_DELIVERY_FORM_STEP_3,
+                
+                HistoryLog::KC_AFTER_FORM,
                 
             ];
         }
 
         $history_logs = HistoryLog::getByStatus($list_actions, $id_rel);
         $data = array();
-        $array_model = array('newCredit' => 'KC- Check up', 'debtCredit' => 'KC- Check up', 'controlDesk' => 'KC- Control desk', 'delivery' => 'Delivery');
+        $array_model = array('newCredit' => 'KC- Check up', 'debtCredit' => 'KC- Check up', 'controlDesk' => 'KC- Control desk', 'delivery' => 'Delivery', 'swap' => 'swap');
 
         foreach ($history_logs as $history_log) {
             //*saber si el usuario es admin
@@ -63,6 +78,7 @@ class ListStrategy implements ActionInterface
             $client         = $credit->creditClientPerson;
             $advisor        = $credit->creditAdvisor;
             $model          = HistoryLog::$name_model[$history_log->status_id];
+
             $module         = $array_model[$model];
             $name           = $credit->id.' '.$client->last_name.' '.$client->second_last_name.' '.$client->name;
             $name_advisor   = $advisor->name.' '.$advisor->last_name;
@@ -126,6 +142,24 @@ class ListStrategy implements ActionInterface
                     $form_option = $get_dinamic_percent['menu'];
                     $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
             }
+
+            if ($history_log->status_id === HistoryLog::KC_SWAP_UPLOAD
+                || $history_log->status_id === HistoryLog::KC_SWAP_FORM
+                || $history_log->status_id === HistoryLog::KC_SWAP_UPLOAD_2
+                || $history_log->status_id === HistoryLog::KC_SWAP_FORM_STEP_2
+                || $history_log->status_id === HistoryLog::KC_SWAP_FORM_STEP_2_2
+                || $history_log->status_id === HistoryLog::KC_SWAP_UPLOAD_STEP_2_3
+                || $history_log->status_id === HistoryLog::KC_SWAP_FORM_STEP_2_3
+                || $history_log->status_id === HistoryLog::KC_SWAP_UPLOAD_STEP_3
+                || $history_log->status_id === HistoryLog::KC_SWAP_FORM_STEP_3
+                || $history_log->status_id === HistoryLog::KC_SWAP_FORM_STEP_3_2
+                ) {
+                    $get_dinamic_percent =  (new $templateStrategy)->dinamicDeadline($history_log);
+                    $view_dead_line_inf_credit = $get_dinamic_percent['deadline'];
+                    $percent_form = $get_dinamic_percent['percent'];
+                    $form_option = $get_dinamic_percent['menu'];
+                    $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+            }
             
             /* if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM) {
                 $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
@@ -163,25 +197,21 @@ class ListStrategy implements ActionInterface
                 $view_dead_line_inf_credit =  'N/A';
             } */
             
-            if ($history_log->status_id === HistoryLog::KC_DELIVERY_UPLOAD_STEP_2) {
-                $percent_form   = (new $templateStrategy)->percentFile($credit->id);
-                $menu_options   = (new $templateStrategy)->menuOptions($history_log, 2);
+            if ($history_log->status_id === HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 || $history_log->status_id === HistoryLog::KC_DELIVERY_FORM_STEP_3) {
+                $get_dinamic_percent =  (new $templateStrategy)->dinamicDeadline($history_log);
+                $view_dead_line_inf_credit = $get_dinamic_percent['deadline'];
+                $percent_form = $get_dinamic_percent['percent'];
+                $form_option = $get_dinamic_percent['menu'];
                 $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-                $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
-                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep2($history_log);
             }
            
-            if ($history_log->status_id === HistoryLog::KC_DELIVERY_FORM_STEP_3) {
-                $percent_form   = (new $templateStrategy)->percentFormStep3($history_log);
-                $menu_options   = (new $templateStrategy)->menuOptionsStep3($history_log);
+            if ($history_log->status_id === HistoryLog::KC_AFTER_FORM) {
+                $get_dinamic_percent =  (new $templateStrategy)->dinamicDeadline($history_log);
+                $view_dead_line_inf_credit = $get_dinamic_percent['deadline'];
+                $percent_form = $get_dinamic_percent['percent'];
+                $form_option = $get_dinamic_percent['menu'];
                 $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-                $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep3($history_log);
             }
-           
-            /* if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_5) {
-            
-            } */
             $option = ($history_log->status_id == 7) ? $file_option : $form_option;
 
             //TODO:  si eres admin o asesor debes poder ver todos y si no solo puedes ver los tuyos como responsable revisar cual campo sera el responsable

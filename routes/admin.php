@@ -166,7 +166,7 @@ Route::resource('kc-swap', '\App\Http\Controllers\Panel\Module\KcSwapController'
 Route::group(['prefix' => 'kc-swap'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcSwapController', 'list'])->middleware('auth');
     Route::get('credit/{credit_id}/cancel', ['\App\Http\Controllers\Panel\Module\KcSwapController', 'cancel'])->middleware('auth');
-    Route::get('credit/{credit_id}/continue', ['\App\Http\Controllers\Panel\Module\KcSwapController', 'continue'])->middleware('auth');
+    Route::get('credit/{history_id}/continue', ['\App\Http\Controllers\Panel\Module\KcSwapController', 'continue'])->middleware('auth');
 });
 
 Route::resource('kc-check-up-debt-reduction', '\App\Http\Controllers\Panel\Module\KcCheckup\DebtReductionController')->middleware('auth');

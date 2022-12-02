@@ -3236,6 +3236,13 @@ window.kycCreditHistory = function (history_id) {
   })["catch"](function (e) {});
 };
 
+window.swapCreditContinue = function (history_id) {
+  axios.get("/panel/kc-swap/credit/" + history_id + "/continue").then(function (response) {
+    var result = response.data;
+    window.history.back();
+  })["catch"](function (e) {});
+};
+
 /***/ }),
 
 /***/ "./resources/js/components/notification/utilities.js":
