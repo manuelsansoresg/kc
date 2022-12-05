@@ -171,6 +171,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         if ($history != null) {
             $percent_form   = self::percentForm($history);
             if ($percent_form == 100) {
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_REPORT, HistoryLog::KC_CHECK_UP_ACTION_REPORT);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $credit->id, 1); //*marcar como completada la tarea
                 //*inicializar las acciones de la siguiente etapa en curso
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_REPORT, $credit->id, 1);
@@ -193,10 +194,17 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $color_report         = 'success';
         $option_inf_report    = null;
         $total_percent        = $percent_file + $percent_form;
+        $status_inf_credit        = 'En espera';
         $status_report        = 'En espera';
         $menu_options         = self::menuOptionsStep($history);
+        
         $status_inf_credit    = ($percent_form >= 100) ? 'Concluido' : 'En curso';
-        $status_report        = ($percent_form_step2 >= 100) ? 'Concluido' : 'En curso';
+
+        if ($percent_form == 100) {
+            $status_report        = ($percent_form_step2 >= 100) ? 'Concluido' : 'En curso';
+        }
+
+        
         $total_credit_percent = ($total_percent> 100) ? 100 : 50;
         $data_deadline        = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit     = $data_deadline['color'];
