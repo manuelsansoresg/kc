@@ -504,14 +504,8 @@ class NewCreditStrategyTemplate implements TemplateInterface
     {
         $credit     = $history->historyCredit;
         $data_actions = array(
-            HistoryLog::KC_CONTROL_DESK_UPLOAD,
-            HistoryLog::KC_CONTROL_DESK_FORM,
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_2,
-            HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1,
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
+            HistoryLog::KC_CHECK_UP_ACTION_FORM,
+            HistoryLog::KC_CHECK_UP_ACTION_DESITION,
         );
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
