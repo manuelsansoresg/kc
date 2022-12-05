@@ -124,6 +124,7 @@ class User extends Authenticatable
         $user = new User($data);
         $user->password = bcrypt($password);
         $user->save();
+        
 
         //*assign role user
         $role = 'Cliente persona';

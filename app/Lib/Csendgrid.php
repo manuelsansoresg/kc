@@ -62,10 +62,12 @@ class Csendgrid
                 "attachment"
             );
         }
-        $email->addContent("text/html", $this->content);
+        if ($this->content != '') {
+            $email->addContent("text/html", $this->content);
+        }
+
         $email->setTemplateId($this->idTemplate);
         $email->addDynamicTemplateDatas($this->params);
-
         try {
             $response = $this->sendgrid->send($email);
             return $response;
