@@ -507,6 +507,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             HistoryLog::KC_CHECK_UP_ACTION_FORM,
             HistoryLog::KC_CHECK_UP_ACTION_DESITION,
         );
+
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
         $status_progress = 0;
@@ -515,10 +516,11 @@ class NewCreditStrategyTemplate implements TemplateInterface
         foreach ($get_actions as $key => $get_action) {
             $status = $get_action->status_progress;
             $status_progress += $status != null ? $status : 0;
-            $current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_CHECK_UP_ACTION_FORM ? 'Información del crédito': 'Reporte';
         }
 
         $percent =  (($status_progress) / 2) * 100;
+
+        $current_show = $status_progress < 2 ? 'Información del crédito': 'Reporte';
 
         if ($show_current_show == true) {
             return $current_show;
