@@ -529,7 +529,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
 
         $percent =  (($status_progress) / 2) * 100;
 
-        $current_show = $status_progress < 2 ? 'Información del crédito': 'Reporte';
+        $current_show = $status_progress < 1 ? 'Información del crédito': 'Reporte';
 
         if ($show_current_show == true) {
             return $current_show;
