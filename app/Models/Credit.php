@@ -131,7 +131,7 @@ class Credit extends Model
             $is_advisor     = Auth::user()->hasRole('Asesor');
             if ($is_advisor === true && Auth::user()->id === $advisor->id) {
                 $users[] = array(
-                    'id' => $query->id,
+                    'id' => $query->id_rel,
                     'product' => $content_product,
                     'client' => $content_client,
                     'advisor' => $name_advisor,
@@ -142,7 +142,7 @@ class Credit extends Model
                 );
             } else {
                 $users[] = array(
-                    'id' => $history->id,
+                    'id' => $history->id_rel,
                     'product' => $content_product,
                     'client' => $content_client,
                     'advisor' => $name_advisor,
