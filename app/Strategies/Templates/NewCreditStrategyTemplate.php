@@ -404,7 +404,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/template/action-document/newCredit/'.$history->id,
+                    'link' => '/panel/template/action-document/newCredit/'.$history->id.'?step=1',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -412,7 +412,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             ),
             'file' => array(
                 [
-                    'link' => '/panel/action-form/newCredit/'.$history->id.'/form',
+                    'link' => '/panel/action-form/newCredit/'.$history->id.'/form'.'?step=1',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -565,8 +565,72 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $percent =  (100 / 100) * $total_valid;
         return $percent;
     }
+
+    public function optionBreadcumbStep($history)
+    {
+        $breadcumbs = array(
+            0 => array(
+             'title' => 'Inicio',
+             'link' => '/panel/home',
+             'active' => null
+            ),
+            1 => array(
+             'title' => 'KC - Check up',
+             'link' => '/panel/kc-check-up',
+             'active' => null
+            ),
+            2 => array(
+             'title' => 'etapas',
+             'link' => null,
+             'active' => true
+            ),
+         );
+         return $breadcumbs;
+    }
+
+    public function optionBreadcumblistAction($history)
+    {
+        $breadcumbs = array(
+            0 => array(
+             'title' => 'Inicio',
+             'link' => '/panel/home',
+             'active' => null
+            ),
+            1 => array(
+             'title' => 'KC - Check up',
+             'link' => '/panel/kc-check-up',
+             'active' => null
+            ),
+            2 => array(
+                'title' => 'etapas',
+                'link' => '/panel/template/steps/newCredit/'.$history->id.'/show',
+                'active' => true
+            ),
+            3 => array(
+                'title' => 'acciones',
+                'link' => '/panel/template/actions/newCredit/'.$history->id.'/show?step=1',
+                'active' => null
+               ),
+               4 => array(
+                'title' => 'Información laboral y contacto',
+                'link' => null,
+                'active' => true
+               ),
+         );
+         return $breadcumbs;
+    }
+
     public function breadcrumb($history, $type = null)
     {
-        return null;
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+        
+        if ($step == null) {
+            $breadcumbs = self::optionBreadcumbStep($history);
+        }
+        if ($step == 1) {
+            $breadcumbs = self::optionBreadcumblistAction($history);
+        }
+        $view_breadcumb    = \View::make('panel.module.breadcumb', ['breadcumbs' => $breadcumbs])->render();
+        return $view_breadcumb;
     }
 }
