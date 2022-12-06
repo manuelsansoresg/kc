@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Lib\Csendgrid;
+use App\Strategies\Values\TemplateValues;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -146,6 +147,9 @@ class User extends Authenticatable
         $send_grid->setTemplate('d-235b3d5c43c14184b365def8c1d1e160');
         $send_grid->setParams(['first_name'=> $data['name'], 'link_account' => $link_account, 'body' => $body]);
         $send_grid->send();
+
+        
+        
         return $user;
     }
 

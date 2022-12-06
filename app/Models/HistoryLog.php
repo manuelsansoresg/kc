@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -255,7 +256,7 @@ class HistoryLog extends Model
             $data['user_id']    = Auth::user()->id;
             $history = new HistoryLog($data);
             $history->save();
-            self::subHistories($id_rel, $status_id, $old_status_id);
+            self::subHistories($id_rel, $status_id, $history);
 
             return $history;
         }
@@ -268,19 +269,52 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
 
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, $id_rel, 1);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $id_rel, 0);
+            //* revisar porcentaje formulario para activar o no la etapa
+            $templateStrategy   = TemplateValues::STRATEGY['newCredit'];
+            $percent            = (new $templateStrategy)->percentForm($history);
+            $credit             = Credit::find($id_rel);
+
+            if ($percent == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, $id_rel, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $id_rel, 1);
+                
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_REPORT, HistoryLog::KC_CHECK_UP_ACTION_REPORT);
+                HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION);
+                
+                //*inicializar las acciones de la siguiente etapa en curso
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_REPORT, $credit->id, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_DESITION, $credit->id, 0);
+            } else {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, $id_rel, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $id_rel, 0);
+            }
+
+            
+
         }
         
         if ($status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM);
-            
-            /* HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT);
-            HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION); */
-            
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, $id_rel, 1);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, $id_rel, 0);
+            //* revisar porcentaje formulario para activar o no la etapa
+            $templateStrategy   = TemplateValues::STRATEGY['debtCredit'];
+            $percent            = (new $templateStrategy)->percentForm($history);
+            $credit             = Credit::find($id_rel);
+
+            if ($percent == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, $id_rel, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, $id_rel, 1);
+                
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT);
+                HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION);
+                
+                //*inicializar las acciones de la siguiente etapa en curso
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, $credit->id, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, $credit->id, 0);
+            } else {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, $id_rel, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, $id_rel, 0);
+            }
         }
 
         if ($status_id == HistoryLog::KC_CONTROL_DESK) {
