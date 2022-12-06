@@ -159,7 +159,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <script src="{{ asset('/js/report_app.js') }}"></script>
     <script>
-    let titulo        = ''    
     let titulo        = '{{isset($financial->commercial_name)?trim($financial->commercial_name): 'Financiera 1' }}'
     </script>
     @if ($status_id == 10)
