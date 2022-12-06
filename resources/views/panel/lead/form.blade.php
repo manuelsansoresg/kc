@@ -152,7 +152,7 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">*Origen</label>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="form-control js-select2" name="data[origin_id]" id="lead-origin"  data-search="on">
+                                                                    <select class="form-control js-select2" name="data[origin_id]" id="lead-origin" onchange="changeOrigen()"  data-search="on">
                                                                         @if ($lead == null)
                                                                         <option value="">Escribe para buscar</option>
                                                                         @endif

@@ -68,11 +68,12 @@ $('.select2multiple').select2({
     });
   }
   
-  $("#lead-origin" ).change(function() {
+  window.changeOrigen = function(change_channel) {
     let origin_id = $("#lead-origin" ).val();
     let lead_id = $("#lead_id" ).val();
     $('#lead-channel').empty();
     var lead_channel = $('#lead-channel');
+    console.log(lead_id);
     axios
         .get("/panel/lead/"+origin_id+"/origin/")
         .then(function (response) {
@@ -87,17 +88,22 @@ $('.select2multiple').select2({
                 }
             }
             
-            if (lead_id != null) {
-                setData(false, false);
-            } else {
-                $('#lead-channel').val(null).trigger('change');
+            $('#lead-channel').val(null).trigger('change');
+            if (change_channel != null) {
+                $('#lead-channel').val(change_channel).trigger("change");
             }
 
         })
         .catch(e => {
             $('#admin_email-error-exist').show();
         });
-  });
+  }
+
+ 
+
+  /* $("#lead-origin" ).change(function() {
+    
+  }); */
 
 function setData(is_change_origen, is_change_organization) {
     let lead_id = $('#lead_id').val();
@@ -136,21 +142,12 @@ function setData(is_change_origen, is_change_organization) {
             $('#lead-second_last_name').val(lead.second_last_name); 
             $('#lead-cellphone').val(lead.cellphone); 
             $('#lead-email').val(lead.email); 
-
-            /* if (financials != null) {
-                var lead_financial = $('#lead-financial_id');
-                for (const key in result) {
-                    const element = result[key];
-                    var option = new Option(element.commercial_name, element.id, true, true);
-                    lead_financial.append(option).trigger('change');
-                    
-                }
-            } */
+           
             $('#content-financial').hide();
             if (product_id == 2) {
                 $('#content-financial').show();
             }
-            $('#lead-channel').val(lead.channel_id).trigger("change");
+            changeOrigen(lead.channel_id);
             $('#lead-financial_id').val(lead.financial_id).trigger("change");
             $('#lead-temperature-id').val(lead.financial_id).trigger("change");
         })
