@@ -5,9 +5,10 @@
     <div class="container-fluid">
         <div class="nk-content-inner">
             <div class="nk-content-body">
-                <div class="nk-block-head nk-block-head-sm">
-                    <div class="nk-block-between">
+                <div class="components-preview wide-md mx-auto">
+                    <div class="nk-block-head nk-block-head-lg wide-sm">
                         <div class="nk-block-head-content">
+                            
                             <h3 class="nk-block-title page-title">Acción formulario</h3>
                             <div class="nk-block-des text-soft">
                                 <nav>
@@ -21,10 +22,9 @@
                                         @else
                                         {!!  $breadcrumb !!}
                                         @endif
-                                            
-                                        </li>
                                     </ul>
                                 </nav>
+                                
                             </div>
                             <div class=" d-block d-md-none">
                                 <div class="col-12">
@@ -59,13 +59,18 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="nk-block nk-block-lg">
-                    <div class="card card-bordered card-preview">
-                        <div class="card-inner">
-                            {!! $form !!}
-                            <input type="hidden" id="id_rel" value="{{ $id_rel }}">
+                    </div><!-- .nk-block-head -->
+                    <div class="nk-block nk-block-lg mt-n3">
+                        <p>* Campos obligatorios</p>
+                        <div class="card card-bordered card-preview">
+                            <div class="card-inner">
+                                <div class="preview-block">
+                                    <div class="row gy-4">
+                                        {!! $form !!}
+                                        <input type="hidden" id="id_rel" value="{{ $id_rel }}">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,6 +78,4 @@
         </div>
     </div>
 </div>
-
-
 @endsection
