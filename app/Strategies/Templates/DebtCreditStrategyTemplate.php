@@ -497,24 +497,19 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
     public function dinamicDeadline($history)
     {
-        $percent            = self::percentDesition($history);
         $status_id          = $history->status_id;
         $credit             = $history->historyCredit;
         $in_progress        = HistoryLog::getByStatus([$status_id], $credit->id)[0];
         $hour               = $in_progress->date_status_progress;
+        $percent            = $in_progress->status_progress / 1 * 100;
         $max_hour           = 12;
         $color_inf_credit   = '';
-
-        if ($status_id == HistoryLog::KC_CHECK_UP_ACTION_FORM) {
-            $percent = self::percentForm($history);
-        }
-
-        $data_deadline  = deadline($hour, $max_hour, $percent, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
+        $data_deadline      = deadline($hour, $max_hour, $percent, $color_inf_credit);
+        $color_inf_credit   = $data_deadline['color'];
+        $hour               = $data_deadline['lbl_hour'];
 
         $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $percent;
+        return $view_dead_line_inf_credit;
     }
 
     public function menuOptions($history)

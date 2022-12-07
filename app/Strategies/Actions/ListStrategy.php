@@ -115,8 +115,8 @@ class ListStrategy implements ActionInterface
 
            /*  if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM) {
             } */
-
-            if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_DESITION || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION) {
+            if ($history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_ACTION_DESITION
+                || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM || $history_log->status_id === HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION) {
                 $view_dead_line_inf_credit =  (new $templateStrategy)->dinamicDeadline($history_log);
             }
 
@@ -161,41 +161,6 @@ class ListStrategy implements ActionInterface
                     $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
             }
             
-            /* if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM) {
-                $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep1($history_log);
-            }
-            
-            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_2) {
-                $percent_form   = (new $templateStrategy)->percentFormStep2($history_log);
-                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-                $menu_options   = (new $templateStrategy)->menuOptions($history_log, 2);
-                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep2($history_log);
-            }
-
-            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1) {
-                $percent_form   = (new $templateStrategy)->percentFormStep3_1($history_log);
-                $menu_options   = (new $templateStrategy)->menuOptionsStep3($history_log);
-                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-                $form_option    = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep3($history_log);
-            }
-           
-            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2) {
-                $percent_form   = (new $templateStrategy)->percentFormStep3_2($history_log);
-                $menu_options   = (new $templateStrategy)->menuOptionsStep3($history_log);
-                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-                $form_option    = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
-                $view_dead_line_inf_credit =  (new $templateStrategy)->deadLineStep3($history_log);
-            }
-            
-            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_5) {
-                $percent_form   = (new $templateStrategy)->percentFormStep5($history_log);
-                $menu_options   = (new $templateStrategy)->menuOptionsStep5($history_log);
-                $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-                $form_option    = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-                $view_dead_line_inf_credit =  'N/A';
-            } */
             
             if ($history_log->status_id === HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 || $history_log->status_id === HistoryLog::KC_DELIVERY_FORM_STEP_3) {
                 $get_dinamic_percent =  (new $templateStrategy)->dinamicDeadline($history_log);
