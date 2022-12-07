@@ -396,7 +396,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $hour                         = $data_deadline['lbl_hour'];
 
         $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $percent;
+        return $view_dead_line_inf_credit;
     }
 
     public function menuOptions($history)
