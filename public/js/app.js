@@ -1615,8 +1615,13 @@ $('.js-select2').select2({
 });
 $('.select2multiple').select2({
   placeholder: "Escribe para buscar.."
-});
-$("#lead-agreement").change(function () {
+}); //onchangeOrganization
+
+window.organizationChange = function (lead_agreement_id, financial_id) {
+  if (lead_agreement_id != null) {
+    $('#lead-agreement').val(lead_agreement_id).trigger("change");
+  }
+
   var lead_agreement = $("#lead-agreement").val();
   $('#lead-content-agreement').hide();
 
@@ -1627,22 +1632,30 @@ $("#lead-agreement").change(function () {
   if (typeof lead_agreement === 'string' && lead_agreement.trim().length == 0) {
     $('#lead-content-agreement').hide();
   } else {
-    getFinancial(lead_agreement);
+    getFinancial(lead_agreement, financial_id);
   }
-});
-$("#lead-product-id").change(function () {
+};
+
+window.productChange = function (lead_product_id) {
+  $('#lead-financial_id').val(null).trigger('change');
+
+  if (lead_product_id != null) {
+    $('#lead-product-id').val(lead_product_id).trigger("change");
+  }
+
   var product_id = $("#lead-product-id").val();
   $('#content-financial').hide();
 
   if (product_id == 2) {
     $('#content-financial').show();
   }
-});
+};
 
-function getFinancial(lead_id) {
+function getFinancial(lead_id, financial_id) {
   $('#lead-financial_id').empty();
   axios.get("/panel/lead/financial/" + lead_id + "/show").then(function (response) {
     var result = response.data;
+    $('#lead-financial_id').empty();
 
     if (result != null) {
       var lead_financial = $('#lead-financial_id');
@@ -1657,13 +1670,11 @@ function getFinancial(lead_id) {
 
       var history_id = $("#history_id").val();
 
-      if (_lead_id != null || history_id != null) {
-        setData(false, false);
-      } else {
+      if (financial_id == null) {
         $('#lead-financial_id').val(null).trigger('change');
-      } //console.log('test');
-      //setData(false);
-
+      } else {
+        $('#lead-financial_id').val(financial_id).trigger('change');
+      }
     }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
@@ -1675,7 +1686,6 @@ window.changeOrigen = function (change_channel) {
   var lead_id = $("#lead_id").val();
   $('#lead-channel').empty();
   var lead_channel = $('#lead-channel');
-  console.log(lead_id);
   axios.get("/panel/lead/" + origin_id + "/origin/").then(function (response) {
     var result = response.data;
 
@@ -1712,19 +1722,15 @@ function setData(is_change_origen, is_change_organization) {
     var channel = result.channel;
     var financials = result.financials;
     var product_id = lead.product_id;
-
-    if (is_change_organization == true) {
-      $('#lead-agreement').val(lead.agreement_id);
-      $('#lead-agreement').trigger("change");
-    }
+    console.log(product_id);
+    productChange(product_id);
+    organizationChange(lead.agreement_id, lead.financial_id);
 
     if (is_change_origen == true) {
       $('#lead-origin').val(lead.origin_id);
       $('#lead-origin').trigger("change");
     }
 
-    $('#lead-product-id').val(lead.product_id);
-    $('#lead-product-id').trigger("change");
     $('#lead-asesor-id').val(lead.asesor_id);
     $('#lead-asesor-id').trigger("change");
     $('#lead-type_id').val(lead.type_id);
@@ -1741,7 +1747,6 @@ function setData(is_change_origen, is_change_organization) {
     }
 
     changeOrigen(lead.channel_id);
-    $('#lead-financial_id').val(lead.financial_id).trigger("change");
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();

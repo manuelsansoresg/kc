@@ -56,7 +56,7 @@
                                                                 <p class="small">Institución o empresa donde labora el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                    
-                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement"  data-search="on">
+                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null)"  data-search="on">
                                                                         @if ($lead_id == null)
                                                                             <option></option>
                                                                         @endif
@@ -80,7 +80,7 @@
                                                                 <label class="form-label">Producto KC</label>
                                                                 <p class="small">Producto que desea el prospecto</p>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[product_id]" id="lead-product-id"  data-search="on">
+                                                                    <select class="form-select js-select2" name="data[product_id]" onchange="productChange(null)" id="lead-product-id"  data-search="on">
                                                                         @if ($lead_id == null)
                                                                             <option value="">Escribe para buscar</option>
                                                                         @endif

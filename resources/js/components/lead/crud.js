@@ -9,73 +9,78 @@ $('.js-select2').select2({
 $('.select2multiple').select2({
     placeholder: "Escribe para buscar..",
 });
+//onchangeOrganization
+window.organizationChange = function(lead_agreement_id, financial_id){
+    
+    if (lead_agreement_id != null) {
+        $('#lead-agreement').val(lead_agreement_id).trigger("change");
+    }
 
-  $("#lead-agreement" ).change(function() {
-    let lead_agreement = $("#lead-agreement" ).val();
-    
+    let lead_agreement = $("#lead-agreement").val();
+
     $('#lead-content-agreement').hide();
-    
-  
     if (lead_agreement == 0) {
         $('#lead-content-agreement').show('slow');
     }
     if (typeof lead_agreement === 'string' && lead_agreement.trim().length == 0) {
         $('#lead-content-agreement').hide();
     } else {
-        getFinancial(lead_agreement);
-        
+        getFinancial(lead_agreement, financial_id);
     }
-  });
+}
 
-  $("#lead-product-id" ).change(function() {
-    let product_id = $("#lead-product-id" ).val();
+window.productChange = function(lead_product_id){
+    $('#lead-financial_id').val(null).trigger('change');
+    if (lead_product_id != null) {
+        $('#lead-product-id').val(lead_product_id).trigger("change");
+    }
+    let product_id = $("#lead-product-id").val();
     $('#content-financial').hide();
     if (product_id == 2) {
         $('#content-financial').show();
     }
-  });
+}
 
-  function getFinancial(lead_id) {
+
+function getFinancial(lead_id, financial_id) {
     $('#lead-financial_id').empty();
     axios
-        .get("/panel/lead/financial/"+lead_id+"/show")
+        .get("/panel/lead/financial/" + lead_id + "/show")
         .then(function (response) {
             let result = response.data;
+            $('#lead-financial_id').empty();
             if (result != null) {
                 var lead_financial = $('#lead-financial_id');
-                
+
                 for (const key in result) {
                     const element = result[key];
                     var option = new Option(element.commercial_name, element.id, true, true);
                     lead_financial.append(option).trigger('change');
-                    
-                }
-                
-                let lead_id = $("#lead_id" ).val();
-                let history_id = $("#history_id" ).val();
-                if (lead_id != null || history_id != null) {
-                    setData(false, false);
-                } else {
-                    $('#lead-financial_id').val(null).trigger('change');
+
                 }
 
-                //console.log('test');
-                //setData(false);
+                let lead_id = $("#lead_id").val();
+                let history_id = $("#history_id").val();
+                if (financial_id == null) {
+                    $('#lead-financial_id').val(null).trigger('change');
+                } else {
+                    $('#lead-financial_id').val(financial_id).trigger('change');
+                }
             }
         })
-    .catch(e => {
-        $('#admin_email-error-exist').show();
-    });
-  }
-  
-  window.changeOrigen = function(change_channel) {
-    let origin_id = $("#lead-origin" ).val();
-    let lead_id = $("#lead_id" ).val();
+        .catch(e => {
+            $('#admin_email-error-exist').show();
+        });
+}
+
+window.changeOrigen = function (change_channel) {
+    let origin_id = $("#lead-origin").val();
+    let lead_id = $("#lead_id").val();
     $('#lead-channel').empty();
+    
     var lead_channel = $('#lead-channel');
-    console.log(lead_id);
     axios
-        .get("/panel/lead/"+origin_id+"/origin/")
+        .get("/panel/lead/" + origin_id + "/origin/")
         .then(function (response) {
             let result = response.data;
             if (result != null) {
@@ -87,7 +92,7 @@ $('.select2multiple').select2({
                     }
                 }
             }
-            
+
             $('#lead-channel').val(null).trigger('change');
             if (change_channel != null) {
                 $('#lead-channel').val(change_channel).trigger("change");
@@ -97,58 +102,52 @@ $('.select2multiple').select2({
         .catch(e => {
             $('#admin_email-error-exist').show();
         });
-  }
+}
 
- 
 
-  /* $("#lead-origin" ).change(function() {
-    
-  }); */
+
+/* $("#lead-origin" ).change(function() {
+  
+}); */
 
 function setData(is_change_origen, is_change_organization) {
     let lead_id = $('#lead_id').val();
-    
+
     axios
         .get("/panel/lead/" + lead_id)
         .then(function (response) {
-            let result        = response.data;
-            let lead          = result.lead;
-            let channel       = result.channel;
-            let financials    = result.financials;
+            let result = response.data;
+            let lead = result.lead;
+            let channel = result.channel;
+            let financials = result.financials;
             let product_id = lead.product_id;
-            if (is_change_organization == true) {
-                $('#lead-agreement').val(lead.agreement_id);
-                $('#lead-agreement').trigger("change");
-            }
+            console.log(product_id);
+            productChange(product_id);
+            organizationChange(lead.agreement_id, lead.financial_id);
+         
             if (is_change_origen == true) {
                 $('#lead-origin').val(lead.origin_id);
                 $('#lead-origin').trigger("change");
             }
-            
-            $('#lead-product-id').val(lead.product_id);
-            $('#lead-product-id').trigger("change");
-            
-            
-            
+
             $('#lead-asesor-id').val(lead.asesor_id);
             $('#lead-asesor-id').trigger("change");
 
-            
+
             $('#lead-type_id').val(lead.type_id);
             $('#lead-type_id').trigger("change");
-            
-            $('#lead-name').val(lead.name); 
-            $('#lead-last_name').val(lead.last_name); 
-            $('#lead-second_last_name').val(lead.second_last_name); 
-            $('#lead-cellphone').val(lead.cellphone); 
-            $('#lead-email').val(lead.email); 
-           
+
+            $('#lead-name').val(lead.name);
+            $('#lead-last_name').val(lead.last_name);
+            $('#lead-second_last_name').val(lead.second_last_name);
+            $('#lead-cellphone').val(lead.cellphone);
+            $('#lead-email').val(lead.email);
+
             $('#content-financial').hide();
             if (product_id == 2) {
                 $('#content-financial').show();
             }
             changeOrigen(lead.channel_id);
-            $('#lead-financial_id').val(lead.financial_id).trigger("change");
             $('#lead-temperature-id').val(lead.financial_id).trigger("change");
         })
         .catch(e => {
@@ -158,12 +157,12 @@ function setData(is_change_origen, is_change_organization) {
 
 window.deleteLead = function (lead_id) {
     axios
-        .get("panel/lead/"+lead_id+"/delete")
+        .get("panel/lead/" + lead_id + "/delete")
         .then(function (response) {
             showInfo(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
         })
         .catch(e => {
-            
+
         });
 }
 
@@ -173,34 +172,34 @@ window.modalAdvisor = function (lead_id) {
     $('#modal-advisor').modal('show');
 }
 
-$( "#frm-advisor" ).submit(function( event ) {
+$("#frm-advisor").submit(function (event) {
     event.preventDefault();
-    let asesor_id   = $('#modal-advisor-id').val();
-    let lead_id     = $('#lead_advisor_id').val();
+    let asesor_id = $('#modal-advisor-id').val();
+    let lead_id = $('#lead_advisor_id').val();
     axios
-        .post("panel/lead/"+lead_id+"/advisor/store", {asesor_id:asesor_id})
+        .post("panel/lead/" + lead_id + "/advisor/store", { asesor_id: asesor_id })
         .then(function (response) {
             showInfo(2, 'dt-lead', 'Datos actualizados', 'Prospecto asignado');
             $('#modal-advisor').modal('hide');
         })
         .catch(e => {
-            
+
         });
 });
 
-window.createClientPerson = function(lead_id) {
+window.createClientPerson = function (lead_id) {
     axios
-    .post("panel/lead/"+lead_id+"/client-person/store")
-    .then(function (response) {
-        let result = response.data;
-        showInfo(2, 'dt-lead', 'Datos actualizados', 'Cuenta creada');
-    })
-    .catch(e => {
-        showToast('prospecto', 'Este email ya está registrado', 'warning');
-    });
+        .post("panel/lead/" + lead_id + "/client-person/store")
+        .then(function (response) {
+            let result = response.data;
+            showInfo(2, 'dt-lead', 'Datos actualizados', 'Cuenta creada');
+        })
+        .catch(e => {
+            showToast('prospecto', 'Este email ya está registrado', 'warning');
+        });
 }
 
-window.modalTags = function(lead_id) {
+window.modalTags = function (lead_id) {
     $('#modal-tag-lead_id').val(lead_id);
     $('#modal-tags').modal('show');
 }
@@ -222,20 +221,20 @@ if (document.getElementById('frm-tags')) {
     });
 }
 
-$( "#frm-tags" ).submit(function( event ) {
+$("#frm-tags").submit(function (event) {
     event.preventDefault();
     let lead_id = $('#modal-tag-lead_id').val();
     const new_form = document.getElementById("frm-tags");
     const data = new FormData(new_form);
 
     axios
-        .post("panel/lead/"+lead_id+"/tag/update", data)
+        .post("panel/lead/" + lead_id + "/tag/update", data)
         .then(function (response) {
             showInfo(2, 'dt-lead', 'Datos actualizados', 'Etiqueta actualizada');
             $('#modal-tags').modal('hide');
         })
         .catch(e => {
-            
+
         });
 });
 
@@ -263,16 +262,16 @@ $().ready(function () {
                 required: true,
             },
             'new_agreement': {
-                required: function(element) {
-                    let  lead_agreement = $("#lead-agreement").val();
-                    if(lead_agreement == 0) { 
+                required: function (element) {
+                    let lead_agreement = $("#lead-agreement").val();
+                    if (lead_agreement == 0) {
                         return true;
                     } else {
                         return false;
                     }
                 }
             },
-            
+
         },
         submitHandler: function (form, event) {
             event.preventDefault();
@@ -292,7 +291,7 @@ $().ready(function () {
         }
     });
 
-    
+
 
 });
 
@@ -306,13 +305,13 @@ window.modalRegisterAction = function (id_rel) {
     $('#modal-register-action').modal('show');
 }
 
-  $(document).ready(function(){
+$(document).ready(function () {
     if (document.getElementById('lead-channel')) {
         setData(true, true);
     }
-    
-  })
 
-  $(document).on("select2:open", () => {
+})
+
+$(document).on("select2:open", () => {
     document.querySelector(".select2-container--open .select2-search__field").focus()
-  })
+})
