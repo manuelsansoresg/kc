@@ -293,7 +293,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
             $percent_form   = self::percentForm($history);
             if ($percent_form == 100) {
                 HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT);
-                HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION);
+                HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, $credit->id, 1);//*marcar como completada la tarea
                 //*inicializar las acciones de la siguiente etapa en curso
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, $credit->id, 1);
@@ -446,7 +446,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $percent_desition       = self::percentDesition($history);
         $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION], $credit->id)[0];
         $hour                   = $in_progress->date_status_progress;
-
+        
         $menu_options           = self::menuOptionReportStep($history);
         $advisor                = $credit->creditAdvisor;
         $user                   = User::find($advisor->id);
