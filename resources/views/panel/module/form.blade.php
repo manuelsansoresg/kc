@@ -2,6 +2,7 @@
     @csrf
     @php
         $name_button = isset($name_button)? $name_button : 'Guardar';
+        
     @endphp
 
     <div class="row gy-4">
@@ -9,6 +10,7 @@
             @php
                 $indicator_required = $element['is_required'] == true ? '*' : '';
                 $value = isset($element['value'])? $element['value'] : null;
+                
             @endphp
             @if ($element['title_section'] != '')
                 <span class="preview-title-lg overline-title">{{ $element['title_section'] }}</span>
@@ -144,6 +146,7 @@
                 @php
                     $options = $element['options'];
                     $is_option_array = $element['is_option_array'];
+                    $onchange = isset($element['onchange']) && $element['onchange'] != null ? $element['onchange'] : null;
                 @endphp
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
@@ -151,7 +154,11 @@
                         <div class="form-control-wrap">
 
                             <select class="form-select js-select2" {{ $element['is_disabled'] }}
-                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" data-search="on">
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}"
+                                @if ($onchange != null) 
+                                onchange="{{ $onchange}}"
+                                @endif
+                                data-search="on">
                                 <option></option>
                                 @if ($options != null && $is_option_array == false)
                                     @foreach ($options as $option)

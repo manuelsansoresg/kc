@@ -81,6 +81,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'type' => 'select2',
                 'is_option_array' => false,
                 'options' => $options_agreement,
+                'onchange' => 'organizationChange(null,null)',
                 'is_required' => true,
                 'is_disabled' => null
             ],
@@ -513,7 +514,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $hour                         = $data_deadline['lbl_hour'];
 
         $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        return $percent;
     }
 
     public function menuOptions($history)

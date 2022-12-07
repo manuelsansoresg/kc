@@ -2997,7 +2997,7 @@ $().ready(function () {
 
         if (type_form == 8) {
           //checkup
-          $('#lead-agreement').val(credit.agreement_id).trigger("change");
+          organizationChange(credit.agreement_id, null);
           $('#name').val(client.name);
           $('#last_name').val(client.last_name);
           $('#second_last_name').val(client.second_last_name);
@@ -3006,12 +3006,11 @@ $().ready(function () {
 
         if (type_form == 12) //reduccion
           {
-            $('#lead-agreement').val(credit.agreement_id).trigger("change");
+            organizationChange(credit.agreement_id, credit.financial_id);
             $('#name').val(client.name);
             $('#last_name').val(client.last_name);
             $('#second_last_name').val(client.second_last_name);
             $('#cellphone').val(client.cellphone);
-            $('#lead-financial_id').val(credit.financial_id).trigger("change");
             $('#current_payment').val(credit.current_payment / 100);
             $('#current_periodicity').val(credit.current_periodicity).trigger("change");
             $('#current_loan').val(credit.current_loan / 100);

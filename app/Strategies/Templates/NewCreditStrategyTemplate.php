@@ -54,6 +54,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $name_form = 'frm-template_new_credit';
         $type_form = HistoryLog::KC_CHECK_UP_ACTION_FORM;
         $options_agreement = Agreement::getAllActive();
+
         $elements = array(
             1 => [
                 'title_section' => 'Generales',
@@ -80,6 +81,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'type' => 'select2',
                 'is_option_array' => false,
                 'options' => $options_agreement,
+                'onchange' => 'organizationChange(null, null)',
                 'is_required' => true,
                 'is_disabled' => null
             ],
@@ -396,7 +398,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $hour                         = $data_deadline['lbl_hour'];
 
         $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        return $percent;
     }
 
     public function menuOptions($history)
