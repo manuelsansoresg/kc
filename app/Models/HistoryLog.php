@@ -226,7 +226,7 @@ class HistoryLog extends Model
         47 => 'swap',
     ];
 
-    public static function move($id_rel, $status_id, $old_status_id, $request = null, $is_subprocess = false)
+    public static function move($id_rel, $status_id, $old_status_id, $request = null, $update_old_status = true)
     {
         if ($request != null) {
             $data = $request->data;
@@ -247,7 +247,7 @@ class HistoryLog extends Model
         //*if exist reset to 0
         $get_old_status = HistoryLog::where($data_old_status);
         //dd($data_old_status);
-        if ($get_old_status != null) {
+        if ($get_old_status != null && $update_old_status == true) {
             $get_old_status->update(['status' => 0]);
         }
         //* if new status and old status don't exist create status
@@ -288,9 +288,6 @@ class HistoryLog extends Model
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, $id_rel, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $id_rel, 0);
             }
-
-            
-
         }
         
         if ($status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
@@ -320,16 +317,10 @@ class HistoryLog extends Model
         if ($status_id == HistoryLog::KC_CONTROL_DESK) {
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD, HistoryLog::KC_CONTROL_DESK_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5);
-
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $id_rel, 0);
         }
+
         if ($status_id == HistoryLog::KC_DELIVERY) {
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2);

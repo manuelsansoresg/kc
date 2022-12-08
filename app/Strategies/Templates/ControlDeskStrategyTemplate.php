@@ -98,7 +98,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             5 => [
                 'name' => 'Edo Cta bancario',
                 'comment' => 'Último estado de cuenta',
-                'is_required' => false,
+                'is_required' => true,
                 'is_date' => false,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
@@ -1849,25 +1849,31 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $percent_form_step2   = self::percentFormStep2($history);
             $percent_form_step3   = self::percentFormStep3_1($history);
             $percent_form_step3_2   = self::percentFormStep3_2($history);
-
+            //* percent 4 is in kccontroldeskcontroller function validateKyc
             $percent_form_step5   = self::percentFormStep5($history);
             
             
             if ($percent_form_step1 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 1);
                  //*inicializar las acciones de la siguiente etapa en curso
+                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, null, false);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $credit->id, 0);
             }
             
             if ($percent_form_step2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $credit->id, 1);
                  //*inicializar las acciones de la siguiente etapa en curso
+                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, null, false);
+                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, null, false);
+                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, null, false);
+
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, $credit->id, 0);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, $credit->id, 0);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, $credit->id, 0);
             }
 
             if ($percent_form_step3 == 100) {
+                
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, $credit->id, 1);
             }
             
@@ -1877,12 +1883,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             
             if ($percent_form_step3 == 100 && $percent_form_step3_2 == 100) {
                  //*inicializar las acciones de la siguiente etapa en curso
+                 HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, null, false);
                  HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $credit->id, 0);
             }
 
             if ($percent_form_step5 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
-                HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK);
+                HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK, null, false);
                 $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
                 (new $notification_add)->send($credit->id);
                 if ($step_origin == 1) { //* comes from swap, create the next stages
@@ -1894,6 +1901,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function listStep($history_id)
     {
+        
         $history                      = HistoryLog::find($history_id);
 
         $credit                       = $history->historyCredit;
@@ -1905,15 +1913,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $file                         = $percent_file == 100 ? 50 : 0;
         $form                         = $percent_form == 100 ? 50 : 0;
         $total_percent                = $file + $form;
-
         $percent_form_step2           = self::percentFormStep2($history); // etapa 2
-
+        
         $percent_form_step3_upload    = self::percentFile($credit->id, 3);
         $percent_form_step3_1         = self::percentFormStep3_1($history); //etapa 3
         $percent_form_step3_2         = self::percentFormStep3_2($history); //etapa 3
         
         $percent_form_step4           = self::percentFormStep4($history); //etapa 4
-
+        
         $percent_form_step5           = self::percentFormStep5($history); //etapa 5
         
         $new_step3 = $percent_form_step3_upload == 100 ? 1 : 0;
@@ -1944,8 +1951,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $status_step4 = ($percent_form_step4 >= 100) ? 'Concluido' : 'En curso';
             $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
         }
-
+        
         $data_deadline    = deadline($hour, $max_hour, $total_percent, $color_inf_credit);
+        
         $color_inf_credit = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
 
@@ -2232,12 +2240,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function actionStep2($history_id, $step_origin = null)
     {
 
+        
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
         $percent_form   = self::percentFormStep2($history);
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $user = User::find($advisor->id);
+        
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
@@ -2325,14 +2335,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_file   = self::percentFile($credit->id, 3);
         $percent_form1   = self::percentFormStep3_1($history);
         $percent_form2   = self::percentFormStep3_2($history);
-
-        $new_percent_form1 = ($percent_form1 == 100) ? 50 : $percent_form1;
-        $new_percent_form2 = ($percent_form2 == 100) ? 50 : $percent_form2;
-
-        $percent_form = $new_percent_form1 + $new_percent_form2;
+        $status_form1 = 'En espera';
+        $status_form2 = 'En espera';
 
         $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
-        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $status_form1    = $percent_form1 == 100 ? 'Concluido' : 'En curso';
+        $status_form2    = $percent_form2 == 100 ? 'Concluido' : 'En curso';
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -2372,7 +2380,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject2,
-            'status' => $status_form,
+            'status' => $status_form1,
             'deadline' => $view_dead_line2,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -2381,7 +2389,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject3,
-            'status' => $status_form,
+            'status' => $status_form2,
             'deadline' => $view_dead_line3,
             'advisor' => $name_advisor,
             'options' => $form_option2,
