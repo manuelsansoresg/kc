@@ -735,16 +735,24 @@ class SwapStrategyTemplate implements TemplateInterface
         }
         if ($history != null) {
             $percent_form_step1   = self::percentForm($history);
+            
             $percent_form_step2   = self::percentFormStep2($history);
-            $percent_form_3_2           = self::percentFormStep3($history);
 
+            $percent_form_2         = self::percentFormStep2($history);
+            $percent_form_2_2       = self::percentFormStep2_2($history);
+            $percent_form_2_3       = self::percentFile($credit->id, '2');
+            $percent_form_2_4       = self::percentFormStep2_3($history);
+
+
+            $percent_form_3_2           = self::percentFormStep3($history);
             if ($percent_form_step1 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM, $credit->id, 1);
-                 //*inicializar las acciones de la siguiente etapa en curso
-                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $credit->id, 0);
             }
            
-            if ($percent_form_step2 == 100) {
+            if ($percent_form_2 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2, $credit->id, 1);
+                //*inicializar las acciones de la siguiente etapa en curso
+                HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_2_2, HistoryLog::KC_SWAP_FORM_STEP_2_2, null, false);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2, $credit->id, 1);
             }
             
@@ -1062,10 +1070,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_file                 = self::percentFile($credit->id, '1_2');
         if ($percent_file == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_2, $credit->id, 1);
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_2, HistoryLog::KC_SWAP_FORM_STEP_2, null, false);
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2, $credit->id, 0);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_2, $credit->id, 0);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, $credit->id, 0);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_3, $credit->id, 0);
         }
         $max_hour                     = self::HOUR_STEP_1;
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD_2], $credit->id)[0];

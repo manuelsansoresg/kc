@@ -2140,7 +2140,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         if ($percent_form == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $credit->id, 1);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $credit->id, 1);
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM, null, false);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 0);
         }
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
