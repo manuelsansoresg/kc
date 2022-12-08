@@ -982,10 +982,10 @@ window.desition = function (credit_id, financial_id, type) {
         var reason = response.data;
 
         if (type == 1) {
-          window.location = '/panel/kc-control-desk';
+          window.location = '/panel/kc-check-up';
+        } else {
+          window.location = '/panel/kc-swap';
         }
-
-        window.location = '/panel/kc-swap';
       })["catch"](function (e) {});
     }
   });
