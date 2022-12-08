@@ -2884,7 +2884,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $client     = $credit->creditClientPerson;
         $total_valid = 0;
 
-        if ($credit->kyc_done == 0 || $credit->kyc_done == 1) {
+        if ($credit->kyc_done == 1 || $credit->kyc_done == 2) {
             $total_valid = 100;
         }
         $percent =  (100 / 100) * $total_valid;
