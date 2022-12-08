@@ -30,7 +30,8 @@ class KcControlDeskController extends Controller
         $history = HistoryLog::find($history_id);
 
         $get_credit = Credit::find($history->id_rel);
-        $get_credit->kyc_done = 0;
+        //* kyc 1= not found 2= found
+        $get_credit->kyc_done = 1;
         $get_credit->update();
 
         HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $get_credit->id, 1); //* marcar como finalizada la accion
