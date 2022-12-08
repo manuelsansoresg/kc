@@ -173,8 +173,8 @@ class NewCreditStrategyTemplate implements TemplateInterface
         if ($history != null) {
             $percent_form   = self::percentForm($history);
             if ($percent_form == 100) {
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_REPORT, HistoryLog::KC_CHECK_UP_ACTION_REPORT);
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION);
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_REPORT, HistoryLog::KC_CHECK_UP_ACTION_REPORT, null, false);
+                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION, null, false);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $credit->id, 1); //*marcar como completada la tarea
                 //*inicializar las acciones de la siguiente etapa en curso
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_REPORT, $credit->id, 1);
