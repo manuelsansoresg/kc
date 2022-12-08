@@ -2912,21 +2912,55 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     {
         $credit     = $history->historyCredit;
         $data_actions = array(
-            HistoryLog::KC_CHECK_UP_ACTION_FORM,
-            HistoryLog::KC_CHECK_UP_ACTION_DESITION,
+            HistoryLog::KC_CONTROL_DESK_UPLOAD,
+            HistoryLog::KC_CONTROL_DESK_FORM,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_2,
+            HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
         );
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
         $status_progress = 0;
-        $current_show = null;
+        $current_show = 'Documentos cliente';
 
         foreach ($get_actions as $key => $get_action) {
             $status = $get_action->status_progress;
             $status_progress += $status != null ? $status : 0;
-            $current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_CHECK_UP_ACTION_FORM ? 'Información del crédito': 'Reporte';
         }
 
-        $percent =  (($status_progress) / 2) * 100;
+        switch ($status_progress) {
+            case 1:
+                $current_show = 'Determinar crédito max';
+                break;
+            case 2:
+                $current_show = 'Crédito deseado';
+                break;
+            case 3:
+                $current_show = 'Documentos cliente';
+                break;
+            case 4:
+                $current_show = 'Llenado de solicitud';
+                break;
+            case 5:
+                $current_show = 'Entrevista';
+                break;
+            case 6:
+                $current_show = 'Análisis KYC';
+                break;
+            case 7:
+                $current_show = 'Contactar financiera';
+                break;
+            
+            default:
+                $current_show = 'Documentos cliente';
+                break;
+        }
+
+        $percent =  (($status_progress) / 5) * 100;
+        
 
         if ($show_current_show == true) {
             return $current_show;
