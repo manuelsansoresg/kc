@@ -2959,7 +2959,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 break;
         }
 
-        $percent =  (($status_progress) / 5) * 100;
+        $percent =  (($status_progress) / 8) * 100;
         
 
         if ($show_current_show == true) {
