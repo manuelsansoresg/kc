@@ -1855,7 +1855,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             
             if ($percent_form_step1 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 1);
-                 //*inicializar las acciones de la siguiente etapa en curso
                 HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, null, false);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $credit->id, 0);
             }
@@ -1873,7 +1872,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             }
 
             if ($percent_form_step3 == 100) {
-                
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, $credit->id, 1);
             }
             
@@ -2140,9 +2138,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         if ($percent_form == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $credit->id, 1);
-            //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 0);
         }
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
@@ -2887,9 +2882,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent = 0;
         $credit     = $history->historyCredit;
         $client     = $credit->creditClientPerson;
-
         $total_valid = 0;
-        if ($client->kyc_done != null) {
+
+        if ($credit->kyc_done == 0 || $credit->kyc_done == 1) {
             $total_valid = 100;
         }
         $percent =  (100 / 100) * $total_valid;
