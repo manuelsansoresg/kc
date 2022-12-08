@@ -316,10 +316,10 @@ class HistoryLog extends Model
 
         if ($status_id == HistoryLog::KC_CONTROL_DESK) {
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD, HistoryLog::KC_CONTROL_DESK_UPLOAD);
-            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM);
 
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $id_rel, 0);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $id_rel, 0);
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
