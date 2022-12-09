@@ -1925,7 +1925,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $new_step3_1 = $percent_form_step3_1 == 100 ? 1 : 0;
         $new_step3_2 = $percent_form_step3_2 == 100 ? 1 : 0;
         
-        $percent_form_step3 = ($new_step3 + $new_step3_1 + $new_step3_2) / 3* 100;
+        $percent_form_step3 = ($new_step3 + $new_step3_1 + $new_step3_2 / 3)* 100;
 
         $color_inf_credit     = 'success';
         $color_report         = 'success';
