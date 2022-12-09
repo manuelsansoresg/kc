@@ -2749,39 +2749,39 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $total_valid = 0;
         if ($credit != null && $credit->applied_financial != '') {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
         
         if ($credit != null && $credit->applied_financial_product != null) {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->applied_loan_type != null) {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
 
         if ($credit != null && $credit->applied_import != null) {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
 
         if ($credit != null && $credit->applied_term != null) {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->applied_periodicity != null) {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->applied_payment != null) {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->applied_loan_total_amount != null) {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->applied_interest_rate != null) {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->applied_CAT != null) {
-            $total_valid = $total_valid + 10;
+            $total_valid = $total_valid + 1;
         }
-        $percent =  (100 / 100) * $total_valid;
+        $percent = ($total_valid / 10) * 100;
         return $percent;
     }
 
