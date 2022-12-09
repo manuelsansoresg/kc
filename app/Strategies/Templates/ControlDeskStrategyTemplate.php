@@ -1913,7 +1913,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $total_percent                = $file + $form;
         $percent_form_step2           = self::percentFormStep2($history); // etapa 2
         
-        $percent_form_step3_upload    = self::percentFile($credit->id, 3);
         $percent_form_step3_1         = self::percentFormStep3_1($history); //etapa 3
         $percent_form_step3_2         = self::percentFormStep3_2($history); //etapa 3
         
@@ -1921,11 +1920,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         $percent_form_step5           = self::percentFormStep5($history); //etapa 5
         
-        $new_step3 = $percent_form_step3_upload == 100 ? 1 : 0;
         $new_step3_1 = $percent_form_step3_1 == 100 ? 1 : 0;
         $new_step3_2 = $percent_form_step3_2 == 100 ? 1 : 0;
         
-        $percent_form_step3 = ($new_step3 + $new_step3_1 + $new_step3_2 )/ 3* 100;
+        $percent_form_step3 = ($new_step3_1 + $new_step3_2 )/ 2* 100;
 
         $color_inf_credit     = 'success';
         $color_report         = 'success';
@@ -2335,7 +2333,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $status_form1 = 'En espera';
         $status_form2 = 'En espera';
 
-        $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
         $status_form1    = $percent_form1 == 100 ? 'Concluido' : 'En curso';
         $status_form2    = $percent_form2 == 100 ? 'Concluido' : 'En curso';
 
@@ -2346,7 +2343,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $menu_options   = self::menuOptionsStep3($history, $step_origin);
 
 
-        $view_dead_line1  = self::deadLineUploadStep3($history);
         $view_dead_line2  = self::deadLineStep3($history);
         $view_dead_line3  = self::deadLineStep3_2($history);
 
@@ -2368,8 +2364,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject1,
-            'status' => $status_file,
-            'deadline' => $view_dead_line1,
+            'status' => 'Opcional',
+            'deadline' => 'N/A',
             'advisor' => $name_advisor,
             'options' => $file_option,
         );
@@ -2912,7 +2908,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             HistoryLog::KC_CONTROL_DESK_UPLOAD,
             HistoryLog::KC_CONTROL_DESK_FORM,
             HistoryLog::KC_CONTROL_DESK_FORM_STEP_2,
-            HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1,
             HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
             HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
             HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
@@ -2921,39 +2916,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
         $status_progress = 0;
-        $current_show = 'Documentos cliente';
+        $current_show = 'Viabilidad';
 
         foreach ($get_actions as $key => $get_action) {
             $status = $get_action->status_progress;
-            $status_progress += $status != null ? $status : 0;
+            $status_progress += $status > 0 ? 1 : 0;
         }
-
-        switch ($status_progress) {
-            case 1:
-                $current_show = 'Determinar crédito max';
-                break;
-            case 2:
-                $current_show = 'Crédito deseado';
-                break;
-            case 3:
-                $current_show = 'Documentos cliente';
-                break;
-            case 4:
-                $current_show = 'Llenado de solicitud';
-                break;
-            case 5:
-                $current_show = 'Entrevista';
-                break;
-            case 6:
-                $current_show = 'Análisis KYC';
-                break;
-            case 7:
-                $current_show = 'Contactar financiera';
-                break;
-            
-            default:
-                $current_show = 'Documentos cliente';
-                break;
+        if ($status_progress < 2) {
+            $current_show = 'Viabilidad';
+        } elseif ($status_progress < 3) {
+            $current_show = 'Características del crédito';
+        } elseif ($status_progress < 5) {
+            $current_show = 'Captura de información';
+        } elseif ($status_progress > 4 && $status_progress < 7) {
+            $current_show = 'KYC';
+        } elseif ($status_progress == 7) {
+            $current_show = ' Asignar usuario financiera';
         }
 
         $percent =  (($status_progress) / 8) * 100;
