@@ -94,7 +94,11 @@
                                                         <label class="form-label">Fecha del documento</label>
                                                         <p><small>{{ $file['comment_date'] }}</small></p>
                                                         <div class="form-control-wrap">
-                                                            <input type="text" id="{{ $key}}-date_file"  name="date_file[{{ $key }}]" class="form-control date-picker" data-date-format="yyyy-mm-dd" required>
+                                                            <input type="text" id="{{ $key}}-date_file" 
+                                                            @if (isset($file['is_required']) && $file['is_required'] == true)
+                                                                required
+                                                            @endif
+                                                            name="date_file[{{ $key }}]" class="form-control date-picker" data-date-format="yyyy-mm-dd">
                                                         </div>
                                                     </div>
                                                 </div>

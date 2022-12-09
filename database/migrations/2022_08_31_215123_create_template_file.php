@@ -17,7 +17,7 @@ class CreateTemplateFile extends Migration
             $table->id();
             $table->integer('model');
             $table->integer('template_config_id');
-            $table->date('date_file');
+            $table->date('date_file')->nullable();
             $table->bigInteger('id_rel');
             $table->timestamps();
         });
