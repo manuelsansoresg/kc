@@ -98,7 +98,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             5 => [
                 'name' => 'Edo Cta bancario',
                 'comment' => 'Último estado de cuenta',
-                'is_required' => true,
+                'is_required' => false,
                 'is_date' => false,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
