@@ -320,6 +320,8 @@ class HistoryLog extends Model
 
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $id_rel, 0);
+            //*Cuando es crédito nuevo y viene de KC-Checkup
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $credit->id, 1);
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
@@ -351,6 +353,8 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5); */
 
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD, $id_rel, 0);
+            //*Cuando es crédito nuevo y viene de KC-Checkup
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $credit->id, 1);
         }
 
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
@@ -428,6 +432,37 @@ class HistoryLog extends Model
             }
             return $status;
         }
+    }
+
+    public function getCurrentModule($credit_id)
+    {
+        $lbl_module = array(
+            HistoryLog::KC_CHECK_UP => 'KC- Check up',
+            HistoryLog::KC_CONTROL_DESK => 'KC- Swap',
+            HistoryLog::KC_DELIVERY => 'KC- Control desk',
+            HistoryLog::KC_AFTER_MARKET => 'KC- Delivery',
+            HistoryLog::KC_SWAP => 'KC- After market',
+        );
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP,
+            HistoryLog::KC_CONTROL_DESK,
+            HistoryLog::KC_DELIVERY,
+            HistoryLog::KC_AFTER_MARKET,
+            HistoryLog::KC_SWAP,
+        );
+        $status_progress = 0;
+        $current_status = 'KC- Check up';
+        $get_actions = HistoryLog::getByStatus($data_actions, $credit_id);
+
+        foreach ($get_actions as $key => $get_action) {
+            $status_id = $get_action->status_id;
+            $status = $get_action->status_progress;
+            $status_progress = $status > 0 ? 1 : 0;
+            if ($status_progress == 1) {
+                $lbl_module[$status_id];
+            }
+        }
+        return $current_status;
     }
 
     public function historyLead()

@@ -213,7 +213,7 @@
                                                 </div>
                                                 <div class="tab-pane" id="tabHistorial">
                                                     @php
-                                                        $histories = $m_history_log->getByStatus([5, 6], $credit->id);
+                                                        $histories = $m_history_log->getByStatus([5, 6, 21, 30, 37, 36], $credit->id);
                                                         $leyend_status = $m_history_log::$label_status;
                                                     @endphp
                                                     @foreach ($histories as $history)
@@ -570,7 +570,7 @@
 
                                                 <div class="col-6">
                                                     <span class="sub-text">Módulo:</span>
-                                                    <span>KC- Check up</span>
+                                                    <span>{{ $m_history_log->getCurrentModule($credit->id) }}</span>
                                                 </div>
                                             </div>
                                         </div><!-- .card-inner -->

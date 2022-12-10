@@ -1888,6 +1888,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             if ($percent_form_step5 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
                 HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK, null, false);
+
                 $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
                 (new $notification_add)->send($credit->id);
                 if ($step_origin == 1) { //* comes from swap, create the next stages
