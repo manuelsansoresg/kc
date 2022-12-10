@@ -113,7 +113,7 @@ class Credit extends Model
             $status_id        = $history->status_id;
             $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
 
-            if ($history->status_id === HistoryLog::KC_AFTER_MARKET) {
+            if ($history->status_id === HistoryLog::KC_AFTER_MARKET || $history->status_id === HistoryLog::KC_CONTROL_DESK) {
                 $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
                 $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
             }

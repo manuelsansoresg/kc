@@ -1898,6 +1898,59 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
     }
 
+    public function menuPrincipalOptions($history)
+    {
+        $credit           = $history->historyCredit;
+        $client           = $credit->creditClientPerson;
+        $status_cancel    = HistoryLog::CREDIT_CANCELED;
+        $status_reject    = HistoryLog::CREDIT_REJECTED;
+        $status_archive   = HistoryLog::CREDIT_ARCHIVE;
+        $old_status       = HistoryLog::KC_CHECK_UP;
+
+        $menu = array(
+            'options' => array(
+                [
+                    'link' => '/panel/client/'.$client->id,
+                    'onclick' => '',
+                    'name' => 'Ver perfil cliente',
+                    'icon' => 'icon ni ni-user-fill'
+                ],
+                [
+                    'link' => '/panel/credit/'.$credit->id,
+                    'onclick' => '',
+                    'name' => 'Ver perfil crédito',
+                    'icon' => 'icon ni ni-report-profit'
+                ],
+                [
+                    'link' => '/panel/template/steps/controlDesk/'.$history->id.'/show',
+                    'onclick' => '',
+                    'name' => 'Ver etapas',
+                    'icon' => 'icon ni ni-list-thumb-fill'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => 'moveModal("Cancelar",'.$credit->id.','.$status_cancel.','.$old_status.',"dt-control-desk")',
+                    'name' => 'Cancelar',
+                    'icon' => 'icon ni ni-cross-circle-fill'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => 'moveModal("Rechazar",'.$credit->id.','.$status_reject.','.$old_status.',"dt-control-desk")',
+                    'name' => 'Rechazar',
+                    'icon' => 'icon ni ni-cross-round-fill'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => 'moveModal("Archivar",'.$credit->id.','.$status_archive.','.$old_status.',"dt-control-desk")',
+                    'name' => 'Archivar',
+                    'icon' => 'icon ni ni-archive-fill'
+                ]
+            ),
+        );
+
+        return $menu;
+    }
+
     public function listStep($history_id)
     {
         

@@ -246,7 +246,6 @@ class HistoryLog extends Model
         );
         //*if exist reset to 0
         $get_old_status = HistoryLog::where($data_old_status);
-        //dd($data_old_status);
         if ($get_old_status != null && $update_old_status == true) {
             $get_old_status->update(['status' => 0]);
         }
