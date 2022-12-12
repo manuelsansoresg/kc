@@ -45,7 +45,8 @@ $().ready(function () {
             axios
                 .post("/panel/reference/" + history_id + "/storeReference", data)
                 .then(function (response) {
-                    window.history.back();
+                    $('#dt-credit-reference').DataTable().ajax.reload();
+                    $('#modal-reference').modal('hide');
 
                 })
                 .catch(e => {

@@ -204,7 +204,7 @@
             @if ($element['title_section'] == 'Referencias')
                 <div class="py-2">
                     <div class="float-end">
-                        <a href="/panel/reference/controlDesk/{{ $history_id }}/form?step={{ isset($_GET['step']) ? '?step=' . $_GET['step'] : null }}"
+                        <a onclick="modalReference({{ $history_id }}, null)"
                             class="btn btn-icon btn-primary"><em class="icon ni ni-plus"></em></a>
                     </div>
                     <div class="row gy-4 mt-3">

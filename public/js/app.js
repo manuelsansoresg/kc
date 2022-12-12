@@ -2485,7 +2485,8 @@ $().ready(function () {
       var history_id = $('#history_id').val();
       var reference_id = $('#reference_id').val();
       axios.post("/panel/reference/" + history_id + "/storeReference", data).then(function (response) {
-        window.history.back();
+        $('#dt-credit-reference').DataTable().ajax.reload();
+        $('#modal-reference').modal('hide');
       })["catch"](function (e) {});
     }
   });
@@ -3262,6 +3263,37 @@ window.kycCreditHistory = function (history_id) {
     var result = response.data;
     window.history.back();
   })["catch"](function (e) {});
+};
+
+window.modalReference = function (history_id, reference_id) {
+  $('#modal_history_id').val(history_id);
+  $('#modal_reference_id').val(reference_id);
+
+  if (reference_id != null) {
+    axios.get("/panel/reference/" + reference_id + "/show").then(function (response) {
+      var result = response.data;
+      $('#last_name').val(result.last_name);
+      $('#second_lastname').val(result.second_lastname);
+      $('#names').val(result.names);
+      $('#relationship').val(result.relationship);
+      $('#relationship_time_years').val(result.relationship_time_years);
+      $('#relationship_time_months').val(result.relationship_time_months);
+      $('#cel_phone').val(result.cel_phone);
+      $('#local_phone').val(result.local_phone);
+      $('#contact_time').val(result.contact_time);
+      $('#postal_code').val(result.postal_code);
+      $('#street').val(result.street);
+      $('#home_external_number').val(result.home_external_number);
+      $('#home_internal_number').val(result.home_internal_number);
+      $('#colony').val(result.colony);
+      $('#city').val(result.city);
+      $('#state').val(result.state);
+      $('#country').val(result.country);
+      $('#note').val(result.note);
+    })["catch"](function (e) {});
+  }
+
+  $('#modal-reference').modal('show');
 };
 
 window.swapCreditContinue = function (history_id) {

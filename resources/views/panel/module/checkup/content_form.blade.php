@@ -78,4 +78,5 @@
         </div>
     </div>
 </div>
+@include('panel.action.modal.modal_reference')
 @endsection

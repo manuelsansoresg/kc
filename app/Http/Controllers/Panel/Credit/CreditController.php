@@ -69,6 +69,12 @@ class CreditController extends Controller
         $reference =  CreditReference::find($reference_id);
         return view('panel.credit.reference.form', compact('history_id', 'reference_id', 'reference'));
     }
+   
+    public function showReference($reference_id)
+    {
+        $reference =  CreditReference::find($reference_id);
+        return response()->json($reference);
+    }
 
     public function deleteReference($reference_id)
     {

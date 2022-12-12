@@ -113,7 +113,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function configForm($id_rel, $history_id = null)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
-
         if ($step == 1) {
             return self::configFormStep1($id_rel, $history_id);
         } elseif ($step == 2) {

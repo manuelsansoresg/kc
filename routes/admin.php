@@ -219,6 +219,7 @@ Route::group(['prefix' => 'reference'], function () {
     Route::post('{history_id}/storeReference', ['\App\Http\Controllers\Panel\Credit\CreditController', 'storeReference'])->middleware('auth');
     Route::get('{history_id}/list', ['\App\Http\Controllers\Panel\Credit\CreditController', 'listReference'])->middleware('auth');
     Route::get('{history_id}/{reference_id}/edit', ['\App\Http\Controllers\Panel\Credit\CreditController', 'editReference'])->middleware('auth');
+    Route::get('{reference_id}/show', ['\App\Http\Controllers\Panel\Credit\CreditController', 'showReference'])->middleware('auth');
     Route::delete('{reference_id}/delete', ['\App\Http\Controllers\Panel\Credit\CreditController', 'deleteReference'])->middleware('auth');
 });
 

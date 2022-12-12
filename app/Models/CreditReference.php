@@ -71,8 +71,8 @@ class CreditReference extends Model
         $menu = array(
             'options' => array(
                 [
-                    'link' => '/panel/reference/'.$history->id.'/'.$reference_id.'/edit',
-                    'onclick' => '',
+                    'link' => null,
+                    'onclick' => 'modalReference('.$history->id.','.$reference_id.')',
                     'name' => 'Editar',
                     'icon' => 'icon ni ni-edit',
                 ],
