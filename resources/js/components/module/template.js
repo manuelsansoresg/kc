@@ -256,6 +256,37 @@ $().ready(function () {
             'client_person[marital_status]': {
                 required: true,
             },
+            /* domicilio */
+
+            'client_person[client_postal_code]': {
+                required: true,
+                number: true,
+                minlength: 5,
+                maxlength:5
+            },
+            
+            'client_person[client_street]': {
+                required: true,
+            },
+            'client_person[client_home_external_number]': {
+                required: true,
+            },
+            'client_person[client_home_internal_number]': {
+                required: true,
+            },
+            'client_person[client_colony]': {
+                required: true,
+            },
+            'client_person[client_city]': {
+                required: true,
+            },
+            'client_person[client_state]': {
+                required: true,
+            },
+            'client_person[client_country]': {
+                required: true,
+            },
+
             'client_person[relative_local_phone]': {
                 number: true,
                 minlength: 10,
