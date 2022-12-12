@@ -2686,9 +2686,6 @@ $().ready(function () {
       'client_person[client_home_external_number]': {
         required: true
       },
-      'client_person[client_home_internal_number]': {
-        required: true
-      },
       'client_person[client_colony]': {
         required: true
       },
@@ -2730,9 +2727,6 @@ $().ready(function () {
         required: true
       },
       'client_person[workplace_home_external_number]': {
-        required: true
-      },
-      'client_person[workplace_home_internal_number]': {
         required: true
       },
       'client_person[workplace_colony]': {
