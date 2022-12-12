@@ -2670,8 +2670,8 @@ $().ready(function () {
       },
       'client_person[curp]': {
         required: true,
-        minlength: 13,
-        maxlength: 13
+        minlength: 18,
+        maxlength: 18
       },
       'client_person[client_postal_code]': {
         required: true,
