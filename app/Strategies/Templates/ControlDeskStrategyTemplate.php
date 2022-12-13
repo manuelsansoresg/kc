@@ -1287,7 +1287,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
 
             25 => [
-                'title_section' => 'Domicilio',
+                'title_section' => 'Bienes',
                 'title' => null,
                 'name_field' => null,
                 'id_field' => null,
