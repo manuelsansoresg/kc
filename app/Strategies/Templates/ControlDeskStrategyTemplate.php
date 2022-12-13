@@ -2517,7 +2517,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit                       = $history->historyCredit;
         $color_inf_credit             = 'success';
         $percent_form1                = self::percentFormStep3_2($history);
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1], $credit->id)[0];
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2], $credit->id)[0];
         $max_hour                     = self::HOUR_STEP_3;
         $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_form1, $color_inf_credit);

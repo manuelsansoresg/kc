@@ -391,9 +391,7 @@ class HistoryLog extends Model
                     ->where('id_rel', $id_rel)
                     ->where('status', 1);
         $data_update['status_progress'] = $status_progress;
-        if ($status_progress == 0) {
-            $data_update['date_status_progress'] =  date('Y-m-d H:i:s');
-        }
+        $data_update['date_status_progress'] =  date('Y-m-d H:i:s');
         $history->update($data_update);
         $get_history = null;
         if ($history->first() != null) {
