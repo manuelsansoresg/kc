@@ -160,7 +160,7 @@ class HistoryLog extends Model
         22 => 'Documentos cliente',
         23 => 'Determinar crédito max',
         24 => 'Crédito deseado',
-        25 => 'Edo Cta Bancario',
+        25 => 'Edo Cta',
         26 => 'Llenado de solicitud',
         27 => 'Entrevista',
         28 => 'Análisis KYC',
