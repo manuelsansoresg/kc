@@ -130,6 +130,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function configFormStep1($id_rel, $history_id)
     {
+        $step = isset($_GET['step']) ? $_GET['step'] : '1';
         $name_form = 'frm-template_control_desk_step1';
         $type_form = HistoryLog::KC_CONTROL_DESK_FORM;
         $elements = array(
@@ -217,6 +218,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
+            7 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/controlDesk/'.$history_id.'/show?step='.$step,
+                'col' => 'col-12'
+            ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -233,6 +250,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $loan_type = config('enums.loan_type');
         $sign_type = config('enums.sign_type');
         $periodicity = config('enums.periodicity');
+        $step = isset($_GET['step']) ? $_GET['step'] : '2';
 
         $elements = array(
             1 => [
@@ -418,6 +436,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
+            14 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/controlDesk/'.$history_id.'/show?step='.$step,
+                'col' => 'col-12'
+            ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -428,6 +462,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form    = 'frm-template_control_desk_step3_1';
         $type_form    = HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1;
         $sex = config('enums.sex');
+        $step = isset($_GET['step']) ? $_GET['step'] : '3';
 
         $elements = array(
             1 => [
@@ -879,6 +914,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
+            33 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/controlDesk/'.$history_id.'/show?step='.$step,
+                'col' => 'col-12'
+            ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -893,6 +944,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $home_type        = config('enums.home_type');
         $option_switch    = array(1 => 'Sí', 2 => 'No');
         $prepad_method          = array(1 => 'Efectivo', 2 => 'cheque', 3 => 'transferencia', 4 => 'otro');
+        $step = isset($_GET['step']) ? $_GET['step'] : '3';
 
         $elements = array(
             1 => [
@@ -1782,6 +1834,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
                 'col' => 'col-md-12'
             ],
+            64 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/controlDesk/'.$history_id.'/show?step='.$step,
+                'col' => 'col-12'
+            ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -1800,6 +1868,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $client_person = $credit->creditClientPerson;
         $curp = $client_person != null ? $client_person->curp : null;
         $show_btn = false;
+        $step = isset($_GET['step']) ? $_GET['step'] : '4';
+
         $elements = array(
             1 => [
                 'title_section' => 'Generales',
@@ -1847,6 +1917,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
                 'onclick' => 'kycCreditHistory('.$history_id.')'
             ],
+            4 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/controlDesk/'.$history_id.'/show?step='.$step,
+                'col' => 'col-12'
+            ],
             
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'show_btn' => $show_btn, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -1860,7 +1946,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $user_financials = User::getUserRole('Cliente financiera');
         $option_user_financial = array();
         $step_origin    = isset($_GET['step_origin']) ? $_GET['step_origin'] : null;
-
+        $step = isset($_GET['step']) ? $_GET['step'] : '4';
         foreach ($user_financials as $user) {
             $name = $user->name.' '.$user->last_name.' '.$user->second_last_name;
             $option_user_financial[$user->id] = $name;
@@ -1943,7 +2029,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/kc-delivery',
+                'value' => '/panel/kc-control-desk',
                 'col' => 'col-12'
             ],
             
