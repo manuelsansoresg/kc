@@ -3010,9 +3010,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($client != null && $client->client_home_external_number != null) {
             $total_valid = $total_valid + 5;
         }
-        if ($client != null && $client->client_home_internal_number != null) {
-            $total_valid = $total_valid + 5;
-        }
+        
         if ($client != null && $client->client_colony != null) {
             $total_valid = $total_valid + 5;
         }
@@ -3064,6 +3062,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $client     = $credit->creditClientPerson;
 
         $total_valid = 0;
+        if ($client != null && $client->marital_status != '') {
+            $total_valid = 100;
+        }
+        
         if ($client != null && $client->marital_status != '') {
             $total_valid = 100;
         }

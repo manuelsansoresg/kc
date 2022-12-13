@@ -265,9 +265,7 @@ $().ready(function () {
             'client_person[client_home_external_number]': {
                 required: true,
             },
-            'client_person[client_home_internal_number]': {
-                required: true,
-            },
+            
             'client_person[client_colony]': {
                 required: true,
             },
@@ -581,7 +579,6 @@ $().ready(function () {
                         $('#applied_interest_rate').val(credit.applied_interest_rate);
                         $('#applied_CAT').val(credit.applied_CAT);
                     }
-
                     if (type_form == 26) //form kc-desktop step3 - 1
                     {
                         $('#work_email').val(client.work_email);
@@ -612,6 +609,9 @@ $().ready(function () {
                         $('#workplace_city').val(client.workplace_city);
                         $('#workplace_state').val(client.workplace_state);
                         $('#workplace_country').val(client.workplace_country);
+                        
+                        
+                        
                     }
 
                     if (type_form == 27) //form kc-desktop step3 - 2
@@ -663,6 +663,15 @@ $().ready(function () {
                         selectRadio(credit.soruce_provider, 'soruce_provider');
                         selectRadio(credit.real_propetary, 'real_propetary');
                         $('#notes').val(credit.notes);
+
+                        $('#client_postal_code').val(client.client_postal_code);
+                        $('#client_street').val(client.client_street);
+                        $('#client_home_external_number').val(client.client_home_external_number);
+                        $('#client_home_internal_number').val(client.client_home_internal_number);
+                        $('#client_colony').val(client.client_colony);
+                        $('#client_city').val(client.client_city);
+                        $('#client_state').val(client.client_state);
+                        $('#client_country').val(client.client_country);
                     }
 
                     if (type_form == 29) //form kc-desktop step 5

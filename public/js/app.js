@@ -2766,9 +2766,6 @@ $().ready(function () {
       'client_person[client_home_external_number]': {
         required: true
       },
-      'client_person[client_home_internal_number]': {
-        required: true
-      },
       'client_person[client_colony]': {
         required: true
       },
@@ -3149,6 +3146,14 @@ $().ready(function () {
             selectRadio(credit.soruce_provider, 'soruce_provider');
             selectRadio(credit.real_propetary, 'real_propetary');
             $('#notes').val(credit.notes);
+            $('#client_postal_code').val(client.client_postal_code);
+            $('#client_street').val(client.client_street);
+            $('#client_home_external_number').val(client.client_home_external_number);
+            $('#client_home_internal_number').val(client.client_home_internal_number);
+            $('#client_colony').val(client.client_colony);
+            $('#client_city').val(client.client_city);
+            $('#client_state').val(client.client_state);
+            $('#client_country').val(client.client_country);
           }
 
         if (type_form == 29) //form kc-desktop step 5
