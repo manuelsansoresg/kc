@@ -320,7 +320,7 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $id_rel, 0);
             //*Cuando es crédito nuevo y viene de KC-Checkup
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $credit->id, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
