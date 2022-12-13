@@ -1587,7 +1587,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             50 => [
                 'title_section' => null,
-                'title' => 'Segundo apellido',
+                'title' => 'Nombres',
                 'name_field' => 'credit[relative_public_servant_names]',
                 'id_field' => 'relative_public_servant_names',
                 'comment_admin' => null,
@@ -1601,7 +1601,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             51 => [
                 'title_section' => null,
-                'title' => 'Segundo apellido',
+                'title' => 'Relación',
                 'name_field' => 'credit[relative_public_servant_relationship]',
                 'id_field' => 'relative_public_servant_relationship',
                 'comment_admin' => null,
@@ -1615,7 +1615,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             52 => [
                 'title_section' => null,
-                'title' => 'Segundo apellido',
+                'title' => 'Puesto',
                 'name_field' => 'credit[relative_public_servant_position]',
                 'id_field' => 'relative_public_servant_position',
                 'comment_admin' => null,
@@ -1629,7 +1629,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             53 => [
                 'title_section' => null,
-                'title' => 'Segundo apellido',
+                'title' => 'Período',
                 'name_field' => 'credit[relative_public_servant_period]',
                 'id_field' => 'relative_public_servant_period',
                 'comment_admin' => null,
