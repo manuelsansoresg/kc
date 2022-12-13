@@ -33,9 +33,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group"><label class="form-label">*Persona tipo</label>
+                                    <div class="form-group"><label class="form-label">*Rol</label>
                                         <div class="form-control-select">
-                                            <select name="type_person" class="form-control" id="type_person" onchange="showRazon()">
+                                            <select name="rol_id" class="form-control" id="rol_id" onchange="showRazon()">
                                                 <option value="">Selecciona una opción</option>
                                                 @foreach ($roles as $key => $role)
                                                     <option value="{{ $key }}"> {{ $role }} </option>
@@ -47,9 +47,9 @@
                                 <div id="content-razon" style="">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="frm-user-admin-name">*Rol</label>
+                                            <label class="form-label" for="frm-user-admin-name">*Persona tipo</label>
                                             <div class="form-control-select">
-                                                <select name="rol_id" class="form-control" id="rol_id" onchange="showRazon()">
+                                                <select name="type_person" class="form-control" id="type_person" onchange="showRazon()">
                                                     <option value="">Selecciona una opción</option>
                                                     <option value="1">Física</option>
                                                     <option value="2">Moral</option>
