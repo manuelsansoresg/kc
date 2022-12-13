@@ -232,8 +232,7 @@
             @endif
         @endforeach
 
-        <input type="hidden" id="type_form" value="{{ $type_form }}">
-        <input type="hidden" id="history_id" name="history_id" value="{{ $history_id }}">
+       
         @if ($type_form != 31)
         @if (!isset($show_btn))
             <div class="col-12">
@@ -249,3 +248,5 @@
         @endif
     </div>
 </form>
+<input type="hidden" id="type_form" value="{{ $type_form }}">
+<input type="hidden" id="history_id" name="history_id" value="{{ $history_id }}">
