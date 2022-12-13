@@ -2141,11 +2141,20 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         //TODO: change validation when the decision action is carried out in the report
         if ($status_step1 == 'Concluido') {
             $status_step2 = ($percent_form_step2 >= 100) ? 'Concluido' : 'En curso';
-            $status_step3 = ($percent_form_step3 >= 100) ? 'Concluido' : 'En curso';
-            $status_step4 = ($percent_form_step4 >= 100) ? 'Concluido' : 'En curso';
-            $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
         }
         
+        if ($status_step2 == 'Concluido') {
+            $status_step3 = ($percent_form_step3 >= 100) ? 'Concluido' : 'En curso';
+        }
+
+        if ($status_step3 == 'Concluido') {
+            $status_step4 = ($percent_form_step4 >= 100) ? 'Concluido' : 'En curso';
+        }
+
+        if ($status_step4 == 'Concluido') {
+            $status_step5 = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
+        }
+
         $data_deadline    = deadline($hour, $max_hour, $total_percent, $color_inf_credit);
         
         $color_inf_credit = $data_deadline['color'];
