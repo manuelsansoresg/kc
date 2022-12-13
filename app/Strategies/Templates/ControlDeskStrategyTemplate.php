@@ -2081,10 +2081,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $percent_form_step3_2   = self::percentFormStep3_2($history);
             //* percent 4 is in kccontroldeskcontroller function validateKyc
             $percent_form_step5   = self::percentFormStep5($history);
-            
-            
             if ($percent_form_step1 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 1);
+
                 HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, null, false);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $credit->id, 0);
             }
@@ -2537,12 +2536,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $user = User::find($advisor->id);
         
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-
+        
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptions($history, 2, $step_origin);
         $view_dead_line_inf_credit  = self::deadLineStep2($history);
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-
+        
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }

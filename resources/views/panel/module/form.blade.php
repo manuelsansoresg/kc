@@ -247,6 +247,7 @@
             
         @endif
     </div>
+    <input type="hidden" id="type_form" value="{{ $type_form }}">
+    <input type="hidden" id="history_id" name="history_id" value="{{ $history_id }}">
 </form>
-<input type="hidden" id="type_form" value="{{ $type_form }}">
-<input type="hidden" id="history_id" name="history_id" value="{{ $history_id }}">
+
