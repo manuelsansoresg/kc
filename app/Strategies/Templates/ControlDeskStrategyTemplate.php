@@ -3281,8 +3281,72 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent = ($count_file / $total_valid) * 100;
         return $percent;
     }
+   
+    public function optionBreadcumbStep($history)
+    {
+        $breadcumbs = array(
+            0 => array(
+             'title' => 'Inicio',
+             'link' => '/panel/home',
+             'active' => null
+            ),
+            1 => array(
+             'title' => 'KC - Control desk',
+             'link' => '/panel/kc-control-desk',
+             'active' => null
+            ),
+            2 => array(
+             'title' => 'etapas',
+             'link' => null,
+             'active' => true
+            ),
+         );
+         return $breadcumbs;
+    }
+
+    public function optionBreadcumblistAction($history, $step)
+    {
+        
+        $breadcumbs = array(
+            0 => array(
+             'title' => 'Inicio',
+             'link' => '/panel/home',
+             'active' => null
+            ),
+            1 => array(
+             'title' => 'KC - Control desk',
+             'link' => '/panel/kc-control-desk',
+             'active' => null
+            ),
+            2 => array(
+                'title' => 'etapas',
+                'link' => '/panel/template/steps/controlDesk/'.$history->id.'/show',
+                'active' => true
+            ),
+            3 => array(
+                'title' => 'acciones',
+                'link' => '/panel/template/actions/controlDesk/'.$history->id.'/show?step='.$step,
+                'active' => null
+               ),
+               4 => array(
+                'title' => 'Información laboral y contacto',
+                'link' => null,
+                'active' => true
+               ),
+         );
+         return $breadcumbs;
+    }
+
     public function breadcrumb($history, $type = null)
     {
-        return null;
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+        if ($step == null) {
+            $breadcumbs = self::optionBreadcumbStep($history);
+        }
+        if ($step == 1 || $step == 2 || $step == 3 || $step == 4 || $step == 5) {
+            $breadcumbs = self::optionBreadcumblistAction($history, $step);
+        }
+        $view_breadcumb    = \View::make('panel.module.breadcumb', ['breadcumbs' => $breadcumbs])->render();
+        return $view_breadcumb;
     }
 }
