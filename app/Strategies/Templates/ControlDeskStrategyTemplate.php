@@ -2702,18 +2702,21 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     
     public function actionStep4($history_id, $step_origin = null)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
+        $history            = HistoryLog::find($history_id);
+        $credit             = $history->historyCredit;
+        $advisor            = $credit->creditAdvisor;
 
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        $user               = User::find($advisor->id);
+        $role               = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        $menu_options   = self::menuOptionsStep4($history, $step_origin);
+        $name_advisor       = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        $menu_options       = self::menuOptionsStep4($history, $step_origin);
 
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-        $view_dead_line1  = self::deadLineStep4($history);
+        $form_option        = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $view_dead_line1    = self::deadLineStep4($history);
+        $percent            = self::percentFormStep4($history);
+
+        $status = $percent == 100 ? 'Concluido' : 'En curso';
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -2726,7 +2729,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' =>  'Opcional',
+            'status' =>  $status,
             'deadline' => $view_dead_line1,
             'advisor' => $name_advisor,
             'options' => $form_option,
