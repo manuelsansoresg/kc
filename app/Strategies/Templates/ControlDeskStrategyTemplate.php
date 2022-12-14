@@ -2134,7 +2134,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $status_cancel    = HistoryLog::CREDIT_CANCELED;
         $status_reject    = HistoryLog::CREDIT_REJECTED;
         $status_archive   = HistoryLog::CREDIT_ARCHIVE;
-        $old_status       = HistoryLog::KC_CHECK_UP;
+        $old_status       = $history->old_status_id;
 
         $menu = array(
             'options' => array(
