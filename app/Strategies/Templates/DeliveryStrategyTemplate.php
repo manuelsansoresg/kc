@@ -229,6 +229,22 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
+            4 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/delivery/'.$history_id.'/show?step=2',
+                'col' => 'col-12'
+            ],
             
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -576,6 +592,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $percent_form                 = self::percentFile($credit->id);
         if ($percent_form == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, $credit->id, 1);
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3, null, false);
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit->id, 0);
         }
         $max_hour                     = self::HOUR_STEP_2;
@@ -598,12 +616,6 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-        if ($percent_form == 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, $credit->id, 1);
-            //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit->id, 1);
-        }
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptions($history, 2);
         
@@ -672,7 +684,6 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptionsStep3($history);
-
         $view_dead_line_inf_credit  =self::deadLineStep3($history);
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
