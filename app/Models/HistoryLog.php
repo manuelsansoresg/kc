@@ -325,10 +325,9 @@ class HistoryLog extends Model
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
-           /*  HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2);
-            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2);
-            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3); */
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $id_rel, 1);
+           /*  
+             */
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $id_rel, 0);
            /*  HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, $id_rel, 1); */
         }
@@ -389,14 +388,23 @@ class HistoryLog extends Model
         //dd($status_id, $id_rel, $status_progress);
         $history = HistoryLog::where('status_id', $status_id)
                     ->where('id_rel', $id_rel)
-                    ->where('status', 1);
-        $data_update['status_progress'] = $status_progress;
-        $data_update['date_status_progress'] =  date('Y-m-d H:i:s');
-        $history->update($data_update);
+                    ->where('status', 1)->first();
         $get_history = null;
-        if ($history->first() != null) {
-            $get_history = HistoryLog::find($history->first()->id);
+        
+        if ($history != null) {
+            $get_history = HistoryLog::find($history->id);
+            $get_history->status_progress = $status_progress;
+            if ($get_history->date_status_progress == null) {
+                $get_history->date_status_progress =  date('Y-m-d H:i:s');
+            }
+            $get_history->update();
+
+            if ($history->first() != null) {
+                $get_history = HistoryLog::find($history->first()->id);
+            }
         }
+        
+        
         return $get_history;
     }
 

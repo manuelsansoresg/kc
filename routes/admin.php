@@ -155,6 +155,7 @@ Route::group(['prefix' => 'kc-control-desk'], function () {
 Route::resource('kc-delivery', '\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController')->middleware('auth');
 Route::group(['prefix' => 'kc-delivery'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController', 'list'])->middleware('auth');
+    Route::get('{history_id}/module-response', ['\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController', 'moduleResponse'])->middleware('auth');
 });
 
 Route::resource('kc-aftermarket', '\App\Http\Controllers\Panel\Module\KcAfterMarketController')->middleware('auth');

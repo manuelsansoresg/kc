@@ -58,6 +58,7 @@ class ListStrategy implements ActionInterface
                 HistoryLog::KC_SWAP_FORM_STEP_3,
                 HistoryLog::KC_SWAP_FORM_STEP_3_2,
                 
+                HistoryLog::KC_DELIVERY_FORM,
                 HistoryLog::KC_DELIVERY_UPLOAD_STEP_2,
                 HistoryLog::KC_DELIVERY_FORM_STEP_3,
                 
@@ -162,7 +163,7 @@ class ListStrategy implements ActionInterface
             }
             
             
-            if ($history_log->status_id === HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 || $history_log->status_id === HistoryLog::KC_DELIVERY_FORM_STEP_3) {
+            if ($history_log->status_id === HistoryLog::KC_DELIVERY_FORM || $history_log->status_id === HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 || $history_log->status_id === HistoryLog::KC_DELIVERY_FORM_STEP_3) {
                 $get_dinamic_percent =  (new $templateStrategy)->dinamicDeadline($history_log);
                 $view_dead_line_inf_credit = $get_dinamic_percent['deadline'];
                 $percent_form = $get_dinamic_percent['percent'];

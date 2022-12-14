@@ -25,6 +25,18 @@ class KcDeliveryController extends Controller
         return response()->json(['data' => $users]);
     }
 
+    public function moduleResponse($history_id)
+    {
+        $history    = HistoryLog::find($history_id);
+        $credit     = $history->historyCredit;
+        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $credit->id, 1);
+        //*inicializar las acciones de la siguiente etapa en curso
+        HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2, null, false);
+        HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, null, false);
+        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit->id, 1);
+        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, $credit->id, 0);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

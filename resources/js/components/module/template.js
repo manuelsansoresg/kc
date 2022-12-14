@@ -796,6 +796,16 @@ window.kycCreditHistory = function(history_id) {
         });
 }
 
+window.deliveryModuleResponse = function (history_id) {
+    axios
+        .get("/panel/kc-delivery/"+history_id+"/module-response")
+        .then(function (response) {
+
+        })
+        .catch(e => {
+        });
+}
+
 window.modalReference = function(history_id, reference_id) {
 
     $('#modal_history_id').val(history_id);
