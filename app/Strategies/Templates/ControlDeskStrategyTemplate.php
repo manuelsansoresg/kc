@@ -3225,9 +3225,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $current_show = 'Características del crédito';
         } elseif ($status_progress < 5) {
             $current_show = 'Captura de información';
-        } elseif ($status_progress > 4 && $status_progress < 7) {
+        } elseif ($status_progress > 4 && $status_progress < 5) {
             $current_show = 'KYC';
-        } elseif ($status_progress == 7) {
+        } elseif ($status_progress > 5) {
             $current_show = ' Asignar usuario financiera';
         }
 
