@@ -2913,9 +2913,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $client     = $credit->creditClientPerson;
 
         $total_valid = 0;
-        if ($credit != null && $credit->applied_financial != '') {
-            $total_valid = $total_valid + 1;
-        }
+       
         
         if ($credit != null && $credit->applied_financial_product != null) {
             $total_valid = $total_valid + 1;
@@ -2946,7 +2944,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($credit != null && $credit->applied_CAT != null) {
             $total_valid = $total_valid + 1;
         }
-        $percent = ($total_valid / 10) * 100;
+        $percent = ($total_valid / 9) * 100;
         return $percent;
     }
 
