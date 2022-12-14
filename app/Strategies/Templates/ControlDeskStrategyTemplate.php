@@ -1115,134 +1115,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            13 => [
-                'title_section' => 'Domicilio',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
             
-            14 => [
-                'title_section' => null,
-                'title' => 'Código postal',
-                'name_field' => 'client_person[client_postal_code]',
-                'id_field' => 'client_postal_code',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            15 => [
-                'title_section' => null,
-                'title' => 'Calle',
-                'name_field' => 'client_person[client_street]',
-                'id_field' => 'client_street',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            16 => [
-                'title_section' => null,
-                'title' => 'Número exterior.',
-                'name_field' => 'client_person[client_home_external_number]',
-                'id_field' => 'client_home_external_number',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            17 => [
-                'title_section' => null,
-                'title' => 'Número interior',
-                'name_field' => 'client_person[client_home_internal_number]',
-                'id_field' => 'client_home_internal_number',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            18 => [
-                'title_section' => null,
-                'title' => 'Colonia',
-                'name_field' => 'client_person[client_colony]',
-                'id_field' => 'client_colony',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            19 => [
-                'title_section' => null,
-                'title' => 'Municipio',
-                'name_field' => 'client_person[client_city]',
-                'id_field' => 'client_city',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            20 => [
-                'title_section' => null,
-                'title' => 'Estado',
-                'name_field' => 'client_person[client_state]',
-                'id_field' => 'client_state',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            21 => [
-                'title_section' => null,
-                'title' => 'País',
-                'name_field' => 'client_person[client_country]',
-                'id_field' => 'client_country',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'text',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            22 => [
+            13 => [
                 'title_section' => null,
                 'title' => 'Tipo vivienda',
                 'name_field' => 'client_person[home_type]',
@@ -1256,7 +1130,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            23 => [
+            14 => [
                 'title_section' => null,
                 'title' => 'Tiempo de vivir ahí',
                 'name_field' => 'client_person[home_time_living]',
@@ -1270,7 +1144,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            24 => [
+            15 => [
                 'title_section' => null,
                 'title' => 'Comentarios vivienda',
                 'name_field' => 'client_person[home_note]',
@@ -1286,7 +1160,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null
             ],
 
-            25 => [
+            16 => [
                 'title_section' => 'Bienes',
                 'title' => null,
                 'name_field' => null,
@@ -1301,7 +1175,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null
             ],
             
-            26 => [
+            17 => [
                 'title_section' => null,
                 'title' => 'Número de propiedades',
                 'name_field' => 'client_person[propety_ownnership_amount]',
@@ -1315,7 +1189,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            27 => [
+            18 => [
                 'title_section' => null,
                 'title' => 'Varlos estimado de propiedades',
                 'name_field' => 'client_person[propety_ownnership_value]',
@@ -1329,7 +1203,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            28 => [
+            19 => [
                 'title_section' => null,
                 'title' => 'Número de vehículos propios',
                 'name_field' => 'client_person[vehicle_ownnership_amount]',
@@ -1343,7 +1217,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            29 => [
+            20 => [
                 'title_section' => null,
                 'title' => 'Varlos estimado de vehículos',
                 'name_field' => 'client_person[vehicle_ownnership_value]',
@@ -1357,7 +1231,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            30 => [
+            21 => [
                 'title_section' => null,
                 'title' => 'Número de dependientes económicos',
                 'name_field' => 'client_person[economic_dependents]',
@@ -1371,7 +1245,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            31 => [
+            22 => [
                 'title_section' => 'Laboral',
                 'title' => null,
                 'name_field' => null,
@@ -1385,7 +1259,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => null,
                 'is_disabled' => null
             ],
-            32 => [
+            23 => [
                 'title_section' => null,
                 'title' => 'Centro de trabajo',
                 'name_field' => 'client_person[workplace_name]',
@@ -1399,7 +1273,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            33 => [
+            24 => [
                 'title_section' => null,
                 'title' => 'Fecha de ingreso',
                 'name_field' => 'client_person[admission_date]',
@@ -1413,7 +1287,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            34 => [
+            25 => [
                 'title_section' => null,
                 'title' => 'Área',
                 'name_field' => 'client_person[employee_area]',
@@ -1427,7 +1301,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            35 => [
+            26 => [
                 'title_section' => null,
                 'title' => 'Puesto',
                 'name_field' => 'client_person[employee_position]',
@@ -1441,7 +1315,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            36 => [
+            27 => [
                 'title_section' => null,
                 'title' => 'Fuente de ingresos adicionales',
                 'name_field' => 'client_person[aditional_labor_source]',
@@ -1455,7 +1329,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            37 => [
+            28 => [
                 'title_section' => null,
                 'title' => 'Ingresos adicionales',
                 'name_field' => 'client_person[aditional_labor_income]',
@@ -1469,7 +1343,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            38 => [
+            29 => [
                 'title_section' => null,
                 'title' => 'Tel fijo',
                 'name_field' => 'client_person[workplace_local_phone]',
@@ -1483,7 +1357,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            39 => [
+            30 => [
                 'title_section' => null,
                 'title' => 'Tel celular',
                 'name_field' => 'client_person[workplace_cel_phone]',
@@ -1497,7 +1371,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            40 => [
+            31 => [
                 'title_section' => null,
                 'title' => 'Clave centro trabajo',
                 'name_field' => 'client_person[workplace_code]',
@@ -1511,7 +1385,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            41 => [
+            32 => [
                 'title_section' => null,
                 'title' => 'Extensión',
                 'name_field' => 'client_person[workplace_local_phone_extension]',
@@ -1525,7 +1399,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            42 => [
+            33 => [
                 'title_section' => 'Referencias',
                 'title' => null,
                 'name_field' => null,
@@ -1539,7 +1413,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => null,
                 'is_disabled' => null
             ],
-            43 => [
+            34 => [
                 'title_section' => 'PLD',
                 'title' => null,
                 'name_field' => null,
@@ -1553,7 +1427,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => null,
                 'is_disabled' => null
             ],
-            44 => [
+            35 => [
                 'title_section' => null,
                 'title' => 'Cliente funcionario público',
                 'name_field' => 'credit[client_public_servant]',
@@ -1567,7 +1441,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            45 => [
+            36 => [
                 'title_section' => null,
                 'title' => 'Puesto',
                 'name_field' => 'credit[client_public_servant_position]',
@@ -1581,7 +1455,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            46 => [
+            37 => [
                 'title_section' => null,
                 'title' => 'Período',
                 'name_field' => 'credit[client_public_servant_period]',
@@ -1595,7 +1469,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            47 => [
+            38 => [
                 'title_section' => null,
                 'title' => 'Familiar funcionario público',
                 'name_field' => 'credit[relative_public_servant]',
@@ -1609,7 +1483,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            48 => [
+            39 => [
                 'title_section' => null,
                 'title' => 'Primer apellido',
                 'name_field' => 'credit[relative_public_servant_lastname]',
@@ -1623,7 +1497,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            49 => [
+            40 => [
                 'title_section' => null,
                 'title' => 'Segundo apellido',
                 'name_field' => 'credit[relative_public_servant_second_lastname]',
@@ -1637,7 +1511,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            50 => [
+            41 => [
                 'title_section' => null,
                 'title' => 'Nombres',
                 'name_field' => 'credit[relative_public_servant_names]',
@@ -1651,7 +1525,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            51 => [
+            42 => [
                 'title_section' => null,
                 'title' => 'Relación',
                 'name_field' => 'credit[relative_public_servant_relationship]',
@@ -1665,7 +1539,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            52 => [
+            43 => [
                 'title_section' => null,
                 'title' => 'Puesto',
                 'name_field' => 'credit[relative_public_servant_position]',
@@ -1679,7 +1553,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            53 => [
+            44 => [
                 'title_section' => null,
                 'title' => 'Período',
                 'name_field' => 'credit[relative_public_servant_period]',
@@ -1693,7 +1567,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            54 => [
+            45 => [
                 'title_section' => null,
                 'title' => 'Pagos anticipados',
                 'name_field' => 'credit[prepaid]',
@@ -1707,7 +1581,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            55 => [
+            46 => [
                 'title_section' => null,
                 'title' => 'Método de pago',
                 'name_field' => 'credit[prepad_method]',
@@ -1721,7 +1595,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            56 => [
+            47 => [
                 'title_section' => null,
                 'title' => 'Frecuencia de pago',
                 'name_field' => 'credit[prepaid_frequency]',
@@ -1735,7 +1609,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            57 => [
+            48 => [
                 'title_section' => null,
                 'title' => 'Origen de recursos',
                 'name_field' => 'credit[prepaid_source]',
@@ -1749,7 +1623,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            58 => [
+            49 => [
                 'title_section' => 'Otros datos',
                 'title' => null,
                 'name_field' => null,
@@ -1763,7 +1637,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => null,
                 'is_disabled' => null
             ],
-            59 => [
+            50 => [
                 'title_section' => null,
                 'title' => 'Aval',
                 'name_field' => 'credit[endorsement]',
@@ -1777,7 +1651,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            60 => [
+            51 => [
                 'title_section' => null,
                 'title' => 'Beneficiario real',
                 'name_field' => 'credit[real_beneficiary]',
@@ -1791,7 +1665,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            61 => [
+            52 => [
                 'title_section' => null,
                 'title' => 'Proveedor de recursos',
                 'name_field' => 'credit[soruce_provider]',
@@ -1805,7 +1679,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            62 => [
+            53 => [
                 'title_section' => null,
                 'title' => 'Propietario real',
                 'name_field' => 'credit[real_propetary]',
@@ -1819,7 +1693,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            63 => [
+            54 => [
                 'title_section' => null,
                 'title' => 'Comentarios',
                 'name_field' => 'credit[notes]',
@@ -1834,7 +1708,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
                 'col' => 'col-md-12'
             ],
-            64 => [
+            55 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
