@@ -457,7 +457,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
             return $current_show;
         }
         
-        return $percent;
+        return reduceDecimal($percent);
     }
 
     

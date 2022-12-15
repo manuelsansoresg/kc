@@ -658,7 +658,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $percent =  (($status_progress) / 2) * 100;
 
         if ($show_current_show == true) {
-            return $current_show;
+            return reduceDecimal($current_show);
         }
         
         return $percent;
