@@ -993,14 +993,19 @@
   let format_final = timefin.toLocaleString('en-US', {hour:'numeric', minute: 'numeric', hour12: true })
 
   NioApp.Picker.init = function () {
-    NioApp.Picker.date('.date-picker');
+    
+    NioApp.Picker.date('.date-picker', {
+      months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+      dateFormat: 'dd/mm/yy',
+    });
     NioApp.Picker.dob('.date-picker-alt');
-
+    
     $('.time-picker').timepicker({
       timeFormat: 'h:mm p',
       interval: 15,
       minTime: '7',
       startTime: '7',
+      
       defaultTime: time.getHours() + ":" + (Math.floor(time.getMinutes() / 15) * 15),
       dynamic: false,
       dropdown: true,

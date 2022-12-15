@@ -71,15 +71,16 @@
                                             @foreach ($files as $key => $file)
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label class="form-label" for="frm-user-admin-name">{{ $file['name']}}</label>
+                                                        <label class="form-label" for="frm-user-admin-name">{{ $file['is_required'] == true ? '*' : '' }} {{ $file['name']}}</label>
                                                         <p><small>{{ $file['comment'] }}</small></p>
-                                                        <p><small>{{ $is_required[$file['is_required']] }}</small></p>
                                                         <div class="form-control-wrap">
                                                             <div id="{{ $key}}-dropzone-action" data-max-file-size="{{ $file['max_size']}}" data-max-files="{{ $file['max_file'] }}"  data-accepted-files="{{ $file['type']}}">
                                                                 <div class="dz-message" data-dz-message> 
                                                                     <span class="dz-message-text">Arrastra y suelta el archivo</span>
-                                                                    <span class="dz-message-or">o</span> <button
-                                                                        class="btn btn-primary">Selecciona</button> </div>
+                                                                    <span class="dz-message-or">o</span> 
+                                                                    <span
+                                                                        class="dz-message-text">Haz click para elegir</span> 
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -91,7 +92,6 @@
                                                 @if ($file['is_date'] === true)
                                                 <div class="col-12 col-md-6">
                                                     <div class="form-group">
-                                                        <label class="form-label">Fecha del documento</label>
                                                         <p><small>{{ $file['comment_date'] }}</small></p>
                                                         <div class="form-control-wrap">
                                                             <input type="text" id="{{ $key}}-date_file" 
@@ -103,7 +103,7 @@
                                                     </div>
                                                 </div>
                                                 @endif
-                                                <hr>
+                                                <hr class="preview-hr">
                                             @endforeach
                                             <input type="hidden" id="action-model" name="model" value="{{ $model }}">
                                             <input type="hidden" id="action-id_rel" name="id_rel" value="{{ $credit_id }}">
