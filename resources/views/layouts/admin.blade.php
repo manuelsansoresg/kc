@@ -35,7 +35,7 @@
                         <a href="#" class="nk-nav-compact nk-quick-nav-icon d-none d-xl-inline-flex" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
                     </div>
                     <div class="nk-sidebar-brand">
-                        <a href="html/index.html" class="logo-link nk-sidebar-logo">
+                        <a href="/panel/lead" class="logo-link nk-sidebar-logo">
                             <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}" srcset="{{ asset('images/logo-dark.png') }}" alt="logo">
                             <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}" srcset="{{ asset('images/logo-dark.png') }}" alt="logo-dark">
                         </a>
