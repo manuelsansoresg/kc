@@ -31,15 +31,15 @@
                             <div class="nk-block nk-block-middle nk-auth-body">
                                 <div class="brand-logo pb-5">
                                     <a href="html/index.html" class="logo-link">
-                                        <img class="logo-light logo-img logo-img-lg" src="/images_admin/logo.png" srcset="/images_admin/logo2x.png 2x" alt="logo">
-                                        <img class="logo-dark logo-img logo-img-lg" src="/images_admin/logo-dark.png" srcset="/images_admin/logo-dark2x.png 2x" alt="logo-dark">
+                                        <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo-dark.png') }}"  alt="logo">
+                                        <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logo-dark.png') }}"  alt="logo-dark">
                                     </a>
                                 </div>
                                 <div class="nk-block-head">
                                     <div class="nk-block-head-content">
-                                        <h5 class="nk-block-title">Sign-In</h5>
+                                        <h5 class="nk-block-title">Loging</h5>
                                         <div class="nk-block-des">
-                                            <p>Accesa al panel usando tu email y contraseña.</p>
+                                            <p>Accede al panel usando tu email y contraseña.</p>
                                         </div>
                                     </div>
                                 </div><!-- .nk-block-head -->
@@ -48,7 +48,7 @@
                                     <div class="form-group">
                                         <div class="form-label-group">
                                             <label class="form-label" for="email-address">Email</label>
-                                            <a class="link link-primary link-sm" tabindex="-1" href="#">¿Necesitas ayuda?</a>
+                                            <a class="link link-primary link-sm" tabindex="-1" href="/ayuda">¿Necesitas ayuda?</a>
                                         </div>
                                         <div class="form-control-wrap">
                                             <input id="email"  placeholder="Ingresa tu email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
@@ -62,7 +62,7 @@
                                     <div class="form-group">
                                         <div class="form-label-group">
                                             <label class="form-label" for="password">Contraseña</label>
-                                            <a class="link link-primary link-sm" tabindex="-1" href="html/pages/auths/auth-reset.html">¿Olvido su contraseña?</a>
+                                            <a class="link link-primary link-sm" tabindex="-1" href="/ayuda">¿Olvido su contraseña?</a>
                                         </div>
                                         <div class="form-control-wrap">
                                             <a tabindex="-1" href="#" class="form-icon form-icon-right passcode-switch lg" data-target="password">
@@ -82,26 +82,26 @@
                                     </div>
                                 </form><!-- form -->
                               
-                                <div class="text-center pt-4 pb-3">
+                                {{-- <div class="text-center pt-4 pb-3">
                                     <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
                                 </div>
                                 <ul class="nav justify-center gx-4">
                                     <li class="nav-item"><a class="nav-link" href="#">Facebook</a></li>
                                     <li class="nav-item"><a class="nav-link" href="#">Google</a></li>
-                                </ul>
+                                </ul> --}}
                                
                             </div><!-- .nk-block -->
                             <div class="nk-block nk-auth-footer">
                                 <div class="nk-block-between">
                                     <ul class="nav nav-sm">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#">Terminos y condiciónes</a>
+                                            <a class="nav-link" href="/terminos">Terminos y condiciónes</a>
                                         </li>
-                                        <li class="nav-item">
+                                     {{--    <li class="nav-item">
                                             <a class="nav-link" href="#">Politicas de privacidad</a>
-                                        </li>
+                                        </li> --}}
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#">Ayuda</a>
+                                            <a class="nav-link" href="/ayuda">Ayuda</a>
                                         </li>
                                         <li class="nav-item dropup d-none">
                                             <a class="dropdown-toggle dropdown-indicator has-indicator nav-link" data-bs-toggle="dropdown" data-offset="0,10"><small>English</small></a>
@@ -137,46 +137,26 @@
                                     </ul><!-- .nav -->
                                 </div>
                                 <div class="mt-3">
-                                    <p>&copy; 2022 DashLite. All Rights Reserved.</p>
+                                    <p>&copy; KaaxClub. Derechos reservados</p>
                                 </div>
                             </div><!-- .nk-block -->
                         </div><!-- .nk-split-content -->
-                        <div class="nk-split-content nk-split-stretch bg-lighter d-flex toggle-break-lg toggle-slide toggle-slide-right" data-toggle-body="true" data-content="athPromo" data-toggle-screen="lg" data-toggle-overlay="true">
+                        <div class="nk-split-content nk-split-stretch bg-lighter d-flex toggle-break-lg toggle-slide toggle-slide-right">
                             <div class="slider-wrap w-100 w-max-550px p-3 p-sm-5 m-auto">
-                                <div class="slider-init" data-slick='{"dots":true, "arrows":false}'>
-                                    <div class="slider-item">
+                                <div  data-slick='{"dots":true, "arrows":false}'>
+                                    <div class="slider-item text-center">
                                         <div class="nk-feature nk-feature-center">
-                                            <div class="nk-feature-img">
-                                                <img class="round" src="/images_admin/slides/promo-a.png" srcset="/images_admin/slides/promo-a2x.png 2x" alt="">
+                                            <div class="nk-feature-img text-center">
+                                                <img class="" src="{{ asset('images/android-chrome-192x192.png') }}" alt="">
                                             </div>
                                             <div class="nk-feature-content py-4 p-sm-5">
-                                                <h4>Dashlite</h4>
-                                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
+                                                <h4>Panel Admin</h4>
+                                                <p>Gestiona créditos y su información.</p>
                                             </div>
                                         </div>
                                     </div><!-- .slider-item -->
-                                    <div class="slider-item">
-                                        <div class="nk-feature nk-feature-center">
-                                            <div class="nk-feature-img">
-                                                <img class="round" src="/images_admin/slides/promo-b.png" srcset="/images_admin/slides/promo-b2x.png 2x" alt="">
-                                            </div>
-                                            <div class="nk-feature-content py-4 p-sm-5">
-                                                <h4>Dashlite</h4>
-                                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
-                                            </div>
-                                        </div>
-                                    </div><!-- .slider-item -->
-                                    <div class="slider-item">
-                                        <div class="nk-feature nk-feature-center">
-                                            <div class="nk-feature-img">
-                                                <img class="round" src="/images_admin/slides/promo-c.png" srcset="/images_admin/slides/promo-c2x.png 2x" alt="">
-                                            </div>
-                                            <div class="nk-feature-content py-4 p-sm-5">
-                                                <h4>Dashlite</h4>
-                                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
-                                            </div>
-                                        </div>
-                                    </div><!-- .slider-item -->
+                                   
+                                   
                                 </div><!-- .slider-init -->
                                 <div class="slider-dots"></div>
                                 <div class="slider-arrows"></div>
