@@ -23,7 +23,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     const HOUR_STEP_1  = 6;
     const HOUR_STEP_2  = 3;
     const HOUR_STEP_3  = 6;
-    const HOUR_STEP_4  = 1;
+    const HOUR_STEP_4  = 2;
     const HOUR_STEP_5  = 4;
 
     public function move($id)
@@ -2956,72 +2956,78 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $total_valid = 0;
         if ($client != null && $client->sex != '') {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
-        //dd($history->id, $client);
         if ($client != null && $client->rfc != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
-
+        
         if ($client != null && $client->nationality != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
-
+        
         if ($client != null && $client->curp != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
         if ($client != null && $client->client_postal_code != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
+        
         if ($client != null && $client->client_street != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
         if ($client != null && $client->client_home_external_number != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
         
         if ($client != null && $client->client_colony != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
         
         if ($client != null && $client->client_city != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
         if ($client != null && $client->client_state != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
+        
         if ($client != null && $client->client_country != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
+        
         if ($client != null && $client->monthly_income != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
+        
         if ($client != null && $client->workplace_postal_code != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
+        
         if ($client != null && $client->workplace_street != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
+        
         if ($client != null && $client->workplace_home_external_number != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
-        if ($client != null && $client->workplace_home_internal_number != null) {
-            $total_valid = $total_valid + 5;
-        }
+        
         if ($client != null && $client->workplace_colony != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
+       
         if ($client != null && $client->workplace_city != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
+      
         if ($client != null && $client->workplace_state != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
+        
         if ($client != null && $client->workplace_country != null) {
-            $total_valid = $total_valid + 5;
+            $total_valid = $total_valid + 1;
         }
-        $percent =  (100 / 100) * $total_valid;
-        return $percent;
+        $percent =  ($total_valid /19)  * 100;
+        return reduceDecimal($percent);
     }
 
     public function percentFormStep3_2($history)
@@ -3048,11 +3054,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit     = $history->historyCredit;
         $client     = $credit->creditClientPerson;
         $total_valid = 0;
-
         if ($credit->kyc_done == 1 || $credit->kyc_done == 2) {
-            $total_valid = 100;
+            $total_valid = 1;
         }
-        $percent =  (100 / 100) * $total_valid;
+        $percent =  ($total_valid / 1) * 100;
         return $percent;
     }
     

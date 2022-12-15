@@ -25,25 +25,21 @@ if (!function_exists('formatDateNameMonth')) {
 if (!function_exists('deadline')) {
     function deadline($date_init, $max_hour, $percent, $color, $show_max_hour = false)
     {
-        $date_init = strtotime($date_init);//fecha inicial
-        $date_fin = strtotime(date('Y-m-d H:i:s'));//fecha de cierre
-        $hour = abs($date_init - $date_fin)/3600;
-        $rest = 0;
-        if ($hour < $max_hour) {
-            $rest_hour   = explode('.', $max_hour - $hour);
-            $rest       = isset($rest_hour[0])? $rest_hour[0] : $rest_hour;
-        }
 
-        //dd($max_hour, $hour, $rest);
+        $fecha1 = new DateTime($date_init);//fecha inicial
+        $fecha2 = new DateTime(date('Y-m-d H:i:s'));//fecha de cierre
+        $intervalo = $fecha1->diff($fecha2);
+        $hour = $intervalo->format('%h');
+
         $lbl_hour   = '';
         $color      = 'success';
 
-        $lbl_hour = '- '.$rest.' Horas';
+        $lbl_hour = '- '.$hour.' Horas';
         if ($percent === 100) {
             $lbl_hour = 'Concluido';
             $color      = 'success';
         } else {
-            if ($rest == 0) { //*deadline end
+            if ($hour > $max_hour) { //*deadline end
                 $lbl_hour = 'Vencido';
                 $color      = 'danger';
             } else {
@@ -53,7 +49,7 @@ if (!function_exists('deadline')) {
             }
         }
         if ($show_max_hour == true) {
-            $lbl_hour = $rest;
+            $lbl_hour = $hour;
         }
 
         $data = array('hour' => $hour, 'color' => $color, 'lbl_hour' => $lbl_hour);
@@ -98,5 +94,14 @@ if (!function_exists('format_price')) {
         }
 
         return number_format($price, 2, '.', ',');
+    }
+}
+
+if (!function_exists('reduceDecimal')) {
+    function reduceDecimal($number, $max_decimal = 2)
+    {
+        $extract = explode(".", $number);
+        $new_number = isset($extract[1])? $extract[0].'.'.substr($extract[0], 0, $max_decimal) : $number;
+        return $new_number;
     }
 }
