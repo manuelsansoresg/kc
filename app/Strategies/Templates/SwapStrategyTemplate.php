@@ -2202,7 +2202,7 @@ class SwapStrategyTemplate implements TemplateInterface
             $current_show = 'Asignar usuario financiera';
         }
 
-        $percent =  (($status_progress) / 8) * 100;
+        $percent =  (($status_progress) / 17) * 100;
         
 
         if ($show_current_show == true) {
