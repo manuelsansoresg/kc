@@ -271,9 +271,10 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $hour               = $history->created_at;
         $data_deadline      = deadline($hour, $max_hour, $percent, $color_inf_credit);
         $color_inf_credit   = $data_deadline['color'];
-        $hour               = $data_deadline['lbl_hour'];
-        $view_deadline      = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        $rest_hour               = $data_deadline['lbl_hour'];
+        $view_deadline      = \View::make('panel.module.view_dead_line', ['hour' => $rest_hour, 'color_inf_credit' => $color_inf_credit])->render();
         return $view_deadline;
+        //return $hour.'-'.$rest_hour;
     }
 
     public function listAction($history_id)

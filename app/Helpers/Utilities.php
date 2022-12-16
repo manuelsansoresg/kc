@@ -30,11 +30,14 @@ if (!function_exists('deadline')) {
         $fecha2 = new DateTime(date('Y-m-d H:i:s'));//fecha de cierre
         $intervalo = $fecha1->diff($fecha2);
         $hour = $intervalo->format('%h');
+        $day = $intervalo->format('%d');
 
         $lbl_hour   = '';
         $color      = 'success';
+        $rest_hour = $hour - $max_hour;
+        
+        
 
-        $lbl_hour = '- '.$hour.' Horas';
         if ($percent === 100) {
             $lbl_hour = 'Concluido';
             $color      = 'success';
@@ -42,6 +45,8 @@ if (!function_exists('deadline')) {
             if ($hour > $max_hour) { //*deadline end
                 $lbl_hour = 'Vencido';
                 $color      = 'danger';
+            } elseif ($hour == 0 && $day == 0) {
+                $rest_hour = $max_hour;
             } else {
                 if ($hour > 5) {
                     $color = ($hour >= $max_hour) ? 'danger' : 'warning';
@@ -52,7 +57,14 @@ if (!function_exists('deadline')) {
             $lbl_hour = $hour;
         }
 
-        $data = array('hour' => $hour, 'color' => $color, 'lbl_hour' => $lbl_hour);
+        $lbl_hour = '- '.$rest_hour.' Horas';
+
+        if ($day > 0 && $max_hour == '24') { //validar si es 24 horas
+            $lbl_hour = 'Vencido';
+            $color      = 'danger';
+        }
+
+        $data = array('hour' => $hour, 'color' => $color, 'lbl_hour' => $lbl_hour, 'day' => $day);
         return $data;
     }
 }
