@@ -24,10 +24,10 @@ use stdClass;
 class SwapStrategyTemplate implements TemplateInterface
 {
     const HOUR_STEP_1   = 6;
-    const HOUR_STEP_2   = 1;
+    const HOUR_STEP_2   = 2;
     const HOUR_STEP_2_2 = 2;
-    const HOUR_STEP_2_3 = 1;
-    const HOUR_STEP_2_4 = 1;
+    const HOUR_STEP_2_3 = 2;
+    const HOUR_STEP_2_4 = 2;
     const HOUR_STEP_3   = 24;
     const HOUR_STEP_3_2   = 24;
 
@@ -741,37 +741,38 @@ class SwapStrategyTemplate implements TemplateInterface
             $percent_form_2         = self::percentFormStep2($history);
             $percent_form_2_2       = self::percentFormStep2_2($history);
             //* percent_form_2_3 validate in deadLineFileStep2_3 because is form upload
+            $percent_form_2_4                 = self::percentFormStep2_3($history);
 
+            //* percent_form 3_1 validate in deadLineFormStep3 because is form upload
             $percent_form3_2           = self::percentFormStep3($history);
             $percent_form_3_3         = self::percentFormStep3_2($history);
 
 
             if ($percent_form_step1 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM, $credit->id, 1);
-                //*inicializar las acciones de la siguiente etapa en curso
-                HistoryLog::move($credit->id, HistoryLog::KC_SWAP_UPLOAD_2, HistoryLog::KC_SWAP_UPLOAD_2, null, false);
-                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_2, $credit->id, 0);
             }
            
             if ($percent_form_2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2, $credit->id, 1);
-                //*inicializar las acciones de la siguiente etapa en curso
-                HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_2_2, HistoryLog::KC_SWAP_FORM_STEP_2_2, null, false);
-                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_2, $credit->id, 0);
             }
             
             if ($percent_form_2_2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_2, $credit->id, 1);
+            }
+           
+            if ($percent_form_2_4 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_3, $credit->id, 1);
                 //*inicializar las acciones de la siguiente etapa en curso
-                HistoryLog::move($credit->id, HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, null, false);
-                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, $credit->id, 0);
+                HistoryLog::move($credit->id, HistoryLog::KC_SWAP_UPLOAD_STEP_3, HistoryLog::KC_SWAP_UPLOAD_STEP_3, null, false);
+                HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_3, HistoryLog::KC_SWAP_FORM_STEP_3, null, false);
+                HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_3_2, HistoryLog::KC_SWAP_FORM_STEP_3_2, null, false);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_3, $credit->id, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3, $credit->id, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3_2, $credit->id, 1);
             }
             
             if ($percent_form3_2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3, $credit->id, 1);
-                //*inicializar las acciones de la siguiente etapa en curso
-                HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_3_2, HistoryLog::KC_SWAP_FORM_STEP_3_2, null, false);
-                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3_2, $credit->id, 0);
             }
             
             if ($percent_form_3_3 == 100) {
@@ -823,6 +824,10 @@ class SwapStrategyTemplate implements TemplateInterface
         $status_step2               = 'En espera';
         $status_step3               = 'En espera';
         $status_step4               = 'En espera';
+        $status_step5               = 'En espera';
+        $status_step6               = 'En espera';
+        $status_step7               = 'En espera';
+        $status_step8               = 'En espera';
 
         //percent step 1
         $percent_file               = self::percentFile($credit->id);
@@ -869,18 +874,41 @@ class SwapStrategyTemplate implements TemplateInterface
         
         $percent_form_step6_1       = (new $template_control_desk)->percentFormStep3_1($history); //etapa 6
         $percent_form_step6_2       = (new $template_control_desk)->percentFormStep3_2($history); //etapa 6
+        
+        $percent_form_step7       = (new $template_control_desk)->percentFormStep4($history); //etapa 6
         $new_percent_form_step6_1   = $percent_form_step6_1 == 100 ? 50 : $percent_form_step6_1;
         $new_percent_form_step6_2   = $percent_form_step6_2 == 100 ? 50 : $percent_form_step6_2;
         $kc_total_percent_step6     = $new_percent_form_step6_1 + $new_percent_form_step6_2;
 
         $percent_form_step8         = (new $template_control_desk)->percentFormStep5($history); //etapa 5
+        if ($status_step1 == 'Concluido') {
+            $status_step2               = ($total_percent2 >= 100) ? 'Concluido' : 'En curso';
+        }
         
-        $status_step2               = ($total_percent2 >= 100) ? 'Concluido' : 'En curso';
-        $status_step3               = ($total_percent_step3 >= 100) ? 'Concluido' : 'En curso';
-        $status_step4               = ($kc_total_percent_step4 >= 100) ? 'Concluido' : 'En curso';
-        $status_step5               = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
-        $status_step6               = ($kc_total_percent_step6 >= 100) ? 'Concluido' : 'En curso';
-        $status_step8               = ($percent_form_step8 >= 100) ? 'Concluido' : 'En curso';
+        if ($status_step2 == 'Concluido') {
+            $status_step3               = ($total_percent_step3 >= 100) ? 'Concluido' : 'En curso';
+        }
+        
+        if ($status_step3 == 'Concluido') {
+            $status_step4               = ($kc_total_percent_step4 >= 100) ? 'Concluido' : 'En curso';
+        }
+        
+        if ($status_step4 == 'Concluido') {
+            $status_step5               = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
+        }
+        
+        if ($status_step5 == 'Concluido') {
+            $status_step6               = ($kc_total_percent_step6 >= 100) ? 'Concluido' : 'En curso';
+        }
+        
+        if ($status_step6 == 'Concluido') {
+            $status_step7               = ($percent_form_step7 >= 100) ? 'Concluido' : 'En curso';
+        }
+        
+        if ($status_step7 == 'Concluido') {
+            $status_step8               = ($percent_form_step8 >= 100) ? 'Concluido' : 'En curso';
+        }
+
 
         $menu_options               = self::menuOptionsStep($history);
 
@@ -897,27 +925,27 @@ class SwapStrategyTemplate implements TemplateInterface
             $option_step2   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         }
         
-        if ($option_step2 == 'Concluido') {
+        if ($status_step2 == 'Concluido') {
             $option_step3   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
         }
         
-        if ($option_step3 == 'Concluido') {
+        if ($status_step3 == 'Concluido') {
             $option_step4   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
         }
         
-        if ($option_step4 == 'Concluido') {
+        if ($status_step4 == 'Concluido') {
             $option_step5   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep5']])->render();
         }
         
-        if ($option_step5 == 'Concluido') {
+        if ($status_step5 == 'Concluido') {
             $option_step6   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep6']])->render();
         }
         
-        if ($option_step6 == 'Concluido') {
+        if ($status_step6 == 'Concluido') {
             $option_step7   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep7']])->render();
         }
         
-        if ($option_step7 == 'Concluido') {
+        if ($status_step7 == 'Concluido') {
             $option_step8   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep8']])->render();
         }
 
@@ -937,12 +965,13 @@ class SwapStrategyTemplate implements TemplateInterface
         $view_percent4   = \View::make('panel.module.view_percent', ['percent' => $kc_total_percent_step4])->render();
         $view_percent5   = \View::make('panel.module.view_percent', ['percent' => $percent_form_step5])->render();
         $view_percent6   = \View::make('panel.module.view_percent', ['percent' => $kc_total_percent_step6])->render();
+        $view_percent7   = \View::make('panel.module.view_percent', ['percent' => $percent_form_step7])->render();
         $view_percent8   = \View::make('panel.module.view_percent', ['percent' => $percent_form_step8])->render();
 
         $data = array();
         $data[] = array(
             'name' => $view_count_1,
-            'step' => 'Información de crédito actual',
+            'step' => 'Carga',
             'status' => $status_step1,
             'progress' => $view_percent,
             'deadline' => '',
@@ -997,8 +1026,8 @@ class SwapStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => $view_count_7,
             'step' => 'KYC',
-            'status' => 'Opcional',
-            'progress' => 'N/A',
+            'status' => $status_step5,
+            'progress' => $view_percent7,
             'deadline' => '',
             'options' => $option_step7,
         );
@@ -1073,9 +1102,6 @@ class SwapStrategyTemplate implements TemplateInterface
         
         if ($percent_file == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD, $credit->id, 1);
-            //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM, HistoryLog::KC_SWAP_FORM, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM, $credit->id, 0);
         }
 
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD], $credit->id)[0];
@@ -1099,13 +1125,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_file                 = self::percentForm($history);
         if ($percent_file == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_2, $credit->id, 1);
-            //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_2, HistoryLog::KC_SWAP_FORM_STEP_2, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2, $credit->id, 0);
         }
         $max_hour                     = self::HOUR_STEP_1;
-        dd('test');
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM], $credit->id)[0];
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD_2], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_file, $color_inf_credit, $show_max_hour);
         $color_inf_credit             = $data_deadline['color'];
@@ -1127,7 +1149,13 @@ class SwapStrategyTemplate implements TemplateInterface
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_2, $credit->id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
             HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_2, HistoryLog::KC_SWAP_FORM_STEP_2, null, false);
+            HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_2_2, HistoryLog::KC_SWAP_FORM_STEP_2_2, null, false);
+            HistoryLog::move($credit->id, HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, null, false);
+            HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_2_3, HistoryLog::KC_SWAP_FORM_STEP_2_3, null, false);
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2, $credit->id, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_2, $credit->id, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, $credit->id, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_3, $credit->id, 0);
         }
         $max_hour                     = self::HOUR_STEP_1;
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD_2], $credit->id)[0];
@@ -1226,10 +1254,12 @@ class SwapStrategyTemplate implements TemplateInterface
         $credit                 = $history->historyCredit;
         $advisor                = $credit->creditAdvisor;
         $status_file            = 'En espera';
+        $status_file_2          = 'En espera';
+        $status_form            = 'En espera';
 
-        $percent_file       = self::percentFile($credit->id);
-        $percent_form       = self::percentForm($history);
-        $percent_file_2     = self::percentFile($credit->id, '1_2');
+        $percent_file           = self::percentFile($credit->id);
+        $percent_form           = self::percentForm($history);
+        $percent_file_2         = self::percentFile($credit->id, '1_2');
         
 
         $user                   = User::find($advisor->id);
@@ -1239,27 +1269,28 @@ class SwapStrategyTemplate implements TemplateInterface
         $menu_options           = self::menuOptions($history, 1);
         $view_dead_line_step1   = self::deadLineStep1($history);
         $view_dead_line_step2   = self::deadLineStep1_2($history);
-        dd('test');
         $view_dead_line_step3   = self::deadLineStep1_3($history);
 
-        $option2 = null;
-        $option3 = null;
+        $option2                = null;
+        $option3                = null;
 
-        $status_file = ($percent_file >= 100) ? 'Concluido' : 'En curso';
-        $status_file_2 = ($percent_file_2 >= 100) ? 'Concluido' : 'En curso';
-        $status_form = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+        $status_file            = ($percent_file >= 100) ? 'Concluido' : 'En curso';
+        if ($status_file == 'Concluido') {
+            $status_file_2          = ($percent_file_2 >= 100) ? 'Concluido' : 'En curso';
+        }
+
+        if ($status_file_2 == 'Concluido') {
+            $status_form            = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+        }
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }
 
         $option1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-        if ($percent_file == 100) {
-            $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-        }
-        if ($percent_form == 100) {
-            $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file2']])->render();
-        }
+        $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file2']])->render();
+       
        
         $subject1 = HistoryLog::$label_subject[38];
         $subject2 = HistoryLog::$label_subject[39];
@@ -1299,6 +1330,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $credit                 = $history->historyCredit;
         $advisor                = $credit->creditAdvisor;
         $status_step2           = 'En espera';
+        $status_step2_2         = 'En espera';
+        $status_step2_3         = 'En espera';
+        $status_step2_4         = 'En espera';
 
         $percent_form_2         = self::percentFormStep2($history);
         $percent_form_2_2       = self::percentFormStep2_2($history);
@@ -1321,25 +1355,24 @@ class SwapStrategyTemplate implements TemplateInterface
         $option4                = null;
         
         $status_step2           = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
-        $status_step2_2         = ($percent_form_2_2 >= 100) ? 'Concluido' : 'En curso';
-        $status_step2_3         = ($percent_form_2_3 >= 100) ? 'Concluido' : 'En curso';
-        $status_step2_4         = ($percent_form_2_4 >= 100) ? 'Concluido' : 'En curso';
+        if ($status_step2 == 'Concluido') {
+            $status_step2_2         = ($percent_form_2_2 >= 100) ? 'Concluido' : 'En curso';
+        }
+        if ($status_step2_2 == 'Concluido') {
+            $status_step2_3         = ($percent_form_2_3 >= 100) ? 'Concluido' : 'En curso';
+        }
+        if ($status_step2_3 == 'Concluido') {
+            $status_step2_4         = ($percent_form_2_4 >= 100) ? 'Concluido' : 'En curso';
+        }
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }
 
         $option1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-        if ($percent_form_2 == 100) {
-            $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
-        }
-        if ($percent_form_2_2 == 100) {
-            $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-        }
-        if ($percent_form_2_3 == 100) {
-            $option4  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form3']])->render();
-        }
-       
+        $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
+        $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
+        $option4  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form3']])->render();
 
         $data = array();
 
@@ -1394,6 +1427,8 @@ class SwapStrategyTemplate implements TemplateInterface
         $credit                 = $history->historyCredit;
         $advisor                = $credit->creditAdvisor;
         $status_file            = 'En espera';
+        $status_form           = 'En espera';
+        $status_form_2         = 'En espera';
 
         $percent_file           = self::percentFile($credit->id, '3');
         $percent_form           = self::percentFormStep3($history);
@@ -1415,21 +1450,20 @@ class SwapStrategyTemplate implements TemplateInterface
         $option4                = null;
         
         $status_file            = ($percent_file >= 100) ? 'Concluido' : 'En curso';
-        $status_form            = ($percent_form >= 100) ? 'Concluido' : 'En curso';
-        $status_form_2          = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
+        if ($status_file == 'Concluido') {
+            $status_form            = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+        }
+        if ($status_form == 'Concluido') {
+            $status_form_2          = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
+        }
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }
 
         $option1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-        if ($percent_file == 100) {
-            $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-        }
-        if ($percent_form == 100) {
-            $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
-        }
-       
+        $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
        
 
         $data = array();
@@ -1513,9 +1547,6 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form                 = self::percentFile($credit->id);
         if ($percent_form == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, $credit->id, 1);
-            //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_2_3, HistoryLog::KC_SWAP_FORM_STEP_2_3, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_3, $credit->id, 0);
         }
         $max_hour                     = self::HOUR_STEP_2_3;
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD_STEP_2_3], $credit->id)[0];
@@ -1534,9 +1565,6 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form                 = self::percentFile($credit->id);
         if ($percent_form == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_3, $credit->id, 1);
-            //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_3, HistoryLog::KC_SWAP_FORM_STEP_3, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3, $credit->id, 0);
         }
         $max_hour                     = self::HOUR_STEP_3;
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD_STEP_3], $credit->id)[0];
@@ -2121,18 +2149,30 @@ class SwapStrategyTemplate implements TemplateInterface
     {
         $credit     = $history->historyCredit;
         $data_actions = array(
-            HistoryLog::KC_SWAP_UPLOAD,
-            HistoryLog::KC_SWAP_FORM,
-            HistoryLog::KC_SWAP_UPLOAD_2,
-            HistoryLog::KC_SWAP_FORM_STEP_2,
-            HistoryLog::KC_SWAP_FORM_STEP_2_2,
-            HistoryLog::KC_SWAP_UPLOAD_STEP_2_3,
-            HistoryLog::KC_SWAP_FORM_STEP_2_3,
-            HistoryLog::KC_SWAP_UPLOAD_STEP_3,
-            HistoryLog::KC_SWAP_FORM_STEP_3,
-            HistoryLog::KC_SWAP_FORM_STEP_3_2,
+            HistoryLog::KC_SWAP_UPLOAD, //1
+            HistoryLog::KC_SWAP_FORM, //2
+            HistoryLog::KC_SWAP_UPLOAD_2, //3
+
+            HistoryLog::KC_SWAP_FORM_STEP_2, //4
+            HistoryLog::KC_SWAP_FORM_STEP_2_2, //5
+            HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, //6
+            HistoryLog::KC_SWAP_FORM_STEP_2_3, //7
+
+            HistoryLog::KC_SWAP_UPLOAD_STEP_3, //8
+            HistoryLog::KC_SWAP_FORM_STEP_3, //9
+            HistoryLog::KC_SWAP_FORM_STEP_3_2, //10
             
-            HistoryLog::KC_SWAP_FORM_STEP_3_2,
+            HistoryLog::KC_CONTROL_DESK_UPLOAD, //11
+            HistoryLog::KC_CONTROL_DESK_FORM, //12
+
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, //13
+
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, //14
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, //15
+
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, //16
+
+            HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, //17
         );
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
@@ -2144,32 +2184,22 @@ class SwapStrategyTemplate implements TemplateInterface
             $status_progress += $status != null ? $status : 0;
         }
 
-        switch ($status_progress) {
-            case 1:
-                $current_show = 'Determinar crédito max';
-                break;
-            case 2:
-                $current_show = 'Crédito deseado';
-                break;
-            case 3:
-                $current_show = 'Documentos cliente';
-                break;
-            case 4:
-                $current_show = 'Llenado de solicitud';
-                break;
-            case 5:
-                $current_show = 'Entrevista';
-                break;
-            case 6:
-                $current_show = 'Análisis KYC';
-                break;
-            case 7:
-                $current_show = 'Contactar financiera';
-                break;
-            
-            default:
-                $current_show = 'Documentos cliente';
-                break;
+        if ($status_progress < 3) {
+            $current_show = 'Carga';
+        } elseif ($status_progress < 7) {
+            $current_show = 'Firma y envio solicitud terminación';
+        } elseif ($status_progress < 10) {
+            $current_show = 'Cotización de liquidación';
+        } elseif ($status_progress < 12) {
+            $current_show = 'Viabilidad';
+        } elseif ($status_progress == 12) {
+            $current_show = 'Características del crédito';
+        } elseif ($status_progress == 13) {
+            $current_show = 'Captura de información';
+        } elseif ($status_progress < 15) {
+            $current_show = 'KYC';
+        } elseif ($status_progress < 16) {
+            $current_show = 'Asignar usuario financiera';
         }
 
         $percent =  (($status_progress) / 8) * 100;

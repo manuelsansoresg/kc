@@ -33,7 +33,11 @@ class KcSwapController extends Controller
     public function continue($history_id)
     {
         $history = HistoryLog::find($history_id);
-        HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3_2, $history->id_rel, 1);
+        $credit                     = $history->historyCredit;
+
+        HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_UPLOAD, HistoryLog::KC_CONTROL_DESK_UPLOAD, null, false);
+        HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM, null, false);
+
         HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $history->id_rel, 0);
         HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $history->id_rel, 0);
     }
