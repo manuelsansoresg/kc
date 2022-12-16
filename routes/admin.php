@@ -3,7 +3,11 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::resource('home', '\App\Http\Controllers\Panel\PanelController')->middleware('auth');
+//Route::resource('home', '\App\Http\Controllers\Panel\PanelController')->middleware('auth');
+
+Route::get('home', function () {
+    return redirect('/panel/lead');
+});
 
 
 //*client profile

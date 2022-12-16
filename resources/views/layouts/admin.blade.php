@@ -65,28 +65,7 @@
                                    
                                 </li>
                                 
-                                <li class="nk-menu-item has-sub">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-archived"></em></span>
-                                        <span class="nk-menu-text">Archivo</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
-                                        
-                                        <li class="nk-menu-item">
-                                            <a href="/panel/archive/lead" class="nk-menu-link">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
-                                                <span class="nk-menu-text">Prospecto persona</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                        <li class="nk-menu-item">
-                                            <a href="/panel/archive/product" class="nk-menu-link">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-sign-usd-alt2"></em></span>
-                                                <span class="nk-menu-text">Créditos</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                    </ul>
-                                   
-                                </li>
+                                
 
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
@@ -263,6 +242,28 @@
                                             <a href="/panel/credit/product/{{ $m_history::CREDITS_PAID }}" class="nk-menu-link">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-sign-usd-alt2"></em></span>
                                                 <span class="nk-menu-text">Pagados</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                    </ul>
+                                   
+                                </li>
+                                <li class="nk-menu-item has-sub">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-archived"></em></span>
+                                        <span class="nk-menu-text">Archivo</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/archive/lead" class="nk-menu-link">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                                                <span class="nk-menu-text">Prospecto persona</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/archive/product" class="nk-menu-link">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-sign-usd-alt2"></em></span>
+                                                <span class="nk-menu-text">Créditos</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                     </ul>
