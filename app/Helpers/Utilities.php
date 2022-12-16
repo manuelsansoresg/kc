@@ -35,8 +35,6 @@ if (!function_exists('deadline')) {
         $lbl_hour   = '';
         $color      = 'success';
         $rest_hour = $hour - $max_hour;
-        
-        
 
         if ($percent === 100) {
             $lbl_hour = 'Concluido';
