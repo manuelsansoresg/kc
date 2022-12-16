@@ -90,7 +90,6 @@ class HomeController extends Controller
 
     public function survey($credit_id)
     {
-        
     }
 
     /**
@@ -103,5 +102,10 @@ class HomeController extends Controller
     {
         $enums = array('Cancelar' => 'credit_reason_cancel', 'Rechazar' => 'credit_reason_reject', 'Archivar' => 'credit_reason_archive', 'ArchivarLead' => 'reason_archive');
         return response()->json(config('enums.'.$enums[$type]));
+    }
+
+    public function resumeCredit(Credit $credit)
+    {
+        return view('panel.credit.credit_resume', compact('credit'));
     }
 }
