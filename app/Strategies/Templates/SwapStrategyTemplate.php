@@ -2307,7 +2307,7 @@ class SwapStrategyTemplate implements TemplateInterface
             return $current_show;
         }
         
-        return $percent;
+        return reduceDecimal($percent);
     }
 
     public function getFile($template_config_id)
