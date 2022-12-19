@@ -41,3 +41,5 @@ Route::get('reporte/{history_id}/metodologia', ['\App\Http\Controllers\HomeContr
 Route::get('credit-resume/{credit}', ['\App\Http\Controllers\HomeController', 'resumeCredit']);
 
 Route::resource('survey', '\App\Http\Controllers\Panel\Module\SurveyController');
+
+Route::get('user/tyc/validate', ['\App\Http\Controllers\HomeController', 'validateAccess']);

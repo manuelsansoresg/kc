@@ -36,6 +36,9 @@ Route::group(['prefix' => 'user'], function () {
     //*esta ruta equivale tanto como administrador como asesor
     Route::get('administrador/{id}/delete', ['\App\Http\Controllers\Panel\User\AdminController', 'destroy'])->middleware('auth');
 
+    Route::post('tyc/accept', ['\App\Http\Controllers\Panel\User\AdminController', 'tycAccept'])->middleware('auth');
+
+
     
 });
 

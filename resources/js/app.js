@@ -53,8 +53,47 @@ window.moveElement = function (section, id, idDatatable) {
     });
 }
 
+window.isAccess = function() {
+    axios
+    .get("/user/tyc/validate")
+    .then(function (response) {
+        let result = response.data;
+        let is_block = result.is_block;
+        if (is_block == true) {
+            $('#modal-access').modal('show');
+        } else {
+            $('#modal-access').modal('hide');
+        }
+    })
+    .catch(e => {
+    });
+}
 
+$( "#frm-tyc" ).submit(function( event ) {
+    event.preventDefault();
+    const new_form    = document.getElementById('frm-tyc');
+    const data        = new FormData(new_form);
 
+    axios.post("/panel/user/tyc/accept", data)
+    .then(function (response) {
+        $('#modal-access').modal('hide');
+        isAccess();
+        
+    })
+    .catch(e => {
+    });
+});
+
+$().ready(function () {
+   
+    isAccess();
+    var myModalEl = document.getElementById('modal-access')
+    myModalEl.addEventListener('hidden.bs.modal', function (event) {
+        isAccess();
+    })
+
+    
+});
 
 
 require('./components/websocket');

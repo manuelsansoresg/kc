@@ -4363,6 +4363,36 @@ window.moveElement = function (section, id, idDatatable) {
   })["catch"](function (e) {});
 };
 
+window.isAccess = function () {
+  axios.get("/user/tyc/validate").then(function (response) {
+    var result = response.data;
+    var is_block = result.is_block;
+
+    if (is_block == true) {
+      $('#modal-access').modal('show');
+    } else {
+      $('#modal-access').modal('hide');
+    }
+  })["catch"](function (e) {});
+};
+
+$("#frm-tyc").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById('frm-tyc');
+  var data = new FormData(new_form);
+  axios.post("/panel/user/tyc/accept", data).then(function (response) {
+    $('#modal-access').modal('hide');
+    isAccess();
+  })["catch"](function (e) {});
+});
+$().ready(function () {
+  isAccess();
+  var myModalEl = document.getElementById('modal-access');
+  myModalEl.addEventListener('hidden.bs.modal', function (event) {
+    isAccess();
+  });
+});
+
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
 })();
 

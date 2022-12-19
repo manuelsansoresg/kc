@@ -7,7 +7,9 @@ use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Notification;
 use App\Models\Sendgridtest;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -107,5 +109,16 @@ class HomeController extends Controller
     public function resumeCredit(Credit $credit)
     {
         return view('panel.credit.credit_resume', compact('credit'));
+    }
+
+    public function validateAccess()
+    {
+        $role = Auth::user()->hasRole('Cliente financiera');
+        $is_block = false;
+        if ($role === true) {
+            $user = User::find(Auth::user()->id);
+            $is_block = $user->tyc_accept === 1 ? false : true;
+        }
+        return response()->json(['is_block' => $is_block]);
     }
 }

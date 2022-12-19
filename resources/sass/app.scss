@@ -26,6 +26,13 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     width: 100%;
 }
 
+.tyc{
+    border: 1px solid rgb(194, 191, 191);
+    width: 100%;
+    height: 400px;
+    overflow: auto;
+}
+
 #dt-acctions .nk-tb-col, .row_reduce .nk-tb-col{
     padding: 0.5rem 0.5rem;
 }

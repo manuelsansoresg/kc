@@ -34,7 +34,8 @@ class User extends Authenticatable
         'type_person',
         'rol_id',
         'is_rss',
-        'is_access_config'
+        'is_access_config',
+        'tyc_accept'
 
     ];
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -110,5 +111,13 @@ class AdminController extends Controller
         $user = User::find($id);
         $user->delete();
         return response()->json(200);
+    }
+
+    public function tycAccept(Request $request)
+    {
+        $tyc = $request->tyc;
+        $user = User::find(Auth::user()->id);
+        $user->tyc_accept = $tyc;
+        $user->update();
     }
 }
