@@ -299,6 +299,22 @@ class SwapStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null,
             ],
+            10 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=1',
+                'col' => 'col-12'
+            ],
             
             
         );
@@ -327,6 +343,22 @@ class SwapStrategyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null
+            ],
+            2 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=2',
+                'col' => 'col-12'
             ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -369,6 +401,22 @@ class SwapStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => true,
                 'value' => 1,
+            ],
+            3 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=2',
+                'col' => 'col-12'
             ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -495,6 +543,22 @@ class SwapStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => true,
                 'value' => 1,
+            ],
+            8 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=2',
+                'col' => 'col-12'
             ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_button' => $name_button, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -650,6 +714,23 @@ class SwapStrategyTemplate implements TemplateInterface
                 'is_disabled' => false,
                 'value' => $credit->termination_deadline,
             ],
+
+            10 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=3',
+                'col' => 'col-12'
+            ],
             
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_button' => $name_button, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -701,6 +782,23 @@ class SwapStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null,
                 'col' => 'col-12 col-md-4',
+            ],
+
+            3 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=3',
+                'col' => 'col-12'
             ],
             
             
