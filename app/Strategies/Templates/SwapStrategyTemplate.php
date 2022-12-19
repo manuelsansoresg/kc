@@ -2019,7 +2019,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $menu = array(
             'progress' => array(
                 [
-                    'link' => '/panel/kc-check-up/report/answer_module/' . $history->id . '/show/',
+                    'link' => '/panel/swap/report/answer_module/' . $history->id . '/show/',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut',
@@ -2027,7 +2027,7 @@ class SwapStrategyTemplate implements TemplateInterface
             ),
             'desition' => array(
                 [
-                    'link' => '/panel/kc-check-up/report/desition/' . $history->id . '/show/',
+                    'link' => '/panel/swap/report/desition/' . $history->id . '/show/',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut',

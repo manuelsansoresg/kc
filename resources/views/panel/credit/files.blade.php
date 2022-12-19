@@ -16,8 +16,12 @@
                             <div class="nk-block-des text-soft">
                                 <nav>
                                     <ul class="breadcrumb">
+                                        @php
+                                            $title = array('newCredit' => 'KC- Check up', 'debtCredit' => 'KC- Check up', 'controlDesk' => 'KC- Control desk', 'swap' => 'KC- Swap' , 'delivery' => 'KC- Delivery');
+                                            $route = array('newCredit' => 'kc-check-up', 'debtCredit' => 'kc-check-up', 'controlDesk' => 'kc-control-desk', 'swap' => 'kc-swap' , 'delivery' => 'kc-delivery');
+                                        @endphp
                                         <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
-                                        <li class="breadcrumb-item active"><a href="/panel/kc-check-up">KC- Check up</a>
+                                        <li class="breadcrumb-item active"><a href="/panel/{{ isset($route[Request::segment(4)])? $route[Request::segment(4)] : '' }}"> {{ isset($title[Request::segment(4)])? $title[Request::segment(4)] : '' }} </a>
                                         <li class="breadcrumb-item active"><a href="/panel/template/steps/{{ Request::segment(4) }}/{{  $history->id }}/show">Etapas</a>
                                         <li class="breadcrumb-item active"><a href="/panel/template/actions/{{ Request::segment(4) }}/{{  $history->id }}/show">Acciones</a>
                                         <li class="breadcrumb-item active">Acción carga
