@@ -103,7 +103,7 @@ class SwapStrategyTemplate implements TemplateInterface
     public function uploadstep2()
     {
         $elements = array(
-            3 => [
+            4 => [
                 'name' => 'Solicitud de terminación anticipada de contrato (Firmada)',
                 'comment' => null,
                 'is_required' => true,
