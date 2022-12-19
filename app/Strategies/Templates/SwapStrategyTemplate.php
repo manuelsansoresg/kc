@@ -67,9 +67,9 @@ class SwapStrategyTemplate implements TemplateInterface
                 'comment_date' => null
             ],
             2 => [
-                'name' => 'Identificación oficial',
-                'comment' => 'INE vigente',
-                'is_required' => false,
+                'name' => 'Edo Cta financiera actual',
+                'comment' => 'Más reciente',
+                'is_required' => true,
                 'is_date' => false,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
