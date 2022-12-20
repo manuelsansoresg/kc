@@ -932,12 +932,11 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form               = self::percentForm($history);
         $percent_file_1_2           = self::percentFile($credit->id, '1_2');
         
+        $new_percent_file           = $percent_file == 100 ? 1 : $percent_file;
+        $new_percent_file2          = $percent_file_1_2 == 100 ? 1 : $percent_file_1_2;
+        $new_percent_form           = $percent_form == 100 ? 1 : $percent_form;
         
-        $new_percent_file           = $percent_file == 100 ? 33 : $percent_file;
-        $new_percent_file2          = $percent_file_1_2 == 100 ? 33 : $percent_file_1_2;
-        $new_percent_form           = $percent_form == 100 ? 34 : $percent_form;
-        
-        $total_percent              = $new_percent_file + $new_percent_file2 + $new_percent_form;
+        $total_percent              = ($new_percent_file + $new_percent_file2 + $new_percent_form) / 3 * 100 ;
         $status_step1               = ($total_percent >= 100) ? 'Concluido' : 'En curso';
 
 
@@ -1197,7 +1196,6 @@ class SwapStrategyTemplate implements TemplateInterface
         $credit             = $history->historyCredit;
         $color_inf_credit   = 'success';
         $percent_file       = self::percentFile($credit->id);
-        
         if ($percent_file == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD, $credit->id, 1);
         }
@@ -1373,13 +1371,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $option3                = null;
 
         $status_file            = ($percent_file >= 100) ? 'Concluido' : 'En curso';
-        if ($status_file == 'Concluido') {
-            $status_file_2          = ($percent_file_2 >= 100) ? 'Concluido' : 'En curso';
-        }
-
-        if ($status_file_2 == 'Concluido') {
-            $status_form            = ($percent_form >= 100) ? 'Concluido' : 'En curso';
-        }
+        $status_file_2          = ($percent_file_2 >= 100) ? 'Concluido' : 'En curso';
+        $status_form            = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+       
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -1453,15 +1447,10 @@ class SwapStrategyTemplate implements TemplateInterface
         $option4                = null;
         
         $status_step2           = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
-        if ($status_step2 == 'Concluido') {
-            $status_step2_2         = ($percent_form_2_2 >= 100) ? 'Concluido' : 'En curso';
-        }
-        if ($status_step2_2 == 'Concluido') {
-            $status_step2_3         = ($percent_form_2_3 >= 100) ? 'Concluido' : 'En curso';
-        }
-        if ($status_step2_3 == 'Concluido') {
-            $status_step2_4         = ($percent_form_2_4 >= 100) ? 'Concluido' : 'En curso';
-        }
+        $status_step2_2         = ($percent_form_2_2 >= 100) ? 'Concluido' : 'En curso';
+        $status_step2_3         = ($percent_form_2_3 >= 100) ? 'Concluido' : 'En curso';
+        $status_step2_4         = ($percent_form_2_4 >= 100) ? 'Concluido' : 'En curso';
+       
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -1548,12 +1537,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $option4                = null;
         
         $status_file            = ($percent_file >= 100) ? 'Concluido' : 'En curso';
-        if ($status_file == 'Concluido') {
-            $status_form            = ($percent_form >= 100) ? 'Concluido' : 'En curso';
-        }
-        if ($status_form == 'Concluido') {
-            $status_form_2          = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
-        }
+        $status_form            = ($percent_form >= 100) ? 'Concluido' : 'En curso';
+        $status_form_2          = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
+       
 
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
@@ -2341,12 +2327,12 @@ class SwapStrategyTemplate implements TemplateInterface
     //*TODO: se deshabilito al ser opcional la caja de carga
     public function percentFile($id_rel, $step = null)
     {
-        $model = File::MODEL['swap'];
-        $percent = 0;
-        $total_valid = 1;
-        $count_file = 0;
+        $model        = File::MODEL['swap'];
+        $count_file   = 0;
         $percent_file = 0;
         $config_files = self::configUpload($step);
+        $total        = 0;
+
         foreach ($config_files as $key => $config_file) {
             $file = File::where([
                 'model' => $model,
@@ -2354,14 +2340,16 @@ class SwapStrategyTemplate implements TemplateInterface
                 'template_config_id' => $key,
             ])
                 ->first();
+            if ($config_file['is_required'] == true) {
+                $total = $total + 1;
+            }
             if ($file != null && $config_file['is_required'] == true) {
                 $count_file = $count_file + 1;
                 $percent_file = $percent_file + 100;
             }
         }
 
-        $percent =  (100 / 100) * $percent_file;
-        return $percent;
+        return ($count_file  )/ $total * 100;
     }
 
     public function optionBreadcumbStep($history)

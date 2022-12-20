@@ -35,7 +35,8 @@ if (!function_exists('deadline')) {
         $lbl_hour   = '';
         $color      = 'success';
         $rest_hour = $hour - $max_hour;
-
+        $lbl_hour = '- '.$rest_hour.' Horas';
+        
         if ($percent === 100) {
             $lbl_hour = 'Concluido';
             $color      = 'success';
@@ -55,7 +56,7 @@ if (!function_exists('deadline')) {
             $lbl_hour = $hour;
         }
 
-        $lbl_hour = '- '.$rest_hour.' Horas';
+        
 
         if ($day > 0 && $max_hour == '24') { //validar si es 24 horas
             $lbl_hour = 'Vencido';
