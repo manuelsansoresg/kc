@@ -35,7 +35,7 @@ if (!function_exists('deadline')) {
         $lbl_hour   = '';
         $color      = 'success';
         $rest_hour = $hour - $max_hour;
-        $lbl_hour = '- '.$rest_hour.' Horas';
+        $lbl_hour = $rest_hour.' Horas';
         
         if ($percent === 100) {
             $lbl_hour = 'Concluido';
