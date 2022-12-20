@@ -1491,7 +1491,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Firma',
             'subject' => $subject2,
-            'description' => 'Solicitar firma',
+            'description' => 'Confirmar',
             'status' => $status_step2_2,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,

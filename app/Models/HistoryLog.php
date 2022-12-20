@@ -177,7 +177,7 @@ class HistoryLog extends Model
         39 => 'Información laboral y contacto',
         46 => 'Solicitud de terminación',
         40 => 'Preparar documento',
-        41 => 'Solcitar firma',
+        41 => 'Confirmar',
         42 => 'Documento firmado',
         43 => 'Enviar solicitud',
         44 => 'Cotización terminación',
