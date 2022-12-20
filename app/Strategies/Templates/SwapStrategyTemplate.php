@@ -2373,8 +2373,8 @@ class SwapStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             1 => array(
-             'title' => 'KC - Aftermarket',
-             'link' => '/panel/kc-aftermarket',
+             'title' => 'KC - Swap',
+             'link' => '/panel/kc-swap',
              'active' => null
             ),
             2 => array(
