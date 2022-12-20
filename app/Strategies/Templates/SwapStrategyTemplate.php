@@ -69,7 +69,7 @@ class SwapStrategyTemplate implements TemplateInterface
             2 => [
                 'name' => 'Edo Cta financiera actual',
                 'comment' => 'Más reciente',
-                'is_required' => true,
+                'is_required' => false,
                 'is_date' => false,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
