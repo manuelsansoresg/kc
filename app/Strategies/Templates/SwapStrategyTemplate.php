@@ -887,6 +887,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 $credit   = Credit::find($id_rel);
                 $client         = $credit->creditClientPerson;
                 $financial_t = $credit->creditAppliedFinancial;
+                $name_financial_t = $financial_t->email;
                 if ($credit->signed == 1) { //* equal percent_form_2_4
                     HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_3, $credit->id, 1);
                     //*inicializar las acciones de la siguiente etapa en curso
@@ -896,7 +897,7 @@ class SwapStrategyTemplate implements TemplateInterface
                     $send_grid_create_sender = new Csendgrid();
                     $sender = $send_grid_create_sender->createEmail($credit->id);
     
-                    $send_grid = new Csendgrid('manuelsansoresg@gmail.com', 'creacion cuenta', ' ', $sender);
+                    $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', $sender);
                     $send_grid->setTemplate('d-944f2768988a43dca2e0ad689954fd20');
                     $data_params = array(
                         'name' => $client->name,
@@ -932,11 +933,11 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form               = self::percentForm($history);
         $percent_file_1_2           = self::percentFile($credit->id, '1_2');
         
-        $new_percent_file           = $percent_file == 100 ? 1 : $percent_file;
-        $new_percent_file2          = $percent_file_1_2 == 100 ? 1 : $percent_file_1_2;
-        $new_percent_form           = $percent_form == 100 ? 1 : $percent_form;
+        $new_percent_file           = $percent_file == 100 ? 1 : 0;
+        $new_percent_file2          = $percent_file_1_2 == 100 ? 1 : 0;
+        $new_percent_form           = $percent_form == 100 ? 1 : 0;
         
-        $total_percent              = ($new_percent_file + $new_percent_file2 + $new_percent_form) / 3 * 100 ;
+        $total_percent              = reduceDecimal(($new_percent_file + $new_percent_file2 + $new_percent_form) / 3 * 100);
         $status_step1               = ($total_percent >= 100) ? 'Concluido' : 'En curso';
 
 
