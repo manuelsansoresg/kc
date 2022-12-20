@@ -2341,9 +2341,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $status_form    = 'En espera';
 
         $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
-        if ($status_file == 'Concluido') {
-            $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-        }
+        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+       
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -2505,9 +2504,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $status_form2 = 'En espera';
 
         $status_form1    = $percent_form1 == 100 ? 'Concluido' : 'En curso';
-        if ($status_form1 == 'Concluido') {
-            $status_form2    = $percent_form2 == 100 ? 'Concluido' : 'En curso';
-        }
+        $status_form2    = $percent_form2 == 100 ? 'Concluido' : 'En curso';
+       
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
