@@ -1768,8 +1768,12 @@ class SwapStrategyTemplate implements TemplateInterface
 
     public function menuPrincipalOptions($history)
     {
-        $credit     = $history->historyCredit;
-        $client     = $credit->creditClientPerson;
+        $credit           = $history->historyCredit;
+        $client           = $credit->creditClientPerson;
+        $status_cancel    = HistoryLog::CREDIT_CANCELED;
+        $status_reject    = HistoryLog::CREDIT_REJECTED;
+        $status_archive   = HistoryLog::CREDIT_ARCHIVE;
+        $old_status       = $history->old_status_id;
 
         $menu = array(
             'options' => array(
@@ -1790,6 +1794,24 @@ class SwapStrategyTemplate implements TemplateInterface
                     'onclick' => '',
                     'name' => 'Ver etapas',
                     'icon' => 'icon ni ni-list-thumb-fill'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => 'moveModal("Cancelar",' . $credit->id . ',' . $status_cancel . ',' . $old_status . ',"dt-kc-swap")',
+                    'name' => 'Cancelar',
+                    'icon' => 'icon ni ni-cross-circle-fill'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => 'moveModal("Rechazar",' . $credit->id . ',' . $status_reject . ',' . $old_status . ',"dt-kc-swap")',
+                    'name' => 'Rechazar',
+                    'icon' => 'icon ni ni-cross-round-fill'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => 'moveModal("Archivar",' . $credit->id . ',' . $status_archive . ',' . $old_status . ',"dt-kc-swap")',
+                    'name' => 'Archivar',
+                    'icon' => 'icon ni ni-archive-fill'
                 ]
             ),
         );
