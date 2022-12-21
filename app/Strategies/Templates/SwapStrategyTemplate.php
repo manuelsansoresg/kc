@@ -963,24 +963,8 @@ class SwapStrategyTemplate implements TemplateInterface
         $new_percent_file_step3_3   = $percent_form_2_step3  == 100 ? 34 : $percent_form_2_step3;
         $total_percent_step3        = $new_percent_form_step3_1 + $new_percent_form_step3_2 + $new_percent_file_step3_3;
 
-        $template_control_desk      = TemplateValues::STRATEGY['controlDesk'];
-        $ck_percent_file            = (new $template_control_desk)->percentFile($credit->id);
-        $ck_percent_form            = (new $template_control_desk)->percentForm($history); // etapa cuatro
-        $ck_file                    = $ck_percent_file == 100 ? 50 : 0;
-        $ck_form                    = $ck_percent_form == 100 ? 50 : 0;
-        $kc_total_percent_step4     = $ck_file + $ck_form;
-
-        $percent_form_step5         = (new $template_control_desk)->percentFormStep2($history); //etapa 5
         
-        $percent_form_step6_1       = (new $template_control_desk)->percentFormStep3_1($history); //etapa 6
-        $percent_form_step6_2       = (new $template_control_desk)->percentFormStep3_2($history); //etapa 6
-        
-        $percent_form_step7       = (new $template_control_desk)->percentFormStep4($history); //etapa 6
-        $new_percent_form_step6_1   = $percent_form_step6_1 == 100 ? 50 : $percent_form_step6_1;
-        $new_percent_form_step6_2   = $percent_form_step6_2 == 100 ? 50 : $percent_form_step6_2;
-        $kc_total_percent_step6     = $new_percent_form_step6_1 + $new_percent_form_step6_2;
 
-        $percent_form_step8         = (new $template_control_desk)->percentFormStep5($history); //etapa 5
         if ($status_step1 == 'Concluido') {
             $status_step2               = ($total_percent2 >= 100) ? 'Concluido' : 'En curso';
         }
@@ -989,26 +973,6 @@ class SwapStrategyTemplate implements TemplateInterface
             $status_step3               = ($total_percent_step3 >= 100) ? 'Concluido' : 'En curso';
         }
         
-        if ($status_step3 == 'Concluido') {
-            $status_step4               = ($kc_total_percent_step4 >= 100) ? 'Concluido' : 'En curso';
-        }
-        
-        if ($status_step4 == 'Concluido') {
-            $status_step5               = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
-        }
-        
-        if ($status_step5 == 'Concluido') {
-            $status_step6               = ($kc_total_percent_step6 >= 100) ? 'Concluido' : 'En curso';
-        }
-        
-        if ($status_step6 == 'Concluido') {
-            $status_step7               = ($percent_form_step7 >= 100) ? 'Concluido' : 'En curso';
-        }
-        
-        if ($status_step7 == 'Concluido') {
-            $status_step8               = ($percent_form_step8 >= 100) ? 'Concluido' : 'En curso';
-        }
-
 
         $menu_options               = self::menuOptionsStep($history);
 
@@ -1016,11 +980,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $option_step1   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
         $option_step2 = null;
         $option_step3 = null;
-        $option_step4 = null;
-        $option_step5 = null;
-        $option_step6 = null;
-        $option_step7 = null;
-        $option_step8 = null;
+    
         if ($status_step1 == 'Concluido') {
             $option_step2   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         }
@@ -1033,40 +993,17 @@ class SwapStrategyTemplate implements TemplateInterface
             $option_step4   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
         }
         
-        if ($status_step4 == 'Concluido') {
-            $option_step5   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep5']])->render();
-        }
-        
-        if ($status_step5 == 'Concluido') {
-            $option_step6   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep6']])->render();
-        }
-        
-        if ($status_step6 == 'Concluido') {
-            $option_step7   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep7']])->render();
-        }
-        
-        if ($status_step7 == 'Concluido') {
-            $option_step8   = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep8']])->render();
-        }
+       
 
         
         $view_count_1   = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_2   = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
         $view_count_3   = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
-        $view_count_4   = \View::make('panel.module.view_count', ['number' => 'Cuatro'])->render();
-        $view_count_5   = \View::make('panel.module.view_count', ['number' => 'Cinco'])->render();
-        $view_count_6   = \View::make('panel.module.view_count', ['number' => 'Seis'])->render();
-        $view_count_7   = \View::make('panel.module.view_count', ['number' => 'Siete'])->render();
-        $view_count_8   = \View::make('panel.module.view_count', ['number' => 'Ocho'])->render();
-        
+      
         $view_percent   = \View::make('panel.module.view_percent', ['percent' => $total_percent])->render();
         $view_percent2   = \View::make('panel.module.view_percent', ['percent' => $total_percent2])->render();
         $view_percent3   = \View::make('panel.module.view_percent', ['percent' => $total_percent_step3])->render();
-        $view_percent4   = \View::make('panel.module.view_percent', ['percent' => $kc_total_percent_step4])->render();
-        $view_percent5   = \View::make('panel.module.view_percent', ['percent' => $percent_form_step5])->render();
-        $view_percent6   = \View::make('panel.module.view_percent', ['percent' => $kc_total_percent_step6])->render();
-        $view_percent7   = \View::make('panel.module.view_percent', ['percent' => $percent_form_step7])->render();
-        $view_percent8   = \View::make('panel.module.view_percent', ['percent' => $percent_form_step8])->render();
+       
 
         $data = array();
         $data[] = array(
@@ -1095,57 +1032,13 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => '',
             'options' => $option_step3,
         );
-        
-        $data[] = array(
-            'name' => $view_count_4,
-            'step' => 'Viabilidad',
-            'status' => $status_step4,
-            'progress' => $view_percent4,
-            'deadline' => '',
-            'options' => $option_step4,
-        );
-        
-        $data[] = array(
-            'name' => $view_count_5,
-            'step' => 'Características del crédito',
-            'status' => $status_step5,
-            'progress' => $view_percent5,
-            'deadline' => '',
-            'options' => $option_step5,
-        );
-        
-        $data[] = array(
-            'name' => $view_count_6,
-            'step' => 'Captura de información',
-            'status' => $status_step6,
-            'progress' => $view_percent6,
-            'deadline' => '',
-            'options' => $option_step6,
-        );
-        
-        $data[] = array(
-            'name' => $view_count_7,
-            'step' => 'KYC',
-            'status' => $status_step5,
-            'progress' => $view_percent7,
-            'deadline' => '',
-            'options' => $option_step7,
-        );
-        $data[] = array(
-            'name' => $view_count_8,
-            'step' => 'Asignar usuario financiera',
-            'status' => $status_step8,
-            'progress' => $view_percent8,
-            'deadline' => '',
-            'options' => $option_step8,
-        );
        
         return $data;
     }
 
     public function moduleDeadline($history)
     {
-        $max_hour           = 48;
+        $max_hour           = 32;
         $percent            = self::getPercent($history);
         $color_inf_credit   = 'success';
         $hour               = $history->created_at;
@@ -2270,18 +2163,6 @@ class SwapStrategyTemplate implements TemplateInterface
             HistoryLog::KC_SWAP_UPLOAD_STEP_3, //8
             HistoryLog::KC_SWAP_FORM_STEP_3, //9
             HistoryLog::KC_SWAP_FORM_STEP_3_2, //10
-            
-            HistoryLog::KC_CONTROL_DESK_UPLOAD, //11
-            HistoryLog::KC_CONTROL_DESK_FORM, //12
-
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, //13
-
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, //14
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, //15
-
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, //16
-
-            HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, //17
         );
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
@@ -2299,19 +2180,9 @@ class SwapStrategyTemplate implements TemplateInterface
             $current_show = 'Firma y envio solicitud terminación';
         } elseif ($status_progress < 10) {
             $current_show = 'Cotización de liquidación';
-        } elseif ($status_progress < 12) {
-            $current_show = 'Viabilidad';
-        } elseif ($status_progress == 12) {
-            $current_show = 'Características del crédito';
-        } elseif ($status_progress == 13) {
-            $current_show = 'Captura de información';
-        } elseif ($status_progress < 15) {
-            $current_show = 'KYC';
-        } elseif ($status_progress < 16) {
-            $current_show = 'Asignar usuario financiera';
         }
 
-        $percent =  (($status_progress) / 17) * 100;
+        $percent =  (($status_progress) / 10) * 100;
         
 
         if ($show_current_show == true) {
@@ -2387,7 +2258,7 @@ class SwapStrategyTemplate implements TemplateInterface
             ),
             1 => array(
              'title' => 'KC - Swap',
-             'link' => '/panel/swap',
+             'link' => '/panel/kc-swap',
              'active' => null
             ),
             2 => array(
@@ -2416,7 +2287,7 @@ class SwapStrategyTemplate implements TemplateInterface
             ),
             1 => array(
              'title' => 'KC - Swap',
-             'link' => '/panel/swap',
+             'link' => '/panel/kc-swap',
              'active' => null
             ),
             2 => array(
