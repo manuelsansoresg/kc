@@ -864,18 +864,18 @@ class SwapStrategyTemplate implements TemplateInterface
                 HistoryLog::move($credit->id, HistoryLog::KC_SWAP_UPLOAD_STEP_3, HistoryLog::KC_SWAP_UPLOAD_STEP_3, null, false);
                 HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_3, HistoryLog::KC_SWAP_FORM_STEP_3, null, false);
                 HistoryLog::move($credit->id, HistoryLog::KC_SWAP_FORM_STEP_3_2, HistoryLog::KC_SWAP_FORM_STEP_3_2, null, false);
-                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_3, $credit->id, 1);
-                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3, $credit->id, 1);
-                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3_2, $credit->id, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_3, $credit->id, 0);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3, $credit->id, 0);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3_2, $credit->id, 0);
             }
             
             if ($percent_form3_2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3, $credit->id, 1);
             }
             
-            if ($percent_form_3_3 == 100) {
+           /*  if ($percent_form_3_3 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3_2, $credit->id, 1);
-            }
+            } */
 
             if (isset($data_credit['signed']) && $data_credit['signed'] == 1) {
                 $credit   = Credit::find($id_rel);
@@ -1575,7 +1575,7 @@ class SwapStrategyTemplate implements TemplateInterface
     {
         $credit         = $history->historyCredit;
         $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep3($history);
+        $percent_form                 = self::percentFormStep3_2($history);
         $max_hour                     = self::HOUR_STEP_3;
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_3_2], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
@@ -2074,6 +2074,16 @@ class SwapStrategyTemplate implements TemplateInterface
         return $percent;
     }
 
+    public function percentFormStep3_2($history)
+    {
+        $percent        = 0;
+        $credit         = $history->historyCredit;
+        $in_progress    = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_3_2], $credit->id);
+        $get_inprogress = count($in_progress)> 0 ? $in_progress[0] : null;
+        $percent =  $get_inprogress != null && $get_inprogress->status_progress == 1 ? 100 : 0;
+        return $percent;
+    }
+    
     public function percentFormStep3($history)
     {
         $percent = 0;
@@ -2083,65 +2093,29 @@ class SwapStrategyTemplate implements TemplateInterface
         $total_valid = 0;
         
         if ($credit != null && $credit->termination_number != null) {
-            $total_valid = 14;
+            $total_valid =  $total_valid + 1;
         }
         if ($credit != null && $credit->termination_bank_name != null) {
-            $total_valid = $total_valid + 14;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->termination_bank_account_holder != null) {
-            $total_valid = $total_valid + 14;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->termination_bank_clabe != null) {
-            $total_valid = $total_valid + 14;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->termination_bank_reference != null) {
-            $total_valid = $total_valid + 14;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->termination_amount != null) {
-            $total_valid = $total_valid + 14;
+            $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->termination_deadline != null) {
-            $total_valid = $total_valid + 16;
+            $total_valid = $total_valid + 1;
         }
-
         
-        $percent =  (100 / 100) * $total_valid;
+        $percent =  reduceDecimal(($total_valid / 7) * 100);
         return $percent;
-    }
-    
-    public function percentFormStep3_2($history)
-    {
-        $percent = 0;
-        $credit     = $history->historyCredit;
-        $client     = $credit->creditClientPerson;
-
-        $total_valid = 0;
-        
-        if ($credit != null && $credit->termination_number != null) {
-            $total_valid = 14;
-        }
-        if ($credit != null && $credit->termination_bank_name != null) {
-            $total_valid = 14;
-        }
-        if ($credit != null && $credit->termination_bank_account_holder != null) {
-            $total_valid = 14;
-        }
-        if ($credit != null && $credit->termination_bank_clabe != null) {
-            $total_valid = 14;
-        }
-        if ($credit != null && $credit->termination_bank_reference != null) {
-            $total_valid = 14;
-        }
-        if ($credit != null && $credit->termination_amount != null) {
-            $total_valid = 14;
-        }
-        if ($credit != null && $credit->termination_deadline != null) {
-            $total_valid = 16;
-        }
-
-        
-        $percent =  (100 / 100) * $total_valid;
-        return 100;
     }
 
     

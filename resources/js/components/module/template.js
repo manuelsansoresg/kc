@@ -841,11 +841,20 @@ window.modalReference = function(history_id, reference_id) {
 }
 
 window.swapCreditContinue = function(history_id) {
+    let url_redirect  = null;
+
+    if (document.getElementById('url_redirect')) {
+        url_redirect = $('#url_redirect').val();
+    }
+
     axios
         .get("/panel/kc-swap/credit/"+history_id+"/continue")
         .then(function (response) {
             let result = response.data;
-            window.history.back();
+            if (url_redirect == null) {
+                window.history.back();
+            }
+            window.location = url_redirect;
         })
         .catch(e => {
         });
