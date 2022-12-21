@@ -335,15 +335,18 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_SWAP_UPLOAD, HistoryLog::KC_SWAP_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_SWAP_FORM, HistoryLog::KC_SWAP_FORM);
             HistoryLog::move($id_rel, HistoryLog::KC_SWAP_UPLOAD_2, HistoryLog::KC_SWAP_UPLOAD_2);
-
+            
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_2, $id_rel, 0);
             //*Cuando es crédito nuevo y viene de KC-Checkup
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
         }
-
+        
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $id_rel, 0);
+            //*inicializar las acciones
+            HistoryLog::move($id_rel, HistoryLog::KC_AFTER_FORM, HistoryLog::KC_AFTER_FORM);
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $id_rel, 0);
         }
         if ($status_id == HistoryLog::CREDITS_PAID) {
