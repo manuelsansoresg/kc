@@ -20,7 +20,7 @@ class Csendgrid
     public $attach;
     public $path;
 
-    public function __construct($to = '', $subject = '', $content = '', $from = 'contacto@kaaxclub.com', $cc = '', $attach = '')
+    public function __construct($to = '', $subject = '', $content = '', $from = 'contacto@kaaxclub.com', $cc = '', $attach = [])
     {
         $this->from       = $from;
         $this->to         = $to;
@@ -44,6 +44,7 @@ class Csendgrid
 
     public function send()
     {
+        
         $email = new \SendGrid\Mail\Mail();
         $email->setFrom($this->from);
         $email->setSubject($this->subject);
@@ -51,16 +52,18 @@ class Csendgrid
         if ($this->cc != '') {
             $email->addCc($this->to);
         }
-
-        if ($this->attach != '') {
-            $file = asset($this->path.'/'. $this->attach);
-            $file_encoded = base64_encode(file_get_contents($this->path.'/'. $this->attach));
-            $email->addAttachment(
-                $file_encoded,
-                "application/text",
-                $file,
-                "attachment"
-            );
+        if (count($this->attach) > 0) {
+            foreach ($this->attach as $files) {
+                $attach = $files->name;
+                $file = asset($this->path.'/'. $attach);
+                $file_encoded = base64_encode(file_get_contents($this->path.'/'. $attach));
+                $email->addAttachment(
+                    $file_encoded,
+                    "application/text",
+                    $file,
+                    "attachment"
+                );
+            }
         }
         if ($this->content != '') {
             $email->addContent("text/html", $this->content);
@@ -122,8 +125,8 @@ class Csendgrid
         $client         = $credit->creditClientPerson;
         $client_name    = $client->last_name.' '.$client->second_last_name.' '.$client->name;
 
-        $nick_name = self::createNick($credit_id);
-        $new_email = self::createEmail($credit_id);
+        $nick_name      = self::createNick($credit_id);
+        $new_email      = $client->name.' '.$client->last_name;
 
         $request_body = json_decode('{
             "nickname": "' . $nick_name . '",

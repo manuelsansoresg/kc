@@ -55,10 +55,14 @@ class File extends Model
         return $view_files;
     }
     
-    public static function getByIdRelandModel($id_rel, $models)
+    public static function getByIdRelandModel($id_rel, $models, $template_id = null)
     {
         //dd($models);
-        $files = File::where(['id_rel' => $id_rel])->whereIn('model', $models)->get();
+        $files = File::where(['id_rel' => $id_rel])->whereIn('model', $models);
+        if ($template_id != null) {
+            $files->whereIn('template_config_id', $template_id);
+        }
+        $files= $files->get();
         $new_file = array();
         foreach ($files as $file) {
             $fileStrategy   = TemplateValues::STRATEGY[HistoryLog::$name_model[$file->model]];
@@ -66,6 +70,12 @@ class File extends Model
             $new_file[] = array('name_template' => $get_file['name'], 'name' => $file->name);
         }
         return $new_file;
+    }
+
+    public static function getFilesBySwap($credit_id)
+    {
+        $files = File::where(['id_rel' => $credit_id])->whereIn('model', [37])->whereIn('template_config_id', [1,4])->get();
+        return $files;
     }
 
     public static function getAllTemplate($model, $id_rel)
