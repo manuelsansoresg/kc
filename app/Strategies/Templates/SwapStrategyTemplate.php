@@ -120,7 +120,7 @@ class SwapStrategyTemplate implements TemplateInterface
     public function uploadStep3()
     {
         $elements = array(
-            4 => [
+            5 => [
                 'name' => 'Cotización de liquidación',
                 'comment' => null,
                 'is_required' => true,
