@@ -797,7 +797,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=3',
+                'value' => '/panel/kc-swap',
                 'col' => 'col-12'
             ],
             
