@@ -35,7 +35,7 @@ class KcSwapController extends Controller
         $history = HistoryLog::find($history_id);
         $credit                     = $history->historyCredit;
 
-        HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CONTROL_DESK, null, false);
+        HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, $history->old_status_id);
     }
 
     /**
