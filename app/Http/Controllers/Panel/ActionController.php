@@ -126,7 +126,7 @@ class ActionController extends Controller
     {
         $path = File::PATH;
         $file = File::find($id);
-        unlink($path.'/'.$file->name);
+        @unlink($path.'/'.$file->name);
         $file->delete();
     }
 
