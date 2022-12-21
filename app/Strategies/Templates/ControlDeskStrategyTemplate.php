@@ -86,7 +86,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_date' => false,
                 'max_size' => 2,
                 'max_file' => 2,
-                'type' => 'image/*',
+                'type' => 'image/*, .pdf',
                 'comment_date' => null
             ],
         );
