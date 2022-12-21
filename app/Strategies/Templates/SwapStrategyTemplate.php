@@ -899,7 +899,7 @@ class SwapStrategyTemplate implements TemplateInterface
 
                     $get_files_attach = File::getFilesBySwap($credit->id);
                     //$send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', $sender, '', $get_files_attach);
-                    $send_grid = new Csendgrid('manuelsansoresg@gmail.com', 'creacion cuenta', ' ', $sender, '', $get_files_attach);
+                    $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', $sender, '', $get_files_attach);
                     $send_grid->setTemplate('d-944f2768988a43dca2e0ad689954fd20');
                     $data_params = array(
                         'name' => $client->name,
