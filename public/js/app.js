@@ -3247,10 +3247,12 @@ function saveForm(id_form, model) {
   data.append('id_rel', id_rel);
   axios.post("/panel/action-form", data).then(function (response) {
     var result = response.data;
-    /* if (url_redirect == null) {
-        window.history.back();
+
+    if (url_redirect == null) {
+      window.history.back();
     }
-    window.location = url_redirect; */
+
+    window.location = url_redirect;
   })["catch"](function (e) {});
 } //TODO: alerta si detecto kyc
 
