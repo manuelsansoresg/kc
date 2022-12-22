@@ -3185,6 +3185,12 @@ $().ready(function () {
             $('#rfc').val(client.rfc);
             $('#id_number').val(credit.id_number);
             $('#current_credit_number').val(credit.current_credit_number);
+            $('#current_payment').val(credit.current_payment / 100);
+            $('#current_periodicity').val(credit.current_periodicity).trigger("change");
+            $('#current_loan').val(credit.current_loan / 100);
+            $('#current_term').val(credit.current_term);
+            $('#current_principal_balance').val(credit.current_principal_balance / 100);
+            $('#current_total_balance').val(credit.current_total_balance / 100);
           }
 
         if (type_form == 40) //form kc-swap step 2

@@ -163,6 +163,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $type_form    = HistoryLog::KC_SWAP_FORM;
         $credit       = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
+        $option_financials = config('financial_enums.periodicity_products');
 
         $elements = array(
             1 => [
@@ -314,6 +315,104 @@ class SwapStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
                 'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=1',
                 'col' => 'col-12'
+            ],
+            11 => [
+                'title_section' => 'Crédito actual',
+                'title' => null,
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => null,
+                'is_disabled' => null
+            ],
+            12 => [
+                'title_section' => null,
+                'title' => 'pago actual',
+                'name_field' => 'current_payment',
+                'id_field' => 'current_payment',
+                'comment_admin' => 'Pago periódico actual del crédito',
+                'comment_webApp' => 'Pago periódico actual del crédito',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => null
+            ],
+            13 => [
+                'title_section' => null,
+                'title' => 'Periodicidad actual',
+                'name_field' => 'current_periodicity',
+                'id_field' => 'current_periodicity',
+                'comment_admin' => 'Periodicidad del crédito actual del cliente',
+                'comment_webApp' => 'Periodicidad de tu crédito actual',
+                'placeholder' => null,
+                'type' => 'select2',
+                'is_option_array' => true,
+                'options' => $option_financials,
+                'is_required' => false,
+                'is_disabled' => null
+            ],
+            14 => [
+                'title_section' => null,
+                'title' => 'Crédito actual',
+                'name_field' => 'current_loan',
+                'id_field' => 'current_loan',
+                'comment_admin' => 'Préstamo otorgado al cliente',
+                'comment_webApp' => 'Préstamo que obtuviste con la financiera actual',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => null
+            ],
+            15 => [
+                'title_section' => null,
+                'title' => 'Plazo actual',
+                'name_field' => 'current_term',
+                'id_field' => 'current_term',
+                'comment_admin' => 'Plazo del crédito',
+                'comment_webApp' => 'Plazo del crédito (número de pagos)',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => null
+            ],
+            16 => [
+                'title_section' => null,
+                'title' => 'Saldo insoluto actual',
+                'name_field' => 'current_principal_balance',
+                'id_field' => 'current_principal_balance',
+                'comment_admin' => 'Saldo de capital',
+                'comment_webApp' => 'Saldo de capital pendiente (no incluye interés)',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => null
+            ],
+            17 => [
+                'title_section' => null,
+                'title' => 'Saldo total actual',
+                'name_field' => 'current_total_balance',
+                'id_field' => 'current_total_balance',
+                'comment_admin' => 'Saldo del crédito',
+                'comment_webApp' => 'Saldo del crédito (total de los pagos pendientes)',
+                'placeholder' => null,
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => null
             ],
             
             
@@ -821,6 +920,15 @@ class SwapStrategyTemplate implements TemplateInterface
             if (isset($data_credit['changed_commission'])) {
                 $data_credit['changed_commission'] = $data_credit['changed_commission'] * 100;
             }
+            if (isset($request->current_payment)) {
+                $credit->current_payment              = $request->current_payment * 100;
+                $credit->current_periodicity          = $request->current_periodicity;
+                $credit->current_loan                 = $request->current_loan * 100;
+                $credit->current_term                 = $request->current_term;
+                $credit->current_principal_balance    = $request->current_principal_balance * 100;
+                $credit->current_total_balance        = $request->current_total_balance * 100;
+            }
+
             $credit->fill($data_credit);
             $credit->update();
         }
