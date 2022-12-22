@@ -87,4 +87,9 @@ class CreditReference extends Model
 
         return $menu;
     }
+
+    public function credit()
+    {
+        return $this->belongsTo(Credit::class, 'credit_id');
+    }
 }

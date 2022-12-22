@@ -348,6 +348,11 @@ class Credit extends Model
     {
         return $this->belongsTo(ClientPerson::class, 'client_person_id');
     }
+
+    public function creditReference()
+    {
+        return $this->hasMany(CreditReference::class);
+    }
     
     public function creditAgreement()
     {

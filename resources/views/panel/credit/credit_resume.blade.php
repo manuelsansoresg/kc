@@ -15,6 +15,7 @@
     $financial_applied    = $credit->creditAppliedFinancial;
     $product              = $credit->creditProduct;
     $product_applied      = $credit->creditAppliedProduct;
+    $credit_references    = $credit->creditReference;
     $types                = config('enums.type_lead');
     $origins              = config('enums.origin');
     $channel              = $m_lead->getChanelByOrigin($credit->origin_id);
@@ -26,7 +27,7 @@
     $education_level          = config('enums.education_level');
 
     //TODO: hacer que al pasar de prospecto a credito cambiar el model
-    $files = $m_file->getByIdRelandModel($credit->id, [$m_history_log::KC_CHECK_UP, $m_history_log::KC_CONTROL_DESK, $m_history_log::KC_CHECK_UP_DEBT_REDUCTION]);
+    $files = $m_file->getByIdRelandModel($credit->id, [$m_history_log::KC_CHECK_UP, $m_history_log::KC_CONTROL_DESK, $m_history_log::KC_CHECK_UP_DEBT_REDUCTION, $m_history_log::KC_SWAP, $m_history_log::KC_DELIVERY]);
     $path = $m_file::PATH;
     
    
@@ -65,6 +66,133 @@
                             <div class="card-inner">
                                 <div class="preview-block">
                                     <div class="row gy-4">
+                                        <div class="nk-block-head nk-block-head-line">
+                                            <span class="preview-title-lg overline-title text-primary ">Crédito Solicitado</span>
+                                        </div>
+                                        <div class="profile-ud-list">
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Fecha</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? formatDateNameMonth($credit->payment_capacity_period, false) : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Capacidad de pago</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->payment_capacity : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Financiera</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $financial_applied !== null ? $financial_applied->commercial_name : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Producto financiero</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $product_applied !== null ? $product_applied->alias : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Tipo de trámite</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ isset($loan_type[$credit->applied_loan_type]) ? $loan_type[$credit->applied_loan_type] : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                           
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Promoción</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->applied_loan_discount : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Tipo de firma</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ isset($sign_type[$credit->applied_sign_type]) ? $sign_type[$credit->applied_sign_type] : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Importe solicitado</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->applied_import : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Plazo solcitado</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->applied_term : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Periodicidad solicitada</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ isset($periodicity[$credit->applied_periodicity]) ? $periodicity[$credit->applied_periodicity] : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Pago solicitado</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->applied_payment : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Monto total del crédito</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->applied_loan_total_amount : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Tasa de interés</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->applied_interest_rate : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                           
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">CAT</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->applied_CAT : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+
                                         <span class="preview-title-lg overline-title text-primary ">Generales</span>
                                         <div class="profile-ud-list">
                                             <div class="profile-ud-item">
@@ -596,6 +724,176 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        {{-- references --}}
+                                        <span class="preview-title-lg overline-title text-primary ">Referencias</span>
+                                        @foreach ($credit_references as $key => $reference)
+                                        <span class="preview-title-lg overline-title text-secondary ">Referencia {{ $key + 1 }}</span>                                            
+                                        <div class="profile-ud-list">
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Nombres</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->names }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Apellido paterno</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->last_name }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Apellido materno</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->second_lastname }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Relación</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->relationship }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Años de relación</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->relationship_time_years }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Meses de relación</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->relationship_time_months }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Tel. Celular</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->cel_phone }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Tel. Fijo</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->local_phone }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Horario de contacto</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->contact_time }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Código postal</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->postal_code }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Calle</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->street }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Número exterior</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->home_external_number }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Número interior</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->home_internal_number }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Colonia</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->colony }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Municipio</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->city }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Estado</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->state }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">País</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->country }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">Comentario</span>
+                                                        <span class="profile-ud-value">
+                                                            {{  $reference->note }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                        
+                                        {{-- references --}}
+
+                                        {{-- documentos --}}
+                                        <span class="preview-title-lg overline-title text-primary ">Documentos</span>      
+                                                                           
+                                        <div class="profile-ud-list">
+                                            @foreach ($files as $file)
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label"><a href="{{ asset($path.'/'.$file['name']) }}">{{ $file['name_template'] }}</a></span>
+                                                    <span class="profile-ud-value">
+                                                        <a href="{{ asset($path.'/'.$file['name']) }}" download>Descargar</a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            @endforeach   
+                                        </div>
+                                        {{-- documentos --}}
                                     </div>
                                 </div>
                             </div>
