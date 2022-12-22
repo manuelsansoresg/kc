@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Models\File;
 use App\Models\HistoryLog;
 use Illuminate\Http\Request;
 
@@ -36,6 +37,7 @@ class KcSwapController extends Controller
         $credit                     = $history->historyCredit;
         HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_3_2, $credit->id, 1);
         HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, $history->old_status_id);
+        File::updateModel($credit->id, HistoryLog::KC_CONTROL_DESK, [HistoryLog::KC_SWAP]);
     }
 
     /**
