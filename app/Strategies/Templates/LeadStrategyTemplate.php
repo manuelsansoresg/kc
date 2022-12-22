@@ -74,4 +74,9 @@ class LeadStrategyTemplate implements TemplateInterface
     {
         return null;
     }
+
+    public function setTitle()
+    {
+        return 'Acción formulario';
+    }
 }

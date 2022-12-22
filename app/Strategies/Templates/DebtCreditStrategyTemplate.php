@@ -759,4 +759,9 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $view_breadcumb    = \View::make('panel.module.breadcumb', ['breadcumbs' => $breadcumbs])->render();
         return $view_breadcumb;
     }
+
+    public function setTitle()
+    {
+        return 'Acción formulario';
+    }
 }

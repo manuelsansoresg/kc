@@ -123,7 +123,7 @@ class HistoryLog extends Model
         28 => 'Formulario',
         29 => 'Formulario',
         30 => 'Entró a KC - Delivery',
-        31 => 'Respuesta del módulo',
+        31 => 'Email',
         32 => 'Formulario',
         33 => 'Carga',
         34 => 'Formulario',

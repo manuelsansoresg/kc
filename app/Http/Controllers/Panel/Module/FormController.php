@@ -23,10 +23,11 @@ class FormController extends Controller
         $credit           = $history->historyCredit;
         $form             = (new $actionStrategy)->configForm($credit->id, $history_id);
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
+        $title            = (new $actionStrategy)->setTitle($history);
         $client           = $credit->creditClientPerson;
         $product          = $credit->creditProduct;
         $id_rel           = $credit->id;
-        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'product', 'credit', 'client', 'history', 'breadcrumb'));
+        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
     }
 
    

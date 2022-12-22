@@ -113,45 +113,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
             ],
             2 => [
                 'title_section' => null,
-                'title' => 'Ver perfíl de crédito',
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'href',
-                'link' => '/panel/credit/'.$credit->id,
-                'onclick' => 'deliveryModuleResponse('.$history_id.')',
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
-            ],
-            3 => [
-                'title_section' => null,
-                'title' => 'Ver perfíl de cliente',
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'href',
-                'link' => '/panel/client/'.$client_person->id,
-                'onclick' => 'deliveryModuleResponse('.$history_id.')',
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
-            ],
-            4 => [
-                'title_section' => null,
-                'title' => 'Descargar',
+                'title' => 'Enviar email',
                 'name_field' => null,
                 'id_field' => null,
                 'comment_admin' => null,
@@ -575,7 +537,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $subject1 = HistoryLog::$label_subject[31];
 
         $data[] = array(
-            'name' => 'Respuesta de módulo',
+            'name' => 'Email',
             'subject' => $subject1,
             'status' => $status_file,
             'deadline' => $view_dead_line,
@@ -1251,5 +1213,10 @@ class DeliveryStrategyTemplate implements TemplateInterface
         
         $view_breadcumb    = \View::make('panel.module.breadcumb', ['breadcumbs' => $breadcumbs])->render();
         return $view_breadcumb;
+    }
+
+    public function setTitle()
+    {
+        return 'Acción email';
     }
 }
