@@ -1105,7 +1105,19 @@ class DeliveryStrategyTemplate implements TemplateInterface
                     'onclick' => 'moveModal("Archivar",'.$credit->id.','.$status_archive.','.$old_status.',"dt-delivery")',
                     'name' => 'Archivar',
                     'icon' => 'icon ni ni-archive-fill'
-                ]
+                ],
+                [
+                    'link' => '/credit-resume/'.$credit->id,
+                    'onclick' => '',
+                    'name' => 'Ver resumen',
+                    'icon' => 'icon ni ni-list-round'
+                ],
+                [
+                    'link' => 'panel/template/action-document/delivery/'.$history->id.'?step=2',
+                    'onclick' => '',
+                    'name' => 'Comprobar pago',
+                    'icon' => 'icon ni ni-list-round'
+                ],
             ),
         );
 
