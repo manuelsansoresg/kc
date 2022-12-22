@@ -1047,11 +1047,11 @@ class DeliveryStrategyTemplate implements TemplateInterface
             $current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
         }
 
-        if ($status_progress == 1) {
+        if ($status_progress < 1) {
             $current_show = 'Entrega';
-        } elseif ($status_progress == 2) {
+        } elseif ($status_progress < 2) {
             $current_show = 'Comprobar pago';
-        } elseif ($status_progress < 5) {
+        } elseif ($status_progress > 2) {
             $current_show = 'Verificar pago';
         }
 
