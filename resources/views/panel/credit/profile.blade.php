@@ -524,8 +524,8 @@
                                         </div><!-- .card-inner -->
                                         <div class="card-inner card-inner-sm">
                                             <ul class="btn-toolbar justify-center gx-1">
-                                                <li><a href="#" class="btn btn-trigger btn-icon"><em
-                                                            class="icon ni ni-shield-off"></em></a></li>
+                                                <li><a href="/credit-resume/{{ $credit->id }}" class="btn btn-trigger btn-icon"><em
+                                                            class="icon ni ni-list-round"></em></a></li>
                                                 <li><a href="#" class="btn btn-trigger btn-icon"><em
                                                             class="icon ni ni-mail"></em></a></li>
                                                 <li><a href="#" class="btn btn-trigger btn-icon"><em
