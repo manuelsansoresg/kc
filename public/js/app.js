@@ -3270,8 +3270,10 @@ window.kycCreditHistory = function (history_id) {
   })["catch"](function (e) {});
 };
 
-window.deliveryModuleResponse = function (history_id) {
-  axios.get("/panel/kc-delivery/" + history_id + "/module-response").then(function (response) {})["catch"](function (e) {});
+window.deliverysendEmail = function (history_id) {
+  axios.get("/panel/kc-delivery/" + history_id + "/send-email").then(function (response) {
+    window.location = '/panel/template/actions/delivery/' + history_id + '/show?step=1';
+  })["catch"](function (e) {});
 };
 
 window.modalReference = function (history_id, reference_id) {

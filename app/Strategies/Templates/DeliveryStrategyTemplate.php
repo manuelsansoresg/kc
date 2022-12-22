@@ -121,7 +121,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'placeholder' => '',
                 'type' => 'href',
                 'link' => null,
-                'onclick' => 'deliveryModuleResponse('.$history_id.')',
+                'onclick' => 'deliverysendEmail('.$history_id.')',
                 'class' => 'btn btn-primary',
                 'target' => '_blank',
                 'is_option_array' => false,

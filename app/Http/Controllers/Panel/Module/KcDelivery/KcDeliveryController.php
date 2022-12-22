@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Module\KcDelivery;
 
 use App\Http\Controllers\Controller;
+use App\Lib\Csendgrid;
 use App\Models\Credit;
 use App\Models\HistoryLog;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class KcDeliveryController extends Controller
         return response()->json(['data' => $users]);
     }
 
-    public function moduleResponse($history_id)
+    public function sendEmail($history_id)
     {
         $history    = HistoryLog::find($history_id);
         $credit     = $history->historyCredit;
@@ -35,6 +36,16 @@ class KcDeliveryController extends Controller
         HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, null, false);
         HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit->id, 1);
         HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, $credit->id, 0);
+        //*send email
+        $financial_t = $credit->creditAppliedFinancial;
+        $name_financial_t = $financial_t->email;
+        $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', 'contacto@kaaxclub.com');
+        $send_grid->setTemplate('d-208896a6a91043619f40ba61cbebf5c7');
+        $data_params = array(
+            'link_account' => asset('credit-resume/'.$credit->id),
+         );
+        $send_grid->setParams($data_params);
+        $send_grid->send();
     }
 
     /**

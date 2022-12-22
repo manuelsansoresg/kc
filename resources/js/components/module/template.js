@@ -803,11 +803,11 @@ window.kycCreditHistory = function(history_id) {
         });
 }
 
-window.deliveryModuleResponse = function (history_id) {
+window.deliverysendEmail = function (history_id) {
     axios
-        .get("/panel/kc-delivery/"+history_id+"/module-response")
+        .get("/panel/kc-delivery/"+history_id+"/send-email")
         .then(function (response) {
-
+            window.location = '/panel/template/actions/delivery/'+history_id+'/show?step=1';
         })
         .catch(e => {
         });
