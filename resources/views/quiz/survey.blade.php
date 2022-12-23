@@ -9,9 +9,9 @@
     <meta name="description"
         content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="/assets_admin/images/favicon.png">
+    <link rel="shortcut icon" href="/images/favicon-32x32.png">
     <!-- Page Title  -->
-    <title>Survey | Customer Satisfaction | DashLite Admin Template</title>
+    <title>KC- Encuesta de satisfacción</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
@@ -65,7 +65,7 @@
                                                                     id="surevey_credit_delivery-1" required
                                                                     value="1">
                                                                 <label class="custom-control-label"
-                                                                    for="surevey_credit_delivery-1">Sí lo recibí</label>
+                                                                    for="surevey_credit_delivery-1">Sí lo recibí.</label>
                                                             </div>
                                                         </li>
                                                         <li>
@@ -76,7 +76,7 @@
                                                                     value="2">
                                                                 <label class="custom-control-label"
                                                                     for="surevey_credit_delivery-2">Sí pero un plazo o
-                                                                    monto distinto</label>
+                                                                    monto distinto.</label>
                                                             </div>
                                                         </li>
                                                         <li>
@@ -86,7 +86,7 @@
                                                                     id="surevey_credit_delivery-3" required
                                                                     value="3">
                                                                 <label class="custom-control-label"
-                                                                    for="surevey_credit_delivery-3">No lo recibi</label>
+                                                                    for="surevey_credit_delivery-3">No lo recibí.</label>
                                                             </div>
                                                         </li>
                                                     </ul>
