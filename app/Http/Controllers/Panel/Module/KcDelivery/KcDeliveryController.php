@@ -7,6 +7,7 @@ use App\Lib\Csendgrid;
 use App\Models\Credit;
 use App\Models\HistoryLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KcDeliveryController extends Controller
 {

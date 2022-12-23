@@ -90,9 +90,10 @@ class Credit extends Model
     public static function listDatatable($status)
     {
        
-        
+        //*restrict user financial and asesor
         $get_list    = HistoryLog::getByStatus($status);
         $users        = array();
+
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);
             $product          = $query->creditProduct;
@@ -130,7 +131,20 @@ class Credit extends Model
             
             $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
             $is_advisor     = Auth::user()->hasRole('Asesor');
+            $is_user_financial = Auth::user()->hasRole('Cliente financiera');
+
             if ($is_advisor === true && Auth::user()->id === $advisor->id) {
+                $users[] = array(
+                    'id' => $query->id_rel,
+                    'product' => $content_product,
+                    'client' => $content_client,
+                    'advisor' => $name_advisor,
+                    'progress' => $progress_bar,
+                    'in_progress' => $in_progress,
+                    'deadline' => $dead_line,
+                    'options' => $option
+                );
+            } elseif ($is_user_financial === true && $query->financial_user_assigned === Auth::user()->id) {
                 $users[] = array(
                     'id' => $query->id_rel,
                     'product' => $content_product,

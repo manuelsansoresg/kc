@@ -50,51 +50,50 @@
                     <div class="nk-sidebar-content">
                         <div class="nk-sidebar-menu" data-simplebar>
                             <ul class="nk-menu">
+                                @hasrole('Administrador|Asesor')
+                                    <li class="nk-menu-item has-sub">
+                                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                                            <span class="nk-menu-text">Prospectos</span>
+                                        </a>
+                                        <ul class="nk-menu-sub">
 
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/lead" class="nk-menu-link">
+                                                    <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                                                    <span class="nk-menu-text">Persona</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                        </ul>
 
+                                    </li>
+                                @endhasrole
 
-                                <li class="nk-menu-item has-sub">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
-                                        <span class="nk-menu-text">Prospectos</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
+                                @hasrole('Administrador|Asesor')
+                                    <li class="nk-menu-item has-sub">
+                                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-check-circle-cut"></em></span>
+                                            <span class="nk-menu-text">Acciones Prospectos</span>
+                                        </a>
+                                        <ul class="nk-menu-sub">
 
-                                        <li class="nk-menu-item">
-                                            <a href="/panel/lead" class="nk-menu-link">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
-                                                <span class="nk-menu-text">Persona</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                    </ul>
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/action/in_progress/lead/view" class="nk-menu-link">
+                                                    <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
+                                                    <span class="nk-menu-text">En curso</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/action/completed/lead/view" class="nk-menu-link">
+                                                    <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
+                                                    <span class="nk-menu-text">Concluidas</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                        </ul>
 
-                                </li>
-
-
-
-                                <li class="nk-menu-item has-sub">
-                                    <a href="#" class="nk-menu-link nk-menu-toggle">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-check-circle-cut"></em></span>
-                                        <span class="nk-menu-text">Acciones Prospectos</span>
-                                    </a>
-                                    <ul class="nk-menu-sub">
-
-                                        <li class="nk-menu-item">
-                                            <a href="/panel/action/in_progress/lead/view" class="nk-menu-link">
-                                                <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
-                                                <span class="nk-menu-text">En curso</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                        <li class="nk-menu-item">
-                                            <a href="/panel/action/completed/lead/view" class="nk-menu-link">
-                                                <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
-                                                <span class="nk-menu-text">Concluidas</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                    </ul>
-
-                                </li>
-
+                                    </li>
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-check-circle-cut"></em></span>
@@ -117,8 +116,7 @@
                                     </ul>
 
                                 </li>
-
-
+                                @endhasrole
 
                                 @hasrole('Administrador')
                                     @if ($m_user->getAccesConfig() == 1)
@@ -190,44 +188,57 @@
                                         </li>
                                     @endif
                                 @endhasrole
-
+                                @hasrole('Administrador|Cliente financiera|Asesor')
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">MÓDULOS</h6>
                                 </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-check-up" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
                                         <span class="nk-menu-text">KC- Check up</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-swap" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-swap-alt"></em></span>
                                         <span class="nk-menu-text">KC- Swap</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-control-desk" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
                                         <span class="nk-menu-text">KC- Control desk</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                @hasrole('Administrador|Cliente financiera|Asesor')
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-delivery" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
                                         <span class="nk-menu-text">KC- Delivery</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-aftermarket" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span>
                                         <span class="nk-menu-text">KC- Aftermarket</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
-
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">CRÉDITOS</h6>
                                 </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-files"></em></span>
@@ -270,6 +281,8 @@
                                     </ul>
 
                                 </li>
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-archived"></em></span>
@@ -293,8 +306,7 @@
                                     </ul>
 
                                 </li>
-
-
+                                @endhasrole
                             </ul><!-- .nk-menu -->
                         </div><!-- .nk-sidebar-menu -->
                     </div><!-- .nk-sidebar-content -->

@@ -1067,60 +1067,80 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $status_reject    = HistoryLog::CREDIT_REJECTED;
         $status_archive   = HistoryLog::CREDIT_ARCHIVE;
         $old_status       = $history->old_status_id;
+        $is_user_financial = Auth::user()->hasRole('Cliente financiera');
+        if ($is_user_financial === true ) {
+            $menu = array(
+                'options' => array(
+                    [
+                        'link' => '/credit-resume/'.$credit->id,
+                        'onclick' => '',
+                        'name' => 'Ver resumen',
+                        'icon' => 'icon ni ni-list-round'
+                    ],
+                    [
+                        'link' => 'panel/template/action-document/delivery/'.$history->id.'?step=2',
+                        'onclick' => '',
+                        'name' => 'Comprobar pago',
+                        'icon' => 'icon ni ni-list-round'
+                    ],
+                ),
+            );
+        } else {
 
-        $menu = array(
-            'options' => array(
-                [
-                    'link' => '/panel/client/'.$client->id,
-                    'onclick' => '',
-                    'name' => 'Ver perfil cliente',
-                    'icon' => 'icon ni ni-user-fill'
-                ],
-                [
-                    'link' => '/panel/credit/'.$credit->id,
-                    'onclick' => '',
-                    'name' => 'Ver perfil crédito',
-                    'icon' => 'icon ni ni-report-profit'
-                ],
-                [
-                    'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
-                    'onclick' => '',
-                    'name' => 'Ver etapas',
-                    'icon' => 'icon ni ni-list-thumb-fill'
-                ],
-                [
-                    'link' => null,
-                    'onclick' => 'moveModal("Cancelar",'.$credit->id.','.$status_cancel.','.$old_status.',"dt-delivery")',
-                    'name' => 'Cancelar',
-                    'icon' => 'icon ni ni-cross-circle-fill'
-                ],
-                [
-                    'link' => null,
-                    'onclick' => 'moveModal("Rechazar",'.$credit->id.','.$status_reject.','.$old_status.',"dt-delivery")',
-                    'name' => 'Rechazar',
-                    'icon' => 'icon ni ni-cross-round-fill'
-                ],
-                [
-                    'link' => null,
-                    'onclick' => 'moveModal("Archivar",'.$credit->id.','.$status_archive.','.$old_status.',"dt-delivery")',
-                    'name' => 'Archivar',
-                    'icon' => 'icon ni ni-archive-fill'
-                ],
-                [
-                    'link' => '/credit-resume/'.$credit->id,
-                    'onclick' => '',
-                    'name' => 'Ver resumen',
-                    'icon' => 'icon ni ni-list-round'
-                ],
-                [
-                    'link' => 'panel/template/action-document/delivery/'.$history->id.'?step=2',
-                    'onclick' => '',
-                    'name' => 'Comprobar pago',
-                    'icon' => 'icon ni ni-list-round'
-                ],
-            ),
-        );
-
+            $menu = array(
+                'options' => array(
+                    [
+                        'link' => '/panel/client/'.$client->id,
+                        'onclick' => '',
+                        'name' => 'Ver perfil cliente',
+                        'icon' => 'icon ni ni-user-fill'
+                    ],
+                    [
+                        'link' => '/panel/credit/'.$credit->id,
+                        'onclick' => '',
+                        'name' => 'Ver perfil crédito',
+                        'icon' => 'icon ni ni-report-profit'
+                    ],
+                    [
+                        'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+                        'onclick' => '',
+                        'name' => 'Ver etapas',
+                        'icon' => 'icon ni ni-list-thumb-fill'
+                    ],
+                    [
+                        'link' => null,
+                        'onclick' => 'moveModal("Cancelar",'.$credit->id.','.$status_cancel.','.$old_status.',"dt-delivery")',
+                        'name' => 'Cancelar',
+                        'icon' => 'icon ni ni-cross-circle-fill'
+                    ],
+                    [
+                        'link' => null,
+                        'onclick' => 'moveModal("Rechazar",'.$credit->id.','.$status_reject.','.$old_status.',"dt-delivery")',
+                        'name' => 'Rechazar',
+                        'icon' => 'icon ni ni-cross-round-fill'
+                    ],
+                    [
+                        'link' => null,
+                        'onclick' => 'moveModal("Archivar",'.$credit->id.','.$status_archive.','.$old_status.',"dt-delivery")',
+                        'name' => 'Archivar',
+                        'icon' => 'icon ni ni-archive-fill'
+                    ],
+                    [
+                        'link' => '/credit-resume/'.$credit->id,
+                        'onclick' => '',
+                        'name' => 'Ver resumen',
+                        'icon' => 'icon ni ni-list-round'
+                    ],
+                    [
+                        'link' => 'panel/template/action-document/delivery/'.$history->id.'?step=2',
+                        'onclick' => '',
+                        'name' => 'Comprobar pago',
+                        'icon' => 'icon ni ni-list-round'
+                    ],
+                ),
+            );
+        }
+        
         return $menu;
     }
 

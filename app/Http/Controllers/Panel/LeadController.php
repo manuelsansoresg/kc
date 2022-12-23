@@ -34,6 +34,10 @@ class LeadController extends Controller
      */
     public function index()
     {
+        $is_financiera = Auth::user()->hasRole('Cliente financiera');
+        if ($is_financiera === true) {
+            return redirect('panel/kc-delivery');
+        }
         $model        = $this->model;
         return view('panel.lead.list', compact('model'));
     }
