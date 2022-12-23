@@ -1,5 +1,5 @@
 <div class="user-card">
     <div class="">
-        <strong>{{ $number }}</strong>
+        <b>{{ $number }}</b>
     </div>
 </div>
