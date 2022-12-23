@@ -877,6 +877,126 @@
                                             @endforeach
                                         
                                         {{-- references --}}
+                                        {{-- PLD --}}
+                                        <span class="preview-title-lg overline-title text-primary ">PLD</span>
+                                        <div class="profile-ud-list">
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Cliente funcionario público</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null && $credit->client_public_servant == 1 ? 'Sí' : 'No' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Puesto</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ?  $credit->client_public_servant_position : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Período</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ?  $credit->client_public_servant_period : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Familiar funcionario público</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null && $credit->relative_public_servant == 1 ? 'Sí' : 'No' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Primer apellido</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ?  $credit->relative_public_servant_lastname : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Segundo apellido</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ?  $credit->relative_public_servant_second_lastname : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Nombres</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ?  $credit->relative_public_servant_names : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Relación</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ?  $credit->relative_public_servant_relationship : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Puesto</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ?  $credit->relative_public_servant_position : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Período</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ?  $credit->relative_public_servant_period : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Pagos anticipados</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null && $credit->prepaid == 1 ? 'Sí' : 'No' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Método de pago</span>
+                                                    @php
+                                                        $prepad_method  = array(1 => 'Efectivo', 2 => 'cheque', 3 => 'transferencia', 4 => 'otro');
+                                                    @endphp
+                                                    <span class="profile-ud-value">
+                                                        {{ isset($prepad_method[$credit->prepad_method]) ? $prepad_method[$credit->prepad_method] : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Frecuencia de pago</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->prepaid_frequency : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="profile-ud-item">
+                                                <div class="profile-ud wider">
+                                                    <span class="profile-ud-label">Origen de recursos</span>
+                                                    <span class="profile-ud-value">
+                                                        {{ $credit !== null ? $credit->prepaid_source : null }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- PLD --}}
 
                                         {{-- documentos --}}
                                         <span class="preview-title-lg overline-title text-primary ">Documentos</span>      
