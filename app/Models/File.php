@@ -67,7 +67,9 @@ class File extends Model
         foreach ($files as $file) {
             $fileStrategy   = TemplateValues::STRATEGY[HistoryLog::$name_model[$file->model]];
             $get_file       = (new $fileStrategy)->getFile($file->template_config_id);
-            $new_file[] = array('name_template' => $get_file['name'], 'name' => $file->name);
+            if (isset( $get_file['name'])) {
+                $new_file[] = array('name_template' => $get_file['name'], 'name' => $file->name);
+            }
         }
         return $new_file;
     }

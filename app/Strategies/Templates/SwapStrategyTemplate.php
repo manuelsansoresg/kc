@@ -2275,7 +2275,7 @@ class SwapStrategyTemplate implements TemplateInterface
 
     public function getFile($template_config_id)
     {
-        $config = self::configUpload()[$template_config_id];
+        $config = isset(self::configUpload()[$template_config_id]) ? self::configUpload()[$template_config_id] : null;
         return $config;
     }
 
