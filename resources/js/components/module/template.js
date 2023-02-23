@@ -726,6 +726,7 @@ $().ready(function () {
                 });
         }
     }
+    
 });
 
 function selectRadio(val, id) {
@@ -793,14 +794,24 @@ function saveForm(id_form, model) {
 }
 //TODO: alerta si detecto kyc
 window.kycCreditHistory = function(history_id) {
+    let curp = $('#curp').val();
+    $('#kyc-curp').html('');
+    $('#kyc-msg').html('');
     axios
-        .get("/panel/kc-control-desk/kc/"+history_id+"/validate")
+        .get("/panel/kc-control-desk/kc/"+history_id+"/"+curp+"/validate")
         .then(function (response) {
             let result = response.data;
-            window.history.back();
+            $('#kyc-curp').html(result.html);
+            $('#kyc-msg-curp').val(result.msg);
         })
         .catch(e => {
         });
+}
+
+window.showKycCurp = function(){
+    let msg = $('#kyc-msg-curp').val();
+    $('#kyc-msg').html(msg);
+    $('#modal-kyc').modal('show');
 }
 
 window.deliverysendEmail = function (history_id) {

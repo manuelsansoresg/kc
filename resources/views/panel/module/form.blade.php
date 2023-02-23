@@ -53,6 +53,11 @@
                 </div>
             @endif
            
+            @if ($element['type'] == 'div')
+               <div  class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}" id="{{ isset($element['id_field'])? $element['id_field'] : ''  }}">
+                {{ $element['title'] }}
+               </div>
+            @endif
             @if ($element['type'] == 'href')
                 @php
                     $onclick = isset($element['onclick']) && $element['onclick'] != null ? $element['onclick'] : null;

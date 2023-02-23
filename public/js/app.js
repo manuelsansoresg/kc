@@ -3264,10 +3264,20 @@ function saveForm(id_form, model) {
 
 
 window.kycCreditHistory = function (history_id) {
-  axios.get("/panel/kc-control-desk/kc/" + history_id + "/validate").then(function (response) {
+  var curp = $('#curp').val();
+  $('#kyc-curp').html('');
+  $('#kyc-msg').html('');
+  axios.get("/panel/kc-control-desk/kc/" + history_id + "/" + curp + "/validate").then(function (response) {
     var result = response.data;
-    window.history.back();
+    $('#kyc-curp').html(result.html);
+    $('#kyc-msg-curp').val(result.msg);
   })["catch"](function (e) {});
+};
+
+window.showKycCurp = function () {
+  var msg = $('#kyc-msg-curp').val();
+  $('#kyc-msg').html(msg);
+  $('#modal-kyc').modal('show');
 };
 
 window.deliverysendEmail = function (history_id) {

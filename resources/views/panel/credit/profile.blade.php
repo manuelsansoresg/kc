@@ -6,6 +6,7 @@
 @inject('m_action', 'App\Models\Action')
 @inject('m_file', 'App\Models\File')
 @inject('m_survey', 'App\Models\Survey')
+@inject('m_kyc', 'App\Models\Kyc')
 
 @php
     
@@ -82,6 +83,9 @@
                                                         href="#tabComision">Comisión</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabDocs">Docs</a> </li>
+                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                        href="#tabKyc">KYC</a> </li>
+
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#survey">Encuesta</a> </li>
                                                 <li class="nav-item nav-item-trigger d-xxl-none">
@@ -438,7 +442,16 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-
+                                                <div class="tab-pane" id="tabKyc">
+                                                    <span class="preview-title-lg overline-title text-primary ">validar CURP</span>
+                                                   <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-12" style="overflow: auto">
+                                                                {!! $m_kyc->getCollection($credit->id) !!}
+                                                            </div>
+                                                        </div>
+                                                   </div>
+                                                </div>
                                                 <div class="tab-pane" id="survey">
                                                     @php
                                                         $get_survey                 = $m_survey->getQuiz($credit->id);

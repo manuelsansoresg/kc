@@ -1777,6 +1777,23 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             3 => [
                 'title_section' => null,
+                'title' => '',
+                'is_required' => false,
+                'type' => 'div',
+                'col' => 'col-12',
+                'id_field' => 'kyc-curp',
+            ],
+            4 => [
+                'title_section' => null,
+                'title' => '',
+                'is_required' => false,
+                'type' => 'hidden',
+                'name_field' => '',
+                'id_field' => 'kyc-msg-curp',
+            ],
+           
+            5 => [
+                'title_section' => null,
                 'title' => 'Guardar',
                 'name_field' => null,
                 'id_field' => null,
@@ -1792,7 +1809,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
                 'onclick' => 'kycCreditHistory(' . $history_id . ')'
             ],
-            4 => [
+            6 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',

@@ -79,4 +79,5 @@
     </div>
 </div>
 @include('panel.action.modal.modal_reference')
+@include('panel.action.modal.modalkyc')
 @endsection

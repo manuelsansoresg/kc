@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Lib\CNubarium;
 use App\Lib\Csendgrid;
 use App\Models\Action;
 use App\Models\HistoryLog;
@@ -34,6 +35,11 @@ class LeadController extends Controller
      */
     public function index()
     {
+
+        $nubarium = new CNubarium();
+        $curp = $nubarium->validateCurp('AASA070522HMCLSRA5');
+        dd($curp);
+        
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
         if ($is_financiera === true) {
             return redirect('panel/kc-delivery');
