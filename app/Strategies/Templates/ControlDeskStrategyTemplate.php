@@ -1773,26 +1773,139 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => true,
                 'is_disabled' => null,
-                'value' => $curp
+                'value' => $curp,
+                'class' => 'col-12 col-md-6',
+                'class_form_group' => 'mb-0',
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'type' => 'href',
+                        'name_field' => 'Validar',
+                        'class' => 'btn btn-outline-primary float-end',
+                        'onclick' => 'kycCreditHistory(' . $history_id . ')'
+                    ),
+                    1 => array(
+                        'link' => null,
+                        'type' => 'div',
+                        'col' => 'col-12 col-md-6 my-0',
+                        'name_field' => '',
+                        'class' => 'btn btn-outline-primary float-end',
+                        'id_field' => 'kyc-curp',
+                        
+                    ),
+                )
             ],
+            
             3 => [
                 'title_section' => null,
-                'title' => '',
-                'is_required' => false,
-                'type' => 'div',
-                'col' => 'col-12',
-                'id_field' => 'kyc-curp',
-            ],
-            4 => [
-                'title_section' => null,
-                'title' => '',
-                'is_required' => false,
-                'type' => 'hidden',
-                'name_field' => '',
-                'id_field' => 'kyc-msg-curp',
+                'title' => 'Validar INE',
+                'name_field' => 'client_person[ine]',
+                'id_field' => 'ine',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => '',
+                'class' => 'col-12 col-md-6',
+                'class_form_group' => 'mb-0',
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'type' => 'href',
+                        'name_field' => 'Validar',
+                        'class' => 'btn btn-outline-primary float-end',
+                        'onclick' => 'kycCreditHistory(' . $history_id . ')'
+                    ),
+                    1 => array(
+                        'link' => null,
+                        'type' => 'div',
+                        'col' => 'col-12 col-md-6 my-0',
+                        'name_field' => '',
+                        'class' => 'btn btn-outline-primary float-end',
+                        'id_field' => 'kyc-curp',
+                        
+                    ),
+                )
             ],
            
+            4 => [
+                'title_section' => null,
+                'title' => 'Validar INE',
+                'name_field' => 'client_person[ine]',
+                'id_field' => 'ine',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => '',
+                'class' => 'col-12 col-md-6',
+                'class_form_group' => 'mb-0',
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'type' => 'href',
+                        'name_field' => 'Validar',
+                        'class' => 'btn btn-outline-primary float-end',
+                        'onclick' => 'kycCreditHistory(' . $history_id . ')'
+                    ),
+                    1 => array(
+                        'link' => null,
+                        'type' => 'div',
+                        'col' => 'col-12 col-md-6 my-0',
+                        'name_field' => '',
+                        'class' => 'btn btn-outline-primary float-end',
+                        'id_field' => 'kyc-curp',
+                        
+                    ),
+                )
+            ],
+            
             5 => [
+                'title_section' => null,
+                'title' => 'Validar INE',
+                'name_field' => 'client_person[ine]',
+                'id_field' => 'ine',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => '',
+                'class' => 'col-12 col-md-6',
+                'class_form_group' => 'mb-0',
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'type' => 'href',
+                        'name_field' => 'Validar',
+                        'class' => 'btn btn-outline-primary float-end',
+                        'onclick' => 'kycCreditHistory(' . $history_id . ')'
+                    ),
+                    1 => array(
+                        'link' => null,
+                        'type' => 'div',
+                        'col' => 'col-12 col-md-6 my-0',
+                        'name_field' => '',
+                        'class' => 'btn btn-outline-primary float-end',
+                        'id_field' => 'kyc-curp',
+                        
+                    ),
+                )
+            ],
+
+           
+            16 => [
                 'title_section' => null,
                 'title' => 'Guardar',
                 'name_field' => null,
@@ -1807,9 +1920,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => true,
                 'is_disabled' => null,
-                'onclick' => 'kycCreditHistory(' . $history_id . ')'
+                
             ],
-            6 => [
+            7 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',

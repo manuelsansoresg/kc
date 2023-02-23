@@ -16,8 +16,11 @@
                 <span class="preview-title-lg overline-title">{{ $element['title_section'] }}</span>
             @endif
             @if ($element['type'] == 'text')
+            @php
+                $class_form_group  = isset($element['class_form_group'])? $element['class_form_group'] : ''               
+            @endphp
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
-                    <div class="form-group">
+                    <div class="form-group {{ $class_form_group }}">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
                             <input type="text" class="form-control" {{ $element['is_disabled'] }}
@@ -31,6 +34,36 @@
                             @endif
                         </div>
                     </div>
+                    @if ($element['childs'])
+                        @foreach ($element['childs'] as $child)
+                            @if ( $child['type'] == 'href')
+                                <div class="form-group mb-0">
+                                    <label class="form-label"> </label>
+                                    <div class="form-control-wrap">
+                                        <a 
+                                        @if (isset($child['link']))
+                                            href="{{ $child['link'] }}"
+                                        @endif
+                                        @if (isset($child['onclick']))
+                                            onclick="{{ $child['onclick'] }}"
+                                        @endif
+                                        class="{{ $child['class'] }}">{{ $child['name_field'] }}</a>
+                                    </div>
+                                </div>
+                            @endif
+                            @if ($child['type'] == 'div')
+                                <div  class="{{ isset($child['col'])? $child['col'] : 'col-md-6'  }}" id="{{ isset($child['id_field'])? $child['id_field'] : ''  }}">
+                                    {{ $child['name_field'] }}
+                                </div>
+                            @endif
+                        @endforeach
+                  {{--   @for ($i = 0; $i < $element['childs']; $i++)
+                    @php
+                        $child = $element['childs'][$i];
+                    @endphp
+                   
+                    @endfor --}}
+                    @endif
                 </div>
             @endif
             
