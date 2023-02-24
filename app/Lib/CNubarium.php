@@ -46,7 +46,6 @@ class CNubarium
                 }';
 
                 $result_validate = self::setValidate('https://ine.nubarium.com/ine/v2/valida_ine', $data_params);
-                dd($data_params, $result_validate);
                 $html = $result_validate->estatus == "OK" ? '<a class="text-primary" onclick="showKycCurp(2)" style="cursor:pointer"> Ver respuesta </a>' : '<span class="text-danger"> <em class="icon ni ni-alert"></em> Error verifica la información </span>';
                 break;
 
