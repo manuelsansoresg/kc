@@ -1834,7 +1834,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
            
             4 => [
                 'title_section' => null,
-                'title' => 'Validar INE',
+                'title' => 'Validar RFC',
                 'name_field' => 'client_person[ine]',
                 'id_field' => 'ine',
                 'comment_admin' => null,
@@ -1870,7 +1870,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             
             5 => [
                 'title_section' => null,
-                'title' => 'Validar INE',
+                'title' => 'Validar Datos laborales ISSSTE',
                 'name_field' => 'client_person[ine]',
                 'id_field' => 'ine',
                 'comment_admin' => null,
