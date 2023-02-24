@@ -47,13 +47,27 @@
                                         @if (isset($child['onclick']))
                                             onclick="{{ $child['onclick'] }}"
                                         @endif
-                                        class="{{ $child['class'] }}">{{ $child['name_field'] }}</a>
+                                        @if (isset($child['target']))
+                                            target="{{ $child['target'] }}"
+                                        @endif
+                                        class="{{ $child['class'] }}">{!! $child['name_field'] !!} </a>
                                     </div>
                                 </div>
                             @endif
+                            @if ( $child['type'] == 'text')
+                            <div class="form-group mb-0">
+                                <label class="form-label"> </label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" 
+                                        name="{{ $child['name_field'] }}" placeholder="{{ $child['placeholder'] }}"
+                                        id="{{ $child['id_field'] }}" value="">
+                                </div>
+                            </div>
+                            @endif
+                           
                             @if ($child['type'] == 'div')
                                 <div  class="{{ isset($child['col'])? $child['col'] : 'col-md-6'  }}" id="{{ isset($child['id_field'])? $child['id_field'] : ''  }}">
-                                    {{ $child['name_field'] }}
+                                    {!! $child['name_field'] !!}
                                 </div>
                             @endif
                         @endforeach

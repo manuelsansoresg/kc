@@ -3266,24 +3266,40 @@ function saveForm(id_form, model) {
 window.kycCreditHistory = function (history_id, type) {
   var params = {
     1: 'curp',
-    2: 'ine'
+    2: 'ine',
+    3: 'rfc',
+    4: 'issste'
   };
   var id = params[type];
   var param = $('#' + id).val();
-  console.log(id);
-  $('#kyc-' + id).html('');
-  $('#kyc-' + id + '-msg').html('');
-  axios.get("/panel/kc-control-desk/kc/" + history_id + "/" + param + "/" + type + "/validate").then(function (response) {
-    var result = response.data;
-    $('#kyc-' + id).html(result.html);
-    $('#kyc-' + id + '-msg').val(result.msg);
-  })["catch"](function (e) {});
+  var param2 = type == 2 ? $('#identificadorCiudadano').val() : null;
+  var error = false;
+
+  if (type == 2 && param == '' && param2 == '') {
+    error = true;
+    Swal.fire({
+      text: 'Campos obligatorios',
+      icon: 'warning'
+    });
+  }
+
+  if (error == false) {
+    $('#kyc-' + id).html('');
+    $('#kyc-' + id + '-msg').html('');
+    axios.get("/panel/kc-control-desk/kc/" + history_id + "/" + param + "/" + param2 + "/" + type + "/validate").then(function (response) {
+      var result = response.data;
+      $('#kyc-' + id).html(result.html);
+      $('#kyc-' + id + '-msg').val(result.msg);
+    })["catch"](function (e) {});
+  }
 };
 
 window.showKycCurp = function (type) {
   var params = {
     1: 'curp',
-    2: 'ine'
+    2: 'ine',
+    3: 'rfc',
+    4: 'issste'
   };
   var id = params[type];
   var msg = $('#kyc-' + id + '-msg').val();

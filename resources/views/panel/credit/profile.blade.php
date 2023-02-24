@@ -443,11 +443,45 @@
                                                     </table>
                                                 </div>
                                                 <div class="tab-pane" id="tabKyc">
-                                                    <span class="preview-title-lg overline-title text-primary ">validar CURP</span>
+                                                    <div class="nk-block-head nk-block-head-line">
+                                                        <span class="preview-title-lg overline-title text-primary ">validar CURP</span>
+                                                    </div>
+
+                                                    <span class="preview-title-lg overline-title text-primary "></span>
                                                    <div class="container">
                                                         <div class="row">
                                                             <div class="col-12" style="overflow: auto">
                                                                 {!! $m_kyc->getCollection($credit->id) !!}
+                                                            </div>
+                                                        </div>
+                                                   </div>
+                                                   <div class="nk-block-head nk-block-head-line py-3">
+                                                        <span class="preview-title-lg overline-title text-primary ">validar INE</span>
+                                                    </div>
+                                                   <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-12" style="overflow: auto">
+                                                                {!! $m_kyc->getCollection($credit->id, 2) !!}
+                                                            </div>
+                                                        </div>
+                                                   </div>
+                                                   <div class="nk-block-head nk-block-head-line py-3">
+                                                        <span class="preview-title-lg overline-title text-primary ">validar RFC</span>
+                                                    </div>
+                                                   <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-12" style="overflow: auto">
+                                                                {!! $m_kyc->getCollection($credit->id, 3) !!}
+                                                            </div>
+                                                        </div>
+                                                   </div>
+                                                   <div class="nk-block-head nk-block-head-line py-3">
+                                                        <span class="preview-title-lg overline-title text-primary ">validar Datos laborales ISSSTE</span>
+                                                    </div>
+                                                   <div class="container">
+                                                        <div class="row">
+                                                            <div class="col-12" style="overflow: auto">
+                                                                {!! $m_kyc->getCollection($credit->id, 4) !!}
                                                             </div>
                                                         </div>
                                                    </div>

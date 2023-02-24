@@ -27,11 +27,11 @@ class KcControlDeskController extends Controller
         return response()->json(['data' => $users]);
     }
 
-    public function validateKyc($history_id, $param, $type)
+    public function validateKyc($history_id, $param, $param2, $type)
     {
         //*ejecutar api nubarium
         $history        = HistoryLog::find($history_id);
-        $validate_nb    = Kyc::sendValidateKyc($history->id_rel, $type, $param);
+        $validate_nb    = Kyc::sendValidateKyc($history->id_rel, $type, $param, $param2);
         $estatus        = $validate_nb['estatus'];
         $html           = $validate_nb['html'];
         $msg            = Kyc::formatMsg($validate_nb['result']);

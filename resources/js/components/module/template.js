@@ -794,25 +794,39 @@ function saveForm(id_form, model) {
 }
 //TODO: alerta si detecto kyc
 window.kycCreditHistory = function(history_id, type) {
-    let params    = {1:'curp', 2: 'ine'};
+    let params    = {1:'curp', 2: 'ine', 3: 'rfc', 4: 'issste'};
     let id        = params[type];
     let param     = $('#'+id).val();
-    console.log(id);
-    $('#kyc-'+id).html('');
-    $('#kyc-'+id+'-msg').html('');
-    axios
-        .get("/panel/kc-control-desk/kc/"+history_id+"/"+param+"/"+type+"/validate")
-        .then(function (response) {
-            let result = response.data;
-            $('#kyc-'+id).html(result.html);
-            $('#kyc-'+id+'-msg').val(result.msg);
+    let param2 = type == 2 ? $('#identificadorCiudadano').val() : null;
+    let error = false;  
+
+    if (type == 2 && param == '' && param2 == '') {
+        error = true;
+        Swal.fire({
+            text: 'Campos obligatorios',
+            icon: 'warning',
         })
-        .catch(e => {
-        });
+    }
+
+    if (error == false) {
+        $('#kyc-'+id).html('');
+        $('#kyc-'+id+'-msg').html('');
+    
+    
+        axios
+            .get("/panel/kc-control-desk/kc/"+history_id+"/"+param+"/"+param2+"/"+type+"/validate")
+            .then(function (response) {
+                let result = response.data;
+                $('#kyc-'+id).html(result.html);
+                $('#kyc-'+id+'-msg').val(result.msg);
+            })
+            .catch(e => {
+            });
+    }
 }
 
 window.showKycCurp = function(type){
-    let params    = {1:'curp', 2: 'ine'};
+    let params    = {1:'curp', 2: 'ine', 3: 'rfc', 4: 'issste'};
     let id        = params[type];
 
     let msg = $('#kyc-'+id+'-msg').val();

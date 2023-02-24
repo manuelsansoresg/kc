@@ -34,7 +34,7 @@ class CNubarium
         return json_decode($response);
     }
 
-    public function validate($type, $params)
+    public function validate($type, $param, $param2)
     {
         $result_validate    = null;
         $html               = null;
@@ -42,17 +42,43 @@ class CNubarium
         
         switch ($type) {
             case 2:
-                $data_params = '{"cic": "' . $params. '", "identificadorCiudadano": "098794022"
+                $data_params = '{
+                    "cic": "' . $param. '", 
+                    "identificadorCiudadano": "' . $param2. '"
                 }';
 
                 $result_validate = self::setValidate('https://ine.nubarium.com/ine/v2/valida_ine', $data_params);
                 $html = $result_validate->estatus == "OK" ? '<a class="text-primary" onclick="showKycCurp(2)" style="cursor:pointer"> Ver respuesta </a>' : '<span class="text-danger"> <em class="icon ni ni-alert"></em> Error verifica la información </span>';
                 break;
+            case 3:
+                $data_params = '{
+                    "rfc": "' . $param. '"
+                }';
+
+                $result_validate = self::setValidate('https://sat.nubarium.com/sat/valida_rfc', $data_params);
+                $html = $result_validate->estatus == "OK" ? '<a class="text-primary" onclick="showKycCurp(3)" style="cursor:pointer"> Ver respuesta </a>' : '<span class="text-danger"> <em class="icon ni ni-alert"></em> Error verifica la información </span>';
+                break;
+            case 4:
+                $data_params = '{
+                    "curp": "' . $param. '"
+                }';
+
+                $result_validate = self::setValidate('https://api.nubarium.com/issste/obtener_historial', $data_params);
+                $html = $result_validate->estatus == "OK" ? '<a class="text-primary" onclick="showKycCurp(3)" style="cursor:pointer"> Ver respuesta </a>' : '<span class="text-danger"> <em class="icon ni ni-alert"></em> Error verifica la información </span>';
+                break;
+            case 4:
+                $data_params = '{
+                    "rfc": "' . $param. '"
+                }';
+
+                $result_validate = self::setValidate('https://sat.nubarium.com/sat/valida_rfc', $data_params);
+                $html = $result_validate->estatus == "OK" ? '<a class="text-primary" onclick="showKycCurp(3)" style="cursor:pointer"> Ver respuesta </a>' : '<span class="text-danger"> <em class="icon ni ni-alert"></em> Error verifica la información </span>';
+                break;
 
             default:
                 $data_params = '{
                     "documento": "0",
-                    "curp": "' . $params. '"
+                    "curp": "' . $param. '"
                 }';
 
                 $result_validate = self::setValidate('https://curp.nubarium.com/renapo/v2/valida_curp', $data_params);

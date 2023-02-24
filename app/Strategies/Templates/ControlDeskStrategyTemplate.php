@@ -1814,13 +1814,31 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'class_form_group' => 'mb-0',
                 'childs' => array(
                     0 => array(
+                        'placeholder' => 'Identificador del ciudadano',
                         'link' => null,
-                        'type' => 'href',
-                        'name_field' => 'Validar',
+                        'type' => 'text',
+                        'name_field' => 'identificador_ciudadano',
+                        'id_field' => 'identificadorCiudadano',
                         'class' => 'btn btn-outline-primary float-end',
                         'onclick' => 'kycCreditHistory(' . $history_id . ', 2)'
                     ),
                     1 => array(
+                        'link' => '/images/credencial-modeloEG.png',
+                        'target' => '_blank',
+                        'type' => 'href',
+                        'name_field' => '<em class="icon ni ni-help"></em> Ayuda',
+                        'class' => 'text-primary',
+                        'onclick' => 'kycCreditHistory(' . $history_id . ', 2)'
+                    ),
+                    2 => array(
+                        'link' => null,
+                        'type' => 'href',
+                        'title' => 'text_info',
+                        'name_field' => 'Validar',
+                        'class' => 'btn btn-outline-primary float-end',
+                        'onclick' => 'kycCreditHistory(' . $history_id . ', 2)'
+                    ),
+                    3 => array(
                         'link' => null,
                         'type' => 'div',
                         'col' => 'col-12 col-md-6 my-0',
@@ -1854,7 +1872,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         'type' => 'href',
                         'name_field' => 'Validar',
                         'class' => 'btn btn-outline-primary float-end',
-                        'onclick' => 'kycCreditHistory(' . $history_id . ')'
+                        'onclick' => 'kycCreditHistory(' . $history_id . ', 3)'
                     ),
                     1 => array(
                         'link' => null,
@@ -1890,7 +1908,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         'type' => 'href',
                         'name_field' => 'Validar',
                         'class' => 'btn btn-outline-primary float-end',
-                        'onclick' => 'kycCreditHistory(' . $history_id . ')'
+                        'onclick' => 'kycCreditHistory(' . $history_id . ', 4)'
                     ),
                     1 => array(
                         'link' => null,
@@ -1898,14 +1916,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         'col' => 'col-12 col-md-6 my-0',
                         'name_field' => '',
                         'class' => 'btn btn-outline-primary float-end',
-                        'id_field' => 'kyc-isste',
+                        'id_field' => 'kyc-issste',
                         
                     ),
                 )
             ],
 
            
-            16 => [
+            6 => [
                 'title_section' => null,
                 'title' => 'Guardar',
                 'name_field' => null,
@@ -1954,11 +1972,28 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '',
                 'col' => ''
             ],
+            
             9 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => '',
                 'id_field' => 'kyc-ine-msg',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '',
+                'col' => ''
+            ],
+            10 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => '',
+                'id_field' => 'kyc-rfc-msg',
                 'comment_admin' => '',
                 'comment_webApp' =>  null,
                 'placeholder' => '',
