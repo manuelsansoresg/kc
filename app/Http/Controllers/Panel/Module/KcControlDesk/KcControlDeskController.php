@@ -27,31 +27,22 @@ class KcControlDeskController extends Controller
         return response()->json(['data' => $users]);
     }
 
-    public function validateKyc($history_id, $curp)
+    public function validateKyc($history_id, $param, $type)
     {
         //*ejecutar api nubarium
-        $nubarium       = new CNubarium();
-        $validate_nb    = $nubarium->validateCurp($curp);
-        $estatus        = ($validate_nb->estatus == "OK")? 1 : 2;
-        $html           = '';
-        $msg            = Kyc::formatMsg($validate_nb);
         $history        = HistoryLog::find($history_id);
-        $get_credit     = Credit::find($history->id_rel);
-        //* kyc 1= not found 2= found
-        $get_credit->kyc_done = $estatus;
-        $get_credit->update();
-
-        if ($estatus == 1) {
-            $html = '<a class="text-primary" onclick="showKycCurp()" style="cursor:pointer"> Ver respuesta </a>';
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $get_credit->id, 1); //* marcar como finalizada la accion
-            HistoryLog::move($get_credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $get_credit->id, 0);
-        } else {
-            $html .= '&nbsp;  <span class="text-danger"> <em class="icon ni ni-alert"></em> Error verifica la información </span>';
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $get_credit->id, 0); //* marcar como no finalizada la accion
-        }
-        Kyc::set($get_credit->id, 1, $estatus, $validate_nb);
+        $validate_nb    = Kyc::sendValidateKyc($history->id_rel, $type, $param);
+        $estatus        = $validate_nb['estatus'];
+        $html           = $validate_nb['html'];
+        $msg            = Kyc::formatMsg($validate_nb['result']);
         return response()->json(['status' => $estatus, 'html' => $html, 'msg' => $msg]);
+    }
+
+    public function saveKyc($credit_id)
+    {
+        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $credit_id, 1); //* marcar como finalizada la accion
+        HistoryLog::move($credit_id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, null, false);
+        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit_id, 0);
     }
 
     /**

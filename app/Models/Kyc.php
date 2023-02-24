@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Lib\CNubarium;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,6 +33,15 @@ class Kyc extends Model
             $kyc->update(['answer' => json_encode($answer), 'status' => $status]);
         }
         return $kyc;
+    }
+
+    public static function sendValidateKyc($credit_id, $type, $param)
+    {
+        $get_credit   = Credit::find($credit_id);
+        $nubarium     = new CNubarium();
+        $validate_nb  = $nubarium->validate($type, $param);
+        Kyc::set($get_credit->id, $type, $validate_nb['estatus'], $validate_nb['result']);
+        return $validate_nb;
     }
 
     public function getCollection($credit_id, $type = 1)

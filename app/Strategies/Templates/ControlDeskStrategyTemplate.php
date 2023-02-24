@@ -1782,7 +1782,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         'type' => 'href',
                         'name_field' => 'Validar',
                         'class' => 'btn btn-outline-primary float-end',
-                        'onclick' => 'kycCreditHistory(' . $history_id . ')'
+                        'onclick' => 'kycCreditHistory(' . $history_id . ', 1)'
                     ),
                     1 => array(
                         'link' => null,
@@ -1803,7 +1803,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'id_field' => 'ine',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
-                'placeholder' => '',
+                'placeholder' => 'Código identificador de Credencial',
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => 'null',
@@ -1818,7 +1818,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         'type' => 'href',
                         'name_field' => 'Validar',
                         'class' => 'btn btn-outline-primary float-end',
-                        'onclick' => 'kycCreditHistory(' . $history_id . ')'
+                        'onclick' => 'kycCreditHistory(' . $history_id . ', 2)'
                     ),
                     1 => array(
                         'link' => null,
@@ -1826,7 +1826,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         'col' => 'col-12 col-md-6 my-0',
                         'name_field' => '',
                         'class' => 'btn btn-outline-primary float-end',
-                        'id_field' => 'kyc-curp',
+                        'id_field' => 'kyc-ine',
                         
                     ),
                 )
@@ -1835,8 +1835,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             4 => [
                 'title_section' => null,
                 'title' => 'Validar RFC',
-                'name_field' => 'client_person[ine]',
-                'id_field' => 'ine',
+                'name_field' => 'client_person[rfc]',
+                'id_field' => 'rfc',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
@@ -1862,7 +1862,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         'col' => 'col-12 col-md-6 my-0',
                         'name_field' => '',
                         'class' => 'btn btn-outline-primary float-end',
-                        'id_field' => 'kyc-curp',
+                        'id_field' => 'kyc-rfc',
                         
                     ),
                 )
@@ -1871,8 +1871,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             5 => [
                 'title_section' => null,
                 'title' => 'Validar Datos laborales ISSSTE',
-                'name_field' => 'client_person[ine]',
-                'id_field' => 'ine',
+                'name_field' => 'client_person[issste]',
+                'id_field' => 'issste',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
@@ -1898,7 +1898,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         'col' => 'col-12 col-md-6 my-0',
                         'name_field' => '',
                         'class' => 'btn btn-outline-primary float-end',
-                        'id_field' => 'kyc-curp',
+                        'id_field' => 'kyc-isste',
                         
                     ),
                 )
@@ -1937,6 +1937,38 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
                 'value' => '/panel/template/actions/controlDesk/' . $history_id . '/show?step=' . $step,
                 'col' => 'col-12'
+            ],
+            8 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => '',
+                'id_field' => 'kyc-curp-msg',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '',
+                'col' => ''
+            ],
+            9 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => '',
+                'id_field' => 'kyc-ine-msg',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '',
+                'col' => ''
             ],
 
         );

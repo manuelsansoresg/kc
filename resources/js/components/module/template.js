@@ -793,23 +793,29 @@ function saveForm(id_form, model) {
         });
 }
 //TODO: alerta si detecto kyc
-window.kycCreditHistory = function(history_id) {
-    let curp = $('#curp').val();
-    $('#kyc-curp').html('');
-    $('#kyc-msg').html('');
+window.kycCreditHistory = function(history_id, type) {
+    let params    = {1:'curp', 2: 'ine'};
+    let id        = params[type];
+    let param     = $('#'+id).val();
+    console.log(id);
+    $('#kyc-'+id).html('');
+    $('#kyc-'+id+'-msg').html('');
     axios
-        .get("/panel/kc-control-desk/kc/"+history_id+"/"+curp+"/validate")
+        .get("/panel/kc-control-desk/kc/"+history_id+"/"+param+"/"+type+"/validate")
         .then(function (response) {
             let result = response.data;
-            $('#kyc-curp').html(result.html);
-            $('#kyc-msg-curp').val(result.msg);
+            $('#kyc-'+id).html(result.html);
+            $('#kyc-'+id+'-msg').val(result.msg);
         })
         .catch(e => {
         });
 }
 
-window.showKycCurp = function(){
-    let msg = $('#kyc-msg-curp').val();
+window.showKycCurp = function(type){
+    let params    = {1:'curp', 2: 'ine'};
+    let id        = params[type];
+
+    let msg = $('#kyc-'+id+'-msg').val();
     $('#kyc-msg').html(msg);
     $('#modal-kyc').modal('show');
 }
