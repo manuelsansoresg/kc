@@ -23,8 +23,13 @@
                     <div class="form-group {{ $class_form_group }}">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" {{ $element['is_disabled'] }}
+                            <input type="text" class="form-control 
+                            @if (isset( $element['class_input']))
+                                    {{ $element['class_input'] }}
+                                @endif
+                            " {{ $element['is_disabled'] }}
                                 name="{{ $element['name_field'] }}" placeholder="{{ $element['placeholder'] }}"
+                                
                                 id="{{ $element['id_field'] }}" value="{{ $value }}">
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>

@@ -3268,10 +3268,16 @@ window.kycCreditHistory = function (history_id, type) {
     1: 'curp',
     2: 'ine',
     3: 'rfc',
-    4: 'issste'
+    4: 'curp'
   };
   var id = params[type];
+  var id_result = params[type];
   var param = $('#' + id).val();
+
+  if (type == 4) {
+    id_result = 'issste';
+  }
+
   var param2 = type == 2 ? $('#identificadorCiudadano').val() : null;
   var error = false;
 
@@ -3284,12 +3290,12 @@ window.kycCreditHistory = function (history_id, type) {
   }
 
   if (error == false) {
-    $('#kyc-' + id).html('');
-    $('#kyc-' + id + '-msg').html('');
+    $('#kyc-' + id_result).html('');
+    $('#kyc-' + id_result + '-msg').html('');
     axios.get("/panel/kc-control-desk/kc/" + history_id + "/" + param + "/" + param2 + "/" + type + "/validate").then(function (response) {
       var result = response.data;
-      $('#kyc-' + id).html(result.html);
-      $('#kyc-' + id + '-msg').val(result.msg);
+      $('#kyc-' + id_result).html(result.html);
+      $('#kyc-' + id_msg + '-msg').val(result.msg);
     })["catch"](function (e) {});
   }
 };

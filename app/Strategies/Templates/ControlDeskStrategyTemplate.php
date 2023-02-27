@@ -1900,14 +1900,15 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null,
                 'value' => '',
-                'class' => 'col-12 col-md-6',
+                'col' => 'col-12 col-md-6',
+                'class_input' => 'd-none',
                 'class_form_group' => 'mb-0',
                 'childs' => array(
                     0 => array(
                         'link' => null,
                         'type' => 'href',
                         'name_field' => 'Validar',
-                        'class' => 'btn btn-outline-primary float-end',
+                        'class' => 'btn btn-outline-primary float-end my-n3',
                         'onclick' => 'kycCreditHistory(' . $history_id . ', 4)'
                     ),
                     1 => array(

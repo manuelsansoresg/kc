@@ -794,9 +794,13 @@ function saveForm(id_form, model) {
 }
 //TODO: alerta si detecto kyc
 window.kycCreditHistory = function(history_id, type) {
-    let params    = {1:'curp', 2: 'ine', 3: 'rfc', 4: 'issste'};
+    let params    = {1:'curp', 2: 'ine', 3: 'rfc', 4: 'curp'};
     let id        = params[type];
+    let id_result    = params[type];
     let param     = $('#'+id).val();
+    if (type == 4) {
+        id_result     = 'issste';
+    }
     let param2 = type == 2 ? $('#identificadorCiudadano').val() : null;
     let error = false;  
 
@@ -809,16 +813,16 @@ window.kycCreditHistory = function(history_id, type) {
     }
 
     if (error == false) {
-        $('#kyc-'+id).html('');
-        $('#kyc-'+id+'-msg').html('');
+        $('#kyc-'+id_result).html('');
+        $('#kyc-'+id_result+'-msg').html('');
     
     
         axios
             .get("/panel/kc-control-desk/kc/"+history_id+"/"+param+"/"+param2+"/"+type+"/validate")
             .then(function (response) {
                 let result = response.data;
-                $('#kyc-'+id).html(result.html);
-                $('#kyc-'+id+'-msg').val(result.msg);
+                $('#kyc-'+id_result).html(result.html);
+                $('#kyc-'+id_msg+'-msg').val(result.msg);
             })
             .catch(e => {
             });
