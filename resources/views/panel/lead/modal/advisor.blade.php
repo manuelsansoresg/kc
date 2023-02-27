@@ -27,6 +27,8 @@
                         </div>
                         
                         <input type="hidden" id="lead_advisor_id" name="lead_id">
+                        <input type="hidden" id="credit_id" name="credit_id">
+                        <input type="hidden" id="type_id" name="type_id">
                         
                         <div class="col-12">
                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">

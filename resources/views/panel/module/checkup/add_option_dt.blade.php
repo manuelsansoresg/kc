@@ -41,6 +41,10 @@
             <a onclick="moveModal('Archivar', {{ $credit_id }}, '{{ $m_history::CREDIT_ARCHIVE }}', '{{ $status_id }}' , 'dt-check-up')" class="pointer">
                 <em class="icon ni ni-archive-fill"></em><span>Archivar</span></a>
         </li>
+        <li>
+            <a onclick="modalAdvisorCredit({{ $credit_id }})" class="pointer">
+                <em class="icon ni ni-archive-fill"></em><span>Asignar asesor</span></a>
+        </li>
       
     </ul>
 </div>

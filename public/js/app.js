@@ -1761,6 +1761,13 @@ window.deleteLead = function (lead_id) {
 
 window.modalAdvisor = function (lead_id) {
   $('#lead_advisor_id').val(lead_id);
+  $('#type_id').val(1);
+  $('#modal-advisor').modal('show');
+};
+
+window.modalAdvisorCredit = function (credit_id) {
+  $('#credit_id').val(credit_id);
+  $('#type_id').val(2);
   $('#modal-advisor').modal('show');
 };
 
@@ -1768,10 +1775,20 @@ $("#frm-advisor").submit(function (event) {
   event.preventDefault();
   var asesor_id = $('#modal-advisor-id').val();
   var lead_id = $('#lead_advisor_id').val();
-  axios.post("panel/lead/" + lead_id + "/advisor/store", {
+  var credit_id = $('#credit_id').val();
+  var type_id = $('#type_id').val();
+  var url = "panel/lead/" + lead_id + "/advisor/store";
+  var dt = 'dt-lead';
+
+  if (type_id == 2) {
+    url = "panel/credit/" + credit_id + "/advisor/store";
+    dt = 'dt-check-up';
+  }
+
+  axios.post(url, {
     asesor_id: asesor_id
   }).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Prospecto asignado');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, dt, 'Datos actualizados', 'Prospecto asignado');
     $('#modal-advisor').modal('hide');
   })["catch"](function (e) {});
 });

@@ -82,7 +82,8 @@ class User extends Authenticatable
             'financial_id',
             'type_person'
         )
-            ->role($role)->get();
+            ->role($role)
+            ->get();
         return $users;
     }
 

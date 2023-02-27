@@ -56,6 +56,13 @@ class CreditController extends Controller
         return response()->json($credit_reference);
     }
 
+    public function advisorStore($credit_id, Request $request)
+    {
+        Credit::find($credit_id)->update(
+            ['asesor_id' => $request->asesor_id]
+        );
+    }
+
     public function listReference($history_id)
     {
         $history    = HistoryLog::find($history_id);

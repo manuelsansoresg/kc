@@ -169,17 +169,34 @@ window.deleteLead = function (lead_id) {
 
 window.modalAdvisor = function (lead_id) {
     $('#lead_advisor_id').val(lead_id);
+    $('#type_id').val(1);
+    $('#modal-advisor').modal('show');
+}
+
+window.modalAdvisorCredit = function (credit_id) {
+    $('#credit_id').val(credit_id);
+    $('#type_id').val(2);
     $('#modal-advisor').modal('show');
 }
 
 $("#frm-advisor").submit(function (event) {
     event.preventDefault();
-    let asesor_id = $('#modal-advisor-id').val();
-    let lead_id = $('#lead_advisor_id').val();
+    let asesor_id   = $('#modal-advisor-id').val();
+    let lead_id     = $('#lead_advisor_id').val();
+    let credit_id   = $('#credit_id').val();
+    let type_id     = $('#type_id').val();
+    let url         = "panel/lead/" + lead_id + "/advisor/store";
+    let dt          = 'dt-lead';
+
+    if (type_id == 2) {
+        url = "panel/credit/" + credit_id + "/advisor/store";
+        dt = 'dt-check-up';
+    }
+
     axios
-        .post("panel/lead/" + lead_id + "/advisor/store", { asesor_id: asesor_id })
+        .post(url, { asesor_id: asesor_id })
         .then(function (response) {
-            showInfo(2, 'dt-lead', 'Datos actualizados', 'Prospecto asignado');
+            showInfo(2, dt, 'Datos actualizados', 'Prospecto asignado');
             $('#modal-advisor').modal('hide');
         })
         .catch(e => {

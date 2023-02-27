@@ -147,9 +147,7 @@ Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\KcCheckupController', 'list'])->middleware('auth');
     Route::get('/report/list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'list'])->middleware('auth');
     Route::get('/report/answer_module/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'actionReport'])->middleware('auth');
-    
     Route::get('/report/desition/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionReport'])->middleware('auth');
-    
     Route::get('/report/desition/{credit_id}/{financial_id}/{type}/accept', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionAccept'])->middleware('auth');
 });
 
@@ -207,6 +205,7 @@ Route::group(['prefix' => 'credit'], function () {
     Route::get('product/{status}', ['\App\Http\Controllers\Panel\Credit\CreditController', 'product'])->middleware('auth');
     Route::get('product/{status}/list', ['\App\Http\Controllers\Panel\Credit\CreditController', 'productList'])->middleware('auth');
     
+    Route::post('{credit_id}/advisor/store', ['\App\Http\Controllers\Panel\Credit\CreditController', 'advisorStore'])->middleware('auth');
 
     
 });
