@@ -13,8 +13,6 @@ class LeadStrategy implements ValidateStagesInterface
         $error                = false;
         $error_organization   = false;
         $error_product        = false;
-        $error_account        = false;
-        $error_adviser        = false;
         $errors = array();
 
         if ($get_lead != null) {
@@ -28,15 +26,9 @@ class LeadStrategy implements ValidateStagesInterface
                 $error_product = true;
             }
             
-            if ($get_account == 0) {
-                $error_account = true;
-            }
-
-            if ($get_lead->asesor_id == null) {
-                $error_adviser = true;
-            }
+           
     
-            if ($error_organization == true || $error_product == true || $error_account == true  || $error_adviser == true) {
+            if ($error_organization == true || $error_product == true) {
                 $error = true;
             }
 
@@ -45,8 +37,6 @@ class LeadStrategy implements ValidateStagesInterface
             $errors = array(
                 'Organización' => $error_organization,
                 'Producto' => $error_product,
-                'Cuenta' => $error_account,
-                'Asesor' => $error_adviser,
             );
         }
         $data_error = array(
