@@ -152,7 +152,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             8 => [
@@ -628,12 +628,10 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         }
 
         if ($client != null && $client->last_name != null) {
-            $total_valid = $total_valid + 20;
+            $total_valid = $total_valid + 40;
         }
 
-        if ($client != null && $client->cellphone != null) {
-            $total_valid = $total_valid + 20;
-        }
+        
         $percent =  (100 / 100) * $total_valid;
         return $percent;
     }

@@ -2553,7 +2553,6 @@ $().ready(function () {
         required: true
       },
       'cellphone': {
-        required: true,
         number: true,
         minlength: 10
       },
@@ -2587,7 +2586,6 @@ $().ready(function () {
         required: true
       },
       'cellphone': {
-        required: true,
         number: true,
         minlength: 10
       },

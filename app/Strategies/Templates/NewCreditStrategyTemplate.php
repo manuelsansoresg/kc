@@ -138,7 +138,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             7 => [
@@ -494,7 +494,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $percent = 0;
         $total_valid = 0;
         if ($credit != null && $credit->agreement_id != '' && $client != null && $client->agreement_id != '') {
-            $total_valid = $total_valid + 25;
+            $total_valid = $total_valid + 50;
         }
 
         if ($client != null && $client->name != null) {
@@ -505,9 +505,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             $total_valid = $total_valid + 25;
         }
 
-        if ($client != null && $client->cellphone != null) {
-            $total_valid = $total_valid + 25;
-        }
+       
         $percent =  (100 / 100) * $total_valid;
         return $percent;
     }

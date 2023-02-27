@@ -39,7 +39,7 @@
                             @endif
                         </div>
                     </div>
-                    @if ($element['childs'])
+                    @if (isset($element['childs']))
                         @foreach ($element['childs'] as $child)
                             @if ( $child['type'] == 'href')
                                 <div class="form-group mb-0">
