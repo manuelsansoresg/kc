@@ -1,6 +1,7 @@
 
 import { showInfo } from './utilities';
 
+
 function move(id, form, modal, datatable, title, msg){
 
     const new_form = document.getElementById(form);
@@ -76,6 +77,8 @@ window.modalValidate = function(id, model){
     });
 }
 
+
+
 window.desition = function(credit_id, financial_id, type) {
     Swal.fire({
         title: '¿Estás seguro?',
@@ -94,6 +97,9 @@ window.desition = function(credit_id, financial_id, type) {
                 } else {
                     window.location = '/panel/kc-swap';
                 }
+
+               
+               
             })
             .catch(e => {
                 

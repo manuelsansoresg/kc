@@ -36,6 +36,7 @@ class HomeController extends Controller
     {
         $history    = HistoryLog::find($history_id);
         $credit     = $history->historyCredit;
+        
         $financial  = $credit->creditFinancial; //financiera transferente
         $client     = $credit->creditClientPerson;
         $option     = 2;
@@ -67,11 +68,11 @@ class HomeController extends Controller
                 'interes' => 8500,
                 'comision_apertura' => 0
             );
-
             $get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: $chart['Financiera 1'];
+            
             return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id'));
         }
-        return view('content_report', compact('client', 'history_id', 'status_id'));
+        return view('content_report', compact('client', 'history_id', 'status_id', 'credit'));
     }
 
     public function method($history_id)

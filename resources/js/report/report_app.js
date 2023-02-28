@@ -1,3 +1,8 @@
+import Swal from 'sweetalert2';
+
+window.axios = require('axios');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 function confetti() {
     $.each($(".particletext.confetti"), function(){
        var confetticount = ($(this).width()/50)*10;
@@ -19,7 +24,7 @@ function confetti() {
 });
 
 
-window.desition = function(credit_id, financial_id) {
+window.desitionReport = function(credit_id, financial_id, type) {
    Swal.fire({
        title: '¿Estás seguro?',
        icon: 'warning',
@@ -27,16 +32,16 @@ window.desition = function(credit_id, financial_id) {
        confirmButtonText: 'Sí',
        cancelButtonText: 'Mejor no'
    }).then(function (result) {
-       if (result.value) {
-           axios
-           .get("/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+"/accept")
-           .then(function (response) {
-               let reason = response.data;
-               //window.location = '/panel/kc-control-desk';
-           })
-           .catch(e => {
-               
-           });
-       }
+    if (result.isConfirmed) {
+        axios
+        .get("/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept")
+        .then(function (response) {
+            let reason = response.data;
+            window.location = '/panel/report/status/finish';
+        })
+        .catch(e => {
+            
+        });
+    }
    });
 }

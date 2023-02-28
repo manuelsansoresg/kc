@@ -96,7 +96,7 @@
                                             class="fw-bold text-muted">/5 </span> 
                                             
                                     <small
-                                        class="text-muted font-monospace mb-4 d-block"></small><button type="button"
+                                        class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, 1, 1)" type="button"
                                         class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
                                         <li class="mb-2">
@@ -147,7 +147,7 @@
                                 <div class="card-body pt-0 pb-4 px-4">
                                     <h6 class="display-9"><span class="fw-light small"></span>Calificación: 5<span
                                             class="small">/5</span></h6><small
-                                        class="text-muted font-monospace mb-4 d-block"></small><button type="button"
+                                        class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, 2, 1)" type="button"
                                         class="w-100 btn btn-lg btn-gradient-primary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
                                         <li class="mb-2">
@@ -198,7 +198,7 @@
                                 <div class="card-body pt-0 pb-4 px-4">
                                     <h6 class="display-9"><span class="fw-light small"></span>Calificación: 3<span
                                             class="small">/5</span></h6><small
-                                        class="text-muted font-monospace mb-4 d-block"></small><button type="button"
+                                        class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, 3, 1)" type="button"
                                         class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
                                         <li class="mb-2">
@@ -249,7 +249,7 @@
                                 <div class="card-body pt-0 pb-4 px-4">
                                     <h6 class="display-9"><span class="fw-light small"></span>Calificación: 2<span
                                             class="small">/5</span></h6><small
-                                        class="text-muted font-monospace mb-4 d-block"></small><button type="button"
+                                        class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, 4, 1)" type="button"
                                         class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
                                         <li class="mb-2">
@@ -300,7 +300,7 @@
                                 <div class="card-body pt-0 pb-4 px-4">
                                     <h6 class="display-9"><span class="fw-light small"></span>Calificación: 2<span
                                             class="small">/5</span></h6><small
-                                        class="text-muted font-monospace mb-4 d-block"></small><button type="button"
+                                        class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, 5, 1)" type="button"
                                         class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
                                     <ul class="list-unstyled mb-0 pt-4">
                                         <li class="mb-2">
