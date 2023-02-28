@@ -1,7 +1,11 @@
 @extends('layouts.report')
 
 @section('title', 'Metodología')
-    
+
+@section('header')
+@include('layouts.content_report_nav')
+@endsection
+
 @section('content')
 
 <section class="position-relative bg-style-1">
@@ -175,4 +179,8 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('add_script')
+    @include('layouts.script_report')
 @endsection

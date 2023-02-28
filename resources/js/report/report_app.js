@@ -37,7 +37,7 @@ window.desitionReport = function(credit_id, financial_id, type) {
         .get("/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept")
         .then(function (response) {
             let reason = response.data;
-            window.location = '/panel/report/status/finish';
+            window.location = '/reporte/'+credit_id+'/status/finish';
         })
         .catch(e => {
             

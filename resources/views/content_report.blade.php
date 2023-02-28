@@ -1,5 +1,10 @@
 @extends('layouts.report')
 @section('title', 'Reporte')
+
+@section('header')
+    @include('layouts.content_report_nav')
+@endsection
+
 @section('content')
 
 {{-- hero --}}
@@ -646,3 +651,8 @@
         </div>
     </section>
 @endsection
+
+@section('add_script')
+    @include('layouts.script_report')
+@endsection
+

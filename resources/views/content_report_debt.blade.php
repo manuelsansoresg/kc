@@ -1,5 +1,10 @@
 @extends('layouts.report')
 
+@section('header')
+    @include('layouts.content_report_nav')
+@endsection
+
+
 @section('content')
     <!--::Hero Default::-->
     <section class="position-relative bg-style-1 debt">
@@ -730,4 +735,8 @@
           </div>
       </div>
   </section>
+@endsection
+
+@section('add_script')
+    @include('layouts.script_report')
 @endsection

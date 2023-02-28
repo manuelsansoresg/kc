@@ -6405,7 +6405,7 @@ window.desitionReport = function (credit_id, financial_id, type) {
     if (result.isConfirmed) {
       axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
         var reason = response.data;
-        window.location = '/panel/report/status/finish';
+        window.location = '/reporte/' + credit_id + '/status/finish';
       })["catch"](function (e) {});
     }
   });

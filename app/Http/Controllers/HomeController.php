@@ -75,6 +75,11 @@ class HomeController extends Controller
         return view('content_report', compact('client', 'history_id', 'status_id', 'credit'));
     }
 
+    public function exitReport($credit_id)
+    {
+        return view('content_exit_report');
+    }
+
     public function method($history_id)
     {
         return view('content_report_metodologia', compact('history_id'));
