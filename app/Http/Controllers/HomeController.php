@@ -34,6 +34,7 @@ class HomeController extends Controller
 
     public function report($history_id)
     {
+        
         $history    = HistoryLog::find($history_id);
         $credit     = $history->historyCredit;
         
@@ -75,8 +76,11 @@ class HomeController extends Controller
         return view('content_report', compact('client', 'history_id', 'status_id', 'credit'));
     }
 
-    public function exitReport($credit_id)
+    public function exitReport(Credit $credit)
     {
+        if ($credit->applied_financial != '') {
+            return view('content_expiration_report');
+        }
         return view('content_exit_report');
     }
 
