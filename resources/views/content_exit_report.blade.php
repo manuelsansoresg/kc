@@ -23,12 +23,29 @@
                             <div class="row position-relative">
                                 <div class="col-lg-9 col-md-10 mx-auto text-center">
                                     <h2 class="mb-4 aos-init aos-animate display-2" data-aos="fade-up"> ¡Genial! </h2>
-                                    <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> Un asesor de nuestro equipo te contactará en unos minutos para iniciar el trámite de tu crédito.
+                                    @php
+                                        $currentDateTime = date('l H:i');
+                                        $dayOK = (date('l') == 'Monday' || date('l') == 'Tuesday' 
+                                                || date('l') == 'Wednesday' || date('l') == 'Thursday' 
+                                                || date('l') == 'Friday');
+                                        $timeOK = (date('H:i', strtotime($currentDateTime)) >= '09:00' 
+                                                && date('H:i', strtotime($currentDateTime)) <= '18:00');
+                                        
+                                    @endphp 
+                                    @if ($dayOK && $timeOK)
+                                    <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                                        Un asesor de nuestro equipo te contactará en unos minutos para iniciar el trámite de tu crédito.
                                     </h2>
-                                    
-                                    <h2 class="h3 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> Puedes darle seguimiento al trámite desde la App. 
+                                    @else
+                                    <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
+                                        Un asesor de nuestro equipo te contactará a la brevedad posible para iniciar el trámite de tu crédito.
                                     </h2>
+                                    @endif
 
+                                    <h2 class="h3 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
+                                        Puedes darle seguimiento al trámite desde la App. 
+                                    </h2>
+                                    @if ($dayOK && $timeOK)
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
                                             <a class="btn btn-primary btn-lg hover-lift me-3" href="https://app.kaaxclub.com/" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
@@ -37,6 +54,20 @@
                                             </a>
                                         </div>
                                     </div>
+                                        
+                                    @else
+                                    <div class="d-flex flex-wrap justify-content-center">
+                                        <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
+                                            <a class="btn btn-primary btn-lg hover-lift me-3" href="https://app.kaaxclub.com/" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    
+
+                                   
                                 </div>
                             </div>
                         </div>
