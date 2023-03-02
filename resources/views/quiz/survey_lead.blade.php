@@ -31,14 +31,14 @@
     <div class="d-flex justify-content-center align-items-center vh-100" id="content-lead-flex">
         <div class="text-center" id="content-leyend-start">
             <img class="" src="{{ asset('images/logo-dark.png') }}"
-            alt="logo"  data-aos="fade-up">
+            alt="logo"  data-aos="fade-up" data-aos-duration="5000">
             <p class="mt-5">
                 @if ($dayOK && $timeOK)
-                <h3 class="text-white"  data-aos="fade-up">
+                <h3 class="text-white"  data-aos="fade-up" data-aos-duration="5000">
                     El trámite es fácil y rápido. <br> Puedes iniciar el trámite tú mismo o si lo prefieres, un asesor te puede ayudar via WhatsApp
                 </h3>
                 @else
-                <h3 class="text-white"  data-aos="fade-up">
+                <h3 class="text-white"  data-aos="fade-up" data-aos-duration="5000">
                     El trámite es fácil y rápido.
                 </h3>
                     
@@ -48,19 +48,19 @@
                 @if ($dayOK && $timeOK)
                 <div class="row justify-content-center">
                     <div class="col-6">
-                        <a onclick="startStepperLead()" id="btn-next-init" class="btn btn-primary btn-lg btn-block py-3 pointer"  data-aos="fade-up">Adelante :)</a>
+                        <a onclick="startStepperLead()" id="btn-next-init" class="btn btn-primary btn-lg btn-block py-3 pointer"  data-aos="fade-up" data-aos-duration="5000">Adelante :)</a>
                     </div>
                 </div>
                 <div class="row justify-content-center mt-3">
                     <div class="col-6">
-                        <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer"  data-aos="fade-up">Contactar asesor</a>
+                        <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer"  data-aos="fade-up" data-aos-duration="5000">Contactar asesor</a>
                     </div>
                 </div>
                 
                 @else
                 <div class="row justify-content-center">
                     <div class="col-6">
-                        <a onclick="startStepperLead()" class="btn btn-primary btn-lg btn-block py-3 pointer"  data-aos="fade-up">Adelante :)</a>
+                        <a onclick="startStepperLead()" class="btn btn-primary btn-lg btn-block py-3 pointer"  data-aos="fade-up" data-aos-duration="5000">Adelante :)</a>
                     </div>
                 </div>
                 @endif
