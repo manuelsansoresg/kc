@@ -38,7 +38,7 @@
                     El trámite es fácil y rápido. <br> Puedes iniciar el trámite tú mismo o si lo prefieres, un asesor te puede ayudar via WhatsApp
                 </h3>
                 @else
-                <h3 class="text-white"  data-aos="fade-up" data-aos-duration="5000">
+                <h3 class="text-white"  data-aos="fade-up" data-aos-duration="9000">
                     El trámite es fácil y rápido.
                 </h3>
                     
