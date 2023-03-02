@@ -922,10 +922,12 @@
     }
   }; // Stepper Init @v1.0
 
+  if (!document.getElementById('frm-survey-lead')) {
+    NioApp.Stepper.init = function () {
+      NioApp.Stepper('.stepper-init');
+    }; // Tagify @v1.0.1
+  }
 
-  NioApp.Stepper.init = function () {
-    NioApp.Stepper('.stepper-init');
-  }; // Tagify @v1.0.1
 
 
   NioApp.Tagify = function (elm, opt) {

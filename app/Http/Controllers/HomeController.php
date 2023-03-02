@@ -32,6 +32,11 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function surveyHola()
+    {
+        return view('quiz.survey_lead');
+    }
+
     public function report($history_id)
     {
         
