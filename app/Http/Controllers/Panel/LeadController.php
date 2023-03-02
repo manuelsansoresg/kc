@@ -35,6 +35,19 @@ class LeadController extends Controller
      */
     public function index()
     {
+
+        $lead_id = 1;
+        $find_lead  = Lead::find($lead_id);
+        $find_user  = User::where('email', 'manuelsansoresg@gmail.com')->first();
+        $domain = 'https://app.kaaxclub.com';
+        $link_login = $domain.'/login';
+        $link_password_change = $domain.'/account/'.$lead_id.'/password/change';
+        $send_grid = new Csendgrid('manuelsansoresg@gmail.com', 'creacion cuenta');
+        $send_grid->setTemplate('d-ea081e65c8014113b50315a103127d13');
+        $send_grid->setParams(['first_name'=> $find_lead->name, 'link_login' => $link_login, 'link_password_change' => $link_password_change]);
+        $send_grid->send();
+        
+
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
         if ($is_financiera === true) {
             return redirect('panel/kc-delivery');
