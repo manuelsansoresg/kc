@@ -902,7 +902,7 @@
             content: 'stepper-steps',
             prev: 'step-prev',
             next: 'step-next',
-            /* submit: 'step-submit' */
+            submit: 'step-submit'
           },
           classes: {
             nav_current: 'current',

@@ -18,8 +18,12 @@
     font-size: 18px !important;
 }
 
+.form-control {
+    font-size: 18px !important;
+ }
+
 @media only screen and (max-width: 480px) {
-    .btn {
+    .btn, .form-control {
         font-size: 15px !important;
     }
 

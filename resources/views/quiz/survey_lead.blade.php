@@ -41,7 +41,7 @@
                         <div class="bg-dark is-dark p-5 text-center">
                             <a href="/" class="logo-link nk-sidebar-logo">
                                 <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo2x.png 2x" alt="logo">
+                                    srcset="./images/logo2x.png 2x" alt="logo" data-aos="fade-up" data-aos-duration="5000">
                                 <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
                                     srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
                             </a>
@@ -98,9 +98,9 @@
                         <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
                             <a href="/" class="logo-link nk-sidebar-logo">
                                 <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo2x.png 2x" alt="logo">
+                                    srcset="./images/logo2x.png 2x" alt="logo" >
                                 <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark" >
                             </a>
 
                             <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
