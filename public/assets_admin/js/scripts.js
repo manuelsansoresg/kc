@@ -902,7 +902,7 @@
             content: 'stepper-steps',
             prev: 'step-prev',
             next: 'step-next',
-            submit: 'step-submit'
+            /* submit: 'step-submit' */
           },
           classes: {
             nav_current: 'current',
@@ -923,12 +923,12 @@
   }; // Stepper Init @v1.0
 
   if (!document.getElementById('frm-survey-lead')) {
-    NioApp.Stepper.init = function () {
-      NioApp.Stepper('.stepper-init');
-    }; // Tagify @v1.0.1
+   
   }
 
-
+  NioApp.Stepper.init = function () {
+    NioApp.Stepper('.stepper-init');
+  }; // Tagify @v1.0.1
 
   NioApp.Tagify = function (elm, opt) {
     if ($(elm).exists() && typeof $.fn.tagify === 'function') {

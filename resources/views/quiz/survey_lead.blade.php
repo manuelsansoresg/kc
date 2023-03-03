@@ -12,300 +12,244 @@
     <link rel="shortcut icon" href="/images/favicon-32x32.png">
     <!-- Page Title  -->
     <title>KC- Encuesta de satisfacción</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
+    {{-- aditional css --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+        integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="/css/survey.css?ver=1.0.0">
+
 </head>
 @php
-     $currentDateTime = date('l H:i');
-    $dayOK = (date('l') == 'Monday' || date('l') == 'Tuesday' 
-            || date('l') == 'Wednesday' || date('l') == 'Thursday' 
-            || date('l') == 'Friday');
-    $timeOK = (date('H:i', strtotime($currentDateTime)) >= '09:00' 
-            && date('H:i', strtotime($currentDateTime)) <= '18:00');
+    $currentDateTime = date('l H:i');
+    $dayOK = date('l') == 'Monday' || date('l') == 'Tuesday' || date('l') == 'Wednesday' || date('l') == 'Thursday' || date('l') == 'Friday';
+    $timeOK = date('H:i', strtotime($currentDateTime)) >= '09:00' && date('H:i', strtotime($currentDateTime)) <= '18:00';
 @endphp
-<body class="nk-body npc-general pg-survey bg-dark text-white">
-    <div class="d-flex justify-content-center align-items-center vh-100" id="content-lead-flex">
-        <div class="text-center" id="content-leyend-start">
-            <img class="" src="{{ asset('images/logo-dark.png') }}"
-            alt="logo"  data-aos="fade-up" data-aos-duration="5000">
-            <p class="mt-5">
-                @if ($dayOK && $timeOK)
-                <h3 class="text-white"  data-aos="fade-up" data-aos-duration="5000">
-                    El trámite es fácil y rápido. <br> Puedes iniciar el trámite tú mismo o si lo prefieres, un asesor te puede ayudar via WhatsApp
-                </h3>
-                @else
-                <h3 class="text-white"  data-aos="fade-up" data-aos-duration="9000">
-                    El trámite es fácil y rápido.
-                </h3>
-                    
-                @endif
-            </p>
-            <p class="mt-5">
-                @if ($dayOK && $timeOK)
-                <div class="row justify-content-center">
-                    <div class="col-6">
-                        <a onclick="startStepperLead()" id="btn-next-init" class="btn btn-primary btn-lg btn-block py-3 pointer"  data-aos="fade-up" data-aos-duration="5000">Adelante :)</a>
-                    </div>
+
+<body class="nk-body bg-dark npc-general pg-survey text-white">
+    <div class="nk-app-root">
+        <!-- main @s -->
+        <div class="nk-main ">
+            <!-- wrap @s -->
+            <div class="nk-wrap nk-wrap-nosidebar">
+                <!-- content @s -->
+                <div class="nk-content" id="content-lead-flex">
+                    <div class="d-flex justify-content-center align-items-center vh-100">
+                        <div class="bg-dark is-dark p-5 text-center">
+                            <a href="/" class="logo-link nk-sidebar-logo">
+                                <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                    srcset="./images/logo2x.png 2x" alt="logo">
+                                <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                            </a>
+                            <div class="text-block">
+                                <p class="mt-5">
+                                    @if ($dayOK && $timeOK)
+                                        <h3 class="text-white" data-aos="fade-up" data-aos-duration="5000">
+                                            El trámite es fácil y rápido. <br> Puedes iniciar el trámite tú mismo o si
+                                            lo
+                                            prefieres, un
+                                            asesor te puede ayudar via WhatsApp
+                                        </h3>
+                                    @else
+                                        <h3 class="text-white" data-aos="fade-up" data-aos-duration="9000">
+                                            El trámite es fácil y rápido.
+                                        </h3>
+                                    @endif
+                                </p>
+                                <p class="mt-5">
+                                    @if ($dayOK && $timeOK)
+                                        <div class="row justify-content-center">
+                                            <div class="col-6">
+                                                <a onclick="startStepperLead()" id="btn-next-init"
+                                                    class="btn btn-primary btn-lg btn-block py-3 pointer"
+                                                    data-aos="fade-up" data-aos-duration="5000">Adelante :)</a>
+                                            </div>
+                                        </div>
+                                        <div class="row justify-content-center mt-3">
+                                            <div class="col-6">
+                                                <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer"
+                                                    data-aos="fade-up" data-aos-duration="5000">Contactar asesor</a>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="row justify-content-center">
+                                            <div class="col-6">
+                                                <a onclick="startStepperLead()"
+                                                    class="btn btn-primary btn-lg btn-block py-3 pointer"
+                                                    data-aos="fade-up" data-aos-duration="5000">Adelante :)</a>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                </p>
+
+                            </div>
+
+                        </div><!-- .nk-split-content -->
+
+                    </div><!-- .nk-split -->
                 </div>
-                <div class="row justify-content-center mt-3">
-                    <div class="col-6">
-                        <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer"  data-aos="fade-up" data-aos-duration="5000">Contactar asesor</a>
-                    </div>
-                </div>
-                
-                @else
-                <div class="row justify-content-center">
-                    <div class="col-6">
-                        <a onclick="startStepperLead()" class="btn btn-primary btn-lg btn-block py-3 pointer"  data-aos="fade-up" data-aos-duration="5000">Adelante :)</a>
-                    </div>
-                </div>
-                @endif
-               
-            </p>
-        </div>
-        <div id="content-lead-form" class="col-12" style="display: none">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-md-6 offset-md-1" id="animate-logo" >
-                        <img class="" src="{{ asset('images/logo-dark.png') }}"
-                        alt="logo">
-                        <form class="nk-stepper stepper-init is-alter mt-3" action="#">
-                            <div class="nk-stepper-content">
-                                <div class="nk-stepper-progress stepper-progress mb-4">
-                                    <div class="stepper-progress-count mb-2"></div>
-                                    <div class="progress progress-md">
-                                        <div class="progress-bar stepper-progress-bar"></div>
-                                    </div>
-                                </div>
-                                <div class="nk-stepper-steps stepper-steps">
-                                    <div class="nk-stepper-step">
-                                        <h5 class="title mb-3 mt-5">¿Recibiste el crédito?</h5>
-                                        <div class="form-control-wrap mt-4">
-                                            <ul class="custom-control-group flex-column align-start">
-                                                <li>
-                                                    <div class="custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input"
-                                                            name="surevey_credit_delivery"
-                                                            id="surevey_credit_delivery-1" required
-                                                            value="1">
-                                                        <label class="custom-control-label"
-                                                            for="surevey_credit_delivery-1">Sí lo recibí.</label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input"
-                                                            name="surevey_credit_delivery"
-                                                            id="surevey_credit_delivery-2" required
-                                                            value="2">
-                                                        <label class="custom-control-label"
-                                                            for="surevey_credit_delivery-2">Sí pero un plazo o
-                                                            monto distinto.</label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="custom-control custom-radio">
-                                                        <input type="radio" class="custom-control-input"
-                                                            name="surevey_credit_delivery"
-                                                            id="surevey_credit_delivery-3" required
-                                                            value="3">
-                                                        <label class="custom-control-label"
-                                                            for="surevey_credit_delivery-3">No lo recibí.</label>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                <div class="nk-content  p-5" id="content-lead-form" style="display: none">
+                    <div class="d-flex  align-items-center vh-100">
+                        <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
+                            <a href="/" class="logo-link nk-sidebar-logo">
+                                <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                    srcset="./images/logo2x.png 2x" alt="logo">
+                                <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                            </a>
+
+                            <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
+                                <div class="nk-stepper-content">
+                                    <div class="nk-stepper-progress stepper-progress mb-4">
+                                        <div class="stepper-progress-count mb-2"></div>
+                                        <div class="progress progress-md">
+                                            <div class="progress-bar stepper-progress-bar"></div>
                                         </div>
                                     </div>
-                                    <div class="nk-stepper-step">
-                                        <h5 class="title mb-3">¿Cómo calificarías la atención que recibiste en
-                                            KaaxClub?</h5>
-                                            <ul class="custom-control-group custom-control-vertical custom-control-stacked w-100">
-                                                <li>
-                                                    <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                        <input type="radio" class="custom-control-input" id="surevey_kc_attention-s5" name="surevey_kc_attention" value="5">
-                                                        <label class="custom-control-label" for="surevey_kc_attention-s5">
-                                                            <span class="user-card"> <span class="sq_icon">
-                                                                    <img class="img-radio-survey" src="{{ asset('images/survey5.svg') }}" alt=""> </span>
-                                                                <span class="user-info"> <span class="lead-text">5
-                                                                    </span> </span> </span> </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                        <input type="radio" class="custom-control-input" id="surevey_kc_attention-s4" name="surevey_kc_attention" value="4">
-                                                        <label class="custom-control-label" for="surevey_kc_attention-s4">
-                                                            <span class="user-card"> <span class="sq_icon">
-                                                                    <img class="img-radio-survey" src="{{ asset('images/survey4.svg') }}" alt=""> </span>
-                                                                <span class="user-info"> <span class="lead-text">4</span> </span> </span> </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                        <input type="radio" class="custom-control-input" id="surevey_kc_attention-s3" name="surevey_kc_attention" value="3">
-                                                        <label class="custom-control-label" for="surevey_kc_attention-s3">
-                                                            <span class="user-card"> <span class="sq_icon">
-                                                                    <img class="img-radio-survey" src="{{ asset('images/survey3.svg') }}" alt=""> </span>
-                                                                <span class="user-info"> <span class="lead-text">3</span> </span> </span> </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                        <input type="radio" class="custom-control-input" id="surevey_kc_attention-s2" name="surevey_kc_attention" value="2">
-                                                        <label class="custom-control-label" for="surevey_kc_attention-s2">
-                                                            <span class="user-card"> <span class="sq_icon">
-                                                                    <img class="img-radio-survey" src="{{ asset('images/survey2.svg') }}" alt=""> </span>
-                                                                <span class="user-info"> <span class="lead-text">2</span> </span> </span> </label>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                        <input type="radio" class="custom-control-input" id="surevey_kc_attention-s1" name="surevey_kc_attention" value="1">
-                                                        <label class="custom-control-label" for="surevey_kc_attention-s1">
-                                                            <span class="user-card"> <span class="sq_icon">
-                                                                    <img class="img-radio-survey" src="{{ asset('images/survey1.svg') }}" alt=""> </span>
-                                                                <span class="user-info"> <span class="lead-text">1</span> </span> </span> </label>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        
-                                    </div>
-                                    <div class="nk-stepper-step">
-                                        <h5 class="title mb-4">¿Cómo calificarías la atención la financiera que
-                                            te otorgó el crédito?</h5>
-                                        <div class="row g-4">
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <div class="form-control-wrap">
-                                                        <ul class="custom-control-group custom-control-vertical custom-control-stacked w-100">
-                                                            <li>
-                                                                <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                                    <input type="radio" class="custom-control-input" id="surevey_financial_attention-s5" name="surevey_financial_attention" value="5">
-                                                                    <label class="custom-control-label" for="surevey_financial_attention-s5">
-                                                                        <span class="user-card"> <span class="sq_icon">
-                                                                                <img class="img-radio-survey" src="{{ asset('images/survey5.svg') }}" alt=""> </span>
-                                                                            <span class="user-info"> <span class="lead-text">5
-                                                                                </span> </span> </span> </label>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                                    <input type="radio" class="custom-control-input" id="surevey_financial_attention-s4" name="surevey_financial_attention" value="4">
-                                                                    <label class="custom-control-label" for="surevey_financial_attention-s4">
-                                                                        <span class="user-card"> <span class="sq_icon">
-                                                                                <img class="img-radio-survey" src="{{ asset('images/survey4.svg') }}" alt=""> </span>
-                                                                            <span class="user-info"> <span class="lead-text">4</span> </span> </span> </label>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                                    <input type="radio" class="custom-control-input" id="surevey_financial_attention-s3" name="surevey_financial_attention" value="3">
-                                                                    <label class="custom-control-label" for="surevey_financial_attention-s3">
-                                                                        <span class="user-card"> <span class="sq_icon">
-                                                                                <img class="img-radio-survey" src="{{ asset('images/survey3.svg') }}" alt=""> </span>
-                                                                            <span class="user-info"> <span class="lead-text">3</span> </span> </span> </label>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                                    <input type="radio" class="custom-control-input" id="surevey_financial_attention-s2" name="surevey_financial_attention" value="2">
-                                                                    <label class="custom-control-label" for="surevey_financial_attention-s2">
-                                                                        <span class="user-card"> <span class="sq_icon">
-                                                                                <img class="img-radio-survey" src="{{ asset('images/survey2.svg') }}" alt=""> </span>
-                                                                            <span class="user-info"> <span class="lead-text">2</span> </span> </span> </label>
-                                                                </div>
-                                                            </li>
-                                                            <li>
-                                                                <div class="custom-control custom-control-sm custom-radio custom-control-pro">
-                                                                    <input type="radio" class="custom-control-input" id="surevey_financial_attention-s1" name="surevey_financial_attention" value="1">
-                                                                    <label class="custom-control-label" for="surevey_financial_attention-s1">
-                                                                        <span class="user-card"> <span class="sq_icon">
-                                                                                <img class="img-radio-survey" src="{{ asset('images/survey1.svg') }}" alt=""> </span>
-                                                                            <span class="user-info"> <span class="lead-text">1</span> </span> </span> </label>
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
+                                    <div class="nk-stepper-steps stepper-steps">
+                                        <div class="nk-stepper-step">
+                                            <h5 class="title mb-3 mt-5">Hola ¿Cómo te llamas?</h5>
+                                            <div class="form-group"><label class="form-label text-white"
+                                                    for="sv1-first-name">
+                                                </label>
+                                                <div class="form-control-wrap"><input type="text"
+                                                        class="form-control" id="sv1-first-name" name="sv1-first-name"
+                                                        placeholder="Por favor, escribe tu primer nombre"
+                                                        required=""></div>
+                                            </div>
+                                        </div>
+                                        <div class="nk-stepper-step">
+                                            <h5 class="title mb-3 mt-5">Gracias! <span id="span-name"></span> ¿Y tu
+                                                primer apellido?</h5>
+                                            <div class="form-group"><label class="form-label text-white"
+                                                    for="sv1-last-name">
+                                                </label>
+                                                <div class="form-control-wrap"><input type="text"
+                                                        class="form-control" id="sv1-last-name"
+                                                        name="sv1-last-name"
+                                                        placeholder="Por favor, escribe tu respuesta" required="">
                                                 </div>
                                             </div>
-                                          
                                         </div>
-                                    </div>
-                                    <div class="nk-stepper-step">
-                                        <h5 class="title mb-3">¿Tienes algún comentario?</h5>
-                                        <div class="form-group">
-                                                
-                                            <div class="form-control-wrap">
-                                                <textarea class="form-control form-control-sm" id="survey_note" name="survey_note"
-                                                    placeholder="Opcional"></textarea>
+                                        <div class="nk-stepper-step">
+                                            <h5 class="title mb-3 mt-5">Nos gusta la comunicación tradicional. Pero, ¿qué tal si nos das tu email para mantenernos en contacto?</h5>
+                                            <div class="form-group"><label class="form-label text-white"
+                                                    for="sv1-email">
+                                                </label>
+                                                <div class="form-control-wrap"><input type="text"
+                                                        class="form-control" id="sv1-email"
+                                                        name="sv1-email"
+                                                        placeholder="Por favor, escribe tu email" required="">
+                                                </div>
                                             </div>
                                         </div>
-                                       
-                                    </div>
-                                    <div class="nk-stepper-step">
-                                        <div class="pt-4 pb-2">
-                                            <em
-                                                class="icon icon-circle icon-circle-xxl mb-4 ni ni-check bg-primary-dim"></em>
-                                            <h5 class="title mb-2">Encuesta concluida</h5>
-                                            <p>Gracias! tu opinión nos ayuda a mejorar</p>
+                                        
+                                        <div class="nk-stepper-step">
+                                            <h5 class="title mb-3 mt-5">En caso de que necesitemos enviarte un mensaje por WhatsApp, ¿nos das tu número de celular?</h5>
+                                            <div class="form-group"><label class="form-label text-white"
+                                                    for="sv1-cellphone">
+                                                </label>
+                                                <div class="form-control-wrap"><input type="number"
+                                                        class="form-control" id="sv1-cellphone"
+                                                        name="sv1-cellphone"
+                                                        minlength="10" maxlength="10" pattern="[0-9]{10}"
+                                                        placeholder="Por favor, escribe tu email" required="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <div class="nk-stepper-step">
+                                            <div class="pt-4 pb-2">
+                                                <em
+                                                    class="icon icon-circle icon-circle-xxl mb-4 ni ni-check bg-primary-dim"></em>
+                                                <h5 class="title mb-2">Encuesta concluida</h5>
+                                                <p>Gracias! tu opinión nos ayuda a mejorar</p>
+                                            </div>
                                         </div>
                                     </div>
+                                    <ul class="nk-stepper-pagination pt-4 gx-4 gy-2 stepper-pagination">
+                                        <li class="step-prev"><button class="btn btn-dim btn-primary btn-lg py-3"
+                                                onclick="animateStepper()">Regresar</button></li>
+                                        <li class="step-next"><button class="btn btn-primary btn-lg py-3"
+                                                onclick="animateStepper()">Continuar </button>
+                                        </li>
+                                        <li class="step-submit" onclick="saveSurvey()"><button
+                                                class="btn btn-primary">Enviar</button>
+                                        </li>
+                                    </ul>
+
                                 </div>
-                                <ul class="nk-stepper-pagination pt-4 gx-4 gy-2 stepper-pagination">
-                                    <li class="step-prev"><button
-                                            class="btn btn-dim btn-primary">Regresar</button></li>
-                                    <li class="step-next"><button class="btn btn-primary">Continuar</button>
-                                    </li>
-                                    <li class="step-submit" onclick="saveSurvey()"><button class="btn btn-primary">Enviar</button>
-                                    </li>
-                                    {{-- <input type="hidden" id="credit_id" name="credit_id" value="{{ $credit_id }}"> --}}
-                                </ul>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                </div><!-- .nk-split-content -->
+
+                <!-- wrap @e -->
             </div>
-          
+
+            <footer class="fixed-bottom text-center">
+                <p>&copy; Equipo de KaaxClub</p>
+            </footer>
+            <!-- content @e -->
         </div>
+        <!-- main @e -->
     </div>
-    
     <!-- app-root @e -->
     <!-- JavaScript -->
     <script src="/assets_admin/js/bundle.js?ver=3.0.3"></script>
     <script src="/assets_admin/js/scripts.js?ver=3.0.3"></script>
     <script src="/js/survey.js?ver=1"></script>
-    <!-- select region modal -->
-    
-  <!-- Adding jQuery with CDN -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-  <!-- Adding AOS JS Library -->
-  <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
-  
+
+    <!-- Adding jQuery with CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Adding AOS JS Library -->
+    <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
+
     <script>
         $(document).ready(function() {
-            //Initialize AOS
+            //*Initialize AOS
             AOS.init();
-            //*SURVEY LEAD
+            //* SURVEY LEAD
             window.startStepperLead = function() {
-                $('#content-leyend-start').hide();
-                $('#content-lead-flex').removeClass('justify-content-center');
-                
-                $("#content-lead-form").show("slide", { direction: "down" }, 500);
+                /* $('#content-leyend-start').hide(); */
+                $('#content-lead-flex').hide();
+                /* $('#content-lead-flex').removeClass('justify-content-center'); */
 
-
-                
-                NioApp.Stepper.init = function () {
-                    NioApp.Stepper('.stepper-init');
-                }; // Tagify @v1.0.1
+                $("#content-lead-form").show("slide", {
+                    direction: "down"
+                }, 500);
             }
+
+            //* Assing value to the span with ID 'span-name' when typing in the input field with ID 'name'
+            $('#name').on('input', function() {
+                $('#span-name').text($(this).val());
+            });
+            //*animate stepper when click button continuar or regresar
+            window.animateStepper = function() {
+                $("#content-lead-form").hide();
+                $("#content-lead-form").show("slide", {
+                    direction: "down"
+                }, 500);
+
+            }
+
+            $('.form-control').on('keydown', function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                }
+            });
            
-           
-            
+
+
         });
-     
     </script>
+
+
 </html>

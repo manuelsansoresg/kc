@@ -1,0 +1,39 @@
+.form-control::placeholder {
+    color: rgba(57, 57, 57, 0.7) !important;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+}
+
+.title, .stepper-progress-count {
+    font-size: 28px !important;
+    font-weight: 400 !important;
+}
+
+.form-control{
+    padding-top: 15px;
+    padding-bottom: 10px;
+}
+
+.btn {
+    font-size: 18px !important;
+}
+
+@media only screen and (max-width: 480px) {
+    .btn {
+        font-size: 15px !important;
+    }
+
+    .form-control::placeholder {
+        font-size: 15px !important;
+    }
+    
+    .title, .stepper-progress-count {
+        font-size: 20px !important;
+    }
+    
+    .form-control{
+        padding-top: 10px;
+        padding-bottom: 8px;
+    }
+
+}
