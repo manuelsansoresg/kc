@@ -1,3 +1,4 @@
+@inject('m_agreement', 'App\Models\Agreement')
 <!DOCTYPE html>
 <html lang="zxx" class="js">
 
@@ -20,6 +21,7 @@
         integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="/css/survey.css?ver=1.0.0">
 
 </head>
@@ -41,7 +43,8 @@
                         <div class="bg-dark is-dark p-5 text-center">
                             <a href="/" class="logo-link nk-sidebar-logo">
                                 <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo2x.png 2x" alt="logo" data-aos="fade-up" data-aos-duration="5000">
+                                    srcset="./images/logo2x.png 2x" alt="logo" data-aos="fade-up"
+                                    data-aos-duration="5000">
                                 <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
                                     srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
                             </a>
@@ -66,7 +69,9 @@
                                             <div class="col-6">
                                                 <a onclick="startStepperLead()" id="btn-next-init"
                                                     class="btn btn-primary btn-lg btn-block py-3 pointer"
-                                                    data-aos="fade-up" data-aos-duration="5000">Adelante :)</a>
+                                                    data-aos="fade-up" data-aos-duration="5000">Adelante &nbsp; <i
+                                                    class="fas fa-smile-beam text-warning"></i>
+                                                </a>
                                             </div>
                                         </div>
                                         <div class="row justify-content-center mt-3">
@@ -80,7 +85,8 @@
                                             <div class="col-6">
                                                 <a onclick="startStepperLead()"
                                                     class="btn btn-primary btn-lg btn-block py-3 pointer"
-                                                    data-aos="fade-up" data-aos-duration="5000">Adelante :)</a>
+                                                    data-aos="fade-up" data-aos-duration="5000">Adelante &nbsp; <i
+                                                    class="fas fa-smile-beam text-warning"></i></a>
                                             </div>
                                         </div>
                                     @endif
@@ -98,9 +104,9 @@
                         <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
                             <a href="/" class="logo-link nk-sidebar-logo">
                                 <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo2x.png 2x" alt="logo" >
+                                    srcset="./images/logo2x.png 2x" alt="logo">
                                 <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark" >
+                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
                             </a>
 
                             <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
@@ -118,52 +124,94 @@
                                                     for="sv1-first-name">
                                                 </label>
                                                 <div class="form-control-wrap"><input type="text"
-                                                        class="form-control" id="sv1-first-name" name="sv1-first-name"
+                                                        class="form-control" id="name" name="sv1-first-name"
                                                         placeholder="Por favor, escribe tu primer nombre"
                                                         required=""></div>
                                             </div>
                                         </div>
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5">Gracias! <span id="span-name"></span> ¿Y tu
+                                            <h5 class="title mb-3 mt-5">¡Gracias! <span class="span-name"></span> ¿Y
+                                                tu
                                                 primer apellido?</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-last-name">
                                                 </label>
                                                 <div class="form-control-wrap"><input type="text"
-                                                        class="form-control" id="sv1-last-name"
-                                                        name="sv1-last-name"
+                                                        class="form-control" id="sv1-last-name" name="sv1-last-name"
                                                         placeholder="Por favor, escribe tu respuesta" required="">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5">Nos gusta la comunicación tradicional. Pero, ¿qué tal si nos das tu email para mantenernos en contacto?</h5>
+                                            <h5 class="title mb-3 ">Nos gusta la comunicación tradicional. Pero, ¿qué
+                                                tal si nos das tu email para mantenernos en contacto?</h5>
                                             <div class="form-group"><label class="form-label text-white"
-                                                    for="sv1-email">
+                                                    for="sv1-email"> No enviamos spam. ¡Lo prometemos! <i
+                                                        class="fas fa-smile-beam text-warning"></i>
                                                 </label>
-                                                <div class="form-control-wrap"><input type="text"
-                                                        class="form-control" id="sv1-email"
-                                                        name="sv1-email"
+                                                <div class="form-control-wrap mt-5"><input type="text"
+                                                        class="form-control" id="sv1-email" name="sv1-email"
                                                         placeholder="Por favor, escribe tu email" required="">
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5">En caso de que necesitemos enviarte un mensaje por WhatsApp, ¿nos das tu número de celular?</h5>
+                                            <h5 class="title mb-3 mt-5">En caso de que necesitemos enviarte un mensaje
+                                                por WhatsApp, ¿nos das tu número de celular?</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-cellphone">
                                                 </label>
                                                 <div class="form-control-wrap"><input type="number"
-                                                        class="form-control" id="sv1-cellphone"
-                                                        name="sv1-cellphone"
+                                                        class="form-control" id="sv1-cellphone" name="sv1-cellphone"
                                                         minlength="10" maxlength="10" pattern="[0-9]{10}"
-                                                        placeholder="Por favor, escribe tu email" required="">
+                                                        placeholder="Por favor, escribe tu número de celular"
+                                                        required="">
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        
+                                        @php
+                                            $agreements = $m_agreement::all();
+                                        @endphp
+
+                                        <div class="nk-stepper-step">
+                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> ¿En dónde
+                                                trabajas?</h5>
+                                            <div class="form-group"><label class="form-label text-white"
+                                                    for="sv1-cellphone">
+                                                </label>
+                                                <div class="form-control-wrap">
+                                                    <select class="form-select js-select2" id="agreement"
+                                                        name="sv2-select-position" data-placeholder="Select Position"
+                                                        required="" data-select2-id="sv2-select-position"
+                                                        tabindex="-1" aria-hidden="true">
+                                                        <option value="">Seleccione una opción</option>
+                                                        <option value="00">Otro</option>
+                                                        @foreach ($agreements as $agreement)
+                                                            <option value="{{ $agreement->id }}">{{ $agreement->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="nk-stepper-step">
+                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> y por último
+                                                ¿Cómo podemos ayudarte?</h5>
+                                            <div class="form-group"><label class="form-label text-white"
+                                                    for="sv1-cellphone">
+                                                </label>
+                                                <div class="form-control-wrap"><input type="number"
+                                                        class="form-control" id="sv1-cellphone" name="sv1-cellphone"
+                                                        minlength="10" maxlength="10" pattern="[0-9]{10}"
+                                                        placeholder="Por favor, escribe tu número de celular"
+                                                        required="">
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="nk-stepper-step">
                                             <div class="pt-4 pb-2">
                                                 <em
@@ -177,10 +225,10 @@
                                         <li class="step-prev"><button class="btn btn-dim btn-primary btn-lg py-3"
                                                 onclick="animateStepper()">Regresar</button></li>
                                         <li class="step-next"><button class="btn btn-primary btn-lg py-3"
-                                                onclick="animateStepper()">Continuar </button>
+                                                onclick="animateStepper()" id="continue">Continuar </button>
                                         </li>
                                         <li class="step-submit" onclick="saveSurvey()"><button
-                                                class="btn btn-primary">Enviar</button>
+                                                class="btn btn-primary btn-lg py-3">Enviar</button>
                                         </li>
                                     </ul>
 
@@ -189,6 +237,38 @@
                         </div>
                     </div>
                 </div><!-- .nk-split-content -->
+
+                <div class="nk-content  p-5" id="content-lead-work" style="display:none">
+                    <div class="d-flex  align-items-center vh-100">
+                        <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
+                            <a href="/" class="logo-link nk-sidebar-logo">
+                                <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                    srcset="./images/logo2x.png 2x" alt="logo">
+                                <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                            </a>
+                            <p class="mt-5">
+                            <h3 class="text-white" data-aos="fade-up" data-aos-duration="5000">
+                                Lo sentimos <i class="fas fa-sad-tear text-warning"></i>
+                            </h3>
+                            </p>
+                            <p class="mt-5">
+                                Aún no contamos con servicio para el lugar donde trabajas
+                                <br>
+                                Por favor, dinos dónde trabajas para poder ofrecerte nuestro servicio próximamente.
+                            </p>
+                            <div class="form-group">
+                                <label class="form-label text-white" for="sv1-email">   </label>
+                                <div class="form-control-wrap"><input type="text" class="form-control"
+                                        id="sv1-email" name="sv1-email" placeholder="Por favor, escribe tu respuesta"
+                                        required="">
+                                </div>
+                            </div>
+                            <button
+                                                class="btn btn-primary btn-lg py-3">Terminar</button>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- wrap @e -->
             </div>
@@ -229,7 +309,7 @@
 
             //* Assing value to the span with ID 'span-name' when typing in the input field with ID 'name'
             $('#name').on('input', function() {
-                $('#span-name').text($(this).val());
+                $('.span-name').text($(this).val());
             });
             //*animate stepper when click button continuar or regresar
             window.animateStepper = function() {
@@ -245,8 +325,20 @@
                     event.preventDefault();
                 }
             });
-           
 
+
+            $('#agreement').on('change', function() {
+                var selectedValue = $(this).val();
+                if (selectedValue == '00') {
+                    $("#content-lead-form").hide();
+                    $("#content-lead-work").show("slide", {
+                    direction: "down"
+                }, 500);
+                    
+                } else {
+                    $('#continue').click();
+                }
+            });
 
         });
     </script>
