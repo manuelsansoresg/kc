@@ -16,6 +16,7 @@ class VerifyCsrfToken extends Middleware
         '/panel/temp/*',
         '/panel/files/images/*',
         'api/surveysparrow/*',
-        'api/rrss/*'
+        'api/rrss/*',
+        '/lead/store'
     ];
 }

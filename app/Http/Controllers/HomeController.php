@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agreement;
 use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -124,6 +125,12 @@ class HomeController extends Controller
     public function resumeCredit(Credit $credit)
     {
         return view('panel.credit.credit_resume', compact('credit'));
+    }
+
+    public function leadStore(Request  $request)
+    {
+        $lead = Lead::saveLeadSurvey($request);
+        return response()->json(['lead' => $lead]);
     }
 
     public function validateAccess()

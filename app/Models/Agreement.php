@@ -63,6 +63,14 @@ class Agreement extends Model
         return $agreement;
     }
 
+    public static function saveIsNotExist($agreement)
+    {
+        $agreement = Agreement::where('name', $agreement)->count();
+        if ($agreement == 0) {
+            Agreement::create(['name' => $agreement]);
+        }
+    }
+
     public function lead()
     {
         return $this->hasOne(Lead::class);

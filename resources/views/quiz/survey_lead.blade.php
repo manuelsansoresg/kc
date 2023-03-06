@@ -99,17 +99,18 @@
 
                     </div><!-- .nk-split -->
                 </div>
-                <div class="nk-content  p-5" id="content-lead-form" style="display: none">
-                    <div class="d-flex  align-items-center vh-100">
-                        <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
-                            <a href="/" class="logo-link nk-sidebar-logo">
-                                <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo2x.png 2x" alt="logo">
-                                <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
-                            </a>
-
-                            <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
+                <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
+                    <div class="nk-content  p-5" id="content-lead-form" style="display: none">
+                        <div class="d-flex  align-items-center vh-100">
+                            <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
+                                <a href="/" class="logo-link nk-sidebar-logo">
+                                    <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                        srcset="./images/logo2x.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                        srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                                </a>
+    
+                                
                                 <div class="nk-stepper-content">
                                     <div class="nk-stepper-progress stepper-progress mb-4">
                                         <div class="stepper-progress-count mb-2"></div>
@@ -155,7 +156,7 @@
                                                 </div>
                                             </div>
                                         </div>
-
+    
                                         <div class="nk-stepper-step">
                                             <h5 class="title mb-3 mt-5">En caso de que necesitemos enviarte un mensaje
                                                 por WhatsApp, ¿nos das tu número de celular?</h5>
@@ -173,7 +174,7 @@
                                         @php
                                             $agreements = $m_agreement::all();
                                         @endphp
-
+    
                                         <div class="nk-stepper-step">
                                             <h5 class="title mb-3 mt-5"><span class="span-name"> </span> ¿En dónde
                                                 trabajas?</h5>
@@ -195,8 +196,8 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
+    
+    
                                         <div class="nk-stepper-step">
                                             <h5 class="title mb-3 mt-5"><span class="span-name"> </span> y por último
                                                 ¿Cómo podemos ayudarte?</h5>
@@ -228,7 +229,7 @@
                                                 <a onclick="chooseOptionCredit(2)" class="btn btn-primary btn-lg" style="cursor: pointer;">Ya tengo un crédito, quiero mejorarlo</a> --}}
                                             </div>
                                         </div>
-
+    
                                         <div class="nk-stepper-step">
                                             <div class="pt-4 pb-2">
                                                 <em
@@ -245,7 +246,7 @@
                                                             data-aos="fade-up" data-aos-duration="5000">Contactar asesor</a>
                                                     </div>
                                                 </div>
-
+    
                                                     
                                                   
                                                 @else
@@ -257,7 +258,7 @@
                                                         </a>
                                                     </div>
                                                 </div>
-
+    
                                                    
                                                 @endif
                                                 <div class="row justify-content-center">
@@ -280,46 +281,47 @@
                                                 class="btn btn-primary btn-lg py-3" id="btn-finish">Enviar</button>
                                         </li>
                                     </ul>
-
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div><!-- .nk-split-content -->
-
-                <div class="nk-content  p-5" id="content-lead-work" style="display:none">
-                    <div class="d-flex  align-items-center vh-100">
-                        <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
-                            <a href="/" class="logo-link nk-sidebar-logo">
-                                <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo2x.png 2x" alt="logo">
-                                <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
-                            </a>
-                            <p class="mt-5">
-                            <h3 class="text-white" data-aos="fade-up" data-aos-duration="5000">
-                                Lo sentimos <i class="fas fa-sad-tear text-warning"></i>
-                            </h3>
-                            </p>
-                            <p class="mt-5">
-                                Aún no contamos con servicio para el lugar donde trabajas
-                                <br>
-                                Por favor, dinos dónde trabajas para poder ofrecerte nuestro servicio próximamente.
-                            </p>
-                            <div class="form-group">
-                                <label class="form-label text-white" for="sv1-email">   </label>
-                                <div class="form-control-wrap"><input type="text" class="form-control"
-                                        id="sv1-email" name="sv1-email" placeholder="Por favor, escribe tu respuesta"
-                                        required="">
+    
                                 </div>
                             </div>
-                            <button
-                                                class="btn btn-primary btn-lg py-3">Terminar</button>
+                        </div>
+                    </div><!-- .nk-split-content -->
+    
+                    <div class="nk-content  p-5" id="content-lead-work" style="display:none">
+                        <div class="d-flex  align-items-center vh-100">
+                            <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
+                                <a href="/" class="logo-link nk-sidebar-logo">
+                                    <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                        srcset="./images/logo2x.png 2x" alt="logo">
+                                    <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
+                                        srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                                </a>
+                                <p class="mt-5">
+                                <h3 class="text-white" data-aos="fade-up" data-aos-duration="5000">
+                                    Lo sentimos <i class="fas fa-sad-tear text-warning"></i>
+                                </h3>
+                                </p>
+                                <p class="mt-5">
+                                    Aún no contamos con servicio para el lugar donde trabajas
+                                    <br>
+                                    Por favor, dinos dónde trabajas para poder ofrecerte nuestro servicio próximamente.
+                                </p>
+                                <div class="form-group">
+                                    <label class="form-label text-white" for="sv1-email">   </label>
+                                    <div class="form-control-wrap"><input type="text" class="form-control"
+                                            id="sv1-email" name="data[other]" placeholder="Por favor, escribe tu respuesta"
+                                            required="">
+                                    </div>
+                                </div>
+                                <button type="button"
+                                                    class="btn btn-primary btn-lg py-3" onclick="saveLead(true)">Terminar</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- wrap @e -->
+    
+                    <!-- wrap @e -->
+                    <input type="hidden" id="lead_id" name="lead_id">
+                </form>
             </div>
 
             <footer class="fixed-bottom text-center">
@@ -375,6 +377,10 @@
                     $('#btn-back').hide();
                     $('#btn-finish').hide();
                 }
+                if (count_steeper > 3) {
+                    console.log('ejecutar guardado');
+                    saveLead(false);
+                }
                 animateStepper();
                 
             }
@@ -383,10 +389,6 @@
                 count_steeper = count_steeper - 1;
                 console.log(count_steeper);
                 animateStepper();
-            }
-            window.animateStepper = function() {
-               
-
             }
 
             $('.form-control').on('keydown', function(event) {
@@ -411,6 +413,24 @@
 
             window.chooseOptionCredit = function() {
                 $('#continue').click();
+            }
+
+            window.saveLead = function (is_redirect) {
+                const form = document.getElementById('frm-survey');
+                const formData = new FormData(form);
+
+                axios.post('/lead/store', formData)
+                .then(function(response) {
+                    let result = response.data;
+                    let lead = result.lead;
+                    $('#lead_id').val(lead.id);
+                    if (is_redirect == true) {
+                        window.location = 'https://kaaxclub.com';
+                    }
+                })
+                .catch(function(error) {
+                });
+                
             }
 
         });

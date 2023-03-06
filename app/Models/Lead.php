@@ -25,7 +25,8 @@ class Lead extends Model
         'asesor_id' ,
         'temperature_id' ,
         'type_id', //*atención
-        'financial_id'
+        'financial_id',
+        'other'
     ];
 
     public static function listDatatable()
@@ -179,6 +180,33 @@ class Lead extends Model
         }
        
         return $lead;
+    }
+
+    public static function saveLeadSurvey($request)
+    {
+        $data_lead    = $request->data;
+        $lead_id      = $request->lead_id;
+
+        if ($data_lead['agreement_id'] = '00') {
+            unset($data_lead['agreement_id']);
+        }
+        $get_lead = Lead::find($lead_id);
+        if ($get_lead == null) {
+            $get_lead = new Lead($data_lead);
+            $get_lead->save();
+            if ($get_lead != null) {
+                //* Execute notification in create lead
+                $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+                (new $notification)->send($get_lead->id);
+                //*crear contacto sendgrid
+                $send_grid = new Csendgrid();
+                $send_grid->createContact($get_lead->email, $get_lead->first_name, $get_lead->last_name);
+                HistoryLog::move($get_lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+            }
+        } else {
+            $get_lead->fill($data_lead)->update();
+        }
+        return $get_lead;
     }
 
     public static function createWithSurvey($data, $survey_id)

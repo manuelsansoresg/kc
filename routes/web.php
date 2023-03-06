@@ -47,5 +47,6 @@ Route::get('reporte/{credit}/status/finish', ['\App\Http\Controllers\HomeControl
 Route::get('credit-resume/{credit}', ['\App\Http\Controllers\HomeController', 'resumeCredit']);
 
 Route::resource('survey', '\App\Http\Controllers\Panel\Module\SurveyController');
-
 Route::get('user/tyc/validate', ['\App\Http\Controllers\HomeController', 'validateAccess']);
+
+Route::post('lead/store', ['\App\Http\Controllers\HomeController', 'leadStore']);
