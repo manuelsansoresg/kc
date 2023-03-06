@@ -124,7 +124,7 @@
                                                     for="sv1-first-name">
                                                 </label>
                                                 <div class="form-control-wrap"><input type="text"
-                                                        class="form-control" id="name" name="sv1-first-name"
+                                                        class="form-control" id="name" name="data[name]"
                                                         placeholder="Por favor, escribe tu primer nombre"
                                                         required=""></div>
                                             </div>
@@ -137,7 +137,7 @@
                                                     for="sv1-last-name">
                                                 </label>
                                                 <div class="form-control-wrap"><input type="text"
-                                                        class="form-control" id="sv1-last-name" name="sv1-last-name"
+                                                        class="form-control" id="sv1-last-name" name="data[last_name]"
                                                         placeholder="Por favor, escribe tu respuesta" required="">
                                                 </div>
                                             </div>
@@ -149,8 +149,8 @@
                                                     for="sv1-email"> No enviamos spam. ¡Lo prometemos! <i
                                                         class="fas fa-smile-beam text-warning"></i>
                                                 </label>
-                                                <div class="form-control-wrap mt-5"><input type="text"
-                                                        class="form-control" id="sv1-email" name="sv1-email"
+                                                <div class="form-control-wrap mt-5"><input type="email"
+                                                        class="form-control" id="sv1-email" name="data[email]"
                                                         placeholder="Por favor, escribe tu email" required="">
                                                 </div>
                                             </div>
@@ -163,7 +163,7 @@
                                                     for="sv1-cellphone">
                                                 </label>
                                                 <div class="form-control-wrap"><input type="number"
-                                                        class="form-control" id="sv1-cellphone" name="sv1-cellphone"
+                                                        class="form-control" id="sv1-cellphone" name="data[cellphone]"
                                                         minlength="10" maxlength="10" pattern="[0-9]{10}"
                                                         placeholder="Por favor, escribe tu número de celular"
                                                         required="">
@@ -182,7 +182,7 @@
                                                 </label>
                                                 <div class="form-control-wrap">
                                                     <select class="form-select js-select2" id="agreement"
-                                                        name="sv2-select-position" data-placeholder="Select Position"
+                                                        name="data[agreement_id]" data-placeholder="Select Position"
                                                         required="" data-select2-id="sv2-select-position"
                                                         tabindex="-1" aria-hidden="true">
                                                         <option value="">Seleccione una opción</option>
@@ -202,13 +202,30 @@
                                                 ¿Cómo podemos ayudarte?</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-cellphone">
+                                                    Te ayudamos a encontrar la mejor opción
                                                 </label>
-                                                <div class="form-control-wrap"><input type="number"
-                                                        class="form-control" id="sv1-cellphone" name="sv1-cellphone"
-                                                        minlength="10" maxlength="10" pattern="[0-9]{10}"
-                                                        placeholder="Por favor, escribe tu número de celular"
-                                                        required="">
-                                                </div>
+                                                <ul class="custom-control-group custom-control-vertical custom-control-stacked w-100">
+                                                    <li>
+                                                        <div class="custom-control custom-control-sm custom-radio custom-control-pro">
+                                                            <input type="radio" class="custom-control-input" id="surevey_kc_attention-s5" name="data[product_id]" value="1" onclick="chooseOptionCredit()">
+                                                            <label class="custom-control-label bg-dark" for="surevey_kc_attention-s5">
+                                                                <span class="user-card"> <span class="sq_icon">
+                                                                    Quiero un crédito nuevo </span>
+                                                                   </span> </label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="custom-control custom-control-sm custom-radio custom-control-pro">
+                                                            <input type="radio" class="custom-control-input" id="surevey_kc_attention-s6" name="data[product_id]" value="2" onclick="chooseOptionCredit()">
+                                                            <label class="custom-control-label bg-dark" for="surevey_kc_attention-s6">
+                                                                <span class="user-card"> <span class="sq_icon">
+                                                                    Ya tengo un crédito, quiero mejorarlo </span>
+                                                                   </span> </label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                                {{-- <a onclick="chooseOptionCredit(1)" class="btn btn-primary btn-lg" style="cursor: pointer;">Quiero un crédito nuevo</a>
+                                                <a onclick="chooseOptionCredit(2)" class="btn btn-primary btn-lg" style="cursor: pointer;">Ya tengo un crédito, quiero mejorarlo</a> --}}
                                             </div>
                                         </div>
 
@@ -216,19 +233,51 @@
                                             <div class="pt-4 pb-2">
                                                 <em
                                                     class="icon icon-circle icon-circle-xxl mb-4 ni ni-check bg-primary-dim"></em>
-                                                <h5 class="title mb-2">Encuesta concluida</h5>
-                                                <p>Gracias! tu opinión nos ayuda a mejorar</p>
+                                                <h5 class="title mb-2">Genial!</h5>
+                                                <p>Te hemos enviado un correo electrónico con el análisis de las opciones de crédito disponibles para ti. 
+                                                    <br>
+                                                    Una vez que elijas la mejor opción, te ayudaremos con el trámite.
+                                                </p>
+                                                @if ($dayOK && $timeOK)
+                                                <div class="row justify-content-center mt-3">
+                                                    <div class="col-6">
+                                                        <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
+                                                            data-aos="fade-up" data-aos-duration="5000">Contactar asesor</a>
+                                                    </div>
+                                                </div>
+
+                                                    
+                                                  
+                                                @else
+                                                <div class="row justify-content-center">
+                                                    <div class="col-6">
+                                                        <a onclick="startStepperLead()" id="btn-next-init"
+                                                            class="btn btn-primary btn-lg btn-block py-3 pointer btn-block"
+                                                            data-aos="fade-up" data-aos-duration="5000">Ayuda
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                                   
+                                                @endif
+                                                <div class="row justify-content-center">
+                                                    <div class="col-6">
+                                                        <a href="https://kaaxclub.com/"
+                                                            class="btn btn-primary btn-lg btn-block py-3 pointer btn-block"
+                                                                data-aos="fade-up" data-aos-duration="5000">Salir</a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <ul class="nk-stepper-pagination pt-4 gx-4 gy-2 stepper-pagination">
                                         <li class="step-prev"><button class="btn btn-dim btn-primary btn-lg py-3"
-                                                onclick="animateStepper()">Regresar</button></li>
+                                                onclick="backStepper()" id="btn-back">Regresar</button></li>
                                         <li class="step-next"><button class="btn btn-primary btn-lg py-3"
-                                                onclick="animateStepper()" id="continue">Continuar </button>
+                                                onclick="continueStepper()" id="continue">Continuar </button>
                                         </li>
                                         <li class="step-submit" onclick="saveSurvey()"><button
-                                                class="btn btn-primary btn-lg py-3">Enviar</button>
+                                                class="btn btn-primary btn-lg py-3" id="btn-finish">Enviar</button>
                                         </li>
                                     </ul>
 
@@ -294,6 +343,7 @@
 
     <script>
         $(document).ready(function() {
+            let count_steeper = 0;
             //*Initialize AOS
             AOS.init();
             //* SURVEY LEAD
@@ -312,11 +362,30 @@
                 $('.span-name').text($(this).val());
             });
             //*animate stepper when click button continuar or regresar
-            window.animateStepper = function() {
+            function animateStepper() {
                 $("#content-lead-form").hide();
                 $("#content-lead-form").show("slide", {
                     direction: "down"
                 }, 500);
+            }
+            window.continueStepper = function() {
+                count_steeper = count_steeper + 1;
+                console.log(count_steeper);
+                if (count_steeper == 6) {
+                    $('#btn-back').hide();
+                    $('#btn-finish').hide();
+                }
+                animateStepper();
+                
+            }
+
+            window.backStepper = function() {
+                count_steeper = count_steeper - 1;
+                console.log(count_steeper);
+                animateStepper();
+            }
+            window.animateStepper = function() {
+               
 
             }
 
@@ -339,6 +408,10 @@
                     $('#continue').click();
                 }
             });
+
+            window.chooseOptionCredit = function() {
+                $('#continue').click();
+            }
 
         });
     </script>
