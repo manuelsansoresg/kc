@@ -320,6 +320,7 @@
     
                     <!-- wrap @e -->
                     <input type="hidden" id="lead_id" name="lead_id">
+                    <input type="hidden" id="number_step" name="number_step">
                 </form>
                </div>
             </div>
@@ -373,6 +374,7 @@
             window.continueStepper = function() {
                 count_steeper = count_steeper + 1;
                 console.log(count_steeper);
+                $('#number_step').val(count_steeper);
                 if (count_steeper == 6) {
                     $('#btn-back').hide();
                     $('#btn-finish').hide();
@@ -388,6 +390,7 @@
             window.backStepper = function() {
                 count_steeper = count_steeper - 1;
                 console.log(count_steeper);
+                $('#number_step').val(count_steeper);
                 animateStepper();
             }
 

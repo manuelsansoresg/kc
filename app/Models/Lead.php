@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Lib\Csendgrid;
 use App\Strategies\Values\SendNotificationsValues;
+use App\Strategies\Values\TemplateValues;
 use App\Strategies\Values\ValidateStagesValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -183,10 +184,11 @@ class Lead extends Model
     public static function saveLeadSurvey($request)
     {
         $data_lead                = $request->data;
+        $number_step              = $request->number_step;
         $data_lead['origin_id']   = 2;
         $data_lead['channel_id']  = 1;
         $data_lead['type_id']     = 1;
-        $lead_id      = $request->lead_id;
+        $lead_id                  = $request->lead_id;
 
         if ($data_lead['agreement_id'] == '00') {
             unset($data_lead['agreement_id']);
@@ -206,6 +208,11 @@ class Lead extends Model
             }
         } else {
             $get_lead->fill($data_lead)->update();
+        }
+
+        if ($number_step == 6) {
+            $template   = TemplateValues::STRATEGY['lead'];
+            (new $template)->move($get_lead->id);
         }
         return $get_lead;
     }
