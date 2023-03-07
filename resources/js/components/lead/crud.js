@@ -10,8 +10,13 @@ $('.select2multiple').select2({
     placeholder: "Escribe para buscar..",
 });
 //onchangeOrganization
-window.organizationChange = function(lead_agreement_id, financial_id){
+window.organizationChange = function(lead_agreement_id, financial_id, other){
     
+    if (other != null) {
+        lead_agreement_id = 0;
+        $('#new_agreement').val(other);
+    }
+
     if (lead_agreement_id != null) {
         $('#lead-agreement').val(lead_agreement_id).trigger("change");
     }
@@ -116,14 +121,16 @@ function setData(is_change_origen, is_change_organization) {
     axios
         .get("/panel/lead/" + lead_id)
         .then(function (response) {
-            let result = response.data;
-            let lead = result.lead;
-            let channel = result.channel;
-            let financials = result.financials;
-            let product_id = lead.product_id;
+            let result        = response.data;
+            let lead          = result.lead;
+            let channel       = result.channel;
+            let financials    = result.financials;
+            let product_id    = lead.product_id;
+            let other         = lead.other;
+
             console.log(product_id);
             productChange(product_id);
-            organizationChange(lead.agreement_id, lead.financial_id);
+            organizationChange(lead.agreement_id, lead.financial_id, other);
          
             if (is_change_origen == true) {
                 $('#lead-origin').val(lead.origin_id);
