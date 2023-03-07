@@ -250,10 +250,10 @@
                                                     
                                                   
                                                 @else
-                                                <div class="row justify-content-center">
+                                                <div class="row justify-content-center mt-3">
                                                     <div class="col-6">
                                                         <a onclick="startStepperLead()" id="btn-next-init"
-                                                            class="btn btn-primary btn-lg btn-block py-3 pointer btn-block"
+                                                            class="btn btn-primary btn-lg btn-block pointer btn-block"
                                                             data-aos="fade-up" data-aos-duration="5000">Ayuda
                                                         </a>
                                                     </div>
@@ -261,10 +261,10 @@
     
                                                    
                                                 @endif
-                                                <div class="row justify-content-center">
+                                                <div class="row justify-content-center mt-3">
                                                     <div class="col-6">
                                                         <a href="https://kaaxclub.com/"
-                                                            class="btn btn-primary btn-lg btn-block py-3 pointer btn-block"
+                                                            class="btn btn-primary btn-lg btn-block pointer btn-block"
                                                                 data-aos="fade-up" data-aos-duration="5000">Salir</a>
                                                     </div>
                                                 </div>

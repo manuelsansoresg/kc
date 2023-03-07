@@ -190,7 +190,7 @@ class Lead extends Model
         $data_lead['type_id']     = 1;
         $lead_id      = $request->lead_id;
 
-        if ($data_lead['agreement_id'] = '00') {
+        if ($data_lead['agreement_id'] == '00') {
             unset($data_lead['agreement_id']);
         }
         $get_lead = Lead::find($lead_id);
