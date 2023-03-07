@@ -184,7 +184,10 @@ class Lead extends Model
 
     public static function saveLeadSurvey($request)
     {
-        $data_lead    = $request->data;
+        $data_lead                = $request->data;
+        $data_lead['origin_id']   = 2;
+        $data_lead['channel_id']  = 1;
+        $data_lead['type_id']     = 1;
         $lead_id      = $request->lead_id;
 
         if ($data_lead['agreement_id'] = '00') {
