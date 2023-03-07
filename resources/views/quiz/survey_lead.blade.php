@@ -43,10 +43,9 @@
                         <div class="bg-dark is-dark p-5 text-center">
                             <a href="/" class="logo-link nk-sidebar-logo">
                                 <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo2x.png 2x" alt="logo" data-aos="fade-up"
+                                    alt="logo" data-aos="fade-up"
                                     data-aos-duration="5000">
-                                <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                            
                             </a>
                             <div class="text-block">
                                 <p class="mt-5">
@@ -66,7 +65,7 @@
                                 <p class="mt-5">
                                     @if ($dayOK && $timeOK)
                                         <div class="row justify-content-center">
-                                            <div class="col-6">
+                                            <div class="col-12 col-md-6">
                                                 <a onclick="startStepperLead()" id="btn-next-init"
                                                     class="btn btn-primary btn-lg btn-block py-3 pointer"
                                                     data-aos="fade-up" data-aos-duration="5000">Adelante &nbsp; <i
@@ -75,14 +74,14 @@
                                             </div>
                                         </div>
                                         <div class="row justify-content-center mt-3">
-                                            <div class="col-6">
+                                            <div class="col-12 col-md-6">
                                                 <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer"
                                                     data-aos="fade-up" data-aos-duration="5000">Contactar asesor</a>
                                             </div>
                                         </div>
                                     @else
                                         <div class="row justify-content-center">
-                                            <div class="col-6">
+                                            <div class="col-12 col-md-6">
                                                 <a onclick="startStepperLead()"
                                                     class="btn btn-primary btn-lg btn-block py-3 pointer"
                                                     data-aos="fade-up" data-aos-duration="5000">Adelante &nbsp; <i
@@ -99,15 +98,15 @@
 
                     </div><!-- .nk-split -->
                 </div>
+               <div class="container">
                 <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
                     <div class="nk-content  p-5" id="content-lead-form" style="display: none">
                         <div class="d-flex  align-items-center vh-100">
                             <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
                                 <a href="/" class="logo-link nk-sidebar-logo">
                                     <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                        srcset="./images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                        srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                                    alt="logo" data-aos="fade-up"
+                                    data-aos-duration="5000">
                                 </a>
     
                                 
@@ -187,11 +186,12 @@
                                                         required="" data-select2-id="sv2-select-position"
                                                         tabindex="-1" aria-hidden="true">
                                                         <option value="">Seleccione una opción</option>
-                                                        <option value="00">Otro</option>
+                                                        
                                                         @foreach ($agreements as $agreement)
                                                             <option value="{{ $agreement->id }}">{{ $agreement->name }}
                                                             </option>
                                                         @endforeach
+                                                        <option value="00">Otro</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -241,7 +241,7 @@
                                                 </p>
                                                 @if ($dayOK && $timeOK)
                                                 <div class="row justify-content-center mt-3">
-                                                    <div class="col-6">
+                                                    <div class="col-12 col-md-6">
                                                         <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
                                                             data-aos="fade-up" data-aos-duration="5000">Contactar asesor</a>
                                                     </div>
@@ -251,7 +251,7 @@
                                                   
                                                 @else
                                                 <div class="row justify-content-center mt-3">
-                                                    <div class="col-6">
+                                                    <div class="col-12 col-md-6">
                                                         <a onclick="startStepperLead()" id="btn-next-init"
                                                             class="btn btn-primary btn-lg btn-block pointer btn-block"
                                                             data-aos="fade-up" data-aos-duration="5000">Ayuda
@@ -262,7 +262,7 @@
                                                    
                                                 @endif
                                                 <div class="row justify-content-center mt-3">
-                                                    <div class="col-6">
+                                                    <div class="col-12 col-md-6">
                                                         <a href="https://kaaxclub.com/"
                                                             class="btn btn-primary btn-lg btn-block pointer btn-block"
                                                                 data-aos="fade-up" data-aos-duration="5000">Salir</a>
@@ -292,9 +292,8 @@
                             <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
                                 <a href="/" class="logo-link nk-sidebar-logo">
                                     <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                        srcset="./images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                        srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                                    alt="logo" data-aos="fade-up"
+                                    data-aos-duration="5000">
                                 </a>
                                 <p class="mt-5">
                                 <h3 class="text-white" data-aos="fade-up" data-aos-duration="5000">
@@ -322,6 +321,7 @@
                     <!-- wrap @e -->
                     <input type="hidden" id="lead_id" name="lead_id">
                 </form>
+               </div>
             </div>
 
             <footer class="fixed-bottom text-center">
@@ -432,6 +432,10 @@
                 });
                 
             }
+
+            $(".stepper-progress-count").text(function(index, currentText) {
+            return currentText.replace("of", "de");
+            });
 
         });
     </script>
