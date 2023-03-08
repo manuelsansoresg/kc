@@ -131,7 +131,7 @@ class User extends Authenticatable
              //* send email new account
             $domain = 'https://app.kaaxclub.com';
             $link_login = $domain.'/login';
-            $link_password_change = $domain.'/account/'.$lead_id.'/password/change';
+            $link_password_change = $domain.'/account/'.$lead_id.'/password/setup';
             $send_grid = new Csendgrid($find_lead->email, 'creacion cuenta');
             $send_grid->setTemplate('d-ea081e65c8014113b50315a103127d13');
             $send_grid->setParams(['first_name'=> $find_lead->name, 'link_login' => $link_login, 'link_password_change' => $link_password_change]);
@@ -157,7 +157,7 @@ class User extends Authenticatable
             $lead_client->save();
             //* send email new account
             $domain = 'https://app.kaaxclub.com';
-            $link_account = $domain.'/account/'.$lead_id.'/password/change';
+            $link_account = $domain.'/account/'.$lead_id.'/password/setup';
             $body = 'Usuario: '. $user->mail. '<br> Contraseña: '.$password;
             $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
             $send_grid->setTemplate('d-235b3d5c43c14184b365def8c1d1e160');
