@@ -44,10 +44,13 @@ class RssController extends Controller
         $data_lead['origin_id']   = 4;
         $data_lead['channel_id']  = 2;
 
-        $lead = Lead::create($data_lead)->toArray();
-        return response()->json(['lead' => $lead , 'data_lead' => $data_lead]);
+        if (Lead::where('email', $data_lead['email'])->count() == 0) {
+            $lead = Lead::create($data_lead)->toArray();
+        }
+        
+
         //*crear prospecto en log
-        HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+        HistoryLog::move($lead['id'], HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         //*crear contacto sendgrid
         $send_grid = new Csendgrid();
         $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name);
