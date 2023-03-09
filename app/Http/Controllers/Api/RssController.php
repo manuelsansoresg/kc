@@ -45,6 +45,7 @@ class RssController extends Controller
         $data_lead['channel_id']  = 2;
 
         $lead = Lead::create($data_lead)->toArray();
+        return response()->json(['lead' => $lead , 'data_lead' => $data_lead]);
         //*crear prospecto en log
         HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         //*crear contacto sendgrid
