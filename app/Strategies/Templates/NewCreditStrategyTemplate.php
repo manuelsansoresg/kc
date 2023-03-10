@@ -342,56 +342,58 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $credit                 = $history->historyCredit;
         $max_hour               = 12;
         $percent_desition       = self::percentDesition($history);
-        $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_ACTION_DESITION], $credit->id)[0];
-        $hour                   = $in_progress->date_status_progress;
-
-        $menu_options           = self::menuOptionReportStep($history);
-        $advisor                = $credit->creditAdvisor;
-        
-        $name_module_response   = 'KaaxClub';
-        $user                   = User::find($advisor->id);
-        $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
-        $color_desition         = 'success';
-        $name_advisor           = $role.' - '.$advisor->name.' '.$advisor->last_name;
-        
-        $data_deadline          = deadline($hour, $max_hour, $percent_desition, 'success');
-        $color_desition         = $data_deadline['color'];
-        $hour                   = $data_deadline['lbl_hour'];
-        
-        $deadline[]   = 'N/A';
-        $deadline[]   = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
-
-        $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
-        $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
-
+        $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_ACTION_DESITION], $credit->id);
         $data         = array();
-        $status[]     = 'Concluida';
-        $status[]     = $percent_desition == 100 ? 'Concluido' : 'En curso';
-
-        $name[]       = 'Respuesta de módulo';
-        $name[]       = 'Decisión';
-
-        $subject[]    = HistoryLog::$label_subject[9];
-        $subject[]    = HistoryLog::$label_subject[14];
-
-        $data_actions = array(
-            HistoryLog::KC_CHECK_UP_ACTION_REPORT,
-            HistoryLog::KC_CHECK_UP_ACTION_DESITION,
-        );
-      
-        $get_actions  = HistoryLog::getByStatus($data_actions, $credit->id);
-
-        foreach ($get_actions as $key => $get_action) {
-            $data[] = array(
-                'name' =>  $name[$key],
-                'subject' => $subject[$key],
-                'status' => $status[$key],
-                'deadline' => $deadline[$key],
-                'advisor' => $name_advisor,
-                'options' => $option[$key],
+        try {
+            $hour                   = $in_progress->date_status_progress;
+            $menu_options           = self::menuOptionReportStep($history);
+            $advisor                = $credit->creditAdvisor;
+            
+            $name_module_response   = 'KaaxClub';
+            $user                   = User::find($advisor->id);
+            $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $color_desition         = 'success';
+            $name_advisor           = $role.' - '.$advisor->name.' '.$advisor->last_name;
+            
+            $data_deadline          = deadline($hour, $max_hour, $percent_desition, 'success');
+            $color_desition         = $data_deadline['color'];
+            $hour                   = $data_deadline['lbl_hour'];
+            
+            $deadline[]   = 'N/A';
+            $deadline[]   = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
+    
+            $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
+            $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
+    
+            
+            $status[]     = 'Concluida';
+            $status[]     = $percent_desition == 100 ? 'Concluido' : 'En curso';
+    
+            $name[]       = 'Respuesta de módulo';
+            $name[]       = 'Decisión';
+    
+            $subject[]    = HistoryLog::$label_subject[9];
+            $subject[]    = HistoryLog::$label_subject[14];
+    
+            $data_actions = array(
+                HistoryLog::KC_CHECK_UP_ACTION_REPORT,
+                HistoryLog::KC_CHECK_UP_ACTION_DESITION,
             );
+          
+            $get_actions  = HistoryLog::getByStatus($data_actions, $credit->id);
+    
+            foreach ($get_actions as $key => $get_action) {
+                $data[] = array(
+                    'name' =>  $name[$key],
+                    'subject' => $subject[$key],
+                    'status' => $status[$key],
+                    'deadline' => $deadline[$key],
+                    'advisor' => $name_advisor,
+                    'options' => $option[$key],
+                );
+            }
+        } catch (\Exception $th) {
         }
-
         return $data;
     }
 
