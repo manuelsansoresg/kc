@@ -106,7 +106,7 @@ class User extends Authenticatable
             
             $send_grid = new Csendgrid($to, 'creacion cuenta');
             $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
-            $send_grid->setParams(['first_name'=> 'Manuel']);
+            $send_grid->setParams(['first_name'=> $user->name]);
             $send_grid->send();
         }
         
@@ -116,8 +116,7 @@ class User extends Authenticatable
 
         $user->assignRole(ucfirst($role));
     }
-
-    public static function saveClientPersona($data)
+    public static function saveLeadClientPersona($data)
     {
         $name       = explode(' ', $data['name']);
         $password   = 'hola'.$name[0];
@@ -165,6 +164,30 @@ class User extends Authenticatable
             $send_grid->send();
         }
         return $user;
+    }
+    public static function saveClientPersona($data)
+    {
+        $name       = $data['name'];
+        $password   = 'hola'.$name;
+        $email      = $data['email'];
+        //*Check that the email does not exist in credits
+        $find_user  = User::where('email', $email)->first();
+        
+        if ($find_user == null) {
+            //*create user with leads parameters
+            $user             = new User($data);
+            $user->password   = bcrypt($password);
+            $user->save();
+
+            $to           = $user->email;
+            $send_grid    = new Csendgrid($to, 'creacion cuenta');
+
+            $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
+            $send_grid->setParams(['first_name'=> 'Manuel']);
+            $send_grid->send();
+            $find_user    = $user;
+        }
+        return $find_user;
     }
 
     public static function changePassword($request)

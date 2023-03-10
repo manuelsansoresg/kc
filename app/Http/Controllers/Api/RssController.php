@@ -39,22 +39,9 @@ class RssController extends Controller
      */
     public function store(Request $request)
     {
-        $data_lead    = $request->all();
-
-        $data_lead['origin_id']   = 4;
-        $data_lead['channel_id']  = 2;
-
-        if (Lead::where('email', $data_lead['email'])->count() == 0) {
-            $lead = Lead::create($data_lead)->toArray();
-        }
-        
-
-        //*crear prospecto en log
-        HistoryLog::move($lead['id'], HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
-        //*crear contacto sendgrid
-        $send_grid = new Csendgrid();
-        $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name);
-        $user = User::saveClientPersona($lead);
+        $data_user    = $request->all();
+        $data_user['is_rss']   = 1;
+        $user = User::saveClientPersona($data_user);
         return response()->json($user);
     }
 

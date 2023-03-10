@@ -102,7 +102,7 @@ class Lead extends Model
         if ($get_lead->count() === 0) {
             $status = 200;
             $lead = Lead::find($lead_id)->toArray();
-            User::saveClientPersona($lead);
+            User::saveLeadClientPersona($lead);
         }
         return $status;
     }
