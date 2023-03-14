@@ -13,4 +13,19 @@ class PasswordReset extends Model
         'email',
         'token'
     ];
+
+    public static function setToken($email, $token)
+    {
+        $get_password = PasswordReset::where('email', $email);
+        
+        if ($get_password->count() == 0) {
+            PasswordReset::create([
+                'email' => $email,
+                'token' => $token,
+            ]);
+        } else {
+            $get_password = PasswordReset::where('email', $email)
+            ->update(['token' => urldecode($token)]);
+        }
+    }
 }
