@@ -183,6 +183,7 @@ class Lead extends Model
 
     public static function saveLeadSurvey($request)
     {
+
         $data_lead                = $request->data;
         $number_step              = $request->number_step;
         $data_lead['origin_id']   = 2;
@@ -211,6 +212,40 @@ class Lead extends Model
         }
 
         if ($number_step == 6) {
+            $template   = TemplateValues::STRATEGY['lead'];
+            (new $template)->move($get_lead->id);
+        }
+        return $get_lead;
+    }
+
+    //* validate save form include iframe in domain appp.kaaxclub
+    public static function saveLeadFormSurvey($request)
+    {
+        $data_lead                = $request->data;
+        $number_step              = $request->number_step;
+        $data_lead['origin_id']   = 2;
+        $data_lead['channel_id']  = 1;
+        $data_lead['type_id']     = 1;
+        $lead_id                  = $request->lead_id;
+        $correo                   = $request->key_email;
+        $user                     = User::where('email', $correo)->first();
+        
+        $data_lead['name']        = $user->name;
+        $data_lead['last_name']   = $user->last_name;
+        $data_lead['email']       = $user->email;
+
+        if ($data_lead['agreement_id'] == '00') {
+            unset($data_lead['agreement_id']);
+        }
+        $get_lead = Lead::find($lead_id);
+        if ($get_lead == null) {
+            $get_lead = new Lead($data_lead);
+            $get_lead->save();
+        } else {
+            $get_lead->fill($data_lead)->update();
+        }
+
+        if ($number_step == 4) {
             $template   = TemplateValues::STRATEGY['lead'];
             (new $template)->move($get_lead->id);
         }

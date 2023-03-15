@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agreement;
+use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Notification;
 use App\Models\Sendgridtest;
+use App\Models\TokenForms;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,6 +38,17 @@ class HomeController extends Controller
     public function surveyHola()
     {
         return view('quiz.survey_lead');
+    }
+
+    public function surveyForm(Request $request)
+    {
+        $token                = $request->token;
+        $email                = $request->email;
+        $validate             = TokenForms::validateToken($token, $email);
+        if ($validate) {
+            return view('quiz.survey_form');
+        }
+        abort(404);
     }
 
     public function report($history_id)
@@ -130,6 +143,12 @@ class HomeController extends Controller
     public function leadStore(Request  $request)
     {
         $lead = Lead::saveLeadSurvey($request);
+        return response()->json(['lead' => $lead]);
+    }
+
+    public function leadFormStore(Request  $request)
+    {
+        $lead = Lead::saveLeadFormSurvey($request);
         return response()->json(['lead' => $lead]);
     }
 

@@ -50,3 +50,6 @@ Route::resource('survey', '\App\Http\Controllers\Panel\Module\SurveyController')
 Route::get('user/tyc/validate', ['\App\Http\Controllers\HomeController', 'validateAccess']);
 
 Route::post('lead/store', ['\App\Http\Controllers\HomeController', 'leadStore']);
+Route::post('lead/form/store', ['\App\Http\Controllers\HomeController', 'leadFormStore']);
+
+Route::get('quiz/form', ['\App\Http\Controllers\HomeController', 'surveyForm']);
