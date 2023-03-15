@@ -293,7 +293,7 @@
                 count_steeper = count_steeper + 1;
                 console.log(count_steeper);
                 $('#number_step').val(count_steeper);
-                if (count_steeper == 6) {
+                if (count_steeper == 4) {
                     $('#btn-back').hide();
                     $('#btn-finish').hide();
                 }
@@ -351,7 +351,7 @@
                     }
                 })
                 .catch(function(error) {
-                    $('#msg-error').show();
+                    /* $('#msg-error').show(); */
                 });
                 
             }
