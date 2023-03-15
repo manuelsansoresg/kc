@@ -34,7 +34,7 @@ return [
     ),
     'channel_web_app' => array(
         1 => 'Creación de cuenta',
-        2 => 'Cuenta RRSS',
+        2 => 'Formulario',
     ),
     'reason_archive' => array(
         1 => 'No interesado',
