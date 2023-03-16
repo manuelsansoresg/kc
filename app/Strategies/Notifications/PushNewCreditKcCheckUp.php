@@ -35,7 +35,8 @@ class PushNewCreditKcCheckUp implements SendNotificationsInterface
         foreach ($get_notifications as $notification) {
             $users = User::getUserRole('Administrador');
             $credit = $notification->notificationCredit;
-            $advisor = $credit->creditAdvisor;
+            $advisor = $credit != null ? $credit->creditAdvisor : null;
+
             $toast  = \View::make('panel.toast', ['title' => $notification->title, 'body' => $notification->body])->render();
             
             foreach ($users as $user) {

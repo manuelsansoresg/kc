@@ -223,8 +223,8 @@ class Lead extends Model
     {
         $data_lead                = $request->data;
         $number_step              = $request->number_step;
-        $data_lead['origin_id']   = 2;
-        $data_lead['channel_id']  = 1;
+        $data_lead['origin_id']   = 3;
+        $data_lead['channel_id']  = 2;
         $data_lead['type_id']     = 1;
         $lead_id                  = $request->lead_id;
         $correo                   = $request->key_email;
