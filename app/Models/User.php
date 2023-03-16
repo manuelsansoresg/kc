@@ -89,10 +89,12 @@ class User extends Authenticatable
 
     public static function saveEdit($request)
     {
+        $is_save = false;
         if ($request->user_id == null) {
             $user = new User($request->except(['_token', 'pass_confirm', 'password', 'user_id', 'type_user']));
             $user->password = bcrypt($request->password);
             $user->save();
+            $is_save = true;
         } else {
             $user = User::find($request->user_id);
             $user->fill($request->except(['_token', 'pass_confirm', 'password', 'user_id', 'type_user']));
@@ -100,7 +102,7 @@ class User extends Authenticatable
         }
         $role = $request->type_user;
         
-        if ($request->type_user == 'cliente-persona') {
+        if ($request->type_user == 'cliente-persona' && $is_save == true) {
             $role = 'Cliente persona';
             $to = $user->email;
             
