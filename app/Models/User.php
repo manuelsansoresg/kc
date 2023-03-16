@@ -130,7 +130,7 @@ class User extends Authenticatable
 
         $token = \Str::random(64);
         $token = str_replace('/', '', $token);
-        $link_password = env('APP_KAAX').'/password/reset/'.$token.'?email='.$find_lead->email;
+        $link_password = 'https://app.kaaxclub.com/password/reset/'.$token.'?email='.$find_lead->email;
         PasswordReset::setToken($find_lead->email, $token);
         
         if ($find_user != null) {
