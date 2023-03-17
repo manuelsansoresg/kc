@@ -25,7 +25,7 @@ class TokenForms extends Model
         }
 
         // Checar si han pasado 30 minutos o más desde que se creó el registro
-        if (Carbon::parse($record->created_at)->addMinutes(120)->isPast()) {
+        if (Carbon::parse($record->updated_at)->addMinutes(120)->isPast()) {
             return false;
         }
 
