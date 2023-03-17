@@ -81,6 +81,7 @@ class ReportController extends Controller
         $client     = $credit->creditClientPerson;
         $agreement  = $credit->creditAgreement;
         $financials = $agreement != null ? $agreement->financialAgreement : null;
+        //dd($agreement->financialAgreement);
         $model      = ($history != null && $history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
 
         return view('panel.module.checkup.actions.report.desition', compact('credit', 'product', 'financials', 'client', 'history_id', 'history', 'model'));
