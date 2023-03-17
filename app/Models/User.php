@@ -102,20 +102,20 @@ class User extends Authenticatable
         }
         $role = $request->type_user;
         
-        if ($request->type_user == 'cliente-persona' && $is_save == true) {
+        if ($request->type_user == 'cliente-persona' ) {
             $role = 'Cliente persona';
-            $to = $user->email;
-            
-            $send_grid = new Csendgrid($to, 'creacion cuenta');
-            $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
-            $send_grid->setParams(['first_name'=> $user->name]);
-            $send_grid->send();
+            if ($is_save == true) {
+                $to = $user->email;
+                $send_grid = new Csendgrid($to, 'creacion cuenta');
+                $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
+                $send_grid->setParams(['first_name'=> $user->name]);
+                $send_grid->send();
+            }
         }
         
         if ($request->type_user == 'cliente-financiera') {
             $role = 'Cliente financiera';
         }
-
         $user->assignRole(ucfirst($role));
     }
     public static function saveLeadClientPersona($data)
