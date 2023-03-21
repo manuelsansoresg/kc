@@ -19,8 +19,14 @@
                         <em class="icon ni ni-lock-alt-fill"></em><span>Cambiar contraseña</span></a>
                 </li>
                 <li>
-                    <a href="/panel/user-profile/{{ $user_id }}">
+                    @if ($id != null)
+                        <a href="/panel/client/{{ $id }}">
+                            <em class="icon ni ni-users-fill"></em><span>Perfíl</span></a>
+                        
+                    @else
+                    <a onclick="msgProfile()" class="pointer">
                         <em class="icon ni ni-users-fill"></em><span>Perfíl</span></a>
+                    @endif
                 </li>
                 <li>
                     <a class="pointer" onclick="deleteUser({{ $user_id }})">

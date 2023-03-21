@@ -53,6 +53,17 @@ window.moveElement = function (section, id, idDatatable) {
     });
 }
 
+window.msgProfile = function () {
+    Swal.fire({
+        title: 'Este usuario no tiene ningún trámite',
+        icon: 'warning',
+        showCancelButton: true,
+        showConfirmButton: false,
+        //confirmButtonText: 'Sí, elimina',
+        cancelButtonText: 'Cerrar'
+    });
+}
+
 window.isAccess = function() {
     axios
     .get("/user/tyc/validate")

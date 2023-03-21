@@ -222,7 +222,9 @@ class User extends Authenticatable
         $users        = array();
         
         foreach ($get_users as $user) {
-            $option = \View::make('panel.user.add_option_dt', [ 'type' => 2, 'user_id' => $user->id])->render();
+            $client_person = ClientPerson::where('email', $user->email)->first();
+            $id = isset( $client_person->id) ?  $client_person->id : null;
+            $option = \View::make('panel.user.add_option_dt', [ 'type' => 2, 'user_id' => $user->id, 'id' =>$id])->render();
             $lbl_status = '<span class="text-success">Sí</span>';
             if ($user->status == 'No') {
                 $lbl_status = '<span class="text-danger">No</span>';

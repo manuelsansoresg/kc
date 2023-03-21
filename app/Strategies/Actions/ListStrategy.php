@@ -82,7 +82,21 @@ class ListStrategy implements ActionInterface
 
             $module         = $array_model[$model];
             $name           = $credit->id.' '.$client->last_name.' '.$client->second_last_name.' '.$client->name;
-            $name_advisor   = $advisor->name.' '.$advisor->last_name;
+            $name_advisor = null;
+            $name_responsable = null;
+
+            try {
+                $name_advisor   = $advisor->name.' '.$advisor->last_name;
+                $user = User::find($advisor->id);
+                $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+                $name_responsable   = $role.' - '.$advisor->name.' '.$advisor->last_name;
+                if ($advisor->id == Auth::user()->id) {
+                    $name_responsable = 'Tú';
+                }
+            } catch (\Exception $th) {
+                //throw $th;
+            }
+
             $max_hour       = 12;
             $hour           = $credit->created_at;
             $templateStrategy   = TemplateValues::STRATEGY[$model];
@@ -94,17 +108,11 @@ class ListStrategy implements ActionInterface
             $percent_file   = (new $templateStrategy)->percentFile($history_log->id_rel);
             $percent_form   = (new $templateStrategy)->percentForm($history_log);
 
-            $user = User::find($advisor->id);
-            $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
-
-            $name_responsable   = $role.' - '.$advisor->name.' '.$advisor->last_name;
-
+            
             $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
             $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
-            if ($advisor->id == Auth::user()->id) {
-                $name_responsable = 'Tú';
-            }
+            
             $color_inf_credit = '';
             //TODO: change when the decision develops 
             $status_form                  = $percent_form == 100 ? 'Concluido' : 'En curso';

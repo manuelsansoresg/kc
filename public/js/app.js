@@ -4446,6 +4446,17 @@ window.moveElement = function (section, id, idDatatable) {
   })["catch"](function (e) {});
 };
 
+window.msgProfile = function () {
+  Swal.fire({
+    title: 'Este usuario no tiene ningún trámite',
+    icon: 'warning',
+    showCancelButton: true,
+    showConfirmButton: false,
+    //confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Cerrar'
+  });
+};
+
 window.isAccess = function () {
   axios.get("/user/tyc/validate").then(function (response) {
     var result = response.data;

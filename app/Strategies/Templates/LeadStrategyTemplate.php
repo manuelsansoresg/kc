@@ -34,7 +34,15 @@ class LeadStrategyTemplate implements TemplateInterface
                 'email' => $lead->email,
                 'agreement_id' => $lead->agreement_id,
             );
-            $client_person = ClientPerson::create($data_client_person);
+            // know if exist client person
+            if (ClientPerson::where('email', $lead->email)->count() == 0) {
+                $client_person = ClientPerson::create($data_client_person);
+            } else {
+                ClientPerson::where('email', $lead->email)
+                            ->update($data_client_person);
+                $client_person = ClientPerson::where('email', $lead->email)->first();
+            }
+            
 
             //* create credit
             $data_lead = array(
