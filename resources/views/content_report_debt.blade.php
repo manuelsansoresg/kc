@@ -1,7 +1,9 @@
 @extends('layouts.report')
 
 @section('header')
-    @include('layouts.content_report_nav')
+    @if (!isset($_GET['credit_id']))
+        @include('layouts.content_report_nav')
+    @endif
 @endsection
 
 

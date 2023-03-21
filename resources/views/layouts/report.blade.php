@@ -36,6 +36,7 @@
 
 
     {{-- kc score --}}
+    @if (!isset($_GET['credit_id']))
     <!--:Footer:-->
     <footer class="footer bg-dark text-white position-relative overflow-hidden">
         <div class="container pt-9 pt-lg-11 pb-4 position-relative z-index-1">
@@ -98,6 +99,7 @@
             </div>
         </div>
     </footer>
+    @endif
 
 
     <!--:Theme script:-->
