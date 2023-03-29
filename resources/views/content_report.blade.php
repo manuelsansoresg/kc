@@ -2,13 +2,16 @@
 @section('title', 'Reporte')
 
 @section('header')
-    @if (!isset($_GET['credit_id']))
+    @if (!isset($_GET['is_app']))
         @include('layouts.content_report_nav')
     @endif
 @endsection
 
 @section('content')
-
+@php
+    $is_app = isset($_GET['is_app'])? true : false;
+@endphp
+<input type="hidden" name="" value="{{ $is_app }}" id="is_app">
 {{-- hero --}}
 <section class="position-relative bg-style-1">
     <div class="container py-9 py-lg-11 position-relative z-index-1">

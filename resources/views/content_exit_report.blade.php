@@ -2,7 +2,7 @@
 @section('title', 'Reporte')
 
 @section('header')
-    @if (!isset($_GET['credit_id']))
+    @if (!isset($_GET['is_app']))
         @include('layouts.content_report_nav2')
     @endif
     

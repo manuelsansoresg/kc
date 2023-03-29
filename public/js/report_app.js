@@ -6395,6 +6395,8 @@ $(document).ready(function () {
 });
 
 window.desitionReport = function (credit_id, financial_id, type) {
+  var is_app = $('#is_app').val();
+  var url = "/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept";
   sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
     title: '¿Estás seguro?',
     icon: 'warning',
@@ -6403,9 +6405,9 @@ window.desitionReport = function (credit_id, financial_id, type) {
     cancelButtonText: 'Mejor no'
   }).then(function (result) {
     if (result.isConfirmed) {
-      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
+      axios.get(url).then(function (response) {
         var reason = response.data;
-        window.location = '/reporte/' + credit_id + '/status/finish';
+        window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
       })["catch"](function (e) {});
     }
   });

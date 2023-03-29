@@ -25,6 +25,8 @@ function confetti() {
 
 
 window.desitionReport = function(credit_id, financial_id, type) {
+    let is_app = $('#is_app').val();
+    let url = "/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept";
    Swal.fire({
        title: '¿Estás seguro?',
        icon: 'warning',
@@ -34,10 +36,10 @@ window.desitionReport = function(credit_id, financial_id, type) {
    }).then(function (result) {
     if (result.isConfirmed) {
         axios
-        .get("/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept")
+        .get(url)
         .then(function (response) {
             let reason = response.data;
-            window.location = '/reporte/'+credit_id+'/status/finish';
+            window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app;
         })
         .catch(e => {
             

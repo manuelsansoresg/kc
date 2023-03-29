@@ -1,13 +1,16 @@
 @extends('layouts.report')
 
 @section('header')
-    @if (!isset($_GET['credit_id']))
+    @if (!isset($_GET['is_app']))
         @include('layouts.content_report_nav')
     @endif
 @endsection
 
 
 @section('content')
+@php
+    $is_app = isset($_GET['is_app'])? true : false;
+@endphp
     <!--::Hero Default::-->
     <section class="position-relative bg-style-1 debt">
         <div class="container py-9 py-lg-11 position-relative z-index-1">

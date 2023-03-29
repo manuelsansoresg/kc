@@ -77,6 +77,8 @@ class HistoryLog extends Model
     const KC_SWAP_FORM_STEP_3                 = 45;
     const KC_SWAP_FORM_STEP_3_2               = 47;
     
+    const KC_PAYMENT                          = 49;
+    
 
     protected $fillable = [
         'id_rel',
@@ -141,6 +143,7 @@ class HistoryLog extends Model
         46 => 'Carga',
         47 => 'Formulario',
         48 => 'Formulario',
+        49 => 'Entró a KC - Payments',
     ];
     
     public static $label_subject = [
@@ -184,6 +187,7 @@ class HistoryLog extends Model
         45 => 'Cotización terminación',
         47 => '¿Continuar?',
         48 => 'Calidad de servicio',
+        49 => '',
     ];
 
     public static $name_model = [
@@ -224,6 +228,8 @@ class HistoryLog extends Model
         45 => 'swap',
         46 => 'swap',
         47 => 'swap',
+        48 => '',
+        49 => 'payment',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $update_old_status = true)

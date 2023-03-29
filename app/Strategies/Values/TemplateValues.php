@@ -8,6 +8,7 @@ use App\Strategies\Templates\DebtCreditStrategyTemplate;
 use App\Strategies\Templates\DeliveryStrategyTemplate;
 use App\Strategies\Templates\LeadStrategyTemplate;
 use App\Strategies\Templates\NewCreditStrategyTemplate;
+use App\Strategies\Templates\PaymentStrategyTemplate;
 use App\Strategies\Templates\SwapStrategyTemplate;
 
 final class TemplateValues
@@ -20,5 +21,6 @@ final class TemplateValues
         'delivery' => DeliveryStrategyTemplate::class,
         'afterMarket' => AfterMarketStrategyTemplate::class,
         'swap' => SwapStrategyTemplate::class,
+        'payment' => PaymentStrategyTemplate::class,
     ];
 }

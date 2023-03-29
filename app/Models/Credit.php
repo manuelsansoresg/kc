@@ -93,79 +93,82 @@ class Credit extends Model
         //*restrict user financial and asesor
         $get_list    = HistoryLog::getByStatus($status);
         $users        = array();
-
         foreach ($get_list as $history) {
-            $query            = Credit::find($history->id_rel);
-            $product          = $query->creditProduct;
-            $alias_product    = $product !== null ? $product->alias : null;
-            $client           = $query->creditClientPerson;
-            $advisor          = $query->creditAdvisor;
-            $route            = self::routeShowStep()[$history->status_id];
-            $model            = HistoryLog::$name_model[$history->status_id];
-            $templateStrategy = TemplateValues::STRATEGY[$model];
-            $percent          = (new $templateStrategy)->getPercent($history);
-            $percent_form     = (new $templateStrategy)->percentForm($history);
-            $hour             = $query->created_at;
-            $max_hour         = 24;
-            $data_deadline    = deadlineKc($hour, $max_hour);
-            $in_progress      = (new $templateStrategy)->getPercent($history, true);
-            $dead_line        = (new $templateStrategy)->moduleDeadline($history);
-            
-            $hour             = $data_deadline['lbl_hour'];
-            $status_id        = $history->status_id;
-            $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
+            try {
+                $query            = Credit::find($history->id_rel);
+                $product          = $query->creditProduct;
+                $alias_product    = $product !== null ? $product->alias : null;
+                $client           = $query->creditClientPerson;
+                $advisor          = $query->creditAdvisor;
+                $route            = self::routeShowStep()[$history->status_id];
+                $model            = HistoryLog::$name_model[$history->status_id];
+                $templateStrategy = TemplateValues::STRATEGY[$model];
+                $percent          = (new $templateStrategy)->getPercent($history);
+                $percent_form     = (new $templateStrategy)->percentForm($history);
+                //dd($history->status_id);
+                $hour             = $query->created_at;
+                $max_hour         = 24;
+                $data_deadline    = deadlineKc($hour, $max_hour);
+                $in_progress      = (new $templateStrategy)->getPercent($history, true);
+                $dead_line        = (new $templateStrategy)->moduleDeadline($history);
+                
+                $hour             = $data_deadline['lbl_hour'];
+                $status_id        = $history->status_id;
+                $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
 
-            if ($history->status_id === HistoryLog::KC_AFTER_MARKET || $history->status_id === HistoryLog::KC_CONTROL_DESK || $history->status_id === HistoryLog::KC_DELIVERY) {
-                $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
-                $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
-            }
+                if ($history->status_id === HistoryLog::KC_AFTER_MARKET || $history->status_id === HistoryLog::KC_CONTROL_DESK || $history->status_id === HistoryLog::KC_DELIVERY) {
+                    $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
+                    $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+                }
 
-            if ($history->status_id === HistoryLog::KC_SWAP) {
-                $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
-                $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
-            }
+                if ($history->status_id === HistoryLog::KC_SWAP) {
+                    $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
+                    $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+                }
 
-            $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
-            $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client, 'percent' => $percent])->render();
-            $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
-            
-            $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
-            $is_advisor     = Auth::user()->hasRole('Asesor');
-            $is_user_financial = Auth::user()->hasRole('Cliente financiera');
+                $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
+                $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => $client, 'percent' => $percent])->render();
+                $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
+                
+                $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
+                $is_advisor     = Auth::user()->hasRole('Asesor');
+                $is_user_financial = Auth::user()->hasRole('Cliente financiera');
 
-            if ($is_advisor === true && Auth::user()->id === $advisor->id) {
-                $users[] = array(
-                    'id' => $query->id_rel,
-                    'product' => $content_product,
-                    'client' => $content_client,
-                    'advisor' => $name_advisor,
-                    'progress' => $progress_bar,
-                    'in_progress' => $in_progress,
-                    'deadline' => $dead_line,
-                    'options' => $option
-                );
-            } elseif ($is_user_financial === true && $query->financial_user_assigned === Auth::user()->id) {
-                $users[] = array(
-                    'id' => $query->id_rel,
-                    'product' => $content_product,
-                    'client' => $content_client,
-                    'advisor' => $name_advisor,
-                    'progress' => $progress_bar,
-                    'in_progress' => $in_progress,
-                    'deadline' => $dead_line,
-                    'options' => $option
-                );
-            } else {
-                $users[] = array(
-                    'id' => $history->id_rel,
-                    'product' => $content_product,
-                    'client' => $content_client,
-                    'advisor' => $name_advisor,
-                    'progress' => $progress_bar,
-                    'in_progress' => $in_progress,
-                    'deadline' => $dead_line,
-                    'options' => $option
-                );
+                if ($is_advisor === true && Auth::user()->id === $advisor->id) {
+                    $users[] = array(
+                        'id' => $query->id_rel,
+                        'product' => $content_product,
+                        'client' => $content_client,
+                        'advisor' => $name_advisor,
+                        'progress' => $progress_bar,
+                        'in_progress' => $in_progress,
+                        'deadline' => $dead_line,
+                        'options' => $option
+                    );
+                } elseif ($is_user_financial === true && $query->financial_user_assigned === Auth::user()->id) {
+                    $users[] = array(
+                        'id' => $query->id_rel,
+                        'product' => $content_product,
+                        'client' => $content_client,
+                        'advisor' => $name_advisor,
+                        'progress' => $progress_bar,
+                        'in_progress' => $in_progress,
+                        'deadline' => $dead_line,
+                        'options' => $option
+                    );
+                } else {
+                    $users[] = array(
+                        'id' => $history->id_rel,
+                        'product' => $content_product,
+                        'client' => $content_client,
+                        'advisor' => $name_advisor,
+                        'progress' => $progress_bar,
+                        'in_progress' => $in_progress,
+                        'deadline' => $dead_line,
+                        'options' => $option
+                    );
+                }//code...
+            } catch (\Exception $th) {
             }
         }
         return $users;
@@ -352,6 +355,7 @@ class Credit extends Model
             30 => 'delivery',
             36 => 'afterMarket',
             37 => 'swap',
+            49 => 'payment',
 
         );
         return $routes;

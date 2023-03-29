@@ -56,7 +56,6 @@ class HomeController extends Controller
         
         $history    = HistoryLog::find($history_id);
         $credit     = $history->historyCredit;
-
         if ($credit->applied_financial != '') {
             return view('content_expiration_report');
         }

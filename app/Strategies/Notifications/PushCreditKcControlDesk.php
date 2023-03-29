@@ -35,30 +35,13 @@ class PushCreditKcControlDesk implements SendNotificationsInterface
         foreach ($get_notifications as $notification) {
             $users = User::getUserRole('Administrador');
             $credit = $notification->notificationCredit;
-            $advisor = $credit->creditAdvisor;
-            $toast  = \View::make('panel.toast', ['title' => $notification->title, 'body' => $notification->body])->render();
-            
-            foreach ($users as $user) {
-                $data_array = array(
-                    'user_id' => $user->id,
-                    'title' => $notification->title,
-                    'body' => $notification->body,
-                    'toast' => $toast,
-                    'id' => $notification->id,
-                    'created_at' => date('Y-m-d H:i:s', strtotime($notification->created_at)),
-                    'date' => $notification->created_at,
-                    'status' => $notification->status,
-                );
-                //dd($user->id, Auth::user()->id);
-                if ($user->id == Auth::user()->id) {
-                    $notifications[] = $data_array;
-                }
-            }
-
-            if ($advisor != null) {
-                if ($advisor->id == Auth::user()->id) {
+            try {
+                $advisor = $credit->creditAdvisor;
+                $toast  = \View::make('panel.toast', ['title' => $notification->title, 'body' => $notification->body])->render();
+                
+                foreach ($users as $user) {
                     $data_array = array(
-                        'user_id' => $advisor->id,
+                        'user_id' => $user->id,
                         'title' => $notification->title,
                         'body' => $notification->body,
                         'toast' => $toast,
@@ -67,8 +50,29 @@ class PushCreditKcControlDesk implements SendNotificationsInterface
                         'date' => $notification->created_at,
                         'status' => $notification->status,
                     );
-                    $notifications[] = $data_array;
+                    //dd($user->id, Auth::user()->id);
+                    if ($user->id == Auth::user()->id) {
+                        $notifications[] = $data_array;
+                    }
                 }
+
+                if ($advisor != null) {
+                    if ($advisor->id == Auth::user()->id) {
+                        $data_array = array(
+                            'user_id' => $advisor->id,
+                            'title' => $notification->title,
+                            'body' => $notification->body,
+                            'toast' => $toast,
+                            'id' => $notification->id,
+                            'created_at' => date('Y-m-d H:i:s', strtotime($notification->created_at)),
+                            'date' => $notification->created_at,
+                            'status' => $notification->status,
+                        );
+                        $notifications[] = $data_array;
+                    }
+                }
+            } catch (\Exception $th) {
+                //throw $th;
             }
         }
         return $notifications;

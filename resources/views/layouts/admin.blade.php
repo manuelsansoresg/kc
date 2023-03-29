@@ -234,6 +234,14 @@
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-payments" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span>
+                                        <span class="nk-menu-text">KC- Payments</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">CRÉDITOS</h6>
                                 </li><!-- .nk-menu-item -->

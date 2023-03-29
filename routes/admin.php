@@ -168,6 +168,11 @@ Route::group(['prefix' => 'kc-after-market'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcAfterMarketController', 'list'])->middleware('auth');
 });
 
+Route::resource('kc-payments', '\App\Http\Controllers\Panel\Module\KcPaymentController')->middleware('auth');
+Route::group(['prefix' => 'kc-payments'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcPaymentController', 'list'])->middleware('auth');
+});
+
 Route::resource('kc-swap', '\App\Http\Controllers\Panel\Module\KcSwapController')->middleware('auth');
 Route::group(['prefix' => 'kc-swap'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcSwapController', 'list'])->middleware('auth');
