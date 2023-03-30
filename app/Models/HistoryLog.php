@@ -380,7 +380,7 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $history->old_status_id);
 
             //*inicializar las acciones
-            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $id_rel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_1, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $id_rel, 0);
         }
