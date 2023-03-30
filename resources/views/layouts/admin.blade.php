@@ -21,6 +21,8 @@
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
+    <link id="skin-default" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
 </head>
 
@@ -236,7 +238,7 @@
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-payments" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span>
+                                        <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
                                         <span class="nk-menu-text">KC- Payments</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
@@ -311,6 +313,27 @@
                                                 <span class="nk-menu-text">Créditos</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
+                                        <li class="nk-menu-item has-sub">
+                                            <a href="#" class="nk-menu-link nk-menu-toggle">
+                                                <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
+                                                <span class="nk-menu-text">KC- Payments</span>
+                                            </a>
+                                            <ul class="nk-menu-sub">
+
+                                                <li class="nk-menu-item">
+                                                    <a href="/panel/archive/lead" class="nk-menu-link">
+                                                        <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
+                                                        <span class="nk-menu-text">Pagado</span>
+                                                    </a>
+                                                </li><!-- .nk-menu-item -->
+                                                <li class="nk-menu-item">
+                                                    <a href="/panel/archive/lead" class="nk-menu-link">
+                                                        <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
+                                                        <span class="nk-menu-text">No pagado</span>
+                                                    </a>
+                                                </li><!-- .nk-menu-item -->
+                                            </ul>
+                                        </li>
                                     </ul>
 
                                 </li>

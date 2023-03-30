@@ -921,6 +921,12 @@ function move(id, form, modal, datatable, title, msg) {
   })["catch"](function (e) {});
 }
 
+window.deliveryFinish = function (id, statusid, urlredirect) {
+  axios.get("/panel/action/" + id + "/" + statusid + "/finish").then(function (response) {
+    window.location = urlredirect;
+  })["catch"](function (e) {});
+};
+
 window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#frm-archive').trigger("reset");
   $('#id_rel').val(id);
@@ -2966,6 +2972,17 @@ $().ready(function () {
       saveForm('frm-template_delivery_step2', 'delivery');
     }
   });
+  $("#frm-template_payment_step2").validate({
+    rules: {
+      'credit[changed_commission]': {
+        number: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_payment_step2', 'payment');
+    }
+  });
   $("#frm-template_delivery_step3").validate({
     rules: {
       'credit[payment_check]': {
@@ -2975,6 +2992,17 @@ $().ready(function () {
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
       saveForm('frm-template_delivery_step3', 'delivery');
+    }
+  });
+  $("#frm-template_payment_step3").validate({
+    rules: {
+      'credit[payment_check]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_payment_step3', 'payment');
     }
   });
   $("#frm-template_swap_step1").validate({
@@ -3323,8 +3351,8 @@ function saveForm(id_form, model) {
     if (url_redirect == null) {
       window.history.back();
     }
+    /* window.location = url_redirect; */
 
-    window.location = url_redirect;
   })["catch"](function (e) {});
 } //TODO: alerta si detecto kyc
 

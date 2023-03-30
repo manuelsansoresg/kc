@@ -308,3 +308,4 @@
     <input type="hidden" id="history_id" name="history_id" value="{{ $history_id }}">
 </form>
 
+@include('panel.modal.archive')

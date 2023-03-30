@@ -139,7 +139,7 @@ class PaymentStrategyTemplate implements TemplateInterface
     public function configFormstep2($id_rel, $history_id)
     {
         $credit = Credit::find($id_rel);
-        $name_form = 'frm-template_delivery_step2';
+        $name_form = 'frm-template_payment_step2';
         $type_form = HistoryLog::KC_DELIVERY_FORM_STEP_2;
         $financial = Financial::select('id', 'commercial_name as name')->get();
         $product = FinancialProduct::getProductByFinancial($credit->applied_financial);
@@ -204,7 +204,7 @@ class PaymentStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/delivery/'.$history_id.'/show?step=2',
+                'value' => '/panel/template/actions/payment/'.$history_id.'/show?step=2',
                 'col' => 'col-12'
             ],
             
@@ -215,7 +215,7 @@ class PaymentStrategyTemplate implements TemplateInterface
 
     public function configFormstep3($id_rel, $history_id)
     {
-        $name_form    = 'frm-template_delivery_step3';
+        $name_form    = 'frm-template_payment_step3';
         $type_form    = HistoryLog::KC_DELIVERY_FORM_STEP_3;
         $option_payment    = array(1 => 'Sí', 2 => 'No');
 
@@ -336,13 +336,12 @@ class PaymentStrategyTemplate implements TemplateInterface
         return $list;
     }
     
-
+    //when save comprobante pago
     public function saveForm($request)
     {
         $id_rel   = $request->id_rel;
         $credit   = Credit::find($id_rel);
         $history  = HistoryLog::find($request->history_id);
-
         if ($request->credit) {
             $data_credit = $request->credit;
             if (isset($data_credit['changed_commission'])) {
@@ -358,13 +357,12 @@ class PaymentStrategyTemplate implements TemplateInterface
             $client->fill($data_client_person);
             $client->update();
         }
-        
         if ($history != null) {
             $percent_form_step3 = self::percentFormStep3($history);
             if ($percent_form_step3 == 100) {
-                HistoryLog::move($credit->id, HistoryLog::CREDITS_PAID, $history->old_status_id);
+                HistoryLog::move($credit->id, HistoryLog::KC_PAYMENT_PAID_ARCHIVE, $history->old_status_id);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $id_rel, 1);
-               /*  $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
+                /* $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
                 (new $notification_add)->send($credit->id); */
             }
         }
@@ -414,21 +412,12 @@ class PaymentStrategyTemplate implements TemplateInterface
         $view_percent_step2         = \View::make('panel.module.view_percent', ['percent' => $percent_file_step2])->render();
         $view_percent_step3         = \View::make('panel.module.view_percent', ['percent' => $percent_form])->render();
 
-        $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
-        $view_count_step2           = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
-        $view_count_step3           = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
-        $view_count_step4           = \View::make('panel.module.view_count', ['number' => 'Cuatro'])->render();
+        $view_count_step2           = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
+        $view_count_step3           = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
+        $view_count_step4           = \View::make('panel.module.view_count', ['number' => 'Tres'])->render();
 
 
         $data = array();
-        $data[] = array(
-            'name' => $view_count_inf_credit,
-            'step' => 'Entrega',
-            'status' => $status_step1,
-            'progress' => $view_percent_step1,
-            'deadline' =>'',
-            'options' => $option_step1,
-        );
         $data[] = array(
             'name' => $view_count_step2,
             'step' => 'Comprobar pago',
@@ -447,7 +436,7 @@ class PaymentStrategyTemplate implements TemplateInterface
             'options' => $option_step3,
         );
 
-        if ($percent_form == 100) {
+        /* if ($percent_form == 100) {
             $data[] = array(
                 'name' => $view_count_step4,
                 'step' => 'Captura de información',
@@ -456,7 +445,7 @@ class PaymentStrategyTemplate implements TemplateInterface
                 'deadline' => '',
                 'options' => null,
             );
-        }
+        } */
        
         return $data;
     }
@@ -554,13 +543,13 @@ class PaymentStrategyTemplate implements TemplateInterface
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFile($credit->id);
         if ($percent_form == 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_UPLOAD_STEP_2, $credit->id, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_1, $credit->id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
             HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3, null, false);
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit->id, 0);
         }
         $max_hour                     = self::HOUR_STEP_2;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_UPLOAD_STEP_2], $credit->id)[0];
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_FORM_STEP_1], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
@@ -583,6 +572,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $menu_options   = self::menuOptions($history, 2);
         
         $view_dead_line_step2  = self::deadLineStep2($history);
+        //$view_dead_line_step2  = '';
 
         $view_dead_line_inf_credit  = 'N/A';
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
@@ -775,7 +765,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/action-form/delivery/' . $history->id . '/form?step=' . $step,
+                    'link' => '/panel/action-form/payment/' . $history->id . '/form?step=' . $step,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -783,7 +773,7 @@ class PaymentStrategyTemplate implements TemplateInterface
             ),
             'form2' => array(
                 [
-                    'link' => '/panel/template/action-document/delivery/' . $history->id . '?step='.$step,
+                    'link' => '/panel/template/action-document/payment/' . $history->id . '?step='.$step,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -807,7 +797,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $menu = array(
             'form' => array(
                 [
-                    'link' => '/panel/action-form/delivery/' . $history->id . '/form?step=3',
+                    'link' => '/panel/action-form/payment/' . $history->id . '/form?step=3',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -815,7 +805,7 @@ class PaymentStrategyTemplate implements TemplateInterface
             ),
             'form2' => array(
                 [
-                    'link' => '/panel/action-form/delivery/' . $history->id . '/form?step=3_2',
+                    'link' => '/panel/action-form/payment/' . $history->id . '/form?step=3_2',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -823,7 +813,7 @@ class PaymentStrategyTemplate implements TemplateInterface
             ),
             'file' => array(
                 [
-                    'link' => '/panel/template/action-document/delivery/' . $history->id . '?step=3',
+                    'link' => '/panel/template/action-document/payment/' . $history->id . '?step=3',
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
@@ -873,7 +863,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $menu = array(
             'actionstep1' => array(
                 [
-                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=1',
+                    'link' => '/panel/template/actions/payment/' . $history->id . '/show?step=1',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
@@ -881,7 +871,7 @@ class PaymentStrategyTemplate implements TemplateInterface
             ),
             'actionstep2' => array(
                 [
-                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=2',
+                    'link' => '/panel/template/actions/payment/' . $history->id . '/show?step=2',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
@@ -889,7 +879,7 @@ class PaymentStrategyTemplate implements TemplateInterface
             ),
             'actionstep3' => array(
                 [
-                    'link' => '/panel/template/actions/delivery/' . $history->id . '/show?step=3',
+                    'link' => '/panel/template/actions/payment/' . $history->id . '/show?step=3',
                     'onclick' => '',
                     'name' => $lbl_action,
                     'icon' => 'icon ni ni-view-list-wd',
@@ -996,7 +986,6 @@ class PaymentStrategyTemplate implements TemplateInterface
         $credit     = $history->historyCredit;
         $data_actions = array(
             HistoryLog::KC_DELIVERY_FORM,
-            HistoryLog::KC_DELIVERY_UPLOAD_STEP_2,
             HistoryLog::KC_DELIVERY_FORM_STEP_3,
         );
         
@@ -1007,7 +996,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         foreach ($get_actions as $key => $get_action) {
             $status = $get_action->status_progress;
             $status_progress += $status != null ? $status : 0;
-            $current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
+            //$current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
         }
 
         if ($status_progress < 1) {
@@ -1036,7 +1025,7 @@ class PaymentStrategyTemplate implements TemplateInterface
     //*TODO: se deshabilito al ser opcional la caja de carga
     public function percentFile($id_rel)
     {
-        $model = File::MODEL['delivery'];
+        $model = File::MODEL['payment'];
         $percent = 0;
         $total_valid = 1;
         $count_file = 0;
@@ -1079,7 +1068,7 @@ class PaymentStrategyTemplate implements TemplateInterface
                         'icon' => 'icon ni ni-list-round'
                     ],
                     [
-                        'link' => 'panel/template/action-document/delivery/'.$history->id.'?step=2',
+                        'link' => 'panel/template/action-document/payment/'.$history->id.'?step=2',
                         'onclick' => '',
                         'name' => 'Comprobar pago',
                         'icon' => 'icon ni ni-list-round'
@@ -1103,7 +1092,7 @@ class PaymentStrategyTemplate implements TemplateInterface
                         'icon' => 'icon ni ni-report-profit'
                     ],
                     [
-                        'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+                        'link' => '/panel/template/steps/payment/'.$history->id.'/show',
                         'onclick' => '',
                         'name' => 'Ver etapas',
                         'icon' => 'icon ni ni-list-thumb-fill'
@@ -1154,8 +1143,8 @@ class PaymentStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             1 => array(
-             'title' => 'KC - Delivery',
-             'link' => '/panel/delivery',
+             'title' => 'KC - Payment',
+             'link' => '/panel/kc-payments',
              'active' => null
             ),
             2 => array(
@@ -1176,13 +1165,13 @@ class PaymentStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             1 => array(
-             'title' => 'KC - Delivery',
-             'link' => '/panel/delivery',
+             'title' => 'KC - Payment',
+             'link' => '/panel/kc-payments',
              'active' => null
             ),
             2 => array(
                 'title' => 'etapas',
-                'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+                'link' => '/panel/template/steps/payment/'.$history->id.'/show',
                 'active' => true
             ),
             3 => array(
@@ -1205,18 +1194,18 @@ class PaymentStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             1 => array(
-             'title' => 'KC - Delivery',
-             'link' => '/panel/delivery',
+             'title' => 'KC - Payment',
+             'link' => '/panel/kc-payments',
              'active' => null
             ),
             2 => array(
              'title' => 'etapas',
-             'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+             'link' => '/panel/template/steps/payment/'.$history->id.'/show',
              'active' => null
             ),
             3 => array(
              'title' => 'acciones',
-             'link' => '/panel/template/actions/delivery/'.$history->id.'/show?step='.$step,
+             'link' => '/panel/template/actions/payment/'.$history->id.'/show?step='.$step,
              'active' => null
             ),
             4 => array(

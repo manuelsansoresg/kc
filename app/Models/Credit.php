@@ -84,7 +84,9 @@ class Credit extends Model
         'termination_amount', //* save * 100
         'termination_deadline',
         'kyc_done',
-        
+        'credit_signed',
+        'approved',
+        'delivered',
     ];
 
     public static function listDatatable($status)

@@ -54,9 +54,10 @@ class HistoryLog extends Model
     const KC_DELIVERY_FORM                    = 31;
     
     const KC_DELIVERY_FORM_STEP_2             = 32;
-    const KC_DELIVERY_UPLOAD_STEP_2           = 33;
+    
+    const KC_DELIVERY_FORM_STEP_3             = 33;
 
-    const KC_DELIVERY_FORM_STEP_3             = 34;
+    const KC_DELIVERY_FORM_STEP_4             = 34;
     
     const CREDITS_PAID                        = 35;
 
@@ -78,6 +79,13 @@ class HistoryLog extends Model
     const KC_SWAP_FORM_STEP_3_2               = 47;
     
     const KC_PAYMENT                          = 49;
+    const KC_PAYMENT_FORM_STEP_1              = 52;
+    const KC_PAYMENT_UPLOAD_STEP_1            = 53;
+
+    const KC_PAYMENT_FORM_STEP_2              = 54;
+    
+    const KC_PAYMENT_PAID_ARCHIVE             = 50;
+    const KC_PAYMENT_UNPAID_ARCHIVE           = 51;
     
 
     protected $fillable = [
@@ -144,6 +152,11 @@ class HistoryLog extends Model
         47 => 'Formulario',
         48 => 'Formulario',
         49 => 'Entró a KC - Payments',
+        50 => 'Entró a  Archivo - KC- Payments - Pagado',
+        51 => 'Entró a  Archivo - KC- Payments - No pagado',
+        52 => 'Formulario',
+        53 => 'Carga',
+        54 => 'Formulario',
     ];
     
     public static $label_subject = [
@@ -170,9 +183,9 @@ class HistoryLog extends Model
         29 => 'Contactar financiera',
         //30 => 'Entró a KC - Delivery',
         31 => 'Información del crédito',
-        32 => 'Cambios en comisión',
-        33 => 'Comprobante de pago',
-        34 => 'Verificar pago',
+        32 => 'Confirar firma',
+        33 => 'Confirmación de entrega',
+        34 => 'Reducción de análisis',
         35 => 'Créditos pagados',
         36 => 'Entró a KC - After market',
         37 => 'Entró a KC - Swap',
@@ -188,6 +201,11 @@ class HistoryLog extends Model
         47 => '¿Continuar?',
         48 => 'Calidad de servicio',
         49 => '',
+        50 => '',
+        51 => '',
+        52 => '',
+        53 => '',
+        54 => '',
     ];
 
     public static $name_model = [
@@ -230,6 +248,11 @@ class HistoryLog extends Model
         47 => 'swap',
         48 => '',
         49 => 'payment',
+        50 => 'payment',
+        51 => 'payment',
+        52 => 'payment',
+        53 => 'payment',
+        54 => 'payment',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $update_old_status = true)
@@ -333,8 +356,7 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
          
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $id_rel, 0);
-            //copy to after market
-            HistoryLog::move($id_rel, HistoryLog::KC_AFTER_MARKET, HistoryLog::KC_AFTER_MARKET);
+            
         }
 
         if ($status_id == HistoryLog::KC_SWAP) {
@@ -349,6 +371,19 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
         }
         
+        if ($status_id == HistoryLog::KC_PAYMENT) {
+            //copy to after market
+            HistoryLog::move($id_rel, HistoryLog::KC_AFTER_MARKET, HistoryLog::KC_AFTER_MARKET);
+            HistoryLog::move($id_rel, HistoryLog::CREDITS_PAID, $history->old_status_id);
+            
+            HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_FORM_STEP_1, $history->old_status_id);
+            HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $history->old_status_id);
+
+            //*inicializar las acciones
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_1, $id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $id_rel, 0);
+        }
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $id_rel, 0);
             //*inicializar las acciones

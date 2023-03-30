@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Models\Action;
+use App\Models\Credit;
 use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\RegisterAction;
@@ -29,6 +30,32 @@ class ActionController extends Controller
     {
         $history = HistoryLog::move($id_rel, $status_id, $old_status_id, $request);
         return response()->json($history);
+    }
+
+    public function moveDeliveryFinish(HistoryLog $history, $status_id)
+    {
+        $credit = Credit::find($history->id_rel);
+        $credit_id = $credit->id;
+        if ($status_id == HistoryLog::KC_DELIVERY_FORM_STEP_3) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit_id, 1);
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($credit_id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3, null, false);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit_id, 0);
+            $credit->credit_signed = 1;
+        } elseif ($status_id == HistoryLog::KC_DELIVERY_FORM_STEP_4) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit_id, 1);
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($credit_id, HistoryLog::KC_DELIVERY_FORM_STEP_4, HistoryLog::KC_DELIVERY_FORM_STEP_4, null, false);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_4, $credit_id, 0);
+            $credit->approved = 1;
+        } elseif ($status_id == HistoryLog::KC_PAYMENT) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_4, $credit_id, 1);
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, HistoryLog::KC_PAYMENT, null, false);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $credit_id, 0);
+            $credit->delivered = 1;
+        }
+        $credit->update();
     }
 
     /**

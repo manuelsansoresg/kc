@@ -406,6 +406,19 @@ $().ready(function () {
         }
     });
     
+    $("#frm-template_payment_step2").validate({
+        rules: {
+            'credit[changed_commission]': {
+                number: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_payment_step2', 'payment');
+        }
+    });
+    
+    
     $("#frm-template_delivery_step3").validate({
         rules: {
             'credit[payment_check]': {
@@ -415,6 +428,18 @@ $().ready(function () {
         submitHandler: function (form, event) {
             event.preventDefault();
             saveForm('frm-template_delivery_step3', 'delivery');
+        }
+    });
+    
+    $("#frm-template_payment_step3").validate({
+        rules: {
+            'credit[payment_check]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_payment_step3', 'payment');
         }
     });
    
@@ -785,7 +810,7 @@ function saveForm(id_form, model) {
             if (url_redirect == null) {
                 window.history.back();
             }
-            window.location = url_redirect;
+            /* window.location = url_redirect; */
         })
         .catch(e => {
         });

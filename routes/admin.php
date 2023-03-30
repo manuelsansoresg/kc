@@ -96,6 +96,7 @@ Route::group(['prefix' => 'action'], function () {
     Route::get('module/{name_status}/list', ['\App\Http\Controllers\Panel\ActionController', 'listModuleAction'])->middleware('auth');
 
     Route::post('{id_rel}/{status_id}/{old_status_id}/move', ['\App\Http\Controllers\Panel\ActionController', 'move'])->middleware('auth');
+    Route::get('{history}/{status_id}/finish', ['\App\Http\Controllers\Panel\ActionController', 'moveDeliveryFinish'])->middleware('auth');
 });
 
 //*dropzone file

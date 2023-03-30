@@ -21,6 +21,18 @@ function move(id, form, modal, datatable, title, msg){
     });
 }
 
+window.deliveryFinish = function(id, statusid, urlredirect) 
+{
+    axios
+    .get("/panel/action/"+id+"/"+statusid+"/finish")
+    .then(function (response) {
+       window.location = urlredirect;
+    })
+    .catch(e => {
+        
+    });
+}
+
 window.moveModal = function(title, id, statusid, old_status_id, dt) {
     $('#frm-archive').trigger("reset");
     $('#id_rel').val(id);
