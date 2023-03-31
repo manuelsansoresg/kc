@@ -281,11 +281,11 @@
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                         <li class="nk-menu-item">
-                                            <a href="/panel/credit/product/{{ $m_history::CREDITS_PAID }}"
+                                            <a href="/panel/credit/product/{{ $m_history::CREDITS_DELIVERED }}"
                                                 class="nk-menu-link">
                                                 <span class="nk-menu-icon"><em
                                                         class="icon ni ni-sign-usd-alt2"></em></span>
-                                                <span class="nk-menu-text">Pagados</span>
+                                                <span class="nk-menu-text">Entregados</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                     </ul>

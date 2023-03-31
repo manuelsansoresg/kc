@@ -51,7 +51,7 @@ class ActionController extends Controller
         } elseif ($status_id == HistoryLog::KC_PAYMENT) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_4, $credit_id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, HistoryLog::KC_PAYMENT, null, false);
+            HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, $history->old_status_id, null, false);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $credit_id, 0);
             $credit->delivered = 1;
         }

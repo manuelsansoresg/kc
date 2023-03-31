@@ -60,6 +60,7 @@ class HistoryLog extends Model
     const KC_DELIVERY_FORM_STEP_4             = 34;
     
     const CREDITS_PAID                        = 35;
+    const CREDITS_DELIVERED                   = 55;
 
     const KC_AFTER_MARKET                     = 36;
     const KC_AFTER_FORM                       = 48;
@@ -157,6 +158,8 @@ class HistoryLog extends Model
         52 => 'Formulario',
         53 => 'Carga',
         54 => 'Formulario',
+        54 => 'Formulario',
+        55 => 'Formulario',
     ];
     
     public static $label_subject = [
@@ -206,6 +209,7 @@ class HistoryLog extends Model
         52 => '',
         53 => '',
         54 => '',
+        55 => '',
     ];
 
     public static $name_model = [
@@ -374,7 +378,7 @@ class HistoryLog extends Model
         if ($status_id == HistoryLog::KC_PAYMENT) {
             //copy to after market
             HistoryLog::move($id_rel, HistoryLog::KC_AFTER_MARKET, HistoryLog::KC_AFTER_MARKET);
-            HistoryLog::move($id_rel, HistoryLog::CREDITS_PAID, $history->old_status_id);
+            HistoryLog::move($id_rel, HistoryLog::CREDITS_DELIVERED, $history->old_status_id);
             
             HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_FORM_STEP_1, $history->old_status_id);
             HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $history->old_status_id);
