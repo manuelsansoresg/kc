@@ -378,7 +378,7 @@ class HistoryLog extends Model
         if ($status_id == HistoryLog::KC_PAYMENT) {
             //copy to after market
             HistoryLog::move($id_rel, HistoryLog::KC_AFTER_MARKET, HistoryLog::KC_AFTER_MARKET);
-            HistoryLog::move($id_rel, HistoryLog::CREDITS_DELIVERED, $history->old_status_id);
+            HistoryLog::move($id_rel, HistoryLog::CREDITS_DELIVERED, HistoryLog::CREDITS_DELIVERED);
             
             HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_FORM_STEP_1, $history->old_status_id);
             HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $history->old_status_id);
