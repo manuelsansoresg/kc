@@ -360,8 +360,10 @@ class PaymentStrategyTemplate implements TemplateInterface
         if ($history != null) {
             $percent_form_step3 = self::percentFormStep2($history);
             if ($percent_form_step3 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_2, $credit->id, 1);
+
                 HistoryLog::move($credit->id, HistoryLog::KC_PAYMENT_PAID_ARCHIVE, $history->old_status_id);
-                HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $id_rel, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_PAID_ARCHIVE, $credit->id, 0);
                 /* $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
                 (new $notification_add)->send($credit->id); */
             }
@@ -380,8 +382,8 @@ class PaymentStrategyTemplate implements TemplateInterface
         $percent_form_2         = self::percentFormStep2($history);
 
         $color_inf_credit     = 'success';
+        $option_step1         = null;
         $option_step2         = null;
-        $option_step3         = null;
         
         //$percent_form = $percent_form;
         $menu_options         = self::menuOptionsStep($history);
@@ -391,7 +393,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         //TODO: change validation when the decision action is carried out in the report
         if ($percent_file_step1 == 100) {
             $status_step2 = ($percent_file_step1 >= 100) ? 'Concluido' : 'En curso';
-            $status_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
+            $status_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
         }
         
         if ($percent_form_2 == 100) {
@@ -399,15 +401,10 @@ class PaymentStrategyTemplate implements TemplateInterface
             $option_step2               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         }
 
-        $data_deadline              = deadline($hour, $max_hour, $percent_file_step1, $color_inf_credit);
-        $color_inf_credit           = $data_deadline['color'];
-        $hour                       = $data_deadline['lbl_hour'];
-
         $option_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
         
-        $view_percent_inf_credit    = 'N/A';
         $view_percent_step1         = \View::make('panel.module.view_percent', ['percent' => $percent_file_step1])->render();
-        $view_percent_step2         = \View::make('panel.module.view_percent', ['percent' => $percent_file_step1])->render();
+        $view_percent_step2         = \View::make('panel.module.view_percent', ['percent' => $percent_form_2])->render();
 
         $view_count_step1           = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_step2           = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
@@ -420,7 +417,7 @@ class PaymentStrategyTemplate implements TemplateInterface
             'status' => $status_step2,
             'progress' => $view_percent_step1,
             'deadline' => '',
-            'options' => $option_step2,
+            'options' => $option_step1,
         );
        
         $data[] = array(
@@ -429,7 +426,7 @@ class PaymentStrategyTemplate implements TemplateInterface
             'status' => $status_step2,
             'progress' => $view_percent_step2,
             'deadline' => '',
-            'options' => $option_step3,
+            'options' => $option_step2,
         );
 
         /* if ($percent_form == 100) {
@@ -486,6 +483,13 @@ class PaymentStrategyTemplate implements TemplateInterface
         $credit                       = $history->historyCredit;
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM], $credit->id)[0];
         $percent_form                 = self::percentForm($history);
+
+        if ($percent_form == 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $credit->id, 1);
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($credit->id, HistoryLog::KC_PAYMENT_FORM_STEP_2, HistoryLog::KC_PAYMENT_FORM_STEP_2, null, false);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_2, $credit->id, 0);
+        }
         $max_hour                     = self::HOUR_STEP_1;
         $hour                         = $history->created_at;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
@@ -856,15 +860,8 @@ class PaymentStrategyTemplate implements TemplateInterface
     {
         $lbl_action = $type_lbl === 1 ? 'Lista de acciones' : 'Ver acción';
         $menu = array(
+           
             'actionstep1' => array(
-                [
-                    'link' => '/panel/template/actions/payment/' . $history->id . '/show?step=1',
-                    'onclick' => '',
-                    'name' => $lbl_action,
-                    'icon' => 'icon ni ni-view-list-wd',
-                ]
-            ),
-            'actionstep2' => array(
                 [
                     'link' => '/panel/template/actions/payment/' . $history->id . '/show?step=2',
                     'onclick' => '',
@@ -872,7 +869,7 @@ class PaymentStrategyTemplate implements TemplateInterface
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
-            'actionstep3' => array(
+            'actionstep2' => array(
                 [
                     'link' => '/panel/template/actions/payment/' . $history->id . '/show?step=3',
                     'onclick' => '',
