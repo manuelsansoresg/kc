@@ -358,9 +358,7 @@ class HistoryLog extends Model
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
-         
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $id_rel, 0);
-            
         }
 
         if ($status_id == HistoryLog::KC_SWAP) {
