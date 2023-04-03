@@ -2538,14 +2538,20 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $status_file    = 'En espera';
         $status_form    = 'En espera';
 
-        $status_file    =  $percent_file == 100 ? 'Concluido' : 'En curso';
+        $status_file    = $percent_file == 100 ? 'Concluido' : 'En curso';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-       
+        $name_advisor   = null;
 
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        try {
+            $user = User::find($advisor->id);
+            $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+        }
         $menu_options   = self::menuOptions($history, 1, $step_origin);
         $view_dead_line_upload  = self::deadLineUploadStep1($history);
         $view_dead_line_form  = self::deadLineStep1($history);
@@ -2553,9 +2559,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
 
         $data = array();
 
