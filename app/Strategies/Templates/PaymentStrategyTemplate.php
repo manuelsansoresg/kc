@@ -20,9 +20,9 @@ use stdClass;
 
 class PaymentStrategyTemplate implements TemplateInterface
 {
-    const HOUR_STEP_1  = 48;
+    const HOUR_STEP_1  = 0;
     const HOUR_STEP_2  = 192;
-    const HOUR_STEP_3  = 2;
+    const HOUR_STEP_3  = 8;
 
     public function move($id)
     {
@@ -445,7 +445,7 @@ class PaymentStrategyTemplate implements TemplateInterface
 
     public function moduleDeadline($history)
     {
-        $max_hour           = 192;
+        $max_hour           = 200;
         $percent            = self::getPercent($history);
         $color_inf_credit   = 'success';
         $hour               = $history->created_at;
@@ -542,13 +542,13 @@ class PaymentStrategyTemplate implements TemplateInterface
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFile($credit->id);
         if ($percent_form == 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_1, $credit->id, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $credit->id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
             HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3, null, false);
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit->id, 0);
         }
         $max_hour                     = self::HOUR_STEP_2;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_FORM_STEP_1], $credit->id)[0];
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_UPLOAD_STEP_1], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
@@ -557,6 +557,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         return $view_dead_line_inf_credit;
     }
 
+    //este es la accion 1
     public function actionStep2($history_id)
     {
 
@@ -614,7 +615,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFormStep2($history);
         $max_hour                     = self::HOUR_STEP_3;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM_STEP_3], $credit->id)[0];
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_FORM_STEP_2], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
         $color_inf_credit             = $data_deadline['color'];
@@ -977,8 +978,8 @@ class PaymentStrategyTemplate implements TemplateInterface
     {
         $credit     = $history->historyCredit;
         $data_actions = array(
-            HistoryLog::KC_DELIVERY_FORM,
-            HistoryLog::KC_DELIVERY_FORM_STEP_3,
+            HistoryLog::KC_PAYMENT_UPLOAD_STEP_1,
+            HistoryLog::KC_PAYMENT_FORM_STEP_2,
         );
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
@@ -991,12 +992,10 @@ class PaymentStrategyTemplate implements TemplateInterface
             //$current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
         }
 
-        if ($status_progress < 1) {
-            $current_show = 'Entrega';
-        } elseif ($status_progress < 2) {
-            $current_show = 'Comprobar pago';
-        } elseif ($status_progress > 2) {
-            $current_show = 'Verificar pago';
+        if ($status_progress <= 1) {
+            $current_show = 'Confirmación de entrega';
+        } elseif ($status_progress > 1) {
+            $current_show = 'Reducción de análisis';
         }
 
         $percent =  (($status_progress) / 3) * 100;

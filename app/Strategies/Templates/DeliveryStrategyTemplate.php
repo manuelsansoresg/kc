@@ -20,9 +20,10 @@ use stdClass;
 
 class DeliveryStrategyTemplate implements TemplateInterface
 {
-    const HOUR_STEP_1  = 48;
-    const HOUR_STEP_2  = 192;
-    const HOUR_STEP_3  = 2;
+    const HOUR_STEP_1  = 2;
+    const HOUR_STEP_2  = 24;
+    const HOUR_STEP_3  = 24;
+    const HOUR_STEP_4  = 24;
 
     public function move($id)
     {
@@ -548,7 +549,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
     public function moduleDeadline($history)
     {
-        $max_hour           = 192;
+        $max_hour           = 74;
         $percent            = self::getPercent($history);
         $color_inf_credit   = 'success';
         $hour               = $history->created_at;
@@ -744,7 +745,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $credit                       = $history->historyCredit;
         $color_inf_credit             = 'success';
         $percent_form                 = self::percentFormStep4($credit->id);
-        $max_hour                     = self::HOUR_STEP_3;
+        $max_hour                     = self::HOUR_STEP_4;
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM_STEP_4], $credit->id)[0];
         $hour                         = $in_progress->date_status_progress;
         $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
