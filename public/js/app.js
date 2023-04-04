@@ -929,7 +929,7 @@ window.deliveryFinish = function (id, statusid, urlredirect) {
 
 window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#frm-archive').trigger("reset");
-  $('#id_rel').val(id);
+  $('#modal_archive_id_rel').val(id);
   $('#statusid').val(statusid);
   $('#title').val('Crédito');
   $('#old_status_id').val(old_status_id);
@@ -941,7 +941,7 @@ window.moveModal = function (title, id, statusid, old_status_id, dt) {
 
 window.moveModalLead = function (title, id, statusid, old_status_id, dt) {
   $('#frm-archive').trigger("reset");
-  $('#id_rel').val(id);
+  $('#modal_archive_id_rel').val(id);
   $('#statusid').val(statusid);
   $('#title').val('Prospecto');
   $('#old_status_id').val(old_status_id);
@@ -959,7 +959,7 @@ if (document.getElementById('frm-archive')) {
 
 $("#frm-archive").submit(function (event) {
   event.preventDefault();
-  var id_rel = $('#id_rel').val();
+  var id_rel = $('#modal_archive_id_rel').val();
   var dt = $('#dt').val();
   var msg = 'Cambios aplicados correctamente';
   var title = $('#title').val();
@@ -3351,8 +3351,8 @@ function saveForm(id_form, model) {
     if (url_redirect == null) {
       window.history.back();
     }
-    /* window.location = url_redirect; */
 
+    window.location = url_redirect;
   })["catch"](function (e) {});
 } //TODO: alerta si detecto kyc
 

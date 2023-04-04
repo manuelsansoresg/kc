@@ -1111,7 +1111,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
             $current_show = 'Entrega crédito';
         }
 
-        $percent =  (($status_progress) / 3) * 100;
+        $percent =  (($status_progress) / 4) * 100;
 
         if ($show_current_show == true) {
             return $current_show;

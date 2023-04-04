@@ -35,7 +35,7 @@ window.deliveryFinish = function(id, statusid, urlredirect)
 
 window.moveModal = function(title, id, statusid, old_status_id, dt) {
     $('#frm-archive').trigger("reset");
-    $('#id_rel').val(id);
+    $('#modal_archive_id_rel').val(id);
     $('#statusid').val(statusid);
     $('#title').val('Crédito');
     $('#old_status_id').val(old_status_id);
@@ -47,7 +47,7 @@ window.moveModal = function(title, id, statusid, old_status_id, dt) {
 
 window.moveModalLead = function(title, id, statusid, old_status_id, dt) {
     $('#frm-archive').trigger("reset");
-    $('#id_rel').val(id);
+    $('#modal_archive_id_rel').val(id);
     $('#statusid').val(statusid);
     $('#title').val('Prospecto');
     $('#old_status_id').val(old_status_id);
@@ -68,7 +68,7 @@ if (document.getElementById('frm-archive')) {
 $( "#frm-archive" ).submit(function( event ) {
     event.preventDefault();
     
-    let id_rel = $('#id_rel').val();
+    let id_rel = $('#modal_archive_id_rel').val();
     let dt = $('#dt').val();
     let msg = 'Cambios aplicados correctamente';
     let title = $('#title').val();

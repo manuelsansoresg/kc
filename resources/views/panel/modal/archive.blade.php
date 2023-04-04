@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         
-                        <input type="hidden" id="id_rel" name="id_rel">
+                        <input type="hidden" id="modal_archive_id_rel" name="id_rel">
                        
                         
                         <div class="col-12">

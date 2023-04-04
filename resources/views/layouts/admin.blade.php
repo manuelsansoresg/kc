@@ -235,7 +235,7 @@
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
-                                @hasrole('Administrador|Asesor')
+                                @hasrole('Administrador|Asesor|Cliente financiera')
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-payments" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
