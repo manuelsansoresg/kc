@@ -957,6 +957,12 @@ if (document.getElementById('frm-archive')) {
   });
 }
 
+window.concluir = function (history_id) {
+  axios.get('/panel/action/' + history_id + '/concluir').then(function (response) {
+    var result = response.data;
+  })["catch"](function (e) {});
+};
+
 $("#frm-archive").submit(function (event) {
   event.preventDefault();
   var id_rel = $('#modal_archive_id_rel').val();

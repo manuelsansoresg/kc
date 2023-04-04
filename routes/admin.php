@@ -97,6 +97,8 @@ Route::group(['prefix' => 'action'], function () {
 
     Route::post('{id_rel}/{status_id}/{old_status_id}/move', ['\App\Http\Controllers\Panel\ActionController', 'move'])->middleware('auth');
     Route::get('{history}/{status_id}/finish', ['\App\Http\Controllers\Panel\ActionController', 'moveDeliveryFinish'])->middleware('auth');
+
+    Route::get('{history}/concluir', ['\App\Http\Controllers\Panel\ActionController', 'concluir'])->middleware('auth');
 });
 
 //*dropzone file
@@ -139,6 +141,7 @@ Route::group(['prefix' => 'financial-product'], function () {
 });
 
 Route::get('{section}/{id}/move', ['\App\Http\Controllers\Panel\PanelController', 'move'])->middleware('auth');
+
 
 //*Client
 Route::resource('client', '\App\Http\Controllers\Panel\Client\ClientPersonController')->middleware('auth');

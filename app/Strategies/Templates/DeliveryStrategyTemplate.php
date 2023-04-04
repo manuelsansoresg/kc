@@ -475,16 +475,23 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $status_step3   = 'En espera';
         $status_step4   = 'En espera';
 
+        $option_step2 = null;
+        $option_step3 = null;
+        $option_step4 = null;
+
         //TODO: change validation when the decision action is carried out in the report
         if ($status_step1 == 'Concluido') {
             $status_step2 = ($percentStep2 >= 100) ? 'Concluido' : 'En curso';
+            $option_step2               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         }
         if ($status_step2 == 'Concluido') {
             $status_step3 = ($percent_form_step3 >= 100) ? 'Concluido' : 'En curso';
+            $option_step3               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
         }
        
         if ($status_step3 == 'Concluido') {
             $status_step4 = ($percent_form_step4 >= 100) ? 'Concluido' : 'En curso';
+            $option_step4               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
         }
 
         $data_deadline              = deadline($hour, $max_hour, $percentStep2, $color_inf_credit);
@@ -492,9 +499,9 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $hour                       = $data_deadline['lbl_hour'];
 
         $option_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
-        $option_step2               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
-        $option_step3               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep3']])->render();
-        $option_step4               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep4']])->render();
+        
+        
+        
         
         $view_percent_inf_credit    = 'N/A';
         $view_percent_step1         = \View::make('panel.module.view_percent', ['percent' => $percent_form_step1])->render();
@@ -1235,6 +1242,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
                         'link' => 'panel/template/action-document/delivery/'.$history->id.'?step=2',
                         'onclick' => '',
                         'name' => 'Comprobar pago',
+                        'icon' => 'icon ni ni-list-round'
+                    ],
+                    [
+                        'link' => null,
+                        'onclick' => 'concluir('.$history->id.')',
+                        'name' => 'Concluir',
                         'icon' => 'icon ni ni-list-round'
                     ],
                 ),

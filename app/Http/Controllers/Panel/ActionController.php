@@ -58,6 +58,11 @@ class ActionController extends Controller
         $credit->update();
     }
 
+    public function concluir(HistoryLog $history)
+    {
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *

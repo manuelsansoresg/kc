@@ -504,6 +504,24 @@ class HistoryLog extends Model
         return $current_status;
     }
 
+    public function getCurrentModuleAndStep($credit_id)
+    {
+        $lbl_module = array(
+            HistoryLog::KC_CHECK_UP => 'KC- Check up',
+            HistoryLog::KC_CONTROL_DESK => 'KC- Swap',
+            HistoryLog::KC_DELIVERY => 'KC- Control desk',
+            HistoryLog::KC_AFTER_MARKET => 'KC- Delivery',
+            HistoryLog::KC_SWAP => 'KC- After market',
+        );
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP,
+            HistoryLog::KC_CONTROL_DESK,
+            HistoryLog::KC_DELIVERY,
+            HistoryLog::KC_AFTER_MARKET,
+            HistoryLog::KC_SWAP,
+        );
+    }
+
     public function historyLead()
     {
         return $this->belongsTo(Lead::class, 'id_rel');

@@ -64,6 +64,17 @@ if (document.getElementById('frm-archive')) {
     });
 }
 
+window.concluir = function (history_id) {
+    axios
+    .get('/panel/action/'+history_id+'/concluir')
+    .then(function (response) {
+        let result = response.data;
+       
+    })
+    .catch(e => {
+        
+    });
+}
 
 $( "#frm-archive" ).submit(function( event ) {
     event.preventDefault();
