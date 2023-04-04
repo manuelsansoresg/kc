@@ -2623,7 +2623,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             if ($advisor->id == Auth::user()->id) {
                 $name_advisor = 'Tú';
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             //throw $th;
         }
         
@@ -2708,19 +2708,26 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
         $percent_file   = self::percentFile($credit->id, 3);
-        $percent_form1   = self::percentFormStep3_1($history);
-        $percent_form2   = self::percentFormStep3_2($history);
-        $status_form1 = 'En espera';
-        $status_form2 = 'En espera';
+        $percent_form1  = self::percentFormStep3_1($history);
+        $percent_form2  = self::percentFormStep3_2($history);
+        $status_form1   = 'En espera';
+        $status_form2   = 'En espera';
 
-        $status_form1    = $percent_form1 == 100 ? 'Concluido' : 'En curso';
-        $status_form2    = $percent_form2 == 100 ? 'Concluido' : 'En curso';
-       
+        $status_form1   = $percent_form1 == 100 ? 'Concluido' : 'En curso';
+        $status_form2   = $percent_form2 == 100 ? 'Concluido' : 'En curso';
+        $name_advisor   = null;
 
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        try {
+            $user = User::find($advisor->id);
+            $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+        }
 
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptionsStep3($history, $step_origin);
 
 
@@ -2732,9 +2739,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         $form_option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+       
 
         $data = array();
 
@@ -2791,14 +2796,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function actionStep4($history_id, $step_origin = null)
     {
-        $history            = HistoryLog::find($history_id);
-        $credit             = $history->historyCredit;
-        $advisor            = $credit->creditAdvisor;
+        $history        = HistoryLog::find($history_id);
+        $credit         = $history->historyCredit;
+        $advisor        = $credit->creditAdvisor;
+        $name_advisor   = null;
 
-        $user               = User::find($advisor->id);
-        $role               = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        try {
+            $user               = User::find($advisor->id);
+            $role               = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor       = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+        }
 
-        $name_advisor       = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options       = self::menuOptionsStep4($history, $step_origin);
 
         $form_option        = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
@@ -2807,9 +2820,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $status = $percent == 100 ? 'Concluido' : 'En curso';
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+     
 
         $data = array();
 
@@ -2846,14 +2857,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function actionStep5($history_id, $step_origin = null)
     {
 
-        $history              = HistoryLog::find($history_id);
-        $credit               = $history->historyCredit;
-        $advisor              = $credit->creditAdvisor;
+        $history        = HistoryLog::find($history_id);
+        $credit         = $history->historyCredit;
+        $advisor        = $credit->creditAdvisor;
+        $name_advisor   = null;
 
-        $user                 = User::find($advisor->id);
-        $role                 = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        try {
+            $user                 = User::find($advisor->id);
+            $role                 = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor         = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+        }
 
-        $name_advisor         = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options         = self::menuOptionsStep5($history, $step_origin);
 
         $percent_form_step5   = self::percentFormStep5($history); //etapa 3
@@ -2864,9 +2883,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+       
 
         $data = array();
 
@@ -2886,18 +2903,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function listStepReport($history_id)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $max_hour       = 12;
-        $hour           = $credit->created_at;
-        $menu_options   = self::menuOptionReportStep($history);
-        $advisor        = $credit->creditAdvisor;
-
+        $history                = HistoryLog::find($history_id);
+        $credit                 = $history->historyCredit;
+        $max_hour               = 12;
+        $hour                   = $credit->created_at;
+        $menu_options           = self::menuOptionReportStep($history);
+        $advisor                = $credit->creditAdvisor;
+        $name_advisor           = null;
         $name_module_response   = 'KaaxClub';
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        
+        try {
+            $user = User::find($advisor->id);
+            $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+
         $color_desition   = 'success';
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
 
         $data_deadline    = deadline($hour, $max_hour, 0, 'success');
         $color_desition = $data_deadline['color'];
