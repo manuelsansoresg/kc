@@ -1742,6 +1742,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
         $curp = $client_person != null ? $client_person->curp : null;
+        $rfc = $client_person != null ? $client_person->rfc : null;
         //$show_btn = false;
         $step = isset($_GET['step']) ? $_GET['step'] : '4';
 
@@ -1772,7 +1773,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => 'null',
                 'is_required' => false,
-                'is_disabled' => null,
+                'is_disabled' => 'disabled',
                 'value' => $curp,
                 'class' => 'col-12 col-md-6',
                 'class_form_group' => 'mb-0',
@@ -1862,8 +1863,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => 'null',
                 'is_required' => false,
-                'is_disabled' => null,
-                'value' => '',
+                'is_disabled' => 'disabled',
+                'value' => $rfc,
                 'class' => 'col-12 col-md-6',
                 'class_form_group' => 'mb-0',
                 'childs' => array(
@@ -1899,9 +1900,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '',
+                'value' => $curp,
                 'col' => 'col-12 col-md-6',
-                'class_input' => 'd-none',
+                'class_input' => '',
                 'class_form_group' => 'mb-0',
                 'childs' => array(
                     0 => array(

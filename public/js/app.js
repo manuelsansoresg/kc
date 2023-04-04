@@ -3356,10 +3356,10 @@ function saveForm(id_form, model) {
     var result = response.data;
 
     if (url_redirect == null) {
-      /*  window.history.back(); */
+      window.history.back();
     }
-    /*  window.location = url_redirect; */
 
+    window.location = url_redirect;
   })["catch"](function (e) {});
 } //TODO: alerta si detecto kyc
 
@@ -3396,7 +3396,7 @@ window.kycCreditHistory = function (history_id, type) {
     axios.get("/panel/kc-control-desk/kc/" + history_id + "/" + param + "/" + param2 + "/" + type + "/validate").then(function (response) {
       var result = response.data;
       $('#kyc-' + id_result).html(result.html);
-      $('#kyc-' + id_msg + '-msg').val(result.msg);
+      $('#kyc-' + id_result + '-msg').val(result.msg);
     })["catch"](function (e) {});
   }
 };

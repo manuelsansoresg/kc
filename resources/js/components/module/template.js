@@ -818,9 +818,9 @@ function saveForm(id_form, model) {
         .then(function (response) {
             let result = response.data;
             if (url_redirect == null) {
-               /*  window.history.back(); */
+                window.history.back();
             }
-           /*  window.location = url_redirect; */
+            window.location = url_redirect;
         })
         .catch(e => {
         });
@@ -844,7 +844,6 @@ window.kycCreditHistory = function(history_id, type) {
             icon: 'warning',
         })
     }
-
     if (error == false) {
         $('#kyc-'+id_result).html('');
         $('#kyc-'+id_result+'-msg').html('');
@@ -855,7 +854,8 @@ window.kycCreditHistory = function(history_id, type) {
             .then(function (response) {
                 let result = response.data;
                 $('#kyc-'+id_result).html(result.html);
-                $('#kyc-'+id_msg+'-msg').val(result.msg);
+                $('#kyc-'+id_result+'-msg').val(result.msg);
+                
             })
             .catch(e => {
             });
