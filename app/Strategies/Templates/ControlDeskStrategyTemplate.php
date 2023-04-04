@@ -2613,18 +2613,26 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $advisor        = $credit->creditAdvisor;
         $percent_form   = self::percentFormStep2($history);
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $user = User::find($advisor->id);
+        $name_advisor   = null;
 
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        try {
+            $user = User::find($advisor->id);
+            $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
 
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
+
         $menu_options   = self::menuOptions($history, 2, $step_origin);
         $view_dead_line_inf_credit  = self::deadLineStep2($history);
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
 
         $data = array();
 
