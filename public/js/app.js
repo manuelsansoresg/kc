@@ -2946,13 +2946,17 @@ $().ready(function () {
       saveForm('frm-template_control_desk_step3_2', 'controlDesk');
     }
   });
-  var form = document.getElementById('frm-template_control_desk_step4'); // Maneja el evento submit del formulario
 
-  form.addEventListener('submit', function (event) {
-    event.preventDefault(); // Evita que el formulario se envíe automáticamente
+  if (document.getElementById('frm-template_control_desk_step4')) {
+    var form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4'); // Maneja el evento submit del formulario
 
-    saveForm('frm-template_control_desk_step4', 'controlDesk'); // Aquí puedes agregar el código para enviar los datos del formulario con Axios u otro método
-  });
+    form_control_desk_step4.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_step4', 'controlDesk'); // Aquí puedes agregar el código para enviar los datos del formulario con Axios u otro método
+    });
+  }
+
   $("#frm-template_control_desk_step5").validate({
     rules: {
       'credit[financial_user_assigned]': {
