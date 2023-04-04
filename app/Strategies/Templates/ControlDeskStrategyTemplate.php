@@ -2177,6 +2177,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 Credit::find($id_rel)
                 ->update(['kyc_done' => 1]);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $credit->id, 1);
+                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, null, false);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 0);
             }
 
             if ($percent_form_step5 == 100) {
