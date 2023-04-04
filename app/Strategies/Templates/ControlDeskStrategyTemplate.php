@@ -1742,7 +1742,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
         $curp = $client_person != null ? $client_person->curp : null;
-        $show_btn = false;
+        //$show_btn = false;
         $step = isset($_GET['step']) ? $_GET['step'] : '4';
 
         $elements = array(
@@ -1771,7 +1771,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => 'null',
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null,
                 'value' => $curp,
                 'class' => 'col-12 col-md-6',
@@ -1807,7 +1807,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => 'null',
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null,
                 'value' => '',
                 'class' => 'col-12 col-md-6',
@@ -1861,7 +1861,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => 'null',
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null,
                 'value' => '',
                 'class' => 'col-12 col-md-6',
@@ -1897,7 +1897,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => 'null',
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null,
                 'value' => '',
                 'col' => 'col-12 col-md-6',
@@ -1922,26 +1922,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     ),
                 )
             ],
-
-           
+          
             6 => [
-                'title_section' => null,
-                'title' => 'Guardar',
-                'name_field' => null,
-                'id_field' => null,
-                'col' => 'col-12',
-                'class' => 'btn btn-primary',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'href',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => true,
-                'is_disabled' => null,
-                
-            ],
-            7 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
@@ -1957,7 +1939,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '/panel/template/actions/controlDesk/' . $history_id . '/show?step=' . $step,
                 'col' => 'col-12'
             ],
-            8 => [
+            7 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => '',
@@ -1974,7 +1956,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'col' => ''
             ],
             
-            9 => [
+            8 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => '',
@@ -1990,7 +1972,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '',
                 'col' => ''
             ],
-            10 => [
+            9 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => '',
@@ -2008,7 +1990,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
 
         );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'show_btn' => $show_btn, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements,  'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
     public function configFormstep5($id_rel, $history_id)
@@ -2153,6 +2135,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $percent_form_step3   = self::percentFormStep3_1($history);
             $percent_form_step3_2   = self::percentFormStep3_2($history);
             //* percent 4 is in kccontroldeskcontroller function validateKyc
+            $percent_form_step4   = self::percentFormStep4($history);
             $percent_form_step5   = self::percentFormStep5($history);
             if ($percent_form_step1 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 1);
@@ -2185,6 +2168,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 //*inicializar las acciones de la siguiente etapa en curso
                 HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, null, false);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $credit->id, 0);
+            }
+
+            //*by saving end of kyc phase KYC.
+
+            if ($request->has('client_person.issste')) {
+                Credit::find($id_rel)
+                ->update(['kyc_done' => 1]);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $credit->id, 1);
             }
 
             if ($percent_form_step5 == 100) {

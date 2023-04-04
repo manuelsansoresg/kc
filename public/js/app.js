@@ -2946,6 +2946,13 @@ $().ready(function () {
       saveForm('frm-template_control_desk_step3_2', 'controlDesk');
     }
   });
+  var form = document.getElementById('frm-template_control_desk_step4'); // Maneja el evento submit del formulario
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+    saveForm('frm-template_control_desk_step4', 'controlDesk'); // Aquí puedes agregar el código para enviar los datos del formulario con Axios u otro método
+  });
   $("#frm-template_control_desk_step5").validate({
     rules: {
       'credit[financial_user_assigned]': {
@@ -3349,10 +3356,10 @@ function saveForm(id_form, model) {
     var result = response.data;
 
     if (url_redirect == null) {
-      window.history.back();
+      /*  window.history.back(); */
     }
+    /*  window.location = url_redirect; */
 
-    window.location = url_redirect;
   })["catch"](function (e) {});
 } //TODO: alerta si detecto kyc
 
