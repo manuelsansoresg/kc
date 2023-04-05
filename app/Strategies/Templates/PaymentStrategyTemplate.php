@@ -370,6 +370,16 @@ class PaymentStrategyTemplate implements TemplateInterface
         }
     }
 
+    public function getUrlActionInProgress($acion_in_progress, $history)
+    {
+        $url = array(
+            'Comprobante de pago"' => '/panel/template/action-document/payment/'.$history->id.'?step=2',
+            'Verificar pago' => '/panel/action-form/payment/'.$history->id.'/form?step=3',
+            
+        );
+        return $url[$acion_in_progress];
+    }
+
     public function listStep($history_id)
     {
         $history              = HistoryLog::find($history_id);
@@ -392,13 +402,12 @@ class PaymentStrategyTemplate implements TemplateInterface
 
         //TODO: change validation when the decision action is carried out in the report
         if ($percent_file_step1 == 100) {
-            $status_step2 = ($percent_file_step1 >= 100) ? 'Concluido' : 'En curso';
-            $status_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
+            $status_step1 = ($percent_file_step1 >= 100) ? 'Concluido' : 'En curso';
+            $option_step2               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         }
         
         if ($percent_form_2 == 100) {
             $status_step2 = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
-            $option_step2               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep2']])->render();
         }
 
         $option_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
@@ -414,7 +423,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => $view_count_step1,
             'step' => 'Comprobar pago',
-            'status' => $status_step2,
+            'status' => $status_step1,
             'progress' => $view_percent_step1,
             'deadline' => '',
             'options' => $option_step1,
@@ -471,9 +480,12 @@ class PaymentStrategyTemplate implements TemplateInterface
 
     public function percentForm($history)
     {
-        $credit                       = $history->historyCredit;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_FORM_STEP_1], $credit->id)[0];
-        $percent_form                 = $in_progress->status_progress == 1 ? 100 : 0;
+        $credit         = $history->historyCredit;
+        $percent_form   = 0;
+        $in_progress    = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_FORM_STEP_1], $credit->id);
+        if ($in_progress->count() > 0) {
+            $percent_form                 = $in_progress[0]->status_progress == 1 ? 100 : 0;
+        }
         return $percent_form;
     }
     
@@ -481,9 +493,9 @@ class PaymentStrategyTemplate implements TemplateInterface
     {
         $color_inf_credit             = 'success';
         $credit                       = $history->historyCredit;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM], $credit->id)[0];
+        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_FORM_STEP_1], $credit->id)[0];
         $percent_form                 = self::percentForm($history);
-
+        
         if ($percent_form == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $credit->id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
@@ -544,8 +556,8 @@ class PaymentStrategyTemplate implements TemplateInterface
         if ($percent_form == 100) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $credit->id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit->id, 0);
+            HistoryLog::move($credit->id, HistoryLog::KC_PAYMENT_FORM_STEP_2, HistoryLog::KC_PAYMENT_FORM_STEP_2, null, false);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_2, $credit->id, 0);
         }
         $max_hour                     = self::HOUR_STEP_2;
         $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_UPLOAD_STEP_1], $credit->id)[0];
@@ -584,8 +596,8 @@ class PaymentStrategyTemplate implements TemplateInterface
 
         $data = array();
 
-        $subject1 = HistoryLog::$label_subject[32];
-        $subject2 = HistoryLog::$label_subject[33];
+        $subject1 = HistoryLog::$label_subject[52];
+        $subject2 = HistoryLog::$label_subject[53];
         
         $data[] = array(
             'name' => 'Formulario',
@@ -645,7 +657,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         }
 
         $data = array();
-        $subject1 = HistoryLog::$label_subject[34];
+        $subject1 = HistoryLog::$label_subject[54];
         
         $data[] = array(
             'name' => 'Formulario',
@@ -984,21 +996,20 @@ class PaymentStrategyTemplate implements TemplateInterface
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
         $status_progress = 0;
-        $current_show = null;
-
+        $current_show = '';
+        
         foreach ($get_actions as $key => $get_action) {
             $status = $get_action->status_progress;
             $status_progress += $status != null ? $status : 0;
             //$current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
         }
-
         if ($status_progress <= 1) {
             $current_show = 'Confirmación de entrega';
         } elseif ($status_progress > 1) {
             $current_show = 'Reducción de análisis';
         }
 
-        $percent =  (($status_progress) / 3) * 100;
+        $percent =  $status_progress > 0 ? (($status_progress) / 3) * 100 : 0;
 
         if ($show_current_show == true) {
             return $current_show;
@@ -1064,10 +1075,10 @@ class PaymentStrategyTemplate implements TemplateInterface
                         'name' => 'Comprobar pago',
                         'icon' => 'icon ni ni-list-round'
                     ],
+                   
                 ),
             );
         } else {
-
             $menu = array(
                 'options' => array(
                     [
@@ -1116,6 +1127,12 @@ class PaymentStrategyTemplate implements TemplateInterface
                         'link' => 'panel/template/action-document/delivery/'.$history->id.'?step=2',
                         'onclick' => '',
                         'name' => 'Comprobar pago',
+                        'icon' => 'icon ni ni-list-round'
+                    ],
+                    [
+                        'link' => null,
+                        'onclick' => 'concluir('.$history->id.')',
+                        'name' => 'Concluir',
                         'icon' => 'icon ni ni-list-round'
                     ],
                 ),

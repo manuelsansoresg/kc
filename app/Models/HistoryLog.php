@@ -186,7 +186,7 @@ class HistoryLog extends Model
         29 => 'Contactar financiera',
         //30 => 'Entró a KC - Delivery',
         31 => 'Información del crédito',
-        32 => 'Confirar firma',
+        32 => 'Confirmar firma',
         33 => 'Confirmación de entrega',
         34 => 'Reducción de análisis',
         35 => 'Créditos pagados',
@@ -206,9 +206,9 @@ class HistoryLog extends Model
         49 => '',
         50 => '',
         51 => '',
-        52 => '',
-        53 => '',
-        54 => '',
+        52 => 'Cambios en comisión',
+        53 => 'Comprobante de pago',
+        54 => 'Verificar pago',
         55 => '',
     ];
 
@@ -283,7 +283,6 @@ class HistoryLog extends Model
             $get_old_status->update(['status' => 0]);
         }
         //* if new status and old status don't exist create status
-        
         if ($get_status === null) {
             $data['user_id']    = Auth::user()->id;
             $history = new HistoryLog($data);
@@ -478,7 +477,7 @@ class HistoryLog extends Model
         $lbl_module = array(
             HistoryLog::KC_CHECK_UP => 'KC- Check up',
             HistoryLog::KC_CONTROL_DESK => 'KC- Swap',
-            HistoryLog::KC_DELIVERY => 'KC- Control desk',
+            HistoryLog::KC_DELIVERY => 'KC- Delivery',
             HistoryLog::KC_AFTER_MARKET => 'KC- Delivery',
             HistoryLog::KC_SWAP => 'KC- After market',
         );
@@ -504,23 +503,63 @@ class HistoryLog extends Model
         return $current_status;
     }
 
-    public function getCurrentModuleAndStep($credit_id)
+    public static function getLastStatus($status, $credit_id, $active = 1)
+    {
+        $get_status =  HistoryLog::wherein('status_id', $status)
+                ->where('id_rel', $credit_id);
+        if ($active == 1) {
+            $get_status->where('status', $active);
+        }
+                
+        $get_status = $get_status->orderBy('id', 'DESC')->first();
+        return $get_status;
+    }
+
+    public static function getCurrentModuleAndStep($credit_id)
     {
         $lbl_module = array(
             HistoryLog::KC_CHECK_UP => 'KC- Check up',
             HistoryLog::KC_CONTROL_DESK => 'KC- Swap',
-            HistoryLog::KC_DELIVERY => 'KC- Control desk',
+            HistoryLog::KC_DELIVERY => 'KC- Delivery',
+            HistoryLog::KC_DELIVERY_FORM => 'Información del crédito',
+            HistoryLog::KC_DELIVERY_FORM_STEP_2 => 'Confirmar firma',
+            HistoryLog::KC_DELIVERY_FORM_STEP_3 => 'Resolución de análisis',
+            HistoryLog::KC_DELIVERY_FORM_STEP_4 => 'Confirmar entrega',
             HistoryLog::KC_AFTER_MARKET => 'KC- Delivery',
             HistoryLog::KC_SWAP => 'KC- After market',
+            HistoryLog::KC_PAYMENT_UPLOAD_STEP_1 => 'Comprobante de pago',
+            HistoryLog::KC_PAYMENT_FORM_STEP_2 => 'Verificar pago',
         );
         $data_actions = array(
             HistoryLog::KC_CHECK_UP,
             HistoryLog::KC_CONTROL_DESK,
             HistoryLog::KC_DELIVERY,
+            HistoryLog::KC_DELIVERY_FORM,
+            HistoryLog::KC_DELIVERY_FORM_STEP_2,
+            HistoryLog::KC_DELIVERY_FORM_STEP_3,
+            HistoryLog::KC_DELIVERY_FORM_STEP_4,
             HistoryLog::KC_AFTER_MARKET,
             HistoryLog::KC_SWAP,
+            HistoryLog::KC_PAYMENT_UPLOAD_STEP_1,
+            HistoryLog::KC_PAYMENT_FORM_STEP_2,
         );
+
+        $status_progress = 0;
+        $current_status = 'KC- Check up';
+        $get_action = HistoryLog::getLastStatus($data_actions, $credit_id);
+        //dd($get_action);
+        try {
+            $status = $get_action->status_progress;
+            $status_progress = $status > 0 ? 1 : 0;
+            $current_status = $lbl_module[$get_action->status_id];
+            /* if ($status_progress == 1) {
+            } */
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        return $current_status;
     }
+
 
     public function historyLead()
     {

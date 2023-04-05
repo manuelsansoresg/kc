@@ -66,10 +66,10 @@ if (document.getElementById('frm-archive')) {
 
 window.concluir = function (history_id) {
     axios
-    .get('/panel/action/'+history_id+'/concluir')
+    .get('/panel/action/'+history_id+'/complete')
     .then(function (response) {
         let result = response.data;
-       
+       window.location = result.url;
     })
     .catch(e => {
         

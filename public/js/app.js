@@ -958,8 +958,9 @@ if (document.getElementById('frm-archive')) {
 }
 
 window.concluir = function (history_id) {
-  axios.get('/panel/action/' + history_id + '/concluir').then(function (response) {
+  axios.get('/panel/action/' + history_id + '/complete').then(function (response) {
     var result = response.data;
+    window.location = result.url;
   })["catch"](function (e) {});
 };
 

@@ -450,6 +450,18 @@ class DeliveryStrategyTemplate implements TemplateInterface
         }
     }
 
+    public function getUrlActionInProgress($acion_in_progress, $history)
+    {
+        $url = array(
+            'Información del crédito' => '/panel/action-form/delivery/'.$history->id.'/form?step=1',
+            'Confirmar firma' => '/panel/action-form/delivery/'.$history->id.'/form?step=2',
+            'Resolución de análisis' => '/panel/action-form/delivery/'.$history->id.'/form?step=3',
+            'Confirmar entrega' => '/panel/action-form/delivery/'.$history->id.'/form?step=4',
+            
+        );
+        return $url[$acion_in_progress];
+    }
+
     public function listStep($history_id)
     {
         $history              = HistoryLog::find($history_id);
@@ -469,15 +481,15 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $option_step3         = null;
         
         //$percent_form = $percent_form;
-        $menu_options   = self::menuOptionsStep($history);
-        $status_step1   = $percent_form_step1 == 100? 'Concluido' : 'En curso';
-        $status_step2   = 'En espera';
-        $status_step3   = 'En espera';
-        $status_step4   = 'En espera';
+        $menu_options         = self::menuOptionsStep($history);
+        $status_step1         = $percent_form_step1 == 100? 'Concluido' : 'En curso';
+        $status_step2         = 'En espera';
+        $status_step3         = 'En espera';
+        $status_step4         = 'En espera';
 
-        $option_step2 = null;
-        $option_step3 = null;
-        $option_step4 = null;
+        $option_step2         = null;
+        $option_step3         = null;
+        $option_step4         = null;
 
         //TODO: change validation when the decision action is carried out in the report
         if ($status_step1 == 'Concluido') {
@@ -682,7 +694,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         if ($advisor->id == Auth::user()->id) {
             $name_advisor = 'Tú';
         }
-
+        $status_file    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $data = array();
 
         $subject1 = HistoryLog::$label_subject[32];
@@ -690,7 +702,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' =>  'Opcional',
+            'status' =>  $status_file,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $form_option_2,
@@ -767,6 +779,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
+        $percent_form                 = self::percentFormStep4($credit->id);
+        $status_form    =  $percent_form == 100 ? 'Concluido' : 'En curso';
 
         $user = User::find($advisor->id);
         $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
@@ -788,7 +802,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' =>  'Opcional',
+            'status' =>  $status_form,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,

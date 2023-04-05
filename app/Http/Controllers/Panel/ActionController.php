@@ -49,18 +49,22 @@ class ActionController extends Controller
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_4, $credit_id, 0);
             $credit->approved = 1;
         } elseif ($status_id == HistoryLog::KC_PAYMENT) {
+            HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, $history->old_status_id);
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_4, $credit_id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, $history->old_status_id, null, false);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $credit_id, 0);
             $credit->delivered = 1;
         }
         $credit->update();
     }
 
-    public function concluir(HistoryLog $history)
+    public function complete(HistoryLog $history)
     {
-        
+        $action_in_progress   = HistoryLog::getCurrentModuleAndStep($history->id_rel);
+        $model                = HistoryLog::$name_model[$history->status_id];
+        $templateStrategy     = TemplateValues::STRATEGY[$model];
+        $url                  = (new $templateStrategy)->getUrlActionInProgress($action_in_progress, $history);
+        return response()->json([ 'url' => $url]);
     }
 
     /**
