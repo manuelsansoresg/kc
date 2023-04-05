@@ -196,7 +196,7 @@ class Credit extends Model
             $advisor          = $query->creditAdvisor;
             $menu_options   = self::menuOptionCredit($history);
 
-            $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive', 35 => 'pagado');
+            $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive', 35 => 'pagado', 55 => 'delivered');
             $reason = isset(config('enums.'.$reason_enums[$history->status_id])[$history->reason]) ? config('enums.'.$reason_enums[$history->status_id])[$history->reason] : null;
 
             $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['archive']])->render();
