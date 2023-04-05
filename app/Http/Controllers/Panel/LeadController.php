@@ -69,10 +69,22 @@ class LeadController extends Controller
     {
         return view('panel.lead.archive');
     }
+    
+    public function archiveView($module_id)
+    {
+        return view('panel.lead.archive_dinamic', ['module_id' => $module_id]);
+    }
 
     public function listArchive()
     {
         $archive = Lead::listArchive();
+        
+        return response()->json(['data' => $archive]);
+    }
+   
+    public function listModuleArchive($module_id)
+    {
+        $archive = HistoryLog::listArchive($module_id);
         
         return response()->json(['data' => $archive]);
     }

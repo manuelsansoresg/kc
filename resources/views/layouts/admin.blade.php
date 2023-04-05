@@ -321,19 +321,25 @@
                                             <ul class="nk-menu-sub">
 
                                                 <li class="nk-menu-item">
-                                                    <a href="/panel/archive/lead" class="nk-menu-link">
+                                                    <a href="/panel/archive/view/{{ $m_history::KC_PAYMENT_PAID_ARCHIVE }}" class="nk-menu-link">
                                                         <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
                                                         <span class="nk-menu-text">Pagado</span>
                                                     </a>
                                                 </li><!-- .nk-menu-item -->
                                                 <li class="nk-menu-item">
-                                                    <a href="/panel/archive/lead" class="nk-menu-link">
+                                                    <a href="/panel/archive/view/{{ $m_history::KC_PAYMENT_UNPAID_ARCHIVE }}" class="nk-menu-link">
                                                         <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
                                                         <span class="nk-menu-text">No pagado</span>
                                                     </a>
                                                 </li><!-- .nk-menu-item -->
                                             </ul>
                                         </li>
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/archive/view/{{ $m_history::KC_AFTER_MARKET_ARCHIVE }}" class="nk-menu-link">
+                                                <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
+                                                <span class="nk-menu-text">KC- Aftermarket</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
                                     </ul>
 
                                 </li>

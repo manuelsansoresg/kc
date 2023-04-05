@@ -74,8 +74,10 @@ Route::get('{id}/{model}/validate/show', ['\App\Http\Controllers\Panel\PanelCont
 Route::post('{model}/note', ['\App\Http\Controllers\Panel\PanelController', 'noteStore'])->middleware('auth');
 
 Route::group(['prefix' => 'archive'], function () {
+    Route::get('view/{module}', ['\App\Http\Controllers\Panel\LeadController', 'archiveView'])->middleware('auth');
     Route::get('lead', ['\App\Http\Controllers\Panel\LeadController', 'archive'])->middleware('auth');
     Route::get('lead/list/show', ['\App\Http\Controllers\Panel\LeadController', 'listArchive'])->middleware('auth');
+    Route::get('lead/list/{module_id}/show', ['\App\Http\Controllers\Panel\LeadController', 'listModuleArchive'])->middleware('auth');
     Route::get('product', ['\App\Http\Controllers\Panel\LeadController', 'product'])->middleware('auth');
 });
 

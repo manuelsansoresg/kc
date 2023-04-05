@@ -87,6 +87,7 @@ class HistoryLog extends Model
     
     const KC_PAYMENT_PAID_ARCHIVE             = 50;
     const KC_PAYMENT_UNPAID_ARCHIVE           = 51;
+    const KC_AFTER_MARKET_ARCHIVE             = 56;
     
 
     protected $fillable = [
@@ -160,6 +161,7 @@ class HistoryLog extends Model
         54 => 'Formulario',
         54 => 'Formulario',
         55 => 'Formulario',
+        56 => 'After market',
     ];
     
     public static $label_subject = [
@@ -210,6 +212,7 @@ class HistoryLog extends Model
         53 => 'Comprobante de pago',
         54 => 'Verificar pago',
         55 => '',
+        56 => '',
     ];
 
     public static $name_model = [
@@ -257,6 +260,8 @@ class HistoryLog extends Model
         52 => 'payment',
         53 => 'payment',
         54 => 'payment',
+        55 => 'delivery',
+        56 => 'afterMarket',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $update_old_status = true)
@@ -586,6 +591,39 @@ class HistoryLog extends Model
         return $current_status;
     }
 
+    public static function listArchive($module_id)
+    {
+        
+        $status_id    = $module_id;
+        $get_list     = HistoryLog::where(['status_id' => $status_id, 'status' => 1])->get();
+        $data         = array();
+        foreach ($get_list as $query) {
+            $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'id' => $query->id])->render();
+            
+            $lbl_status   = '<span class="text-success">Valido</span>';
+            $lead         = $query->historyLead;
+
+            if ($lead != null) {
+                $product      = $lead != null ? $lead->productLead : null;
+                $user         = $lead != null ? $lead->advisorLead : null;
+    
+                $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $lead])->render();
+                $reason = (isset(config('enums.reason_archive')[$query->reason]))? config('enums.reason_archive')[$query->reason] : '';
+                $data[] = array(
+                    'name' => $content_lead,
+                    'date' => formatDateNameMonth($query->created_at),
+                    'product' => ($product != null) ? $product->alias : '',
+                    'origin' => config('enums.origin')[$lead->origin_id],
+                    'reason' => $reason,
+                    'label' => config('enums.temperatures')[$lead->temperature_id],
+                    'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
+                    'status' => $lbl_status,
+                    'options' => $option,
+                );
+            }
+        }
+        return $data;
+    }
 
     public function historyLead()
     {

@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
     let route = $('#route_datatable').val();
+    let  module_id = null;
+
+    if (document.getElementById('module_id')) {
+        module_id = $('#module_id').val();
+    }
+
+
     let table = NioApp.DataTable('#dt-lead', {
         processing: true,
         responsive: {
@@ -56,6 +63,28 @@ document.addEventListener('DOMContentLoaded', function () {
     let table_archive = NioApp.DataTable('#dt-lead-archive', {
         processing: true,
         ajax: '/panel/archive/lead/list/show',
+        columns: [
+            { data: 'name' },
+            { data: 'date' },
+            { data: 'product' },
+            { data: 'origin' },
+            { data: 'reason' },
+            { data: 'advisor' },
+            { data: 'options', }
+        ],
+        columnDefs: [
+            { className: "nk-tb-col", targets: "_all" },
+        ],
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass("nk-tb-item odd");
+
+        },
+        
+    },);
+    
+    let table__dinamic_archive = NioApp.DataTable('#dt-lead-dinamic-archive', {
+        processing: true,
+        ajax: '/panel/archive/lead/list/'+module_id+'/show',
         columns: [
             { data: 'name' },
             { data: 'date' },
