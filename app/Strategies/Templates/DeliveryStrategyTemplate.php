@@ -622,20 +622,26 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $advisor        = $credit->creditAdvisor;
         $percent_form   = self::percentForm($history);
         $status_file    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $name_advisor   = null;
 
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        try {
+            $user = User::find($advisor->id);
+            $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+        //throw $th;
+        }
 
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptions($history, 1);
 
         $view_dead_line  = self::deadLineStep1($history);
 
         $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
 
         $data = array();
 
@@ -676,14 +682,24 @@ class DeliveryStrategyTemplate implements TemplateInterface
     public function actionStep2($history_id)
     {
 
-        $history                      = HistoryLog::find($history_id);
-        $credit                       = $history->historyCredit;
-        $advisor                      = $credit->creditAdvisor;
-        $percent_form                 = self::percentStep2($credit->id);
-        $status_form                  = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $user                         = User::find($advisor->id);
-        $role                         = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-        $name_advisor                 = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        $history        = HistoryLog::find($history_id);
+        $credit         = $history->historyCredit;
+        $advisor        = $credit->creditAdvisor;
+        $percent_form   = self::percentStep2($credit->id);
+        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $name_advisor   = null;
+        
+        try {
+            $user                         = User::find($advisor->id);
+            $role                         = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor                 = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+        //throw $th;
+        }
+
         $menu_options                 = self::menuOptions($history, 2);
         
         $view_dead_line_step2         = self::deadLineStep2($history);
@@ -691,9 +707,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $form_option                  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
         $form_option_2                = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
         $status_file    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $data = array();
 
@@ -732,18 +746,24 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $advisor        = $credit->creditAdvisor;
         $percent_form   = self::percentFormStep3($credit->id);
         $status_form    =  $percent_form == 100 ? 'Concluido' : 'En curso';
+        $name_advisor   = null;
 
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        try {
+            $user = User::find($advisor->id);
+            $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+        }
 
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptionsStep3($history);
         $view_dead_line_inf_credit  = self::deadLineStep3($history);
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
 
         $data = array();
         $subject1 = HistoryLog::$label_subject[34];
@@ -781,18 +801,24 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $advisor        = $credit->creditAdvisor;
         $percent_form                 = self::percentFormStep4($credit->id);
         $status_form    =  $percent_form == 100 ? 'Concluido' : 'En curso';
+        $name_advisor   = null;
 
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        try {
+            $user = User::find($advisor->id);
+            $role = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }//code...
+        } catch (\Exception $th) {
+            //throw $th;
+        }
 
-        $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options   = self::menuOptionsStep4($history);
 
         $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
         
         $view_dead_line_inf_credit  = self::deadLineStep4($history);
         $data = array();
