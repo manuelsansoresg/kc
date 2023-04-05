@@ -43,7 +43,7 @@
         </li>
         <li>
             <a onclick="modalAdvisorCredit({{ $credit_id }})" class="pointer">
-                <em class="icon ni ni-archive-fill"></em><span>Asignar asesor</span></a>
+                <em class="icon ni ni-headphone"></em><span>Asignar asesor</span></a>
         </li>
       
     </ul>
