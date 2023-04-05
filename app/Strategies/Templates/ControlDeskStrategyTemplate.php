@@ -1899,7 +1899,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => 'null',
                 'is_required' => false,
-                'is_disabled' => null,
+                'is_disabled' => 'disabled',
                 'value' => $curp,
                 'col' => 'col-12 col-md-6',
                 'class_input' => '',
