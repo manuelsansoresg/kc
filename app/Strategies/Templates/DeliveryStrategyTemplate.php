@@ -1224,12 +1224,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                         'name' => 'Ver resumen',
                         'icon' => 'icon ni ni-list-round'
                     ],
-                    [
-                        'link' => 'panel/template/action-document/delivery/'.$history->id.'?step=2',
-                        'onclick' => '',
-                        'name' => 'Comprobar pago',
-                        'icon' => 'icon ni ni-list-round'
-                    ],
+                   
                 ),
             );
         } else {
@@ -1278,12 +1273,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                         'name' => 'Ver resumen',
                         'icon' => 'icon ni ni-list-round'
                     ],
-                    [
-                        'link' => 'panel/template/action-document/delivery/'.$history->id.'?step=2',
-                        'onclick' => '',
-                        'name' => 'Comprobar pago',
-                        'icon' => 'icon ni ni-list-round'
-                    ],
+                   
                     [
                         'link' => null,
                         'onclick' => 'concluir('.$history->id.')',
