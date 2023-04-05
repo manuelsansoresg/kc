@@ -2240,6 +2240,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'onclick' => 'moveModal("Archivar",' . $credit->id . ',' . $status_archive . ',' . $old_status . ',"dt-control-desk")',
                     'name' => 'Archivar',
                     'icon' => 'icon ni ni-archive-fill'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => 'modalAdvisorCredit('. $credit->id.')',
+                    'name' => 'Asignar asesor',
+                    'icon' => 'icon ni ni-headphone'
                 ]
             ),
         );
