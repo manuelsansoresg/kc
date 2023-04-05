@@ -268,6 +268,7 @@ class HistoryLog extends Model
         $data['id_rel']           = $id_rel;
         $data['status_id']        = $status_id;
         $data['old_status_id']    = $old_status_id;
+        $data['status']           = 1;
         $get_status = HistoryLog::where($data)->first();
 
         self::removeInProgress($id_rel, $status_id);

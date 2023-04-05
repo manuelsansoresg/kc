@@ -334,7 +334,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $status_cancel    = HistoryLog::CREDIT_CANCELED;
         $old_status       = $history->old_status_id;
         $status_reject    = HistoryLog::CREDIT_REJECTED;
-        $url_finish       = '/panel/kc-payments';
+        $url_finish       = '/panel/kc-delivery';
 
 
         $elements = array(
