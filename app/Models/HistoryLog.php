@@ -516,37 +516,62 @@ class HistoryLog extends Model
         return $get_status;
     }
 
-    public static function getCurrentModuleAndStep($credit_id)
+    public static function getCurrentAction($credit_id)
     {
         $lbl_module = array(
-            HistoryLog::KC_CHECK_UP => 'KC- Check up',
-            HistoryLog::KC_CONTROL_DESK => 'KC- Swap',
-            HistoryLog::KC_DELIVERY => 'KC- Delivery',
             HistoryLog::KC_DELIVERY_FORM => 'Información del crédito',
             HistoryLog::KC_DELIVERY_FORM_STEP_2 => 'Confirmar firma',
             HistoryLog::KC_DELIVERY_FORM_STEP_3 => 'Resolución de análisis',
             HistoryLog::KC_DELIVERY_FORM_STEP_4 => 'Confirmar entrega',
-            HistoryLog::KC_AFTER_MARKET => 'KC- Delivery',
-            HistoryLog::KC_SWAP => 'KC- After market',
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1 => 'Comprobante de pago',
             HistoryLog::KC_PAYMENT_FORM_STEP_2 => 'Verificar pago',
         );
         $data_actions = array(
-            HistoryLog::KC_CHECK_UP,
-            HistoryLog::KC_CONTROL_DESK,
-            HistoryLog::KC_DELIVERY,
             HistoryLog::KC_DELIVERY_FORM,
             HistoryLog::KC_DELIVERY_FORM_STEP_2,
             HistoryLog::KC_DELIVERY_FORM_STEP_3,
             HistoryLog::KC_DELIVERY_FORM_STEP_4,
-            HistoryLog::KC_AFTER_MARKET,
-            HistoryLog::KC_SWAP,
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1,
             HistoryLog::KC_PAYMENT_FORM_STEP_2,
         );
 
         $status_progress = 0;
-        $current_status = 'KC- Check up';
+        $current_status =  null;
+        $get_action = HistoryLog::getLastStatus($data_actions, $credit_id);
+        //dd($get_action);
+        try {
+            $status = $get_action->status_progress;
+            $status_progress = $status > 0 ? 1 : 0;
+            $current_status = $lbl_module[$get_action->status_id];
+            /* if ($status_progress == 1) {
+            } */
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        return $current_status;
+    }
+    
+    public static function getCurrentStep($credit_id)
+    {
+        $lbl_module = array(
+            HistoryLog::KC_DELIVERY_FORM => 'Información del crédito',
+            HistoryLog::KC_DELIVERY_FORM_STEP_2 => 'Confirmar firma',
+            HistoryLog::KC_DELIVERY_FORM_STEP_3 => 'Resolución de análisis',
+            HistoryLog::KC_DELIVERY_FORM_STEP_4 => 'Confirmar entrega',
+            HistoryLog::KC_PAYMENT_UPLOAD_STEP_1 => 'Comprobante de pago',
+            HistoryLog::KC_PAYMENT_FORM_STEP_2 => 'Verificar pago',
+        );
+        $data_actions = array(
+            HistoryLog::KC_DELIVERY_FORM,
+            HistoryLog::KC_DELIVERY_FORM_STEP_2,
+            HistoryLog::KC_DELIVERY_FORM_STEP_3,
+            HistoryLog::KC_DELIVERY_FORM_STEP_4,
+            HistoryLog::KC_PAYMENT_UPLOAD_STEP_1,
+            HistoryLog::KC_PAYMENT_FORM_STEP_2,
+        );
+
+        $status_progress = 0;
+        $current_status =  null;
         $get_action = HistoryLog::getLastStatus($data_actions, $credit_id);
         //dd($get_action);
         try {

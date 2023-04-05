@@ -60,7 +60,7 @@ class ActionController extends Controller
 
     public function complete(HistoryLog $history)
     {
-        $action_in_progress   = HistoryLog::getCurrentModuleAndStep($history->id_rel);
+        $action_in_progress   = HistoryLog::getCurrentAction($history->id_rel);
         $model                = HistoryLog::$name_model[$history->status_id];
         $templateStrategy     = TemplateValues::STRATEGY[$model];
         $url                  = (new $templateStrategy)->getUrlActionInProgress($action_in_progress, $history);

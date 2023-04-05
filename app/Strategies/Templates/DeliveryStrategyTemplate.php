@@ -1147,17 +1147,17 @@ class DeliveryStrategyTemplate implements TemplateInterface
             $status = $get_action->status_progress;
             $status_progress += $status != null ? $status : 0;
         }
-
-        if ($status_progress < 1) {
+        
+        if ($status_progress == 0) {
             $current_show = 'Entrega info';
-        } elseif ($status_progress > 1) {
+        } elseif ($status_progress == 1) {
             $current_show = 'Firma de docs';
-        } elseif ($status_progress > 2) {
+        } elseif ($status_progress == 2) {
             $current_show = 'Analisis';
-        } elseif ($status_progress > 3) {
+        } elseif ($status_progress > 2) {
             $current_show = 'Entrega crédito';
         }
-
+        //dd($status_progress, $current_show);
         $percent =  (($status_progress) / 4) * 100;
 
         if ($show_current_show == true) {
