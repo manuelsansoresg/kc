@@ -245,7 +245,7 @@ $().ready(function () {
     
     $("#frm-template_control_desk_step3_2").validate({
         rules: {
-            'client_person[marital_status]': {
+            'credit[interviewer]': {
                 required: true,
             },
             /* domicilio */

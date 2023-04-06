@@ -87,6 +87,7 @@ class Credit extends Model
         'credit_signed',
         'approved',
         'delivered',
+        'interviewer'
     ];
 
     public static function listDatatable($status)

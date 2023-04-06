@@ -148,6 +148,10 @@ return [
         2 => 'Mujer',
     ),
    
+    'interviewer' => array(
+        1 => 'KaaxClub',
+        2 => 'Financiera',
+    ),
     'marital_status' => array(
         1 => 'Soltero',
         2 => 'Divorciado',
