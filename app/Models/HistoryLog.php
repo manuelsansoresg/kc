@@ -253,7 +253,7 @@ class HistoryLog extends Model
         45 => 'swap',
         46 => 'swap',
         47 => 'swap',
-        48 => '',
+        48 => 'afterMarket',
         49 => 'payment',
         50 => 'payment',
         51 => 'payment',

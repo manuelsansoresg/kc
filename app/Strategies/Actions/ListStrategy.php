@@ -61,14 +61,14 @@ class ListStrategy implements ActionInterface
                 HistoryLog::KC_DELIVERY_FORM,
                 HistoryLog::KC_DELIVERY_FORM_STEP_3,
                 
-                HistoryLog::KC_AFTER_FORM,
+                //HistoryLog::KC_AFTER_FORM,
                 
             ];
         }
 
         $history_logs = HistoryLog::getByStatus($list_actions, $id_rel);
         $data = array();
-        $array_model = array('newCredit' => 'KC- Check up', 'debtCredit' => 'KC- Check up', 'controlDesk' => 'KC- Control desk', 'delivery' => 'Delivery', 'swap' => 'swap');
+        $array_model = array('newCredit' => 'KC- Check up', 'debtCredit' => 'KC- Check up', 'controlDesk' => 'KC- Control desk', 'delivery' => 'Delivery', 'swap' => 'swap',  'afterMarket' => 'After Market');
 
         foreach ($history_logs as $history_log) {
             //*saber si el usuario es admin
@@ -80,6 +80,12 @@ class ListStrategy implements ActionInterface
             $model          = HistoryLog::$name_model[$history_log->status_id];
 
             $module         = $array_model[$model];
+            $percent_file    = null;
+            $percent_form    = null;
+            $file_option    = null;
+            $file_option    = null;
+            
+
             $name           = $credit->id.' '.$client->last_name.' '.$client->second_last_name.' '.$client->name;
             $name_advisor = null;
             $name_responsable = null;
@@ -104,12 +110,17 @@ class ListStrategy implements ActionInterface
 
             $menu_options   = (new $templateStrategy)->menuOptions($history_log);
             
-            $percent_file   = (new $templateStrategy)->percentFile($history_log->id_rel);
-            $percent_form   = (new $templateStrategy)->percentForm($history_log);
+            try {
+                $percent_file   = (new $templateStrategy)->percentFile($history_log->id_rel);
+                $percent_form   = (new $templateStrategy)->percentForm($history_log);
+                $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
+                $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
 
             
-            $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
-            $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+           
 
             
             $color_inf_credit = '';

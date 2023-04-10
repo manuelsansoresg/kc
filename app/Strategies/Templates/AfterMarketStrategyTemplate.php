@@ -426,38 +426,51 @@ class AfterMarketStrategyTemplate implements TemplateInterface
     public function percentForm($history)
     {
         $credit     = $history->historyCredit;
-        $in_progress  = HistoryLog::getByStatus([HistoryLog::KC_AFTER_FORM], $credit->id)[0];
-        //dd($credit->id);
-        $percent = ($in_progress->status_progress == 1) ? 100 : 0;
+        try {
+            $in_progress  = HistoryLog::getByStatus([HistoryLog::KC_AFTER_FORM], $credit->id)[0];
+            $percent = ($in_progress->status_progress == 1) ? 100 : 0;
+        } catch (\Throwable $th) {
+            return 0;
+        }
         return $percent;
+    }
+    
+    public function percentFile($history)
+    {
+       
+        return 0;
     }
 
 
     //* get all percentages of the shares
     public function getPercent($history, $show_current_show = false)
     {
-        $credit     = $history->historyCredit;
-        $data_actions = array(
-            HistoryLog::KC_AFTER_FORM,
-        );
-        
-        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
-        $status_progress = 0;
-        $current_show = null;
+        try {
+            $credit     = $history->historyCredit;
+            $data_actions = array(
+                HistoryLog::KC_AFTER_FORM,
+            );
+            
+            $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+            $status_progress = 0;
+            $current_show = null;
 
-        foreach ($get_actions as $key => $get_action) {
-            $status = $get_action->status_progress;
-            $status_progress += $status != null ? $status : 0;
-            $current_show = 'Encuesta';
+            foreach ($get_actions as $key => $get_action) {
+                $status = $get_action->status_progress;
+                $status_progress += $status != null ? $status : 0;
+                $current_show = 'Encuesta';
+            }
+
+            $percent =  (($status_progress) / 1) * 100;
+
+            if ($show_current_show == true) {
+                return $current_show;
+            }
+            
+            return reduceDecimal($percent);
+        } catch (\Throwable $th) {
+            return 0;
         }
-
-        $percent =  (($status_progress) / 1) * 100;
-
-        if ($show_current_show == true) {
-            return $current_show;
-        }
-        
-        return reduceDecimal($percent);
     }
 
     
