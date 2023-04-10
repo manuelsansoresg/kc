@@ -48,7 +48,7 @@ class HomeController extends Controller
         if ($validate) {
             return view('quiz.survey_form');
         }
-        abort(404);
+        //abort(404);
     }
 
     public function report($history_id)
