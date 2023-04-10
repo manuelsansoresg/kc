@@ -16,7 +16,10 @@ class TokenForms extends Model
 
     public static function validateToken($token, $email)
     {
+        $encoded_email = urlencode($email);
+        $email = str_replace('%40', '@', $encoded_email);
         dd($email);
+
         $record = TokenForms
                     ::where('email', $email)
                     ->where('token', $token)->first();
