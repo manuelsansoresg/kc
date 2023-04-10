@@ -355,7 +355,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
             1 => [
                 'title_section' => null,
-                'title' => 'Autorizar crédito',
+                'title' => 'Crédito entregado',
                 'name_field' => null,
                 'id_field' => null,
                 'comment_admin' => null,
