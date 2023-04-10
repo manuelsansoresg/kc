@@ -380,7 +380,7 @@
                                                             <div class="profile-ud wider">
                                                                 <span class="profile-ud-label">Entrevistador</span>
                                                                 <span class="profile-ud-value">
-                                                                    {{ config('enums.interviewer')[$credit->interviewer] }}
+                                                                    {{ isset(config('enums.interviewer')[$credit->interviewer]) ? config('enums.interviewer')[$credit->interviewer] : null }}
                                                                 </span>
                                                             </div>
                                                         </div>
