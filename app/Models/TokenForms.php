@@ -16,6 +16,7 @@ class TokenForms extends Model
 
     public static function validateToken($token, $email)
     {
+        dd($email);
         $record = TokenForms
                     ::where('email', $email)
                     ->where('token', $token)->first();
