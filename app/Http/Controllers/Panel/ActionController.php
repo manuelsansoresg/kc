@@ -49,10 +49,10 @@ class ActionController extends Controller
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_4, $credit_id, 0);
             $credit->approved = 1;
         } elseif ($status_id == HistoryLog::KC_PAYMENT) {
-            HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, $history->old_status_id);
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_4, $credit_id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $credit_id, 0);
+            HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, $history->old_status_id, null, false);
             $credit->delivered = 1;
         }
         $credit->update();

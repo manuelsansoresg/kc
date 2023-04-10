@@ -594,9 +594,14 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
     public function percentForm($history)
     {
-        $credit                       = $history->historyCredit;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM], $credit->id)[0];
-        $percent_form                 = $in_progress->status_progress == 1 ? 100 : 0;
+        $percent_form = 0;
+        try {
+            $credit                       = $history->historyCredit;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM], $credit->id)[0];
+            $percent_form                 = $in_progress->status_progress == 1 ? 100 : 0;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         return $percent_form;
     }
     
