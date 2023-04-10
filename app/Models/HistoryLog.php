@@ -190,7 +190,7 @@ class HistoryLog extends Model
         31 => 'Información del crédito',
         32 => 'Confirmar firma',
         33 => 'Confirmación de entrega',
-        34 => 'Reducción de análisis',
+        34 => 'Resolución de análisis',
         35 => 'Créditos pagados',
         36 => 'Entró a KC - After market',
         37 => 'Entró a KC - Swap',
