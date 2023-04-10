@@ -225,19 +225,25 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $hour                   = $history->created_at;
         //$percent_form   = self::percentForm($history);
         $percent_form           = self::percentForm($history);
+        $name_advisor = null;
 
-        $user                   = User::find($advisor->id);
-        $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+        try {
+            $user                   = User::find($advisor->id);
+            $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+        }
 
-        $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options           = self::menuOptions($history, 1);
 
         $view_dead_line_step1   = self::deadLineStep1($history, 100);
         $option                 = null;
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
 
         $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         

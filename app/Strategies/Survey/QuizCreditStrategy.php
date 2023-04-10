@@ -33,7 +33,9 @@ class QuizCreditStrategy implements SurveyInterface
         if ($get_survey == 0) {
             $survey = new Survey($data_survey);
             $survey->save();
-            HistoryLog::move($request->credit_id, HistoryLog::KC_AFTER_MARKET_ARCHIVE, HistoryLog::KC_AFTER_MARKET);
+            HistoryLog::move($request->credit_id, HistoryLog::KC_AFTER_MARKET_ARCHIVE, HistoryLog::KC_AFTER_MARKET_ARCHIVE);
+            HistoryLog::where(['id_rel' => $request->credit_id, 'status_id' => HistoryLog::KC_AFTER_MARKET, 'status' => 1])
+                        ->update(['status' => 0]);
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $request->credit_id, 1);
         }
     }
