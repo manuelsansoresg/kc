@@ -275,8 +275,8 @@ class HistoryLog extends Model
         $data['old_status_id']    = $old_status_id;
         $data['status']           = 1;
         $get_status = HistoryLog::where($data)->first();
-
         self::removeInProgress($id_rel, $status_id);
+        
         
         //*validate if old status exist
         $data_old_status = array(
@@ -301,7 +301,7 @@ class HistoryLog extends Model
 
     public function subHistories($id_rel, $status_id, $history)
     {
-
+        
         if ($status_id == HistoryLog::KC_CHECK_UP) {
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
@@ -383,9 +383,8 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_AFTER_MARKET, HistoryLog::KC_AFTER_MARKET);
             HistoryLog::move($id_rel, HistoryLog::CREDITS_DELIVERED, HistoryLog::CREDITS_DELIVERED);
             
-            HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_FORM_STEP_1, $history->old_status_id);
-            HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $history->old_status_id);
-
+            HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_FORM_STEP_1, HistoryLog::KC_PAYMENT_FORM_STEP_1);
+            HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, HistoryLog::KC_PAYMENT_FORM_STEP_1);
             //*inicializar las acciones
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $id_rel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_1, $id_rel, 1);
