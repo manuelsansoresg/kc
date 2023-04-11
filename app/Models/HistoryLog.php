@@ -290,7 +290,11 @@ class HistoryLog extends Model
         }
         //* if new status and old status don't exist create status
         if ($get_status === null) {
-            $data['user_id']    = Auth::user()->id;
+            try {
+                $data['user_id']    = Auth::user()->id;
+            } catch (\Exception $th) {
+            }
+
             $history = new HistoryLog($data);
             $history->save();
             self::subHistories($id_rel, $status_id, $history);

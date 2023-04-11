@@ -228,10 +228,11 @@ class Lead extends Model
         $data_lead['type_id']     = 1;
         $lead_id                  = $request->lead_id;
         $correo                   = $request->key_email;
-        $user                     = User::where('email', $correo)->first();
-        $email                    = $user->email;
+        $email                    = $correo;
         $encoded_email            = urlencode($email);
         $email                    = str_replace('%40', '@', $encoded_email);
+        $user                     = User::where('email', $email)->first();
+        
 
         $data_lead['name']        = $user->name;
         $data_lead['last_name']   = $user->last_name;
