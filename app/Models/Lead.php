@@ -229,10 +229,13 @@ class Lead extends Model
         $lead_id                  = $request->lead_id;
         $correo                   = $request->key_email;
         $user                     = User::where('email', $correo)->first();
-        
+        $email                    = $user->email;
+        $encoded_email            = urlencode($email);
+        $email                    = str_replace('%40', '@', $encoded_email);
+
         $data_lead['name']        = $user->name;
         $data_lead['last_name']   = $user->last_name;
-        $data_lead['email']       = $user->email;
+        $data_lead['email']       = $email;
 
         if ($data_lead['agreement_id'] == '00') {
             unset($data_lead['agreement_id']);
