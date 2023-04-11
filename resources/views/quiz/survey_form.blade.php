@@ -297,7 +297,7 @@
                     $('#btn-back').hide();
                     $('#btn-finish').hide();
                 }
-                if (count_steeper > 3) {
+                if (count_steeper > 2) {
                     console.log('ejecutar guardado');
                     saveLead(false);
                 }

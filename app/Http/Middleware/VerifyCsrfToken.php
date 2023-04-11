@@ -19,5 +19,6 @@ class VerifyCsrfToken extends Middleware
         'api/rrss/*',
         '/lead/store',
         '/lead/form/store',
+        '/survey',
     ];
 }

@@ -245,7 +245,7 @@ class Lead extends Model
             $get_lead->fill($data_lead)->update();
         }
 
-        if ($number_step == 4) {
+        if ($number_step == 3) {
             $template   = TemplateValues::STRATEGY['lead'];
             (new $template)->move($get_lead->id);
         }
