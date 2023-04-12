@@ -269,7 +269,6 @@ class HistoryLog extends Model
         if ($request != null) {
             $data = $request->data;
         }
-
         $data['id_rel']           = $id_rel;
         $data['status_id']        = $status_id;
         $data['old_status_id']    = $old_status_id;
