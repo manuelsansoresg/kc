@@ -245,6 +245,7 @@ class Lead extends Model
         if ($get_lead == null) {
             $get_lead = new Lead($data_lead);
             $get_lead->save();
+            HistoryLog::move($get_lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT, $request);
         } else {
             $get_lead->fill($data_lead)->update();
         }
