@@ -169,6 +169,7 @@ class CreditController extends Controller
             HistoryLog::CREDIT_CANCELED => 'Cancelados',
             HistoryLog::CREDIT_REJECTED => 'Rechazados',
             HistoryLog::CREDITS_DELIVERED => 'Entregados',
+            HistoryLog::CREDITS_PAID => 'Pagado',
         );
         $title = $titles[$status];
         if ($status != HistoryLog::CREDIT_IN_PROGRESS) {
