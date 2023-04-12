@@ -89,8 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'name' },
             { data: 'date' },
             { data: 'product' },
-            { data: 'origin' },
-            { data: 'reason' },
             { data: 'advisor' },
             { data: 'options', }
         ],

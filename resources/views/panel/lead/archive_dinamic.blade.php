@@ -31,8 +31,6 @@
                                             <th>Nombre</th>
                                             <th>Fecha</th>
                                             <th>Producto</th>
-                                            <th>Origen</th>
-                                            <th>Motivo</th>
                                             <th>Asesor</th>
                                             <th></th>
                                         </tr>

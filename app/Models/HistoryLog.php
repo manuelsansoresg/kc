@@ -603,21 +603,18 @@ class HistoryLog extends Model
             $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'id' => $query->id])->render();
             
             $lbl_status   = '<span class="text-success">Valido</span>';
-            $lead         = $query->historyLead;
-
-            if ($lead != null) {
-                $product      = $lead != null ? $lead->productLead : null;
-                $user         = $lead != null ? $lead->advisorLead : null;
+            $credit         = $query->historyCredit;
+            $client         = $credit->creditClientPerson;
+            if ($client != null) {
+                $product      = $credit != null ? $credit->creditProduct : null;
+                $user         = $credit != null ? $credit->creditAdvisor : null;
     
-                $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $lead])->render();
+                $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $client])->render();
                 $reason = (isset(config('enums.reason_archive')[$query->reason]))? config('enums.reason_archive')[$query->reason] : '';
                 $data[] = array(
                     'name' => $content_lead,
                     'date' => formatDateNameMonth($query->created_at),
                     'product' => ($product != null) ? $product->alias : '',
-                    'origin' => config('enums.origin')[$lead->origin_id],
-                    'reason' => $reason,
-                    'label' => config('enums.temperatures')[$lead->temperature_id],
                     'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
                     'status' => $lbl_status,
                     'options' => $option,

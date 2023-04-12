@@ -2017,10 +2017,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'product'
     }, {
-      data: 'origin'
-    }, {
-      data: 'reason'
-    }, {
       data: 'advisor'
     }, {
       data: 'options'
