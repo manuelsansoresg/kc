@@ -148,7 +148,7 @@ class HomeController extends Controller
 
     public function leadFormStore(Request  $request)
     {
-        $lead = Lead::saveLeadFormSurvey($request);
+        $lead = Lead::saveLeadFormSurvey($request, true);
         return response()->json(['lead' => $lead]);
     }
 

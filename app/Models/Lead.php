@@ -92,7 +92,7 @@ class Lead extends Model
         return $data;
     }
 
-    public static function createClientPerson($lead_id)
+    public static function createClientPerson($lead_id, $is_report = false)
     {
         $get_lead = LeadClient::where('lead_id', $lead_id);
         $status = 500;
@@ -102,7 +102,7 @@ class Lead extends Model
         if ($get_lead->count() === 0) {
             $status = 200;
             $lead = Lead::find($lead_id)->toArray();
-            User::saveLeadClientPersona($lead);
+            User::saveLeadClientPersona($lead, $is_report);
         }
         return $status;
     }
@@ -219,7 +219,7 @@ class Lead extends Model
     }
 
     //* validate save form include iframe in domain appp.kaaxclub
-    public static function saveLeadFormSurvey($request)
+    public static function saveLeadFormSurvey($request, $is_report = false)
     {
         $data_lead                = $request->data;
         $number_step              = $request->number_step;
@@ -251,7 +251,7 @@ class Lead extends Model
         }
         if ($number_step == 3) {
             $template   = TemplateValues::STRATEGY['lead'];
-            (new $template)->move($get_lead->id);
+            (new $template)->move($get_lead->id, $is_report);
         }
         return $get_lead;
     }

@@ -13,7 +13,7 @@ use stdClass;
 
 class LeadStrategyTemplate implements TemplateInterface
 {
-    public function move($id)
+    public function move($id, $is_report = false)
     {
         $lead = Lead::find($id);
         if ($lead !== null) {
@@ -64,7 +64,7 @@ class LeadStrategyTemplate implements TemplateInterface
             HistoryLog::move($credit->id, HistoryLog::CREDIT_IN_PROGRESS, HistoryLog::CREDIT_IN_PROGRESS);
             
             //*create account automatically
-            Lead::createClientPerson($lead->id);
+            Lead::createClientPerson($lead->id, $is_report);
 
             //* enter module kc-checkup and list actions
             if ($product->c_product_id = 1 && $product->c_service_id == 1) {
