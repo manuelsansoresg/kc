@@ -304,7 +304,6 @@ class HistoryLog extends Model
 
     public function subHistories($id_rel, $status_id, $history)
     {
-        
         if ($status_id == HistoryLog::KC_CHECK_UP) {
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
@@ -381,9 +380,12 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
         }
         
-        if ($status_id == HistoryLog::KC_PAYMENT) {
+        if ($status_id == HistoryLog::KC_PAYMENT) { // finish delivery and enter kcpayment
             //copy to after market
             HistoryLog::move($id_rel, HistoryLog::KC_AFTER_MARKET, HistoryLog::KC_AFTER_MARKET);
+            HistoryLog::where(['id_rel' => $id_rel, 'status_id' => HistoryLog::CREDIT_IN_PROGRESS, 'status' => 1])
+                        ->update(['status' => 0]);
+
             HistoryLog::move($id_rel, HistoryLog::CREDITS_DELIVERED, HistoryLog::CREDITS_DELIVERED);
             
             HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_FORM_STEP_1, HistoryLog::KC_PAYMENT_FORM_STEP_1);
