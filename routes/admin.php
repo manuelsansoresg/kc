@@ -154,7 +154,7 @@ Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('/report/list/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'list'])->middleware('auth');
     Route::get('/report/answer_module/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'actionReport'])->middleware('auth');
     Route::get('/report/desition/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionReport'])->middleware('auth');
-    Route::get('/report/desition/{credit_id}/{financial_id}/{type}/accept', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionAccept'])->middleware('auth');
+    Route::get('/report/desition/{credit_id}/{financial_id}/{type}/accept', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionAccept']);
 });
 
 Route::resource('kc-control-desk', '\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController')->middleware('auth');
