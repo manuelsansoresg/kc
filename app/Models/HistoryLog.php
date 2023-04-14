@@ -487,10 +487,9 @@ class HistoryLog extends Model
         $lbl_module = array(
             HistoryLog::KC_CHECK_UP => 'KC- Check up',
             HistoryLog::KC_CHECK_UP_DEBT_REDUCTION => 'KC- Check up',
-            HistoryLog::KC_CONTROL_DESK => 'KC- Swap',
+            HistoryLog::KC_CONTROL_DESK => 'KC- Control desk',
             HistoryLog::KC_DELIVERY => 'KC- Delivery',
-            HistoryLog::KC_SWAP => 'KC- After market',
-            HistoryLog::KC_CHECK_UP => 'KC- Delivery',
+            HistoryLog::KC_SWAP => 'KC- Swap',
         );
         $data_actions = array(
             HistoryLog::KC_CHECK_UP,
