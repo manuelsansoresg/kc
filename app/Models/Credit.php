@@ -235,31 +235,29 @@ class Credit extends Model
     {
         $get_in_progress    = HistoryLog::getByStatus([HistoryLog::CREDIT_IN_PROGRESS]);
         //$get_list    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION]);
-      
         $users        = array();
-        foreach ($get_in_progress as $history_progress) {
-            $id_rel = $history_progress->id_rel;
+        foreach ($get_in_progress as $history) {
+            $id_rel           = $history->id_rel;
 
-            $get_list    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION], $id_rel);
-
-            foreach ($get_list as $history) {
-                $query            = Credit::find($history->id_rel);
-                $product          = $query->creditProduct;
-                $alias_product    = $product !== null ? $product->alias : null;
-                $client           = $query->creditClientPerson;
-                $advisor          = $query->creditAdvisor;
-                $route            = self::routeShowStep()[$history->status_id];
-                $model            = HistoryLog::$name_model[$history->status_id];
+            $query            = Credit::find($history->id_rel);
+            $product          = $query->creditProduct;
+            $alias_product    = $product !== null ? $product->alias : null;
+            $client           = $query->creditClientPerson;
+            $advisor          = $query->creditAdvisor;
+            try {
+                $get_module       = HistoryLog::getInProgress($id_rel, true);
+                $name_module       = HistoryLog::getInProgress($id_rel);
+                $model            = HistoryLog::$name_model[$get_module];
                 $templateStrategy = TemplateValues::STRATEGY[$model];
                 $percent          = (new $templateStrategy)->getPercent($history);
                 
                 
-    
+
                 $hour             = $query->created_at;
                 $max_hour         = 24;
-    
-                $modulo           = 'KC- Check up';
-    
+
+                $modulo           = $name_module;
+
                 $data_deadline    = deadlineKc($hour, $max_hour);
                 $color_inf_credit = $data_deadline['color'];
                 $hour             = $data_deadline['lbl_hour'];
@@ -298,6 +296,7 @@ class Credit extends Model
                         'options' => $option
                     );
                 }
+            } catch (\Exception $th) {
             }
         }
         return $users;
@@ -354,6 +353,7 @@ class Credit extends Model
         $routes = array(
             6 => 'newCredit',
             10 => 'debtCredit',
+            19 => 'debtCredit',
             21 => 'controlDesk',
             30 => 'delivery',
             36 => 'afterMarket',

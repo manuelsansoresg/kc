@@ -482,7 +482,41 @@ class HistoryLog extends Model
         }
     }
 
-    public function getCurrentModule($credit_id)
+    public static function getInProgress($credit_id, $is_return_id = false)
+    {
+        $lbl_module = array(
+            HistoryLog::KC_CHECK_UP => 'KC- Check up',
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION => 'KC- Check up',
+            HistoryLog::KC_CONTROL_DESK => 'KC- Swap',
+            HistoryLog::KC_DELIVERY => 'KC- Delivery',
+            HistoryLog::KC_SWAP => 'KC- After market',
+            HistoryLog::KC_CHECK_UP => 'KC- Delivery',
+        );
+        $data_actions = array(
+            HistoryLog::KC_CHECK_UP,
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION,
+            HistoryLog::KC_CONTROL_DESK,
+            HistoryLog::KC_DELIVERY,
+            HistoryLog::KC_SWAP,
+        );
+        $status_progress = 0;
+        $current_status = 'KC- Check up';
+        $id_current_status = HistoryLog::KC_CHECK_UP;
+        $get_action = HistoryLog::getLastStatus($data_actions, $credit_id);
+        $status_id = $get_action->status_id;
+
+        $status = $get_action->status_progress;
+        $status_progress = $status > 0 ? 1 : 0;
+        $current_status = $lbl_module[$status_id];
+        $id_current_status = $status_id;
+        
+        if ($is_return_id == false) {
+            return $current_status;
+        }
+        return $id_current_status;
+    }
+
+    public static function getCurrentModule($credit_id, $is_return_id = false)
     {
         $lbl_module = array(
             HistoryLog::KC_CHECK_UP => 'KC- Check up',
@@ -500,17 +534,20 @@ class HistoryLog extends Model
         );
         $status_progress = 0;
         $current_status = 'KC- Check up';
-        $get_actions = HistoryLog::getByStatus($data_actions, $credit_id);
+        $id_current_status = HistoryLog::KC_CHECK_UP;
+        $get_action = HistoryLog::getLastStatus($data_actions, $credit_id);
 
-        foreach ($get_actions as $key => $get_action) {
-            $status_id = $get_action->status_id;
-            $status = $get_action->status_progress;
-            $status_progress = $status > 0 ? 1 : 0;
-            if ($status_progress == 1) {
-                $lbl_module[$status_id];
-            }
+        $status_id = $get_action->status_id;
+        $status = $get_action->status_progress;
+        $status_progress = $status > 0 ? 1 : 0;
+        if ($status_progress == 1) {
+            $current_status = $lbl_module[$status_id];
+            $id_current_status = $status_id;
         }
-        return $current_status;
+        if ($is_return_id == false) {
+            return $current_status;
+        }
+        return $id_current_status;
     }
 
     public static function getLastStatus($status, $credit_id, $active = 1)
