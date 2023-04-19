@@ -509,10 +509,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data_deadline              = deadline($hour, $max_hour, $percentStep2, $color_inf_credit);
         $color_inf_credit           = $data_deadline['color'];
         $hour                       = $data_deadline['lbl_hour'];
-
         $option_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
-        
-        
         
         
         $view_percent_inf_credit    = 'N/A';
@@ -1172,6 +1169,37 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return reduceDecimal($percent);
     }
 
+    public function getlblStatusApi($history)
+    {
+        $credit               = $history->historyCredit;
+        $percent_form_step1   = self::percentForm($history);
+        $percentStep2         = self::percentStep2($credit->id);
+        $percent_form_step3   = self::percentFormStep3($credit->id);
+        $percent_form_step4   = self::percentFormStep4($credit->id);
+        $status_step1         = $percent_form_step1 == 100 && $percentStep2 == 100? 'CONCLUIDA' : 'EN CURSO';
+        $total_percent        = ($status_step1 ==  'CONCLUIDA') ? 75 : 60;
+
+        $status_step2         = 'EN ESPERA';
+        $status_step3         = 'EN ESPERA';
+        if ($status_step1 == 'CONCLUIDA') {
+            $status_step2 = ($percent_form_step3 >= 100) ? 'CONCLUIDA' : 'EN CURSO';
+            $total_percent = ($percent_form_step3 >= 100) ? 90 : 75;
+        }
+        if ($status_step2 == 'CONCLUIDA') {
+            $status_step3 = ($percent_form_step4 >= 100) ? 'CONCLUIDA' : 'EN CURSO';
+            $total_percent = ($percent_form_step4 >= 100) ? 100 : 90;
+        }
+    
+        
+
+        $data_lbl = array(
+            'Firma de documentos' => $status_step1,
+            'Analisís de todo el crédito' => $status_step2,
+            'Entrega de crédito' => $status_step3,
+        );
+        return array('lbl' => $data_lbl, 'total_percent' => $total_percent);
+    }
+
     public function getFile($template_config_id)
     {
         $config = self::configUpload()[$template_config_id];
@@ -1210,6 +1238,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $percent =  (100 / 100) * $percent_file;
         return $percent;
     }
+
+    
 
     public function menuPrincipalOptions($history)
     {

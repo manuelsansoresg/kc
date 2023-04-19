@@ -23,3 +23,8 @@ Route::group(['prefix' => 'surveysparrow'], function () {
 });
 
 Route::resource('rrss', '\App\Http\Controllers\Api\RssController');
+
+
+Route::group(['prefix' => 'appkax'], function () {
+    Route::get('{history}/{model}/steps', ['\App\Http\Controllers\Api\AppKaxController', 'steps']);
+});

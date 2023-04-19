@@ -2268,6 +2268,52 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $menu;
     }
 
+    public function getlblStatusApi($history)
+    {
+        $credit               = $history->historyCredit;
+        $percent_file         = self::percentFile($credit->id);
+        $percent_form         = self::percentForm($history); // etapa 1
+
+        $percent_form_step2   = self::percentFormStep2($history); // etapa 2
+
+
+        $percent_form_step3_1 = self::percentFormStep3_1($history); //etapa 3
+        $percent_form_step3_2 = self::percentFormStep3_2($history); //etapa 3
+        
+        $new_step3_1          = $percent_form_step3_1 == 100 ? 1 : 0;
+        $new_step3_2          = $percent_form_step3_2 == 100 ? 1 : 0;
+        
+        $percent_form_step3   = ($new_step3_1 + $new_step3_2) / 2 * 100;
+        $percent_form_step4   = self::percentFormStep4($history); //etapa 4
+        $percent_form_step5   = self::percentFormStep5($history); //etapa 5
+
+        $status_step2         = 'EN ESPERA';
+        $status_step3         = 'EN ESPERA';
+        $status_step4         = 'EN ESPERA';
+        $status_step5         = 'EN ESPERA';
+        
+
+        $status_step1 = ($percent_form >= 100) ? 'CONCLUIDA' : 'EN CURSO';
+        $total_percent = ($percent_form >= 100) ? 20 : 0;
+        //TODO: change validation when the decision action is carried out in the report
+        if ($status_step1 == 'CONCLUIDA') {
+            $status_step2 = ($percent_form_step2 >= 100) ? 'CONCLUIDA' : 'EN CURSO';
+            $total_percent = ($percent_form_step2 >= 100) ? 40 : 20;
+        }
+
+        if ($status_step2 == 'CONCLUIDA') {
+            $status_step3 = ($percent_form_step3 == 100 && $percent_form_step4 == 100 && $percent_form_step5 == 100) ? 'CONCLUIDA' : 'EN CURSO';
+            $total_percent = ($percent_form_step3 == 100 && $percent_form_step4 == 100 && $percent_form_step5 == 100) ? 100 : 40;
+        }
+
+        $data_lbl = array(
+            'Recopilación de información' => $status_step1,
+            'Características del crédito' => $status_step2,
+            'Captura de información' => $status_step3,
+        );
+        return array('lbl' => $data_lbl, 'total_percent' => $total_percent);
+    }
+
     public function listStep($history_id)
     {
 
@@ -3368,6 +3414,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         return $percent;
     }
+    
 
     public function getFile($template_config_id)
     {
