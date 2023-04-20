@@ -152,15 +152,16 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">*Origen</label>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="form-control js-select2" name="data[origin_id]" id="lead-origin" onchange="changeOrigen()"  data-search="on">
+                                                                    <select class="form-control"  data-search="on" disabled>
                                                                         @if ($lead == null)
                                                                         <option value="">Escribe para buscar</option>
                                                                         @endif
                                                                         @foreach ($origins as $key=>$origin)
-                                                                            <option value="{{ $key }}">{{ $origin }}
+                                                                            <option value="{{ $key }}" {{ $key == 1 ? 'selected' : null }}>{{ $origin }}
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
+                                                                    <input type="hidden" name="data[origin_id]" value="1">
                                                                 </div>
                                                             </div>
                                                         </div>
