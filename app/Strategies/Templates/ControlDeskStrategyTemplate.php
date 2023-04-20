@@ -2305,7 +2305,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $status_step3 = ($percent_form_step3 == 100 && $percent_form_step4 == 100 && $percent_form_step5 == 100) ? 'CONCLUIDA' : 'EN CURSO';
             $total_percent = ($percent_form_step3 == 100 && $percent_form_step4 == 100 && $percent_form_step5 == 100) ? 100 : 40;
         }
-
         $data_lbl = array(
             'Recopilación de información' => $status_step1,
             'Características del crédito' => $status_step2,
