@@ -10,7 +10,7 @@
     <meta name="keywords" content="nft, crypto, html5 template">
     <title>Welcome | EnftyMart - NFT Marketplace HTML Template</title>
     <!-- Favicon -->
-    <link rel="icon" sizes="16x16" href="images/favicon.png">
+    <link rel="icon" sizes="16x16" href="images/favicon.ico">
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/assets/css/vendor.bundle.css?ver=100">
     <link rel="stylesheet" href="/assets/css/style.css?ver=100">
