@@ -379,6 +379,11 @@ class Credit extends Model
     {
         return $this->belongsTo(Agreement::class, 'agreement_id');
     }
+
+    public static function getLastCredit($client_id)
+    {
+        return Credit::where('client_person_id', $client_id)->orderBy('id', 'DESC')->limit(1)->first();
+    }
     
     public function creditFinancial()
     {

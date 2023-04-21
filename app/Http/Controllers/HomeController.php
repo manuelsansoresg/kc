@@ -42,11 +42,14 @@ class HomeController extends Controller
 
     public function surveyForm(Request $request)
     {
-        $token                = $request->token;
-        $email                = $request->email;
-        $validate             = TokenForms::validateToken($token, $email);
+        $token        = $request->token;
+        $email        = $request->email;
+        $get_client   = ClientPerson::where('email', $email)->first();
+        $credit                 = Credit::getLastCredit($get_client->id);
+        $validate     = TokenForms::validateToken($token, $email);
+
         if ($validate) {
-            return view('quiz.survey_form');
+            return view('quiz.survey_form', compact('credit'));
         }
         abort(404);
     }

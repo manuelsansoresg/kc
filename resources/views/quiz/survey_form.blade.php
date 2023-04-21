@@ -31,7 +31,7 @@
     $timeOK = date('H:i', strtotime($currentDateTime)) >= '09:00' && date('H:i', strtotime($currentDateTime)) <= '18:00';
 @endphp
 
-<body class="nk-body bg-dark npc-general pg-survey text-white">
+<body class="nk-body bg-transparent npc-general pg-survey text-white">
     <div class="nk-app-root">
         <!-- main @s -->
         <div class="nk-main ">
@@ -40,7 +40,7 @@
                 <!-- content @s -->
                 <div class="nk-content" id="content-lead-flex">
                     <div class="d-flex justify-content-center align-items-center vh-100">
-                        <div class="bg-dark is-dark p-5 text-center">
+                        <div class="bg-transparent is-dark p-5 text-center">
                             <a href="/" class="logo-link nk-sidebar-logo">
                                 <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
                                     alt="logo" data-aos="fade-up"
@@ -178,7 +178,7 @@
                                                 </p>
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
+                                                        <a href="/reporte/{{ $credit->id }}" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
                                                             data-aos="fade-up" data-aos-duration="5000">Ver reporte</a>
                                                     </div>
                                                 </div>
@@ -293,7 +293,7 @@
                 count_steeper = count_steeper + 1;
                 console.log(count_steeper);
                 $('#number_step').val(count_steeper);
-                if (count_steeper == 4) {
+                if (count_steeper == 3) {
                     $('#btn-back').hide();
                     $('#btn-finish').hide();
                 }
