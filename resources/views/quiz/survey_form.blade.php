@@ -178,7 +178,7 @@
                                                 </p>
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a href="/reporte/{{ $credit->id }}" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
+                                                        <a href="" id="lnk_show_report" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
                                                             data-aos="fade-up" data-aos-duration="5000">Ver reporte</a>
                                                     </div>
                                                 </div>
@@ -345,6 +345,12 @@
                 .then(function(response) {
                     let result = response.data;
                     let lead = result.lead;
+                    let credit_id = result.credit_id;
+
+                    let lnk_show_report = document.getElementById('lnk_show_report');
+                    lnk_show_report.href = '/app/reporte/null/'+credit_id;
+
+
                     $('#lead_id').val(lead.id);
                     if (is_redirect == true) {
                         window.location = 'https://kaaxclub.com';

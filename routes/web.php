@@ -40,6 +40,7 @@ Route::get('hola', ['\App\Http\Controllers\HomeController', 'surveyHola']);
 
 
 Route::get('reporte/{history_id}', ['\App\Http\Controllers\HomeController', 'report']);
+Route::get('app/reporte/{history_id}/{credit_id}', ['\App\Http\Controllers\HomeController', 'report']);
 Route::get('reporte/{history_id}/metodologia', ['\App\Http\Controllers\HomeController', 'method']);
 
 Route::get('reporte/{credit}/status/finish', ['\App\Http\Controllers\HomeController', 'exitReport']);

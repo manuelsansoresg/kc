@@ -461,6 +461,13 @@ class HistoryLog extends Model
         return $history;
     }
 
+    public static function getByStatusFirst($status, $credit_id)
+    {
+        return HistoryLog::wherein('status_id', $status)
+                ->where('id_rel', $credit_id)
+                ->orderBy('id', 'DESC')->limit(1)->first();
+    }
+
     //TODO:create a field in credit that is the name of the module and update that
     public function getStatusCredit($credit_id)
     {

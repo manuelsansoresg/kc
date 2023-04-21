@@ -44,21 +44,26 @@ class HomeController extends Controller
     {
         $token        = $request->token;
         $email        = $request->email;
-        $get_client   = ClientPerson::where('email', $email)->first();
-        $credit                 = Credit::getLastCredit($get_client->id);
         $validate     = TokenForms::validateToken($token, $email);
 
         if ($validate) {
-            return view('quiz.survey_form', compact('credit'));
+            return view('quiz.survey_form');
         }
         abort(404);
     }
 
-    public function report($history_id)
+    public function report($history_id, $credit_id = null)
     {
+        if ($credit_id == null) {
+            $history    = HistoryLog::find($history_id);
+            $credit     = $history->historyCredit;
+        } else {
+            $get_action = HistoryLog::getByStatusFirst([HistoryLog::KC_CHECK_UP], $credit_id);
+            $history    = HistoryLog::find($get_action->id);
+            $credit     = Credit::find($credit_id);
+        }
+
         
-        $history    = HistoryLog::find($history_id);
-        $credit     = $history->historyCredit;
         if ($credit->applied_financial != '') {
             return view('content_expiration_report');
         }
@@ -95,7 +100,16 @@ class HomeController extends Controller
                 'comision_apertura' => 0
             );
             $get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: $chart['Financiera 1'];
-            
+            $data_report = array(
+                'client' => $client,
+                'credit' => $credit,
+                'financial' => $financial,
+                'get_chart' => $get_chart,
+                'option' => $option,
+                'history_id' => $history_id,
+                'is_best' => $is_best,
+                'status_id' => $status_id,
+            );
             return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id'));
         }
         return view('content_report', compact('client', 'history_id', 'status_id', 'credit'));
@@ -151,8 +165,20 @@ class HomeController extends Controller
 
     public function leadFormStore(Request  $request)
     {
-        $lead = Lead::saveLeadFormSurvey($request, true);
-        return response()->json(['lead' => $lead]);
+        $lead         = Lead::saveLeadFormSurvey($request, true);
+        $credit_id    = null;
+
+        try {
+            $email        = $lead->email;
+            $get_client   = ClientPerson::where('email', $email)->first();
+            $credit       = Credit::getLastCredit($get_client->id);
+            $credit_id    = $credit->id;
+        } catch (\Exception $th) {
+            
+        }
+        
+
+        return response()->json(['lead' => $lead, 'credit_id' => $credit_id]);
     }
 
     public function validateAccess()
