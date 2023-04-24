@@ -380,9 +380,7 @@
             console.log("window.parent: ", window.parent);
             console.log("window: ", window);
 
-            if (window.parent !== window) {
-                window.parent.postMessage({ creditId: creditId }, "https://app.kaaxclub.com");
-            }
+            window.parent.postMessage({ creditId: creditId }, "https://app.kaaxclub.com");
         }
     </script>
 
