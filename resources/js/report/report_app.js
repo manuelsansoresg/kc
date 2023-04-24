@@ -47,3 +47,4 @@ window.desitionReport = function(credit_id, financial_id, type) {
     }
    });
 }
+

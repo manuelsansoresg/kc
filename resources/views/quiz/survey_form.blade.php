@@ -178,8 +178,9 @@
                                                 </p>
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a href="" id="lnk_show_report" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
+                                                        <a href="#" onclick="redirectApp();"  class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
                                                             data-aos="fade-up" data-aos-duration="5000">Ver reporte</a>
+                                                            <input type="hidden" name="" id="credit_id" value="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -231,7 +232,7 @@
                                 <input type="hidden" name="key_email" value="{{ $_GET['email'] }}">
                                 
                                 <button type="button"
-                                                    class="btn btn-primary btn-lg py-3" onclick="saveLead(true)">Terminar</button>
+                                                    class="btn btn-primary btn-lg py-3" onclick="saveLead(false)">Terminar</button>
                             </div>
                         </div>
                     </div>
@@ -347,9 +348,13 @@
                     let lead = result.lead;
                     let credit_id = result.credit_id;
 
-                    let lnk_show_report = document.getElementById('lnk_show_report');
-                    lnk_show_report.href = '/app/reporte/null/'+credit_id;
+                    document.getElementById('credit_id').value = credit_id;
+                   /*  
+                    lnk_show_report.href = '/app/reporte/null/'+credit_id; */
 
+                    /* if (lnk_show_report != null) {
+                        redirectApp(credit_id);
+                    } */
 
                     $('#lead_id').val(lead.id);
                     if (is_redirect == true) {
@@ -367,6 +372,19 @@
             });
 
         });
+        function redirectApp () {
+            // Get the value of the credit_id input field
+            var creditId = document.getElementById("credit_id").value;
+            // Check if we are on the same domain, if not, show an error message
+            if (window.top.location.origin !== "https://app.kaaxclub.com/") {
+            alert("Error: Redirects only allowed within https://app.kaaxclub.com/ domain.");
+            return;
+            }
+            
+            // Redirect to the new domain with the credit_id value as a URL parameter
+            window.top.location.href = "https://app.kaaxclub.com/reporte/" + creditId;
+        }
+        
     </script>
 
 
