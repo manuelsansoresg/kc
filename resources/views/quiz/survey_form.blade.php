@@ -373,6 +373,7 @@
 
             window.obtenerCreditId = function() {
                 var creditId = document.getElementById("credit_id").value;
+                console.log(creditId);
                 window.parent.postMessage({ creditId: creditId }, "https://app.kaaxclub.com");
             }
 
