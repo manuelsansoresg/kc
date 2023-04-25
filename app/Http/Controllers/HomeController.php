@@ -58,9 +58,9 @@ class HomeController extends Controller
             $history    = HistoryLog::find($history_id);
             $credit     = $history->historyCredit;
         } else {
-            $get_action = HistoryLog::getByStatusFirst([HistoryLog::KC_CHECK_UP], $credit_id);
-            $history    = HistoryLog::find($get_action->id);
-            $credit     = Credit::find($credit_id);
+            $get_action   = HistoryLog::getByStatusFirst([HistoryLog::KC_CHECK_UP], $credit_id);
+            $history      = HistoryLog::find($get_action->id);
+            $credit       = Credit::find($credit_id);
         }
 
         

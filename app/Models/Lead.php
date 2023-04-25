@@ -232,8 +232,6 @@ class Lead extends Model
         $encoded_email            = urlencode($email);
         $email                    = str_replace('%40', '@', $encoded_email);
         $user                     = User::where('email', $email)->first();
-        
-
         $data_lead['name']        = $user->name;
         $data_lead['last_name']   = $user->last_name;
         $data_lead['email']       = $email;

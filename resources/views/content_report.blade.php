@@ -13,7 +13,7 @@
 @endphp
 <input type="hidden" name="" value="{{ $is_app }}" id="is_app">
 {{-- hero --}}
-<section class="position-relative bg-style-1">
+<section class="position-relative bg-style-1 {{ $is_app == true ? 'mt-n4' : ''}}" >
     <div class="container py-9 py-lg-11 position-relative z-index-1">
         <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
         </div>

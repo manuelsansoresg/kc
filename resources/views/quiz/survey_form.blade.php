@@ -34,7 +34,7 @@
 <body class="nk-body bg-transparent npc-general pg-survey text-white">
     <div class="nk-app-root">
         <!-- main @s -->
-        <div class="nk-main ">
+        <div class="nk-main mt-n5">
             <!-- wrap @s -->
             <div class="nk-wrap nk-wrap-nosidebar">
                 <!-- content @s -->
@@ -178,8 +178,8 @@
                                                 </p>
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <button type="button" onclick="obtenerCreditId()" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
-                                                            data-aos="fade-up" data-aos-duration="5000">Ver reporte</button>
+                                                        <a href="#" id="lnk_show_report"  class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
+                                                            data-aos="fade-up" data-aos-duration="5000">Ver reporte</a>
                                                             <input type="hidden" name="" id="credit_id" value="">
                                                     </div>
                                                 </div>
@@ -348,9 +348,8 @@
                     let lead = result.lead;
                     let credit_id = result.credit_id;
 
-                    document.getElementById('credit_id').value = credit_id;
-                   /*  
-                    lnk_show_report.href = '/app/reporte/null/'+credit_id; */
+                    var lnk_show_report = document.getElementById("lnk_show_report");
+                    lnk_show_report.href = '/app/reporte/null/'+credit_id+'?is_app==true';
 
                     /* if (lnk_show_report != null) {
                         redirectApp(credit_id);
@@ -374,14 +373,6 @@
             
 
         });
-        
-        window.obtenerCreditId = function() {
-            var creditId = document.getElementById("credit_id").value;
-            console.log("window.parent: ", window.parent);
-            console.log("window: ", window);
-
-            window.parent.postMessage({ creditId: creditId }, "https://app.kaaxclub.com");
-        }
     </script>
 
 
