@@ -10,7 +10,9 @@
 
 @section('content')
 
-
+@php
+    $lnk_app = isset($_GET['is_app']) ? '?is_app=true' : null;
+@endphp
 {{-- hero --}}
 <section class="position-relative">
     <div class="container py-9 py-lg-11 position-relative z-index-1">
@@ -51,9 +53,9 @@
                                     @if ($dayOK && $timeOK)
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary btn-lg hover-lift me-3" href="https://app.kaaxclub.com/" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                            <a class="btn btn-primary btn-lg hover-lift me-3" href="#!">Contactar asesor <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                            <a class="btn btn-primary btn-lg hover-lift me-3" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2" href="https://app.kaaxclub.com{{ $lnk_app }}" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2" href="#!">Contactar asesor <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
                                             </a>
                                         </div>
                                     </div>
@@ -61,9 +63,9 @@
                                     @else
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary btn-lg hover-lift me-3" href="https://app.kaaxclub.com/" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                            <a class="btn btn-primary btn-lg hover-lift me-3" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                            <a class="btn btn-primary btn-lg hover-lift me-3" href="#!">Salir <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2" href="https://app.kaaxclub.com{{ $lnk_app }}" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2" href="#!">Salir <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
                                             </a>
                                         </div>
                                     </div>

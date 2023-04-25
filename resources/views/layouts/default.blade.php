@@ -145,7 +145,7 @@
                                 </li>
                             </ul>
                             <ul class="menu-btns">
-                                <li><a href="https://app.kaaxclub.com/l" class="btn btn-dark">Ir a la App</a></li>
+                                <li><a href="https://app.kaaxclub.com/" class="btn btn-dark">Ir a la App</a></li>
                                 <li>
                                     <a href="#" class="theme-toggler" title="Toggle Dark/Light mode">
                                         <span>
