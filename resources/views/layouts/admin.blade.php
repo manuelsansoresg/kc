@@ -227,6 +227,7 @@
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
+                                <hr>
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-aftermarket" class="nk-menu-link">

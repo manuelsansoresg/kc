@@ -28,7 +28,22 @@
     $files = $m_file->getByIdRelandModel($credit->id, [$m_history_log::KC_CHECK_UP, $m_history_log::KC_CONTROL_DESK, $m_history_log::KC_CHECK_UP_DEBT_REDUCTION, $m_history_log::KC_SWAP, $m_history_log::KC_DELIVERY]);
     $path = $m_file::PATH;
     
-   
+    $status = array(
+        $m_history_log::KC_CHECK_UP,
+        $m_history_log::KC_CHECK_UP_DEBT_REDUCTION,
+        $m_history_log::KC_SWAP,
+        $m_history_log::KC_CONTROL_DESK,
+        $m_history_log::KC_DELIVERY,
+    );
+    $histories = $m_history_log->getByStatus($status, $credit->id, null);
+    $leyend_status = $m_history_log::$label_status;
+    $status_credit = array(
+        $m_history_log::CREDIT_IN_PROGRESS,
+        $m_history_log::CREDIT_CANCELED,
+        $m_history_log::CREDIT_REJECTED,
+        $m_history_log::CREDITS_DELIVERED,
+    );
+    $current_module = $m_history_log->getByStatusFirst($status_credit, $credit->id);
 @endphp
 
 @section('content')
@@ -216,10 +231,7 @@
                                                     </div><!-- .card-inner -->
                                                 </div>
                                                 <div class="tab-pane" id="tabHistorial">
-                                                    @php
-                                                        $histories = $m_history_log->getByStatus([5, 6, 21, 30, 37, 36], $credit->id);
-                                                        $leyend_status = $m_history_log::$label_status;
-                                                    @endphp
+                                                    
                                                     @foreach ($histories as $history)
                                                         <div class="user-card mt-3">
                                                             <div class="user-info">
@@ -619,7 +631,7 @@
                                                 <div class="col-6">
                                                     <span class="sub-text">Estatus:</span>
                                                     <span>
-                                                        {{ $m_history_log->getStatusCredit($credit->id) }}
+                                                        {{ isset($m_history_log::$label_status[$current_module->status_id]) ? $m_history_log::$label_status[$current_module->status_id] : null; }}
                                                     </span>
                                                 </div>
 

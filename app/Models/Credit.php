@@ -240,11 +240,13 @@ class Credit extends Model
             $id_rel           = $history->id_rel;
 
             $query            = Credit::find($history->id_rel);
-            $product          = $query->creditProduct;
-            $alias_product    = $product !== null ? $product->alias : null;
-            $client           = $query->creditClientPerson;
-            $advisor          = $query->creditAdvisor;
+            
             try {
+                $product          = $query->creditProduct;
+                $alias_product    = $product !== null ? $product->alias : null;
+                
+                $client           = $query->creditClientPerson;
+                $advisor          = $query->creditAdvisor;
                 $get_module       = HistoryLog::getInProgress($id_rel, true);
                 $name_module       = HistoryLog::getInProgress($id_rel);
                 $model            = HistoryLog::$name_model[$get_module];

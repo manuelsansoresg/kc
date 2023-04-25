@@ -449,14 +449,16 @@ class HistoryLog extends Model
         return $get_history;
     }
 
-    public static function getByStatus($status_id, $id_rel = null)
+    public static function getByStatus($status_id, $id_rel = null, $status = 1)
     {
         $history = HistoryLog::wherein('status_id', $status_id);
         if ($id_rel != null) {
             $history->where('id_rel', $id_rel);
         }
-        $history = $history->where('status', 1)
-                    ->orderBy('created_at', 'DESC')
+        if ($status != null) {
+            $history->where('status', $status);
+        }
+        $history = $history->orderBy('created_at', 'DESC')
                     ->get();
         return $history;
     }
@@ -526,16 +528,14 @@ class HistoryLog extends Model
     {
         $lbl_module = array(
             HistoryLog::KC_CHECK_UP => 'KC- Check up',
-            HistoryLog::KC_CONTROL_DESK => 'KC- Swap',
-            HistoryLog::KC_DELIVERY => 'KC- Delivery',
-            HistoryLog::KC_AFTER_MARKET => 'KC- Delivery',
             HistoryLog::KC_SWAP => 'KC- After market',
+            HistoryLog::KC_CONTROL_DESK => 'KC- Control desk',
+            HistoryLog::KC_DELIVERY => 'KC- Delivery',
         );
         $data_actions = array(
             HistoryLog::KC_CHECK_UP,
             HistoryLog::KC_CONTROL_DESK,
             HistoryLog::KC_DELIVERY,
-            HistoryLog::KC_AFTER_MARKET,
             HistoryLog::KC_SWAP,
         );
         $status_progress = 0;
@@ -546,10 +546,12 @@ class HistoryLog extends Model
         $status_id = $get_action->status_id;
         $status = $get_action->status_progress;
         $status_progress = $status > 0 ? 1 : 0;
-        if ($status_progress == 1) {
+        $current_status = $lbl_module[$status_id];
+        $id_current_status = $status_id;
+       /*  if ($status_progress == 1) {
             $current_status = $lbl_module[$status_id];
             $id_current_status = $status_id;
-        }
+        } */
         if ($is_return_id == false) {
             return $current_status;
         }
