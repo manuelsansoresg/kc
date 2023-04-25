@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -109,7 +110,7 @@ class HistoryLog extends Model
         3 => 'Se créo el prospecto',
         4 => 'Se creó cliente persona desde prospecto',
         5 => 'se creó el crédito',
-        6 => 'Entró a KC - Check up',
+        6 => 'KC - Check up',
         7 => 'Carga',
         8 => 'Formulario',
         9 => 'Reporte',
@@ -124,7 +125,7 @@ class HistoryLog extends Model
         18 => 'Rechazado',
         19 => 'En curso',
         20 => 'Nuevo crédito en KC - Check up',
-        20 => 'Entró a KC - Control desk',
+        20 => 'KC - Control desk',
         21 => 'Control desk',
         22 => 'Carga',
         23 => 'Formulario',
@@ -134,14 +135,14 @@ class HistoryLog extends Model
         27 => 'Formulario',
         28 => 'Formulario',
         29 => 'Formulario',
-        30 => 'Entró a KC - Delivery',
+        30 => 'KC - Delivery',
         31 => 'Email',
         32 => 'Formulario',
         33 => 'Carga',
         34 => 'Formulario',
         35 => 'Créditos pagados',
-        36 => 'Entró a KC - After market',
-        37 => 'Entró a KC - Swap',
+        36 => 'KC - After market',
+        37 => 'KC - Swap',
         38 => 'Carga',
         39 => 'Formulario',
         40 => 'Formulario',
@@ -153,9 +154,9 @@ class HistoryLog extends Model
         46 => 'Carga',
         47 => 'Formulario',
         48 => 'Formulario',
-        49 => 'Entró a KC - Payments',
-        50 => 'Entró a  Archivo - KC- Payments - Pagado',
-        51 => 'Entró a  Archivo - KC- Payments - No pagado',
+        49 => 'KC - Payments',
+        50 => ' Archivo - KC- Payments - Pagado',
+        51 => ' Archivo - KC- Payments - No pagado',
         52 => 'Formulario',
         53 => 'Carga',
         54 => 'Formulario',
@@ -394,6 +395,10 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $id_rel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_1, $id_rel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $id_rel, 0);
+
+            // send push
+            $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcPayment'];
+            (new $notification_add)->send($credit->id);
         }
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $id_rel, 0);
