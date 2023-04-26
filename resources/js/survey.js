@@ -41,7 +41,6 @@ $(document).ready(function() {
         animateStepper();
         
     }
-
     window.backStepper = function() {
         count_steeper = count_steeper - 1;
         console.log(count_steeper);

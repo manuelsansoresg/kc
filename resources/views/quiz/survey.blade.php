@@ -208,7 +208,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                  
                                                 </div>
                                             </div>
                                             <div class="nk-stepper-step">
