@@ -48,3 +48,13 @@ window.desitionReport = function(credit_id, financial_id, type) {
    });
 }
 
+// Agregar un controlador de eventos a todos los enlaces dentro del iframe
+var iframeLinks = document.querySelectorAll('.iframe-link');
+for (var i = 0; i < iframeLinks.length; i++) {
+  iframeLinks[i].addEventListener('click', function(event) {
+    // Prevenir que el enlace se abra en el iframe
+    event.preventDefault();
+    // Redirigir al usuario fuera del iframe
+    window.top.location.href = this.href;
+  });
+}

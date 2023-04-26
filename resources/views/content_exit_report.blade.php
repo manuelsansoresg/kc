@@ -53,7 +53,7 @@
                                     @if ($dayOK && $timeOK)
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2 col-12 col-md-4" href="https://app.kaaxclub.com{{ $lnk_app }}" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2 col-12 col-md-4 iframe-link" href="https://app.kaaxclub.com{{ $lnk_app }}" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
                                             <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2 col-12 col-md-4" href="#!">Contactar asesor <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
                                             <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2 col-12 col-md-4" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
                                             </a>
@@ -63,7 +63,7 @@
                                     @else
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="https://app.kaaxclub.com{{ $lnk_app }}" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4 iframe-link" href="https://app.kaaxclub.com{{ $lnk_app }}" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
                                             <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
                                             <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="#!">Salir <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
                                             </a>
