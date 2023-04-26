@@ -1699,6 +1699,34 @@ function getFinancial(lead_id, financial_id) {
   });
 }
 
+window.setChannel = function (origin_id) {
+  $('#lead-channel').empty();
+  var lead_channel = $('#lead-channel');
+  axios.get("/panel/lead/" + origin_id + "/origin/").then(function (response) {
+    var result = response.data;
+
+    if (result != null) {
+      for (var key in result) {
+        var element = result[key];
+
+        if (element != 'Selecciona una opción') {
+          var option = new Option(element, key, true, true);
+          lead_channel.append(option).trigger('change');
+        }
+      }
+    }
+
+    $('#lead-channel').val(null).trigger('change');
+    $('#lead-channel').val(change_channel).trigger("change");
+  })["catch"](function (e) {
+    $('#admin_email-error-exist').show();
+  });
+};
+
+if (document.getElementById('lead-origin-admin')) {
+  setChannel(1);
+}
+
 window.changeOrigen = function (change_channel) {
   var origin_id = $("#lead-origin").val();
   var lead_id = $("#lead_id").val();

@@ -161,7 +161,8 @@
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
-                                                                    <input type="hidden" name="data[origin_id]" value="1">
+                                                                    <input type="hidden" name="data[origin_id]" value="1" id="lead-origin">
+                                                                    <input type="hidden" id="lead-origin-admin">
                                                                 </div>
                                                             </div>
                                                         </div>
