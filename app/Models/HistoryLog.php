@@ -161,7 +161,7 @@ class HistoryLog extends Model
         53 => 'Carga',
         54 => 'Formulario',
         54 => 'Formulario',
-        55 => 'Formulario',
+        55 => 'KC - Delivery',
         56 => 'After market',
     ];
     
@@ -548,19 +548,19 @@ class HistoryLog extends Model
         $id_current_status = HistoryLog::KC_CHECK_UP;
         $get_action = HistoryLog::getLastStatus($data_actions, $credit_id);
 
-        $status_id = $get_action->status_id;
-        $status = $get_action->status_progress;
-        $status_progress = $status > 0 ? 1 : 0;
-        $current_status = $lbl_module[$status_id];
-        $id_current_status = $status_id;
-       /*  if ($status_progress == 1) {
+        if ($get_action != null) {
+            $status_id = $get_action->status_id;
+            $status = $get_action->status_progress;
+            $status_progress = $status > 0 ? 1 : 0;
             $current_status = $lbl_module[$status_id];
             $id_current_status = $status_id;
-        } */
-        if ($is_return_id == false) {
-            return $current_status;
+          
+            if ($is_return_id == false) {
+                return $current_status;
+            }
+            return $id_current_status;
         }
-        return $id_current_status;
+        return null;
     }
 
     public static function getLastStatus($status, $credit_id, $active = 1)

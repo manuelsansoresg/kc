@@ -44,6 +44,12 @@
         $m_history_log::CREDITS_DELIVERED,
     );
     $current_module = $m_history_log->getByStatusFirst($status_credit, $credit->id);
+    $status_credit_archive = array(
+        $m_history_log::KC_PAYMENT_PAID_ARCHIVE,
+        $m_history_log::KC_PAYMENT_UNPAID_ARCHIVE,
+        $m_history_log::KC_AFTER_MARKET_ARCHIVE,
+    );
+    $current_archive = $m_history_log->getByStatusFirst($status_credit, $credit->id);
 @endphp
 
 @section('content')
@@ -631,7 +637,9 @@
                                                 <div class="col-6">
                                                     <span class="sub-text">Estatus:</span>
                                                     <span>
-                                                        {{ isset($m_history_log::$label_status[$current_module->status_id]) ? $m_history_log::$label_status[$current_module->status_id] : null; }}
+                                                        @if ($current_archive == null)
+                                                            {{ isset($m_history_log::$label_status[$current_module->status_id]) ? $m_history_log::$label_status[$current_module->status_id] : null; }}
+                                                        @endif
                                                     </span>
                                                 </div>
 
