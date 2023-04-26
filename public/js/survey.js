@@ -2294,16 +2294,76 @@ var __webpack_exports__ = {};
   \********************************/
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+$(document).ready(function () {
+  var count_steeper = 0; //*Initialize AOS
 
-window.saveSurvey = function () {
-  var new_form = document.getElementById("frm-survey");
-  var data = new FormData(new_form);
-  axios.post("survey", data).then(function (response) {
-    window.location = '/panel/kc-aftermarket'; // TODO: volver dinamico de donde provenga
-  })["catch"](function (e) {
-    var response = e.response;
+  AOS.init(); //* SURVEY LEAD
+
+  window.startSteppersurvey = function () {
+    /* $('#content-leyend-start').hide(); */
+    $('#content-survey-flex').hide();
+    /* $('#content-survey-flex').removeClass('justify-content-center'); */
+
+    $("#content-survey-form").show("slide", {
+      direction: "down"
+    }, 500);
+  }; //*animate stepper when click button continuar or regresar
+
+
+  function animateStepper() {
+    $("#content-survey-form").hide();
+    $("#content-survey-form").show("slide", {
+      direction: "down"
+    }, 500);
+  }
+
+  window.continueStepper = function () {
+    count_steeper = count_steeper + 1;
+    console.log(count_steeper);
+    $('#number_step_survey').val(count_steeper);
+
+    if (count_steeper == 3) {
+      $('#btn-back').hide();
+      $('#btn-finish').hide();
+    }
+
+    if (count_steeper == 4) {
+      console.log('ejecutar guardado');
+      var btnBack = document.getElementById("btnBack");
+      btnBack.style.display = "none";
+      saveSurvey();
+    }
+
+    animateStepper();
+  };
+
+  window.backStepper = function () {
+    count_steeper = count_steeper - 1;
+    console.log(count_steeper);
+    $('#number_step_survey').val(count_steeper);
+    /* animateStepper(); */
+  };
+
+  $('.form-control').on('keydown', function (event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+    }
   });
-};
+
+  window.saveSurvey = function () {
+    var new_form = document.getElementById("frm-survey");
+    var data = new FormData(new_form);
+    axios.post("survey", data).then(function (response) {
+      /* window.location = '/panel/kc-aftermarket'; // TODO: volver dinamico de donde provenga */
+    })["catch"](function (e) {
+      var response = e.response;
+    });
+  };
+
+  $(".stepper-progress-count").text(function (index, currentText) {
+    return currentText.replace("of", "de");
+  });
+});
 })();
 
 /******/ })()
