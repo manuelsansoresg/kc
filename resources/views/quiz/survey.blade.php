@@ -37,7 +37,8 @@
                                 <img class="logo-dark logo-img" src="{{ asset('images/logo-dark.png') }}"
                                     srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
                             </a>
-                            <div class="text-block">
+                            <div class="text-block" data-aos="fade-up"
+                            data-aos-duration="5000">
                                 <img class="nk-survey-gfx mb-5" src="/assets_admin/images/gfx/survey.svg"
                                     alt="">
                                 <h3 class="text-white">Encuesta de satisfacción</h3>
@@ -49,7 +50,8 @@
                             class="nk-split-content nk-split-stretch bg-white p-5 d-flex justify-center align-center flex-column">
                             <div class="wide-xs-fix">
                                 <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
-                                    <div class="nk-stepper-content">
+                                    <div class="nk-stepper-content" data-aos="fade-up"
+                                    data-aos-duration="5000">
                                         <div class="nk-stepper-progress stepper-progress mb-4">
                                             <div class="stepper-progress-count mb-2"></div>
                                             <div class="progress progress-md">

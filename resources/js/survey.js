@@ -11,15 +11,15 @@ $(document).ready(function() {
         $('#content-survey-flex').hide();
         /* $('#content-survey-flex').removeClass('justify-content-center'); */
 
-        $("#content-survey-form").show("slide", {
+        $("#frm-survey").show("slide", {
             direction: "down"
         }, 500);
     }
 
     //*animate stepper when click button continuar or regresar
     function animateStepper() {
-        $("#content-survey-form").hide();
-        $("#content-survey-form").show("slide", {
+        $("#frm-survey").hide();
+        $("#frm-survey").show("slide", {
             direction: "down"
         }, 500);
     }
