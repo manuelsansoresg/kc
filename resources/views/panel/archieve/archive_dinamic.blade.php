@@ -14,7 +14,7 @@
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item">Archivo</li>
-                                            <li class="breadcrumb-item active"><a href="/panel/lead">Prospecto</a></li>
+                                            <li class="breadcrumb-item active"><a href="/panel/lead">{{ $title }}</a></li>
                                         </ul>
                                     </nav>
                                 </div>

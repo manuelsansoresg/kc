@@ -155,8 +155,8 @@ class HistoryLog extends Model
         47 => 'Formulario',
         48 => 'Formulario',
         49 => 'KC - Payments',
-        50 => ' Archivo - KC- Payments - Pagado',
-        51 => ' Archivo - KC- Payments - No pagado',
+        50 => 'KC- Payments Pagado',
+        51 => 'KC- Payments  No pagado',
         52 => 'Formulario',
         53 => 'Carga',
         54 => 'Formulario',
@@ -652,12 +652,12 @@ class HistoryLog extends Model
         $get_list     = HistoryLog::where(['status_id' => $status_id, 'status' => 1])->get();
         $data         = array();
         foreach ($get_list as $query) {
-            $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'id' => $query->id])->render();
             
             $lbl_status   = '<span class="text-success">Valido</span>';
             $credit         = $query->historyCredit;
             $client         = $credit->creditClientPerson;
             if ($client != null) {
+                $option       = \View::make('panel.archieve.add_option_archive_dt', [ 'credit_id' => $credit->id, 'client_id' => $client->id])->render();
                 $product      = $credit != null ? $credit->creditProduct : null;
                 $user         = $credit != null ? $credit->creditAdvisor : null;
     

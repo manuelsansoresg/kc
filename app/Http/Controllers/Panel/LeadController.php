@@ -72,7 +72,8 @@ class LeadController extends Controller
     
     public function archiveView($module_id)
     {
-        return view('panel.lead.archive_dinamic', ['module_id' => $module_id]);
+        $title = isset(HistoryLog::$label_status[$module_id]) ? HistoryLog::$label_status[$module_id] : null;
+        return view('panel.archieve.archive_dinamic', ['module_id' => $module_id, 'title' => $title]);
     }
 
     public function listArchive()
