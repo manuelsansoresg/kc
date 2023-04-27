@@ -237,7 +237,7 @@
                                             </li>
                                             <li class="step-submit" onclick="">
                                                 <div class="col-12">
-                                                    <a href="/panel/kc-aftermarket" class="btn btn-primary btn-block">Salir</a>
+                                                    <a href="/" class="btn btn-primary btn-block">Salir</a>
                                                 </div>
                                             </li>
                                             <input type="hidden" id="credit_id" name="credit_id" value="{{ $credit_id }}">
