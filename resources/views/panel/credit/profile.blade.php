@@ -637,7 +637,6 @@
                                                 <div class="col-6">
                                                     <span class="sub-text">Estatus:</span>
                                                     <span>
-                                                        {{ $current_archive }}
                                                         @if ($current_archive == null)
                                                             {{ isset($m_history_log::$label_status[$current_module->status_id]) ? $m_history_log::$label_status[$current_module->status_id] : null; }}
                                                         @endif
