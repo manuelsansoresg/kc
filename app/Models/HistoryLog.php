@@ -382,6 +382,8 @@ class HistoryLog extends Model
         }
         
         if ($status_id == HistoryLog::KC_PAYMENT) { // finish delivery and enter kcpayment
+            
+
             //copy to after market
             HistoryLog::move($id_rel, HistoryLog::KC_AFTER_MARKET, HistoryLog::KC_AFTER_MARKET);
             HistoryLog::where(['id_rel' => $id_rel, 'status_id' => HistoryLog::CREDIT_IN_PROGRESS, 'status' => 1])
@@ -395,10 +397,6 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $id_rel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_1, $id_rel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $id_rel, 0);
-
-            // send push
-            $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcPayment'];
-            (new $notification_add)->send($credit->id);
         }
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $id_rel, 0);
