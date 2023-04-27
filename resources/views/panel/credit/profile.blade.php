@@ -49,7 +49,7 @@
         $m_history_log::KC_PAYMENT_UNPAID_ARCHIVE,
         $m_history_log::KC_AFTER_MARKET_ARCHIVE,
     );
-    $current_archive = $m_history_log->getByStatusFirst($status_credit, $credit->id);
+    $current_archive = $m_history_log->getByStatusFirst($status_credit_archive, $credit->id, 1);
 @endphp
 
 @section('content')
@@ -637,6 +637,7 @@
                                                 <div class="col-6">
                                                     <span class="sub-text">Estatus:</span>
                                                     <span>
+                                                        {{ $current_archive }}
                                                         @if ($current_archive == null)
                                                             {{ isset($m_history_log::$label_status[$current_module->status_id]) ? $m_history_log::$label_status[$current_module->status_id] : null; }}
                                                         @endif
