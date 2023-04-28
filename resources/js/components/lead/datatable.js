@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         responsive: {
             details: {
                 type: 'column',
-                target: 'td:not(:first-child):not(:nth-child(0))',
+                target: 'td:not(:first-child):not(:nth-child(2))',
                 renderer: function ( api, rowIdx, columns ) {
                     let total = columns.length -1;
                     var data = $.map( columns, function ( col, i ) {
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
         responsive: {
             details: {
                 type: 'column',
-                target: 'td:not(:first-child):not(:nth-child(0))',
+                target: 'td:not(:first-child):not(:nth-child(2))',
                 renderer: function ( api, rowIdx, columns ) {
                     let total = columns.length -1;
                     var data = $.map( columns, function ( col, i ) {

@@ -2048,7 +2048,7 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(0))',
+        target: 'td:not(:first-child):not(:nth-child(2))',
         renderer: function renderer(api, rowIdx, columns) {
           var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
@@ -2103,7 +2103,7 @@ document.addEventListener('DOMContentLoaded', function () {
     responsive: {
       details: {
         type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(0))',
+        target: 'td:not(:first-child):not(:nth-child(2))',
         renderer: function renderer(api, rowIdx, columns) {
           var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
