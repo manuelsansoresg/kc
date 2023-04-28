@@ -2310,8 +2310,13 @@ document.addEventListener('DOMContentLoaded', function () {
         type: 'column',
         target: 'td:not(:first-child):not(:nth-child(2))',
         renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            return col.title !== '' ? '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td>' + col.title + ':' + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
