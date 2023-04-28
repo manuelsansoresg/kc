@@ -2085,7 +2085,7 @@ document.addEventListener('DOMContentLoaded', function () {
       targets: "_all"
     }],
     createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item odd");
+      $(row).addClass("nk-tb-item");
     }
   }); // Expand table rows on click
 
@@ -2136,7 +2136,7 @@ document.addEventListener('DOMContentLoaded', function () {
       targets: "_all"
     }],
     createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item odd");
+      $(row).addClass("nk-tb-item");
     }
   }); // Expand table rows on click
 

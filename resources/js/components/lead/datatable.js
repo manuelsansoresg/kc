@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { className: "nk-tb-col", targets: "_all" },
         ],
         createdRow: function (row, data, dataIndex) {
-            $(row).addClass("nk-tb-item odd");
+            $(row).addClass("nk-tb-item");
 
         },
         
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { className: "nk-tb-col", targets: "_all" },
         ],
         createdRow: function (row, data, dataIndex) {
-            $(row).addClass("nk-tb-item odd");
+            $(row).addClass("nk-tb-item");
 
         },
         
