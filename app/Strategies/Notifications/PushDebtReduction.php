@@ -53,12 +53,16 @@ class PushDebtReduction implements SendNotificationsInterface
                 'date' => $notification->created_at,
                 'status' => $notification->status,
             );
-            if ($advisor->id == Auth::user()->id) {
-                if ($user_id == null) {
-                    $notifications[] = $data_array;
-                } elseif ($user_id != null && $user_id == $advisor->id) {
-                    $notifications[] = $data_array;
+            try {
+                if ($advisor->id == Auth::user()->id) {
+                    if ($user_id == null) {
+                        $notifications[] = $data_array;
+                    } elseif ($user_id != null && $user_id == $advisor->id) {
+                        $notifications[] = $data_array;
+                    }
                 }
+            } catch (\Exception $th) {
+                //throw $th;
             }
             //*activate recieve push
            /*  $get_notification = Notification::find($notification->id);

@@ -48,12 +48,16 @@ class PushLeadAddProspect implements SendNotificationsInterface
                     'status' => $notification->status,
                 );
 
-                if ($lead->asesor_id == Auth::user()->id) {
-                    if ($user_id == null) {
-                        $notifications[] = $data_array;
-                    } elseif ($user_id != null && $user_id == $lead->asesor_id) {
-                        $notifications[] = $data_array;
+                try {
+                    if ($lead->asesor_id == Auth::user()->id) {
+                        if ($user_id == null) {
+                            $notifications[] = $data_array;
+                        } elseif ($user_id != null && $user_id == $lead->asesor_id) {
+                            $notifications[] = $data_array;
+                        }
                     }
+                } catch (\Exception $th) {
+                    //throw $th;
                 }
             }
             

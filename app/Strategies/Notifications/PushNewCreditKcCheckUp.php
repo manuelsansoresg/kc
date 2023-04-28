@@ -56,18 +56,22 @@ class PushNewCreditKcCheckUp implements SendNotificationsInterface
                 }
             }
 
-            if ($advisor != null && $advisor->id == Auth::user()->id) {
-                $data_array = array(
-                    'user_id' => $advisor->id,
-                    'title' => $notification->title,
-                    'body' => $notification->body,
-                    'toast' => $toast,
-                    'id' => $notification->id,
-                    'created_at' => date('Y-m-d H:i:s', strtotime($notification->created_at)),
-                    'date' => $notification->created_at,
-                    'status' => $notification->status,
-                );
-                $notifications[] = $data_array;
+            try {
+                if ($advisor != null && $advisor->id == Auth::user()->id) {
+                    $data_array = array(
+                        'user_id' => $advisor->id,
+                        'title' => $notification->title,
+                        'body' => $notification->body,
+                        'toast' => $toast,
+                        'id' => $notification->id,
+                        'created_at' => date('Y-m-d H:i:s', strtotime($notification->created_at)),
+                        'date' => $notification->created_at,
+                        'status' => $notification->status,
+                    );
+                    $notifications[] = $data_array;
+                }
+            } catch (\Exception $th) {
+                //throw $th;
             }
         }
         return $notifications;
