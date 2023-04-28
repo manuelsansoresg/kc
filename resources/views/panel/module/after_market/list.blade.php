@@ -32,7 +32,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Producto</th>
-                                            <th>Cliente</th>
+                                            <th data-priority="1">Cliente</th>
                                             <th>Asesor</th>
                                             <th>Progreso</th>
                                             <th>En curso</th>

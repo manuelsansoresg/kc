@@ -32,7 +32,7 @@
                                             <th>Producto</th>
                                             <th>Motivo</th>
                                             <th>Fecha</th>
-                                            <th>Cliente</th>
+                                            <th data-priority="1">Cliente</th>
                                             <th>Asesor</th>
                                             <th></th>
                                         </tr>

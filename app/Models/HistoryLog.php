@@ -667,6 +667,7 @@ class HistoryLog extends Model
                 $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $client])->render();
                 $reason = (isset(config('enums.reason_archive')[$query->reason]))? config('enums.reason_archive')[$query->reason] : '';
                 $data[] = array(
+                    'id' => $credit->id,
                     'name' => $content_lead,
                     'date' => formatDateNameMonth($query->created_at),
                     'product' => ($product != null) ? $product->alias : '',

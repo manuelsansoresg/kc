@@ -126,6 +126,7 @@ class Lead extends Model
                 $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $lead])->render();
                 $reason = (isset(config('enums.reason_archive')[$query->reason]))? config('enums.reason_archive')[$query->reason] : '';
                 $data[] = array(
+                    'id' => $lead->id,
                     'name' => $content_lead,
                     'date' => formatDateNameMonth($query->created_at),
                     'product' => ($product != null) ? $product->alias : '',

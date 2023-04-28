@@ -25,10 +25,11 @@
                     <div class="nk-block">
                         <div class="card card-bordered card-stretch">
                             <div class="card-body">
-                                <table id="dt-lead-archive" class="display nowrap nk-tb-list nk-tb-ulist dataTable no-footer" style="width:100%">
+                                <table id="dt-lead-archive" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Nombre</th>
+                                            <th>ID</th>
+                                            <th data-priority="1">Nombre</th>
                                             <th>Fecha</th>
                                             <th>Producto</th>
                                             <th>Origen</th>
