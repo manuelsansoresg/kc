@@ -31,7 +31,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Nombre</th>
+                                            <th data-priority="1">Nombre</th>
                                             <th>Fecha</th>
                                             <th>Producto</th>
                                             <th>Origen</th>

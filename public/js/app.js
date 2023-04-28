@@ -2307,14 +2307,11 @@ document.addEventListener('DOMContentLoaded', function () {
     processing: true,
     responsive: {
       details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
         renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
           var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
+            return col.title !== '' ? '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' + '<td>' + col.title + ':' + '</td> ' + '<td>' + col.data + '</td>' + '</tr>' : '';
           }).join('');
           return data ? $('<table/>').append(data) : false;
         }
@@ -2344,6 +2341,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }],
     createdRow: function createdRow(row, data, dataIndex) {
       $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-control-desk tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
     }
   });
 });
