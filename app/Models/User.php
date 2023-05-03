@@ -132,11 +132,10 @@ class User extends Authenticatable
         $token = str_replace('/', '', $token);
         
         PasswordReset::setToken($find_lead->email, $token);
-        
+        $link_password = 'https://app.kaaxclub.com/password/'.$token.'/'.$find_lead->email.'/change';
         if ($find_user != null) {
              //* send email new account
             if ($is_report == false) {
-                $link_password = 'https://app.kaaxclub.com/password/'.$token.'/'.$find_lead->email.'/change';
                 $domain = 'https://app.kaaxclub.com';
                 $link_login = $domain.'/login';
                 $send_grid = new Csendgrid($find_lead->email, 'creacion cuenta');
@@ -146,7 +145,7 @@ class User extends Authenticatable
             }
 
         } else {
-            $link_password = 'https://app.kaaxclub.com/password/reset/'.$token.'?email='.$find_lead->email;
+            //$link_password = 'https://app.kaaxclub.com/password/reset/'.$token.'?email='.$find_lead->email;
             unset($data['id']);
             //*create user with leads parameters
             $user = new User($data);
