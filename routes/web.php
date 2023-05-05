@@ -54,3 +54,15 @@ Route::post('lead/store', ['\App\Http\Controllers\HomeController', 'leadStore'])
 Route::post('lead/form/store', ['\App\Http\Controllers\HomeController', 'leadFormStore']);
 
 Route::get('quiz/form', ['\App\Http\Controllers\HomeController', 'surveyForm']);
+
+
+Route::get('/nosotros', function () {
+    return view('about');
+});
+Route::get('/contacto', function () {
+    return view('contact');
+});
+
+Route::get('/ayuda', function () {
+    return view('help');
+});
