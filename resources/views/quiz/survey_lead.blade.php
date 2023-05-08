@@ -229,11 +229,19 @@
                                                 <a onclick="chooseOptionCredit(2)" class="btn btn-primary btn-lg" style="cursor: pointer;">Ya tengo un crédito, quiero mejorarlo</a> --}}
                                             </div>
                                         </div>
-    
                                         <div class="nk-stepper-step">
                                             <div class="pt-4 pb-2">
+                                                <h3 class="text-center mb-4">Analizando tus opciones y generando reporte</h3>
+                                                <div class="progress">
+                                                    <div id="loading-bar" class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="nk-stepper-step">
+                                            <div class="pt-4 pb-2">
+                                               
                                                 <em
-                                                    class="icon icon-circle icon-circle-xxl mb-4 ni ni-check bg-primary-dim"></em>
+                                                class="icon icon-circle icon-circle-xxl mb-4 ni ni-check bg-primary-dim"></em>
                                                 <h5 class="title mb-2">Genial!</h5>
                                                 <p>Te hemos enviado un correo electrónico con el análisis de las opciones de crédito disponibles para ti. 
                                                     <br>
@@ -248,7 +256,7 @@
                                                 </div>
     
                                                     
-                                                  
+                                                
                                                 @else
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
@@ -259,7 +267,7 @@
                                                     </div>
                                                 </div>
     
-                                                   
+                                                
                                                 @endif
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
@@ -343,7 +351,15 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <!-- Adding AOS JS Library -->
     <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
-
+    <style>
+        #loading-bar {
+        width: 10%;
+        height: 20px;
+        background-color: #0d6efd;
+        -webkit-transition: width 5s ease;  /* Chrome, Safari, Opera */
+        transition: width 5s ease;
+    }
+    </style>
     <script>
         $(document).ready(function() {
             let count_steeper = 0;
@@ -378,7 +394,10 @@
                 if (count_steeper == 6) {
                     $('#btn-back').hide();
                     $('#btn-finish').hide();
+                    $('#continue').hide();
+                    loading();
                 }
+               
                 if (count_steeper > 3) {
                     console.log('ejecutar guardado');
                     saveLead(false);
@@ -439,6 +458,21 @@
             $(".stepper-progress-count").text(function(index, currentText) {
             return currentText.replace("of", "de");
             });
+
+            window.loading = function() {
+
+                let i = 10;
+                let interval = setInterval(() => {
+                    document.getElementById("loading-bar").style.width = i + "%";
+                    document.getElementById("loading-bar").setAttribute("aria-valuenow", i);
+                    if (i >= 100) {
+                        document.getElementById("continue").click();
+                        clearInterval(interval);
+                    } else {
+                    i += 10;
+                    }
+                }, 500);
+            }
 
         });
     </script>
