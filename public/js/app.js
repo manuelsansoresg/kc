@@ -4797,6 +4797,20 @@ $().ready(function () {
     isAccess();
   });
 });
+/* $( "#frm-contact" ).submit(function( event ) {
+    event.preventDefault();
+    alert('test');
+    const new_form    = document.getElementById('frm-contact');
+    const data        = new FormData(new_form);
+    axios.post("/contact", data)
+    .then(function (response) {
+        
+    })
+    .catch(e => {
+    });
+});
+
+ */
 
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
 })();

@@ -14,6 +14,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/assets/css/vendor.bundle.css?ver=100">
     <link rel="stylesheet" href="/assets/css/style.css?ver=100">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Hotjar Tracking Code for https://www.kaaxclub.com -->
     <!-- Hotjar Tracking Code for https://www.kaaxclub.com -->
 <script>

@@ -164,11 +164,13 @@
             <div class="hero-wrap sub-header">
                 <div class="container">
                     <div class="hero-content text-center py-0">
-                        <h1 class="hero-title">How can we help?</h1>
+                        <h1 class="hero-title">Queremos saber de tí</h1>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb breadcrumb-s1 justify-content-center mt-3 mb-0">
-                                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Contact</li>
+                                <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    <a href="/contacto">Contacto</a>
+                                </li>
                             </ol>
                         </nav>
                     </div><!-- hero-content -->
@@ -181,37 +183,37 @@
                     <div class="col-lg-7">
                         <div class="contact-form-wrap mb-5 mb-lg-0">
                             <div class="section-head-sm">
-                                <h2 class="mb-2">Contact Us</h2>
-                                <p>Have a question? Need help? Don't hesitate, drop us a line</p>
+                                <h2 class="mb-2">Contáctanos</h2>
+                                <p>¿Alguna pregunta? ¿Necesitas ayuda? No dudes en enviarnos un mensaje</p>
                             </div>
                             <form action="#">
                                 <div class="row g-gs">
                                     <div class="col-lg-6">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" id="floatingInputName" placeholder="Name">
-                                            <label for="floatingInputName">Your name</label>
+                                            <input type="text" class="form-control" id="floatingInputName" required>
+                                            <label for="floatingInputName">Tú nombre</label>
                                         </div><!-- end form-floating -->
                                     </div><!-- end col -->
                                     <div class="col-lg-6">
                                         <div class="form-floating">
-                                            <input type="email" class="form-control" id="floatingInputEmail" placeholder="name@example.com">
-                                            <label for="floatingInputEmail">Email address</label>
+                                            <input type="email" class="form-control" id="floatingInputEmail" required>
+                                            <label for="floatingInputEmail">Email</label>
                                         </div><!-- end form-floating -->
                                     </div><!-- end col -->
                                     <div class="col-lg-12">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" id="floatingInputPhoneNumber" placeholder="Username">
-                                            <label for="floatingInputPhoneNumber">Phone number</label>
+                                            <input type="text" class="form-control" id="floatingInputPhoneNumber" required>
+                                            <label for="floatingInputPhoneNumber">Celular</label>
                                         </div><!-- end form-floating -->
                                     </div><!-- end col -->
                                     <div class="col-lg-12">
                                         <div class="form-floating">
-                                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-                                            <label for="floatingTextarea">Type message here...</label>
+                                            <textarea class="form-control"id="floatingTextarea" required></textarea>
+                                            <label for="floatingTextarea">Escribe tu mensaje aquí...</label>
                                         </div><!-- end form-floating -->
                                     </div><!-- end col -->
                                     <div class="col-lg-12">
-                                        <button class="btn btn-dark" type="submit">Send Message</button>
+                                        <button type="submit" class="btn btn-dark" type="submit">Enviar mensaje</button>
                                     </div><!-- end col -->
                                 </div><!-- end row -->
                             </form>

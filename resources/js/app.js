@@ -106,5 +106,18 @@ $().ready(function () {
     
 });
 
+/* $( "#frm-contact" ).submit(function( event ) {
+    event.preventDefault();
+    alert('test');
+    const new_form    = document.getElementById('frm-contact');
+    const data        = new FormData(new_form);
+    axios.post("/contact", data)
+    .then(function (response) {
+        
+    })
+    .catch(e => {
+    });
+});
 
+ */
 require('./components/websocket');
