@@ -43,7 +43,7 @@
                         </div><!-- .header-logo -->
                         <div class="header-mobile-action">
                             <div class="header-search-mobile dropdown me-2">
-                                <a class="btn-sm btn btn-dark" href="https://app.kaaxclub.com/" data-bs-toggle="dropdown">
+                                <a class="btn-sm btn btn-dark" href="https://app.kaaxclub.com/">
                                     Ir a la App
                                 </a>
                           
