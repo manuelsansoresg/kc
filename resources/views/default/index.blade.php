@@ -7,17 +7,22 @@
             <div class="col-lg-5 col-sm-9 col-md-6">
                 <div class="hero-image">
                     <img src="images/thumb/nft-img.png" alt="" class="w-100">
+                    <p class="text-center">Elije en menos de 3 minutos</p>
                 </div>
             </div><!-- end col-lg-5 -->
             <div class="col-lg-6 col-md-6">
                 <div class="hero-content pb-0 pt-md-0 pe-lg-4">
-                    <h1 class="hero-title mb-4">Create, sell or collect digital items</h1>
-                    <p class="hero-text mb-4 pb-1">Complete account of the system, and expound the actual teachings of the great explorer of human happiness.</p>
+                    <h1 class="hero-title mb-4">Encuentra y tramita tu crédito de nómina ideal.
+                    </h1>
+                    <p class="hero-text mb-4 pb-1">Elegir entre todas las financieras puede ser confuso y difícil. Pero no tiene que ser así.
+                    </p>
                     <!-- button group -->
                     <ul class="btns-group hero-btns">
-                        <li><a href="explore.html" class="btn btn-lg btn-dark">Explore</a></li>
-                        <li><a href="https://sprw.io/stt-d1fdfd" target="_blank" class="btn btn-lg btn-outline-dark">Iniciar</a></li>
+                        <li><a href="https://sprw.io/stt-d1fdfd" target="_blank" class="btn btn-lg btn-dark">Iniciar</a></li>
                     </ul>
+                    <p class="mt-5 h3">
+                        Fácil, rápido, <span class="text-decoration-underline">sin costo.</span> <i class="fa-solid fa-circle-info"  data-bs-toggle="tooltip" title="Nuestro servicio siempre será sin costo para ti. Nuestro modelo de negocio se basa en una comisión a la financiera que elijas."> </i> 
+                    </p>
                 </div><!-- hero-content -->
             </div><!-- col-lg-6 -->
         </div><!-- end row -->
