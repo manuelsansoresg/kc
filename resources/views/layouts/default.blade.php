@@ -43,21 +43,12 @@
                         </div><!-- .header-logo -->
                         <div class="header-mobile-action">
                             <div class="header-search-mobile dropdown me-2">
-                                <a class="icon-btn" href="#" data-bs-toggle="dropdown">
-                                    <em class="ni ni-search"></em>
+                                <a class="btn-sm btn btn-dark" href="https://app.kaaxclub.com/" data-bs-toggle="dropdown">
+                                    Ir a la App
                                 </a>
-                            {{--     <div class="dropdown-menu dropdown-menu-end card-generic">
-                                    <div class="input-group">
-                                        <input type="search" class="form-control form-control-s1" placeholder="Search item here...">
-                                        <a href="#" class="btn btn-sm btn-outline-secondary"><em class="ni ni-search"></em></a>
-                                    </div>
-                                </div> --}}
+                          
                             </div><!-- end header-search-mobile -->
-                            <div class="header-mobile-wallet me-2">
-                                <a class="icon-btn" href="wallet.html">
-                                    <em class="ni ni-wallet"></em>
-                                </a>
-                            </div><!-- end hheader-mobile-wallet -->
+                           
                             <div class="header-toggle">
                                 <button class="menu-toggler">
                                     <em class="menu-on menu-icon ni ni-menu"></em>
