@@ -267,7 +267,15 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <!-- Adding AOS JS Library -->
     <script src="https://cdn.rawgit.com/michalsnik/aos/2.1.1/dist/aos.js"></script>
-
+    <style>
+        #loading-bar {
+        width: 10%;
+        height: 20px;
+        background-color: #0d6efd;
+        -webkit-transition: width 5s ease;  /* Chrome, Safari, Opera */
+        transition: width 5s ease;
+    }
+    </style>
     <script>
         $(document).ready(function() {
             let count_steeper = 0;
