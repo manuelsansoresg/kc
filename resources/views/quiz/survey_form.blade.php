@@ -41,19 +41,13 @@
                 <div class="nk-content" id="content-lead-flex">
                     <div class="d-flex justify-content-center align-items-center vh-100">
                         <div class="bg-transparent is-dark p-5 text-center">
-                            <a href="/" class="logo-link nk-sidebar-logo">
-                                <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    alt="logo" data-aos="fade-up"
-                                    data-aos-duration="5000">
-                            
-                            </a>
                             <div class="text-block">
                                 <p class="mt-5">
                                     <h3 class="text-white" data-aos="fade-up" data-aos-duration="9000">
                                         Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción<
                                     </h3>
                                 </p>
-                                
+
                                 <p class="mt-5">
                                     <div class="row justify-content-center">
                                         <div class="col-12 col-md-6">
