@@ -38,7 +38,7 @@
             <!-- wrap @s -->
             <div class="nk-wrap nk-wrap-nosidebar">
                 <!-- content @s -->
-                {{-- <div class="nk-content" id="content-lead-flex">
+                <div class="nk-content" id="content-lead-flex">
                     <div class="d-flex justify-content-center align-items-center vh-100">
                         <div class="bg-transparent is-dark p-5 text-center">
                             <a href="/" class="logo-link nk-sidebar-logo">
@@ -50,7 +50,7 @@
                             <div class="text-block">
                                 <p class="mt-5">
                                     <h3 class="text-white" data-aos="fade-up" data-aos-duration="9000">
-                                        El trámite es fácil y rápido.
+                                        Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción<
                                     </h3>
                                 </p>
                                 <p class="mt-5">
@@ -58,8 +58,7 @@
                                         <div class="col-12 col-md-6">
                                             <a onclick="startStepperLead()" id="btn-next-init"
                                                 class="btn btn-primary btn-lg btn-block py-3 pointer"
-                                                data-aos="fade-up" data-aos-duration="5000">Adelante &nbsp; <i
-                                                class="fas fa-smile-beam text-warning"></i>
+                                                data-aos="fade-up" data-aos-duration="5000">Iniciar 
                                             </a>
                                         </div>
                                     </div>
@@ -71,7 +70,7 @@
                         </div><!-- .nk-split-content -->
 
                     </div><!-- .nk-split -->
-                </div> --}}
+                </div>
                <div class="container">
                 <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
                     <div class="nk-content  p-5" id="content-lead-form" style="display: none">
