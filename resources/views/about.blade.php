@@ -9,10 +9,20 @@
             </div><!-- end col-lg-6 -->
             <div class="col-lg-6 pe-lg-5">
                 <div class="section-content-block">
-                    <h2 class="mb-4">Building an open digital economy</h2>
-                    <p class="mb-3">At EnftyMart, we're excited about a brand new type of digital good called a non-fungible token, or NFT. NFTs have exciting new properties: they’re unique, provably scarce, tradeable, and usable across multiple applications. Just like physical goods, you can do whatever you want with them! You could throw them in the trash, gift them to a friend a</p>
-                    <p class="mb-3">A core part of our vision is that open protocols like Ethereum and interoperable standards like ERC-721 and ERC-1155 will enable vibrant new economies. We're building tools that allow consumers to trade their assets freely</p>
-                    <p>We’re proud to be the first and largest marketplace for NFTs.</p>
+                    <h2 class="mb-4">Acerca de</h2>
+                    <p class="mb-3">
+                        Nuestro servicio está diseñado para ayudar a las personas que buscan obtener un crédito nuevo o reducir uno existente, a encontrar y tramitar la mejor opción disponible en el mercado. Nosotros te asistiremos en cada paso del proceso para asegurarnos de que obtengas el mejor crédito posible.
+                    </p>
+                   
+                    <h2 class="mb-4">Misión</h2>
+                    <p class="mb-3">
+                        Nuestra misión es ayudar a las personas a obtener el crédito adecuado mediante una asesoría personalizada y un servicio calificado para encontrar y tramitar la mejor opción disponible en el mercado.
+                    </p>
+                    
+                    <h2 class="mb-4">Visión</h2>
+                    <p class="mb-3">
+                        Nuestra visión es ser el servicio (opción) que cambie la forma en que las personas buscan y mejoran sus créditos, proporcionando soluciones financieras de última generación y una experiencia personalizada excepcional, a través de nuestra tecnología y equipo altamente capacitado. Nos esforzamos por liderar el mercado y ser los impulsores del cambio en la industria financiera.
+                    </p>
                 </div>
             </div><!-- end col-lg-6 -->
         </div><!-- end row -->
@@ -21,9 +31,9 @@
 <section class="cta-section section-space-b bg-pattern mt-5">
     <div class="container">
         <div class="cta-box text-center">
-            <h1 class="cta-title mb-3">Interested in joining us?</h1>
-            <p class="cta-text mb-4">Hop aboard and view our open positions</p>
-            <a href="contact.html" class="btn btn-lg btn-dark">See open roles</a>
+            <h1 class="cta-title mb-3">¿Tienes alguna duda?</h1>
+            <p class="cta-text mb-4">Ponte en contacto con nosotros</p>
+            <a href="/contacto" class="btn btn-lg btn-dark">Contacto</a>
         </div><!-- end cta-box -->
     </div><!-- .container -->
 </section><!-- end cta-section -->
