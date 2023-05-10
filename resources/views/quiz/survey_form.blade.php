@@ -40,11 +40,11 @@
                 <!-- content @s -->
                 <div class="nk-content" id="content-lead-flex">
                     <div class="d-flex justify-content-center align-items-center vh-100">
-                        <div class="bg-transparent is-dark p-5 text-center">
+                        <div class="bg-transparent is-dark p-5">
                             <div class="text-block">
                                 <p class="mt-5" data-aos="fade-up" data-aos-duration="9000">
                                     <h1 class="font-28">Reporte</h1>
-                                    <h5 class="font-15 mt-n2 color-highlight mb-4" style="color: #6576ff !important;">Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción</h5>
+                                    <h5 class="font-15 mt-n2 color-highlight mb-4 text-center" style="color: #6576ff !important;">Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción</h5>
                                     </h3>
                                 </p>
                                 <p class="mt-5">
