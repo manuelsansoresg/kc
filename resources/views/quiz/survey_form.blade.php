@@ -308,6 +308,7 @@
                 console.log(count_steeper);
                 $('#number_step').val(count_steeper);
                 if (count_steeper == 3) {
+                    loading();
                     $('#btn-back').hide();
                     $('#btn-finish').hide();
                 }
@@ -383,6 +384,20 @@
             return currentText.replace("of", "de");
             });
 
+            window.loading = function() {
+
+            let i = 10;
+            let interval = setInterval(() => {
+                document.getElementById("loading-bar").style.width = i + "%";
+                document.getElementById("loading-bar").setAttribute("aria-valuenow", i);
+                if (i >= 100) {
+                    document.getElementById("continue").click();
+                    clearInterval(interval);
+                } else {
+                i += 10;
+                }
+            }, 500);
+            }
             
 
         });
