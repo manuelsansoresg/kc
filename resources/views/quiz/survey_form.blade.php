@@ -44,7 +44,7 @@
                             <div class="text-block">
                                 <p class="mt-5">
                                     <h3 class="text-white" data-aos="fade-up" data-aos-duration="9000">
-                                        Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción<
+                                        Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción
                                     </h3>
                                 </p>
 
