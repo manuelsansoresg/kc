@@ -44,7 +44,7 @@
                             <div class="text-block">
                                 <p class="mt-5" data-aos="fade-up" data-aos-duration="9000">
                                     <h1 class="font-28">Reporte</h1>
-                                    <h5 class="font-15 color-highlight mb-4 text-center text-justify" style="color: #6576ff !important;">Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción</h5>
+                                    <h5 class="font-15 color-highlight mb-4 text-justify" style="color: #6576ff !important;">Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción</h5>
                                     </h3>
                                 </p>
                                 <p class="mt-5">
