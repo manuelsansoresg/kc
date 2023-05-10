@@ -38,7 +38,7 @@
             <!-- wrap @s -->
             <div class="nk-wrap nk-wrap-nosidebar">
                 <!-- content @s -->
-                <div class="nk-content" id="content-lead-flex">
+                {{-- <div class="nk-content" id="content-lead-flex">
                     <div class="d-flex justify-content-center align-items-center vh-100">
                         <div class="bg-transparent is-dark p-5 text-center">
                             <a href="/" class="logo-link nk-sidebar-logo">
@@ -71,7 +71,7 @@
                         </div><!-- .nk-split-content -->
 
                     </div><!-- .nk-split -->
-                </div>
+                </div> --}}
                <div class="container">
                 <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
                     <div class="nk-content  p-5" id="content-lead-form" style="display: none">
@@ -97,6 +97,9 @@
                                         <div class="nk-stepper-step">
                                             <h5 class="title mb-3 mt-5">En caso de que necesitemos enviarte un mensaje
                                                 por WhatsApp, ¿nos das tu número de celular?</h5>
+                                                <label class="form-label text-white"
+                                                    for="sv1-email"> No enviamos spam. ¡Lo prometemos! <i
+                                                        class="fas fa-smile-beam text-warning"></i>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-cellphone">
                                                 </label>
@@ -137,8 +140,8 @@
     
     
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> y por último
-                                                ¿Cómo podemos ayudarte?</h5>
+                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> Y por último. Dinos qué es  lo que deseas.
+                                                </h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-cellphone">
                                                     Te ayudamos a encontrar la mejor opción
@@ -153,7 +156,7 @@
                                                                    </span> </label>
                                                         </div>
                                                     </li>
-                                                    <li>
+                                               {{--      <li>
                                                         <div class="custom-control custom-control-sm custom-radio custom-control-pro">
                                                             <input type="radio" class="custom-control-input" id="surevey_kc_attention-s6" name="data[product_id]" value="2" onclick="chooseOptionCredit()">
                                                             <label class="custom-control-label bg-dark" for="surevey_kc_attention-s6">
@@ -161,10 +164,19 @@
                                                                     Ya tengo un crédito, quiero mejorarlo </span>
                                                                    </span> </label>
                                                         </div>
-                                                    </li>
+                                                    </li> --}}
                                                 </ul>
                                                 {{-- <a onclick="chooseOptionCredit(1)" class="btn btn-primary btn-lg" style="cursor: pointer;">Quiero un crédito nuevo</a>
                                                 <a onclick="chooseOptionCredit(2)" class="btn btn-primary btn-lg" style="cursor: pointer;">Ya tengo un crédito, quiero mejorarlo</a> --}}
+                                            </div>
+                                        </div>
+
+                                        <div class="nk-stepper-step">
+                                            <div class="pt-4 pb-2">
+                                                <h3 class="text-center mb-4">Analizando tus opciones y generando reporte</h3>
+                                                <div class="progress">
+                                                    <div id="loading-bar" class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
                                             </div>
                                         </div>
     
@@ -172,9 +184,10 @@
                                             <div class="pt-4 pb-2">
                                                 <em
                                                     class="icon icon-circle icon-circle-xxl mb-4 ni ni-check bg-primary-dim"></em>
-                                                <h5 class="title mb-2">Genial!</h5>
+                                                <h5 class="title mb-2">¡Genial!</h5>
                                                 <p>Hemos generado un reporte con las opciones de crédito disponibles para tí.
-                                                   
+                                                   <br>
+                                                   Elige la mejor y después te ayudaremos con el trámite para que todo salga bien.
                                                 </p>
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
@@ -217,7 +230,7 @@
                                 </h3>
                                 </p>
                                 <p class="mt-5">
-                                    Aún no contamos con servicio para el lugar donde trabajas
+                                    Aún no contamos con servicio para el lugar donde trabajas.
                                     <br>
                                     Por favor, dinos dónde trabajas para poder ofrecerte nuestro servicio próximamente.
                                 </p>
@@ -231,8 +244,7 @@
                                 <input type="hidden" name="key_user" value="{{ $_GET['token'] }}">
                                 <input type="hidden" name="key_email" value="{{ $_GET['email'] }}">
                                 
-                                <button type="button"
-                                                    class="btn btn-primary btn-lg py-3" onclick="saveLead(false)">Terminar</button>
+                                <a class="btn btn-primary btn-lg py-3 iframe-link" href="https://app.kaaxclub.com/">Terminar</a>
                             </div>
                         </div>
                     </div>
