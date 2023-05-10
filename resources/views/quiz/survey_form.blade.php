@@ -42,9 +42,9 @@
                     <div class="d-flex justify-content-center align-items-center vh-100">
                         <div class="bg-transparent is-dark p-5 text-center">
                             <div class="text-block">
-                                <p class="mt-5">
-                                    <h3 class="text-white" data-aos="fade-up" data-aos-duration="9000">
-                                        Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción
+                                <p class="mt-5" data-aos="fade-up" data-aos-duration="9000">
+                                    <h1 class="font-28">Reporte</h1>
+                                    <h5 class="font-15 mt-n2 color-highlight mb-4">Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción</h5>
                                     </h3>
                                 </p>
                                 <p class="mt-5">
