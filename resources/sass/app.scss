@@ -56,6 +56,10 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     }
 }
 
+.color-highlight {
+    color: #6576ff !important;
+  }
+
 // Medium devices (tablets, 768px and up)
 @media (min-width: 992px) { 
     .content-options{
