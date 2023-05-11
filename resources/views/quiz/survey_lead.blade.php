@@ -256,8 +256,8 @@
                                                 @if ($dayOK && $timeOK)
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
-                                                            data-aos="fade-up" data-aos-duration="5000">Contactar asesor</a>
+                                                        <a href="https://kaaxclub.com/" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
+                                                            >OK</a>
                                                     </div>
                                                 </div>
     
@@ -269,7 +269,7 @@
                                                     <div class="col-12 col-md-6">
                                                         <a href="https://kaaxclub.com/"
                                                             class="btn btn-primary btn-lg btn-block pointer btn-block"
-                                                                data-aos="fade-up" data-aos-duration="5000">OK</a>
+                                                                >Salir</a>
                                                     </div>
                                                 </div>
                                                 
