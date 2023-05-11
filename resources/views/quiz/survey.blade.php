@@ -18,6 +18,17 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
+    <!-- Hotjar Tracking Code for https://www.kaaxclub.com -->
+    <script>
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:3046847,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
 </head>
 
 <body class="nk-body bg-white npc-general pg-survey">

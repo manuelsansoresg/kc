@@ -26,6 +26,31 @@
     <link rel="stylesheet" href="{{ asset('/assets_report/css/theme.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets_report/css/app.css') }}">
     <link href="{{ asset('images/favicon.ico') }}" rel="icon">
+    @if (!isset($_GET['is_app']))
+        <!-- Hotjar Tracking Code for https://www.kaaxclub.com -->
+        <script>
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:3046847,hjsv:6};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+        </script>
+    @else
+        <!-- Hotjar Tracking Code for Webapp -->
+    <script>
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:3488514,hjsv:6};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
+    @endif
 </head>
 
 <body class="dark-mode">
