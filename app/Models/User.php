@@ -168,7 +168,7 @@ class User extends Authenticatable
             $domain = 'https://app.kaaxclub.com';
             //$link_account = $domain.'/account/'.$user->id.'/password/setup';
             $body = 'Usuario: '. $user->mail. '<br> Contraseña: '.$password;
-            $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
+            $send_grid = new Csendgrid($data['email'], 'creacion cuenta', '', 'contacto@kaaxclub.com');
             $send_grid->setTemplate('d-235b3d5c43c14184b365def8c1d1e160');
             $send_grid->setParams(['first_name'=> $data['name'], 'link_account' => $link_password, 'body' => $body]);
             $send_grid->send();
