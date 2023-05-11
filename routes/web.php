@@ -64,7 +64,7 @@ Route::get('/contacto', function () {
 });
 
 Route::get('/ayuda', function () {
-    return view('contact');
+    return view('ayuda');
 });
 
 Route::get('/aviso-de-privacidad', function () {

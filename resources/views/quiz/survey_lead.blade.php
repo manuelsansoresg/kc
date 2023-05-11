@@ -12,7 +12,7 @@
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="/images/favicon-32x32.png">
     <!-- Page Title  -->
-    <title>KC- Encuesta de satisfacción</title>
+    <title>KaaxClub - Hola </title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
@@ -32,6 +32,16 @@
 @endphp
 
 <body class="nk-body bg-dark npc-general pg-survey text-white">
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <a href="/" class="logo-link nk-sidebar-logo">
+                <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
+                    alt="logo" data-aos="fade-up"
+                    data-aos-duration="5000">
+            
+            </a>
+        </div>
+    </div>
     <div class="nk-app-root">
         <!-- main @s -->
         <div class="nk-main ">
@@ -40,57 +50,59 @@
                 <!-- content @s -->
                 <div class="nk-content" id="content-lead-flex">
                     <div class="d-flex justify-content-center align-items-center vh-100">
-                        <div class="bg-dark is-dark p-5 text-center">
-                            <a href="/" class="logo-link nk-sidebar-logo">
-                                <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    alt="logo" data-aos="fade-up"
-                                    data-aos-duration="5000">
+                        <div class="bg-dark is-dark p-5 ">
                             
-                            </a>
                             <div class="text-block">
-                                <p class="mt-5">
+                                <h1 style="color: #6576ff !important;"> Hola </h1>
+                                <p class="">
                                     @if ($dayOK && $timeOK)
-                                        <h3 class="text-white" data-aos="fade-up" data-aos-duration="5000">
-                                            El trámite es fácil y rápido. <br> Puedes iniciar el trámite tú mismo o si
+                                        <p class="text-white" data-aos="fade-up" data-aos-duration="5000" >
+                                            Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción
+                                            <br><br>
+                                            Después  de que elijas, te ayudaremos con el támite para que todo salga bien.
+                                            <br><br>
+                                            Contacta un asesor para que genere tu reporte.O si
                                             lo
-                                            prefieres, un
-                                            asesor te puede ayudar via WhatsApp
-                                        </h3>
+                                            prefieres lo puedes generar tú mismo
+                                        </p>
                                     @else
-                                        <h3 class="text-white" data-aos="fade-up" data-aos-duration="9000">
+                                        <p class="text-white" data-aos="fade-up" data-aos-duration="9000">
                                             El trámite es fácil y rápido.
-                                        </h3>
+                                        </p>
                                     @endif
                                 </p>
-                                <p class="mt-5">
+                                <div class="mt-5" data-aos="fade-up" data-aos-duration="5000">
                                     @if ($dayOK && $timeOK)
-                                        <div class="row justify-content-center">
+                                    <div class="row justify-content-center mt-3" >
+                                        <div class="col-12 col-md-6">
+                                            <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=hola" class="btn btn-primary btn-lg btn-block py-3 pointer"
+                                                >Contactar asesor &nbsp;
+                                                <i class="fab fa-whatsapp text-success"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                        <div class="row justify-content-center mt-3">
                                             <div class="col-12 col-md-6">
                                                 <a onclick="startStepperLead()" id="btn-next-init"
                                                     class="btn btn-primary btn-lg btn-block py-3 pointer"
-                                                    data-aos="fade-up" data-aos-duration="5000">Adelante &nbsp; <i
+                                                    >Hazlo tu mismo &nbsp; <i
                                                     class="fas fa-smile-beam text-warning"></i>
                                                 </a>
                                             </div>
                                         </div>
-                                        <div class="row justify-content-center mt-3">
-                                            <div class="col-12 col-md-6">
-                                                <a href="" class="btn btn-primary btn-lg btn-block py-3 pointer"
-                                                    data-aos="fade-up" data-aos-duration="5000">Contactar asesor</a>
-                                            </div>
-                                        </div>
+                                       
                                     @else
                                         <div class="row justify-content-center">
                                             <div class="col-12 col-md-6">
                                                 <a onclick="startStepperLead()"
                                                     class="btn btn-primary btn-lg btn-block py-3 pointer"
-                                                    data-aos="fade-up" data-aos-duration="5000">Adelante &nbsp; <i
+                                                    >Adelante &nbsp; <i
                                                     class="fas fa-smile-beam text-warning"></i></a>
                                             </div>
                                         </div>
                                     @endif
 
-                                </p>
+                                    </div>
 
                             </div>
 
@@ -103,12 +115,6 @@
                     <div class="nk-content  p-5" id="content-lead-form" style="display: none">
                         <div class="d-flex  align-items-center vh-100">
                             <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
-                                <a href="/" class="logo-link nk-sidebar-logo">
-                                    <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    alt="logo" data-aos="fade-up"
-                                    data-aos-duration="5000">
-                                </a>
-    
                                 
                                 <div class="nk-stepper-content">
                                     <div class="nk-stepper-progress stepper-progress mb-4">
@@ -119,7 +125,7 @@
                                     </div>
                                     <div class="nk-stepper-steps stepper-steps">
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5">Hola ¿Cómo te llamas?</h5>
+                                            <h5 class="title mb-3 mt-5">¿Cómo te llamas?</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-first-name">
                                                 </label>
@@ -199,8 +205,8 @@
     
     
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> y por último
-                                                ¿Cómo podemos ayudarte?</h5>
+                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> Y por último
+                                                Dinos qué es lo que deseas</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-cellphone">
                                                     Te ayudamos a encontrar la mejor opción
@@ -215,7 +221,7 @@
                                                                    </span> </label>
                                                         </div>
                                                     </li>
-                                                    <li>
+                                                   {{--  <li>
                                                         <div class="custom-control custom-control-sm custom-radio custom-control-pro">
                                                             <input type="radio" class="custom-control-input" id="surevey_kc_attention-s6" name="data[product_id]" value="2" onclick="chooseOptionCredit()">
                                                             <label class="custom-control-label bg-dark" for="surevey_kc_attention-s6">
@@ -223,7 +229,7 @@
                                                                     Ya tengo un crédito, quiero mejorarlo </span>
                                                                    </span> </label>
                                                         </div>
-                                                    </li>
+                                                    </li> --}}
                                                 </ul>
                                                 {{-- <a onclick="chooseOptionCredit(1)" class="btn btn-primary btn-lg" style="cursor: pointer;">Quiero un crédito nuevo</a>
                                                 <a onclick="chooseOptionCredit(2)" class="btn btn-primary btn-lg" style="cursor: pointer;">Ya tengo un crédito, quiero mejorarlo</a> --}}
@@ -242,8 +248,8 @@
                                                
                                                 <em
                                                 class="icon icon-circle icon-circle-xxl mb-4 ni ni-check bg-primary-dim"></em>
-                                                <h5 class="title mb-2">Genial!</h5>
-                                                <p>Te hemos enviado un correo electrónico con el análisis de las opciones de crédito disponibles para ti. 
+                                                <h5 class="title mb-2 fw-bold">Genial!</h5>
+                                                <p>Te hemos enviado un <b>correo electrónico</b> con el análisis de las opciones de crédito disponibles para ti. 
                                                     <br>
                                                     Una vez que elijas la mejor opción, te ayudaremos con el trámite.
                                                 </p>
@@ -258,24 +264,33 @@
                                                     
                                                 
                                                 @else
+                                                
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a onclick="startStepperLead()" id="btn-next-init"
+                                                        <a href="https://kaaxclub.com/"
+                                                            class="btn btn-primary btn-lg btn-block pointer btn-block"
+                                                                data-aos="fade-up" data-aos-duration="5000">OK</a>
+                                                    </div>
+                                                </div>
+                                                
+                                                @endif
+                                                <div class="row justify-content-center mt-3">
+                                                    <div class="col-12 col-md-6">
+                                                        <a href="https://kaaxclub.com/ayuda" id="btn-next-init"
                                                             class="btn btn-primary btn-lg btn-block pointer btn-block"
                                                             data-aos="fade-up" data-aos-duration="5000">Ayuda
                                                         </a>
                                                     </div>
                                                 </div>
-    
-                                                
-                                                @endif
+
                                                 <div class="row justify-content-center mt-3">
-                                                    <div class="col-12 col-md-6">
-                                                        <a href="https://kaaxclub.com/"
-                                                            class="btn btn-primary btn-lg btn-block pointer btn-block"
-                                                                data-aos="fade-up" data-aos-duration="5000">Salir</a>
+                                                    <div class="col-12">
+                                                       <p class="text-muted font-italic" style="font-style: italic;">
+                                                        Si no ves el correo electrónico. Consulta la bandeja de spam
+                                                       </p>
                                                     </div>
                                                 </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -333,9 +348,7 @@
                </div>
             </div>
 
-            <footer class="fixed-bottom text-center">
-                <p>&copy; Equipo de KaaxClub</p>
-            </footer>
+          
             <!-- content @e -->
         </div>
         <!-- main @e -->
