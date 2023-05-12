@@ -46,11 +46,16 @@ class Csendgrid
     {
         
         $email = new \SendGrid\Mail\Mail();
-        $email->setFrom($this->from, 'KaaxClub');
+        if ($this->idTemplate == '944f2768988a43dca2e0ad689954fd20') {
+            $email->setFrom($this->from);
+        } else {
+            $email->setFrom($this->from, 'KaaxClub');
+        }
+
         $email->setSubject($this->subject);
         $email->addTo($this->to);
         
-        $email->addCc('manuelsansoresg@gmail.com');
+        //$email->addCc('manuelsansoresg@gmail.com');
        /*  if ($this->cc != '') {
             $email->addCc($this->to);
         } */
