@@ -1,4 +1,4 @@
-{{-- <nav class="navbar navbar-expand-lg navbar-transparent navbar-sticky navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-transparent navbar-sticky navbar-dark">
     <div class="container position-relative">
        
         <div class="text-center">
@@ -33,9 +33,9 @@
             </div>
         </div>
     </div>
-</nav> --}}
+</nav>
 
-<nav class="navbar navbar-expand-lg navbar-transparent navbar-sticky navbar-dark">
+{{-- <nav class="navbar navbar-expand-lg navbar-transparent navbar-sticky navbar-dark">
     <div class="container-fluid position-relative">
         <a class="navbar-brand" href="index.html">
             <img src="{{ asset('images/logo-dark.png') }}" class="img-fluid" alt="">
@@ -81,4 +81,4 @@
             </div>
         </div>
     </div>
-</nav>
+</nav> --}}
