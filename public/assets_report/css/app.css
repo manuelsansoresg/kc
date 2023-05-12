@@ -75,6 +75,7 @@
 .animated-title > div.text-top {
   border-bottom: 4px solid #fff;
   top: 0;
+  width: 96%;
 }
 
 .animated-title > div.text-top div {
