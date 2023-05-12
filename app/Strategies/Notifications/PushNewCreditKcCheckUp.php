@@ -26,9 +26,6 @@ class PushNewCreditKcCheckUp implements SendNotificationsInterface
             Notification::create($data_notification);
             $push  = new Pusher;
             $push->send(['model' => 'pushNewCreditKcCheckUp']);
-
-            $notification_slack = new Slack('kaaxClub', 'nuevo prospecto');
-            $notification_slack->sendMessage();
         }
     }
     

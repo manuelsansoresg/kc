@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Lib\Csendgrid;
+use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
 use App\Strategies\Values\ValidateStagesValues;
@@ -247,6 +248,10 @@ class Lead extends Model
             HistoryLog::move($get_lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         } else {
             $get_lead->fill($data_lead)->update();
+        }
+        if ($number_step == 1) {
+            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+            (new $notification)->send($lead_id);
         }
         if ($number_step == 3) {
             $template   = TemplateValues::STRATEGY['lead'];
