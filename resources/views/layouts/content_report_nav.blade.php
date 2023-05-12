@@ -8,7 +8,7 @@
             </a>
         </div>
        
-        <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="offcanvas"
+        <button class="navbar-toggler border-0 px-2 px-md-0" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasNavbarDefault" aria-controls="offcanvasNavbarDefault" aria-expanded="false"
             aria-label="Toggle navigation"><span class="material-symbols-rounded align-middle">menu</span></button>
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="offcanvasNavbarDefault" tabindex="-1"
