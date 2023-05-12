@@ -1,14 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-transparent navbar-sticky navbar-dark">
     <div class="container position-relative">
        
-        <div class="text-center">
+        <div class="col-10">
             <a class="navbar-brand" href="index.html">
                 <img src="{{ asset('images/logo-dark.png') }}" class="img-fluid" alt="">
     
             </a>
         </div>
        
-        <button class="navbar-toggler border-0 px-2 px-md-0" type="button" data-bs-toggle="offcanvas"
+        <div class="col-2">
+            <button class="navbar-toggler border-0 px-2 px-md-0" type="button" data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasNavbarDefault" aria-controls="offcanvasNavbarDefault" aria-expanded="false"
             aria-label="Toggle navigation"><span class="material-symbols-rounded align-middle">menu</span></button>
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="offcanvasNavbarDefault" tabindex="-1"
@@ -22,15 +23,16 @@
                             data-bs-toggle="dropdown">Opciones<span
                                 class="material-symbols-rounded align-middle lh-1 dropdown-arrow-icon">expand_more</span></a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="index.html">Regresar</a>
+                            <a class="dropdown-item" href="https://kaaxclub.com/ayuda">Ayuda</a>
                             <a class="dropdown-item" href="/reporte/{{ $history_id }}/metodologia">Metodología</a>
-                            <a class="dropdown-item" href="index-signup.html">Continuar</a>
+                            <a class="dropdown-item" href="https://kaaxclub.com">Salir</a>
                         </div>
                     </li>
 
 
                 </ul>
             </div>
+        </div>
         </div>
     </div>
 </nav>

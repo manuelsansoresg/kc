@@ -57,21 +57,18 @@
                         <img src="{{ asset('images/logo-dark.png') }}" class="img-fluid" alt="">
                         </a>
                     </div>
-                    <p class="text-muted">Te ayudamos a elegir y tramitar el mejor crédito. </p>
-                    <p class="text-muted">Si ya tienes un crédito , te ayudamos a reducir tu deuda. </p>
+                    <p class="text-muted">TU mejor decisión. Fácil y rápido </p>
                 </div>
                 <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Metodología</a></li>
-                        <li><a href="#">Ayuda</a></li>
-                        <li><a href="#">Privacidad</a></li>
+                        <li><a href="/reporte/{{ $history_id }}/metodologia">Metodología</a></li>
+                        <li><a href="https://kaaxclub.com/ayuda">Ayuda</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
-                        <li><a href="#">App</a></li>
-                        <li><a href="#">Contacto</a></li>
+                        <li><a href="https://app.kaaxclub.com/">App</a></li>
+                        <li><a href="https://kaaxclub.com/contacto">Contacto</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4 mb-5">

@@ -50,10 +50,12 @@
 
                                 </div>
                             </div>
-                            <div class="col-md-6 col-lg-5 mx-auto" id="hero-img">
-                                
-                                <img class="img-fluid" src="https://kaaxclub.com/images/thumb/item-detail.jpg"
+                            <div class="col-md-6 text-end" id="hero-img">
+                                <div class="col-12 pl-0 pl-md-12">
+                                    <img class="img-fluid" src="https://kaaxclub.com/images/thumb/item-detail.jpg"
                                 alt="">
+                               </div>
+                               
 
 
                             </div>
