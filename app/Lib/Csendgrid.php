@@ -20,7 +20,7 @@ class Csendgrid
     public $attach;
     public $path;
 
-    public function __construct($to = '', $subject = '', $content = '', $from = 'contacto@kaaxclub.com', $cc = '', $attach = [])
+    public function __construct($to = '', $subject = '', $content = '', $from = 'hola@kaaxclub.com', $cc = '', $attach = [])
     {
         $this->from       = $from;
         $this->to         = $to;
@@ -46,12 +46,14 @@ class Csendgrid
     {
         
         $email = new \SendGrid\Mail\Mail();
-        $email->setFrom($this->from);
+        $email->setFrom($this->from, 'KaaxClub');
         $email->setSubject($this->subject);
         $email->addTo($this->to);
-        if ($this->cc != '') {
+        
+        $email->addCc('manuelsansoresg@gmail.com');
+       /*  if ($this->cc != '') {
             $email->addCc($this->to);
-        }
+        } */
         if (count($this->attach) > 0) {
             foreach ($this->attach as $files) {
                 $attach = $files->name;
@@ -137,6 +139,37 @@ class Csendgrid
             "reply_to": {
                 "email": "solicitudes@kaaxclub.com",
                 "name": "kaaxclub"
+            },
+            "address": "23 210 Garcia Gineres",
+            "address_2": "",
+            "city": "Merida",
+            "state": "Yucatan",
+            "zip": "97070",
+            "country": "Mexico"
+        }');
+
+        try {
+            $response = $this->sendgrid->client->marketing()->senders()->post($request_body);
+            return $new_email;
+        } catch (Error $err) {
+            return null;
+        }
+    }
+    
+    public function createSenderKaax()
+    {
+        $nick_name      = 'KaaxClub';
+        $new_email      = 'hola@kaaxclub.com';
+
+        $request_body = json_decode('{
+            "nickname": "' . $nick_name . '",
+            "from": {
+                "email": "' . $new_email . '",
+                "name": "'.$nick_name.'"
+            },
+            "reply_to": {
+                "email": "kaaxclub@gmail.com",
+                "name": "KaaxClub"
             },
             "address": "23 210 Garcia Gineres",
             "address_2": "",
