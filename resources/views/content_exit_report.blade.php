@@ -39,7 +39,7 @@
                                     @endphp 
                                     @if ($dayOK && $timeOK)
                                     <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-                                        Un asesor de nuestro equipo te contactará en unos minutos para iniciar el trámite de tu crédito.
+                                        Un asesor de nuestro equipo te contactará en unos minutos para ayudarte con  el trámite de tu crédito.
                                     </h2>
                                     @else
                                     <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
@@ -53,9 +53,9 @@
                                     @if ($dayOK && $timeOK)
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2 col-12 col-md-4 iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                            <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2 col-12 col-md-4" href="#!">Contactar asesor <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                            <a class="btn btn-primary btn-lg hover-lift me-3 btn-block mt-2 col-12 col-md-4" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App 
+                                                <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12 " href="https://kaaxclub.com/ayuda">Ayuda 
+                                                    <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12 " href="https://kaaxclub.com/">Salir 
                                             </a>
                                         </div>
                                     </div>
@@ -63,9 +63,9 @@
                                     @else
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4 iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="#!">Salir <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4 iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App 
+                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="https://kaaxclub.com/ayuda">Ayuda 
+                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="https://kaaxclub.com">Salir 
                                             </a>
                                         </div>
                                     </div>

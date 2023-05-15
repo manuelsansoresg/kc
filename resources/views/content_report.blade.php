@@ -565,12 +565,80 @@
                         <h5 class="bg-primary bg-opacity-25 text-primary d-table mx-auto rounded-pill px-3 py-2 mb-4"
                             data-aos="fade-up">Contrato</h5>
                     </div>
-                    <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80" data-aos="fade-up"
-                        data-aos-delay="100">Analizamos cada uno de los contratos en busca de cláusulas abusivas o
-                        engañosas.
-                    </p>
+                    <div class="row align-items-center">
+                        <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
+                            <div class="row align-items-center">
+                                <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80" data-aos="fade-up"
+                                    data-aos-delay="100">Analizamos cada uno de los contratos en busca de cláusulas abusivas o
+                                    engañosas.
+                                </p>
 
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-5 mx-auto" data-aos="fade-up" data-aos-delay="100">
 
+                            <div class="container">
+                                <div class="table-responsive">
+                                    <table class="table table-striped text-center text-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>
+                                                    <h6 class="mb-0">Calificación
+                                                    </h6>
+                                                </th>
+            
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row" class="text-start">Financiera 1</th>
+                                                <td><span class="fs-6">
+                                                    <span class="fw-light small"></span>Calificación: 5<span
+                                                    class="small">/5</span>    
+                                                    <a href="">Ver detalles</a>
+                                                </span></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row" class="text-start">Financiera 2</th>
+                                                <td><span class="fs-6">
+                                                    <span class="fw-light small"></span>Calificación: 5<span
+                                                    class="small">/5</span>    
+                                                    <a href="">Ver detalles</a>
+                                                </span></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row" class="text-start">Financiera 3</th>
+                                                <td><span class="fs-6">
+                                                    <span class="fw-light small"></span>Calificación: 5<span
+                                                    class="small">/5</span>    
+                                                    <a href="">Ver detalles</a>
+                                                </span></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row" class="text-start">Financiera 4</th>
+                                                <td><span class="fs-6">
+                                                    <span class="fw-light small"></span>Calificación: 5<span
+                                                    class="small">/5</span>    
+                                                    <a href="">Ver detalles</a>
+                                                </span></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row" class="text-start">Financiera 5</th>
+                                                <td><span class="fs-6">
+                                                    <span class="fw-light small"></span>Calificación: 5<span
+                                                    class="small">/5</span>    
+                                                    <a href="">Ver detalles</a>
+                                                </span></td>
+                                            </tr>
+            
+                                        </tbody>
+            
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -594,15 +662,84 @@
                         <h5 class="bg-primary bg-opacity-25 text-primary d-table mx-auto rounded-pill px-3 py-2 mb-4"
                             data-aos="fade-up">Privacidad de datos</h5>
                     </div>
-                    <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80" data-aos="fade-up"
-                        data-aos-delay="100">
-                        La protección de tus datos personales es tu derecho. Analizamos los avisos de privacidad para
-                        asegurarnos de que tus datos se usen únicamente para los fines requeridos y asegurarnos que no se
-                        compartan ni se vendan a empresas con otro fin ajeno.
 
-                    </p>
+                    <div class="row align-items-center">
+                        <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
+                            <div class="row align-items-center">
+                                <div class="container">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped text-center text-nowrap mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>
+                                                        <h6 class="mb-0">Calificación
+                                                        </h6>
+                                                    </th>
+                
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row" class="text-start">Financiera 1</th>
+                                                    <td><span class="fs-6">
+                                                        <span class="fw-light small"></span>Calificación: 5<span
+                                                        class="small">/5</span>    
+                                                        <a href="">Ver detalles</a>
+                                                    </span></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row" class="text-start">Financiera 2</th>
+                                                    <td><span class="fs-6">
+                                                        <span class="fw-light small"></span>Calificación: 5<span
+                                                        class="small">/5</span>    
+                                                        <a href="">Ver detalles</a>
+                                                    </span></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row" class="text-start">Financiera 3</th>
+                                                    <td><span class="fs-6">
+                                                        <span class="fw-light small"></span>Calificación: 5<span
+                                                        class="small">/5</span>    
+                                                        <a href="">Ver detalles</a>
+                                                    </span></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row" class="text-start">Financiera 4</th>
+                                                    <td><span class="fs-6">
+                                                        <span class="fw-light small"></span>Calificación: 5<span
+                                                        class="small">/5</span>    
+                                                        <a href="">Ver detalles</a>
+                                                    </span></td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row" class="text-start">Financiera 5</th>
+                                                    <td><span class="fs-6">
+                                                        <span class="fw-light small"></span>Calificación: 5<span
+                                                        class="small">/5</span>    
+                                                        <a href="">Ver detalles</a>
+                                                    </span></td>
+                                                </tr>
+                
+                                            </tbody>
+                
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-5 mx-auto" data-aos="fade-up" data-aos-delay="100">
 
-
+                            <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80" data-aos="fade-up"
+                            data-aos-delay="100">
+                            La protección de tus datos personales es tu derecho. Analizamos los avisos de privacidad para
+                            asegurarnos de que tus datos se usen únicamente para los fines requeridos y asegurarnos que no se
+                            compartan ni se vendan a empresas con otro fin ajeno.
+    
+                        </p>
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

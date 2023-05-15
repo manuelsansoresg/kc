@@ -6396,21 +6396,27 @@ $(document).ready(function () {
 
 window.desitionReport = function (credit_id, financial_id, type) {
   var is_app = $('#is_app').val();
-  var url = "/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept";
-  sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
-    title: '¿Estás seguro?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí',
-    cancelButtonText: 'Mejor no'
+  window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
+  /* let url = "/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept";
+  Swal.fire({
+     title: '¿Estás seguro?',
+     icon: 'warning',
+     showCancelButton: true,
+     confirmButtonText: 'Sí',
+     cancelButtonText: 'Mejor no'
   }).then(function (result) {
-    if (result.isConfirmed) {
-      axios.get(url).then(function (response) {
-        var reason = response.data;
-        window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
-      })["catch"](function (e) {});
-    }
-  });
+  if (result.isConfirmed) {
+      axios
+      .get(url)
+      .then(function (response) {
+          let reason = response.data;
+          
+      })
+      .catch(e => {
+          
+      });
+  }
+  }); */
 }; // Agregar un controlador de eventos a todos los enlaces dentro del iframe
 
 
