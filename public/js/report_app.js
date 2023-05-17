@@ -6396,8 +6396,12 @@ $(document).ready(function () {
 
 window.desitionReport = function (credit_id, financial_id, type) {
   var is_app = $('#is_app').val();
-  window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
-  /* let url = "/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept";
+  var url = "/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept";
+  axios.get(url).then(function (response) {
+    var reason = response.data;
+    window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
+  })["catch"](function (e) {});
+  /* 
   Swal.fire({
      title: '¿Estás seguro?',
      icon: 'warning',
@@ -6406,15 +6410,7 @@ window.desitionReport = function (credit_id, financial_id, type) {
      cancelButtonText: 'Mejor no'
   }).then(function (result) {
   if (result.isConfirmed) {
-      axios
-      .get(url)
-      .then(function (response) {
-          let reason = response.data;
-          
-      })
-      .catch(e => {
-          
-      });
+      
   }
   }); */
 }; // Agregar un controlador de eventos a todos los enlaces dentro del iframe

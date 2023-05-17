@@ -42,7 +42,7 @@
 @endphp
 
 <body class="nk-body bg-dark npc-general pg-survey text-white">
-    <div class="row mt-5">
+    <div class=" mt-5">
         <div class="col-12 text-center">
             <a href="/" class="logo-link nk-sidebar-logo">
                 <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
@@ -66,7 +66,7 @@
                                 <h1 style="color: #6576ff !important;"> Hola </h1>
                                 <p class="">
                                     @if ($dayOK && $timeOK)
-                                        <p class="text-white" data-aos="fade-up" data-aos-duration="5000" >
+                                        <h6 class="text-white" data-aos="fade-up" data-aos-duration="5000" >
                                             Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción
                                             <br><br>
                                             Después  de que elijas, te ayudaremos con el támite para que todo salga bien.
@@ -74,11 +74,11 @@
                                             Contacta un asesor para que genere tu reporte.O si
                                             lo
                                             prefieres lo puedes generar tú mismo
-                                        </p>
+                                        </h6>
                                     @else
-                                        <p class="text-white" data-aos="fade-up" data-aos-duration="9000">
+                                        <h6 class="text-white" data-aos="fade-up" data-aos-duration="9000">
                                             El trámite es fácil y rápido.
-                                        </p>
+                                        </h6>
                                     @endif
                                 </p>
                                 <div class="mt-5" data-aos="fade-up" data-aos-duration="5000">

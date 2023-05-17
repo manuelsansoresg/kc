@@ -22,16 +22,16 @@ document.addEventListener('DOMContentLoaded', function () {
                             '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">'+col.data+'</td>'+
                             '</tr>' :
                             '';
-                       } else {
+                    } else {
                             return col.hidden ?
                             '<tr class="py-3" data-dt-row="'+col.rowIndex+'">'+
                                 '<td style="padding-left: 10px; width:50%"><strong>'+col.title+'</strong></td> '+
                                 '<td style="width:50%">'+col.data+'</td>'+
                             '</tr>' :
                             '';
-                       }
+                    }
                     } ).join('');
-    
+
                     return data ?
                         $('<table/>').append( data ) :
                         false;
@@ -58,9 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
             $(row).addClass("nk-tb-item");
             
         },
-      
+        
     },
+
+    
     );
+    
     // Expand table rows on click
     $('#dt-lead tbody').on('click', 'td', function () {
         var row = table.row($(this).closest('tr'));
@@ -187,8 +190,8 @@ document.addEventListener('DOMContentLoaded', function () {
         
     },);
 
-     // Expand table rows on click
-     $('#dt-lead-archive tbody').on('click', 'td', function () {
+      // Expand table rows on click
+      $('#dt-lead-dinamic-archive tbody').on('click', 'td', function () {
         var row = table.row($(this).closest('tr'));
         if (row.child.isShown()) {
             row.child.hide();
@@ -197,5 +200,6 @@ document.addEventListener('DOMContentLoaded', function () {
             row.child.show();
         }
     });
+
 
 });

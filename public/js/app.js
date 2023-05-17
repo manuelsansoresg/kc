@@ -2140,7 +2140,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }); // Expand table rows on click
 
-  $('#dt-lead-archive tbody').on('click', 'td', function () {
+  $('#dt-lead-dinamic-archive tbody').on('click', 'td', function () {
     var row = table.row($(this).closest('tr'));
 
     if (row.child.isShown()) {
