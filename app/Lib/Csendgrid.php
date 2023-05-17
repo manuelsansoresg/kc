@@ -20,7 +20,7 @@ class Csendgrid
     public $attach;
     public $path;
 
-    public function __construct($to = '', $subject = '', $content = '', $from = 'hola@kaaxclub.com', $cc = '', $attach = [])
+    public function __construct($to = '', $subject = '', $content = '', $from = 'contacto@kaaxclub.com', $cc = '', $attach = [])
     {
         $this->from       = $from;
         $this->to         = $to;
