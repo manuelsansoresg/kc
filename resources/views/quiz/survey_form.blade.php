@@ -321,6 +321,7 @@
                     loading();
                     $('#btn-back').hide();
                     $('#btn-finish').hide();
+                    $('#continue').hide();
                 }
                 if (count_steeper > 0) {
                     console.log('ejecutar guardado');
