@@ -1504,7 +1504,7 @@ hr {
     opacity: 1; }
 
 .logo-img {
-  height: 25px; }
+  height: 35px; }
   .logo-img-lg {
     height: 60px; }
   .logo-img-sm {
@@ -1514,6 +1514,15 @@ hr {
     left: 0;
     top: 50%;
     transform: translateY(-50%); }
+
+  .iconimg {
+    width: 65px;
+    padding: 0px 10px;
+  }
+  .iconimg-expande {
+    width: 95px;
+    padding: 0px 5px;
+  }
 
 .menu-item {
   position: relative; }
@@ -1621,7 +1630,7 @@ hr {
     line-height: 2.5rem;
     font-size: 1.25rem; }
   .logo-img {
-    height: 29px; } }
+    height: 45px; } }
 
 @media (min-width: 992px) {
   .header-wrap {

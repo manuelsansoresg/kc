@@ -6,7 +6,7 @@
             <div class="row align-items-center flex-md-row-reverse justify-content-between">
                 <div class="col-lg-5 col-sm-9 col-md-6">
                     <div class="hero-image">
-                        <img src="images/thumb/nft-img.png" alt="" class="w-100">
+                        <img src="images/01_mano.png" alt="" class="w-100">
                         <p class="text-center">Elije en menos de 3 minutos</p>
                     </div>
                 </div><!-- end col-lg-5 -->
@@ -18,15 +18,17 @@
                             no tiene que ser así.
                         </p>
                         <!-- button group -->
-                        <ul class="btns-group hero-btns">
-                            <li><a href="https://sprw.io/stt-d1fdfd" target="_blank" class="btn btn-lg btn-dark">Iniciar</a>
-                            </li>
-                        </ul>
+                       <div class="col-12 col-md-6 text-center text-md-start">
+                        <a href="http://kaaxclub.com/"  class="btn col-8 col-md-5 btn-lg btn-dark">Iniciar</a>
+                       </div>
                         <p class="mt-5 h3">
-                            Fácil, rápido, <span class="text-decoration-underline">sin costo.</span> <i
+                            Fácil, rápido, <span class="text-decoration-underline">sin costo.</span>
+                            <span class="h4">
+                                <i
                                 class="fa-solid fa-circle-info" data-bs-toggle="tooltip"
-                                title="Nuestro servicio siempre será sin costo para ti. Nuestro modelo de negocio se basa en una comisión a la financiera que elijas.">
+                                title="Nuestro servicio siempre será sin costo para ti. Nadie debe cobrarte por solicitar y/0 tramitar un crédito.">
                             </i>
+                            </span>
                         </p>
                     </div><!-- hero-content -->
                 </div><!-- col-lg-6 -->
@@ -44,59 +46,7 @@
                     opciones transparentes y honestas para que puedas tomar decisiones con confianza.
                 </p>
             </div><!-- end section-head -->
-            <div class="row g-gs">
-                <div class="col-sm-6 col-md-6 col-lg-3">
-                    <a href="product-details-v1.html" class="card card-full">
-                        <img src="images/thumb/art.jpg" class="card-img-top" alt="">
-                        <div class="card-body p-4">
-                            <h5 class="card-title card-title-effect">Generamos tu reporte (obtén tu mejor resultado)
-                            </h5>
-                            <p class="small">Analizamos y calificamos tus opciones.</p>
-                        </div><!-- end card-body -->
-                    </a><!-- end card -->
-                </div><!-- end col -->
-                <div class="col-sm-6 col-md-6 col-lg-3">
-                    <a href="product-details-v1.html" class="card card-full">
-                        <img src="images/thumb/art-2.jpg" class="card-img-top" alt="">
-                        <div class="card-body p-4">
-                            <h5 class="card-title card-title-effect">Decide</h5>
-                            <p class="small">Elije la mejor opción para ti
-                            </p>
-                        </div><!-- end card-body -->
-                    </a><!-- end card -->
-                </div><!-- end col -->
-                <div class="col-sm-6 col-md-6 col-lg-3">
-                    <a href="product-details-v1.html" class="card card-full">
-                        <img src="images/thumb/art-3.jpg" class="card-img-top" alt="">
-                        <div class="card-body p-4">
-                            <h5 class="card-title card-title-effect">Tramita con nuestra ayuda</h5>
-                            <p class="small">Te brindamos asesoramiento y asistencia en el proceso</p>
-                        </div><!-- end card-body -->
-                    </a><!-- end card -->
-                </div><!-- end col -->
-                <div class="col-sm-6 col-md-6 col-lg-3">
-                    <a href="product-details-v1.html" class="card card-full">
-                        <img src="images/thumb/art-4.jpg" class="card-img-top" alt="">
-                        <div class="card-body p-4">
-                            <h5 class="card-title card-title-effect">Recibe tú crédito
-                            </h5>
-                            <p class="small">Tu dinero estará listo en poco tiempo
-                            </p>
-                        </div><!-- end card-body -->
-                    </a><!-- end card -->
-                </div><!-- end col -->
-            </div><!-- end row -->
-        </div><!-- end container -->
-    </section><!-- end feature-section-->
-
-    <section class="section-space how-it-work-section">
-        <div class="container">
-            <div class="section-head text-center">
-                <h2 class="mb-3">Ahorra hasta un X %
-                </h2>
-                <p>This is just a simple text made for this unique and awesome template, you can replace it with any text.
-                    It is a long established fact.</p>
-            </div><!-- end section-head -->
+            
             <div class="row g-gs justify-content-center">
                 <div class="col-10 col-sm-6 col-lg-3">
                     <div class="card-hiw card-hiw-s3">
@@ -136,6 +86,60 @@
                         </div>
                         <p class="card-text-s1">Choose between auctions, fixed-price listings, and declining-price listings
                             of item.</p>
+                    </div>
+                </div><!-- end col -->
+            </div>
+
+        </div><!-- end container -->
+    </section><!-- end feature-section-->
+
+    <section class="section-space how-it-work-section">
+        <div class="container">
+            <div class="section-head text-center">
+                <h2 class="mb-3">Ahorra hasta un X %
+                </h2>
+                <p>This is just a simple text made for this unique and awesome template, you can replace it with any text.
+                    It is a long established fact.</p>
+            </div><!-- end section-head -->
+            <div class="row g-gs justify-content-center">
+                <div class="col-10 col-sm-6 col-lg-3">
+                    <div class="card-hiw card-hiw-s3">
+                        <div class="d-flex align-items-center mb-3">
+                            {{-- <span
+                                class="icon ni ni-wallet icon-md icon-circle icon-wbg me-3 text-blue bg-blue-100"></span> --}}
+                            <img class="iconimg" src="/images/01_menor_tasa.png" alt="">
+
+                            <h5>Menor tasa de interés</h5>
+                        </div>
+                      
+                    </div>
+                </div><!-- end col -->
+                <div class="col-10 col-sm-6 col-lg-3">
+                    <div class="card-hiw card-hiw-s3">
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="iconimg" src="/images/02_mejores_opciones.png" alt="">
+                            <h5>Mejores opciones</h5>
+                        </div>
+                       {{--  <p class="card-text-s1">Click <a href="profile.html" class="btn-link">My Collections</a> and set up
+                            your collection. Add social links, a description of item.</p> --}}
+                    </div>
+                </div><!-- end col -->
+                <div class="col-10 col-sm-6 col-lg-3">
+                    <div class="card-hiw card-hiw-s3">
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="iconimg" src="/images/03_poder_de_negociacion.png" alt="">
+                            <h5>Poder de negociación</h5>
+                        </div>
+                    
+                    </div>
+                </div><!-- end col -->
+                <div class="col-10 col-sm-6 col-lg-3">
+                    <div class="card-hiw card-hiw-s3">
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="iconimg" src="/images/04_expande_límites.png" alt="">
+                            <h5>Expande tus limites</h5>
+                        </div>
+                       
                     </div>
                 </div><!-- end col -->
             </div>
