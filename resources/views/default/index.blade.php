@@ -50,48 +50,55 @@
             <div class="row g-gs justify-content-center">
                 <div class="col-10 col-sm-6 col-lg-3">
                     <div class="card-hiw card-hiw-s3">
-                        <div class="d-flex align-items-center mb-3"><span
-                                class="icon ni ni-wallet icon-md icon-circle icon-wbg me-3 text-blue bg-blue-100"></span>
-                            <h5>Set up your wallet</h5>
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="iconimg" src="/images/02_reporte.png" alt="">
+                            <h5>Generamos tu reporte</h5>
                         </div>
-                        <p class="card-text-s1">Once you’ve set up your wallet of choice, connect it to EnftyMart by
-                            clicking the wallet icon.</p>
+                      
+                    </div>
+                    <p class="card-text-s1">Analizamos y calificamos tus opciones</p>
+                </div><!-- end col -->
+                <div class="col-10 col-sm-6 col-lg-3">
+                    <div class="card-hiw card-hiw-s3">
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="iconimg" src="/images/02_decide.png" alt="">
+                            <h5>Decide</h5>
+                        </div>
+                       
+                    </div>
+                    <p class="card-text-s1">Elija la mejor opción para ti</p>
+                </div><!-- end col -->
+                <div class="col-10 col-sm-6 col-lg-3">
+                    <div class="card-hiw card-hiw-s3">
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="iconimg" src="/images/03_tramita.png" alt="">
+                            <h5>Tramita con nuestra ayuda</h5>
+                        </div>
+                        <p class="card-text-s1">Te brindamos asesoramiento y asistencia en el proceso</p>
                     </div>
                 </div><!-- end col -->
                 <div class="col-10 col-sm-6 col-lg-3">
                     <div class="card-hiw card-hiw-s3">
-                        <div class="d-flex align-items-center mb-3"><span
-                                class="icon ni ni-file-text icon-md icon-circle icon-wbg me-3 text-purple bg-purple-100"></span>
-                            <h5>Create collection</h5>
+                        <div class="d-flex align-items-center mb-3">
+                            <img class="iconimg" src="/images/04_recibe_dinero.png" alt="">
+                            <h5>Recibe tú crédito</h5>
                         </div>
-                        <p class="card-text-s1">Click <a href="profile.html" class="btn-link">My Collections</a> and set up
-                            your collection. Add social links, a description of item.</p>
-                    </div>
-                </div><!-- end col -->
-                <div class="col-10 col-sm-6 col-lg-3">
-                    <div class="card-hiw card-hiw-s3">
-                        <div class="d-flex align-items-center mb-3"><span
-                                class="icon ni ni-camera icon-md icon-circle icon-wbg me-3 text-pink bg-pink-100"></span>
-                            <h5>Add your NFTs</h5>
-                        </div>
-                        <p class="card-text-s1">Upload your work (image, video, audio, or 3D art), add a title and
-                            description to item.</p>
-                    </div>
-                </div><!-- end col -->
-                <div class="col-10 col-sm-6 col-lg-3">
-                    <div class="card-hiw card-hiw-s3">
-                        <div class="d-flex align-items-center mb-3"><span
-                                class="icon ni ni-money icon-md icon-circle icon-wbg me-3 text-orange bg-orange-100"></span>
-                            <h5>List them for sale</h5>
-                        </div>
-                        <p class="card-text-s1">Choose between auctions, fixed-price listings, and declining-price listings
-                            of item.</p>
+                        <p class="card-text-s1">Tu dinero estará listo en poco tiempo</p>
                     </div>
                 </div><!-- end col -->
             </div>
 
         </div><!-- end container -->
     </section><!-- end feature-section-->
+
+   <div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 text-center">
+            <a href="http://kaaxclub.com/"  class="btn col-8 col-md-5 btn-lg btn-dark">Iniciar</a>
+        </div>
+       </div>
+   </div>
+    
 
     <section class="section-space how-it-work-section">
         <div class="container">
