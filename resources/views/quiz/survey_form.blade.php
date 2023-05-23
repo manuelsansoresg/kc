@@ -62,15 +62,18 @@
                               
                                 <p class="mt-5" data-aos="fade-up" data-aos-duration="9000">
                                     <h1 class="font-28"  style="color: #6576ff !important;">Reporte</h1>
-                                    <h5 class="font-15 color-highlight mb-4 ">Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción</h5>
-                                    </h3>
+                                    <h5 class="font-15 color-highlight mb-4 ">
+                                        Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción
+                                        <br><br>
+                                        Despues de que elijas, te ayudaremos con el trámite para que todo salga bien.
+                                    </h5>
                                 </p>
                                 <p class="mt-5">
                                     <div class="row justify-content-center">
                                         <div class="col-12 col-md-6">
                                             <a onclick="startStepperLead()" id="btn-next-init"
                                                 class="btn btn-primary btn-lg btn-block py-3 pointer"
-                                                data-aos="fade-up" data-aos-duration="5000">Iniciar 
+                                                data-aos="fade-up" data-aos-duration="5000">Iniciar &nbsp; <i class="fas fa-smile-beam text-warning"></i>
                                             </a>
                                         </div>
                                     </div>
