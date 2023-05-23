@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'KC- Check up')
+@section('title', 'KC - Check up')
 @inject('m_history', 'App\Models\HistoryLog')
 @section('content')
     <div class="nk-content ">

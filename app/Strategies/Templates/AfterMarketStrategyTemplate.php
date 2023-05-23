@@ -46,7 +46,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
     public function configFormStep1($id_rel, $history_id)
     {
         $name_form    = 'frm-template_control_desk_step1';
-        $type_form    = HistoryLog::KC_DELIVERY_FORM;
+        $type_form    = HistoryLog::KC_AFTER_FORM;
         $credit       = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
 
@@ -550,18 +550,18 @@ class AfterMarketStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             1 => array(
-             'title' => 'KC - Delivery',
-             'link' => '/panel/delivery',
+             'title' => 'KC - AFTERMARKET',
+             'link' => '/panel/afterMarket',
              'active' => null
             ),
             2 => array(
              'title' => 'etapas',
-             'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+             'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
              'active' => null
             ),
             3 => array(
              'title' => 'acciones',
-             'link' => '/panel/template/actions/delivery/'.$history->id.'/show?step='.$step,
+             'link' => '/panel/template/actions/afterMarket/'.$history->id.'/show?step='.$step,
              'active' => null
             ),
             4 => array(

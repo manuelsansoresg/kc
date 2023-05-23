@@ -17,7 +17,7 @@
                                 <nav>
                                     <ul class="breadcrumb">
                                         @php
-                                            $title = array('newCredit' => 'KC- Check up', 'debtCredit' => 'KC- Check up', 'controlDesk' => 'KC- Control desk', 'swap' => 'KC- Swap' , 'delivery' => 'KC- Delivery');
+                                            $title = array('newCredit' => 'KC - Check up', 'debtCredit' => 'KC - Check up', 'controlDesk' => 'KC - Control desk', 'swap' => 'KC - Swap' , 'delivery' => 'KC - Delivery');
                                             $route = array('newCredit' => 'kc-check-up', 'debtCredit' => 'kc-check-up', 'controlDesk' => 'kc-control-desk', 'swap' => 'kc-swap' , 'delivery' => 'kc-delivery');
                                         @endphp
                                         <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>

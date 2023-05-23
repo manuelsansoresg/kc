@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'KC- Check up')
+@section('title', 'KC - Check up')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -8,12 +8,12 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">KC- Check up</h3>
+                                <h3 class="nk-block-title page-title">KC - Check up</h3>
                                 <div class="nk-block-des text-soft">
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
-                                            <li class="breadcrumb-item active"><a href="/panel/kc-check-up">KC- Check up</a></li>
+                                            <li class="breadcrumb-item active"><a href="/panel/kc-check-up">KC - Check up</a></li>
                                         </ul>
                                     </nav>
                                 </div>

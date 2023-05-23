@@ -199,7 +199,7 @@
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-check-up" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
-                                        <span class="nk-menu-text">KC- Check up</span>
+                                        <span class="nk-menu-text">KC - Check up</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
@@ -207,7 +207,7 @@
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-swap" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-swap-alt"></em></span>
-                                        <span class="nk-menu-text">KC- Swap</span>
+                                        <span class="nk-menu-text">KC - Swap</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
@@ -215,7 +215,7 @@
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-control-desk" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
-                                        <span class="nk-menu-text">KC- Control desk</span>
+                                        <span class="nk-menu-text">KC - Control desk</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
@@ -223,7 +223,7 @@
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-delivery" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
-                                        <span class="nk-menu-text">KC- Delivery</span>
+                                        <span class="nk-menu-text">KC - Delivery</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
@@ -232,7 +232,7 @@
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-aftermarket" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span>
-                                        <span class="nk-menu-text">KC- Aftermarket</span>
+                                        <span class="nk-menu-text">KC - Aftermarket</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
@@ -240,7 +240,7 @@
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-payments" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
-                                        <span class="nk-menu-text">KC- Payments</span>
+                                        <span class="nk-menu-text">KC - Payments</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
@@ -317,7 +317,7 @@
                                         <li class="nk-menu-item has-sub">
                                             <a href="#" class="nk-menu-link nk-menu-toggle">
                                                 <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
-                                                <span class="nk-menu-text">KC- Payments</span>
+                                                <span class="nk-menu-text">KC - Payments</span>
                                             </a>
                                             <ul class="nk-menu-sub">
 

@@ -68,7 +68,7 @@ class ListStrategy implements ActionInterface
 
         $history_logs = HistoryLog::getByStatus($list_actions, $id_rel);
         $data = array();
-        $array_model = array('newCredit' => 'KC- Check up', 'debtCredit' => 'KC- Check up', 'controlDesk' => 'KC- Control desk', 'delivery' => 'Delivery', 'swap' => 'swap',  'afterMarket' => 'After Market');
+        $array_model = array('newCredit' => 'KC - Check up', 'debtCredit' => 'KC - Check up', 'controlDesk' => 'KC - Control desk', 'delivery' => 'Delivery', 'swap' => 'swap',  'afterMarket' => 'After Market');
 
         foreach ($history_logs as $history_log) {
             //*saber si el usuario es admin

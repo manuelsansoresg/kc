@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width,  initial-scale=1.0">
     {{-- <meta name="description" content="EnftyMart - NFT Marketplace html Template">
     <meta name="keywords" content="nft, crypto, html5 template"> --}}
-    <title>KaaxClub- Tu mejor decisión, fácil y rápido</title>
+    <title>KaaxClub - Tu mejor decisión, fácil y rápido</title>
     <!-- Favicon -->
     <link rel="icon" sizes="16x16" href="images/favicon.ico">
     <!-- Stylesheets -->

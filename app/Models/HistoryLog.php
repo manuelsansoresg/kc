@@ -155,8 +155,8 @@ class HistoryLog extends Model
         47 => 'Formulario',
         48 => 'Formulario',
         49 => 'KC - Payments',
-        50 => 'KC- Payments Pagado',
-        51 => 'KC- Payments  No pagado',
+        50 => 'KC - Payments Pagado',
+        51 => 'KC - Payments  No pagado',
         52 => 'Formulario',
         53 => 'Carga',
         54 => 'Formulario',
@@ -502,11 +502,11 @@ class HistoryLog extends Model
     public static function getInProgress($credit_id, $is_return_id = false)
     {
         $lbl_module = array(
-            HistoryLog::KC_CHECK_UP => 'KC- Check up',
-            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION => 'KC- Check up',
-            HistoryLog::KC_CONTROL_DESK => 'KC- Control desk',
-            HistoryLog::KC_DELIVERY => 'KC- Delivery',
-            HistoryLog::KC_SWAP => 'KC- Swap',
+            HistoryLog::KC_CHECK_UP => 'KC - Check up',
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION => 'KC - Check up',
+            HistoryLog::KC_CONTROL_DESK => 'KC - Control desk',
+            HistoryLog::KC_DELIVERY => 'KC - Delivery',
+            HistoryLog::KC_SWAP => 'KC - Swap',
         );
         $data_actions = array(
             HistoryLog::KC_CHECK_UP,
@@ -516,7 +516,7 @@ class HistoryLog extends Model
             HistoryLog::KC_SWAP,
         );
         $status_progress = 0;
-        $current_status = 'KC- Check up';
+        $current_status = 'KC - Check up';
         $id_current_status = HistoryLog::KC_CHECK_UP;
         $get_action = HistoryLog::getLastStatus($data_actions, $credit_id);
         $status_id = $get_action->status_id;
@@ -535,10 +535,10 @@ class HistoryLog extends Model
     public static function getCurrentModule($credit_id, $is_return_id = false)
     {
         $lbl_module = array(
-            HistoryLog::KC_CHECK_UP => 'KC- Check up',
-            HistoryLog::KC_SWAP => 'KC- After market',
-            HistoryLog::KC_CONTROL_DESK => 'KC- Control desk',
-            HistoryLog::KC_DELIVERY => 'KC- Delivery',
+            HistoryLog::KC_CHECK_UP => 'KC - Check up',
+            HistoryLog::KC_SWAP => 'KC - After market',
+            HistoryLog::KC_CONTROL_DESK => 'KC - Control desk',
+            HistoryLog::KC_DELIVERY => 'KC - Delivery',
         );
         $data_actions = array(
             HistoryLog::KC_CHECK_UP,
@@ -547,7 +547,7 @@ class HistoryLog extends Model
             HistoryLog::KC_SWAP,
         );
         $status_progress = 0;
-        $current_status = 'KC- Check up';
+        $current_status = 'KC - Check up';
         $id_current_status = HistoryLog::KC_CHECK_UP;
         $get_action = HistoryLog::getLastStatus($data_actions, $credit_id);
 
