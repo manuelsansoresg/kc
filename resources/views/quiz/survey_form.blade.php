@@ -385,7 +385,7 @@
                     let credit_id = result.credit_id;
 
                     var lnk_show_report = document.getElementById("lnk_show_report");
-                    lnk_show_report.href = '/app/reporte/null/'+credit_id+'?is_app==true';
+                    lnk_show_report.href = '/app/reporte/null/'+credit_id+'?is_app=true';
 
                     /* if (lnk_show_report != null) {
                         redirectApp(credit_id);

@@ -12,10 +12,14 @@
 
 @php
     $lnk_app = isset($_GET['is_app']) ? '?is_app=true' : null;
+    $is_app = isset($_GET['is_app']) ? true : false;
+    $text1 = 'Un asesor de nuestro equipo te contactará en unos minutos para ayudarte con  el trámite de tu crédito.';
+    $text2 = 'Un asesor de nuestro equipo te contactará a la brevedad posible para iniciar el trámite de tu crédito.';
+    $text3 = 'Puedes darle seguimiento al trámite desde la App.';
 @endphp
 {{-- hero --}}
 <section class="position-relative">
-    <div class="container py-9 py-lg-11 position-relative z-index-1">
+    <div class="container {{ $is_app == false ? 'py-9 py-lg-11' : 'py-0 py-lg-11' }} position-relative z-index-1">
         <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
         </div>
         <div class="row justify-content-between align-items-start">
@@ -24,10 +28,15 @@
                 <section class="position-relative">
                     <div class="bg-dark w-100 h-50 bottom-0 start-0 position-absolute"></div>
                     <div class="container position-relative">
-                        <div class="px-4 py-7 py-lg-9 rounded-4 position-relative z-index-1 overflow-hidden text-white bg-secondary">
+                        <div class="px-4 {{ $is_app == false ? 'py-7 py-lg-9' : 'py-0 py-lg-9' }} rounded-4 position-relative z-index-1 overflow-hidden text-white bg-secondary">
                             <div class="row position-relative">
                                 <div class="col-lg-9 col-md-10 mx-auto text-center">
+                                    @if ($is_app == false)
                                     <h2 class="mb-4 aos-init aos-animate display-2" data-aos="fade-up"> ¡Genial! </h2>
+                                    @else
+                                    <h2 class="mb-4 aos-init aos-animate display-2 mt-3" data-aos="fade-up"> ¡Genial! </h2>
+                                    @endif
+                                    
                                     @php
                                         $currentDateTime = date('l H:i');
                                         $dayOK = (date('l') == 'Monday' || date('l') == 'Tuesday' 
@@ -38,38 +47,69 @@
                                         
                                     @endphp 
                                     @if ($dayOK && $timeOK)
-                                    <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-                                        Un asesor de nuestro equipo te contactará en unos minutos para ayudarte con  el trámite de tu crédito.
+                                        @if ($is_app == false)
+                                        <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                                            {{ $text1 }}
+                                        </h2>
+                                        @else
+                                        <h6 class="mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                                            {{ $text1 }}
+                                        </h6>
+                                        @endif
+                                    @else
+                                        @if ($is_app == false)
+                                        <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
+                                            {{ $text2 }}
+                                        </h2>
+                                        @else
+                                        <h6 class="mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
+                                            {{ $text2 }}
+                                        </h6>
+                                        @endif
+                                   
+                                    @endif
+                                    
+                                    @if ($is_app == false)
+                                    <h2 class="h3 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
+                                        {{ $text3 }}
                                     </h2>
                                     @else
-                                    <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
-                                        Un asesor de nuestro equipo te contactará a la brevedad posible para ayudarte con  el trámite de tu crédito.
-                                    </h2>
+                                    <h6 class="mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
+                                        {{ $text3 }}
+                                    </h6>
+                                    @endif
+                                   
+                                    @if ($is_app == false)
+                                        @if ($dayOK && $timeOK)
+                                        <div class="d-flex flex-wrap justify-content-center">
+                                            <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
+                                                <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App 
+                                                    <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12 " href="https://kaaxclub.com/ayuda">Ayuda 
+                                                        <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12 " href="https://kaaxclub.com/">Salir 
+                                                </a>
+                                            </div>
+                                        </div>
+                                            
+                                        @else
+                                        <div class="d-flex flex-wrap justify-content-center">
+                                            <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
+                                                <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4 iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App 
+                                                <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="https://kaaxclub.com/ayuda">Ayuda 
+                                                <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="https://kaaxclub.com">Salir 
+                                                </a>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    @else
+                                    <div class="d-flex flex-wrap justify-content-center pb-3">
+                                        <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
+                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">OK 
+                                            </a>
+                                        </div>
+                                    </div>
                                     @endif
 
-                                    <h2 class="h3 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
-                                        Puedes darle seguimiento al trámite desde la App. 
-                                    </h2>
-                                    @if ($dayOK && $timeOK)
-                                    <div class="d-flex flex-wrap justify-content-center">
-                                        <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App 
-                                                <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12 " href="https://kaaxclub.com/ayuda">Ayuda 
-                                                    <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12 " href="https://kaaxclub.com/">Salir 
-                                            </a>
-                                        </div>
-                                    </div>
-                                        
-                                    @else
-                                    <div class="d-flex flex-wrap justify-content-center">
-                                        <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4 iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App 
-                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="https://kaaxclub.com/ayuda">Ayuda 
-                                            <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="https://kaaxclub.com">Salir 
-                                            </a>
-                                        </div>
-                                    </div>
-                                    @endif
+                                    
                                     
 
                                    
