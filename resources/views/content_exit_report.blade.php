@@ -43,7 +43,7 @@
                                     </h2>
                                     @else
                                     <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
-                                        Un asesor de nuestro equipo te contactará a la brevedad posible para iniciar el trámite de tu crédito.
+                                        Un asesor de nuestro equipo te contactará a la brevedad posible para ayudarte con  el trámite de tu crédito.
                                     </h2>
                                     @endif
 
