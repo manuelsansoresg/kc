@@ -69,11 +69,11 @@
                                         <h6 class="text-white" data-aos="fade-up" data-aos-duration="5000" >
                                             Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción
                                             <br><br>
-                                            Después  de que elijas, te ayudaremos con el támite para que todo salga bien.
+                                            Después  de que elijas, te ayudaremos con el trámite para que todo salga bien.
                                             <br><br>
-                                            Contacta un asesor para que genere tu reporte.O si
+                                            Contacta un asesor para que genere tu reporte. O si
                                             lo
-                                            prefieres lo puedes generar tú mismo
+                                            prefieres lo puedes generar tú mismo.
                                         </h6>
                                     @else
                                         <h6 class="text-white" data-aos="fade-up" data-aos-duration="9000">
@@ -90,7 +90,7 @@
                                         <div class="col-12 col-md-6">
                                             <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=hola" class="btn btn-primary btn-lg btn-block py-3 pointer"
                                                 >Contactar asesor &nbsp;
-                                                <i class="fab fa-whatsapp text-success"></i>
+                                                <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
                                             </a>
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@
                                             <div class="col-12 col-md-6">
                                                 <a onclick="startStepperLead()" id="btn-next-init"
                                                     class="btn btn-primary btn-lg btn-block py-3 pointer"
-                                                    >Hazlo tu mismo &nbsp; <i
+                                                    >Hazlo tú mismo &nbsp; <i
                                                     class="fas fa-smile-beam text-warning"></i>
                                                 </a>
                                             </div>
@@ -114,7 +114,12 @@
                                             </div>
                                         </div>
                                     @endif
-
+                                    <div class="row justify-content-center mt-5">
+                                        <div class="col-12 text-center">
+                                           <img width="20" src="/images/01_seguridad.png" alt="">
+                                           &nbsp; <span class="text-muted text-ssl">Certificado SSL de seguridad y protección de datos</small>
+                                        </div>
+                                    </div>
                                     </div>
 
                             </div>

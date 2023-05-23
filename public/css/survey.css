@@ -22,6 +22,10 @@
     font-size: 18px !important;
  }
 
+ .text-ssl{
+    font-size: 10px !important;
+ }
+
 @media only screen and (max-width: 480px) {
     .btn, .form-control {
         font-size: 15px !important;
