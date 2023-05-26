@@ -18,9 +18,12 @@
                             no tiene que ser así.
                         </p>
                         <!-- button group -->
-                       <div class="col-12 col-md-6 text-center text-md-start">
-                        <a href="http://kaaxclub.com/"  class="btn col-8 col-md-5 btn-lg btn-dark">Iniciar</a>
-                       </div>
+                        <div class="row">
+
+                            <div class="col-12 text-center text-md-start">
+                             <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block">Iniciar</a>
+                            </div>
+                        </div>
                         <p class="mt-5 h3">
                             Fácil, rápido, <span class="text-decoration-underline">sin costo.</span>
                             <span class="h4">
@@ -52,7 +55,7 @@
                     <div class="card-hiw card-hiw-s3">
                         <div class="d-flex align-items-center mb-3">
                             <img class="iconimg" src="/images/02_reporte.png" alt="">
-                            <h5>Generamos tu reporte</h5>
+                            <h5>1. Generamos tu reporte</h5>
                         </div>
                       
                     </div>
@@ -62,7 +65,7 @@
                     <div class="card-hiw card-hiw-s3">
                         <div class="d-flex align-items-center mb-3">
                             <img class="iconimg" src="/images/02_decide.png" alt="">
-                            <h5>Decide</h5>
+                            <h5>2. Decide</h5>
                         </div>
                        
                     </div>
@@ -72,7 +75,7 @@
                     <div class="card-hiw card-hiw-s3">
                         <div class="d-flex align-items-center mb-3">
                             <img class="iconimg" src="/images/03_tramita.png" alt="">
-                            <h5>Tramita con nuestra ayuda</h5>
+                            <h5>3. Tramita con nuestra ayuda</h5>
                         </div>
                         <p class="card-text-s1">Te brindamos asesoramiento y asistencia en el proceso</p>
                     </div>
@@ -81,7 +84,7 @@
                     <div class="card-hiw card-hiw-s3">
                         <div class="d-flex align-items-center mb-3">
                             <img class="iconimg" src="/images/04_recibe_dinero.png" alt="">
-                            <h5>Recibe tú crédito</h5>
+                            <h5>4. Recibe tú crédito</h5>
                         </div>
                         <p class="card-text-s1">Tu dinero estará listo en poco tiempo</p>
                     </div>
@@ -94,7 +97,7 @@
    <div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-md-6 text-center">
-            <a href="http://kaaxclub.com/"  class="btn col-8 col-md-5 btn-lg btn-dark">Iniciar</a>
+            <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-5 btn-lg btn-dark">Iniciar</a>
         </div>
        </div>
    </div>
