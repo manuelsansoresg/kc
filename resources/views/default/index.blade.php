@@ -4,32 +4,36 @@
     <div class="hero-wrap hero-wrap-2 section-space">
         <div class="container">
             <div class="row align-items-center flex-md-row-reverse justify-content-between">
-                <div class="col-lg-5 col-sm-9 col-md-6">
-                    <div class="hero-image">
-                        <img src="images/01_mano.png" alt="" class="w-100">
-                        <p class="text-center">Elije en menos de 3 minutos</p>
+                <div class="col-lg-5 col-12 col-md-6">
+                    <div class="row justify-content-center">
+                        <div class="hero-image col-6 col-md-12">
+                            <img src="images/01_mano.png" alt="" class="">
+                            
+                        </div>
+                        <div class="col-12">
+                            <p class="text-center">Elije en menos de 3 minutos</p>
+                        </div>
                     </div>
                 </div><!-- end col-lg-5 -->
-                <div class="col-lg-6 col-md-6">
+                <div class="col-lg-6 col-md-6 text-center text-md-start">
                     <div class="hero-content pb-0 pt-md-0 pe-lg-4">
-                        <h1 class="hero-title mb-4">Encuentra y tramita tu crédito de nómina ideal.
+                        <h1 class="hero-title mb-4">Compara, elige y tramita tu crédito de nómina ideal.
                         </h1>
                         <p class="hero-text mb-4 pb-1">Elegir entre todas las financieras puede ser confuso y difícil. Pero
                             no tiene que ser así.
                         </p>
                         <!-- button group -->
-                        <div class="row">
-
+                        <div class="row mt-n2 mt-md-0">
                             <div class="col-12 text-center text-md-start">
                              <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block">Iniciar</a>
                             </div>
                         </div>
-                        <p class="mt-5 h3">
-                            Fácil, rápido, <span class="text-decoration-underline">sin costo.</span>
+                        <p class="mt-3 h3 text-center text-md-start">
+                            Fácil, rápido, y <span class="text-decoration-underline">  gratis.</span>
                             <span class="h4">
                                 <i
                                 class="fa-solid fa-circle-info" data-bs-toggle="tooltip"
-                                title="Nuestro servicio siempre será sin costo para ti. Nadie debe cobrarte por solicitar y/0 tramitar un crédito.">
+                                title="Nuestro servicio siempre será sin costo para ti. Nadie debe cobrarte por solicitar y/o tramitar un crédito.">
                             </i>
                             </span>
                         </p>
@@ -45,8 +49,7 @@
         <div class="container">
             <div class="section-head text-center">
                 <h2 class="mb-3">Imparcialidad y confianza</h2>
-                <p>En KaaxClub, no estamos afiliados a ninguna institución financiera. Nos enfocamos en ti y te ofrecemos
-                    opciones transparentes y honestas para que puedas tomar decisiones con confianza.
+                <p>No tenemos afiliación con ninguna institución financiera. Nos enorgullecemos de estar completamente del lado del cliente.
                 </p>
             </div><!-- end section-head -->
             
@@ -55,17 +58,17 @@
                     <div class="card-hiw card-hiw-s3">
                         <div class="d-flex align-items-center mb-3">
                             <img class="iconimg" src="/images/02_reporte.png" alt="">
-                            <h5>1. Generamos tu reporte</h5>
+                            <h5>1. Compara tus opciones</h5>
                         </div>
                       
                     </div>
-                    <p class="card-text-s1">Analizamos y calificamos tus opciones</p>
+                    <p class="card-text-s1">Analizamos y calificamos cada financiera</p>
                 </div><!-- end col -->
                 <div class="col-10 col-sm-6 col-lg-3">
                     <div class="card-hiw card-hiw-s3">
                         <div class="d-flex align-items-center mb-3">
                             <img class="iconimg" src="/images/02_decide.png" alt="">
-                            <h5>2. Decide</h5>
+                            <h5>2. Decide informado</h5>
                         </div>
                        
                     </div>

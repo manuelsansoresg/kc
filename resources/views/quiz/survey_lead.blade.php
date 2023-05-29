@@ -67,17 +67,17 @@
                                 <p class="">
                                     @if ($dayOK && $timeOK)
                                         <h6 class="text-white" data-aos="fade-up" data-aos-duration="5000" >
-                                            Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción
+                                            Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción.
                                             <br><br>
                                             Después  de que elijas, te ayudaremos con el trámite para que todo salga bien.
                                             <br><br>
-                                            Contacta un asesor para que genere tu reporte. O si
+                                            Contacta un asesor para que genere tu reporte comparativo. O si
                                             lo
                                             prefieres lo puedes generar tú mismo.
                                         </h6>
                                     @else
                                         <h6 class="text-white" data-aos="fade-up" data-aos-duration="9000">
-                                            Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción
+                                            Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción.
                                             <br><br>
                                             Después  de que elijas, te ayudaremos con el támite para que todo salga bien.
                                            
@@ -88,7 +88,7 @@
                                     @if ($dayOK && $timeOK)
                                     <div class="row justify-content-center mt-3" >
                                         <div class="col-12 col-md-6">
-                                            <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=hola" class="btn btn-primary btn-lg btn-block py-3 pointer"
+                                            <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary btn-lg btn-block py-3 pointer"
                                                 >Contactar asesor &nbsp;
                                                 <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
                                             </a>
@@ -154,7 +154,7 @@
                                             </div>
                                         </div>
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5">¡Gracias! <span class="span-name"></span> ¿Y
+                                            <h5 class="title mb-3 mt-5">Gracias <span class="span-name"></span> ¿y
                                                 tu
                                                 primer apellido?</h5>
                                             <div class="form-group"><label class="form-label text-white"
@@ -167,7 +167,7 @@
                                             </div>
                                         </div>
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 ">Nos gusta la comunicación tradicional. Pero, ¿qué
+                                            <h5 class="title mb-3 ">Nos gusta la comunicación tradicional, pero ¿qué
                                                 tal si nos das tu email para mantenernos en contacto?</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-email"> No enviamos spam. ¡Lo prometemos! <i
@@ -182,7 +182,7 @@
     
                                         <div class="nk-stepper-step">
                                             <h5 class="title mb-3 mt-5">En caso de que necesitemos enviarte un mensaje
-                                                por WhatsApp, ¿nos das tu número de celular?</h5>
+                                                por WhatsApp ¿nos das tu número de celular?</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-cellphone">
                                                 </label>
@@ -199,7 +199,7 @@
                                         @endphp
     
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> ¿En dónde
+                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> ¿en dónde
                                                 trabajas?</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-cellphone">
@@ -223,8 +223,8 @@
     
     
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> Y por último
-                                                Dinos qué es lo que deseas</h5>
+                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> por último
+                                                dinos qué es lo que deseas</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-cellphone">
                                                     Te ayudamos a encontrar la mejor opción
@@ -263,10 +263,7 @@
                                         </div>
                                         <div class="nk-stepper-step">
                                             <div class="pt-4 pb-2">
-                                               
-                                                <em
-                                                class="icon icon-circle icon-circle-xxl mb-4 ni ni-check bg-primary-dim"></em>
-                                                <h5 class="title mb-2 fw-bold">Genial!</h5>
+                                                <h5 class="title mb-2 fw-bold">¡Genial!</h5>
                                                 <p>Te hemos enviado un <b>correo electrónico</b> con el análisis de las opciones de crédito disponibles para ti. 
                                                     <br>
                                                     Una vez que elijas la mejor opción, te ayudaremos con el trámite.
