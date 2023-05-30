@@ -19,8 +19,7 @@
                     <div class="hero-content pb-0 pt-md-0 pe-lg-4">
                         <h1 class="hero-title mb-4">Compara, elige y tramita tu crédito de nómina ideal.
                         </h1>
-                        <p class="hero-text mb-4 pb-1">Elegir entre todas las financieras puede ser confuso y difícil. Pero
-                            no tiene que ser así.
+                        <p class="hero-text mb-4 pb-1">Elegir entre todas las financieras puede ser confuso y difícil, pero no tiene que ser así.
                         </p>
                         <!-- button group -->
                         <div class="row mt-n2 mt-md-0">
@@ -29,7 +28,7 @@
                             </div>
                         </div>
                         <p class="mt-3 h3 text-center text-md-start">
-                            Fácil, rápido, y <span class="text-decoration-underline">  gratis.</span>
+                            Fácil, rápido, y <span class="text-decoration-underline">gratis.</span>
                             <span class="h4">
                                 <i
                                 class="fa-solid fa-circle-info" data-bs-toggle="tooltip"
