@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <p class="mt-3 h3 text-center text-md-start">
-                            Fácil, rápido, y <span class="text-decoration-underline">gratis.</span>
+                            Fácil, rápido, y <span class="text-decoration-underline">gratis</span>.
                             <span class="h4">
                                 <i
                                 class="fa-solid fa-circle-info" data-bs-toggle="tooltip"
