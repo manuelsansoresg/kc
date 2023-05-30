@@ -6,7 +6,7 @@
             <div class="row align-items-center flex-md-row-reverse justify-content-between">
                 <div class="col-lg-5 col-12 col-md-6">
                     <div class="row justify-content-center">
-                        <div class="hero-image col-7 col-md-12">
+                        <div class="hero-image col-8 col-md-12">
                             <img src="images/01_mano.png" alt="" class="">
                             
                         </div>
