@@ -6,7 +6,7 @@
             <div class="row align-items-center flex-md-row-reverse justify-content-between">
                 <div class="col-lg-5 col-12 col-md-6">
                     <div class="row justify-content-center">
-                        <div class="hero-image col-6 col-md-12">
+                        <div class="hero-image col-7 col-md-12">
                             <img src="images/01_mano.png" alt="" class="">
                             
                         </div>
@@ -79,7 +79,7 @@
                             <img class="iconimg" src="/images/03_tramita.png" alt="">
                             <h5>3. Tramita con nuestra ayuda</h5>
                         </div>
-                        <p class="card-text-s1">Te brindamos asesoramiento y asistencia en el proceso</p>
+                        <p class="card-text-s1">Te brindamos asesoría y asistencia en el proceso</p>
                     </div>
                 </div><!-- end col -->
                 <div class="col-10 col-sm-6 col-lg-3">
