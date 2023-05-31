@@ -72,9 +72,22 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     }
  }
 
+ .full-height {
+    height: 100vh !important;
+  }
+  
+  
+
  /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
   .text-elije {
     font-size: 12px;
   }
 }
+
+@media (max-width: 767px) {
+    /* Estilos para versión móvil */
+    .full-height {
+      height: 0 !important;
+    }
+  }

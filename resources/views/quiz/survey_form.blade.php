@@ -49,7 +49,7 @@
             <div class="nk-wrap nk-wrap-nosidebar">
                 <!-- content @s -->
                 <div class="nk-content" id="content-lead-flex">
-                    <div class="d-flex justify-content-center align-items-center vh-100">
+                    <div class="d-flex justify-content-center align-items-center full-height">
                        
                         <div class="bg-transparent is-dark p-5">
                             <div class="row justify-content-center">
@@ -63,9 +63,9 @@
                                 <p class="mt-5" data-aos="fade-up" data-aos-duration="9000">
                                     <h1 class="font-28"  style="color: #6576ff !important;">Reporte</h1>
                                     <h5 class="font-15 color-highlight mb-4 ">
-                                        Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción
+                                        Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción.
                                         <br><br>
-                                        Despues de que elijas, te ayudaremos con el trámite para que todo salga bien.
+                                        Después de que elijas, te ayudaremos con el trámite para que todo salga bien.
                                     </h5>
                                 </p>
                                 <p class="mt-5">
@@ -88,15 +88,9 @@
                 </div>
                <div class="container">
                 <form class="nk-stepper stepper-init is-alter" action="#" id="frm-survey">
-                    <div class="nk-content  p-5" id="content-lead-form" style="display: none">
-                        <div class="d-flex  align-items-center vh-100">
+                    <div class="nk-content p-5 mt-5" id="content-lead-form" style="display: none">
+                        <div class="d-flex mt-2 align-items-center full-height">
                             <div class="wide-xs-fix col-12 col-md-6 offset-md-1">
-                                <a href="/" class="logo-link nk-sidebar-logo">
-                                    <img class="logo-light logo-img" src="{{ asset('images/logo-dark.png') }}"
-                                    alt="logo" data-aos="fade-up"
-                                    data-aos-duration="5000">
-                                </a>
-    
                                 
                                 <div class="nk-stepper-content">
                                     <div class="nk-stepper-progress stepper-progress mb-4">
@@ -110,7 +104,7 @@
     
                                         <div class="nk-stepper-step">
                                             <h5 class="title mb-3 mt-5">En caso de que necesitemos enviarte un mensaje
-                                                por WhatsApp, ¿nos das tu número de celular?</h5>
+                                                por WhatsApp ¿nos das tu número de celular?</h5>
                                                 <label class="form-label text-white"
                                                     for="sv1-email"> No enviamos spam. ¡Lo prometemos! <i
                                                         class="fas fa-smile-beam text-warning"></i>
@@ -196,10 +190,8 @@
     
                                         <div class="nk-stepper-step">
                                             <div class="pt-4 pb-2">
-                                                <em
-                                                    class="icon icon-circle icon-circle-xxl mb-4 ni ni-check bg-primary-dim"></em>
                                                 <h5 class="title mb-2">¡Genial!</h5>
-                                                <p>Hemos generado un reporte con las opciones de crédito disponibles para tí.
+                                                <p>Hemos generado un reporte con las opciones de crédito disponibles para ti.
                                                    <br>
                                                    Elige la mejor y después te ayudaremos con el trámite para que todo salga bien.
                                                 </p>
@@ -300,6 +292,7 @@
     <script>
         $(document).ready(function() {
             let count_steeper = 0;
+            let count_steeper_real = 0;
             //*Initialize AOS
             AOS.init();
             //* SURVEY LEAD
@@ -326,6 +319,8 @@
             }
             window.continueStepper = function() {
                 count_steeper = count_steeper + 1;
+                count_steeper_real = count_steeper_real + 1;
+                setCount(count_steeper_real);
                 console.log(count_steeper);
                 $('#number_step').val(count_steeper);
                 if (count_steeper == 3) {
@@ -338,12 +333,15 @@
                     console.log('ejecutar guardado');
                     saveLead(false);
                 }
+                
                 animateStepper();
                 
             }
 
             window.backStepper = function() {
-                count_steeper = count_steeper - 1;
+                count_steeper         = count_steeper - 1;
+                count_steeper_real    = count_steeper_real - 1;
+                setCount(count_steeper_real);
                 console.log(count_steeper);
                 $('#number_step').val(count_steeper);
                 animateStepper();
@@ -402,10 +400,21 @@
                 
             }
 
-            $(".stepper-progress-count").text(function(index, currentText) {
-            return currentText.replace("of", "de");
-            });
+            function setCount(number) {
+                changeof();
+                const countElement = document.querySelector('.stepper-progress-count');
+                const countText = countElement.textContent;
+                const updatedText = number + countText.slice(1);
+                countElement.textContent = updatedText;
+            }
 
+            function changeof() {
+                $(".stepper-progress-count").text(function(index, currentText) {
+                        return currentText.replace("of", "de");
+                });
+            }
+          
+            changeof();
             window.loading = function() {
 
             let i = 10;
