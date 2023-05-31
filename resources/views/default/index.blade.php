@@ -11,13 +11,13 @@
                             
                         </div>
                         <div class="col-12">
-                            <p class="text-center">Elije en menos de 3 minutos</p>
+                            <p class="text-center text-elije">Elije en menos de 3 minutos</p>
                         </div>
                     </div>
                 </div><!-- end col-lg-5 -->
                 <div class="col-lg-6 col-md-6 text-center text-md-start">
                     <div class="hero-content pb-0 pt-md-0 pe-lg-4">
-                        <h1 class="hero-title mb-4">Compara, elige y tramita tu crédito de nómina ideal.
+                        <h1 class="hero-title mb-4 color-primary">Compara, elige y tramita tu crédito de nómina ideal.
                         </h1>
                         <p class="hero-text mb-4 pb-1">Elegir entre todas las financieras puede ser confuso y difícil, pero no tiene que ser así.
                         </p>
