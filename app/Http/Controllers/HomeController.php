@@ -122,7 +122,8 @@ class HomeController extends Controller
 
     public function method($history_id)
     {
-        return view('content_report_metodologia', compact('history_id'));
+        $status_id = null;
+        return view('content_report_metodologia', compact('history_id', 'status_id'));
     }
 
     public function showNotification()
