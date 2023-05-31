@@ -1,7 +1,7 @@
 <script>
     let titulo        = '{{isset($financial->commercial_name)?trim($financial->commercial_name): 'Financiera 1' }}'
     </script>
-    @if ($status_id == 10)
+    @if (isset($status_id) && $status_id == 10)
     <script>
      const labels_options = [
             titulo+'(Tu crédito)',
