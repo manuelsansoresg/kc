@@ -26,7 +26,7 @@
                                 data-aos-delay="100">
                                 <div class="row align-items-center">
                                     <div class="animated-title">
-                                        <div class="text-top">
+                                        <div class="text-top ">
                                             <div>
                                                 <span class="h1">¡Enhorabuena! </span>
                                                 <span class="h1">{{ $client->name }}</span>
@@ -83,8 +83,7 @@
                 <div class="col-lg-10 col-xl-8 mx-auto text-center">
                     <h1 class="display-4 mb-0" data-aos="fade-up" data-aos-delay="100">Calificación de KaaxClub</h1>
                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                        Hemos analizado a detalle cada financiera y cada crédito para crear una puntuación que te ayude a
-                        tomar una mejor decisión.
+                        Analizamos a detalle y otorgamos una puntuación a cada financiera para ayudarte a tomar la mejor decisión.
                     </p>
                 </div>
             </div>
@@ -389,19 +388,13 @@
                                         data-aos="fade-up"> Costo Anual Total Real
                                     </h2>
                                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                        El <b>CAT real</b> es el verdadero costo que tiene un crédito. Incluye el
-                                        interés, comisiones y cargos del crédito; Es una de la información más
-                                        importante.
-                                    </p>
-                                    <p class="mb-4" data-aos="fade-up" data-aos-delay="100">Lorem
-                                        En algunos lugares encontrarás términos confusos como "CAT promedio" o "CAT para
-                                        fines informativos”
+                                        No es el famoso y confuso “CAT promedio” o “CAT para fines informativos” que te dicen en los anuncios, nosotros te decimos cuánto pagas al año por cada peso que te prestan.
 
                                     </p>
-                                    <p class="mb-4" data-aos="fade-up" data-aos-delay="100">Lorem
-                                        En KaaxClub te decimos el <b>CAT Real.</b> Sin rodeos.
-
+                                    <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
+                                        El CAT real es el verdadero costo del crédito, esto incluye intereses, impuestos (IVA),  comisiones y cualquier otro cargo; Consideramos que es un factor importante, siempre es bueno pagar menos por el mismo producto.
                                     </p>
+                                   
 
 
 
@@ -437,10 +430,8 @@
                                         <h1 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4"
                                             data-aos="fade-up" data-aos-delay="100">Comisiones.</h1>
                                         <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                            La <b>comisión por apertura</b> en realidad es un cobro de intereses por
-                                            adelantado. Sin embargo; hay créditos que pueden ser más convenientes incluso si
-                                            cobran comisión por apertura. Es mejor fijarse en el <b>CAT real</b>, el cual
-                                            considera dicha comisión en su cálculo.
+                                            Las comisiones en realidad son un cobro de intereses por adelantado. Sin embargo, hay créditos que pueden ser más convenientes incluso si la cobran. Por eso es mejor fijarse en el <b>CAT real</b>, que considera dicha comisión y demás costos en su cálculo.
+
                                         </p>
 
                                     </div>
@@ -529,13 +520,13 @@
                                         data-aos="fade-up"> Plazo máximo
                                     </h2>
                                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                        En ocasiones, una buena estrategia para adquirir un crédito es solicitar el
-                                        plazo máximo para obtener un pago menor y realizar pagos anticipados (abono a
-                                        capital) cada vez que sea posible. De ese modo, pagarás menos interés.
+                                        n mayor plazo te permite hacer pagos “chiquitos” pero al final, terminas pagando más interés..
+                                        Sin embargo, en ocasiones una buena estrategia para adquirir un crédito es solicitar el plazo máximo para obtener un pago menor y realizar abonos a capital o liquidar el crédito anticipadamente. De esa forma pagarás menos interés.
+                                        
                                     </p>
                                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                        Si tienes dudas sobre cómo realizar pagos adelantados (abono a capital),
-                                        contacta un asesor. Con gusto atenderá.
+                                        Si tienes dudas sobre cómo realizar pagos adelantados (abono a capital), contacta un asesor. Con gusto atenderá. 
+
                                     </p>
                                 </div>
                             </div>
@@ -569,8 +560,7 @@
                         <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
                             <div class="row align-items-center">
                                 <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80" data-aos="fade-up"
-                                    data-aos-delay="100">Analizamos cada uno de los contratos en busca de cláusulas abusivas o
-                                    engañosas.
+                                    data-aos-delay="100">Revisamos por ti cada uno de los contratos, esos que nunca se leen,  en busca de cláusulas abusivas o engañosas que puedan perjudicarte.
                                 </p>
 
                             </div>
@@ -732,9 +722,7 @@
 
                             <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80" data-aos="fade-up"
                             data-aos-delay="100">
-                            La protección de tus datos personales es tu derecho. Analizamos los avisos de privacidad para
-                            asegurarnos de que tus datos se usen únicamente para los fines requeridos y asegurarnos que no se
-                            compartan ni se vendan a empresas con otro fin ajeno.
+                            La protección de tus datos personales es tu derecho. Leemos y revisamos los avisos de privacidad para asegurarnos de que tus datos se usen de manera correcta
     
                         </p>
                             
@@ -768,7 +756,9 @@
                                                 data-aos="fade-up"> Simulación
                                             </h2>
                                             <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                                El interés es el costo del dinero. Aquí te decimos cuánto interés y cuánta comisión  se paga en un sencillo ejemplo.
+                                                El interés es el costo del dinero durante el tiempo del préstamo, este, junto con las comisiones, IVA y cargos componen el CAT Real. Aquí te mostramos con un sencillo ejemplo, cuánto te cuesta tu crédito con cada finaciera. 
+                                                (tip: mientras más larga la barra, mayor es el costo).
+                                                
 
                                             </p>
                                             <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
