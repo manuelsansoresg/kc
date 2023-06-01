@@ -1,11 +1,11 @@
 <script>
-    let titulo        = '{{isset($financial->commercial_name)?trim($financial->commercial_name): 'Financiera 1' }}'
+    let titulo        = '{{isset($financial->commercial_name)?trim($financial->commercial_name): 'Crediplus' }}'
     </script>
     @if ($status_id == 10)
     <script>
      const labels_options = [
             titulo+'(Tu crédito)',
-            'Financiera 2 (Mejor opción)',
+            'Consupago (Mejor opción)',
         ];
 
         const data_options = {
@@ -108,11 +108,11 @@
         let inViewInteres = false;
         let inViewOption  = false;
         
-        let color_financiera1 = (titulo == 'Financiera 1')? '#4B3BB6' : 'white';
-        let color_financiera2 = (titulo == 'Financiera 2')? '#4B3BB6' : 'white';
-        let color_financiera3 = (titulo == 'Financiera 3')? '#4B3BB6' : 'white';
-        let color_financiera4 = (titulo == 'Financiera 4')? '#4B3BB6' : 'white';
-        let color_financiera5 = (titulo == 'Financiera 5')? '#4B3BB6' : 'white';
+        let color_financiera1 = (titulo == 'Crediplus')? 'white' : 'white';
+        let color_financiera2 = (titulo == 'Consupago')? 'white' : 'white';
+        let color_financiera3 = (titulo == 'Ommsa')? 'white' : 'white';
+        let color_financiera4 = (titulo == 'Financiera 4')? 'white' : 'white';
+        let color_financiera5 = (titulo == 'Financiera 5')? 'white' : 'white';
 
         function isScrolledIntoView(elem)
         {
@@ -150,35 +150,25 @@
     </script>
     <script>
         const labels = [
-            'Financiera 1',
-            'Financiera 2',
-            'Financiera 3',
-            'Financiera 4',
-            'Financiera 5',
+            'Crediplus',
+            'Consupago',
+            'Ommsa',
         ];
 
         const data = {
             labels: labels,
             datasets: [{
                     label: 'Financiera1',
-                    data: [80, 10, 20, 40, 50],
+                    data: [41.8, 40, 54.1],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.5)', //rojo
                         'rgba(255, 159, 64, 0.5)',// cafe
                         'rgba(255, 205, 86, 0.5)', // marron
-                        'rgba(75, 192, 192, 0.5)', //verde
-                        'rgba(54, 162, 235, 0.5)', // azul
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(201, 203, 207, 0.5)'
                     ],
                     borderColor: [
                         'rgb(255, 99, 132)',
                         'rgb(255, 159, 64)',
                         'rgb(255, 205, 86)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                        'rgb(153, 102, 255)',
-                        'rgb(201, 203, 207)'
                     ],
                     color: ['#fff'],
                     borderWidth: 1,
@@ -257,33 +247,37 @@
         
         /*  intereses */
         const labels_interes = [
-            'Financiera 1',
-            'Financiera 2',
-            'Financiera 3',
-            'Financiera 4',
-            'Financiera 5',
+            'Crediplus',
+            'Consupago',
+            'Ommsa',
         ];
 
         const data_interes = {
             labels: labels_interes,
             datasets: [{
-                    label: 'Prestamo',
+                    label: 'Capital',
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 0.5)',
-                    data: [10000,10000, 10000,10000,10000],
+                    data: [10000,10000, 10000],
 
                 },
                 {
                     label: 'Interés',
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
                     borderColor: 'rgba(255, 99, 132, 0.5)',
-                    data: [4000, 5000 , 4500,5500,4250],
+                    data: [3600, 3450 , 4660],
                 },
                 {
-                    label: 'Comisión por apertura',
+                    label: 'Comisiónes',
                     backgroundColor: 'rgba(255, 205, 86, 0.5)',
                     borderColor: 'rgba(255, 205, 86, 0.5)',
-                    data: [500, 0 , 300,0,0],
+                    data: [0, 0 , 0],
+                },
+                {
+                    label: 'IVA',
+                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                    borderColor: 'rgba(255, 205, 86, 0.5)',
+                    data: [576, 552 , 745.6],
                 },
             ] 
         };
@@ -349,11 +343,9 @@
         
         /* plazo */
         const labels_plazo = [
-            'Financiera 1',
-            'Financiera 2',
-            'Financiera 3',
-            'Financiera 4',
-            'Financiera 5',
+            'Crediplus',
+            'Consupago',
+            'Ommsa',
         ];
 
         const data_plazo = {
@@ -362,7 +354,7 @@
                     label: 'Años',
                     backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 205, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(54, 162, 235, 0.5)'],
                     borderColor:   ['rgba(255, 99, 132, 2)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 205, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(54, 162, 235, 0.5)'],
-                    data: [2, 2.5, 3, 3.5, 3],
+                    data: [3, 4, 2],
                     borderWidth: 2,
 
                 },

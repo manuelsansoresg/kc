@@ -98,11 +98,11 @@
                         <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10 " data-aos="fade-up" data-aos-delay="100">
                             <div class="card mb-4 mb-lg-0 shadow-lg rounded-4 border-0 overflow-hidden">
                                 <div class="px-4 mt-4">
-                                    <h3 class="mb-2">Financiera 1</h1>
+                                    <h3 class="mb-2">Crediplus</h1>
                                         <p class="mb-0 text-muted"></p>
                                 </div>
                                 <div class="card-body pt-0 pb-4 px-4">
-                                    <span class="h4 display-9"><span class="fw-light small"></span>Calificación: 4.8</span>
+                                    <span class="h4 display-9"><span class="fw-light small"></span>Calificación: 4.4</span>
                                         <span
                                             class="fw-bold text-muted">/5 </span> 
                                             
@@ -113,7 +113,7 @@
                                         <li class="mb-2">
                                             <span
                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span>CAT REAL: 4.7</span><span class="text-sm text-muted">/5 </span>
+                                                <span>CAT REAL: 4.1</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
                                            
                                         </li>
@@ -126,20 +126,20 @@
                                         <li class="mb-2">
                                             <span
                                             class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Plazo maximo: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <span>Plazo maximo: 4</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-plazo-maximo')"> &nbsp; Ver</a>
                                         </li>
                                         <li class="mb-2">
                                             <span
                                             class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Contrato: 4</span><span class="text-sm text-muted">/5 </span>
+                                            <span>Contrato: 4.5</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
                                         </li>
                                        
                                         <li class="mb-2">
                                             <span
                                             class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Priv. datos: 4.3</span><span class="text-sm text-muted">/5 </span>
+                                            <span>Priv. datos: 4.5</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
                                     </ul>
                                     <div class="text-center mt-3">
@@ -152,11 +152,11 @@
                             <div class="card mb-4 mb-lg-0 shadow-lg rounded-4 border-0 overflow-hidden"><span
                                     class="badge bg-warning rounded-bottom-0 py-3 fs-6">Mejor opción</span>
                                 <div class="px-4 py-4">
-                                    <h3 class="mb-2">Financiera</h1>
+                                    <h3 class="mb-2">Consupago</h1>
                                         <p class="text-muted mb-0"></p>
                                 </div>
                                 <div class="card-body pt-0 pb-4 px-4">
-                                    <h6 class="display-9"><span class="fw-light small"></span>Calificación: 5<span
+                                    <h6 class="display-9"><span class="fw-light small"></span>Calificación: 4.6<span
                                             class="small">/5</span></h6><small
                                         class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, 2, 1)" type="button"
                                         class="w-100 btn btn-lg btn-gradient-primary hover-lift">Tramitar</button>
@@ -164,7 +164,7 @@
                                         <li class="mb-2">
                                             <span
                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span>CAT REAL: 5</span><span class="text-sm text-muted">/5 </span>
+                                                <span>CAT REAL: 4.3</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
                                            
                                         </li>
@@ -183,14 +183,14 @@
                                         <li class="mb-2">
                                             <span
                                             class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Contrato: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <span>Contrato: 4.5</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
                                         </li>
                                        
                                         <li class="mb-2">
                                             <span
                                             class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Priv. datos: 5</span><span class="text-sm text-muted">/5 </span>
+                                            <span>Priv. datos: 4.5</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
                                     </ul>
                                     <div class="text-center mt-3">
@@ -203,11 +203,11 @@
                         <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10 " data-aos="fade-up" data-aos-delay="150">
                             <div class="card shadow-lg rounded-4 border-0 overflow-hidden">
                                 <div class="px-4 py-4">
-                                    <h3 class="mb-2">Financiera 3</h1>
+                                    <h3 class="mb-2">Ommsa</h1>
                                         <p class="text-muted mb-0"></p>
                                 </div>
                                 <div class="card-body pt-0 pb-4 px-4">
-                                    <h6 class="display-9"><span class="fw-light small"></span>Calificación: 3<span
+                                    <h6 class="display-9"><span class="fw-light small"></span>Calificación: 3.9<span
                                             class="small">/5</span></h6><small
                                         class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, 3, 1)" type="button"
                                         class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
@@ -215,116 +215,14 @@
                                         <li class="mb-2">
                                             <span
                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span>CAT REAL: 3</span><span class="text-sm text-muted">/5 </span>
+                                                <span>CAT REAL: 3.3</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
                                            
                                         </li>
                                         <li class="mb-2">
                                             <span
                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span>Comisiones: 3.2</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp; Ver</a>
-                                        </li>
-                                        <li class="mb-2">
-                                            <span
-                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Plazo maximo: 5</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-plazo-maximo')"> &nbsp; Ver</a>
-                                        </li>
-                                        <li class="mb-2">
-                                            <span
-                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Contrato: 3</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
-                                        </li>
-                                       
-                                        <li class="mb-2">
-                                            <span
-                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Priv. datos: 4.3</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
-                                    </ul>
-                                    <div class="text-center mt-3">
-                                        <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver simulación</a>
-                                    </div>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10  mt-5" data-aos="fade-up" data-aos-delay="150">
-                            <div class="card shadow-lg rounded-4 border-0 overflow-hidden">
-                                <div class="px-4 py-4">
-                                    <h3 class="mb-2">Financiera 4</h1>
-                                        <p class="text-muted mb-0"></p>
-                                </div>
-                                <div class="card-body pt-0 pb-4 px-4">
-                                    <h6 class="display-9"><span class="fw-light small"></span>Calificación: 2<span
-                                            class="small">/5</span></h6><small
-                                        class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, 4, 1)" type="button"
-                                        class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
-                                    <ul class="list-unstyled mb-0 pt-4">
-                                        <li class="mb-2">
-                                            <span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span>CAT REAL: 2</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
-                                           
-                                        </li>
-                                        <li class="mb-2">
-                                            <span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span>Comisiones: 3.3</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp; Ver</a>
-                                        </li>
-                                        <li class="mb-2">
-                                            <span
-                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Plazo maximo: 5</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-plazo-maximo')"> &nbsp; Ver</a>
-                                        </li>
-                                        <li class="mb-2">
-                                            <span
-                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Contrato: 3</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
-                                        </li>
-                                       
-                                        <li class="mb-2">
-                                            <span
-                                            class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Priv. datos: 2</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
-                                    </ul>
-                                    <div class="text-center mt-3">
-                                        <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver simulación</a>
-                                    </div>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10  mt-5" data-aos="fade-up" data-aos-delay="150">
-                            <div class="card shadow-lg rounded-4 border-0 overflow-hidden">
-                                <div class="px-4 py-4">
-                                    <h3 class="mb-2">Financiera 5</h3>
-                                    <p class="text-muted mb-0"></p>
-                                </div>
-                                <div class="card-body pt-0 pb-4 px-4">
-                                    <h6 class="display-9"><span class="fw-light small"></span>Calificación: 2<span
-                                            class="small">/5</span></h6><small
-                                        class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, 5, 1)" type="button"
-                                        class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
-                                    <ul class="list-unstyled mb-0 pt-4">
-                                        <li class="mb-2">
-                                            <span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span>CAT REAL: 2</span><span class="text-sm text-muted">/5 </span>
-                                            <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp; Ver</a>
-                                           
-                                        </li>
-                                        <li class="mb-2">
-                                            <span
-                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                <span>Comisiones: 2</span><span class="text-sm text-muted">/5 </span>
+                                                <span>Comisiones: 5</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp; Ver</a>
                                         </li>
                                         <li class="mb-2">
@@ -336,14 +234,14 @@
                                         <li class="mb-2">
                                             <span
                                             class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Contrato: 2</span><span class="text-sm text-muted">/5 </span>
+                                            <span>Contrato: 3.5</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp; Ver</a>
                                         </li>
                                        
                                         <li class="mb-2">
                                             <span
                                             class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                            <span>Priv. datos: 2</span><span class="text-sm text-muted">/5 </span>
+                                            <span>Priv. datos: 4.5</span><span class="text-sm text-muted">/5 </span>
                                             <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp; Ver</a>
                                     </ul>
                                     <div class="text-center mt-3">
@@ -353,6 +251,8 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        
                     </div>
                 </div>
 
@@ -364,11 +264,6 @@
     <a name="section-cat-real"/>
     <section class="position-relative bg-style-1">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
-            <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
-                <h5 class="bg-primary bg-opacity-25 text-primary d-table mx-auto rounded-pill px-3 py-2 mb-4"
-                    data-aos="fade-up">CAT Real</h5>
-
-            </div>
             <div class="row justify-content-between align-items-start">
                 <div class="col-12">
                     <div class="tab-content">
@@ -453,23 +348,15 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <th scope="row" class="text-start">Financiera 1</th>
-                                                        <td><span class="fs-6">SÍ</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="text-start">Financiera 2</th>
+                                                        <th scope="row" class="text-start">Crediplus</th>
                                                         <td><span class="fs-6">NO</span></td>
                                                     </tr>
                                                     <tr>
-                                                        <th scope="row" class="text-start">Financiera 3</th>
+                                                        <th scope="row" class="text-start">Consupago</th>
                                                         <td><span class="fs-6">NO</span></td>
                                                     </tr>
                                                     <tr>
-                                                        <th scope="row" class="text-start">Financiera 4</th>
-                                                        <td><span class="fs-6">NO</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="text-start">Financiera 5</th>
+                                                        <th scope="row" class="text-start">Ommsa</th>
                                                         <td><span class="fs-6">NO</span></td>
                                                     </tr>
 
@@ -520,7 +407,7 @@
                                         data-aos="fade-up"> Plazo máximo
                                     </h2>
                                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                        n mayor plazo te permite hacer pagos “chiquitos” pero al final, terminas pagando más interés..
+                                        Un mayor plazo te permite hacer pagos “chiquitos” pero al final, terminas pagando más interés..
                                         Sin embargo, en ocasiones una buena estrategia para adquirir un crédito es solicitar el plazo máximo para obtener un pago menor y realizar abonos a capital o liquidar el crédito anticipadamente. De esa forma pagarás menos interés.
                                         
                                     </p>
@@ -559,7 +446,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
                             <div class="row align-items-center">
-                                <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80" data-aos="fade-up"
+                                <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80 text-start" data-aos="fade-up"
                                     data-aos-delay="100">Revisamos por ti cada uno de los contratos, esos que nunca se leen,  en busca de cláusulas abusivas o engañosas que puedan perjudicarte.
                                 </p>
 
@@ -582,46 +469,29 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th scope="row" class="text-start">Financiera 1</th>
+                                                <th scope="row" class="text-start">Crediplus</th>
                                                 <td><span class="fs-6">
-                                                    <span class="fw-light small"></span>Calificación: 5<span
+                                                    <span class="fw-light small"></span>Calificación: 4.5<span
                                                     class="small">/5</span>    
                                                     <a href="">Ver detalles</a>
                                                 </span></td>
                                             </tr>
                                             <tr>
-                                                <th scope="row" class="text-start">Financiera 2</th>
+                                                <th scope="row" class="text-start">Consupago</th>
                                                 <td><span class="fs-6">
-                                                    <span class="fw-light small"></span>Calificación: 5<span
+                                                    <span class="fw-light small"></span>Calificación: 4.5<span
                                                     class="small">/5</span>    
                                                     <a href="">Ver detalles</a>
                                                 </span></td>
                                             </tr>
                                             <tr>
-                                                <th scope="row" class="text-start">Financiera 3</th>
+                                                <th scope="row" class="text-start">Ommsa</th>
                                                 <td><span class="fs-6">
-                                                    <span class="fw-light small"></span>Calificación: 5<span
+                                                    <span class="fw-light small"></span>Calificación: 3.5<span
                                                     class="small">/5</span>    
                                                     <a href="">Ver detalles</a>
                                                 </span></td>
                                             </tr>
-                                            <tr>
-                                                <th scope="row" class="text-start">Financiera 4</th>
-                                                <td><span class="fs-6">
-                                                    <span class="fw-light small"></span>Calificación: 5<span
-                                                    class="small">/5</span>    
-                                                    <a href="">Ver detalles</a>
-                                                </span></td>
-                                            </tr>
-                                            <tr>
-                                                <th scope="row" class="text-start">Financiera 5</th>
-                                                <td><span class="fs-6">
-                                                    <span class="fw-light small"></span>Calificación: 5<span
-                                                    class="small">/5</span>    
-                                                    <a href="">Ver detalles</a>
-                                                </span></td>
-                                            </tr>
-            
                                         </tbody>
             
                                     </table>
@@ -671,46 +541,29 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <th scope="row" class="text-start">Financiera 1</th>
+                                                    <th scope="row" class="text-start">Crediplus</th>
                                                     <td><span class="fs-6">
-                                                        <span class="fw-light small"></span>Calificación: 5<span
+                                                        <span class="fw-light small"></span>Calificación: 4.5<span
                                                         class="small">/5</span>    
                                                         <a href="">Ver detalles</a>
                                                     </span></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row" class="text-start">Financiera 2</th>
+                                                    <th scope="row" class="text-start">Consupago</th>
                                                     <td><span class="fs-6">
-                                                        <span class="fw-light small"></span>Calificación: 5<span
+                                                        <span class="fw-light small"></span>Calificación: 4.5<span
                                                         class="small">/5</span>    
                                                         <a href="">Ver detalles</a>
                                                     </span></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row" class="text-start">Financiera 3</th>
+                                                    <th scope="row" class="text-start">Ommsa</th>
                                                     <td><span class="fs-6">
-                                                        <span class="fw-light small"></span>Calificación: 5<span
+                                                        <span class="fw-light small"></span>Calificación: 4.5<span
                                                         class="small">/5</span>    
                                                         <a href="">Ver detalles</a>
                                                     </span></td>
                                                 </tr>
-                                                <tr>
-                                                    <th scope="row" class="text-start">Financiera 4</th>
-                                                    <td><span class="fs-6">
-                                                        <span class="fw-light small"></span>Calificación: 5<span
-                                                        class="small">/5</span>    
-                                                        <a href="">Ver detalles</a>
-                                                    </span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row" class="text-start">Financiera 5</th>
-                                                    <td><span class="fs-6">
-                                                        <span class="fw-light small"></span>Calificación: 5<span
-                                                        class="small">/5</span>    
-                                                        <a href="">Ver detalles</a>
-                                                    </span></td>
-                                                </tr>
-                
                                             </tbody>
                 
                                         </table>
@@ -720,7 +573,7 @@
                         </div>
                         <div class="col-md-6 col-lg-5 mx-auto" data-aos="fade-up" data-aos-delay="100">
 
-                            <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80" data-aos="fade-up"
+                            <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80 text-start" data-aos="fade-up"
                             data-aos-delay="100">
                             La protección de tus datos personales es tu derecho. Leemos y revisamos los avisos de privacidad para asegurarnos de que tus datos se usen de manera correcta
     
