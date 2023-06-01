@@ -207,7 +207,7 @@ class Lead extends Model
             $get_lead->fill($data_lead)->update();
         }
 
-        if ($is_new == true) {
+        if ($number_step == 1) {
             //* Execute notification in create lead
             $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
             (new $notification)->send($get_lead->id);
