@@ -35,7 +35,7 @@ class PushCreditKcDelivery implements SendNotificationsInterface
         foreach ($get_notifications as $notification) {
             $users = User::getUserRole('Administrador');
             $credit = $notification->notificationCredit;
-            $advisor = $credit->creditAdvisor;
+            
             $toast  = \View::make('panel.toast', ['title' => $notification->title, 'body' => $notification->body])->render();
             
             foreach ($users as $user) {
@@ -55,6 +55,7 @@ class PushCreditKcDelivery implements SendNotificationsInterface
                 }
             }
             try {
+                $advisor = $credit->creditAdvisor;
                 if ($advisor->id == Auth::user()->id) {
                     $data_array = array(
                         'user_id' => $advisor->id,
