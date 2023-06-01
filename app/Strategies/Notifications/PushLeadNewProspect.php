@@ -22,14 +22,12 @@ class PushLeadNewProspect implements SendNotificationsInterface
 
         $is_exist = Notification::where($data_notification)->count();
         
-        if ($is_exist == 0) {
-            Notification::create($data_notification);
-            $push  = new Pusher;
-            $push->send(['model' => 'leadNewProspect']);
+        Notification::create($data_notification);
+        $push  = new Pusher;
+        $push->send(['model' => 'leadNewProspect']);
 
-            $notification_slack = new Slack('kaaxClub', 'nuevo prospecto');
-            $notification_slack->sendMessage();
-        }
+        $notification_slack = new Slack('kaaxClub', 'nuevo prospecto');
+        $notification_slack->sendMessage();
     }
     
     public function get($user_id = null, $status = 0)
