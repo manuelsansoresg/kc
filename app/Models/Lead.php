@@ -192,6 +192,7 @@ class Lead extends Model
         $data_lead['channel_id']  = 1;
         $data_lead['type_id']     = 1;
         $lead_id                  = $request->lead_id;
+        $is_new                   = false;
 
         if ($data_lead['agreement_id'] == '00') {
             unset($data_lead['agreement_id']);
@@ -200,17 +201,20 @@ class Lead extends Model
         if ($get_lead == null) {
             $get_lead = new Lead($data_lead);
             $get_lead->save();
-            if ($get_lead != null) {
-                //* Execute notification in create lead
-                $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
-                (new $notification)->send($get_lead->id);
-                //*crear contacto sendgrid
-                $send_grid = new Csendgrid();
-                $send_grid->createContact($get_lead->email, $get_lead->first_name, $get_lead->last_name);
-                HistoryLog::move($get_lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
-            }
+            $is_new = true;
+
         } else {
             $get_lead->fill($data_lead)->update();
+        }
+
+        if ($is_new == true) {
+            //* Execute notification in create lead
+            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+            (new $notification)->send($get_lead->id);
+            //*crear contacto sendgrid
+            $send_grid = new Csendgrid();
+            $send_grid->createContact($get_lead->email, $get_lead->first_name, $get_lead->last_name);
+            HistoryLog::move($get_lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         }
 
         if ($number_step == 6) {
