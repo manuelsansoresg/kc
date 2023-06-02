@@ -313,12 +313,6 @@
                 <div class="col-12">
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="analytics1" role="tabpanel">
-                            <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50" data-aos="fade-up"
-                                data-aos-delay="100">
-                                <h5 class="bg-primary bg-opacity-25 text-primary d-table mx-auto rounded-pill px-3 py-2 mb-4"
-                                    data-aos="fade-up">Comisiones</h5>
-
-                            </div>
                             <div class="row align-items-center">
                                 <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
                                     <div class="row align-items-center">
@@ -384,10 +378,6 @@
     {{-- plazo --}}
     <section class="position-relative bg-style-1">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
-            <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
-                <h5 class="bg-primary bg-opacity-25 text-primary d-table mx-auto rounded-pill px-3 py-2 mb-4"
-                    data-aos="fade-up">Plazo</h5>
-            </div>
             <div class="row justify-content-between align-items-start">
                 <div class="col-12">
                     <div class="tab-content">
@@ -439,13 +429,13 @@
         <div class="container pt-11 pt-lg-13 position-relative z-index-1">
             <div class="row pb-9 pb-lg-11 pt-lg-5">
                 <div class="col-lg-11 mx-auto text-center">
-                    <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50" data-aos="fade-up" data-aos-delay="100">
-                        <h5 class="bg-primary bg-opacity-25 text-primary d-table mx-auto rounded-pill px-3 py-2 mb-4"
-                            data-aos="fade-up">Contrato</h5>
-                    </div>
+                   
                     <div class="row align-items-center">
                         <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
                             <div class="row align-items-center">
+                                <h2 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4"
+                                    data-aos="fade-up"> Contrato
+                                </h2>
                                 <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80 text-start" data-aos="fade-up"
                                     data-aos-delay="100">Revisamos por ti cada uno de los contratos, esos que nunca se leen,  en busca de cláusulas abusivas o engañosas que puedan perjudicarte.
                                 </p>
@@ -473,7 +463,6 @@
                                                 <td><span class="fs-6">
                                                     <span class="fw-light small"></span>Calificación: 4.5<span
                                                     class="small">/5</span>    
-                                                    <a href="">Ver detalles</a>
                                                 </span></td>
                                             </tr>
                                             <tr>
@@ -481,7 +470,6 @@
                                                 <td><span class="fs-6">
                                                     <span class="fw-light small"></span>Calificación: 4.5<span
                                                     class="small">/5</span>    
-                                                    <a href="">Ver detalles</a>
                                                 </span></td>
                                             </tr>
                                             <tr>
@@ -489,7 +477,6 @@
                                                 <td><span class="fs-6">
                                                     <span class="fw-light small"></span>Calificación: 3.5<span
                                                     class="small">/5</span>    
-                                                    <a href="">Ver detalles</a>
                                                 </span></td>
                                             </tr>
                                         </tbody>
@@ -518,10 +505,7 @@
         <div class="container pt-11 pt-lg-13 position-relative z-index-1">
             <div class="row pb-9 pb-lg-11 pt-lg-5">
                 <div class="col-lg-11 mx-auto text-center">
-                    <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50" data-aos="fade-up" data-aos-delay="100">
-                        <h5 class="bg-primary bg-opacity-25 text-primary d-table mx-auto rounded-pill px-3 py-2 mb-4"
-                            data-aos="fade-up">Privacidad de datos</h5>
-                    </div>
+                 
 
                     <div class="row align-items-center">
                         <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
@@ -545,7 +529,6 @@
                                                     <td><span class="fs-6">
                                                         <span class="fw-light small"></span>Calificación: 4.5<span
                                                         class="small">/5</span>    
-                                                        <a href="">Ver detalles</a>
                                                     </span></td>
                                                 </tr>
                                                 <tr>
@@ -553,7 +536,6 @@
                                                     <td><span class="fs-6">
                                                         <span class="fw-light small"></span>Calificación: 4.5<span
                                                         class="small">/5</span>    
-                                                        <a href="">Ver detalles</a>
                                                     </span></td>
                                                 </tr>
                                                 <tr>
@@ -561,7 +543,6 @@
                                                     <td><span class="fs-6">
                                                         <span class="fw-light small"></span>Calificación: 4.5<span
                                                         class="small">/5</span>    
-                                                        <a href="">Ver detalles</a>
                                                     </span></td>
                                                 </tr>
                                             </tbody>
@@ -572,7 +553,9 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-5 mx-auto" data-aos="fade-up" data-aos-delay="100">
-
+                            <h2 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4"
+                            data-aos="fade-up"> Privacidad de datos
+                            </h2>
                             <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80 text-start" data-aos="fade-up"
                             data-aos-delay="100">
                             La protección de tus datos personales es tu derecho. Leemos y revisamos los avisos de privacidad para asegurarnos de que tus datos se usen de manera correcta
@@ -591,11 +574,7 @@
     <a name="section-simulacion"/>
     <section class="position-relative  bg-style-1">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
-            <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
-                <h5 class="bg-primary bg-opacity-25 text-primary d-table mx-auto rounded-pill px-3 py-2 mb-4"
-                    data-aos="fade-up">Simulación</h5>
-
-            </div>
+          
             <div class="row justify-content-between align-items-start">
                 <div class="col-12">
                     <div class="tab-content">
