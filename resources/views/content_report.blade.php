@@ -52,7 +52,7 @@
                             </div>
                             <div class="col-md-6 text-end" id="hero-img">
                                 <div class="col-12 pl-0 pl-md-12">
-                                    <img class="img-fluid" src="https://kaaxclub.com/images/thumb/item-detail.jpg"
+                                    <img class="img-fluid" src="/images/g683.png"
                                 alt="">
                                </div>
                                
