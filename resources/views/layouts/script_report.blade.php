@@ -275,8 +275,8 @@
                 },
                 {
                     label: 'IVA',
-                    backgroundColor: 'rgb(139,122,246)',
-                    borderColor: 'rgb(139,122,246)',
+                    backgroundColor: 'rgb(45,99, 141)',
+                    borderColor: 'rgb(45,99, 141)',
                     data: [576, 552 , 745.6],
                 },
             ] 
