@@ -62,6 +62,12 @@ h1.color-primary {
   color: #5e4c98 !important;
 }
 
+.btn-highlight {
+  color: #ffffff;
+  background-color: #6576ff !important;
+  border-color: #6576ff !important;
+}
+
 @media (min-width: 992px) {
   .content-options {
     display: block;

@@ -64,6 +64,12 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     color: #5e4c98 !important;
   }
 
+.btn-highlight {
+    color: #ffffff;
+    background-color: #6576ff !important;
+    border-color: #6576ff !important;
+}
+
 // Medium devices (tablets, 768px and up)
 @media (min-width: 992px) { 
     .content-options{

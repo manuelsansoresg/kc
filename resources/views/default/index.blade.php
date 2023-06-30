@@ -11,24 +11,40 @@
                             
                         </div>
                         <div class="col-12">
-                            <p class="text-center text-elije">Elije en menos de 3 minutos</p>
+                            <p class="text-center text-elije">Te resolvemos en 3 minutos</p>
                         </div>
                     </div>
                 </div><!-- end col-lg-5 -->
                 <div class="col-lg-6 col-md-6 text-center text-md-start mt-n3 mt-md-0">
                     <div class="hero-content pb-0 pt-md-0 pe-lg-4">
-                        <h1 class="hero-title mb-4 color-primary">Compara, elige y tramita tu crédito de nómina ideal.
+                        <h1 class="hero-title mb-4 color-primary">
+                            Reduce tu  deuda actual
                         </h1>
-                        <p class="hero-text mb-4 pb-1">Elegir entre todas las financieras puede ser confuso y difícil, pero no tiene que ser así.
+                        <p class="hero-text mb-4 pb-1">
+                            Cambiarte a una mejor financiera es tu derecho.
                         </p>
                         <!-- button group -->
                         <div class="row mt-n2 mt-md-0">
-                            <div class="col-12 text-center text-md-start">
-                             <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block">Iniciar</a>
+                            <div class="col-12 col-md-6">
+                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">Quiero reducir mi deuda</a>
+                                <div class="mt-3">
+                                    <small class="text-muted">Te ayudamos a cambiarte a una mejor opción</small>
+                                </div>
                             </div>
+                            <div class="col-12 col-md-6">
+                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola quiero un crédito nuevo"  class="btn col-12 btn-dark btn-block">Quiero un crédito nuevo</a>
+                                <div class="mt-3">
+                                    <small class="text-muted">¿No tienes un crédito? Te ayudamos a encontrar el mejor</small>
+                                </div>
+                            </div>
+                           {{--  <div class="d-flex col-12 text-center text-md-start">
+                             <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block">Quiero reducir mi deuda</a>
+                             
+                             <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block ml-2">Quiero un crédito nuevo</a>
+                            </div> --}}
                         </div>
                         <p class="mt-3 h3 text-center text-md-start">
-                            Fácil, rápido, y <span class="text-decoration-underline">gratis</span>.
+                            Fácil, rápido y <span class="text-decoration-underline">gratis</span>.
                             <span class="h4">
                                 <i
                                 class="fa-solid fa-circle-info" data-bs-toggle="tooltip"
@@ -57,11 +73,11 @@
                     <div class="card-hiw card-hiw-s3">
                         <div class="d-flex align-items-center mb-3">
                             <img class="iconimg" src="/images/02_reporte.png" alt="">
-                            <h5>1. Compara tus opciones</h5>
+                            <h5>1. Analizamos tu sitiación</h5>
                         </div>
                       
                     </div>
-                    <p class="card-text-s1">Analizamos y calificamos cada financiera</p>
+                    <p class="card-text-s1">Calificamos todas tus opciónes</p>
                 </div><!-- end col -->
                 <div class="col-10 col-sm-6 col-lg-3">
                     <div class="card-hiw card-hiw-s3">
@@ -79,16 +95,16 @@
                             <img class="iconimg" src="/images/03_tramita.png" alt="">
                             <h5>3. Tramita con nuestra ayuda</h5>
                         </div>
-                        <p class="card-text-s1">Te brindamos asesoría y asistencia en el proceso</p>
+                        <p class="card-text-s1">Te ayudamos con el trámite en cada paso</p>
                     </div>
                 </div><!-- end col -->
                 <div class="col-10 col-sm-6 col-lg-3">
                     <div class="card-hiw card-hiw-s3">
                         <div class="d-flex align-items-center mb-3">
                             <img class="iconimg" src="/images/04_recibe_dinero.png" alt="">
-                            <h5>4. Recibe tú crédito</h5>
+                            <h5>4. ¡Listo!</h5>
                         </div>
-                        <p class="card-text-s1">Tu dinero estará listo en poco tiempo</p>
+                        <p class="card-text-s1">Disfruta los beneficios de la mejor opción</p>
                     </div>
                 </div><!-- end col -->
             </div>
@@ -98,8 +114,17 @@
 
    <div class="container">
     <div class="row justify-content-center">
-        <div class="col-12 col-md-6 text-center">
-            <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-5 btn-lg btn-dark">Iniciar</a>
+        <div class="col-12 col-md-5">
+            <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">Quiero reducir mi deuda</a>
+            <div class="mt-3 text-center">
+                <small class="text-muted">Te ayudamos a cambiarte a una mejor opción</small>
+            </div>
+        </div>
+        <div class="col-12 col-md-5">
+            <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola quiero un crédito nuevo"  class="btn col-12 btn-dark btn-block">Quiero un crédito nuevo</a>
+            <div class="mt-3 text-center">
+                <small class="text-muted">¿No tienes un crédito? Te ayudamos a encontrar el mejor</small>
+            </div>
         </div>
        </div>
    </div>
@@ -108,10 +133,9 @@
     <section class="section-space how-it-work-section">
         <div class="container">
             <div class="section-head text-center">
-                <h2 class="mb-3">Ahorra hasta un X %
-                </h2>
-                <p>This is just a simple text made for this unique and awesome template, you can replace it with any text.
-                    It is a long established fact.</p>
+               {{--  <h2 class="mb-3">Ahorra hasta un X %
+                </h2> --}}
+                <p>Elegir entre todas las financieras puede ser confuso y difícil, pero no tiene que ser así.</p>
             </div><!-- end section-head -->
             <div class="row g-gs justify-content-center">
                 <div class="col-10 col-sm-6 col-lg-3">
