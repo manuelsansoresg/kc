@@ -43,7 +43,7 @@
                         </div><!-- .header-logo -->
                         <div class="header-mobile-action">
                             <div class="header-search-mobile dropdown me-2">
-                                <a class="btn-sm btn btn-dark" href="https://app.kaaxclub.com/">
+                                <a class="btn-sm btn btn-dark d-none" href="https://app.kaaxclub.com/">
                                     Ir a la App
                                 </a>
                           
@@ -75,7 +75,7 @@
                                 </li>
                             </ul>
                             <ul class="menu-btns">
-                                <li><a href="https://app.kaaxclub.com/" class="btn btn-dark">Ir a la App</a></li>
+                                <li><a href="https://app.kaaxclub.com/" class="btn btn-dark d-none">Ir a la App</a></li>
                                 <li>
                                     <a href="#" class="theme-toggler" title="Toggle Dark/Light mode">
                                         <span>

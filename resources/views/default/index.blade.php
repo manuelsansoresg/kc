@@ -21,20 +21,20 @@
                             Reduce tu  deuda actual
                         </h1>
                         <p class="hero-text mb-4 pb-1">
-                            Cambiarte a una mejor financiera es tu derecho.
+                            <b>Cambiarte a una mejor financiera es tu derecho.</b>
                         </p>
                         <!-- button group -->
                         <div class="row mt-n2 mt-md-0">
                             <div class="col-12 col-md-6">
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">Quiero reducir mi deuda</a>
-                                <div class="mt-3">
-                                    <small class="text-muted">Te ayudamos a cambiarte a una mejor opción</small>
+                                <div class="mt-3 text-center">
+                                    <small class="text-muted text-center">Te ayudamos a cambiarte a una mejor opción</small>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola quiero un crédito nuevo"  class="btn col-12 btn-dark btn-block">Quiero un crédito nuevo</a>
-                                <div class="mt-3">
-                                    <small class="text-muted">¿No tienes un crédito? Te ayudamos a encontrar el mejor</small>
+                                <div class="mt-3 text-center">
+                                    <small class="text-muted text-center">¿No tienes un crédito? Te ayudamos a encontrar el mejor</small>
                                 </div>
                             </div>
                            {{--  <div class="d-flex col-12 text-center text-md-start">
@@ -43,15 +43,19 @@
                              <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block ml-2">Quiero un crédito nuevo</a>
                             </div> --}}
                         </div>
-                        <p class="mt-3 h3 text-center text-md-start">
-                            Fácil, rápido y <span class="text-decoration-underline">gratis</span>.
-                            <span class="h4">
-                                <i
-                                class="fa-solid fa-circle-info" data-bs-toggle="tooltip"
-                                title="Nuestro servicio siempre será sin costo para ti. Nadie debe cobrarte por solicitar y/o tramitar un crédito.">
-                            </i>
-                            </span>
-                        </p>
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-8 text-center">
+                                <p class="mt-3 h3 text-center text-md-start">
+                                    Fácil, rápido y <span class="text-decoration-underline">gratis</span>.
+                                    <span class="h4">
+                                        <i
+                                        class="fa-solid fa-circle-info" data-bs-toggle="tooltip"
+                                        title="Nuestro servicio siempre será sin costo para ti. Nadie debe cobrarte por solicitar y/o tramitar un crédito.">
+                                    </i>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
                     </div><!-- hero-content -->
                 </div><!-- col-lg-6 -->
             </div><!-- end row -->
@@ -73,7 +77,7 @@
                     <div class="card-hiw card-hiw-s3">
                         <div class="d-flex align-items-center mb-3">
                             <img class="iconimg" src="/images/02_reporte.png" alt="">
-                            <h5>1. Analizamos tu sitiación</h5>
+                            <h5>1. Analizamos tu situación</h5>
                         </div>
                       
                     </div>
