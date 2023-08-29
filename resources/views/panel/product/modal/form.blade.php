@@ -23,23 +23,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label" for="frm-product-name">Producto</label>
-                                <div class="form-control-select">
-                                    <select
-                                        name="c_product_id"
-                                        class="form-control" 
-                                        id="c_product_id" >
-                                        <option value="">Selecciona una opción</option>
-                                        @foreach ($products as $product)
-                                            <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    
-                                </div>
-                            </div>
-                        </div>
+                       
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Servicio</label>

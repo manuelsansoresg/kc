@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function () {
         ajax: '/panel/product/list/show',
         columns: [
             { data: 'alias' },
-            { data: 'name' },
             { data: 'service' },
             { data: 'comment' },
             { data: 'status' },

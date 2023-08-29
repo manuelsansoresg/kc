@@ -3874,8 +3874,6 @@ document.addEventListener('DOMContentLoaded', function () {
     columns: [{
       data: 'alias'
     }, {
-      data: 'name'
-    }, {
       data: 'service'
     }, {
       data: 'comment'

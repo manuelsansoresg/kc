@@ -32,7 +32,6 @@
                                     <thead>
                                         <tr>
                                             <th>Alias</th>
-                                            <th>Producto</th>
                                             <th>Servicio</th>
                                             <th>Comentario</th>
                                             <th>Activo</th>

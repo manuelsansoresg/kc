@@ -23,7 +23,7 @@ function setDataUser(product_id) {
         .get("/panel/product/" + product_id)
         .then(function (response) {
             let result = response.data;
-            $('#c_product_id option[value="' + result.c_product_id + '"]').attr("selected", "selected");
+            //$('#c_product_id option[value="' + result.c_product_id + '"]').attr("selected", "selected");
             $('#c_service_id option[value="' + result.c_service_id + '"]').attr("selected", "selected");
             $('#status option[value="' + result.status + '"]').attr("selected", "selected");
             $('#comment').val(result.comment);
