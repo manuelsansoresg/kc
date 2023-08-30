@@ -1390,7 +1390,7 @@ window.deleteFinancial = function (id) {
   })["catch"](function (e) {});
 };
 
-window.alerDelete = function (id) {
+window.alerFinancialDelete = function (id) {
   Swal.fire({
     title: '¿Estás seguro?',
     icon: 'warning',

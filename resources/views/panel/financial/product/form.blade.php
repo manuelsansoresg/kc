@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'Formulario productos')
+
+
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -51,6 +53,8 @@
                                                         $alias = $financial_product != null ? $financial_product->alias : '';
                                                         $type_product_id = $financial_product != null ? $financial_product->type_product_id : '';
                                                         $status = $financial_product != null ? $financial_product->status : '';
+                                                        $bank_id = $financial_product != null ? $financial_product->bank_id : '';
+                                                        $consulta_buro = $financial_product != null ? $financial_product->consulta_buro : null;
                                                     @endphp
                                                     <form method="post" id="frm-product-info" action="">
                                                         <div class="row gy-4">
@@ -97,6 +101,48 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                           
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="frm-product-name">Banco</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <select name="bank_id" id=""
+                                                                            class="form-select">
+                                                                            <option value="">Selecciona una opción</option>
+                                                                            @foreach ($banks as $bank)
+                                                                                <option value="{{ $bank->id }}"
+                                                                                    {{ $bank->id == $bank_id ? ' selected' : '' }}>
+                                                                                    {{ $bank->name }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                           
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Consulta buro</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <ul class="custom-control-group g-3 align-center flex-wrap">
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio" class="custom-control-input" id="consulta_buro_active"  name="consulta_buro"  value="1" {{ $consulta_buro == 1 || $consulta_buro === null  ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label" for="consulta_buro_active">Sí  </label>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio" class="custom-control-input" id="consulta_buro_pending" name="consulta_buro" value="0" {{ $consulta_buro === 0   ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label" for="consulta_buro_pending">No</label>
+                                                                                </div>
+                                                                            </li>
+                                                                           
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">

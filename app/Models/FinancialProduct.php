@@ -68,6 +68,8 @@ class FinancialProduct extends Model
         'abusive_clause11',
         'abusive_clause12',
         'abusive_clause13',
+        'bank_id',
+        'consulta_buro',
     ];
 
 

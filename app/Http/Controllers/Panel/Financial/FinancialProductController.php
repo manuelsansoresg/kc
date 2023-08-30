@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Financial;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank;
 use App\Models\FinancialProduct;
 use Illuminate\Http\Request;
 
@@ -25,9 +26,11 @@ class FinancialProductController extends Controller
      */
     public function create($financial_id)
     {
-        $product_id = null;
-        $financial_product = null;
-        return view('panel.financial.product.form', compact('financial_id', 'product_id', 'financial_product'));
+        $product_id           = null;
+        $financial_product    = null;
+        $banks                = Bank::all();
+
+        return view('panel.financial.product.form', compact('financial_id', 'product_id', 'financial_product', 'banks'));
     }
 
     /**
@@ -82,10 +85,11 @@ class FinancialProductController extends Controller
      */
     public function edit($id)
     {
-        $financial_product = FinancialProduct::find($id);
-        $product_id = $id;
-        $financial_id = $financial_product->financial_id;
-        return view('panel.financial.product.form', compact('financial_id', 'product_id', 'financial_product'));
+        $banks                = Bank::all();
+        $financial_product    = FinancialProduct::find($id);
+        $product_id           = $id;
+        $financial_id         = $financial_product->financial_id;
+        return view('panel.financial.product.form', compact('financial_id', 'product_id', 'financial_product', 'banks'));
     }
 
     /**

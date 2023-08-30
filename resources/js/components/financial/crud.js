@@ -101,7 +101,7 @@ window.deleteFinancial = function (id) {
     });
 }
 
-window.alerDelete = function (id) {
+window.alerFinancialDelete = function (id) {
    
     Swal.fire({
         title: '¿Estás seguro?',
