@@ -1514,13 +1514,13 @@ $("#frm-financial-contact").submit(function (event) {
   })["catch"](function (e) {});
 });
 
-window.deleteProduct = function (id) {
+window.deleteFinancialProduct = function (id) {
   axios["delete"]("/panel/financial-product/" + id).then(function (response) {
     (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financial-product', 'Producto', 'Registro borrado');
   })["catch"](function (e) {});
 };
 
-window.alerDeleteProduct = function (id) {
+window.alerDeleteFinancialProduct = function (id) {
   Swal.fire({
     title: '¿Estás seguro?',
     icon: 'warning',
@@ -3768,8 +3768,8 @@ window.modalProduct = function (type, product_id) {
 
 function setDataUser(product_id) {
   axios.get("/panel/product/" + product_id).then(function (response) {
-    var result = response.data;
-    $('#c_product_id option[value="' + result.c_product_id + '"]').attr("selected", "selected");
+    var result = response.data; //$('#c_product_id option[value="' + result.c_product_id + '"]').attr("selected", "selected");
+
     $('#c_service_id option[value="' + result.c_service_id + '"]').attr("selected", "selected");
     $('#status option[value="' + result.status + '"]').attr("selected", "selected");
     $('#comment').val(result.comment);

@@ -86,7 +86,7 @@ $( "#frm-financial-buro" ).submit(function( event ) {
         });
   });
 
-window.deleteProduct = function (id) {
+window.deleteFinancialProduct = function (id) {
     axios
     .delete("/panel/financial-product/"+id)
     .then(function (response) {
@@ -96,7 +96,7 @@ window.deleteProduct = function (id) {
     });
 }
 
-window.alerDeleteProduct = function (id) {
+window.alerDeleteFinancialProduct = function (id) {
    
     Swal.fire({
         title: '¿Estás seguro?',

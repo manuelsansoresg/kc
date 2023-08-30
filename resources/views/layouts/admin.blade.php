@@ -161,7 +161,7 @@
                                                     <a href="/panel/product" class="nk-menu-link">
                                                         <span class="nk-menu-icon"><em
                                                                 class="icon ni ni-card-view"></em></span>
-                                                        <span class="nk-menu-text">Productos</span>
+                                                        <span class="nk-menu-text">Servicios KC</span>
                                                     </a>
                                                 </li><!-- .nk-menu-item -->
                                                 <li class="nk-menu-item">
