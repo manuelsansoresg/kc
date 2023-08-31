@@ -54,6 +54,10 @@ class LeadStrategyTemplate implements TemplateInterface
                 'channel_id' => $lead->channel_id,
                 'type_id' => $lead->type_id,
                 'asesor_id' => $lead->asesor_id,
+                'importe_solicitado' => $lead->importe_solicitado,
+                'bank_id' => $lead->bank_id,
+                'tipo_credito' => $lead->tipo_credito,
+                'consulta_buro' => $lead->consulta_buro,
             );
             $credit = Credit::create($data_lead);
             //* create history in client person

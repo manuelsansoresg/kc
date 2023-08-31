@@ -28,7 +28,11 @@ class Lead extends Model
         'temperature_id' ,
         'type_id', //*atención
         'financial_id',
-        'other'
+        'other',
+        'importe_solicitado',
+        'bank_id',
+        'tipo_credito',
+        'consulta_buro',
     ];
 
     public static function listDatatable()

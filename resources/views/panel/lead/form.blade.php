@@ -48,62 +48,7 @@
                                             <div class="row gy-4">
                                                 <form method="post" id="frm-lead" action="">
                                                     @csrf
-                                                    <span class="preview-title-lg overline-title">Producto KC</span>
                                                     <div class="row gy-4">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Organización</label>
-                                                                <p class="small">Institución o empresa donde labora el prospecto</p>
-                                                                <div class="form-control-wrap">
-                                                                   
-                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null)"  data-search="on">
-                                                                        @if ($lead_id == null)
-                                                                            <option></option>
-                                                                        @endif
-                
-                                                                        @foreach ($agreements as $agreement)
-                                                                            <option value="{{ $agreement->id }}">{{ $agreement->name }}</option>
-                                                                        @endforeach
-                                                                    <option value="0">Otro</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group" id="lead-content-agreement" style="display: none">
-                                                                <label class="form-label">Otra organización</label>
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="new_agreement" id="new_agreement">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Producto KC</label>
-                                                                <p class="small">Producto que desea el prospecto</p>
-                                                                <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[product_id]" onchange="productChange(null)" id="lead-product-id"  data-search="on">
-                                                                        @if ($lead_id == null)
-                                                                            <option value="">Escribe para buscar</option>
-                                                                        @endif
-                                                                        @foreach ($products as $product)
-                                                                            <option value="{{ $product->id }}">{{ $product->alias }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6" id="content-financial" style="display: none">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Financiera</label>
-                                                                <p class="small">Financiera con la que el prospecto tiene un crédito</p>
-                                                                <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[financial_id]" id="lead-financial_id"  data-search="on">
-                                                                        <option value="">Escribe para buscar</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">General</span>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
@@ -147,6 +92,125 @@
                                                         </div>
                 
                                                         <hr class="preview-hr">
+
+                                                        <span class="preview-title-lg overline-title">Servicio KC</span>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Servicio KC</label>
+                                                                <p class="small">Servicio que desea el prospecto</p>
+                                                                <div class="form-control-wrap">
+                                                                    <select class="form-select js-select2" name="data[product_id]" onchange="productChange(null)" id="lead-product-id"  data-search="on">
+                                                                        @if ($lead_id == null)
+                                                                            <option value="">Escribe para buscar</option>
+                                                                        @endif
+                                                                        @foreach ($products as $product)
+                                                                            <option value="{{ $product->id }}">{{ $product->alias }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                       
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Organización</label>
+                                                                <p class="small">Institución o empresa donde labora el prospecto</p>
+                                                                <div class="form-control-wrap">
+                                                                   
+                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null)"  data-search="on">
+                                                                        @if ($lead_id == null)
+                                                                            <option></option>
+                                                                        @endif
+                
+                                                                        @foreach ($agreements as $agreement)
+                                                                            <option value="{{ $agreement->id }}">{{ $agreement->name }}</option>
+                                                                        @endforeach
+                                                                    <option value="0">Otro</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="lead-content-agreement" style="display: none">
+                                                                <label class="form-label">Otra organización</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="new_agreement" id="new_agreement">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6" id="content-importe-solicitado" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Importe solicitado</label>
+                                                                <p class="small">Cantidad de dinero que necesita el prospecto</p>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="data[importe_solicitado]" id="importe_solicitado">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        
+                                                       
+                                                        <div class="col-md-6" id="content-banco_nomina" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Banco nómina</label>
+                                                                <p class="small">Banco en el que recibe su nómina</p>
+                                                                <div class="form-control-wrap">
+                                                                    <select name="data[bank_id]" id="bank_id" class="form-control">
+                                                                        <option value="">Seleccione una opción</option>
+                                                                        @foreach ($banks as $bank)
+                                                                            <option value="{{ $bank->id }}">{{ $bank->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6" id="content-tipo-credito" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Tipo de crédito</label>
+                                                                <p class="small">Categoría de  crédito</p>
+                                                                <div class="form-control-wrap">
+                                                                    @php
+                                                                        $type_products = config('financial_enums.type_products');
+                                                                    @endphp
+                                                                    <select name="data[tipo_credito]" id="tipo_credito" class="form-control">
+                                                                        @foreach ($type_products as $key => $type_product)
+                                                                            <option value="{{$key}}">{{ $type_product }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        <div class="col-md-6" id="content-consulta-buro-credito" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Consulta buró de crédito</label>
+                                                                <p class="small">Seleccionar si el prospecto desea consulta en el buró</p>
+                                                                <div class="form-control-wrap">
+                                                                    <select name="data[consulta_buro]" id="consulta_buro" class="form-control">
+                                                                        <option value="">Seleccione una opción</option>
+                                                                        <option value="1">Sí</option>
+                                                                        <option value="0">No</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6" id="content-financial" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Financiera</label>
+                                                                <p class="small">Financiera con la que el prospecto tiene un crédito</p>
+                                                                <div class="form-control-wrap">
+                                                                    <select class="form-select js-select2" name="data[financial_id]" id="lead-financial_id"  data-search="on">
+                                                                        <option value="">Escribe para buscar</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <hr class="preview-hr">
+                                                        
                                                         <span class="preview-title-lg overline-title">Origen</span>
                                                         <div class="col-md-6">
                                                             <div class="form-group">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Lib\CNubarium;
 use App\Lib\Csendgrid;
 use App\Models\Action;
+use App\Models\Bank;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\LeadAdvisor;
@@ -107,7 +108,8 @@ class LeadController extends Controller
     {
         $lead_id = null;
         $lead = null;
-        return view('panel.lead.form', compact('lead_id', 'lead'));
+        $banks = Bank::all();
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks'));
     }
 
     /**
@@ -182,7 +184,9 @@ class LeadController extends Controller
     {
         $lead_id = $id;
         $lead = Lead::find($id);
-        return view('panel.lead.form', compact('lead_id', 'lead'));
+        $banks = Bank::all();
+
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks'));
     }
 
     /**

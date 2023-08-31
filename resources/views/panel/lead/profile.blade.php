@@ -4,6 +4,7 @@
 @inject('m_lead', 'App\Models\Lead')
 @inject('m_history_log', 'App\Models\HistoryLog')
 @inject('m_action', 'App\Models\Action')
+@inject('m_bank', 'App\Models\Bank')
 
 @php
     use App\Strategies\Values\ValidateStagesValues;
@@ -14,6 +15,8 @@
     $leadStrategy = ValidateStagesValues::STRATEGY['lead'];
     $validate     = (new $leadStrategy)->getValidate($lead->id);
     $temperatures = config('enums.temperatures');
+    $bank         = $m_bank::find($lead->bank_id);
+    $tipo_credito = isset(config('financial_enums.type_products')[$lead->tipo_credito]) ? config('financial_enums.type_products')[$lead->tipo_credito]  : null;
 @endphp
 
 @section('content')
@@ -143,6 +146,42 @@
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-line">
                                                             <hr class="preview-hr">
+                                                            <span class="preview-title-lg overline-title">Servicio KC</span>
+                                                        </div><!-- .nk-block-head -->
+                                                        <div class="profile-ud-list">
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Importe solicitado</span>
+                                                                    <span class="profile-ud-value"> {{ $lead->importe_solicitado }} </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Banco nómina</span>
+                                                                    <span class="profile-ud-value"> {{ $bank != null ? $bank->name : null }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Tipo de crédito</span>
+                                                                    <span class="profile-ud-value">
+                                                                        {{ $tipo_credito }} </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Consulta buró de crédito</span>
+                                                                    <span class="profile-ud-value">  {{ $lead->consulta_buro == 1 ? 'Sí' : 'No' }}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+        
+                                                        </div><!-- .profile-ud-list -->
+                                                    </div><!-- .nk-block -->
+                                                    <div class="nk-block">
+                                                        <div class="nk-block-head nk-block-head-line">
+                                                            <hr class="preview-hr">
                                                             <span class="preview-title-lg overline-title">Origen</span>
                                                         </div><!-- .nk-block-head -->
                                                         <div class="profile-ud-list">
@@ -169,8 +208,11 @@
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
                                                                     <span class="profile-ud-label">Asesor</span>
-                                                                    <span class="profile-ud-value"> {{ $user->name }}
+                                                                    <span class="profile-ud-value"> 
+                                                                        @if ($user != null)
+                                                                        {{ $user->name }}
                                                                         {{ $user->last_name }} {{ $user->second_last_name }}
+                                                                        @endif
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -320,11 +362,13 @@
                                             <img class="logo-profile" src="{{ asset('images/logo_solo.png') }}" alt="">
                                             <div class="user-info">
                                                 <div class="badge bg-outline-light rounded-pill ucap">PROSPECTO</div>
-                                                <h5> {{ $lead->name }} {{ $lead->last_name }} {{ $lead->second_last_name }} </h5>
-                                                <span class="sub-text">
-                                                    {{ $lead->email }} <br>
-                                                    {{ $agreement->name }}
-                                                </span>
+                                                @if ($lead != null && $agreement != null)
+                                                    <h5> {{ $lead->name }} {{ $lead->last_name }} {{ $lead->second_last_name }} </h5>
+                                                    <span class="sub-text">
+                                                        {{ $lead->email }} <br>
+                                                        {{ $agreement->name }}
+                                                    </span>
+                                                @endif
                                             </div>
                                         </div>
                                     </div><!-- .card-inner -->
@@ -358,7 +402,9 @@
                                             </div>
                                             <div class="col-6">
                                                 <span class="sub-text">Asesor:</span>
-                                                <span> {{ $adviser->name }} {{ $adviser->last_name }} </span>
+                                                @if ($adviser != null)
+                                                    <span> {{ $adviser->name }} {{ $adviser->last_name }} </span>
+                                                @endif
                                             </div>
                                         </div>
                                     </div><!-- .card-inner -->

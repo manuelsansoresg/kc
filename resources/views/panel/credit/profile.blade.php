@@ -2,6 +2,7 @@
 @section('title', 'Perfíl crédito')
 
 @inject('m_lead', 'App\Models\Lead')
+@inject('m_bank', 'App\Models\Bank')
 @inject('m_history_log', 'App\Models\HistoryLog')
 @inject('m_action', 'App\Models\Action')
 @inject('m_file', 'App\Models\File')
@@ -23,6 +24,8 @@
     $loan_type            = config('enums.loan_type');
     $sign_type            = config('enums.sign_type');
     $periodicity          = config('enums.periodicity');
+    $bank                 = $m_bank::find($credit->bank_id);
+    $tipo_credito         = isset(config('financial_enums.type_products')[$credit->tipo_credito]) ? config('financial_enums.type_products')[$credit->tipo_credito]  : null;
 
     //TODO: hacer que al pasar de prospecto a credito cambiar el model
     $files = $m_file->getByIdRelandModel($credit->id, [$m_history_log::KC_CHECK_UP, $m_history_log::KC_CONTROL_DESK, $m_history_log::KC_CHECK_UP_DEBT_REDUCTION, $m_history_log::KC_SWAP, $m_history_log::KC_DELIVERY]);
@@ -219,6 +222,48 @@
                                                                             {{ $client->email }} </span>
                                                                     </div>
                                                                 </div>
+
+                                                            </div><!-- .profile-ud-list -->
+                                                        </div><!-- .nk-block -->
+                                                        <div class="nk-divider divider md"></div>
+
+                                                        <div class="nk-block">
+                                                            <div class="nk-block-head nk-block-head-line">
+                                                                <span
+                                                                    class="preview-title-lg overline-title text-primary ">Servicio KC</span>
+                                                            </div><!-- .nk-block-head -->
+                                                            <div class="profile-ud-list">
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Importe solicitado</span>
+                                                                        <span class="profile-ud-value"> {{ $credit->importe_solicitado }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Banco nómina</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ $bank != null ? $bank->name : null }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Tipo de crédito</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ $tipo_credito }} </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Consulta buró de crédito</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ $credit->consulta_buro == 1 ? 'Sí' : 'No' }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                               
 
                                                             </div><!-- .profile-ud-list -->
                                                         </div><!-- .nk-block -->

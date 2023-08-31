@@ -1690,6 +1690,13 @@ window.productChange = function (lead_product_id) {
   if (product_id == 2) {
     $('#content-financial').show();
   }
+
+  if (product_id == 1) {
+    $('#content-importe-solicitado').show();
+    $('#content-banco_nomina').show();
+    $('#content-tipo-credito').show();
+    $('#content-consulta-buro-credito').show();
+  }
 };
 
 function getFinancial(lead_id, financial_id) {
@@ -1818,6 +1825,10 @@ function setData(is_change_origen, is_change_organization) {
 
     changeOrigen(lead.channel_id);
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
+    $('#importe_solicitado').val(lead.importe_solicitado);
+    $('#bank_id').val(lead.bank_id).trigger("change");
+    $('#tipo_credito').val(lead.tipo_credito).trigger("change");
+    $('#consulta_buro').val(lead.consulta_buro).trigger("change");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });

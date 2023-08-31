@@ -87,7 +87,11 @@ class Credit extends Model
         'credit_signed',
         'approved',
         'delivered',
-        'interviewer'
+        'interviewer',
+        'importe_solicitado',
+        'bank_id',
+        'tipo_credito',
+        'consulta_buro',
     ];
 
     public static function listDatatable($status)
