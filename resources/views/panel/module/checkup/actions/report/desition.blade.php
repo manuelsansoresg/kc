@@ -1,6 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'Acciones')
 @inject('financial', 'App\Models\Financial')
+@inject('m_financial_product', 'App\Models\FinancialProduct')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -71,15 +72,26 @@
                                         $type = isset($_GET['type']) && $values_type[$_GET['type']] ? $_GET['type'] : 1;
                                     @endphp
                                     @if ($financials != null)
-                                        @foreach ($financials as $get_financial)
+                                    @foreach ($financials as $get_financial)
                                         @php
                                             $financial = $get_financial->financial;
+                                            $products = $m_financial_product::getProductByFinancial($financial->id);
                                         @endphp
                                         <div class="col-12 col-md-2">
-                                            <a class="pointer btn btn-primary mt-3" onclick="desition({{ $credit->id }}, {{ $financial->id }}, {{ $type }})" target="_blank">{{ $financial->commercial_name }}</a>
+                                            <a class="pointer btn btn-primary mt-3" onclick="desition({{ $credit->id }}, {{ $financial->id }}, {{ $type }})" target="_blank">
+                                               <div class="row">
+                                                <p> {{ $financial->commercial_name }}</p> <br>
+                                                @foreach ($products as $product)
+                                                    <div class="col-12">
+                                                        <p>{{ $product->name }}</p> 
+                                                    </div>
+                                                @endforeach
+                                               </div>
+                                            </a>
                                         </div>
-                                        @endforeach
-                                    @endif
+                                    @endforeach
+                                @endif
+                                
                                    
                                   
                                     

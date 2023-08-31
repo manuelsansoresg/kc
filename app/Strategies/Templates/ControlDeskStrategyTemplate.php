@@ -248,6 +248,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $type_form = HistoryLog::KC_CONTROL_DESK_FORM_STEP_2;
         $financial = Financial::select('id', 'commercial_name as name')->get();
         $product = FinancialProduct::getProductByFinancial($credit->applied_financial);
+
         $loan_type = config('enums.loan_type');
         $sign_type = config('enums.sign_type');
         $periodicity = config('enums.periodicity');
@@ -294,7 +295,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => $product,
                 'is_required' => true,
-                'is_disabled' => null
+                'is_disabled' => 'disabled'
             ],
             4 => [
                 'title_section' => null,
