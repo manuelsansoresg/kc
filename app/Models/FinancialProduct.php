@@ -90,7 +90,40 @@ class FinancialProduct extends Model
         }
         return $financial_product;
     }
-
+    
+    public function FinancialAndProductByRate($financials)
+    {
+        $new_financials = [];
+        foreach ($financials as $financial) {
+            $object_financial = $financial->financial;
+            $products = FinancialProduct::where('financial_id', $object_financial->id)
+                        ->orderBy('rate_kc', 'DESC')
+                        ->get();
+    
+            $highest_rate_kc = $products->max('rate_kc'); // Obtener el valor más alto de rate_kc
+    
+            $new_financials[] = [
+                'id' => $financial->id,
+                'name' => $object_financial->commercial_name,
+                'highest_rate_kc' => $highest_rate_kc,
+                'products' => $products->map(function ($product) {
+                    return [
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'rate_kc' => $product->rate_kc,
+                    ];
+                })->toArray(),
+            ];
+        }
+    
+        // Ordenar $new_financials en función del highest_rate_kc en orden descendente
+        usort($new_financials, function ($a, $b) {
+            return $b['highest_rate_kc'] - $a['highest_rate_kc'];
+        });
+    
+        return $new_financials;
+    }
+    
     public static function getProductByFinancial($financial_id)
     {
         $products = FinancialProduct::where('financial_id', $financial_id)->get();

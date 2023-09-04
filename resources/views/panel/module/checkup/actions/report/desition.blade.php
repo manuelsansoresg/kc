@@ -68,10 +68,61 @@
                                 <hr>
                                 <div class="row">
                                     @php
-                                        $values_type = array(1 => 1 , 2 => 2);
-                                        $type = isset($_GET['type']) && $values_type[$_GET['type']] ? $_GET['type'] : 1;
+                                        $values_type          = array(1 => 1 , 2 => 2);
+                                        $type                 = isset($_GET['type']) && $values_type[$_GET['type']] ? $_GET['type'] : 1;
+                                        $financial_product    = $m_financial_product::FinancialAndProductByRate($financials)
                                     @endphp
-                                    @if ($financials != null)
+                                    @foreach ($financial_product as $index => $financial_product)
+                                    <div class="col-12 col-md-3">
+                                        <a class="pointer  mt-3" onclick="desition({{ $credit->id }}, {{ $financial_product['id'] }}, {{ $type }})" target="_blank">
+                                           
+                                            <div class="card card-bordered pricing">
+                                                <div class="pricing-head">
+                                                    <div class="pricing-title">
+                                                        <h4 class="card-title title">{{ $financial_product['name'] }}</h4>
+                                                    </div>
+                                                   
+                                                </div>
+                                                <div class="pricing-body">
+                                                    <ul class="pricing-features">
+                                                        @php
+                                                            $products = $financial_product['products'];
+                                                        @endphp
+                                                        @foreach ($products as $product)
+                                                            <div class="col-12">
+                                                                <li><span class="w-50"> {{ $product['name'] }}</span> - <span class="ms-auto"><i class="fa-solid fa-star"></i> {{ $product['rate_kc'] }}</span></li>
+                                                            </div>
+                                                        @endforeach
+                                                        
+                                                       
+                                                       
+                                                    </ul>
+                                                    <div class="pricing-action">
+                                                        <button class="btn btn-outline-light">Elegir</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{-- <div class="row">
+                                            <p> {{ $financial_product['name'] }}</p> <br>
+                                            @php
+                                                $products = $financial_product['products'];
+                                            @endphp
+                                            @foreach ($products as $product)
+                                                <div class="col-12">
+                                                    <p><i class="fa-solid fa-star"></i> {{ $product['rate_kc'] }} </p> 
+                                                    <p>{{ $product['name'] }} </p>
+                                                </div>
+                                            @endforeach
+                                           </div> --}}
+                                        </a>
+                                    </div>
+                                    @if ($index == 2)
+                                        <hr class="mt-3"> <!-- Agregar HR después del tercer elemento -->
+                                        <div class="col-12"></div>
+                                    @endif
+                                    @endforeach
+                                    {{-- @if ($financials != null)
                                     @foreach ($financials as $get_financial)
                                         @php
                                             $financial = $get_financial->financial;
@@ -90,7 +141,7 @@
                                             </a>
                                         </div>
                                     @endforeach
-                                @endif
+                                @endif --}}
                                 
                                    
                                   
