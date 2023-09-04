@@ -70,6 +70,12 @@ class FinancialProduct extends Model
         'abusive_clause13',
         'bank_id',
         'consulta_buro',
+        'rate_kc',
+        'rate_cat',
+        'rate_comision',
+        'rate_deadline',
+        'rate_contract',
+        'rate_privacity',
     ];
 
 

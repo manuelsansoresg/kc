@@ -1513,6 +1513,37 @@ $("#frm-financial-contact").submit(function (event) {
     showToast('Producto', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
+$("#frm-financial-rate").submit(function (event) {
+  event.preventDefault(); // Obtener los valores de los campos, si se ingresaron
+
+  var rate_kc = $("#rate_kc").val() !== '' ? parseFloat($("#rate_kc").val()) : null;
+  var rate_cat = $("#rate_cat").val() !== '' ? parseFloat($("#rate_cat").val()) : null;
+  var rate_comision = $("#rate_comision").val() !== '' ? parseFloat($("#rate_comision").val()) : null;
+  var rate_deadline = $("#rate_deadline").val() !== '' ? parseFloat($("#rate_deadline").val()) : null;
+  var rate_contract = $("#rate_contract").val() !== '' ? parseFloat($("#rate_contract").val()) : null;
+  var rate_privacity = $("#rate_privacity").val() !== '' ? parseFloat($("#rate_privacity").val()) : null; // Función para validar que un valor esté dentro del rango de 0 a 5
+
+  function isValidValue(value) {
+    return value === null || !isNaN(value) && value >= 0 && value <= 5;
+  } // Validar que los valores estén dentro del rango permitido
+
+
+  if (!isValidValue(rate_kc) || !isValidValue(rate_cat) || !isValidValue(rate_comision) || !isValidValue(rate_deadline) || !isValidValue(rate_contract) || !isValidValue(rate_privacity)) {
+    Swal.fire({
+      title: 'Por favor, ingrese valores numéricos entre 0 y 5',
+      icon: 'warning',
+      showCancelButton: true
+    });
+  } else {
+    var new_form = document.getElementById("frm-financial-rate");
+    var data = new FormData(new_form);
+    axios.post("/panel/financial-product", data).then(function (response) {
+      var result = response.data;
+      showToast('Producto', 'Datos guardados', 'success');
+    })["catch"](function (e) {// Manejar errores si es necesario
+    });
+  }
+});
 
 window.deleteFinancialProduct = function (id) {
   axios["delete"]("/panel/financial-product/" + id).then(function (response) {

@@ -41,6 +41,9 @@
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $product_id != null ? '#tabContract' : '#' }}">Contrato</a>
                                                 </li>
+                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                        href="{{ $product_id != null ? '#tabRate' : '#' }}">Calificación KC</a>
+                                                </li>
                                             </ul>
 
                                             <div class="tab-content">
@@ -1106,6 +1109,74 @@
                                                             </div>
                                                         </div>
                                                     </form>
+                                                </div>
+                                                <div class="tab-pane" id="tabRate">
+                                                    <form method="post" id="frm-financial-rate" action="">
+                                                        <div class="row gy-4">
+                                                            @csrf
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_kc">Calificación KC</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="number" name="rate_kc" id="rate_kc" class="form-control" value="{{ $financial_product != null ? $financial_product->rate_kc : null }}" step="0.01" max="5">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_cat">CAT</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="number" name="rate_cat" id="rate_cat" class="form-control" value="" step="0.01" max="5">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_comision">Comisiones</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="number" name="rate_comision" id="rate_comision" class="form-control" value="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_deadline">Plazo</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="number" name="rate_deadline" id="rate_deadline" class="form-control" value="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_contract">Contrato</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="number" name="rate_contract" id="rate_contract" class="form-control" value="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_privacity">Privacidad de datos</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="number" name="rate_privacity" id="rate_privacity" class="form-control" value="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" id="financial_id" name="financial_id"
+                                                            value="{{ $financial_id }}">
+                                                            <input type="hidden" id="product_id" name="product_id"
+                                                                value="{{ $product_id }}">
+                                                            <input type="hidden" name="is_required" value="false">
+                                                            <div class="col-12">
+                                                                <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                                                                    <li>
+                                                                        <button class="btn btn-primary">Guardar</button>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
