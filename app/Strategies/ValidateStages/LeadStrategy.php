@@ -29,10 +29,10 @@ class LeadStrategy implements ValidateStagesInterface
                 $error_product = true;
             }
             
-            if ($get_lead->tipo_credito == null) {
+            if ($get_lead->tipo_credito === null) {
                 $error_tipo_credito = true;
             }
-            if ($get_lead->consulta_buro == null) {
+            if ($get_lead->consulta_buro === null) {
                 $error_buro = true;
             }
     
