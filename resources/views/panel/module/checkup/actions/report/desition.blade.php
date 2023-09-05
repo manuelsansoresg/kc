@@ -70,7 +70,6 @@
                                     @php
                                         $values_type          = array(1 => 1 , 2 => 2);
                                         $type                 = isset($_GET['type']) && $values_type[$_GET['type']] ? $_GET['type'] : 1;
-                                       /*  $financial_product    = $m_financial_product::FinancialAndProductByRate($financials) */
                                     @endphp
                                     @foreach ($financials as $index => $financial_product)
                                     <div class="col-12 col-md-3">

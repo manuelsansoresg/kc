@@ -81,7 +81,8 @@ class FinancialProduct extends Model
 
     public static function getByRate()
     {
-        return FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc')
+        return FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+                                'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity')
                         ->join('financials', 'financials.id', 'financial_products.financial_id')
                         ->orderBy('rate_kc', 'DESC')
                         ->get();
@@ -99,65 +100,34 @@ class FinancialProduct extends Model
         return $financial_product;
     }
     
-    public static function FinancialAndProductByRate($financials)
-    {
-        $new_financials = [];
-        foreach ($financials as $financial) {
-            $object_financial = $financial->financial;
-            $products = FinancialProduct::where('financial_id', $object_financial->id)
-                        ->orderBy('rate_kc', 'DESC')
-                        ->get();
     
-            $highest_rate_kc = $products->max('rate_kc'); // Obtener el valor más alto de rate_kc
-    
-            $new_financials[] = [
-                'id' => $financial->id,
-                'name' => $object_financial->commercial_name,
-                'highest_rate_kc' => $highest_rate_kc,
-                'products' => $products->map(function ($product) {
-                    return [
-                        'id' => $product->id,
-                        'name' => $product->name,
-                        'rate_kc' => $product->rate_kc,
-                    ];
-                })->toArray(),
-            ];
-        }
-    
-        // Ordenar $new_financials en función del highest_rate_kc en orden descendente
-        usort($new_financials, function ($a, $b) {
-            return $b['highest_rate_kc'] - $a['highest_rate_kc'];
-        });
-    
-        return $new_financials;
-    }
 
-    public static function customSortFinancials($new_financials)
+    public static function customSortFinancials($financial_products)
     {
-         // Ordenar $new_financials en función del highest_rate_kc en orden descendente
-        usort($new_financials, function ($a, $b) {
-            return $b['highest_rate_kc'] - $a['highest_rate_kc'];
-        });
+        // Ordenar $financial_products en función del rate_kc en orden descendente
+        $sortedFinancials = $financial_products->sortByDesc('rate_kc')->values();
 
         // Obtener los tres primeros elementos con el rating más alto
-        $topThree = array_slice($new_financials, 0, 3);
+        $topThree = $sortedFinancials->take(3);
 
         // Crear un nuevo arreglo con el orden personalizado
         $sortedFinancials = $topThree;
 
         // Verificar si hay al menos 4 elementos antes de acceder al índice 3
-        if (count($new_financials) >= 4) {
+        if ($sortedFinancials->count() >= 4) {
             // Obtener el elemento original en medio
-            $sortedFinancials[] = $new_financials[3];
+            $sortedFinancials->splice(3, 0, [$sortedFinancials->get(3)]);
 
             // Verificar si hay más de 4 elementos antes de agregar los restantes
-            if (count($new_financials) > 4) {
-                $sortedFinancials = array_merge($sortedFinancials, array_slice($new_financials, 4));
+            if ($sortedFinancials->count() > 4) {
+                $remaining = $sortedFinancials->splice(4);
+                $sortedFinancials = $sortedFinancials->concat($remaining);
             }
         }
 
         return $sortedFinancials;
     }
+
 
     
     public static function getProductByFinancial($financial_id)

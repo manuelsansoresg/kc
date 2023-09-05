@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agreement;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Notification;
@@ -68,10 +69,15 @@ class HomeController extends Controller
             return view('content_expiration_report');
         }
         
-        $financial  = $credit->creditFinancial; //financiera transferente
-        $client     = $credit->creditClientPerson;
-        $option     = 2;
-        $status_id  = $history->status_id;
+        $financial            = $credit->creditFinancial; //financiera transferente
+        $client               = $credit->creditClientPerson;
+        $option               = 2;
+        $status_id            = $history->status_id;
+        $agreement            = $credit->creditAgreement;
+        $financials           = $agreement != null ? $agreement->financialAgreement : null;
+        $financial_products   = FinancialProduct::getByRate();
+        $new_financials       = FinancialProduct::customSortFinancials($financial_products);
+
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             $is_best = false;
             $chart['Financiera 1'] = array(
@@ -112,7 +118,7 @@ class HomeController extends Controller
             );
             return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id'));
         }
-        return view('content_report', compact('client', 'history_id', 'status_id', 'credit'));
+        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials'));
     }
 
     public function exitReport(Credit $credit)
