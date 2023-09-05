@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel\Module\KcCheckup;
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\File;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
@@ -80,7 +81,7 @@ class ReportController extends Controller
         $product    = $credit->creditProduct;
         $client     = $credit->creditClientPerson;
         $agreement  = $credit->creditAgreement;
-        $financials = $agreement != null ? $agreement->financialAgreement : null;
+        $financials = FinancialProduct::getByRate();
         //dd($agreement->financialAgreement);
         $model      = ($history != null && $history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
 

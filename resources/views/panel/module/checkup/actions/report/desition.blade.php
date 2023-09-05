@@ -70,32 +70,24 @@
                                     @php
                                         $values_type          = array(1 => 1 , 2 => 2);
                                         $type                 = isset($_GET['type']) && $values_type[$_GET['type']] ? $_GET['type'] : 1;
-                                        $financial_product    = $m_financial_product::FinancialAndProductByRate($financials)
+                                       /*  $financial_product    = $m_financial_product::FinancialAndProductByRate($financials) */
                                     @endphp
-                                    @foreach ($financial_product as $index => $financial_product)
+                                    @foreach ($financials as $index => $financial_product)
                                     <div class="col-12 col-md-3">
-                                        <a class="pointer  mt-3" onclick="desition({{ $credit->id }}, {{ $financial_product['id'] }}, {{ $type }})" target="_blank">
+                                        <a class="pointer  mt-3" onclick="desition({{ $credit->id }}, {{ $financial_product->financial_id }}, {{ $type }})" target="_blank">
                                            
                                             <div class="card card-bordered pricing">
                                                 <div class="pricing-head">
                                                     <div class="pricing-title">
-                                                        <h4 class="card-title title">{{ $financial_product['name'] }}</h4>
+                                                        <h4 class="card-title title">{{ $financial_product->commercial_name }}</h4>
                                                     </div>
                                                    
                                                 </div>
                                                 <div class="pricing-body">
                                                     <ul class="pricing-features">
-                                                        @php
-                                                            $products = $financial_product['products'];
-                                                        @endphp
-                                                        @foreach ($products as $product)
-                                                            <div class="col-12">
-                                                                <li><span class="w-50"> {{ $product['name'] }}</span> - <span class="ms-auto"><i class="fa-solid fa-star"></i> {{ $product['rate_kc'] }}</span></li>
-                                                            </div>
-                                                        @endforeach
-                                                        
-                                                       
-                                                       
+                                                        <div class="col-12">
+                                                            <li><span class="w-50"> {{ $financial_product->name }}</span> - <span class="ms-auto"><i class="fa-solid fa-star"></i> {{ $financial_product->rate_kc }}</span></li>
+                                                        </div>
                                                     </ul>
                                                     <div class="pricing-action">
                                                         <button class="btn btn-outline-light">Elegir</button>
