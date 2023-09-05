@@ -76,13 +76,22 @@ class FinancialProduct extends Model
         'rate_deadline',
         'rate_contract',
         'rate_privacity',
+        'chart_costo_anual_total',
+        'chart_comision_apertura',
+        'chart_plazo_maximo',
+        'chart_capital',
+        'chart_interes',
+        'chart_comision',
+        'chart_iva',
     ];
 
 
     public static function getByRate()
     {
         return FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-                                'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity')
+                                'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
+                                'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
+                                )
                         ->join('financials', 'financials.id', 'financial_products.financial_id')
                         ->orderBy('rate_kc', 'DESC')
                         ->get();

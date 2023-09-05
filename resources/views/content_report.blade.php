@@ -88,16 +88,23 @@
             </div>
         </div>
     </section>
-
+    @php
+        $chart1 = isset($new_financials[1])? $new_financials[1] : null ;
+        $chart2 = isset($new_financials[0])? $new_financials[0] : null ;
+        $chart3 = isset($new_financials[2])? $new_financials[2] : null ;
+    @endphp
     <section class="position-relative">
         <div class="container-fluid pb-9 pb-lg-11 position-relative mt-n12">
             <div class="bg-body shadow-lg rounded-4 py-5">
                 <div class="container mb-9 mb-lg-11">
                     <div class="row align-items-center justify-content-center">
                         @if ($new_financials != null)
-                            @foreach ($new_financials as $financial_product)
+                            @foreach ($new_financials as $key => $financial_product)
                             <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10 " data-aos="fade-up" data-aos-delay="100">
                                 <div class="card mb-4 mb-lg-0 shadow-lg rounded-4 border-0 overflow-hidden">
+                                    @if ($key == 1)
+                                    <span class="badge bg-warning rounded-bottom-0 py-3 fs-6">Mejor opción</span>
+                                    @endif
                                     <div class="px-4 mt-4">
                                         <h3 class="mb-2">{{ $financial_product->commercial_name }}</h1>
                                             <p class="mb-0 text-muted"></p>
@@ -109,7 +116,7 @@
                                                 
                                         <small
                                             class="text-muted font-monospace mb-4 d-block"></small><button onclick="desitionReport({{ $credit->id }}, {{ $financial_product->financial_id }}, 1)" type="button"
-                                            class="w-100 btn btn-lg btn-gradient-secondary hover-lift">Tramitar</button>
+                                            class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">Tramitar</button>
                                         <ul class="list-unstyled mb-0 pt-4">
                                             <li class="mb-2">
                                                 <span
@@ -398,16 +405,16 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <th scope="row" class="text-start">Crediplus</th>
-                                                        <td><span class="fs-6">NO</span></td>
+                                                        <th scope="row" class="text-start">  {{ $chart1 == null ? '' : $chart1->commercial_name}} </th>
+                                                        <td><span class="fs-6">{{ $chart1 != null && $chart1->chart_comision_apertura == 1 ? 'SÍ' : 'NO'}}</span></td>
                                                     </tr>
                                                     <tr>
-                                                        <th scope="row" class="text-start">Consupago</th>
-                                                        <td><span class="fs-6">NO</span></td>
+                                                        <th scope="row" class="text-start">{{ $chart2 == null ? '' : $chart2->commercial_name}}</th>
+                                                        <td><span class="fs-6">{{ $chart2 != null && $chart2->chart_comision_apertura == 1 ? 'SÍ' : 'NO'}}</span></td>
                                                     </tr>
                                                     <tr>
-                                                        <th scope="row" class="text-start">Ommsa</th>
-                                                        <td><span class="fs-6">NO</span></td>
+                                                        <th scope="row" class="text-start">{{ $chart3 == null ? '' : $chart3->commercial_name}}</th>
+                                                        <td><span class="fs-6">{{ $chart3 != null && $chart3->chart_comision_apertura == 1 ? 'SÍ' : 'NO'}}</span></td>
                                                     </tr>
 
                                                 </tbody>
@@ -515,23 +522,23 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th scope="row" class="text-start">Crediplus</th>
+                                                <th scope="row" class="text-start">{{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}</th>
                                                 <td><span class="fs-6">
-                                                    <span class="fw-light small"></span>Calificación: 4.5<span
+                                                    <span class="fw-light small"></span>Calificación: {{ isset($chart1->rate_contract) ? $chart1->rate_contract : null }}<span
                                                     class="small">/5</span>    
                                                 </span></td>
                                             </tr>
                                             <tr>
-                                                <th scope="row" class="text-start">Consupago</th>
+                                                <th scope="row" class="text-start">{{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}</th>
                                                 <td><span class="fs-6">
-                                                    <span class="fw-light small"></span>Calificación: 4.5<span
+                                                    <span class="fw-light small"></span>Calificación: {{ isset($chart2->rate_contract) ? $chart2->rate_contract : null }}<span
                                                     class="small">/5</span>    
                                                 </span></td>
                                             </tr>
                                             <tr>
-                                                <th scope="row" class="text-start">Ommsa</th>
+                                                <th scope="row" class="text-start">{{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}</th>
                                                 <td><span class="fs-6">
-                                                    <span class="fw-light small"></span>Calificación: 3.5<span
+                                                    <span class="fw-light small"></span>Calificación: {{ isset($chart3->rate_contract) ? $chart3->rate_contract : null }}<span
                                                     class="small">/5</span>    
                                                 </span></td>
                                             </tr>
@@ -581,23 +588,23 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <th scope="row" class="text-start">Crediplus</th>
+                                                    <th scope="row" class="text-start">{{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}</th>
                                                     <td><span class="fs-6">
-                                                        <span class="fw-light small"></span>Calificación: 4.5<span
+                                                        <span class="fw-light small"></span>Calificación: {{ isset($chart1->rate_privacity) ? $chart1->rate_privacity : null }}<span
                                                         class="small">/5</span>    
                                                     </span></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row" class="text-start">Consupago</th>
+                                                    <th scope="row" class="text-start">{{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}</th>
                                                     <td><span class="fs-6">
-                                                        <span class="fw-light small"></span>Calificación: 4.5<span
+                                                        <span class="fw-light small"></span>Calificación: {{ isset($chart2->rate_privacity) ? $chart2->rate_privacity : null }}<span
                                                         class="small">/5</span>    
                                                     </span></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row" class="text-start">Ommsa</th>
+                                                    <th scope="row" class="text-start">{{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}</th>
                                                     <td><span class="fs-6">
-                                                        <span class="fw-light small"></span>Calificación: 4.5<span
+                                                        <span class="fw-light small"></span>Calificación: {{ isset($chart3->rate_privacity) ? $chart3->rate_privacity : null }}<span
                                                         class="small">/5</span>    
                                                     </span></td>
                                                 </tr>

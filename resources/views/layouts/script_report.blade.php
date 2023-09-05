@@ -1,5 +1,6 @@
 <script>
-    let titulo        = '{{isset($financial->commercial_name)?trim($financial->commercial_name): 'Crediplus' }}'
+    
+    let titulo        = '{{ $chart1 != null? $chart1->commercial_name: 'Crediplus' }}'
     </script>
     @if ($status_id == 10)
     <script>
@@ -150,16 +151,16 @@
     </script>
     <script>
         const labels = [
-            'Crediplus',
-            'Consupago',
-            'Ommsa',
+            '{{ $chart1->commercial_name }}',
+            '{{ $chart2->commercial_name }}',
+            '{{ $chart3->commercial_name }}',
         ];
 
         const data = {
             labels: labels,
             datasets: [{
                     label: 'Financiera1',
-                    data: [41.8, 40, 54.1],
+                    data: [{{ $chart1->chart_costo_anual_total == null ? 0 : $chart1->chart_costo_anual_total }}, {{ $chart2->chart_costo_anual_total == null ? 0 : $chart2->chart_costo_anual_total }}, {{ $chart3->chart_costo_anual_total == null ? 0 : $chart3->chart_costo_anual_total }}],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.5)', //rojo
                         'rgba(255, 159, 64, 0.5)',// cafe
@@ -247,9 +248,9 @@
         
         /*  intereses */
         const labels_interes = [
-            'Crediplus',
-            'Consupago',
-            'Ommsa',
+            '{{ $chart1->commercial_name }}',
+            '{{ $chart2->commercial_name }}',
+            '{{ $chart3->commercial_name }}',
         ];
 
         const data_interes = {
@@ -258,26 +259,26 @@
                     label: 'Capital',
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 0.5)',
-                    data: [10000,10000, 10000],
+                    data: [{{ $chart1->chart_capital == null ? 0 : $chart1->chart_capital }},{{ $chart2->chart_capital == null ? 0 : $chart2->chart_capital }}, {{ $chart3->chart_capital == null ? 0 : $chart3->chart_capital }}],
 
                 },
                 {
                     label: 'Interés',
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
                     borderColor: 'rgba(255, 99, 132, 0.5)',
-                    data: [3600, 3450 , 4660],
+                    data: [{{ $chart1->chart_interes == null ? 0 : $chart1->chart_interes }}, {{ $chart2->chart_interes == null ? 0 : $chart2->chart_interes }} , {{ $chart3->chart_interes == null ? 0 : $chart3->chart_interes }}],
                 },
                 {
                     label: 'Comisiónes',
                     backgroundColor: 'rgba(255, 205, 86, 0.5)',
                     borderColor: 'rgba(255, 205, 86, 0.5)',
-                    data: [0, 0 , 0],
+                    data: [{{ $chart1->chart_comision == null ? 0 : $chart1->chart_comision }}, {{ $chart2->chart_comision == null ? 0 : $chart2->chart_comision }} , {{ $chart3->chart_comision == null ? 0 : $chart3->chart_comision }}],
                 },
                 {
                     label: 'IVA',
                     backgroundColor: 'rgb(45,99, 141)',
                     borderColor: 'rgb(45,99, 141)',
-                    data: [576, 552 , 745.6],
+                    data: [{{ $chart1->chart_iva == null ? 0 : $chart1->chart_iva }}, {{ $chart2->chart_iva == null ? 0 : $chart2->chart_iva }} , {{ $chart3->chart_iva == null ? 0 : $chart3->chart_iva }}],
                 },
             ] 
         };
@@ -343,9 +344,9 @@
         
         /* plazo */
         const labels_plazo = [
-            'Crediplus',
-            'Consupago',
-            'Ommsa',
+            '{{ $chart1->commercial_name }}',
+            '{{ $chart2->commercial_name }}',
+            '{{ $chart3->commercial_name }}',
         ];
 
         const data_plazo = {
@@ -354,7 +355,7 @@
                     label: 'Años',
                     backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 205, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(54, 162, 235, 0.5)'],
                     borderColor:   ['rgba(255, 99, 132, 2)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 205, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(54, 162, 235, 0.5)'],
-                    data: [3, 4, 2],
+                    data: [{{ isset($chart1->chart_plazo_maximo) ? $chart1->chart_plazo_maximo : 0 }}, {{ isset($chart2->chart_plazo_maximo) ? $chart2->chart_plazo_maximo : 0 }} , {{ isset($chart3->chart_plazo_maximo) ? $chart3->chart_plazo_maximo : 0 }}],
                     borderWidth: 2,
 
                 },

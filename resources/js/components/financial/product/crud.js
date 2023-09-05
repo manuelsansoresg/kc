@@ -126,6 +126,23 @@ $( "#frm-financial-buro" ).submit(function( event ) {
     }
 });
 
+$( "#frm-financial-chart" ).submit(function( event ) {
+    event.preventDefault();
+    const new_form = document.getElementById("frm-financial-chart");
+    const data = new FormData(new_form);
+
+    axios
+        .post("/panel/financial-product", data)
+        .then(function (response) {
+            let result = response.data;
+            showToast('Producto', 'Datos guardados', 'success');
+            
+        })
+        .catch(e => {
+            
+        });
+  });
+
 
 window.deleteFinancialProduct = function (id) {
     axios
