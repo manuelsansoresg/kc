@@ -28,21 +28,20 @@
                                     <div class="animated-title">
                                         <div class="text-top ">
                                             <div>
-                                                <span class="h1">¡Enhorabuena! </span>
+                                                <span class="h1">¡Felicidades! </span>
                                                 <span class="h1">{{ $client->name }}</span>
                                             </div>
                                         </div>
                                         <div class="text-bottom">
                                             <div>
-                                                <span class="h4">Ahora puedes elegir tu mejor crédito.</span>
+                                                <span class="h4">Encontramos el mejor crédito para tí.</span>
                                             </div>
                                         </div>
                                         
                                         <div class="text-bottom-end">
                                             <div>
-                                                <span class="h4">Te presentamos <b>3</b>
-                                                     financieras que ofrecen créditos por descuento de nómina, para ti que trabajas en  <b>SEP
-                                                        Yucatán.</b></span>
+                                                <span class="h4">Te presentamos las <b>3</b>
+                                                     Mejores</b> financieras </span>
                                             </div>
                                         </div>
                                         

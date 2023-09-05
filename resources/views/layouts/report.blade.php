@@ -57,7 +57,7 @@
                         <img src="{{ asset('images/logo-dark.png') }}" class="img-fluid" alt="">
                         </a>
                     </div>
-                    <p class="text-muted">TU mejor decisión. Fácil y rápido </p>
+                    <p class="text-muted">Tu mejor decisión. Fácil y rápido </p>
                 </div>
                 <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
