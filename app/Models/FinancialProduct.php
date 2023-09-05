@@ -79,6 +79,14 @@ class FinancialProduct extends Model
     ];
 
 
+    public static function getByRate()
+    {
+        return FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc')
+                        ->join('financials', 'financials.id', 'financial_products.financial_id')
+                        ->orderBy('rate_kc', 'DESC')
+                        ->get();
+    }
+
     public static function saveEdit($request)
     {
         if ($request->product_id == null) {
@@ -91,7 +99,7 @@ class FinancialProduct extends Model
         return $financial_product;
     }
     
-    public function FinancialAndProductByRate($financials)
+    public static function FinancialAndProductByRate($financials)
     {
         $new_financials = [];
         foreach ($financials as $financial) {
@@ -123,6 +131,34 @@ class FinancialProduct extends Model
     
         return $new_financials;
     }
+
+    public static function customSortFinancials($new_financials)
+    {
+         // Ordenar $new_financials en función del highest_rate_kc en orden descendente
+        usort($new_financials, function ($a, $b) {
+            return $b['highest_rate_kc'] - $a['highest_rate_kc'];
+        });
+
+        // Obtener los tres primeros elementos con el rating más alto
+        $topThree = array_slice($new_financials, 0, 3);
+
+        // Crear un nuevo arreglo con el orden personalizado
+        $sortedFinancials = $topThree;
+
+        // Verificar si hay al menos 4 elementos antes de acceder al índice 3
+        if (count($new_financials) >= 4) {
+            // Obtener el elemento original en medio
+            $sortedFinancials[] = $new_financials[3];
+
+            // Verificar si hay más de 4 elementos antes de agregar los restantes
+            if (count($new_financials) > 4) {
+                $sortedFinancials = array_merge($sortedFinancials, array_slice($new_financials, 4));
+            }
+        }
+
+        return $sortedFinancials;
+    }
+
     
     public static function getProductByFinancial($financial_id)
     {
