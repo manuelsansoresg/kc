@@ -103,7 +103,7 @@
                                     @else
                                     <div class="d-flex flex-wrap justify-content-center pb-3">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">OK 
+                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://kaaxclub.com" style="text-transform: inherit">OK 
                                             </a>
                                         </div>
                                     </div>
