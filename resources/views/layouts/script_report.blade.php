@@ -420,11 +420,27 @@
        
         
         function scrollToAnchor(aid){
+            $('#content-hide').show();
             var aTag = $("a[name='"+ aid +"']");
             $('html,body').animate({scrollTop: aTag.offset().top},'slow');
         }
 
         $(window).scroll(function() {
+
+            if (isScrolledIntoView('#myChartInteres')) {
+                
+                if (inViewInteres == false) {
+                    inViewInteres = true;
+                    const myChart_interes = new Chart(
+                        document.getElementById('myChartInteres'),
+                        config_interes
+                    );
+                }
+                
+            } else {
+                inViewInteres = false;  
+            }
+            
             if (isScrolledIntoView('#myChart')) {
                 if (inView) { return; }
                 inView = true;
@@ -446,16 +462,7 @@
             } else {
                 inViewPlazo = false;  
             }
-            if (isScrolledIntoView('#myChartInteres')) {
-                if (inView) { return; }
-                inViewInteres = true;
-                const myChart_interes = new Chart(
-                    document.getElementById('myChartInteres'),
-                    config_interes
-                );
-            } else {
-                inViewInteres = false;  
-            }
+            
             
             if (isScrolledIntoView('#chartOption')) {
                 if (inView) { return; }
