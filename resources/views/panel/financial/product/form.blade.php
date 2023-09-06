@@ -1129,7 +1129,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="rate_cat">CAT</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="number" name="rate_cat" id="rate_cat" class="form-control" value="" step="0.01" max="5">
+                                                                        <input type="number" name="rate_cat" id="rate_cat" class="form-control" value="{{ $financial_product != null ? $financial_product->rate_cat : null }}" step="0.01" max="5">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1137,7 +1137,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="rate_comision">Comisiones</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="number" name="rate_comision" id="rate_comision" class="form-control" value="" step="0.01" max="5">
+                                                                        <input type="number" name="rate_comision" id="rate_comision" class="form-control" value="{{ $financial_product != null ? $financial_product->rate_comision : null }}" step="0.01" max="5">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1145,7 +1145,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="rate_deadline">Plazo</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="number" name="rate_deadline" id="rate_deadline" class="form-control" value="" step="0.01" max="5">
+                                                                        <input type="number" name="rate_deadline" id="rate_deadline" class="form-control" value="{{ $financial_product != null ? $financial_product->rate_deadline : null }}" step="0.01" max="5">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1153,7 +1153,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="rate_contract">Contrato</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="number" name="rate_contract" id="rate_contract" class="form-control" value="" step="0.01" max="5">
+                                                                        <input type="number" name="rate_contract" id="rate_contract" class="form-control" value="{{ $financial_product != null ? $financial_product->rate_contract : null }}" step="0.01" max="5">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1161,7 +1161,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="rate_privacity">Privacidad de datos</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="number" name="rate_privacity" id="rate_privacity" class="form-control" value="" step="0.01" max="5">
+                                                                        <input type="number" name="rate_privacity" id="rate_privacity" class="form-control" value="{{ $financial_product != null ? $financial_product->rate_privacity : null }}" step="0.01" max="5">
                                                                     </div>
                                                                 </div>
                                                             </div>
