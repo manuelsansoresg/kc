@@ -67,6 +67,7 @@ Route::group(['prefix' => 'lead'], function () {
     //* mover del lugar
     
     Route::get('financial/{lead_id}/show', ['\App\Http\Controllers\Panel\LeadController', 'listFinancial'])->middleware('auth');
+    Route::get('financial/product/{financial_id}/show', ['\App\Http\Controllers\Panel\LeadController', 'listProductFinancial'])->middleware('auth');
 });
 
 

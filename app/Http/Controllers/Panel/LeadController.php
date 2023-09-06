@@ -14,6 +14,7 @@ use App\Models\LeadNote;
 use App\Models\Note;
 use App\Models\File;
 use App\Models\FinancialAgreement;
+use App\Models\FinancialProduct;
 use App\Models\User;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
@@ -55,6 +56,12 @@ class LeadController extends Controller
     public function listFinancial($lead_id)
     {
         $financials = FinancialAgreement::getList($lead_id);
+        return response()->json($financials);
+    }
+    
+    public function listProductFinancial($financial_id)
+    {
+        $financials = FinancialProduct::getList($financial_id);
         return response()->json($financials);
     }
 

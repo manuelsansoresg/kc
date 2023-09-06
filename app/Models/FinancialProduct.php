@@ -137,6 +137,15 @@ class FinancialProduct extends Model
         return $sortedFinancials;
     }
 
+    public static function getList($financial_id)
+    {
+        $get_financials = FinancialProduct::getProductByFinancial($financial_id);
+        $financials = array();
+        foreach ($get_financials as $get_financial) {
+            $financials[] = $get_financial;
+        }
+        return $financials;
+    }
 
     
     public static function getProductByFinancial($financial_id)

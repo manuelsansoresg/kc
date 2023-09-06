@@ -33,6 +33,7 @@ class Lead extends Model
         'bank_id',
         'tipo_credito',
         'consulta_buro',
+        'financial_product_id',
     ];
 
     public static function listDatatable()
