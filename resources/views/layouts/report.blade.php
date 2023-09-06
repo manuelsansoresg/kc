@@ -61,7 +61,7 @@
                 </div>
                 <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
-                        <li><a href="/reporte/{{ $history_id }}/metodologia">Metodología</a></li>
+                        <li><a href="/reporte/{{ @$history_id }}/metodologia">Metodología</a></li>
                         <li><a href="https://kaaxclub.com/ayuda">Ayuda</a></li>
                     </ul>
                 </div>
