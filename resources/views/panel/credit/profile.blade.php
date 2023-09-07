@@ -8,6 +8,7 @@
 @inject('m_file', 'App\Models\File')
 @inject('m_survey', 'App\Models\Survey')
 @inject('m_kyc', 'App\Models\Kyc')
+@inject('m_financial_product', 'App\Models\FinancialProduct')
 
 @php
     
@@ -233,6 +234,16 @@
                                                                     class="preview-title-lg overline-title text-primary ">Servicio KC</span>
                                                             </div><!-- .nk-block-head -->
                                                             <div class="profile-ud-list">
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        @php
+                                                                            $credit_product = $m_financial_product::getById($credit->financial_product_id);
+                                                                        @endphp
+                                                                        <span class="profile-ud-label">Producto financiero</span>
+                                                                        <span class="profile-ud-value"> {{ $credit_product!= null ? $credit_product->commercial_name : null}}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Importe solicitado</span>

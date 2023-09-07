@@ -148,7 +148,17 @@ class FinancialProduct extends Model
         return $sortedFinancials;
     }
 
-    
+    public static function getById($id)
+    {
+        return FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+                                'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
+                                'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
+                                'financial_products.id as id'
+                                )
+                        ->join('financials', 'financials.id', 'financial_products.financial_id')
+                        ->where('financial_products.id', $id)
+                        ->first();
+    }
 
     
 

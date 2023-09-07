@@ -5,7 +5,7 @@
 @inject('m_history_log', 'App\Models\HistoryLog')
 @inject('m_action', 'App\Models\Action')
 @inject('m_bank', 'App\Models\Bank')
-
+@inject('m_financial_product', 'App\Models\FinancialProduct')
 @php
     use App\Strategies\Values\ValidateStagesValues;
     $agreement    = $lead->agreementLead;
@@ -149,6 +149,17 @@
                                                             <span class="preview-title-lg overline-title">Servicio KC</span>
                                                         </div><!-- .nk-block-head -->
                                                         <div class="profile-ud-list">
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    @php
+                                                                        $lead_product = $m_financial_product::getById($lead->financial_product_id);
+                                                                    @endphp
+                                                                    <span class="profile-ud-label">Producto financiero</span>
+                                                                    <span class="profile-ud-value"> {{ $lead_product!= null ? $lead_product->commercial_name : null}}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
                                                                     <span class="profile-ud-label">Importe solicitado</span>
