@@ -15,7 +15,7 @@
     $is_app = isset($_GET['is_app']) ? true : false;
     $text1 = 'Un asesor de nuestro equipo te contactará en unos minutos para ayudarte con  el trámite de tu crédito.';
     $text2 = 'Un asesor de nuestro equipo te contactará a la brevedad posible para iniciar el trámite de tu crédito.';
-    $text3 = 'Puedes darle seguimiento al trámite desde la App.';
+    $text3 = 'Si tienes alguna duda, no dudes en contactarnos <i class="fas fa-smile-beam text-warning"></i>';
 @endphp
 {{-- hero --}}
 <section class="position-relative">
@@ -32,9 +32,18 @@
                             <div class="row position-relative">
                                 <div class="col-lg-9 col-md-10 mx-auto text-center">
                                     @if ($is_app == false)
-                                    <h2 class="mb-4 aos-init aos-animate display-2" data-aos="fade-up"> ¡Genial! </h2>
+                                    <h2 class="mb-4 aos-init aos-animate display-1" data-aos="fade-up">
+                                        <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
+                                        ¡Genial!
+                                        <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
+                                     </h2>
                                     @else
-                                    <h2 class="mb-4 aos-init aos-animate display-2 mt-3" data-aos="fade-up"> ¡Genial! </h2>
+                                    <h2 class="mb-4 aos-init aos-animate display-1 mt-3" data-aos="fade-up">
+                                        <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
+                                        ¡Genial!
+                                        <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
+
+                                    </h2>
                                     @endif
                                     
                                     @php
@@ -71,11 +80,11 @@
                                     
                                     @if ($is_app == false)
                                     <h2 class="h3 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
-                                        {{ $text3 }}
+                                        {!! $text3  !!}
                                     </h2>
                                     @else
                                     <h6 class="mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100"> 
-                                        {{ $text3 }}
+                                        {!! $text3  !!}
                                     </h6>
                                     @endif
                                    
@@ -83,8 +92,10 @@
                                         @if ($dayOK && $timeOK)
                                         <div class="d-flex flex-wrap justify-content-center">
                                             <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                                <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App 
-                                                    <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12 " href="https://kaaxclub.com/ayuda">Ayuda 
+                                                <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
+                                                >Contacto 
+                                                <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
+                                            </a>
                                                         <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12 " href="https://kaaxclub.com/">Salir 
                                                 </a>
                                             </div>
@@ -93,9 +104,11 @@
                                         @else
                                         <div class="d-flex flex-wrap justify-content-center">
                                             <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                                <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4 iframe-link" href="https://app.kaaxclub.com" style="text-transform: inherit">Ir a la App 
-                                                <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="https://kaaxclub.com/ayuda">Ayuda 
-                                                <a class="btn btn-primary btn-lg hover-lift me-3  btn-block mt-2 col-12 col-md-4" href="https://kaaxclub.com">Salir 
+                                                <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://kaaxclub.com" style="text-transform: inherit">OK 
+                                                </a>
+                                                <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
+                                                    >Contacto 
+                                                    <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
                                                 </a>
                                             </div>
                                         </div>
@@ -104,6 +117,10 @@
                                     <div class="d-flex flex-wrap justify-content-center pb-3">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
                                             <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://kaaxclub.com" style="text-transform: inherit">OK 
+                                            </a>
+                                            <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
+                                                >Contacto 
+                                                <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
                                             </a>
                                         </div>
                                     </div>
