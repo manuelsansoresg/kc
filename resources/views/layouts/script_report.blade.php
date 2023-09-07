@@ -476,5 +476,7 @@
             }
         });
 
-        
+        window.showFinalFinancial = function() {
+            $('#final-financials').show('slow');
+        }
     </script>

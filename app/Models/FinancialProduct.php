@@ -111,31 +111,47 @@ class FinancialProduct extends Model
     
     
 
-    public static function customSortFinancials($financial_products)
+    public static function customSortFinancials($financial_products, $is_limit = false)
     {
         // Ordenar $financial_products en función del rate_kc en orden descendente
         $sortedFinancials = $financial_products->sortByDesc('rate_kc')->values();
 
-        // Obtener los tres primeros elementos con el rating más alto
-        $topThree = $sortedFinancials->take(3);
-
-        // Crear un nuevo arreglo con el orden personalizado
-        $sortedFinancials = $topThree;
-
-        // Verificar si hay al menos 4 elementos antes de acceder al índice 3
-        if ($sortedFinancials->count() >= 4) {
-            // Obtener el elemento original en medio
-            $sortedFinancials->splice(3, 0, [$sortedFinancials->get(3)]);
-
-            // Verificar si hay más de 4 elementos antes de agregar los restantes
-            if ($sortedFinancials->count() > 4) {
-                $remaining = $sortedFinancials->splice(4);
-                $sortedFinancials = $sortedFinancials->concat($remaining);
+        if ($is_limit == false) {
+            
+            // Verificar si hay al menos 3 elementos
+            if ($sortedFinancials->count() >= 3) {
+                // Obtener el elemento con la tasa más alta (en medio)
+                $middleElement = $sortedFinancials->first();
+    
+                // Obtener los elementos restantes (excluyendo el primero que ya está en $middleElement)
+                $remainingElements = $sortedFinancials->slice(1);
+    
+                // Obtener los dos elementos más cercanos al elemento del medio en términos de rate_kc
+                $closestElements = $remainingElements->sortBy(function ($element) use ($middleElement) {
+                    return abs($element['rate_kc'] - $middleElement['rate_kc']);
+                })->take(2)->values();
+    
+                // Crear un nuevo arreglo con los tres elementos en el orden deseado
+                $sortedFinancials = collect([$closestElements[0], $middleElement, $closestElements[1]]);
+            } else {
+                // Si no hay al menos 3 elementos, devolver el arreglo original
+                return $sortedFinancials;
+            }
+        } else {
+            if ($is_limit && $sortedFinancials->count() >= 4) {
+                // Obtener los elementos después del tercero
+                $sortedFinancials = $sortedFinancials->slice(3);
             }
         }
 
         return $sortedFinancials;
     }
+
+    
+
+    
+
+
 
     public static function getList($financial_id)
     {

@@ -65,9 +65,9 @@ class HomeController extends Controller
         }
 
         
-        if ($credit->applied_financial != '') {
+       /*  if ($credit->applied_financial != '') {
             return view('content_expiration_report');
-        }
+        } */
         
         $financial            = $credit->creditFinancial; //financiera transferente
         $client               = $credit->creditClientPerson;
@@ -77,6 +77,7 @@ class HomeController extends Controller
         $financials           = $agreement != null ? $agreement->financialAgreement : null;
         $financial_products   = FinancialProduct::getByRate();
         $new_financials       = FinancialProduct::customSortFinancials($financial_products);
+        $final_financials     = FinancialProduct::customSortFinancials($financial_products, true);
 
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             $is_best = false;
@@ -118,7 +119,7 @@ class HomeController extends Controller
             );
             return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id'));
         }
-        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials'));
+        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials'));
     }
 
     public function exitReport(Credit $credit)
