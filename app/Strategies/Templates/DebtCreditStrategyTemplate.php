@@ -464,12 +464,20 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $hour                   = $in_progress->date_status_progress;
         
         $menu_options           = self::menuOptionReportStep($history);
-        $advisor                = $credit->creditAdvisor;
-        $user                   = User::find($advisor->id);
-        $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+        $name_advisor           = null;
+        try {
+            $advisor        = $credit->creditAdvisor;
+            $user           = User::find($advisor->id);
+            $role           = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        } catch (\Exception $th) {
+                    //throw $th;
+        }
+
+        
+       
         $name_module_response   = 'KaaxClub';
         $color_desition         = 'success';
-        $name_advisor           = $role.' - '.$advisor->name.' '.$advisor->last_name;
         $data_deadline          = deadline($hour, $max_hour, 0, 'success');
         $color_desition         = $data_deadline['color'];
         $hour                   = $data_deadline['lbl_hour'];
