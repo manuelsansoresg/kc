@@ -117,7 +117,7 @@ class HomeController extends Controller
                 'is_best' => $is_best,
                 'status_id' => $status_id,
             );
-            return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id'));
+            return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials'));
         }
         return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials'));
     }

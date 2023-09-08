@@ -11,6 +11,11 @@
 @php
     $is_app = isset($_GET['is_app'])? true : false;
 @endphp
+@php
+$chart1 = isset($new_financials[1]) ? $new_financials[1] : null;
+$chart2 = isset($new_financials[0]) ? $new_financials[0] : null;
+$chart3 = isset($new_financials[2]) ? $new_financials[2] : null;
+@endphp
     <!--::Hero Default::-->
     <section class="position-relative bg-style-1 debt">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
