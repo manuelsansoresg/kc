@@ -22,15 +22,18 @@
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="analytics1" role="tabpanel">
                             <div class="row align-items-center">
-                                <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0" data-aos="fade-up"
+                                <div class="col-md-12 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0 py-0 py-md-5" data-aos="fade-up"
                                     data-aos-delay="100">
-                                    <div class="row align-items-center">
+                                    <div class="row align-items-center py-0 py-md-5">
                                         <div class="animated-title">
                                             <div class="text-top ">
-                                                <div>
+                                                <div class="textcontainer">
+                                                    <span class="particletext confetti h1">¡Felicidades! {{ $client->name }}</span>
+                                                </div>
+                                               {{--  <div>
                                                     <span class="h1">¡Felicidades! </span>
                                                     <span class="h1">{{ $client->name }}</span>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                             <div class="text-bottom">
                                                 <div>
@@ -49,14 +52,14 @@
 
                                     </div>
                                 </div>
-                                <div class="col-md-6 text-end" id="hero-img">
+                               {{--  <div class="col-md-6 text-end" id="hero-img">
                                     <div class="col-12 pl-0 pl-md-12">
                                         <img class="img-fluid" src="/images/g683.png" alt="">
                                     </div>
 
 
 
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
