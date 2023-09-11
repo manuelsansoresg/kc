@@ -103,17 +103,23 @@
         /* option */
     </script>
     @endif
+    @php
+        $color_financiera2 = ($my_product_financial!= null && $my_product_financial->id == $chart2->id) || ($credit->financial_product_id == $chart2->id) ? '#644EF3' : 'white';
+        $color_financiera3 = ($my_product_financial!= null && $my_product_financial->id == $chart3->id) || ($credit->financial_product_id == $chart3->id) ? '#644EF3' : 'white';
+        $color_financiera4 = $my_product_financial!= null && $my_product_financial->id == $chart4->id ? '#644EF3' : 'white';
+    @endphp
+    {{-- {{ dd($my_product_financial,$chart1, $chart2, $chart3, $chart4 ) }} --}}
     <script>
         let inView        = false;
         let inViewPlazo   = false;
         let inViewInteres = false;
         let inViewOption  = false;
         
-        let color_financiera1 = (titulo == 'Crediplus')? 'white' : 'white';
-        let color_financiera2 = (titulo == 'Consupago')? 'white' : 'white';
-        let color_financiera3 = (titulo == 'Ommsa')? 'white' : 'white';
-        let color_financiera4 = (titulo == 'Financiera 4')? 'white' : 'white';
-        let color_financiera5 = (titulo == 'Financiera 5')? 'white' : 'white';
+        let color_financiera1 = '#F9662E';
+        let color_financiera2 = '<?php echo $color_financiera2 ?>';
+        let color_financiera3 = '<?php echo $color_financiera3 ?>';
+        let color_financiera4 = '<?php echo $color_financiera4 ?>';
+        let color_financiera5 = 'white';
 
         function isScrolledIntoView(elem)
         {
