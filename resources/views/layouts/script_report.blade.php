@@ -150,17 +150,31 @@
         })
     </script>
     <script>
-        const labels = [
+         <?php if($chart4 == null){ ?>
+            const labels = [
             '{{ $chart1->commercial_name }}',
             '{{ $chart2->commercial_name }}',
             '{{ $chart3->commercial_name }}',
         ];
+        <?php } else { ?>
+            const labels = [
+            '{{ $chart1->commercial_name }}',
+            '{{ $chart2->commercial_name }}',
+            '{{ $chart3->commercial_name }}',
+            '{{ $chart4->commercial_name }}',
+        ];
+        <?php } ?>
+        
 
         const data = {
             labels: labels,
             datasets: [{
                     label: 'Financiera1',
-                    data: [{{ $chart1->chart_costo_anual_total == null ? 0 : $chart1->chart_costo_anual_total }}, {{ $chart2->chart_costo_anual_total == null ? 0 : $chart2->chart_costo_anual_total }}, {{ $chart3->chart_costo_anual_total == null ? 0 : $chart3->chart_costo_anual_total }}],
+                    <?php if($chart4 == null){ ?>
+                        data: [{{ $chart1->chart_costo_anual_total == null ? 0 : $chart1->chart_costo_anual_total }}, {{ $chart2->chart_costo_anual_total == null ? 0 : $chart2->chart_costo_anual_total }}, {{ $chart3->chart_costo_anual_total == null ? 0 : $chart3->chart_costo_anual_total }}],
+                        <?php } else { ?>
+                            data: [{{ $chart4->chart_costo_anual_total == null ? 0 : $chart4->chart_costo_anual_total }},{{ $chart1->chart_costo_anual_total == null ? 0 : $chart1->chart_costo_anual_total }}, {{ $chart2->chart_costo_anual_total == null ? 0 : $chart2->chart_costo_anual_total }}, {{ $chart3->chart_costo_anual_total == null ? 0 : $chart3->chart_costo_anual_total }}],
+                        <?php } ?>
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.5)', //rojo
                         'rgba(255, 159, 64, 0.5)',// cafe
@@ -247,15 +261,26 @@
 
         
         /*  intereses */
-        const labels_interes = [
+        <?php if($chart4 == null){ ?>
+            const labels_interes = [
             '{{ $chart1->commercial_name }}',
             '{{ $chart2->commercial_name }}',
             '{{ $chart3->commercial_name }}',
-        ];
+            ];
+        <?php } else { ?>
+            const labels_interes = [
+            '{{ $chart1->commercial_name }}',
+            '{{ $chart2->commercial_name }}',
+            '{{ $chart3->commercial_name }}',
+            '{{ $chart4->commercial_name }}',
+            ];
+        <?php } ?>
+       
 
         const data_interes = {
             labels: labels_interes,
-            datasets: [{
+            <?php if($chart4 == null){ ?>
+                datasets: [{
                     label: 'Capital',
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 0.5)',
@@ -281,6 +306,35 @@
                     data: [{{ $chart1->chart_iva == null ? 0 : $chart1->chart_iva }}, {{ $chart2->chart_iva == null ? 0 : $chart2->chart_iva }} , {{ $chart3->chart_iva == null ? 0 : $chart3->chart_iva }}],
                 },
             ] 
+                <?php } else { ?>
+                    datasets: [{
+                    label: 'Capital',
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 0.5)',
+                    data: [{{ $chart4->chart_capital == null ? 0 : $chart4->chart_capital }}, {{ $chart1->chart_capital == null ? 0 : $chart1->chart_capital }},{{ $chart2->chart_capital == null ? 0 : $chart2->chart_capital }}, {{ $chart3->chart_capital == null ? 0 : $chart3->chart_capital }}],
+
+                },
+                {
+                    label: 'Interés',
+                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                    data: [{{ $chart4->chart_interes == null ? 0 : $chart4->chart_interes }},{{ $chart1->chart_interes == null ? 0 : $chart1->chart_interes }}, {{ $chart2->chart_interes == null ? 0 : $chart2->chart_interes }} , {{ $chart3->chart_interes == null ? 0 : $chart3->chart_interes }}],
+                },
+                {
+                    label: 'Comisiónes',
+                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
+                    borderColor: 'rgba(255, 205, 86, 0.5)',
+                    data: [{{ $chart4->chart_comision == null ? 0 : $chart4->chart_comision }},{{ $chart1->chart_comision == null ? 0 : $chart1->chart_comision }}, {{ $chart2->chart_comision == null ? 0 : $chart2->chart_comision }} , {{ $chart3->chart_comision == null ? 0 : $chart3->chart_comision }}],
+                },
+                {
+                    label: 'IVA',
+                    backgroundColor: 'rgb(45,99, 141)',
+                    borderColor: 'rgb(45,99, 141)',
+                    data: [{{ $chart4->chart_iva == null ? 0 : $chart4->chart_iva }},{{ $chart1->chart_iva == null ? 0 : $chart1->chart_iva }}, {{ $chart2->chart_iva == null ? 0 : $chart2->chart_iva }} , {{ $chart3->chart_iva == null ? 0 : $chart3->chart_iva }}],
+                },
+            ] 
+                    <?php } ?>
+            
         };
 
         const config_interes = {
@@ -343,19 +397,34 @@
         };
         
         /* plazo */
-        const labels_plazo = [
+        <?php if($chart4 == null){ ?>
+            const labels_plazo = [
             '{{ $chart1->commercial_name }}',
             '{{ $chart2->commercial_name }}',
             '{{ $chart3->commercial_name }}',
         ];
+        <?php } else { ?>
+            const labels_plazo = [
+            '{{ $chart1->commercial_name }}',
+            '{{ $chart2->commercial_name }}',
+            '{{ $chart3->commercial_name }}',
+            '{{ $chart4->commercial_name }}',
+        ];
+        <?php } ?>
+        
 
         const data_plazo = {
             labels: labels_plazo,
+            
             datasets: [{
                     label: 'Años',
                     backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 205, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(54, 162, 235, 0.5)'],
                     borderColor:   ['rgba(255, 99, 132, 2)', 'rgba(255, 159, 64, 0.5)', 'rgba(255, 205, 86, 0.5)', 'rgba(75, 192, 192, 0.5)', 'rgba(54, 162, 235, 0.5)'],
-                    data: [{{ isset($chart1->chart_plazo_maximo) ? $chart1->chart_plazo_maximo : 0 }}, {{ isset($chart2->chart_plazo_maximo) ? $chart2->chart_plazo_maximo : 0 }} , {{ isset($chart3->chart_plazo_maximo) ? $chart3->chart_plazo_maximo : 0 }}],
+                    <?php if($chart4 == null){ ?>
+                        data: [{{ isset($chart1->chart_plazo_maximo) ? $chart1->chart_plazo_maximo : 0 }}, {{ isset($chart2->chart_plazo_maximo) ? $chart2->chart_plazo_maximo : 0 }} , {{ isset($chart3->chart_plazo_maximo) ? $chart3->chart_plazo_maximo : 0 }}],
+                        <?php } else { ?>
+                            data: [{{ isset($chart4->chart_plazo_maximo) ? $chart4->chart_plazo_maximo : 0 }},{{ isset($chart1->chart_plazo_maximo) ? $chart1->chart_plazo_maximo : 0 }}, {{ isset($chart2->chart_plazo_maximo) ? $chart2->chart_plazo_maximo : 0 }} , {{ isset($chart3->chart_plazo_maximo) ? $chart3->chart_plazo_maximo : 0 }}],
+                        <?php } ?>
                     borderWidth: 2,
 
                 },

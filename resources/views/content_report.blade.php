@@ -95,6 +95,7 @@
         $chart1 = isset($new_financials[1]) ? $new_financials[1] : null;
         $chart2 = isset($new_financials[0]) ? $new_financials[0] : null;
         $chart3 = isset($new_financials[2]) ? $new_financials[2] : null;
+        $chart4 = $my_product_financial;
     @endphp
     <section class="position-relative">
         <div class="container-fluid pb-9 pb-lg-0 position-relative mt-n12">

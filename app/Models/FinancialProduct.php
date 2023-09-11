@@ -160,7 +160,20 @@ class FinancialProduct extends Model
                         ->first();
     }
 
-    
+    public static function existMyFinancial($financial_products, $final_financial_products, $myFinancial_id)
+    {
+
+        $my_product_financial = FinancialProduct::getById($myFinancial_id);
+        $is_financial = true;
+        foreach ($financial_products as $financial_products) {
+            if ($my_product_financial != null && $my_product_financial->id == $financial_products->id) {
+                $is_financial = false;
+            }
+        }
+        
+        
+        return $is_financial == true ? $my_product_financial : null;
+    }
 
 
 

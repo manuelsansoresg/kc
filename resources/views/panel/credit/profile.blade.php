@@ -240,7 +240,7 @@
                                                                             $credit_product = $m_financial_product::getById($credit->financial_product_id);
                                                                         @endphp
                                                                         <span class="profile-ud-label">Producto financiero</span>
-                                                                        <span class="profile-ud-value"> {{ $credit_product!= null ? $credit_product->commercial_name : null}}
+                                                                        <span class="profile-ud-value"> {{ $credit_product!= null ? $credit_product->name : null}}
                                                                         </span>
                                                                     </div>
                                                                 </div>

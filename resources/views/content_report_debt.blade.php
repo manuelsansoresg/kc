@@ -95,6 +95,7 @@
         $chart1 = isset($new_financials[1]) ? $new_financials[1] : null;
         $chart2 = isset($new_financials[0]) ? $new_financials[0] : null;
         $chart3 = isset($new_financials[2]) ? $new_financials[2] : null;
+        $chart4 = $my_product_financial;
     @endphp
     <section class="position-relative">
         <div class="container-fluid pb-9 pb-lg-0 position-relative mt-n12">
@@ -105,14 +106,14 @@
                             @foreach ($new_financials as $key => $financial_product)
                                 <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10 " data-aos="fade-up" data-aos-delay="100">
                                     <div class="card mb-4 mb-lg-0 shadow-lg rounded-4 border-0 overflow-hidden">
-                                        @if ($key == 1 && $credit->financial_product_id !=  $financial_product->financial_id)
+                                        @if ($key == 1 && $credit->financial_product_id !=  $financial_product->id)
                                             <span class="badge bg-warning rounded-bottom-0 py-3 fs-6">Mejor opción</span>
                                         @endif
-                                        @if ($key == 1 && $credit->financial_product_id ==  $financial_product->financial_id)
+                                        @if ($key == 1 && $credit->financial_product_id ==  $financial_product->id)
                                             <span class="badge bg-warning rounded-bottom-0 py-3 fs-6">  Tu crédito actual es la mejor opción</span>
                                         @endif
                                        
-                                        @if ($key != 1 && $credit->financial_product_id ==  $financial_product->financial_id)
+                                        @if ($key != 1 && $credit->financial_product_id ==  $financial_product->id)
                                         <span class="badge bg-primary rounded-bottom-0 py-3 fs-6">Tú crédito actual</span>
                                         @endif
                                         <div class="px-4 mt-4">
