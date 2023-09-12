@@ -7,6 +7,13 @@
     @endif
 @endsection
 
+@php
+$chart1 = isset($new_financials[1]) ? $new_financials[1] : null;
+$chart2 = isset($new_financials[0]) ? $new_financials[0] : null;
+$chart3 = isset($new_financials[2]) ? $new_financials[2] : null;
+$chart4 = $my_product_financial;
+@endphp
+
 @section('content')
     @php
         $is_app = isset($_GET['is_app']) ? true : false;
@@ -35,18 +42,32 @@
                                                     <span class="h1">{{ $client->name }}</span>
                                                 </div> --}}
                                             </div>
-                                            <div class="text-bottom">
-                                                <div>
-                                                    <span class="h4">Encontramos el mejor crédito para tí.</span>
+                                            @if ($my_product!= null && $my_product->id == $chart1->id)
+                                                <div class="text-bottom">
+                                                    <div>
+                                                        <span class="h4">Tienes el mejor crédito disponible.</span>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="text-bottom-end">
-                                                <div>
-                                                    <span class="h4">Te presentamos las <b>3</b>
-                                                        Mejores</b> financieras </span>
+                                                <div class="text-bottom-end">
+                                                    <div>
+                                                        <span class="h4"> Puedes refinanciar tu crédito actual </span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                @else 
+                                                    <div class="text-bottom">
+                                                        <div>
+                                                            <span class="h4">Encontramos una mejor opción a tu crédito actual.</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="text-bottom-end">
+                                                        <div>
+                                                            <span class="h4"> Te ayudaremos a cambiarte a la mejor opción </span>
+                                                        </div>
+                                                    </div>
+                                            @endif
+                                            
 
                                         </div>
 
@@ -91,12 +112,7 @@
             </div>
         </div>
     </section>
-    @php
-        $chart1 = isset($new_financials[1]) ? $new_financials[1] : null;
-        $chart2 = isset($new_financials[0]) ? $new_financials[0] : null;
-        $chart3 = isset($new_financials[2]) ? $new_financials[2] : null;
-        $chart4 = $my_product_financial;
-    @endphp
+   
     <section class="position-relative">
         <div class="container-fluid pb-9 pb-lg-0 position-relative mt-n12">
             <div class="bg-body shadow-lg rounded-4 py-5">
@@ -461,6 +477,15 @@
                                 <div class="col-md-6 col-lg-5 mx-auto">
 
                                     <canvas id="myChartInteres"></canvas>
+                                    @if ($my_product != null)
+                                    <div class="mt-3 text-center" data-aos="fade-up" data-aos-delay="100">
+                                         <small>
+                                             <p class="text-warning py-0 ">Mejor opción: {{ $chart1->commercial_name }} </p> 
+                                             <p class="text-primary py-0 mt-n2 ">Tu crédito actual: {{ $my_product->commercial_name }}</p>
+                                         </small>
+                                    </div>
+                                        
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-12 text-center mt-5"  data-aos="fade-up">
@@ -490,6 +515,15 @@
                                         <div class="row align-items-center">
                                             <div class="col-12">
                                                 <canvas id="myChart"></canvas>
+                                                @if ($my_product != null)
+                                                <div class="mt-3 text-center" data-aos="fade-up" data-aos-delay="100">
+                                                    <small>
+                                                        <p class="text-warning py-0 ">Mejor opción: {{ $chart1->commercial_name }} </p> 
+                                                        <p class="text-primary py-0 mt-n2 ">Tu crédito actual: {{ $my_product->commercial_name }}</p>
+                                                    </small>
+                                                </div>
+                                                    
+                                                @endif
                                             </div>
     
                                         </div>
@@ -620,6 +654,15 @@
                                         <div class="row align-items-center">
                                             <div class="col-12">
                                                 <canvas id="myChartPlazo"></canvas>
+                                                @if ($my_product != null)
+                                                <div class="mt-3 text-center" data-aos="fade-up" data-aos-delay="100">
+                                                     <small>
+                                                         <p class="text-warning py-0 ">Mejor opción: {{ $chart1->commercial_name }} </p> 
+                                                         <p class="text-primary py-0 mt-n2 ">Tu crédito actual: {{ $my_product->commercial_name }}</p>
+                                                     </small>
+                                                </div>
+                                                    
+                                                @endif
                                             </div>
     
                                         </div>

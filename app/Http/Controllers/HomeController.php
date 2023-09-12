@@ -79,6 +79,7 @@ class HomeController extends Controller
         $new_financials       = FinancialProduct::customSortFinancials($financial_products);
         $final_financials     = FinancialProduct::customSortFinancials($financial_products, true);
         $my_product_financial = null;
+        $my_product           = null;
 
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             $is_best = false;
@@ -119,11 +120,12 @@ class HomeController extends Controller
                 'status_id' => $status_id,
             );
 
-            $my_product_financial = FinancialProduct::existMyFinancial($new_financials, $final_financials, $credit->financial_product_id);
+            $my_product_financial   = FinancialProduct::existMyFinancial($new_financials, $final_financials, $credit->financial_product_id);
+            $my_product             = FinancialProduct::getById($credit->financial_product_id);
             
-            return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial'));
+            return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_product'));
         }
-        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
+        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial', 'my_product'));
     }
 
     public function exitReport(Credit $credit)
