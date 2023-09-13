@@ -1189,7 +1189,8 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="rate_kc">Costo anual total real</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="number" name="chart_costo_anual_total" class="form-control" value="{{ $financial_product != null ? $financial_product->chart_costo_anual_total : null }}" >
+                                                                        <input type="number" name="chart_costo_anual_total" class="form-control" value="{{ $financial_product != null ? $financial_product->chart_costo_anual_total : null }}" step="any">
+
                                                                     </div>
                                                                 </div>
                                                             </div>
