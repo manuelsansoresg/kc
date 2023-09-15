@@ -2327,6 +2327,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_form                 = self::percentForm($history); // etapa 1
         $file                         = $percent_file == 100 ? 50 : 0;
         $form                         = $percent_form == 100 ? 50 : 0;
+        //dd($percent_form);
         $total_percent                = $file + $form;
         $percent_form_step2           = self::percentFormStep2($history); // etapa 2
 
