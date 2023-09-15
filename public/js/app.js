@@ -171,7 +171,9 @@ if (document.getElementById('action-model')) {
         var data = new FormData(new_form);
         axios.post("/panel/files/template/date", data).then(function (response) {
           var result = response.data;
-          window.history.back();
+          var url_redirect = null;
+          url_redirect = $('#url_redirect').val();
+          window.location = url_redirect;
         })["catch"](function (e) {});
       }
     });

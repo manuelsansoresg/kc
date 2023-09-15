@@ -27,7 +27,12 @@ class TemplateController extends Controller
         $product = $credit->creditProduct;
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
-
+       
+        
+        if ($model == 'controlDesk') {
+            $list_steps       = (new $actionStrategy)->listStep($history_id);
+            return view('panel.module.view_steps', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb', 'list_steps', 'actionStrategy'));
+        }
         return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb'));
     }
     

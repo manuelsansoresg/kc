@@ -232,7 +232,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/controlDesk/' . $history_id . '/show?step=' . $step,
+                'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
                 'col' => 'col-12'
             ],
         );
@@ -243,16 +243,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function configFormstep2($id_rel, $history_id)
     {
-        $credit = Credit::find($id_rel);
-        $name_form = 'frm-template_control_desk_step2';
-        $type_form = HistoryLog::KC_CONTROL_DESK_FORM_STEP_2;
-        $financial = Financial::select('id', 'commercial_name as name')->get();
-        $product = FinancialProduct::getProductByFinancial($credit->applied_financial);
+        $credit       = Credit::find($id_rel);
+        $name_form    = 'frm-template_control_desk_step2';
+        $type_form    = HistoryLog::KC_CONTROL_DESK_FORM_STEP_2;
+        $financial    = Financial::select('id', 'commercial_name as name')->get();
+        $product      = FinancialProduct::getProductByFinancial($credit->applied_financial);
 
-        $loan_type = config('enums.loan_type');
-        $sign_type = config('enums.sign_type');
-        $periodicity = config('enums.periodicity');
-        $step = isset($_GET['step']) ? $_GET['step'] : '2';
+        $loan_type    = config('enums.loan_type');
+        $sign_type    = config('enums.sign_type');
+        $periodicity  = config('enums.periodicity');
+        $step         = isset($_GET['step']) ? $_GET['step'] : '2';
 
         $elements = array(
             1 => [
@@ -451,7 +451,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/controlDesk/' . $history_id . '/show?step=' . $step,
+                'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
         );
@@ -929,7 +929,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/controlDesk/' . $history_id . '/show?step=' . $step,
+                'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
         );
@@ -1738,7 +1738,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/controlDesk/' . $history_id . '/show?step=' . $step,
+                'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
         );
@@ -1953,7 +1953,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/controlDesk/' . $history_id . '/show?step=' . $step,
+                'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
             7 => [
@@ -2101,7 +2101,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/kc-control-desk',
+                'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
 
@@ -2484,6 +2484,36 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
         return self::actionStep1($history_id);
     }
+    
+    public function listActionByStep($history_id, $step)
+    {
+        if ($step == 2) {
+            try {
+                return self::actionStep2($history_id);
+            } catch (\Exception $e) {
+                return null;
+            }
+        } elseif ($step == 3) {
+            try {
+                return self::actionStep3($history_id);
+            } catch (\Exception $e) {
+                return null;
+            }
+        } elseif ($step == 4) {
+            try {
+                return self::actionStep4($history_id);
+            } catch (\Exception $e) {
+                return null;
+            }
+        } elseif ($step == 5) {
+            try {
+                return self::actionStep5($history_id);
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+        return self::actionStep1($history_id);
+    }
 
     public function dinamicDeadline($history)
     {
@@ -2634,6 +2664,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_upload,
             'advisor' => $name_advisor,
             'options' => $file_option,
+            'link' => '/panel/template/action-document/controlDesk/'.$history_id.'?step=1&step_origin='
         );
 
         $data[] = array(
@@ -2643,6 +2674,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_form,
             'advisor' => $name_advisor,
             'options' => $form_option,
+            'link' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=1&step_origin='
         );
 
         return $data;
@@ -2706,6 +2738,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,
+            'link' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=2&step_origin='
         );
 
         return $data;
@@ -2815,6 +2848,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => 'N/A',
             'advisor' => $name_advisor,
             'options' => $file_option,
+            'link' => '/panel/template/action-document/controlDesk/'.$history_id.'?step=3&step_origin='
         );
 
         $data[] = array(
@@ -2824,6 +2858,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line2,
             'advisor' => $name_advisor,
             'options' => $form_option,
+            'link' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=3_1&step_origin='
         );
 
         $data[] = array(
@@ -2833,6 +2868,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line3,
             'advisor' => $name_advisor,
             'options' => $form_option2,
+            'link' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=3_2&step_origin='
         );
 
         return $data;
@@ -2894,6 +2930,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line1,
             'advisor' => $name_advisor,
             'options' => $form_option,
+            'link' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=4&step_origin='
         );
 
         return $data;
@@ -2957,6 +2994,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line1,
             'advisor' => $name_advisor,
             'options' => $form_option,
+            'link' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=5&step_origin=',
+            
         );
 
         return $data;
@@ -3503,12 +3542,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ),
             2 => array(
                 'title' => 'etapas',
-                'link' => '/panel/template/steps/controlDesk/' . $history->id . '/show',
+                'link' => '/panel/template/steps/controlDesk/'. $history->id.'/show',
                 'active' => true
             ),
             3 => array(
                 'title' => 'acciones',
-                'link' => '/panel/template/actions/controlDesk/' . $history->id . '/show?step=' . $step,
+                'link' => '/panel/template/steps/controlDesk/'. $history->id.'/show',
                 'active' => null
             ),
         );

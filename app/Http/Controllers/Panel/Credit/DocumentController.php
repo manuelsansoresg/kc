@@ -25,6 +25,7 @@ class DocumentController extends Controller
         $client           = $credit->creditClientPerson;
         $product          = $credit->creditProduct;
 
+
         return view('panel.credit.files', compact('files', 'credit_id', 'model', 'product', 'credit', 'client', 'history'));
     }
 

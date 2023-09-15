@@ -439,26 +439,3 @@
 .text-sm {
   font-size: 12px !important;
 }
-/* Estilo para el círculo cuando $key == 1 */
-.col-lg-4[data-aos="fade-up"][data-aos-delay="100"]:nth-child(2) {
-  position: relative; /* Añade posición relativa a la columna */
-}
-
-.col-lg-4[data-aos="fade-up"][data-aos-delay="100"]:nth-child(2)::after {
-  content: "Con la mejor opción puedes ahorrar el 80% en intereses y costos";
-  position: absolute;
-  top: -16%;
-  right: -50px;
-  width: 200px;
-  height: 200px;
-  background-color: yellow;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 16px;
-  color: black;
-  text-align: center;
-  font-weight: bold;
-  z-index: 1;
-}

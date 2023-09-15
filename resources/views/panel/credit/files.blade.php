@@ -111,6 +111,7 @@
                                             @endforeach
                                             <input type="hidden" id="action-model" name="model" value="{{ $model }}">
                                             <input type="hidden" id="action-id_rel" name="id_rel" value="{{ $credit_id }}">
+                                            <input type="hidden" id="url_redirect"value="/panel/template/steps/{{ $model }}/2524/show">
                                             <input type="hidden" id="step" value="{{ isset($_GET['step']) && $_GET['step']? $_GET['step'] : null }}">
             
                                                 <div class="form-group">
