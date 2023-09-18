@@ -154,7 +154,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/newCredit/'.$history_id.'/show',
+                'value' => '/panel/template/steps/newCredit/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
         );
@@ -276,6 +276,17 @@ class NewCreditStrategyTemplate implements TemplateInterface
         return $view_deadline;
     }
 
+    public function listActionByStep($history_id, $step)
+    {
+        if ($step == 2) {
+            return self::listStepReport($history_id);
+        }
+
+        return self::listAction($history_id);
+    }
+
+   
+
     public function listAction($history_id)
     {
         $history        = HistoryLog::find($history_id);
@@ -330,7 +341,11 @@ class NewCreditStrategyTemplate implements TemplateInterface
             HistoryLog::KC_CHECK_UP_ACTION_FORM,
         );
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+        $link[] = '/panel/template/action-document/newCredit/'.$history_id.'?step=1';
+        $link[] = '/panel/action-form/newCredit/'.$history_id.'/form?step=1';
+        
         foreach ($get_actions as $key => $get_action) {
+            
             $data[] = array(
                 'name' =>  $name[$key],
                 'subject' => $subject[$key],
@@ -338,6 +353,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'deadline' => $deadline[$key],
                 'advisor' => $name_advisor,
                 'options' => $option[$key],
+                'link' => $link[$key]
             );
         }
         return $data;
@@ -380,6 +396,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             $option1     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
             $option2     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
             
+            
     
             $data[] = array(
                 'name' =>  'Respuesta de módulo',
@@ -388,6 +405,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'deadline' =>$deadline1,
                 'advisor' => $name_advisor,
                 'options' => $option1,
+                'link' => '/panel/kc-check-up/report/answer_module/'.$history_id.'/show'
             );
             $data[] = array(
                 'name' =>  'Decisión',
@@ -396,6 +414,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'deadline' => $deadline2,
                 'advisor' => $name_advisor,
                 'options' => $option2,
+                'link' => '/panel/kc-check-up/report/desition/'.$history_id.'/show?type=1',
             );
         } catch (\Exception $th) {
             

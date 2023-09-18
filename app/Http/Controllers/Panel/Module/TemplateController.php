@@ -29,7 +29,7 @@ class TemplateController extends Controller
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
        
         
-        if ($model == 'controlDesk') {
+        if ($model == 'controlDesk' || $model == 'newCredit' || $model == 'debtCredit' ) {
             $list_steps       = (new $actionStrategy)->listStep($history_id);
             return view('panel.module.view_steps', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb', 'list_steps', 'actionStrategy'));
         }
