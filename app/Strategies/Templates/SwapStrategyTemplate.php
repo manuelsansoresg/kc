@@ -157,6 +157,8 @@ class SwapStrategyTemplate implements TemplateInterface
         } */
     }
 
+   
+
     public function configFormStep1($id_rel, $history_id)
     {
         $name_form    = 'frm-template_swap_step1';
@@ -313,7 +315,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=1',
+                'value' => '/panel/template/steps/swap/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
             11 => [
@@ -456,7 +458,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=2',
+                'value' => '/panel/template/steps/swap/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
         );
@@ -514,7 +516,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=2',
+                'value' => '/panel/template/steps/swap/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
         );
@@ -656,7 +658,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=2',
+                'value' => '/panel/template/steps/swap/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
         );
@@ -827,7 +829,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/swap/' . $history_id . '/show?step=3',
+                'value' => '/panel/template/steps/swap/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
             
@@ -1024,6 +1026,9 @@ class SwapStrategyTemplate implements TemplateInterface
         }
     }
 
+    
+
+
     public function listStep($history_id)
     {
         $history                    = HistoryLog::find($history_id);
@@ -1160,25 +1165,31 @@ class SwapStrategyTemplate implements TemplateInterface
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
         if ($step == 2) {
+            
             return self::listActionStep2($history_id);
         } elseif ($step == 3) {
+            
             return self::listActionStep3($history_id);
         } elseif ($step == 4) {
+            
             //*execute function in template controldeskstrategy
             $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
             $list       = (new $actionStrategy)->actionStep1($history_id, 1);
             return $list;
         } elseif ($step == 5) {
+            
             //*execute function in template controldeskstrategy
             $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
             $list       = (new $actionStrategy)->actionStep2($history_id, 1);
             return $list;
         } elseif ($step == 6) {
+            
             //*execute function in template controldeskstrategy
             $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
             $list       = (new $actionStrategy)->actionStep3($history_id, 1);
             return $list;
         } elseif ($step == 7) {
+            
             //*execute function in template controldeskstrategy
             $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
             $list       = (new $actionStrategy)->actionStep4($history_id, 1);
@@ -1190,6 +1201,49 @@ class SwapStrategyTemplate implements TemplateInterface
             return $list;
         }
         return self::listActionStep1($history_id);
+
+    }
+
+    public function listActionByStep($history_id, $step)
+    {
+        try {
+            if ($step == 2) {
+                return self::listActionStep2($history_id);
+            } elseif ($step == 3) {
+                return self::listActionStep3($history_id);
+            } elseif ($step == 4) {
+                //*execute function in template controldeskstrategy
+                $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
+                $list       = (new $actionStrategy)->actionStep1($history_id, 1);
+                return $list;
+            } elseif ($step == 5) {
+                
+                //*execute function in template controldeskstrategy
+                $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
+                $list       = (new $actionStrategy)->actionStep2($history_id, 1);
+                return $list;
+            } elseif ($step == 6) {
+                
+                //*execute function in template controldeskstrategy
+                $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
+                $list       = (new $actionStrategy)->actionStep3($history_id, 1);
+                return $list;
+            } elseif ($step == 7) {
+                
+                //*execute function in template controldeskstrategy
+                $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
+                $list       = (new $actionStrategy)->actionStep4($history_id, 1);
+                return $list;
+            } elseif ($step == 8) {
+                
+                //*execute function in template controldeskstrategy
+                $actionStrategy  = TemplateValues::STRATEGY['controlDesk'];
+                $list       = (new $actionStrategy)->actionStep5($history_id, 1);
+                return $list;
+            }
+            return self::listActionStep1($history_id);
+        } catch (\Exception $th) {
+        }
     }
 
     
@@ -1360,11 +1414,18 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form           = self::percentForm($history);
         $percent_file_2         = self::percentFile($credit->id, '1_2');
         
+        $name_advisor = null;
+        try {
+            $user                   = User::find($advisor->id);
+            $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+        }
+        
 
-        $user                   = User::find($advisor->id);
-        $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-
-        $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options           = self::menuOptions($history, 1);
         $view_dead_line_step1   = self::deadLineStep1($history);
         $view_dead_line_step2   = self::deadLineStep1_2($history);
@@ -1378,9 +1439,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $status_form            = ($percent_form >= 100) ? 'Concluido' : 'En curso';
        
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
 
         $option1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
         $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
@@ -1399,6 +1458,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option1,
+            'link' => '/panel/template/action-document/swap/'.$history_id.'?step=1'
         );
         $data[] = array(
             'name' => 'Formulario',
@@ -1407,6 +1467,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $option2,
+            'link' =>  '/panel/action-form/swap/'.$history_id.'/form?step=1',
         );
         $data[] = array(
             'name' => 'Carga',
@@ -1415,6 +1476,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
             'options' => $option3,
+            'link' =>  '/panel/template/action-document/swap/'.$history_id.'?step=1_2',
         );
         return $data;
     }
@@ -1423,7 +1485,7 @@ class SwapStrategyTemplate implements TemplateInterface
     {
         $history                = HistoryLog::find($history_id);
         $credit                 = $history->historyCredit;
-        $advisor                = $credit->creditAdvisor;
+        
         $status_step2           = 'En espera';
         $status_step2_2         = 'En espera';
         $status_step2_3         = 'En espera';
@@ -1433,13 +1495,23 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form_2_2       = self::percentFormStep2_2($history);
         $percent_form_2_3       = self::percentFile($credit->id, '2');
         $percent_form_2_4       = self::percentFormStep2_3($history);
+        
 
-        $user                   = User::find($advisor->id);
-        $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-
-        $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+        $name_advisor = null;
+        try {
+            $advisor                = $credit->creditAdvisor;
+            $user                   = User::find($advisor->id);
+            $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+            
+        } catch (\Exception $th) {
+        }
+        
         $menu_options           = self::menuOptionsStep2($history, 2);
-
+        
         $view_dead_line_step1   = self::deadLineFormStep2($history);
         $view_dead_line_step2   = self::deadLineFormStep2_2($history);
         $view_dead_line_step3   = self::deadLineFileStep2_3($history);
@@ -1455,9 +1527,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $status_step2_4         = ($percent_form_2_4 >= 100) ? 'Concluido' : 'En curso';
        
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
 
         $option1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
@@ -1479,6 +1549,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option1,
+            'link' =>  '/panel/action-form/swap/'.$history_id.'/form?step=2',
         );
         $data[] = array(
             'name' => 'Firma',
@@ -1488,6 +1559,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $option2,
+            'link' =>  '/panel/action-form/swap/'.$history_id.'/form?step=2_2',
         );
         $data[] = array(
             'name' => 'Carga',
@@ -1497,6 +1569,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
             'options' => $option3,
+            'link' =>  '/panel/template/action-document/swap/'.$history_id.'?step=2',
         );
         
         $data[] = array(
@@ -1507,6 +1580,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step4,
             'advisor' => $name_advisor,
             'options' => $option4,
+            'link' =>  '/panel/action-form/swap/'.$history_id.'/form?step=2_3',
         );
         return $data;
     }
@@ -1515,7 +1589,7 @@ class SwapStrategyTemplate implements TemplateInterface
     {
         $history                = HistoryLog::find($history_id);
         $credit                 = $history->historyCredit;
-        $advisor                = $credit->creditAdvisor;
+        
         $status_file            = 'En espera';
         $status_form           = 'En espera';
         $status_form_2         = 'En espera';
@@ -1524,13 +1598,21 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form           = self::percentFormStep3($history);
         $percent_form_2         = self::percentFormStep3_2($history);
         
+        $name_advisor = null;
+        try {
+            $advisor                = $credit->creditAdvisor;
+            $user                   = User::find($advisor->id);
+            $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+       
 
-        $user                   = User::find($advisor->id);
-        $role                   = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-
-        $name_advisor           = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
         $menu_options           = self::menuOptionsStep3($history, 3);
-
         $view_dead_line_step1   = self::deadLineFormStep3($history);
         $view_dead_line_step2   = self::deadLineFormStep3_2($history);
         $view_dead_line_step3   = self::deadLineFormStep3_3($history);
@@ -1544,9 +1626,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $status_form_2          = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
        
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
 
         $option1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
         $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
@@ -1567,6 +1647,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option1,
+            'link' =>  '/panel/template/action-document/swap/'.$history_id.'?step=3',
         );
         $data[] = array(
             'name' => 'Formulario',
@@ -1576,6 +1657,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $option2,
+            'link' =>  '/panel/action-form/swap/'.$history_id.'/form?step=3',
         );
         $data[] = array(
             'name' => 'Decisión',
@@ -1585,6 +1667,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
             'options' => $option3,
+            'link' =>  '/panel/action-form/swap/'.$history_id.'/form?step=3_2',
         );
         
         
@@ -1593,119 +1676,153 @@ class SwapStrategyTemplate implements TemplateInterface
 
     public function deadLineFormStep2($history)
     {
-        $credit         = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep2($history);
-        if ($percent_form == 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2, $credit->id, 1);
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep2($history);
+            if ($percent_form == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2, $credit->id, 1);
+            }
+            $max_hour                     = self::HOUR_STEP_2;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_2], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            
+            $hour                         = $history->created_at;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+            } catch (\Exception $th) {
+            
+            }
+            return null;
         }
-        $max_hour                     = self::HOUR_STEP_2;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_2], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        
-        $hour                         = $history->created_at;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
-    }
 
     public function deadLineFormStep2_2($history)
     {
-        $credit         = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep2_2($history);
-        $max_hour                     = self::HOUR_STEP_2_2;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_2_2], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        $hour                         = $history->created_at;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep2_2($history);
+            $max_hour                     = self::HOUR_STEP_2_2;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_2_2], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $hour                         = $history->created_at;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        return null;
     }
     
     public function deadLineFileStep2_3($history)
     {
-        $credit         = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFile($credit->id);
-        if ($percent_form == 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, $credit->id, 1);
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFile($credit->id);
+            if ($percent_form == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_2_3, $credit->id, 1);
+            }
+            $max_hour                     = self::HOUR_STEP_2_3;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD_STEP_2_3], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            //throw $th;
         }
-        $max_hour                     = self::HOUR_STEP_2_3;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD_STEP_2_3], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        return null;
     }
     
     public function deadLineFormStep3($history)
     {
-        $credit         = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFile($credit->id);
-        if ($percent_form == 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_3, $credit->id, 1);
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFile($credit->id);
+            if ($percent_form == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_3, $credit->id, 1);
+            }
+            $max_hour                     = self::HOUR_STEP_3;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD_STEP_3], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            //throw $th;
         }
-        $max_hour                     = self::HOUR_STEP_3;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_UPLOAD_STEP_3], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        return null;
     }
     
     public function deadLineFormStep3_2($history)
     {
-        $credit         = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep3($history);
-        $max_hour                     = self::HOUR_STEP_3;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_3], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep3($history);
+            $max_hour                     = self::HOUR_STEP_3;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_3], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        return null;
     }
     
     public function deadLineFormStep3_3($history)
     {
-        $credit         = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep3_2($history);
-        $max_hour                     = self::HOUR_STEP_3;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_3_2], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep3_2($history);
+            $max_hour                     = self::HOUR_STEP_3;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_SWAP_FORM_STEP_3_2], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            //throw $th;
+        }
     }
    
     public function deadLineFileStep2_4($history)
     {
-        $credit         = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep2_3($history);
-        
-        $max_hour                     = self::HOUR_STEP_2_3;
-        $hour                         = $history->created_at;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep2_3($history);
+            
+            $max_hour                     = self::HOUR_STEP_2_3;
+            $hour                         = $history->created_at;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        return null;
     }
 
     public function actionStep2($history_id)
