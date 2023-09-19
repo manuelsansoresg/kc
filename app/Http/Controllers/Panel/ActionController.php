@@ -37,6 +37,7 @@ class ActionController extends Controller
     {
         $credit = Credit::find($history->id_rel);
         $credit_id = $credit->id;
+        
         if ($status_id == HistoryLog::KC_DELIVERY_FORM_STEP_3) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit_id, 1);
             //*inicializar las acciones de la siguiente etapa en curso

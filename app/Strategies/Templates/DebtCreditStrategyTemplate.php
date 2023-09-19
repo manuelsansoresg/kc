@@ -416,10 +416,18 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $in_progress    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM], $credit->id)[0];
         $hour           = $in_progress->date_status_progress;
 
-        $user = User::find($advisor->id);
-        $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+        $name_advisor = null;
+        try {
+            $user = User::find($advisor->id);
+            $role = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+            $name_advisor   = $role.' - '.$advisor->name.' '.$advisor->last_name;
+            if ($advisor->id == Auth::user()->id) {
+                $name_advisor = 'Tú';
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+        }
         
-        $name_advisor   = $role.' - '.$advisor->name.' '.$advisor->last_name;
 
         $menu_options   = self::menuOptions($history);
         $color_inf_credit   = 'success';
@@ -434,9 +442,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
         $option[]  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
 
-        if ($advisor->id == Auth::user()->id) {
-            $name_advisor = 'Tú';
-        }
+        
 
         $name[] = 'Carga';
         $name[] = 'Formulario';
@@ -759,7 +765,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
             ),
             3 => array(
                 'title' => 'acciones',
-                'link' => '/panel/template/actions/debtCredit/'.$history->id.'/show?step=1',
+                'link' => '/panel/template/steps/debtCredit/'.$history->id.'/show',
                 'active' => null
                ),
                4 => array(

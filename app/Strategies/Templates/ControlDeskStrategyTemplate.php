@@ -2101,7 +2101,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
+                'value' => '/panel/kc-control-desk',
                 'col' => 'col-12'
             ],
 

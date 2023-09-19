@@ -589,6 +589,19 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return self::actionStep1($history_id);
     }
 
+    public function listActionByStep($history_id, $step)
+    {
+        
+        if ($step == 2) {
+            return self::actionStep2($history_id);
+        } elseif ($step == 3) {
+            return self::actionStep3($history_id);
+        } elseif ($step == 4) {
+            return self::actionStep4($history_id);
+        }
+        return self::actionStep1($history_id);
+    }
+
     public function percentForm($history)
     {
         $percent_form = 0;
@@ -604,17 +617,23 @@ class DeliveryStrategyTemplate implements TemplateInterface
     
     public function deadLineStep1($history)
     {
-        $color_inf_credit             = 'success';
-        $credit                       = $history->historyCredit;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM], $credit->id)[0];
-        $percent_form                 = self::percentForm($history);
-        $max_hour                     = self::HOUR_STEP_1;
-        $hour                         = $history->created_at;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        
+        try {
+            $color_inf_credit             = 'success';
+            $credit                       = $history->historyCredit;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM], $credit->id, 0)[0];
+            $percent_form                 = self::percentForm($history);
+            $max_hour                     = self::HOUR_STEP_1;
+            $hour                         = $history->created_at;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        return null;
     }
 
     public function actionStep1($history_id)
@@ -623,8 +642,10 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
         $percent_form   = self::percentForm($history);
+        
         $status_file    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $name_advisor   = null;
+        
 
         try {
             $user = User::find($advisor->id);
@@ -636,9 +657,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         } catch (\Exception $th) {
         //throw $th;
         }
-
         $menu_options   = self::menuOptions($history, 1);
-
         $view_dead_line  = self::deadLineStep1($history);
 
         $file_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
@@ -656,29 +675,35 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line,
             'advisor' => $name_advisor,
             'options' => $file_option,
+            'link' => '/panel/action-form/delivery/'.$history_id.'/form?step=1'
         );
         return $data;
     }
 
     public function deadLineStep2($history)
     {
-        $credit         = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentStep2($credit->id);
-        /* if ($percent_form == 100) {
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit->id, 1);
-            //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit->id, 0);
-        } */
-        $max_hour                     = self::HOUR_STEP_2;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM_STEP_2], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentStep2($credit->id);
+            /* if ($percent_form == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit->id, 1);
+                //*inicializar las acciones de la siguiente etapa en curso
+                HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3, null, false);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_3, $credit->id, 0);
+            } */
+            $max_hour                     = self::HOUR_STEP_2;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM_STEP_2], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        return null;
     }
 
     public function actionStep2($history_id)
@@ -722,23 +747,28 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $form_option_2,
+            'link' => '/panel/action-form/delivery/'.$history_id.'/form?step=2'
         );
         return $data;
     }
 
     public function deadLineStep3($history)
     {
-        $credit                       = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep3($credit->id);
-        $max_hour                     = self::HOUR_STEP_3;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM_STEP_3], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        try {
+            $credit                       = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep3($credit->id);
+            $max_hour                     = self::HOUR_STEP_3;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM_STEP_3], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            return null;
+        }
     }
 
     public function actionStep3($history_id)
@@ -777,23 +807,29 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,
+            'link' => '/panel/action-form/delivery/'.$history_id.'/form?step=3'
         );
         return $data;
     }
 
     public function deadLineStep4($history)
     {
-        $credit                       = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep4($credit->id);
-        $max_hour                     = self::HOUR_STEP_4;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM_STEP_4], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        try {
+            $credit                       = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep4($credit->id);
+            $max_hour                     = self::HOUR_STEP_4;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_DELIVERY_FORM_STEP_4], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        return null;
     }
     
     public function actionStep4($history_id)
@@ -834,6 +870,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,
+            'link' => '/panel/action-form/delivery/'.$history_id.'/form?step=4'
+            
         );
 
         return $data;
@@ -1393,7 +1431,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
             ),
             3 => array(
              'title' => 'acciones',
-             'link' => '/panel/template/actions/delivery/'.$history->id.'/show?step='.$step,
+             'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
              'active' => null
             ),
             4 => array(

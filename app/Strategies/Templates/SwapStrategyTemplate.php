@@ -2495,7 +2495,7 @@ class SwapStrategyTemplate implements TemplateInterface
             ),
             3 => array(
              'title' => 'acciones',
-             'link' => '/panel/template/actions/swap/'.$history->id.'/show?step='.$step,
+             'link' => '/panel/template/steps/swap/'.$history->id.'/show',
              'active' => null
             ),
             4 => array(
