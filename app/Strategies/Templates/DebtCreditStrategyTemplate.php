@@ -394,6 +394,15 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         return $view_deadline;
     }
 
+    public function listActionByStep($history_id, $step)
+    {
+        if ($step == 2) {
+            return self::listStepReport($history_id);
+        }
+
+        return self::listAction($history_id);
+    }
+
     public function listAction($history_id)
     {
         $history        = HistoryLog::find($history_id);
@@ -441,6 +450,11 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         );
       
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
+
+        $link[] = '/panel/template/action-document/debtCredit/'.$history_id.'?step=1';
+        $link[] = '/panel/action-form/debtCredit/'.$history_id.'/form?step=1';
+
+
         foreach ($get_actions as $key => $get_action) {
             $data[] = array(
                 'name' =>  $name[$key],
@@ -449,6 +463,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'deadline' => $deadline[$key],
                 'advisor' => $name_advisor,
                 'options' => $option[$key],
+                'link' => $link[$key]
             );
         }
         return $data;
@@ -506,6 +521,9 @@ class DebtCreditStrategyTemplate implements TemplateInterface
       
         $get_actions    = HistoryLog::getByStatus($data_actions, $credit->id);
 
+        $link[] = '/panel/kc-check-up/report/answer_module/'.$history_id.'/show';
+        $link[] = '/panel/kc-check-up/report/desition/'.$history_id.'/show?type=2';
+
         foreach ($get_actions as $key => $get_action) {
             $data[] = array(
                 'name' =>  $name[$key],
@@ -514,6 +532,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'deadline' => $deadline[$key],
                 'advisor' => $name_advisor,
                 'options' => $option[$key],
+                'link' => $link[$key]
             );
         }
         return $data;
