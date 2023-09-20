@@ -583,7 +583,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
             ),
             3 => array(
              'title' => 'acciones',
-             'link' => '/panel/template/actions/afterMarket/'.$history->id.'/show?step='.$step,
+             'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
              'active' => null
             ),
             4 => array(
