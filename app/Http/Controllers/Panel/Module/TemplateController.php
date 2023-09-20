@@ -28,7 +28,7 @@ class TemplateController extends Controller
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
         
-        if ($model == 'controlDesk' || $model == 'newCredit' || $model == 'debtCredit' || $model == 'swap' || $model == 'delivery' ) {
+        if ($model == 'controlDesk' || $model == 'newCredit' || $model == 'debtCredit' || $model == 'swap' || $model == 'delivery'  || $model == 'afterMarket' ) {
             $list_steps       = (new $actionStrategy)->listStep($history_id);
             return view('panel.module.view_steps', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb', 'list_steps', 'actionStrategy'));
         }

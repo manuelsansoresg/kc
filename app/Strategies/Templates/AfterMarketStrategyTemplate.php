@@ -122,6 +122,22 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
                 'col' => null
             ],
+            5 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/steps/afterMarket/'.$history_id.'/show',
+                'col' => 'col-12'
+            ],
             
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
@@ -195,6 +211,11 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         return self::actionStep1($history_id);
     }
 
+    public function listActionByStep($history_id, $step)
+    {
+        return self::actionStep1($history_id);
+    }
+
     
     
     public function deadLineStep1($history, $percent, $show_max_hour = false)
@@ -258,6 +279,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option,
+            'link' => '/panel/action-form/afterMarket/'.$history_id.'/form?step=1'
         );
         return $data;
     }
