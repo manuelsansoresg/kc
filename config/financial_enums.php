@@ -24,6 +24,7 @@ return [
         1 => 'Crédito nómina',
         2 => 'Crédito personal',
         3 => 'Tarjeta de crédito',
+        4 => 'Crédito pensionados',
     ),
     
     'colateral_products' => array(
