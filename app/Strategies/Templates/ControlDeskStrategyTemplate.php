@@ -2463,9 +2463,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $max_hour           = 20;
         $percent            = self::getPercent($history);
         $color_inf_credit   = 'success';
-        if ($history->id == 181) {
-            dd($history->created_at);
-        }
         $hour               = $history->created_at;
 
         $data_deadline      = deadline($hour, $max_hour, $percent, $color_inf_credit);
