@@ -31,6 +31,8 @@ if (!function_exists('deadline')) {
         $intervalo = $fecha1->diff($fecha2);
         $hour = $intervalo->format('%h');
         $day = $intervalo->format('%d');
+        $total_hours = $intervalo->days * 24 + $intervalo->h; // Total de horas
+
 
         $lbl_hour   = '';
         $color      = 'success';
@@ -41,7 +43,7 @@ if (!function_exists('deadline')) {
             $lbl_hour = 'Concluido';
             $color      = 'success';
         } else {
-            if ($hour > $max_hour) { //*deadline end
+            if ($total_hours > $max_hour) { //*deadline end
                 $lbl_hour = 'Vencido';
                 $color      = 'danger';
             } elseif ($hour == 0 && $day == 0) {
