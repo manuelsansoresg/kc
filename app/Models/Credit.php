@@ -117,8 +117,11 @@ class Credit extends Model
                 $hour             = $query->created_at;
                 $max_hour         = 24;
                 $data_deadline    = deadlineKc($hour, $max_hour);
+                if ($history->id_rel == 181) {
+                    //dd($query->created_at, $data_deadline);
+                }
                 $in_progress      = (new $templateStrategy)->getPercent($history, true);
-                $dead_line        = (new $templateStrategy)->moduleDeadline($history);
+                $dead_line        = $query->created_at.(new $templateStrategy)->moduleDeadline($history);
                 
                 $hour             = $data_deadline['lbl_hour'];
                 $status_id        = $history->status_id;
