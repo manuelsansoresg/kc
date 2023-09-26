@@ -2109,7 +2109,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'product'
     }, {
-      data: 'origin'
+      data: 'organizacion'
     }, {
       data: 'label'
     }, {

@@ -53,13 +53,14 @@ class Lead extends Model
                 $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
                 $validate       = (new $leadStrategy)->getValidate($query->id);
     
-                $option = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'validate' => $validate])->render();
-                $lead_view = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
+                $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'validate' => $validate])->render();
+                $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
                 
-                $lbl_status = '<span class="text-success">Valido</span>';
+                $lbl_status     = '<span class="text-success">Valido</span>';
                 
                 $product        = $query->productLead;
                 $user           = $query->advisorLead;
+                $agreement      = $query->agreementLead;
     
                 
                 if ($validate['error'] === true) {
@@ -74,7 +75,7 @@ class Lead extends Model
                         'name' => $lead_view,
                         'date' => formatDateNameMonth($query->created_at),
                         'product' => ($product != null) ? $product->alias : '',
-                        'origin' => $origin,
+                        'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
                         'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
                         'status' => $lbl_status,
@@ -86,7 +87,7 @@ class Lead extends Model
                         'name' => $lead_view,
                         'date' => formatDateNameMonth($query->created_at),
                         'product' => ($product != null) ? $product->alias : '',
-                        'origin' => $origin,
+                        'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
                         'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
                         'status' => $lbl_status,

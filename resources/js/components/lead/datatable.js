@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'name' },
             { data: 'date' },
             { data: 'product' },
-            { data: 'origin' },
+            { data: 'organizacion' },
             { data: 'label' },
             { data: 'advisor' },
             { data: 'status' },

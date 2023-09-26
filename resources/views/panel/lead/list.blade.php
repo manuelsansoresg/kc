@@ -34,7 +34,7 @@
                                             <th data-priority="1">Nombre</th>
                                             <th>Fecha</th>
                                             <th>Producto</th>
-                                            <th>Origen</th>
+                                            <th>Organización</th>
                                             <th>Etiqueta</th>
                                             <th>Asesor</th>
                                             <th>Estatus</th>
