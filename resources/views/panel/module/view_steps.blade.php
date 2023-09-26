@@ -113,10 +113,10 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>Acción</th>
-                                                                                    <th class="d-none d-md-flex">Asunto</th>
+                                                                                    <th class="d-none d-md-table-cell">Asunto</th>
                                                                                     <th>Estatus</th>
-                                                                                    <th class="d-none d-md-flex">Deadline</th>
-                                                                                    <th class="d-none d-md-flex">Responsable</th>
+                                                                                    <th class="d-none d-md-table-cell">Deadline</th>
+                                                                                    <th class="d-none d-md-table-cell">Responsable</th>
                                                                                     <th></th>
                                                                                 </tr>
                                                                             </thead>
@@ -126,17 +126,17 @@
                                                                                     <tbody>
                                                                                         <tr>
                                                                                             <td>{!! $list_actions['name'] !!}</td>
-                                                                                            <td class="d-none d-md-flex">{{ $list_actions['subject'] }}
+                                                                                            <td class="d-none d-md-table-cell">{{ $list_actions['subject'] }}
                                                                                             </td>
                                                                                             <td>{{ $list_actions['status'] }}
                                                                                             </td>
-                                                                                            <td class="d-none d-md-flex">{!! $list_actions['deadline'] !!}</td>
-                                                                                            <td class="d-none d-md-flex">{{ $list_actions['advisor'] }}
+                                                                                            <td class="d-none d-md-table-cell">{!! $list_actions['deadline'] !!}</td>
+                                                                                            <td class="d-none d-md-table-cell">{{ $list_actions['advisor'] }}
                                                                                             </td>
                                                                                             <td>
                                                                                                 @if (isset($list_actions['link']))
                                                                                                     <a href="{{ $list_actions['link'] }}"
-                                                                                                        class="btn btn-primary">Abrir</a>
+                                                                                                        class="btn btn-sm btn-primary">Abrir</a>
                                                                                                 @endif
                                                                                             </td>
                                                                                         </tr>
