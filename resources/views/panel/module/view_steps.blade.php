@@ -70,7 +70,7 @@
                                 <div class="col-12 col-md-9">
                                     <div class="card card-bordered card-preview">
                                         <div class="card-inner">
-                                            <div class="row text-secondary">
+                                            <div class="row text-secondary d-none d-md-flex">
                                                 <div class="col-12 col-md-1">#</div>
                                                 <div class="col-12 col-md-3">Etapa</div>
                                                 <div class="col-12 col-md-3">Estatus</div>
@@ -113,10 +113,10 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th>Acción</th>
-                                                                                    <th>Asunto</th>
+                                                                                    <th class="d-none d-md-flex">Asunto</th>
                                                                                     <th>Estatus</th>
-                                                                                    <th>Deadline</th>
-                                                                                    <th>Responsable</th>
+                                                                                    <th class="d-none d-md-flex">Deadline</th>
+                                                                                    <th class="d-none d-md-flex">Responsable</th>
                                                                                     <th></th>
                                                                                 </tr>
                                                                             </thead>
@@ -126,12 +126,12 @@
                                                                                     <tbody>
                                                                                         <tr>
                                                                                             <td>{!! $list_actions['name'] !!}</td>
-                                                                                            <td>{{ $list_actions['subject'] }}
+                                                                                            <td class="d-none d-md-flex">{{ $list_actions['subject'] }}
                                                                                             </td>
                                                                                             <td>{{ $list_actions['status'] }}
                                                                                             </td>
-                                                                                            <td>{!! $list_actions['deadline'] !!}</td>
-                                                                                            <td>{{ $list_actions['advisor'] }}
+                                                                                            <td class="d-none d-md-flex">{!! $list_actions['deadline'] !!}</td>
+                                                                                            <td class="d-none d-md-flex">{{ $list_actions['advisor'] }}
                                                                                             </td>
                                                                                             <td>
                                                                                                 @if (isset($list_actions['link']))
