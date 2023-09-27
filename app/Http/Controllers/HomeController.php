@@ -75,7 +75,7 @@ class HomeController extends Controller
         $status_id            = $history->status_id;
         $agreement            = $credit->creditAgreement;
         $financials           = $agreement != null ? $agreement->financialAgreement : null;
-        $financial_products   = FinancialProduct::getByRate();
+        $financial_products   = FinancialProduct::getByRate($credit->agreement_id);
         $new_financials       = FinancialProduct::customSortFinancials($financial_products);
         $final_financials     = FinancialProduct::customSortFinancials($financial_products, true);
         $my_product_financial = null;

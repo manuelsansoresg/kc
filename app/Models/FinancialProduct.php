@@ -86,7 +86,7 @@ class FinancialProduct extends Model
     ];
 
 
-    public static function getByRate()
+    public static function getByRate($agreement_id)
     {
         return FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
                                 'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
@@ -94,6 +94,8 @@ class FinancialProduct extends Model
                                 'financial_products.id as id'
                                 )
                         ->join('financials', 'financials.id', 'financial_products.financial_id')
+                        ->join('financial_agreements', 'financial_agreements.id', 'financials.id')
+                        ->where('financial_agreements.agreement_id', $agreement_id)
                         ->orderBy('rate_kc', 'DESC')
                         ->get();
     }
