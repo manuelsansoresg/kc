@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class FinancialProduct extends Model
 {
@@ -88,16 +89,23 @@ class FinancialProduct extends Model
 
     public static function getByRate($agreement_id)
     {
-        return FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+        DB::connection()->enableQueryLog();
+        $financial_agreements = FinancialAgreement::where('agreement_id', $agreement_id)->get();
+        $financial_ids = array();
+        foreach ($financial_agreements as $financial_agreement) {
+            $financial_ids[] = $financial_agreement->financial_id;
+        }
+        $sql =  FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
                                 'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
                                 'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
                                 'financial_products.id as id'
                                 )
                         ->join('financials', 'financials.id', 'financial_products.financial_id')
-                        ->join('financial_agreements', 'financial_agreements.id', 'financials.id')
-                        ->where('financial_agreements.agreement_id', $agreement_id)
+                        ->whereIn('financial_products.financial_id', $financial_ids)
                         ->orderBy('rate_kc', 'DESC')
                         ->get();
+        //$queries = DB::getQueryLog();
+        return $sql;
     }
 
     public static function saveEdit($request)

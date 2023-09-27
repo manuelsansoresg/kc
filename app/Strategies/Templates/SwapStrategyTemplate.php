@@ -661,6 +661,24 @@ class SwapStrategyTemplate implements TemplateInterface
                 'value' => '/panel/template/steps/swap/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
+            9 => [
+                'title_section' => null,
+                'title' => 'Saltar',
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'href',
+                'link' => null,
+                'class' => 'btn btn-primary',
+                'target' => '_blank',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+                'col' => 'col-12 col-md-4'
+            ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_button' => $name_button, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
