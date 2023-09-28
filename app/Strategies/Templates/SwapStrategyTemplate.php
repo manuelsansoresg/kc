@@ -531,8 +531,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $name_form = 'frm-template_swap_step2-3';
         $type_form = HistoryLog::KC_SWAP_FORM_STEP_2_3;
         $client_name = $client_person->last_name.' '.$client_person->second_last_name.' '.$client_person->name;
-        $financial_t = $credit->creditAppliedFinancial;
-        $name_financial_t = $financial_t->email;
+        $get_credit_financial = FinancialProduct::find($credit->financial_product_id);
+        $financial = Financial::find($get_credit_financial->financial_id);
+        $name_financial_t = isset($financial->email)? $financial->email : null;
         $id_number = $credit->id_number;
         $rfc = $client_person->rfc;
         $current_credit_number = $credit->current_credit_number;
@@ -1014,7 +1015,9 @@ class SwapStrategyTemplate implements TemplateInterface
             if (isset($data_credit['termination_email_sent']) && $data_credit['termination_email_sent'] == 1) {
                 $credit   = Credit::find($id_rel);
                 $client         = $credit->creditClientPerson;
-                $financial_t = $credit->creditAppliedFinancial;
+                $get_financial_product = FinancialProduct::find($credit->financial_product_id);
+                $financial_t = Financial::find($get_financial_product->financial_id);
+
                 $name_financial_t = $financial_t->email;
                 if ($credit->signed == 1) { //* equal percent_form_2_4
                     HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_3, $credit->id, 1);

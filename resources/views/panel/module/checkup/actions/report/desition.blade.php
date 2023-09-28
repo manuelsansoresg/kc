@@ -73,7 +73,7 @@
                                     @endphp
                                     @foreach ($financials as $index => $financial_product)
                                     <div class="col-12 col-md-3">
-                                        <a class="pointer  mt-3" onclick="desition({{ $credit->id }}, {{ $financial_product->financial_id }}, {{ $type }})" target="_blank">
+                                        <a class="pointer  mt-3" onclick="desition({{ $credit->id }}, {{ $financial_product->id }}, {{ $type }})" target="_blank">
                                             <div class="card card-bordered pricing">
                                                 @if ($credit->financial_product_id == $financial_product->id)
                                                     <span class="pricing-badge badge bg-primary">Mi financiera</span>

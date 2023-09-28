@@ -3255,7 +3255,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $total_valid = 0;
 
 
-        if ($credit != null && $credit->applied_financial_product != null) {
+        if ($credit != null && $credit->applied_financial != null) {
             $total_valid = $total_valid + 1;
         }
         if ($credit != null && $credit->applied_loan_type != null) {

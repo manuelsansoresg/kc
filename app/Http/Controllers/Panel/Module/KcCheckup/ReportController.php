@@ -92,6 +92,8 @@ class ReportController extends Controller
     {
        
         $credit     = Credit::find($credit_id);
+        $get_financial_product = FinancialProduct::find($financial_id);
+
         if ($credit != null) {
             if ($type == 1) { // credito nuevo
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION, null, false);
@@ -99,8 +101,9 @@ class ReportController extends Controller
 
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_DESITION, $credit->id, 1);//marcar como finalizada
                 File::updateModel($credit->id, HistoryLog::KC_CONTROL_DESK, [HistoryLog::KC_CHECK_UP, HistoryLog::ADD_PROSPECT]);
-    
-                $credit->applied_financial = $financial_id;
+                
+                $credit->applied_financial = $get_financial_product->financial_id;
+                $credit->financial_product_id = $get_financial_product->id;
                 $credit->update();
                 
                 HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CHECK_UP);
@@ -113,8 +116,8 @@ class ReportController extends Controller
 
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, $credit->id, 1);
                 File::updateModel($credit->id, HistoryLog::KC_SWAP, [HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::ADD_PROSPECT]);
-                
-                $credit->applied_financial = $financial_id;
+                $credit->applied_financial = $get_financial_product->financial_id;
+                $credit->financial_product_id = $get_financial_product->id;
                 $credit->update();
 
                 HistoryLog::move($credit->id, HistoryLog::KC_SWAP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
