@@ -297,6 +297,9 @@
                     <li>
                         {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
                         <button class="btn btn-primary">{{ $name_button }}</button>
+                        @if ($type_form == 43) {{-- swap --}}
+                            <a  onclick="saltarSwap()" class="btn btn-primary">Saltar</a>
+                        @endif
                     </li>
                 </ul>
             </div>

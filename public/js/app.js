@@ -3686,7 +3686,13 @@ function saveForm(id_form, model) {
 
     window.location = url_redirect;
   })["catch"](function (e) {});
-} //TODO: alerta si detecto kyc
+} //*boton saltar en swap etapa 2_3   
+
+
+window.saltarSwap = function () {
+  $('#send_email').val(0);
+  $("#frm-template_swap_step2-3").submit(); // Envía el formulario
+}; //TODO: alerta si detecto kyc
 
 
 window.kycCreditHistory = function (history_id, type) {

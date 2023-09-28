@@ -827,6 +827,13 @@ function saveForm(id_form, model) {
         .catch(e => {
         });
 }
+
+//*boton saltar en swap etapa 2_3   
+window.saltarSwap = function ()
+{
+    $('#send_email').val(0);
+    $("#frm-template_swap_step2-3").submit(); // Envía el formulario
+}
 //TODO: alerta si detecto kyc
 window.kycCreditHistory = function(history_id, type) {
     let params    = {1:'curp', 2: 'ine', 3: 'rfc', 4: 'curp'};

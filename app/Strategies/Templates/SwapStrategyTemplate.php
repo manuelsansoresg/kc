@@ -663,22 +663,22 @@ class SwapStrategyTemplate implements TemplateInterface
             ],
             9 => [
                 'title_section' => null,
-                'title' => 'Saltar',
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
+                'title' => null,
+                'name_field' => 'send_email',
+                'id_field' => 'send_email',
+                'comment_admin' => '',
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'href',
-                'link' => null,
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
+                'type' => 'hidden',
                 'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
+                'options' => 'null',
+                'is_required' => false,
                 'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
+                'value' => 1,
+                'col' => 'col-12'
             ],
+            
+            
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_button' => $name_button, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -1022,23 +1022,25 @@ class SwapStrategyTemplate implements TemplateInterface
                     HistoryLog::move($credit->id, HistoryLog::KC_SWAP_UPLOAD_STEP_3, HistoryLog::KC_SWAP_UPLOAD_STEP_3, null, false);
                     HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_3, $credit->id, 0);
 
-                    $send_grid_create_sender = new Csendgrid();
-                    $sender = $send_grid_create_sender->createEmail($credit->id);
-
-                    $get_files_attach = File::getFilesBySwap($credit->id);
-                    $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', $sender, '', $get_files_attach);
-                    $send_grid->setTemplate('d-944f2768988a43dca2e0ad689954fd20');
-                    $data_params = array(
-                        'name' => $client->name,
-                        'last_name' => $client->last_name,
-                        'second_last_name' => $client->second_last_name,
-                        'if_number' => $credit->id_number,
-                        'client_rfc' => $client->rfc,
-                        'current_credit_number' => $credit->current_credit_number,
-                        'current_loan' => $credit->current_loan,
-                     );
-                    $send_grid->setParams($data_params);
-                    $send_grid->send();
+                    if ($request->send_email == 1) {
+                        $send_grid_create_sender = new Csendgrid();
+                        $sender = $send_grid_create_sender->createEmail($credit->id);
+    
+                        $get_files_attach = File::getFilesBySwap($credit->id);
+                        $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', $sender, '', $get_files_attach);
+                        $send_grid->setTemplate('d-944f2768988a43dca2e0ad689954fd20');
+                        $data_params = array(
+                            'name' => $client->name,
+                            'last_name' => $client->last_name,
+                            'second_last_name' => $client->second_last_name,
+                            'if_number' => $credit->id_number,
+                            'client_rfc' => $client->rfc,
+                            'current_credit_number' => $credit->current_credit_number,
+                            'current_loan' => $credit->current_loan,
+                         );
+                        $send_grid->setParams($data_params);
+                        $send_grid->send();
+                    }
                 }
             }
         }
