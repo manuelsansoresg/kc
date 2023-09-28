@@ -20,8 +20,8 @@
                         <h1 class="hero-title mb-4 color-primary">
                             Reduce tu  deuda actual
                         </h1>
-                        <p class="hero-text mb-4 pb-1">
-                            <b>Cambiarte a una mejor financiera es tu derecho.</b>
+                        <p class="hero-text mb-4 pb-4">
+                            <b>Cambiarte a una mejor opción es tu derecho.</b>
                         </p>
                         <!-- button group -->
                         <div class="row mt-n2 mt-md-0">
@@ -43,7 +43,7 @@
                              <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block ml-2">Quiero un crédito nuevo</a>
                             </div> --}}
                         </div>
-                        <div class="row justify-content-center">
+                        <div class="row justify-content-center mt-4">
                             <div class="col-12 col-md-8 text-center">
                                 <p class="mt-3 h3 text-center text-md-start">
                                     Fácil, rápido y <span class="text-decoration-underline">gratis</span>.
