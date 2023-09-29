@@ -52,6 +52,14 @@ $( "#frm-financial-buro" ).submit(function( event ) {
         });
   });
 
+  window.showBank = function(is_show)
+  {
+    $('#content-bank').hide();
+    if (is_show == true) {
+        $('#content-bank').show();
+    }
+  }
+
   $( "#frm-financial-comision" ).submit(function( event ) {
     event.preventDefault();
     const new_form = document.getElementById("frm-financial-comision");

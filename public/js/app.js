@@ -1497,6 +1497,15 @@ $("#frm-financial-buro").submit(function (event) {
     showToast('Producto', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
+
+window.showBank = function (is_show) {
+  $('#content-bank').hide();
+
+  if (is_show == true) {
+    $('#content-bank').show();
+  }
+};
+
 $("#frm-financial-comision").submit(function (event) {
   event.preventDefault();
   var new_form = document.getElementById("frm-financial-comision");
@@ -2080,7 +2089,7 @@ document.addEventListener('DOMContentLoaded', function () {
     module_id = $('#module_id').val();
   }
 
-  var table = NioApp.DataTable('#dt-lead', {
+  var table_lead = NioApp.DataTable('#dt-lead', {
     processing: true,
     responsive: {
       details: {
@@ -2129,7 +2138,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }); // Expand table rows on click
 
   $('#dt-lead tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
+    var row = table_lead.row($(this).closest('tr'));
 
     if (row.child.isShown()) {
       row.child.hide();

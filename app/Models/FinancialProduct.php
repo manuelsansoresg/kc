@@ -84,6 +84,7 @@ class FinancialProduct extends Model
         'chart_interes',
         'chart_comision',
         'chart_iva',
+        'is_vincular_banco',
     ];
 
 

@@ -61,6 +61,7 @@
                                                         $status = $financial_product != null ? $financial_product->status : '';
                                                         $bank_id = $financial_product != null ? $financial_product->bank_id : '';
                                                         $consulta_buro = $financial_product != null ? $financial_product->consulta_buro : null;
+                                                        $is_vincular_banco = $financial_product != null ? $financial_product->is_vincular_banco : null;
                                                     @endphp
                                                     <form method="post" id="frm-product-info" action="">
                                                         <div class="row gy-4">
@@ -108,8 +109,30 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                           
+                                                           <div class="col-12">&nbsp;</div>
                                                             <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Vincular banco</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <ul class="custom-control-group g-3 align-center flex-wrap">
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio" class="custom-control-input" onclick="showBank(true)" id="vincular_banco_active"  name="is_vincular_banco"  value="1" {{ $is_vincular_banco == 1   ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label" for="vincular_banco_active">Sí  </label>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio" class="custom-control-input" onclick="showBank(false)" id="vincular_banco_pending" name="is_vincular_banco" value="0" {{ $is_vincular_banco === 0  || $is_vincular_banco === null  ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label" for="vincular_banco_pending">No</label>
+                                                                                </div>
+                                                                            </li>
+                                                                        
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6" id="content-bank" style="{{ $is_vincular_banco == 1 ? 'display: block' : 'display: none'}}">
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="frm-product-name">Banco</label>
                                                                     <div class="form-control-wrap">
