@@ -93,6 +93,7 @@ class Credit extends Model
         'tipo_credito',
         'consulta_buro',
         'financial_product_id',
+        'is_vincular_banco',
     ];
 
     public static function listDatatable($status)

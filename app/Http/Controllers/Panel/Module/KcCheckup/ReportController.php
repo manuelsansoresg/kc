@@ -81,7 +81,7 @@ class ReportController extends Controller
         $product    = $credit->creditProduct;
         $client     = $credit->creditClientPerson;
         $agreement  = $credit->creditAgreement;
-        $financials = FinancialProduct::getByRate($credit->agreement_id);
+        $financials = FinancialProduct::getByRate($credit);
         //dd($agreement->financialAgreement);
         $model      = ($history != null && $history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
 

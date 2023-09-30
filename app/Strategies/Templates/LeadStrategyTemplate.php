@@ -59,6 +59,7 @@ class LeadStrategyTemplate implements TemplateInterface
                 'tipo_credito' => $lead->tipo_credito,
                 'consulta_buro' => $lead->consulta_buro,
                 'applied_financial_product' => $lead->financial_product_id,
+                'is_vincular_banco' => $lead->is_vincular_banco,
             );
             $credit = Credit::create($data_lead);
             //* create history in client person

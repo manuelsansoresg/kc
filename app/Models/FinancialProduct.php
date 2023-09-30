@@ -88,24 +88,38 @@ class FinancialProduct extends Model
     ];
 
 
-    public static function getByRate($agreement_id)
+    public static function getByRate($credit)
     {
         DB::connection()->enableQueryLog();
+        $agreement_id = $credit->agreement_id;
+        $type_product_id = $credit->tipo_credito;
+        $consulta_buro = $credit->consulta_buro;
+        $bank_id = $credit->bank_id;
+
         $financial_agreements = FinancialAgreement::where('agreement_id', $agreement_id)->get();
         $financial_ids = array();
+        $financial_product_ids = array();
+        
         foreach ($financial_agreements as $financial_agreement) {
             $financial_ids[] = $financial_agreement->financial_id;
         }
-        $sql =  FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-                                'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
-                                'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-                                'financial_products.id as id'
-                                )
-                        ->join('financials', 'financials.id', 'financial_products.financial_id')
-                        ->whereIn('financial_products.financial_id', $financial_ids)
-                        ->orderBy('rate_kc', 'DESC')
-                        ->get();
-        //$queries = DB::getQueryLog();
+        //dd($type_product_id, $financial_ids);
+        $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
+            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
+            'financial_products.id as id'
+        )
+            ->join('financials', 'financials.id', 'financial_products.financial_id')
+            ->whereIn('financial_products.financial_id', $financial_ids)
+            ->where('financial_products.type_product_id', $type_product_id)
+            ->where('financial_products.consulta_buro', $consulta_buro)
+            ->orWhere(function ($query) use ($bank_id) {
+                $query->where('financial_products.is_vincular_banco', 1)
+                    ->where('financial_products.bank_id', $bank_id);
+            })
+            ->orderBy('rate_kc', 'DESC')
+            ->get();
+        $queries = DB::getQueryLog();
         return $sql;
     }
 
