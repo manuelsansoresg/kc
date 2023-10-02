@@ -29,7 +29,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Producto</th>
+                                            <th>Servicio KC</th>
                                             <th>Motivo</th>
                                             <th>Fecha</th>
                                             <th data-priority="1">Cliente</th>

@@ -33,7 +33,7 @@
                                             <th>ID</th>
                                             <th data-priority="1">Nombre</th>
                                             <th>Fecha</th>
-                                            <th>Producto</th>
+                                            <th>Servicio KC</th>
                                             <th>Organización</th>
                                             <th>Etiqueta</th>
                                             <th>Asesor</th>
