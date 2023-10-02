@@ -178,7 +178,7 @@
                                                        
                                                         <div class="col-md-6" id="content-banco_nomina" style="display: none">
                                                             <div class="form-group">
-                                                                <label class="form-label">Banco nómina</label>
+                                                                <label class="form-label">Banco nómina (opcional)</label>
                                                                 <p class="small">Banco en el que recibe su nómina</p>
                                                                 <div class="form-control-wrap">
                                                                     <select name="data[bank_id]" id="bank_id" class="form-control">
@@ -193,7 +193,7 @@
                                                         
                                                         <div class="col-md-6" id="content-tipo-credito" style="display: none">
                                                             <div class="form-group">
-                                                                <label class="form-label">Tipo de crédito</label>
+                                                                <label class="form-label">Tipo de crédito que desea el prospecto</label>
                                                                 <p class="small">Categoría de  crédito</p>
                                                                 <div class="form-control-wrap">
                                                                     @php
