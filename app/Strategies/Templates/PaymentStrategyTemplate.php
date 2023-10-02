@@ -1108,6 +1108,13 @@ class PaymentStrategyTemplate implements TemplateInterface
             $menu = array(
                 'options' => array(
                     [
+                        'link' => '/panel/template/steps/payment/'.$history->id.'/show',
+                        'onclick' => '',
+                        'name' => 'Ver etapas',
+                        'icon' => 'icon ni ni-list-thumb-fill',
+                        'class' => 'text-dark'
+                    ],
+                    [
                         'link' => '/panel/client/'.$client->id,
                         'onclick' => '',
                         'name' => 'Ver perfil cliente',
@@ -1119,12 +1126,7 @@ class PaymentStrategyTemplate implements TemplateInterface
                         'name' => 'Ver perfil crédito',
                         'icon' => 'icon ni ni-report-profit'
                     ],
-                    [
-                        'link' => '/panel/template/steps/payment/'.$history->id.'/show',
-                        'onclick' => '',
-                        'name' => 'Ver etapas',
-                        'icon' => 'icon ni ni-list-thumb-fill'
-                    ],
+                    
                     [
                         'link' => null,
                         'onclick' => 'moveModal("Cancelar",'.$credit->id.','.$status_cancel.','.$old_status.',"dt-delivery")',

@@ -14,7 +14,8 @@
                 <a class="pointer" {{ $options[$i_option]['link'] != '' ? 'href='.$options[$i_option]['link'].'' : '' }}
                         {{ $options[$i_option]['onclick'] != '' ? 'onclick='.$options[$i_option]['onclick'].'' : '' }}
                         >
-                    <em class="{{ isset($options[$i_option]['icon'])? $options[$i_option]['icon'] : 'icon ni ni-view-list-wd' }}"></em><span>{{ $options[$i_option]['name']}}</span></a>
+                    <em class="{{ isset($options[$i_option]['icon'])? $options[$i_option]['icon'] : 'icon ni ni-view-list-wd' }}"></em>
+                    <span class="{{ isset($options[$i_option]['class']) ? $options[$i_option]['class'] : null }}">{{ $options[$i_option]['name']}}</span></a>
             </li>
             
         @endfor

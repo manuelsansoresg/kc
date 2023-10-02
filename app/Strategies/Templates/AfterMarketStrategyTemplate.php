@@ -307,6 +307,13 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $menu = array(
             'options' => array(
                 [
+                    'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
+                    'onclick' => '',
+                    'name' => 'Ver etapas',
+                    'icon' => 'icon ni ni-list-thumb-fill',
+                    'class' => 'text-dark'
+                ],
+                [
                     'link' => '/panel/client/'.$client->id,
                     'onclick' => '',
                     'name' => 'Ver perfil cliente',
@@ -318,12 +325,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                     'name' => 'Ver perfil crédito',
                     'icon' => 'icon ni ni-report-profit'
                 ],
-                [
-                    'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
-                    'onclick' => '',
-                    'name' => 'Ver etapas',
-                    'icon' => 'icon ni ni-list-thumb-fill'
-                ]
+                
             ),
         );
 
