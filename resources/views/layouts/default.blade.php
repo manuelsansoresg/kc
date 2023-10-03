@@ -122,10 +122,10 @@
                                     </a>
                                     <p class="my-4 footer-para">Tu mejor desición. Facíl y rápido</p>
                                     <ul class="styled-icon">
-                                        <li><a href="#"><em class="icon ni ni-twitter"></em></a></li>
-                                        <li><a href="#"><em class="icon ni ni-facebook-f"></em></a></li>
-                                        <li><a href="#"><em class="icon ni ni-instagram"></em></a></li>
-                                        <li><a href="#"><em class="icon ni ni-pinterest"></em></a></li>
+                                        {{-- <li><a href="#"><em class="icon ni ni-twitter"></em></a></li> --}}
+                                        <li><a href="https://facebook.com/kaaxclub/" target="_blank"><em class="icon ni ni-facebook-f"></em></a></li>
+                                        <li><a href="https://instagram.com/kaaxclub" target="_blank"><em class="icon ni ni-instagram"></em></a></li>
+                                        {{-- <li><a href="#"><em class="icon ni ni-pinterest"></em></a></li> --}}
                                     </ul>
                                 </div><!-- end footer-item -->
                             </div><!-- end col-lg-3 -->
