@@ -88,7 +88,7 @@
                                                 <div class="pricing-body">
                                                     <ul class="pricing-features">
                                                         <div class="col-12">
-                                                            <li><span class="w-50"> {{ $financial_product->name }}</span> - <span class="ms-auto"><i class="fa-solid fa-star"></i> {{ $financial_product->rate_kc }}</span></li>
+                                                            <li><span class="w-50"> {{ $financial_product->alias }}</span> - <span class="ms-auto"><i class="fa-solid fa-star"></i> {{ $financial_product->rate_kc }}</span></li>
                                                         </div>
                                                     </ul>
                                                     <div class="pricing-action">
