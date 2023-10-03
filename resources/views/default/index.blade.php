@@ -27,13 +27,13 @@
                         <div class="row mt-n2 mt-md-0">
                             <div class="col-12 col-md-6">
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">Quiero reducir mi deuda</a>
-                                <div class="mt-3 text-center">
+                                <div class="mt-0 mt-md-3 text-center">
                                     <small class="text-muted text-center">Te ayudamos a cambiarte a una mejor opción</small>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola quiero un crédito nuevo"  class="btn col-12 btn-dark btn-block">Quiero un crédito nuevo</a>
-                                <div class="mt-3 text-center">
+                                <div class="mt-0 mt-md-3 text-center">
                                     <small class="text-muted text-center">¿No tienes un crédito? Te ayudamos a encontrar el mejor</small>
                                 </div>
                             </div>
