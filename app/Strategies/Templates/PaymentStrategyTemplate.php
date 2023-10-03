@@ -399,6 +399,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $menu_options         = self::menuOptionsStep($history);
         $status_step1         = 'En espera';
         $status_step2         = 'En espera';
+        
 
         //TODO: change validation when the decision action is carried out in the report
         if ($percent_file_step1 == 100) {
@@ -410,7 +411,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         if ($percent_form_2 == 100) {
             $status_step2 = 'Concluido';
         }
-
+        
         $option_step1               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['actionstep1']])->render();
         
         $view_percent_step1         = \View::make('panel.module.view_percent', ['percent' => $percent_file_step1])->render();
@@ -418,7 +419,7 @@ class PaymentStrategyTemplate implements TemplateInterface
 
         $view_count_step1           = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_step2           = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
-
+        
 
         $data = array();
         $data[] = array(
@@ -429,7 +430,6 @@ class PaymentStrategyTemplate implements TemplateInterface
             'deadline' => '',
             'options' => $option_step1,
         );
-       
         $data[] = array(
             'name' => $view_count_step2,
             'step' => 'Verificar pago',
@@ -438,17 +438,8 @@ class PaymentStrategyTemplate implements TemplateInterface
             'deadline' => '',
             'options' => $option_step2,
         );
-
-        /* if ($percent_form == 100) {
-            $data[] = array(
-                'name' => $view_count_step4,
-                'step' => 'Captura de información',
-                'status' => $status_step3,
-                'progress' => $view_percent_step3,
-                'deadline' => '',
-                'options' => null,
-            );
-        } */
+        
+       
        
         return $data;
     }
@@ -641,18 +632,22 @@ class PaymentStrategyTemplate implements TemplateInterface
 
     public function deadLineStep3($history)
     {
-        $credit                       = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form                 = self::percentFormStep2($history);
-        
-        $max_hour                     = self::HOUR_STEP_3;
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_FORM_STEP_2], $credit->id)[0];
-        $hour                         = $in_progress->date_status_progress;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
-        return $view_dead_line_inf_credit;
+        try {
+            $credit                       = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep2($history);
+            
+            $max_hour                     = self::HOUR_STEP_3;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_PAYMENT_FORM_STEP_2], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            return null;
+        }
     }
 
     public function actionStep3($history_id)
@@ -661,6 +656,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
         $percent_form   = self::percentFormStep2($history);
+        
         
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $name_advisor   = null;
