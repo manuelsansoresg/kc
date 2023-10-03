@@ -1066,9 +1066,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $status_step8               = 'En espera';
 
         //percent step 1
-        $percent_file               = self::percentFile($credit->id);
-        $percent_form               = self::percentForm($history);
-        $percent_file_1_2           = self::percentFile($credit->id, '1_2');
+        $percent_file               = reduceDecimal(self::percentFile($credit->id));
+        $percent_form               = reduceDecimal(self::percentForm($history));
+        $percent_file_1_2           = reduceDecimal(self::percentFile($credit->id, '1_2'));
         
         $new_percent_file           = $percent_file == 100 ? 1 : 0;
         $new_percent_file2          = $percent_file_1_2 == 100 ? 1 : 0;
@@ -1079,10 +1079,10 @@ class SwapStrategyTemplate implements TemplateInterface
 
 
         //percent step 2
-        $percent_form_2         = self::percentFormStep2($history);
-        $percent_form_2_2       = self::percentFormStep2_2($history);
-        $percent_form_2_3       = self::percentFile($credit->id, '2');
-        $percent_form_2_4       = self::percentFormStep2_3($history);
+        $percent_form_2         = reduceDecimal(self::percentFormStep2($history));
+        $percent_form_2_2       = reduceDecimal(self::percentFormStep2_2($history));
+        $percent_form_2_3       = reduceDecimal(self::percentFile($credit->id, '2'));
+        $percent_form_2_4       = reduceDecimal(self::percentFormStep2_3($history));
 
         $new_percent_form_2         = $percent_form_2  == 100 ? 25 : $percent_form_2;
         $new_percent_form_2_2       = $percent_form_2_2  == 100 ? 25 : $percent_form_2_2;
@@ -1090,9 +1090,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $new_percent_file_2_4       = $percent_form_2_4  == 100 ? 25 : $percent_form_2_4;
         $total_percent2             = $new_percent_form_2 + $new_percent_form_2_2 + $new_percent_file_2_3 + $new_percent_file_2_4;
 
-        $percent_file_step3         = self::percentFile($credit->id, '3');
-        $percent_form_step3         = self::percentFormStep3($history);
-        $percent_form_2_step3       = self::percentFormStep3_2($history);
+        $percent_file_step3         = reduceDecimal(self::percentFile($credit->id, '3'));
+        $percent_form_step3         = reduceDecimal(self::percentFormStep3($history));
+        $percent_form_2_step3       = reduceDecimal(self::percentFormStep3_2($history));
         $new_percent_form_step3_1   = $percent_file_step3  == 100 ? 33 : $percent_file_step3;
         $new_percent_form_step3_2   = $percent_form_step3  == 100 ? 33 : $percent_form_step3;
         $new_percent_file_step3_3   = $percent_form_2_step3  == 100 ? 34 : $percent_form_2_step3;

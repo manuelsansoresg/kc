@@ -174,7 +174,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
     {
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
-        $percent_form   = self::percentForm($history);
+        $percent_form   = reduceDecimal(self::percentForm($history));
         
         //$percent_form = $percent_form;
         $menu_options         = self::menuOptionsStep($history);

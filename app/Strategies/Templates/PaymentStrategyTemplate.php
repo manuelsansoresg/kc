@@ -388,8 +388,8 @@ class PaymentStrategyTemplate implements TemplateInterface
         $max_hour             = 12;
         $hour                 = $credit->created_at;
         
-        $percent_file_step1   = self::percentFile($credit->id);
-        $percent_form_2         = self::percentFormStep2($history);
+        $percent_file_step1   = reduceDecimal(self::percentFile($credit->id));
+        $percent_form_2         = reduceDecimal(self::percentFormStep2($history));
 
         $color_inf_credit     = 'success';
         $option_step1         = null;

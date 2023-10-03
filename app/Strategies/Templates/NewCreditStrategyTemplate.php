@@ -206,8 +206,8 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $credit               = $history->historyCredit;
         $max_hour             = 12;
         $hour                 = $credit->created_at;
-        $percent_form         = self::percentForm($history);
-        $percent_form_step2   = self::percentDesition($history);
+        $percent_form         = reduceDecimal(self::percentForm($history));
+        $percent_form_step2   = reduceDecimal(self::percentDesition($history));
         $percent_file         = 100;
         $color_inf_credit     = 'success';
         $color_report         = 'success';

@@ -470,11 +470,11 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $max_hour             = 12;
         $hour                 = $credit->created_at;
         
-        $percent_form_step1   = self::percentForm($history);
+        $percent_form_step1   = reduceDecimal(self::percentForm($history));
         
-        $percentStep2         = self::percentStep2($credit->id);
-        $percent_form_step3   = self::percentFormStep3($credit->id);
-        $percent_form_step4   = self::percentFormStep4($credit->id);
+        $percentStep2         = reduceDecimal(self::percentStep2($credit->id));
+        $percent_form_step3   = reduceDecimal(self::percentFormStep3($credit->id));
+        $percent_form_step4   = reduceDecimal(self::percentFormStep4($credit->id));
 
         $color_inf_credit     = 'success';
         $option_step2         = null;

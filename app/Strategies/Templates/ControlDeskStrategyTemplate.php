@@ -2325,20 +2325,20 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $max_hour                     = 12;
         $hour                         = $credit->created_at;
 
-        $percent_file                 = self::percentFile($credit->id);
-        $percent_form                 = self::percentForm($history); // etapa 1
+        $percent_file                 = reduceDecimal(self::percentFile($credit->id));
+        $percent_form                 = reduceDecimal(self::percentForm($history)); // etapa 1
         $file                         = $percent_file == 100 ? 50 : 0;
         $form                         = $percent_form == 100 ? 50 : 0;
         //dd($percent_form);
         $total_percent                = $file + $form;
-        $percent_form_step2           = self::percentFormStep2($history); // etapa 2
+        $percent_form_step2           = reduceDecimal(self::percentFormStep2($history)); // etapa 2
 
-        $percent_form_step3_1         = self::percentFormStep3_1($history); //etapa 3
-        $percent_form_step3_2         = self::percentFormStep3_2($history); //etapa 3
+        $percent_form_step3_1         = reduceDecimal(self::percentFormStep3_1($history)); //etapa 3
+        $percent_form_step3_2         = reduceDecimal(self::percentFormStep3_2($history)); //etapa 3
 
-        $percent_form_step4           = self::percentFormStep4($history); //etapa 4
+        $percent_form_step4           = reduceDecimal(self::percentFormStep4($history)); //etapa 4
 
-        $percent_form_step5           = self::percentFormStep5($history); //etapa 5
+        $percent_form_step5           = reduceDecimal(self::percentFormStep5($history)); //etapa 5
 
         $new_step3_1 = $percent_form_step3_1 == 100 ? 1 : 0;
         $new_step3_2 = $percent_form_step3_2 == 100 ? 1 : 0;
