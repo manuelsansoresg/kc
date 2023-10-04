@@ -10,16 +10,17 @@
 </a>
 <div class="dropdown-menu dropdown-menu-end">
     <ul class="link-list-opt no-bdr">
+        <li>
+            <a class="pointer" href="/panel/template/steps/{{ $route }}/{{ $id }}/show">
+                <em class="icon ni ni-list-thumb-fill"></em><span class="text-dark">Ver etapas</span></a>
+        </li>
         @if ($percent_form == 100)
             <li>
                 <a class="pointer" href="/reporte/{{ $id }}">
                     <em class="icon ni ni-reports"></em><span>Ver reporte</span></a>
             </li>
         @endif
-        <li>
-            <a class="pointer" href="/panel/template/steps/{{ $route }}/{{ $id }}/show">
-                <em class="icon ni ni-list-thumb-fill"></em><span>Ver etapas</span></a>
-        </li>
+        
         <li>
             <a class="pointer" href="/panel/client/{{ $client->id }}">
                 <em class="icon ni ni-user-fill"></em><span>Ver perfil cliente</span></a>
