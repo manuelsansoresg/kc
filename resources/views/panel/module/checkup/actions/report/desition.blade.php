@@ -88,7 +88,9 @@
                                                 <div class="pricing-body">
                                                     <ul class="pricing-features">
                                                         <div class="col-12">
-                                                            <li><span class="w-50"> {{ $financial_product->alias }}</span> - <span class="ms-auto"><i class="fa-solid fa-star"></i> {{ $financial_product->rate_kc }}</span></li>
+                                                            <li><span class="w-60"> Aval o garantía</span> - <span class="ms-auto"> {{ $financial_product->aval_o_garantia == 1 ? 'Sí' : 'No' }}  </span></li>
+                                                            <li><span class="w-60"> Consulta buró de crédito</span> - <span class="ms-auto"> {{ $financial_product->consulta_buro == 1 ? 'Sí' : 'No' }}  </span></li>
+                                                            <li><span class="w-60"> {{ $financial_product->alias }}</span> - <span class="ms-auto"><i class="fa-solid fa-star"></i> {{ $financial_product->rate_kc }}</span></li>
                                                         </div>
                                                     </ul>
                                                     <div class="pricing-action">

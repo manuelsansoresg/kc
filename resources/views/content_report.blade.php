@@ -109,13 +109,13 @@
                                         @if ($key == 1)
                                             <span class="badge bg-warning rounded-bottom-0 py-3 fs-6">Mejor opción</span>
                                         @endif
-                                        <div class="px-4 mt-4">
-                                            <h3 class="mb-2">{{ $financial_product->commercial_name }}</h1>
+                                        <div class="px-4 mt-4 mb-2">
+                                            <span><span class="h3 ">{{ $financial_product->commercial_name }}</span> {{ $financial_product->alias }} </span>
                                                 <p class="mb-0 text-muted"></p>
                                         </div>
                                         <div class="card-body pt-0 pb-4 px-4">
                                             <span class="h4 display-9"><span class="fw-light small"></span>Calificación:
-                                                {{ $financial_product->rate_kc }}</span>
+                                                {{ reduceDecimal($financial_product->rate_kc, 1) }}</span>
                                             <span class="fw-bold text-muted">/5 </span>
 
                                             <small class="text-muted font-monospace mb-4 d-block"></small><button
@@ -123,47 +123,65 @@
                                                 type="button"
                                                 class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">Tramitar</button>
                                             <ul class="list-unstyled mb-0 pt-4">
-                                                <li class="mb-2">
+                                                
+                                                <li class="mb-1">
                                                     <span
                                                         class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                    <span>CAT REAL: {{ $financial_product->rate_cat }}</span><span
+                                                    <span>CAT REAL: {{ reduceDecimal($financial_product->rate_cat, 1) }}</span><span
                                                         class="text-sm text-muted">/5 </span>
                                                     <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp;
                                                         Ver</a>
 
                                                 </li>
-                                                <li class="mb-2">
+                                                <li class="mb-1">
                                                     <span
                                                         class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                    <span>Comisiones: {{ $financial_product->rate_comision }} </span><span
+                                                    <span>Comisiones: {{ reduceDecimal($financial_product->rate_comision, 1) }} </span><span
                                                         class="text-sm text-muted">/5 </span>
                                                     <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp;
                                                         Ver</a>
                                                 </li>
-                                                <li class="mb-2">
+                                                <li class="mb-1">
                                                     <span
                                                         class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                    <span>Plazo maximo: {{ $financial_product->rate_deadline }}
+                                                    <span>Plazo maximo: {{ reduceDecimal($financial_product->rate_deadline, 1) }}
                                                     </span><span class="text-sm text-muted">/5 </span>
                                                     <a href="#" onclick="scrollToAnchor('section-plazo-maximo')">
                                                         &nbsp; Ver</a>
                                                 </li>
-                                                <li class="mb-2">
+                                                <li class="mb-1">
                                                     <span
                                                         class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                    <span>Contrato: {{ $financial_product->rate_contract }} </span><span
+                                                    <span>Contrato: {{ reduceDecimal($financial_product->rate_contract, 1) }} </span><span
                                                         class="text-sm text-muted">/5 </span>
                                                     <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp;
                                                         Ver</a>
                                                 </li>
 
-                                                <li class="mb-2">
+                                                <li class="mb-1">
                                                     <span
                                                         class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                    <span>Priv. datos: {{ $financial_product->rate_privacity }}
+                                                    <span>Priv. datos: {{ reduceDecimal($financial_product->rate_privacity, 1) }}
                                                     </span><span class="text-sm text-muted">/5 </span>
                                                     <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp;
                                                         Ver</a>
+                                                </li>
+                                                <li class="mb-1">
+                                                    <span
+                                                        class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                    <span>Aval o garantía :</span><span
+                                                        class="text-muted">  {{ $financial_product->aval_o_garantia == 1 ? 'Sí' : 'No' }} </span>
+                                                   
+
+                                                </li>
+                                                <li class="mb-1">
+                                                    <span
+                                                        class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                    <span>Consulta buró de crédito :</span><span
+                                                        class="text-muted">  {{ $financial_product->consulta_buro == 1 ? 'Sí' : 'No' }} </span>
+                                                   
+
+                                                </li>
                                             </ul>
                                             <div class="text-center mt-3">
                                                 <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver
@@ -185,13 +203,13 @@
                                         <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10 mt-5 " data-aos="fade-up" data-aos-delay="100">
                                             <div class="card mb-4 mb-lg-0 shadow-lg rounded-4 border-0 overflow-hidden">
                                                
-                                                <div class="px-4 mt-4">
-                                                    <h3 class="mb-2">{{ $final_financials->commercial_name }}</h1>
+                                                <div class="px-4 mt-4 mb-2">
+                                                    <span><span class="h3 ">{{ $final_financials->commercial_name }}</span> {{ $final_financials->alias }} </span>
                                                         <p class="mb-0 text-muted"></p>
                                                 </div>
                                                 <div class="card-body pt-0 pb-4 px-4">
                                                     <span class="h4 display-9"><span class="fw-light small"></span>Calificación:
-                                                        {{ $final_financials->rate_kc }}</span>
+                                                        {{ reduceDecimal($final_financials->rate_kc, 1) }}</span>
                                                     <span class="fw-bold text-muted">/5 </span>
     
                                                     <small class="text-muted font-monospace mb-4 d-block"></small><button
@@ -202,7 +220,7 @@
                                                         <li class="mb-2">
                                                             <span
                                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                            <span>CAT REAL: {{ $final_financials->rate_cat }}</span><span
+                                                            <span>CAT REAL: {{ reduceDecimal($final_financials->rate_cat, 1) }}</span><span
                                                                 class="text-sm text-muted">/5 </span>
                                                             <a href="#" onclick="scrollToAnchor('section-cat-real')"> &nbsp;
                                                                 Ver</a>
@@ -211,7 +229,7 @@
                                                         <li class="mb-2">
                                                             <span
                                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                            <span>Comisiones: {{ $final_financials->rate_comision }} </span><span
+                                                            <span>Comisiones: {{ reduceDecimal($final_financials->rate_comision, 1) }} </span><span
                                                                 class="text-sm text-muted">/5 </span>
                                                             <a href="#" onclick="scrollToAnchor('section-comisiones')"> &nbsp;
                                                                 Ver</a>
@@ -219,7 +237,7 @@
                                                         <li class="mb-2">
                                                             <span
                                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                            <span>Plazo maximo: {{ $final_financials->rate_deadline }}
+                                                            <span>Plazo maximo: {{ reduceDecimal($final_financials->rate_deadline, 1) }}
                                                             </span><span class="text-sm text-muted">/5 </span>
                                                             <a href="#" onclick="scrollToAnchor('section-plazo-maximo')">
                                                                 &nbsp; Ver</a>
@@ -227,7 +245,7 @@
                                                         <li class="mb-2">
                                                             <span
                                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                            <span>Contrato: {{ $final_financials->rate_contract }} </span><span
+                                                            <span>Contrato: {{ reduceDecimal($final_financials->rate_contract, 1) }} </span><span
                                                                 class="text-sm text-muted">/5 </span>
                                                             <a href="#" onclick="scrollToAnchor('section-contrato')"> &nbsp;
                                                                 Ver</a>
@@ -236,10 +254,27 @@
                                                         <li class="mb-2">
                                                             <span
                                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                            <span>Priv. datos: {{ $final_financials->rate_privacity }}
+                                                            <span>Priv. datos: {{ reduceDecimal($final_financials->rate_privacity, 1) }}
                                                             </span><span class="text-sm text-muted">/5 </span>
                                                             <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp;
                                                                 Ver</a>
+                                                        </li>
+                                                        <li class="mb-1">
+                                                            <span
+                                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                            <span>Aval o garantía :</span><span
+                                                                class="text-muted">  {{ $final_financials->aval_o_garantia == 1 ? 'Sí' : 'No' }} </span>
+                                                           
+        
+                                                        </li>
+                                                        <li class="mb-1">
+                                                            <span
+                                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                            <span>Consulta buró de crédito :</span><span
+                                                                class="text-muted">  {{ $final_financials->consulta_buro == 1 ? 'Sí' : 'No' }} </span>
+                                                           
+        
+                                                        </li>
                                                     </ul>
                                                     <div class="text-center mt-3">
                                                         <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver
