@@ -221,6 +221,22 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        @php
+                                                            $status_si_no = config('enums.status_si_no');
+                                                        @endphp
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Aval o garantía</label>
+                                                                <p class="small">Selecciona si el prospecto proporcionaría aval o garantía</p>
+                                                                <div class="form-control-wrap">
+                                                                    <select name="data[aval_o_garantia]" id="aval_o_garantia" class="form-control">
+                                                                        @foreach ($status_si_no as $key_aval_garantia => $aval_garantia)
+                                                                            <option value="{{ $key_aval_garantia }}">{{ $aval_garantia }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         
                                                         
                                                         

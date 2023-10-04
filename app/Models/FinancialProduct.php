@@ -85,20 +85,22 @@ class FinancialProduct extends Model
         'chart_comision',
         'chart_iva',
         'is_vincular_banco',
+        'aval_o_garantia',
     ];
 
 
     public static function getByRate($credit)
     {
         DB::connection()->enableQueryLog();
-        $agreement_id = $credit->agreement_id;
-        $type_product_id = $credit->tipo_credito;
-        $consulta_buro = $credit->consulta_buro;
-        $bank_id = $credit->bank_id;
+        $agreement_id           = $credit->agreement_id;
+        $type_product_id        = $credit->tipo_credito;
+        $consulta_buro          = $credit->consulta_buro;
+        $bank_id                = $credit->bank_id;
+        $aval_o_garantia        = $credit->aval_o_garantia;
 
-        $financial_agreements = FinancialAgreement::where('agreement_id', $agreement_id)->get();
-        $financial_ids = array();
-        $financial_product_ids = array();
+        $financial_agreements   = FinancialAgreement::where('agreement_id', $agreement_id)->get();
+        $financial_ids          = array();
+        $financial_product_ids  = array();
         
         foreach ($financial_agreements as $financial_agreement) {
             $financial_ids[] = $financial_agreement->financial_id;
@@ -113,12 +115,18 @@ class FinancialProduct extends Model
             ->whereIn('financial_products.financial_id', $financial_ids)
             ->where('financial_products.type_product_id', $type_product_id)
             ->where('financial_products.consulta_buro', $consulta_buro)
-            ->orWhere(function ($query) use ($bank_id) {
+            
+            ->orderBy('rate_kc', 'DESC');
+        
+        if ($aval_o_garantia == 1) {
+            $sql->where('financial_products.aval_o_garantia', 1);
+        }
+
+        $sql->orWhere(function ($query) use ($bank_id) {
                 $query->where('financial_products.is_vincular_banco', 1)
                     ->where('financial_products.bank_id', $bank_id);
-            })
-            ->orderBy('rate_kc', 'DESC')
-            ->get();
+            });
+        $sql = $sql->get();
         $queries = DB::getQueryLog();
         return $sql;
     }

@@ -173,5 +173,11 @@ return [
         4 => 'Hipotecada',
         5 => 'Otro',
     ),
+
+    'status_si_no' => array(
+        '' => 'Selecciona una opción',
+        1 => 'Sí',
+        0 => 'No',
+    ),
     
 ];

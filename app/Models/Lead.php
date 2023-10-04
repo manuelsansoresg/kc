@@ -34,6 +34,7 @@ class Lead extends Model
         'tipo_credito',
         'consulta_buro',
         'financial_product_id',
+        'aval_o_garantia',
     ];
 
     public static function listDatatable()

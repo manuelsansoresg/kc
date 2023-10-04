@@ -94,6 +94,7 @@ class Credit extends Model
         'consulta_buro',
         'financial_product_id',
         'is_vincular_banco',
+        'aval_o_garantia',
     ];
 
     public static function listDatatable($status)

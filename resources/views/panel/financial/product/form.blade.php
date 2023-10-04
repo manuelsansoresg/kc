@@ -62,6 +62,7 @@
                                                         $bank_id = $financial_product != null ? $financial_product->bank_id : '';
                                                         $consulta_buro = $financial_product != null ? $financial_product->consulta_buro : null;
                                                         $is_vincular_banco = $financial_product != null ? $financial_product->is_vincular_banco : null;
+                                                        $aval_o_garantia = $financial_product != null ? $financial_product->aval_o_garantia : null;
                                                     @endphp
                                                     <form method="post" id="frm-product-info" action="">
                                                         <div class="row gy-4">
@@ -188,6 +189,29 @@
                                                                         </select>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Aval o garantía</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <ul class="custom-control-group g-3 align-center flex-wrap">
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio" class="custom-control-input" id="aval_o_garantia_active"  name="aval_o_garantia"  value="1" {{ $aval_o_garantia == 1   ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label" for="aval_o_garantia_active">Sí  </label>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio" class="custom-control-input" id="aval_o_garantia_pending" name="aval_o_garantia" value="0" {{ $aval_o_garantia === 0   ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label" for="aval_o_garantia_pending">No</label>
+                                                                                </div>
+                                                                            </li>
+                                                                           
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                                
                                                             </div>
                                                             <input type="hidden" id="financial_id" name="financial_id"
                                                             value="{{ $financial_id }}">
