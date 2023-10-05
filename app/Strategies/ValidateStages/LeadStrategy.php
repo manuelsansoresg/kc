@@ -14,7 +14,6 @@ class LeadStrategy implements ValidateStagesInterface
         $error_organization   = false;
         $error_product        = false;
         $error_tipo_credito   = false;
-        $error_buro           = false;
 
         $errors = array();
 
@@ -32,20 +31,17 @@ class LeadStrategy implements ValidateStagesInterface
             if ($get_lead->tipo_credito === null) {
                 $error_tipo_credito = true;
             }
-            if ($get_lead->consulta_buro === null) {
-                $error_buro = true;
-            }
+            
     
-            if ($error_organization == true || $error_product == true || $error_tipo_credito == true || $error_buro == true) {
+            if ($error_organization == true || $error_product == true || $error_tipo_credito == true) {
                 $error = true;
             }
             
 
             $errors = array(
-                'Organización' => $error_organization,
                 'Servicio KC' => $error_product,
                 'Tipo de  crédito' => $error_tipo_credito,
-                'Consulta buró' => $error_buro,
+                'Organización' => $error_organization,
             );
         }
         $data_error = array(

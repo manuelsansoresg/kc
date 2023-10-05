@@ -112,6 +112,24 @@
                                                             </div>
                                                         </div>
 
+                                                        <div class="col-md-6" id="content-tipo-credito" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Tipo de crédito que desea el prospecto</label>
+                                                                <p class="small">Categoría de  crédito</p>
+                                                                <div class="form-control-wrap">
+                                                                    @php
+                                                                        $type_products = config('financial_enums.type_products');
+                                                                    @endphp
+                                                                    <select name="data[tipo_credito]" id="tipo_credito" class="form-control">
+                                                                        @foreach ($type_products as $key => $type_product)
+                                                                            <option value="{{$key}}">{{ $type_product }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+
                                                        
 
                                                         <div class="col-md-6">
@@ -178,7 +196,7 @@
                                                        
                                                         <div class="col-md-6" id="content-banco_nomina" style="display: none">
                                                             <div class="form-group">
-                                                                <label class="form-label">Banco nómina (opcional)</label>
+                                                                <label class="form-label">Banco nómina </label>
                                                                 <p class="small">Banco en el que recibe su nómina</p>
                                                                 <div class="form-control-wrap">
                                                                     <select name="data[bank_id]" id="bank_id" class="form-control">
@@ -191,23 +209,7 @@
                                                             </div>
                                                         </div>
                                                         
-                                                        <div class="col-md-6" id="content-tipo-credito" style="display: none">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Tipo de crédito que desea el prospecto</label>
-                                                                <p class="small">Categoría de  crédito</p>
-                                                                <div class="form-control-wrap">
-                                                                    @php
-                                                                        $type_products = config('financial_enums.type_products');
-                                                                    @endphp
-                                                                    <select name="data[tipo_credito]" id="tipo_credito" class="form-control">
-                                                                        @foreach ($type_products as $key => $type_product)
-                                                                            <option value="{{$key}}">{{ $type_product }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                        </div>
+                                                        
                                                         <div class="col-md-6" id="content-consulta-buro-credito" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Consulta buró de crédito</label>
