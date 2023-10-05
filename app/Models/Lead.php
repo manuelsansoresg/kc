@@ -100,7 +100,7 @@ class Lead extends Model
         return $data;
     }
 
-    public static function createClientPerson($lead_id, $is_report = false)
+    public static function createClientPerson($lead_id, $is_report = false, $history_id = null)
     {
         $get_lead = LeadClient::where('lead_id', $lead_id);
         $status = 500;
@@ -110,7 +110,7 @@ class Lead extends Model
         if ($get_lead->count() === 0) {
             $status = 200;
             $lead = Lead::find($lead_id)->toArray();
-            User::saveLeadClientPersona($lead, $is_report);
+            User::saveLeadClientPersona($lead, $is_report, $history_id);
         }
         return $status;
     }

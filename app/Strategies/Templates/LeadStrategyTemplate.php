@@ -70,21 +70,23 @@ class LeadStrategyTemplate implements TemplateInterface
             //*in progress
             HistoryLog::move($credit->id, HistoryLog::CREDIT_IN_PROGRESS, HistoryLog::CREDIT_IN_PROGRESS);
             
-            //*create account automatically
-            Lead::createClientPerson($lead->id, $is_report);
-
+            
             //* enter module kc-checkup and list actions
             if ($product->c_product_id = 1 && $product->c_service_id == 1) {
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
+                $history = HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
                 //* Execute notification in new credit
                 $notification   = SendNotificationsValues::STRATEGY['pushNewCreditKcCheckUp'];
                 (new $notification)->send($credit->id);
             } elseif ($product->c_product_id = 1 && $product->c_service_id == 2) {
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
+                $history = HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
                 //* Execute notification in new credit
                 $notification   = SendNotificationsValues::STRATEGY['pushNewCreditKcCheckUp'];
                 (new $notification)->send($credit->id);
             }
+
+            //*create account automatically
+            Lead::createClientPerson($lead->id, $is_report, $history->id);
+
         }
     }
 

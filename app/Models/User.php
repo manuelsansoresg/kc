@@ -118,7 +118,7 @@ class User extends Authenticatable
         }
         $user->assignRole(ucfirst($role));
     }
-    public static function saveLeadClientPersona($data, $is_report = false)
+    public static function saveLeadClientPersona($data, $is_report = false, $history_id)
     {
         $name       = explode(' ', $data['name']);
         $password   = 'hola'.$name[0];
@@ -165,12 +165,12 @@ class User extends Authenticatable
             $lead_client = new LeadClient($data_lead_client);
             $lead_client->save();
             //* send email new account
-            $domain = 'https://app.kaaxclub.com';
-            //$link_account = $domain.'/account/'.$user->id.'/password/setup';
+            $domain = 'https://test.kaaxclub.com/reporte/'.$history_id;
+            //* 235b3d5c43c14184b365def8c1d1e160 link cuando se tenga la webapp
             $body = 'Usuario: '. $user->mail. '<br> Contraseña: '.$password;
             $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
-            $send_grid->setTemplate('d-235b3d5c43c14184b365def8c1d1e160');
-            $send_grid->setParams(['first_name'=> $data['name'], 'link_account' => $link_password, 'body' => $body]);
+            $send_grid->setTemplate('d-b22ee2c485414371995b7ed109e95fb7');
+            $send_grid->setParams(['first_name'=> $data['name'], 'link_account' => $domain, 'body' => $body]);
             $send_grid->send();
         }
         return $user;
