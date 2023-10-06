@@ -71,11 +71,13 @@
                                     <div class="card card-bordered card-preview">
                                         <div class="card-inner">
                                             <div class="row text-secondary d-none d-md-flex">
-                                                <div class="col-12 col-md-1">#</div>
-                                                <div class="col-12 col-md-3">Etapa</div>
-                                                <div class="col-12 col-md-3">Estatus</div>
-                                                <div class="col-12 col-md-3">Progreso</div>
-                                                <div class="col-12 col-md-1"></div>
+                                                <div class="d-none d-md-flex" id="content-header-steps">
+                                                    <div class="col-12 col-md-1 fw-bold">#</div>
+                                                    <div class="col-12 col-md-3 fw-bold">Etapa</div>
+                                                    <div class="col-12 col-md-3 fw-bold">Estatus</div>
+                                                    <div class="col-12 col-md-3 fw-bold">Progreso</div>
+                                                    <div class="col-12 col-md-1 fw-bold"></div>
+                                                </div>
                                             </div>
                                             @if ($list_steps != null)
 
@@ -87,10 +89,10 @@
                                                                 data-bs-target="#accordion-item-{{ $key }}">
                                                                 <div class="row text-secondary">
 
-                                                                    <div class="col-12 col-md-1"> {!! $list_steps['name'] !!}</div>
-                                                                    <div class="col-12 col-md-3">{{ $list_steps['step'] }}</div>
-                                                                    <div class="col-12 col-md-3">{{ $list_steps['status'] }}</div>
-                                                                    <div class="col-12 col-md-3">{!! $list_steps['progress'] !!}</div>
+                                                                    <div class="col-12 col-md-1 text-primary {{ $list_steps['status'] == 'Concluido' ? '' : 'fw-bold' }}"> {!! $list_steps['name'] !!}</div>
+                                                                    <div class="col-12 col-md-3 text-primary {{ $list_steps['status'] == 'Concluido' ? '' : 'fw-bold' }}">{{ $list_steps['step'] }}</div>
+                                                                    <div class="col-12 col-md-3 text-primary {{ $list_steps['status'] == 'Concluido' ? '' : 'fw-bold' }}">{{ $list_steps['status'] }}</div>
+                                                                    <div class="col-12 col-md-3" id="content-progress-steps">{!! $list_steps['progress'] !!}</div>
                                                                     <div class="col-12 col-md-1"></div>
                                                                 </div>
                                                                 @if ($list_steps['status'] != 'En espera')
@@ -128,7 +130,7 @@
                                                                                             <td>{!! $list_actions['name'] !!}</td>
                                                                                             <td class="d-none d-md-table-cell">{{ $list_actions['subject'] }}
                                                                                             </td>
-                                                                                            <td>{{ $list_actions['status'] }}
+                                                                                            <td>{!! $list_actions['status'] !!}
                                                                                             </td>
                                                                                             <td class="d-none d-md-table-cell">{!! $list_actions['deadline'] !!}</td>
                                                                                             <td class="d-none d-md-table-cell">{{ $list_actions['advisor'] }}
@@ -136,7 +138,7 @@
                                                                                             <td>
                                                                                                 @if (isset($list_actions['link']))
                                                                                                     <a href="{{ $list_actions['link'] }}"
-                                                                                                        class="btn btn-sm btn-primary">Abrir</a>
+                                                                                                        class="">Abrir</a>
                                                                                                 @endif
                                                                                             </td>
                                                                                         </tr>

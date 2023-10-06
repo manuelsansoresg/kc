@@ -405,16 +405,18 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
     public function listAction($history_id)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
-        $percent_file   = 100;
-        $percent_form   = self::percentForm($history);
-        $status[]       = 'Opcional';
-        $status[]       = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $max_hour       = 12;
-        $in_progress    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM], $credit->id)[0];
-        $hour           = $in_progress->date_status_progress;
+        $history                = HistoryLog::find($history_id);
+        $credit                 = $history->historyCredit;
+        $advisor                = $credit->creditAdvisor;
+        $percent_file           = 100;
+        $percent_form           = self::percentForm($history);
+        $status_percent_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $max_hour               = 12;
+        $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM], $credit->id)[0];
+        $hour                   = $in_progress->date_status_progress;
+
+        $status[]               = \View::make('panel.module.status', ['status' => 'Opcional'])->render();
+        $status[]               = \View::make('panel.module.status', ['status' => $status_percent_form])->render();
 
         $name_advisor = null;
         try {
@@ -511,8 +513,6 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
         
         $data           = array();
-        $status[]       = 'Concluida';
-        $status[]       = $percent_desition == 100 ? 'Concluido' : 'En curso';
 
         $name[]         = 'Respuesta de módulo';
         $name[]         = 'Decisión';
@@ -529,6 +529,11 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
         $link[] = '/panel/kc-check-up/report/answer_module/'.$history_id.'/show';
         $link[] = '/panel/kc-check-up/report/desition/'.$history_id.'/show?type=2';
+
+        $status_percent_form    = $percent_desition == 100 ? 'Concluido' : 'En curso';
+        $status[]               = \View::make('panel.module.status', ['status' => 'Concluida'])->render();
+        $status[]               = \View::make('panel.module.status', ['status' => $status_percent_form])->render();
+
 
         foreach ($get_actions as $key => $get_action) {
             $data[] = array(

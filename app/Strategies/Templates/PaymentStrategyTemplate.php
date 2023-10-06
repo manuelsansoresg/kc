@@ -605,11 +605,14 @@ class PaymentStrategyTemplate implements TemplateInterface
 
         $subject1 = HistoryLog::$label_subject[52];
         $subject2 = HistoryLog::$label_subject[53];
+
+        $viewStatus1 = \View::make('panel.module.status', ['status' => 'Opcional'])->render();
+        $viewStatus2 = \View::make('panel.module.status', ['status' => $status_form])->render();
         
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' =>  'Opcional',
+            'status' => $viewStatus1 ,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option_2,
@@ -618,7 +621,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject2,
-            'status' => $status_form,
+            'status' => $viewStatus2,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -659,6 +662,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         
         
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_form])->render();
         $name_advisor   = null;
 
         try {
@@ -683,7 +687,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' => $status_form,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,

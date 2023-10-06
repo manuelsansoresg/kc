@@ -2661,10 +2661,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $subject1 = HistoryLog::$label_subject[22];
         $subject2 = HistoryLog::$label_subject[23];
 
+        $viewStatus1 = \View::make('panel.module.status', ['status' => $status_file])->render();
+        $viewStatus2 = \View::make('panel.module.status', ['status' => $status_form])->render();
+
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject1,
-            'status' => $status_file,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_upload,
             'advisor' => $name_advisor,
             'options' => $file_option,
@@ -2674,7 +2677,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject2,
-            'status' => $status_form,
+            'status' => $viewStatus2,
             'deadline' => $view_dead_line_form,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -2734,11 +2737,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data = array();
 
         $subject1 = HistoryLog::$label_subject[24];
+        $viewStatus1 = \View::make('panel.module.status', ['status' => $status_form])->render();
 
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' => $status_form,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -2845,10 +2849,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $subject2 = HistoryLog::$label_subject[26];
         $subject3 = HistoryLog::$label_subject[27];
 
+        $viewStatus1 = \View::make('panel.module.status', ['status' => 'Opcional'])->render();
+        $viewStatus2 = \View::make('panel.module.status', ['status' => $status_form1])->render();
+        $viewStatus3 = \View::make('panel.module.status', ['status' => $status_form2])->render();
+
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject1,
-            'status' => 'Opcional',
+            'status' => $viewStatus1,
             'deadline' => 'N/A',
             'advisor' => $name_advisor,
             'options' => $file_option,
@@ -2858,7 +2866,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject2,
-            'status' => $status_form1,
+            'status' => $viewStatus2,
             'deadline' => $view_dead_line2,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -2868,7 +2876,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject3,
-            'status' => $status_form2,
+            'status' => $viewStatus3,
             'deadline' => $view_dead_line3,
             'advisor' => $name_advisor,
             'options' => $form_option2,
@@ -2927,10 +2935,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $subject1 = HistoryLog::$label_subject[28];
 
+        $viewStatus1 = \View::make('panel.module.status', ['status' => $status])->render();
+
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' =>  $status,
+            'status' =>  $viewStatus1,
             'deadline' => $view_dead_line1,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -2990,11 +3000,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $data = array();
 
         $subject1 = HistoryLog::$label_subject[29];
-
+        $viewStatus1 = \View::make('panel.module.status', ['status' => $status_step5])->render();
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' =>  $status_step5,
+            'status' =>  $viewStatus1,
             'deadline' => $view_dead_line1,
             'advisor' => $name_advisor,
             'options' => $form_option,

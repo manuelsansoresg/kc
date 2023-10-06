@@ -1473,11 +1473,16 @@ class SwapStrategyTemplate implements TemplateInterface
         $subject2 = HistoryLog::$label_subject[39];
         $subject3 = HistoryLog::$label_subject[46];
 
+
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
+        $viewStatus2= \View::make('panel.module.status', ['status' => $status_form])->render();
+        $viewStatus3= \View::make('panel.module.status', ['status' => $status_file_2])->render();
+
         $data = array();
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject1,
-            'status' => $status_file,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option1,
@@ -1486,7 +1491,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject2,
-            'status' => $status_form,
+            'status' => $viewStatus2,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $option2,
@@ -1495,7 +1500,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject3,
-            'status' => $status_file_2,
+            'status' => $viewStatus3,
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
             'options' => $option3,
@@ -1564,11 +1569,16 @@ class SwapStrategyTemplate implements TemplateInterface
         $subject3 = HistoryLog::$label_subject[42];
         $subject4 = HistoryLog::$label_subject[43];
 
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_step2])->render();
+        $viewStatus2= \View::make('panel.module.status', ['status' => $status_step2_2])->render();
+        $viewStatus3= \View::make('panel.module.status', ['status' => $status_step2_3])->render();
+        $viewStatus4= \View::make('panel.module.status', ['status' => $status_step2_4])->render();
+
         $data[] = array(
             'name' => 'Firma',
             'subject' => $subject1,
             'description' => 'Preparar documento',
-            'status' => $status_step2,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option1,
@@ -1578,7 +1588,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Firma',
             'subject' => $subject2,
             'description' => 'Confirmar',
-            'status' => $status_step2_2,
+            'status' => $viewStatus2,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $option2,
@@ -1588,7 +1598,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Carga',
             'subject' => $subject3,
             'description' => 'Documento firmado',
-            'status' => $status_step2_3,
+            'status' => $viewStatus3,
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
             'options' => $option3,
@@ -1599,7 +1609,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Email',
             'subject' => $subject4,
             'description' => 'Enviar solicitud',
-            'status' => $status_step2_4,
+            'status' => $viewStatus4,
             'deadline' => $view_dead_line_step4,
             'advisor' => $name_advisor,
             'options' => $option4,
@@ -1662,11 +1672,15 @@ class SwapStrategyTemplate implements TemplateInterface
         $subject2 = HistoryLog::$label_subject[45];
         $subject3 = HistoryLog::$label_subject[47];
 
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
+        $viewStatus2= \View::make('panel.module.status', ['status' => $status_form])->render();
+        $viewStatus3= \View::make('panel.module.status', ['status' => $status_form_2])->render();
+
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject1,
             'description' => 'Preparar documento',
-            'status' => $status_file,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option1,
@@ -1676,7 +1690,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Formulario',
             'subject' => $subject2,
             'description' => 'Solicitar firma',
-            'status' => $status_form,
+            'status' => $viewStatus2,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $option2,
@@ -1686,7 +1700,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Decisión',
             'subject' => $subject3,
             'description' => 'Documento firmado',
-            'status' => $status_form_2,
+            'status' => $viewStatus3,
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
             'options' => $option3,

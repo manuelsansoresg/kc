@@ -667,11 +667,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data = array();
 
         $subject1 = HistoryLog::$label_subject[31];
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
 
         $data[] = array(
             'name' => 'Email',
             'subject' => $subject1,
-            'status' => $status_file,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line,
             'advisor' => $name_advisor,
             'options' => $file_option,
@@ -739,11 +740,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data = array();
 
         $subject1 = HistoryLog::$label_subject[32];
-        
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
+
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' =>  $status_file,
+            'status' =>  $viewStatus1,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $form_option_2,
@@ -799,11 +801,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $data = array();
         $subject1 = HistoryLog::$label_subject[34];
-        
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_form])->render();
+
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' => $status_form,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -863,10 +866,11 @@ class DeliveryStrategyTemplate implements TemplateInterface
         
         $subject1 = HistoryLog::$label_subject[33];
 
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_form])->render();
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' =>  $status_form,
+            'status' =>  $viewStatus1,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,

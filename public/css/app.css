@@ -78,10 +78,21 @@ h1.color-primary {
   height: 100vh !important;
 }
 
+#content-header-steps {
+  margin-left: 22px;
+}
+
+#content-progress-steps {
+  margin-left: 10px;
+}
+
 /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
   .text-elije {
     font-size: 12px;
+  }
+  #content-progress-steps {
+    margin-left: 0px;
   }
 }
 @media (max-width: 767px) {

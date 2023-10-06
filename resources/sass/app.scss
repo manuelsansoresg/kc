@@ -82,12 +82,23 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     height: 100vh !important;
   }
   
+
+  #content-header-steps{
+    margin-left: 22px;
+  }
+  
+  #content-progress-steps{
+    margin-left: 10px;
+  }
   
 
  /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
   .text-elije {
     font-size: 12px;
+  }
+  #content-progress-steps{
+    margin-left: 0px;
   }
 }
 

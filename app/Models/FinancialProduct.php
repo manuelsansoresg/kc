@@ -94,13 +94,11 @@ class FinancialProduct extends Model
         DB::connection()->enableQueryLog();
         $agreement_id           = $credit->agreement_id;
         $type_product_id        = $credit->tipo_credito;
-        $consulta_buro          = $credit->consulta_buro;
-        $bank_id                = $credit->bank_id;
-        $aval_o_garantia        = $credit->aval_o_garantia;
-
+       
         $financial_agreements   = FinancialAgreement::where('agreement_id', $agreement_id)->get();
         $financial_ids          = array();
         $financial_product_ids  = array();
+        
         
         foreach ($financial_agreements as $financial_agreement) {
             $financial_ids[] = $financial_agreement->financial_id;
@@ -114,21 +112,55 @@ class FinancialProduct extends Model
             ->join('financials', 'financials.id', 'financial_products.financial_id')
             ->whereIn('financial_products.financial_id', $financial_ids)
             ->where('financial_products.type_product_id', $type_product_id)
-            ->where('financial_products.consulta_buro', $consulta_buro)
+            //->where('financial_products.consulta_buro', $consulta_buro)
             
-            ->orderBy('rate_kc', 'DESC');
+            ->orderBy('rate_kc', 'DESC')->get();
+        $consulta_buro          = $credit->consulta_buro;
+        $bank_id                = $credit->bank_id;
+        $aval_o_garantia        = $credit->aval_o_garantia;
+    
+        foreach ($sql as $sql_query) {
+            $product_aval_o_garantia = $sql_query->aval_o_garantia;
+            $product_is_vincular_banco = $sql_query->is_vincular_banco;
+            $product_consulta_buro = $sql_query->consulta_buro;
         
-        if ($aval_o_garantia == 1) {
+            if (($consulta_buro == 1 && $product_consulta_buro == 1) ||
+                ($aval_o_garantia == 1 && $product_aval_o_garantia == 1) ||
+                ($product_is_vincular_banco == 1 && (!is_null($bank_id) && $bank_id > 0)) ||
+                (is_null($consulta_buro) && is_null($aval_o_garantia) && is_null($bank_id))
+            ) {
+                $financial_product_ids[] = $sql_query->id;
+            }
+        }
+
+
+        $result = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
+            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
+            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
+        )
+            ->join('financials', 'financials.id', 'financial_products.financial_id')
+            ->whereIn('financial_products.id', $financial_product_ids)
+            ->orderBy('rate_kc', 'DESC')->get();
+        
+        /* if ($aval_o_garantia == 1) {
             $sql->where('financial_products.aval_o_garantia', 1);
         }
 
-        $sql->orWhere(function ($query) use ($bank_id) {
+        $sql->where(function ($query) use ($bank_id) {
+            $query->where('financial_products.is_vincular_banco', 1);
+            if ($bank_id == 1) {
+                $query->where('financial_products.bank_id', $bank_id);
+            }
+        }); */
+
+        /* $sql->orWhere(function ($query) use ($bank_id) {
                 $query->where('financial_products.is_vincular_banco', 1)
                     ->where('financial_products.bank_id', $bank_id);
-            });
-        $sql = $sql->get();
+            }); */
         $queries = DB::getQueryLog();
-        return $sql;
+        //dd($queries);
+        return $result;
     }
 
     public static function saveEdit($request)

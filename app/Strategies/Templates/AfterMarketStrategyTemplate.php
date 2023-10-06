@@ -271,11 +271,12 @@ class AfterMarketStrategyTemplate implements TemplateInterface
 
         $data = array();
         $subject1 = HistoryLog::$label_subject[48];
+        $viewStatus1 = \View::make('panel.module.status', ['status' => $status_file])->render();
 
         $data[] = array(
             'name' => 'Encuesta',
             'subject' => $subject1,
-            'status' => $status_file,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option,
