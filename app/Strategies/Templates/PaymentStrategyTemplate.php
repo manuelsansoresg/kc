@@ -397,7 +397,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         
         //$percent_form = $percent_form;
         $menu_options         = self::menuOptionsStep($history);
-        $status_step1         = 'En espera';
+        $status_step1         = 'En curso';
         $status_step2         = 'En espera';
         
 
@@ -572,6 +572,7 @@ class PaymentStrategyTemplate implements TemplateInterface
     public function actionStep2($history_id)
     {
 
+        
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
         $advisor        = $credit->creditAdvisor;
@@ -609,6 +610,8 @@ class PaymentStrategyTemplate implements TemplateInterface
         $viewStatus1 = \View::make('panel.module.status', ['status' => 'Opcional'])->render();
         $viewStatus2 = \View::make('panel.module.status', ['status' => $status_form])->render();
         
+        //dd($viewStatus1, $viewStatus2);
+
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
@@ -629,7 +632,7 @@ class PaymentStrategyTemplate implements TemplateInterface
         );
         
         
-
+        //dd('test', $data);
         return $data;
     }
 
