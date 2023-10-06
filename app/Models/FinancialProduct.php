@@ -118,7 +118,7 @@ class FinancialProduct extends Model
         $consulta_buro          = $credit->consulta_buro;
         $bank_id                = $credit->bank_id;
         $aval_o_garantia        = $credit->aval_o_garantia;
-    
+        
         foreach ($sql as $sql_query) {
             $product_aval_o_garantia = $sql_query->aval_o_garantia;
             $product_is_vincular_banco = $sql_query->is_vincular_banco;
@@ -127,12 +127,12 @@ class FinancialProduct extends Model
             if (($consulta_buro == 1 && $product_consulta_buro == 1) ||
                 ($aval_o_garantia == 1 && $product_aval_o_garantia == 1) ||
                 ($product_is_vincular_banco == 1 && (!is_null($bank_id) && $bank_id > 0)) ||
-                (is_null($consulta_buro) && is_null($aval_o_garantia) && is_null($bank_id))
+                (is_null($consulta_buro) || is_null($aval_o_garantia) || is_null($bank_id))
             ) {
                 $financial_product_ids[] = $sql_query->id;
             }
         }
-
+        //dd($consulta_buro,  $bank_id, $aval_o_garantia, $financial_product_ids);
 
         $result = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
