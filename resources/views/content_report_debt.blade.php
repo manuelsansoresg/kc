@@ -36,7 +36,7 @@ $chart4 = $my_product_financial;
                                         <div class="animated-title">
                                             <div class="text-top ">
                                                 <div class="textcontainer">
-                                                    <span class="particletext confetti h1">¡Felicidades! {{ $client->name }}</span>
+                                                    <span class="particletext confetti h1">¡Felicidades {{ $client->name }}!</span>
                                                 </div>
                                                {{--  <div>
                                                     <span class="h1">¡Felicidades! </span>
@@ -336,10 +336,7 @@ $chart4 = $my_product_financial;
                                                 data-aos="fade-up"> Simulación
                                             </h2>
                                             <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                                El interés es el costo del dinero durante el tiempo del préstamo, este,
-                                                junto con las comisiones, IVA y cargos componen el CAT Real. Aquí te
-                                                mostramos con un sencillo ejemplo, cuánto te cuesta tu crédito con cada
-                                                finaciera.
+                                                El interés es el precio que pagas por pedir dinero prestado, y se combina con otras cosas como comisiones, IVA y otros cargos para crear lo que llamamos el CAT Real. Aquí, con un ejemplo sencillo, te enseñamos cuánto te costaría tu crédito con diferentes financias. 
                                                 (tip: mientras más larga la barra, mayor es el costo).
 
 
@@ -412,15 +409,12 @@ $chart4 = $my_product_financial;
                                             data-aos="fade-up"> Costo Anual Total Real
                                         </h2>
                                         <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                            No es el famoso y confuso “CAT promedio” o “CAT para fines informativos” que te
-                                            dicen en los anuncios, nosotros te decimos cuánto pagas al año por cada peso que te
-                                            prestan.
+                                            Seguro has visto publicidad que menciona conceptos como “CAT promedio” o “CAT para fines informativos”. Esos términos pueden ser confusos y engañosos.
+
     
                                         </p>
                                         <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                                            El CAT real es el verdadero costo del crédito, esto incluye intereses, impuestos
-                                            (IVA), comisiones y cualquier otro cargo; Consideramos que es un factor importante,
-                                            siempre es bueno pagar menos por el mismo producto.
+                                            Para que no haya confusiones, nosotros te decimos el CAT real, el cual es el verdadero costo del crédito que incluye intereses, impuestos (IVA), comisiones y cualquier otro cargo. El CAT real es uno de los factores más importantes para comparar las distintas opciones.
                                         </p>
     
     
