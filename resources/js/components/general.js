@@ -36,14 +36,34 @@ $( "#frm-lead-note" ).submit(function( event ) {
 
 
   window.copyToClipBoardReport = function() {
-
     var content = document.getElementById('url_report').value;
- 
-     navigator.clipboard.writeText(content)
-         .then(() => {
-         showToast('', 'URL copiada en el portapapeles', 'success');
-     })
-         .catch(err => {
-         console.log('Something went wrong', err);
-     })
- }
+
+    // Intentar usar la API del Portapapeles (navigator.clipboard) si está disponible
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(content)
+            .then(() => {
+                showToast('', 'URL copiada en el portapapeles', 'success');
+            })
+            .catch(err => {
+                console.log('No se pudo copiar al portapapeles con la API del Portapapeles', err);
+            });
+    } else {
+        // Si la API del Portapapeles no está disponible, usar métodos alternativos
+        var textarea = document.createElement('textarea');
+        textarea.value = content;
+        textarea.style.position = 'fixed'; // Para asegurarse de que sea visible
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'URL copiada en el portapapeles' : 'No se pudo copiar al portapapeles';
+            showToast('', msg, successful ? 'success' : 'error');
+        } catch (err) {
+            console.log('No se pudo copiar al portapapeles con el método alternativo', err);
+        } finally {
+            document.body.removeChild(textarea);
+        }
+    }
+}
+

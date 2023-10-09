@@ -8,6 +8,7 @@
 
 @section('content')
 
+
 <section class="position-relative bg-style-1">
     <div class="container py-9 py-lg-11 position-relative z-index-1">
        
@@ -182,5 +183,5 @@
 @endsection
 
 @section('add_script')
-    @include('layouts.script_report')
+    
 @endsection
