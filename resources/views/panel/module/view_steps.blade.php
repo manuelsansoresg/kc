@@ -89,9 +89,9 @@
                                                                 data-bs-target="#accordion-item-{{ $key }}">
                                                                 <div class="row text-secondary">
 
-                                                                    <div class="col-12 col-md-1 text-primary {{ $list_steps['status'] == 'Concluido' ? '' : 'fw-bold' }}"> {!! $list_steps['name'] !!}</div>
-                                                                    <div class="col-12 col-md-3 text-primary {{ $list_steps['status'] == 'Concluido' ? '' : 'fw-bold' }}">{{ $list_steps['step'] }}</div>
-                                                                    <div class="col-12 col-md-3 text-primary {{ $list_steps['status'] == 'Concluido' ? '' : 'fw-bold' }}">{{ $list_steps['status'] }}</div>
+                                                                    <div class="col-12 col-md-1 text-primary {{ $list_steps['status'] == 'En curso' ? 'fw-bold' : '' }}"> {!! $list_steps['name'] !!}</div>
+                                                                    <div class="col-12 col-md-3 text-primary {{ $list_steps['status'] == 'En curso' ? 'fw-bold' : '' }}">{{ $list_steps['step'] }}</div>
+                                                                    <div class="col-12 col-md-3 text-primary {{ $list_steps['status'] == 'En curso' ? 'fw-bold' : '' }}">{{ $list_steps['status'] }}</div>
                                                                     <div class="col-12 col-md-3" id="content-progress-steps">{!! $list_steps['progress'] !!}</div>
                                                                     <div class="col-12 col-md-1"></div>
                                                                 </div>
