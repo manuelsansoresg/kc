@@ -43,8 +43,7 @@
 
                                             <div class="text-bottom-end">
                                                 <div>
-                                                    <span class="h4">Te presentamos las <b>3</b>
-                                                        Mejores</b> financieras. </span>
+                                                    <span class="h4">Te ayudaremos con el trámite para que todo salga bien. </span>
                                                 </div>
                                             </div>
 
