@@ -37,15 +37,20 @@ class KcDeliveryController extends Controller
         HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit->id, 0);
 
         //*send email
-        $financial_t = $credit->creditAppliedFinancial;
-        $name_financial_t = $financial_t->email;
-        $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta');
-        $send_grid->setTemplate('d-208896a6a91043619f40ba61cbebf5c7');
-        $data_params = array(
-            'link_account' => asset('credit-resume/'.$credit->id),
-         );
-        $send_grid->setParams($data_params);
-        $send_grid->send();
+        try {
+            $financial_t = $credit->creditAppliedFinancial;
+            $name_financial_t = $financial_t->email;
+            $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta');
+            $send_grid->setTemplate('d-208896a6a91043619f40ba61cbebf5c7');
+            $data_params = array(
+                'link_account' => asset('credit-resume/'.$credit->id),
+            );
+            $send_grid->setParams($data_params);
+            $send_grid->send();
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        
     }
 
     /**
