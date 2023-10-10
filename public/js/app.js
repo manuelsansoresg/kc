@@ -1755,6 +1755,8 @@ window.productChange = function (lead_product_id) {
   $('#content-tipo-credito').hide();
   $('#content-consulta-buro-credito').hide();
   $('#content-financial_product_id').hide();
+  $('#content-aval-o-garantia').hide();
+  $('#content-comment').hide();
   $('#lead-financial_id').val(null).trigger('change');
 
   if (lead_product_id != null) {
@@ -1778,6 +1780,12 @@ window.productChange = function (lead_product_id) {
     $('#content-banco_nomina').show();
     $('#content-tipo-credito').show();
     $('#content-consulta-buro-credito').show();
+  }
+
+  if (product_id == 3) {
+    $('#content-aval-o-garantia').show();
+    $('#content-comment').show();
+    $('#content-aval-o-garantia').hide();
   }
 };
 
@@ -1930,6 +1938,7 @@ function setData(is_change_origen, is_change_organization) {
     $('#lead-second_last_name').val(lead.second_last_name);
     $('#lead-cellphone').val(lead.cellphone);
     $('#lead-email').val(lead.email);
+    $('#lead-comment').val(lead.comment);
     $('#content-financial').hide();
 
     if (product_id == 2) {

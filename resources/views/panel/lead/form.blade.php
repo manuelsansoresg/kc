@@ -226,7 +226,7 @@
                                                         @php
                                                             $status_si_no = config('enums.status_si_no');
                                                         @endphp
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6" id="content-aval-o-garantia" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Aval o garantía</label>
                                                                 <p class="small">Selecciona si el prospecto proporcionaría aval o garantía</p>
@@ -236,6 +236,16 @@
                                                                             <option value="{{ $key_aval_garantia }}">{{ $aval_garantia }}</option>
                                                                         @endforeach
                                                                     </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6" id="content-comment" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Comentario</label>
+                                                                <p class="small">Describe la asesoría proporcionada al prospecto</p>
+                                                                <div class="form-control-wrap">
+                                                                    <textarea name="data[comment]" id="lead-comment" cols="5" rows="3" class="form-control"></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
