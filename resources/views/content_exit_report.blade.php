@@ -15,7 +15,7 @@
     $is_app = isset($_GET['is_app']) ? true : false;
     $text1 = 'Un asesor de nuestro equipo te contactará en unos minutos para ayudarte con  el trámite de tu crédito.';
     $text2 = 'Un asesor de nuestro equipo te contactará a la brevedad posible para iniciar el trámite de tu crédito.';
-    $text3 = 'Si tienes alguna duda, no dudes en contactarnos <i class="fas fa-smile-beam text-warning"></i>';
+    $text3 = 'Si tienes alguna duda, no dudes en contactarnos. <i class="fas fa-smile-beam text-warning "></i>';
 @endphp
 {{-- hero --}}
 <section class="position-relative">
@@ -35,13 +35,13 @@
                                     <h2 class="mb-4 aos-init aos-animate display-1" data-aos="fade-up">
                                         <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
                                         ¡Genial!
-                                        <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
+                                        <img style="width: 40px" src="{{ asset('images/7626666left.png') }}" alt="">
                                      </h2>
                                     @else
                                     <h2 class="mb-4 aos-init aos-animate display-1 mt-3" data-aos="fade-up">
                                         <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
                                         ¡Genial!
-                                        <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
+                                        <img style="width: 40px" src="{{ asset('images/7626666left.png') }}" alt="">
 
                                     </h2>
                                     @endif
@@ -94,7 +94,7 @@
                                             <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
                                                 <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
                                                 >Contacto 
-                                                <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
+                                                <img width="18" class="mt-n2" src="/images/whatsapp-logo-1-1.png" alt="">
                                             </a>
                                                         <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12 " href="https://kaaxclub.com/">Salir 
                                                 </a>
@@ -108,7 +108,7 @@
                                                 </a>
                                                 <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
                                                     >Contacto 
-                                                    <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
+                                                    <img width="18" class="mt-n2" src="/images/whatsapp-logo-1-1.png" alt="">
                                                 </a>
                                             </div>
                                         </div>
@@ -120,7 +120,7 @@
                                             </a>
                                             <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
                                                 >Contacto 
-                                                <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
+                                                <img width="18" class="mt-n2" src="/images/whatsapp-logo-1-1.png" alt="">
                                             </a>
                                         </div>
                                     </div>
