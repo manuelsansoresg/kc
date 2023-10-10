@@ -35,6 +35,7 @@ class Lead extends Model
         'consulta_buro',
         'financial_product_id',
         'aval_o_garantia',
+        'comment',
     ];
 
     public static function listDatatable()
@@ -122,7 +123,7 @@ class Lead extends Model
         $get_list     = HistoryLog::where(['status_id' => $status_id, 'status' => 1])->get();
         $data         = array();
         foreach ($get_list as $query) {
-            $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'id' => $query->id])->render();
+            $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'id' => $query->id_rel])->render();
             
             $lbl_status   = '<span class="text-success">Valido</span>';
             $lead         = $query->historyLead;

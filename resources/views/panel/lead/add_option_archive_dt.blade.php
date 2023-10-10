@@ -13,7 +13,11 @@ $user = Auth::user();
     </a>
         <div class="dropdown-menu dropdown-menu-end">
             <ul class="link-list-opt no-bdr">
-    
+                <li>
+                    <a class="pointer" href="/panel/lead/{{ $id }}/profile">
+                        <em class="icon ni ni-user-fill"></em>
+                        <span class="">Ver perfil</span></a>
+                </li>
             </ul>
         </div>
     </div>

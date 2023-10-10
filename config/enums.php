@@ -41,6 +41,7 @@ return [
         2 => 'Sin convenio',
         3 => 'Otro',
         4 => 'Conversión',
+        5 => 'Asesoría',
     ),
     
     'credit_reason_archive' => array(

@@ -97,6 +97,13 @@
                                                                         {{ $product != null ? $product->alias : '' }} </span>
                                                                 </div>
                                                             </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Comentario</span>
+                                                                    <span class="profile-ud-value">
+                                                                        {{ $lead != null ? $lead->comment : '' }} </span>
+                                                                </div>
+                                                            </div>
         
         
                                                         </div><!-- .profile-ud-list -->
