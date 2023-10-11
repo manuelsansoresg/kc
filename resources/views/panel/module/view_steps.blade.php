@@ -82,7 +82,7 @@
                                             @if ($list_steps != null)
 
                                                 @foreach ($list_steps as $key => $list_steps)
-                                                    <div id="accordion" class="accordion">
+                                                    <div id="accordion" class="accordion mt-2">
                                                         <div class="accordion-item">
                                                             <a href="#" class="accordion-head"
                                                                 data-bs-toggle="collapse"
