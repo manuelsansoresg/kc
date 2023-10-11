@@ -11,7 +11,7 @@
                             
                         </div>
                         <div class="col-12">
-                            <p class="text-center text-elije">Te resolvemos en 3 minutos</p>
+                            <p class="text-center text-elije"></p>
                         </div>
                     </div>
                 </div><!-- end col-lg-5 -->
