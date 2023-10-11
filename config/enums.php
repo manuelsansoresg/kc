@@ -26,6 +26,8 @@ return [
         1 => 'WhatsApp',
         2 => 'Llamada',
         3 => 'Webchat',
+        4 => 'Facebook',
+        5 => 'Instagram',
     ),
     'channel_web_page' => array(
         1 => 'Formulario',
