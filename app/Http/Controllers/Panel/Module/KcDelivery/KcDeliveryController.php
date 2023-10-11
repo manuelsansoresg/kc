@@ -38,9 +38,9 @@ class KcDeliveryController extends Controller
 
         //*send email
         try {
-            $financial_t = $credit->creditAppliedFinancial;
-            $name_financial_t = $financial_t->email;
-            $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta');
+            $user_financial = $credit->financial_user_assigned;
+            $user_email_financial = $user_financial->email;
+            $send_grid = new Csendgrid($user_email_financial, 'creacion cuenta');
             $send_grid->setTemplate('d-208896a6a91043619f40ba61cbebf5c7');
             $data_params = array(
                 'link_account' => asset('credit-resume/'.$credit->id),
