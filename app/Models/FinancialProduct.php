@@ -143,23 +143,7 @@ class FinancialProduct extends Model
             ->whereIn('financial_products.id', $financial_product_ids)
             ->orderBy('rate_kc', 'DESC')->get();
         
-        /* if ($aval_o_garantia == 1) {
-            $sql->where('financial_products.aval_o_garantia', 1);
-        }
-
-        $sql->where(function ($query) use ($bank_id) {
-            $query->where('financial_products.is_vincular_banco', 1);
-            if ($bank_id == 1) {
-                $query->where('financial_products.bank_id', $bank_id);
-            }
-        }); */
-
-        /* $sql->orWhere(function ($query) use ($bank_id) {
-                $query->where('financial_products.is_vincular_banco', 1)
-                    ->where('financial_products.bank_id', $bank_id);
-            }); */
         $queries = DB::getQueryLog();
-        //dd($queries);
         return $result;
     }
 
