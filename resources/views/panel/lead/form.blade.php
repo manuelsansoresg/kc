@@ -60,7 +60,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">*Primer apellido</label>
+                                                                <label class="form-label">Primer apellido</label>
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" name="data[last_name]"  id="lead-last_name">
                                                                 </div>
@@ -84,7 +84,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">*Email</label>
+                                                                <label class="form-label">Email</label>
                                                                 <div class="form-control-wrap">
                                                                     <input type="email" class="form-control" name="data[email]" id="lead-email">
                                                                 </div>

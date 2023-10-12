@@ -370,14 +370,14 @@ $().ready(function () {
                 required: true,
             },
             'data[last_name]': {
-                required: true,
+                required: false,
             },
             'data[cellphone]': {
                 number: true,
                 minlength: 10
             },
             'data[email]': {
-                required: true,
+                required: false,
                 email: true
             },
             'data[origin_id]': {

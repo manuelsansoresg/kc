@@ -12,6 +12,7 @@ class LeadStrategy implements ValidateStagesInterface
         $get_lead             = Lead::find($lead_id);
         $error                = false;
         $error_organization   = false;
+        $error_email          = false;
         $error_product        = false;
         $error_tipo_credito   = false;
 
@@ -31,9 +32,12 @@ class LeadStrategy implements ValidateStagesInterface
             if ($get_lead->tipo_credito === null) {
                 $error_tipo_credito = true;
             }
+            if ($get_lead->email === null) {
+                $error_email = true;
+            }
             
     
-            if ($error_organization == true || $error_product == true || $error_tipo_credito == true) {
+            if ($error_organization == true || $error_product == true || $error_tipo_credito == true || $error_email == true) {
                 $error = true;
             }
             
@@ -42,6 +46,7 @@ class LeadStrategy implements ValidateStagesInterface
                 'Servicio KC' => $error_product,
                 'Tipo de  crédito' => $error_tipo_credito,
                 'Organización' => $error_organization,
+                'Email' => $error_email,
             );
         }
         $data_error = array(
