@@ -72,8 +72,8 @@ $user = Auth::user();
                                 <em class="icon ni ni-tag"></em><span>Etiquetas</span></a>
                         </li>
                         <li>
-                            <a class="pointer" onclick="moveModalLead('Archivar', {{ $id }}, '{{ $m_history::LEAD_ARCHIVE }}', '{{ $m_history::CREATE_PROSPECT }}', 'dt-lead')">
-                                <em class="icon ni ni-archive"></em><span>Archivar</span></a>
+                            <a class="pointer" href="https://wa.me/{{ $lead->cellphone }}" target="_blank">
+                                <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
                         </li>
                         <li>
                             <a class="pointer" onclick="actionModal({{ $id }}, true)">
@@ -89,7 +89,10 @@ $user = Auth::user();
                             <a class="pointer" onclick="modalValidate({{ $id }}, 'lead')">
                                 <em class="icon ni ni-alert-circle-fill"></em><span>Ver validaciónes</span></a>
                         </li>
-    
+                        <li>
+                            <a class="pointer" onclick="moveModalLead('Archivar', {{ $id }}, '{{ $m_history::LEAD_ARCHIVE }}', '{{ $m_history::CREATE_PROSPECT }}', 'dt-lead')">
+                                <em class="icon ni ni-archive"></em><span>Archivar</span></a>
+                        </li>
                         <li>
                             <a class="pointer" onclick="deleteLead({{ $id }})">
                                 <em class="icon ni ni-trash"></em><span>Borrar</span></a>

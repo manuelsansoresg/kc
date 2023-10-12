@@ -37,7 +37,11 @@ class LeadStrategy implements ValidateStagesInterface
             }
             
     
-            if ($error_organization == true || $error_product == true || $error_tipo_credito == true || $error_email == true) {
+            /* if ($error_organization == true || $error_product == true || $error_tipo_credito == true || $error_email == true) {
+                $error = true;
+            } */
+            
+            if ($error_organization == true || $error_product == true || $error_tipo_credito == true) {
                 $error = true;
             }
             

@@ -54,8 +54,7 @@ class Lead extends Model
             if ($query != null) {
                 $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
                 $validate       = (new $leadStrategy)->getValidate($query->id);
-    
-                $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'validate' => $validate])->render();
+                $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'lead' => $query, 'validate' => $validate])->render();
                 $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
                 
                 $lbl_status     = '<span class="text-success">Valido</span>';
@@ -123,7 +122,7 @@ class Lead extends Model
         $get_list     = HistoryLog::where(['status_id' => $status_id, 'status' => 1])->get();
         $data         = array();
         foreach ($get_list as $query) {
-            $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'id' => $query->id_rel])->render();
+            $option       = \View::make('panel.lead.add_option_archive_dt', [ 'type' => 2, 'lead' => $query, 'id' => $query->id_rel])->render();
             
             $lbl_status   = '<span class="text-success">Valido</span>';
             $lead         = $query->historyLead;

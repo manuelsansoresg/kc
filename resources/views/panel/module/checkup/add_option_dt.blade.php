@@ -30,6 +30,10 @@
                 <em class="icon ni ni-report-profit"></em><span>Ver perfil crédito</span></a>
         </li>
         <li>
+            <a class="pointer" href="https://wa.me/{{ $client->cellphone }}" target="_blank">
+                <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
+        </li>
+        <li>
             <a onclick="moveModal('Cancelar', {{ $credit_id }}, '{{ $m_history::CREDIT_CANCELED }}', '{{ $status_id }}', 'dt-check-up')" class="pointer">
                 <em class="icon ni ni-cross-circle-fill"></em><span>Cancelar</span></a>
         </li>
