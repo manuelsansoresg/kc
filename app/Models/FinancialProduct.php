@@ -112,8 +112,6 @@ class FinancialProduct extends Model
             ->join('financials', 'financials.id', 'financial_products.financial_id')
             ->whereIn('financial_products.financial_id', $financial_ids)
             ->where('financial_products.type_product_id', $type_product_id)
-            //->where('financial_products.consulta_buro', $consulta_buro)
-            
             ->orderBy('rate_kc', 'DESC')->get();
         $consulta_buro          = $credit->consulta_buro;
         $bank_id                = $credit->bank_id;
