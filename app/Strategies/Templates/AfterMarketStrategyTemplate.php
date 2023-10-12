@@ -326,6 +326,13 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                     'name' => 'Ver perfil crédito',
                     'icon' => 'icon ni ni-report-profit'
                 ],
+                [
+                    'link' => 'https://wa.me//'.$client->cellphone,
+                    'target' => '_blank',
+                    'onclick' => '',
+                    'name' => 'Whatsapp',
+                    'icon' => 'icon ni ni-whatsapp'
+                ],
                 
             ),
         );
