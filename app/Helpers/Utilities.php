@@ -113,8 +113,21 @@ if (!function_exists('format_price')) {
 if (!function_exists('reduceDecimal')) {
     function reduceDecimal($number, $max_decimal = 2)
     {
-        $extract = explode(".", $number);
-        $new_number = isset($extract[1])? $extract[0].'.'.substr($extract[0], 0, $max_decimal) : $number;
-        return $new_number;
+        // Primero, verificamos si el número contiene un punto decimal
+        if (strpos($number, '.') !== false) {
+            // Divide el número en la parte entera y la parte decimal
+            list($integerPart, $decimalPart) = explode('.', $number);
+            
+            // Asegurémonos de que la parte decimal no sea más larga de lo que se permite
+            $decimalPart = substr($decimalPart, 0, $max_decimal);
+            
+            // Combina la parte entera y la parte decimal con un punto
+            $newNumber = $integerPart . '.' . $decimalPart;
+        } else {
+            // Si no hay punto decimal, simplemente devolvemos el número original
+            $newNumber = $number;
+        }
+
+        return $newNumber;
     }
 }

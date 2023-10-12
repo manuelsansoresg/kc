@@ -114,7 +114,7 @@
                                         </div>
                                         <div class="card-body pt-0 pb-4 px-4">
                                             <span class="h4 display-9"><span class="fw-light small"></span>Calificación:
-                                                {{ reduceDecimal($financial_product->rate_kc, 1) }}</span>
+                                                {{ reduceDecimal($financial_product->rate_kc, 2) }}</span>
                                             <span class="fw-bold text-muted">/5 </span>
 
                                             <small class="text-muted font-monospace mb-4 d-block"></small><button
@@ -208,7 +208,7 @@
                                                 </div>
                                                 <div class="card-body pt-0 pb-4 px-4">
                                                     <span class="h4 display-9"><span class="fw-light small"></span>Calificación:
-                                                        {{ reduceDecimal($final_financials->rate_kc, 1) }}</span>
+                                                        {{ reduceDecimal($final_financials->rate_kc, 2) }}</span>
                                                     <span class="fw-bold text-muted">/5 </span>
     
                                                     <small class="text-muted font-monospace mb-4 d-block"></small><button
