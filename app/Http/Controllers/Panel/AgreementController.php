@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Agreement;
 use App\Models\FinancialAgreement;
+use App\Models\FinancialProduct;
 use Illuminate\Http\Request;
 
 class AgreementController extends Controller
@@ -61,9 +62,12 @@ class AgreementController extends Controller
     {
         $agreement = Agreement::find($id);
         $get_financials = $agreement->financialAgreement;
+        //$products = $get_financials->financial;
+        //dd($get_financials);
         $financials = array();
         foreach ($get_financials as $financial) {
-            $financials[]= $financial->financial_id;
+            $product = FinancialProduct::getbyIdFirst($financial->product_id);
+            $financials[]= $product;
         }
         //$financials = trim($financials, ',');
         $data = array('agreement' => $agreement, 'financials' => $financials);

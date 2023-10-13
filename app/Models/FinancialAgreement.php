@@ -10,7 +10,7 @@ class FinancialAgreement extends Model
     use HasFactory;
     protected $fillable = [
         'agreement_id',
-        'financial_id',
+        'product_id',
     ];
     protected $primaryKey = 'agreement_id';
 
@@ -21,13 +21,13 @@ class FinancialAgreement extends Model
             $get_configuration->delete();
         }
 
-        $financials = $request->financials;
-        foreach ($financials as $key => $financial) {
+        $products = $request->products;
+        foreach ($products as $key => $product) {
             $data_financial = array(
                 'agreement_id' => $agreement_id,
-                'financial_id' => $financial ,
+                'product_id' => $product ,
             );
-            $n_financial = FinancialAgreement::create($data_financial);
+            FinancialAgreement::create($data_financial);
         }
     }
 
@@ -36,7 +36,7 @@ class FinancialAgreement extends Model
         $get_financials = FinancialAgreement::where('agreement_id', $agreement_id)->get();
         $financials = array();
         foreach ($get_financials as $get_financial) {
-            $financial = Financial::find($get_financial->financial_id);
+            $financial = FinancialProduct::find($get_financial->product_id);
             $financials[] = $financial;
         }
         return $financials;
@@ -49,6 +49,6 @@ class FinancialAgreement extends Model
     
     public function financial()
     {
-        return $this->belongsTo(Financial::class, 'financial_id');
+        return $this->belongsTo(FinancialProduct::class, 'product_id');
     }
 }

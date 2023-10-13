@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('title', 'Formulario convenio')
-@inject('m_financials', 'App\Models\Financial')
+@inject('m_financial_product', 'App\Models\FinancialProduct')
 @section('content')
 <div class="nk-content ">
     <div class="container-fluid">
@@ -34,7 +34,7 @@
                                             <label class="form-label" for="frm-product-name">Nombre</label>
                                             <div class="form-control-wrap">
                                                 @php
-                                                    $financials = $m_financials->getAll();
+                                                    $products = $m_financial_product->getAll();
                                                 @endphp
                                                 <input type="text" name="data[name]" id="agreement-name" class="form-control">
                                                 
@@ -52,11 +52,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="frm-product-name">Financieras</label>
+                                            <label class="form-label" for="frm-product-name">Productos financieros</label>
                                             <div class="form-control-wrap">
-                                                <select class="form-select select2multiple" multiple="multiple" name="financials[]" id="agreement-financials"   data-search="on">
-                                                @foreach ($financials as $financial)
-                                                    <option value="{{ $financial->id }}"> {{ $financial->commercial_name }} </option>
+                                                <select class="form-select select2multiple" multiple="multiple" name="products[]" id="agreement-financials"   data-search="on">
+                                                @foreach ($products as $product)
+                                                    <option value="{{ $product->id }}"> {{ $product->commercial_name}} - {{ $product->alias }} </option>
                                                 @endforeach
                                                 </select>
                                                 
