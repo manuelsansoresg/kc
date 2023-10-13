@@ -88,6 +88,30 @@ class FinancialProduct extends Model
         'aval_o_garantia',
     ];
 
+    public static function getbyIdFirst($product_id)
+    {
+        $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
+            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
+            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
+        )
+            ->join('financials', 'financials.id', 'financial_products.financial_id')
+            ->where('financial_products.id', $product_id)
+            ->orderBy('rate_kc', 'DESC')->first();
+        return $sql;
+    }
+    
+    public static function getAll()
+    {
+        $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
+            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
+            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
+        )
+            ->join('financials', 'financials.id', 'financial_products.financial_id')
+            ->orderBy('rate_kc', 'DESC')->get();
+        return $sql;
+    }
 
     public static function getByRate($credit)
     {
@@ -99,9 +123,8 @@ class FinancialProduct extends Model
         $financial_ids          = array();
         $financial_product_ids  = array();
         
-        
         foreach ($financial_agreements as $financial_agreement) {
-            $financial_ids[] = $financial_agreement->financial_id;
+            $financial_ids[] = $financial_agreement->product_id;
         }
         //dd($type_product_id, $financial_ids);
         $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
@@ -110,13 +133,14 @@ class FinancialProduct extends Model
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
-            ->whereIn('financial_products.financial_id', $financial_ids)
+            ->whereIn('financial_products.id', $financial_ids)
             ->where('financial_products.type_product_id', $type_product_id)
             ->orderBy('rate_kc', 'DESC')->get();
         $consulta_buro          = $credit->consulta_buro;
         $bank_id                = $credit->bank_id;
         $aval_o_garantia        = $credit->aval_o_garantia;
-        
+        $queries = DB::getQueryLog();
+
         foreach ($sql as $sql_query) {
             $product_aval_o_garantia = $sql_query->aval_o_garantia;
             $product_is_vincular_banco = $sql_query->is_vincular_banco;
@@ -141,7 +165,7 @@ class FinancialProduct extends Model
             ->whereIn('financial_products.id', $financial_product_ids)
             ->orderBy('rate_kc', 'DESC')->get();
         
-        $queries = DB::getQueryLog();
+        
         return $result;
     }
 
@@ -239,5 +263,10 @@ class FinancialProduct extends Model
     {
         $products = FinancialProduct::where('financial_id', $financial_id)->get();
         return $products;
+    }
+
+    public function financialAgreement()
+    {
+        return $this->hasMany(FinancialAgreement::class);
     }
 }
