@@ -34,20 +34,7 @@ $().ready(function () {
     if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null') {
 
         let product_id = $('#product_id').val();
-        let labels_periodicity = {
-            '' : 'Selecciona una opción',
-            1 : 'Semanal',
-            2 : 'Catorcenal',
-            3 : 'Quincenal',
-            4 : 'Mensual',
-        };
-        let labels_payment = {
-            '' : 'Selecciona una opción',
-            1 : 'Descuento de nómina',
-            2 : 'Domiciliación',
-            3 : 'Efectivo',
-            4 : 'Transferencia',
-        };
+        
         
          // Limpia las selecciones actuales en el select múltiple
          $('#product_periodicity_id').val(null).trigger('change');
