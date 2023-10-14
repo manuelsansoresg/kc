@@ -682,15 +682,14 @@ $().ready(function () {
       $('#agreement-name').val(agreement.name);
       $('#agreement-description').val(agreement.description); // Limpia las selecciones actuales en el select múltiple
 
-      $('#agreement-financials').val(null).trigger('change'); // Itera sobre los elementos de financials y los agrega al select múltiple
+      $('#agreement-financials').val(null).trigger('change');
+      $('#agreement-status').val(agreement.status).trigger("change"); // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
 
-      for (var i = 0; i < financials.length; i++) {
-        $('#agreement-financials').append(new Option(financials[i].commercial_name + '-' + financials[i].alias, financials[i].id, true, true));
-      } // Actualiza Select2 después de agregar las opciones
+      var financialValues = financials.map(function (item) {
+        return item.id;
+      }); // Seleccionar los valores correspondientes en los selects
 
-
-      $('#agreement-financials').trigger('change');
-      $('#agreement-status').val(agreement.status).trigger("change"); //$('#agreement-status option[value="' + agreement.status + '"]').trigger("change");
+      $('#agreement-financials').val(financialValues).trigger('change'); //$('#agreement-status option[value="' + agreement.status + '"]').trigger("change");
     })["catch"](function (e) {
       $('#admin_email-error-exist').show();
     });
@@ -1494,6 +1493,42 @@ $().ready(function () {
       });
     }
   });
+
+  if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null') {
+    var product_id = $('#product_id').val();
+    var labels_periodicity = {
+      '': 'Selecciona una opción',
+      1: 'Semanal',
+      2: 'Catorcenal',
+      3: 'Quincenal',
+      4: 'Mensual'
+    };
+    var labels_payment = {
+      '': 'Selecciona una opción',
+      1: 'Descuento de nómina',
+      2: 'Domiciliación',
+      3: 'Efectivo',
+      4: 'Transferencia'
+    }; // Limpia las selecciones actuales en el select múltiple
+
+    $('#product_periodicity_id').val(null).trigger('change');
+    $('#product-principal_pay').val(null).trigger('change');
+    axios.get("/panel/financial-product/" + product_id + '/getPeriodicityAndPaymentMethod').then(function (response) {
+      var result = response.data;
+      var periodicities = result.periodicities;
+      var payments = result.payments; // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+
+      var periodicityValues = periodicities.map(function (item) {
+        return item.periodicity_id;
+      });
+      var paymentValues = payments.map(function (item) {
+        return item.payment_method_id;
+      }); // Seleccionar los valores correspondientes en los selects
+
+      $('#product_periodicity_id').val(periodicityValues).trigger('change');
+      $('#product-principal_pay').val(paymentValues).trigger('change');
+    })["catch"](function (e) {});
+  }
 });
 $("#frm-financial-buro").submit(function (event) {
   event.preventDefault();

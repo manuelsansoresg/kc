@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Panel\Financial;
 use App\Http\Controllers\Controller;
 use App\Models\Bank;
 use App\Models\FinancialProduct;
+use App\Models\ProductPaymentMethod;
+use App\Models\ProductPeriodicity;
 use Illuminate\Http\Request;
 
 class FinancialProductController extends Controller
@@ -31,6 +33,14 @@ class FinancialProductController extends Controller
         $banks                = Bank::all();
 
         return view('panel.financial.product.form', compact('financial_id', 'product_id', 'financial_product', 'banks'));
+    }
+
+    public function getPeriodicityAndPaymentMethod($product_id)
+    {
+        $periodicities = ProductPeriodicity::where('product_id', $product_id)->get();
+        $payments = ProductPaymentMethod::where('product_id', $product_id)->get();
+
+        return response()->json(['periodicities' => $periodicities, 'payments' => $payments]);
     }
 
     /**
@@ -89,6 +99,7 @@ class FinancialProductController extends Controller
         $financial_product    = FinancialProduct::find($id);
         $product_id           = $id;
         $financial_id         = $financial_product->financial_id;
+
         return view('panel.financial.product.form', compact('financial_id', 'product_id', 'financial_product', 'banks'));
     }
 
