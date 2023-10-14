@@ -31,6 +31,46 @@ $().ready(function () {
         }
     });
 
+    if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null') {
+
+        let product_id = $('#product_id').val();
+        let labels_periodicity = {
+            '' : 'Selecciona una opción',
+            1 : 'Semanal',
+            2 : 'Catorcenal',
+            3 : 'Quincenal',
+            4 : 'Mensual',
+        };
+        let labels_payment = {
+            '' : 'Selecciona una opción',
+            1 : 'Descuento de nómina',
+            2 : 'Domiciliación',
+            3 : 'Efectivo',
+            4 : 'Transferencia',
+        };
+        
+         // Limpia las selecciones actuales en el select múltiple
+         $('#product_periodicity_id').val(null).trigger('change');
+         $('#product-principal_pay').val(null).trigger('change');
+        axios
+            .get("/panel/financial-product/" + product_id+'/getPeriodicityAndPaymentMethod')
+            .then(function (response) {
+                let result    = response.data;
+                let periodicities = result.periodicities;
+                let payments   = result.payments;
+
+                // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+                let periodicityValues = periodicities.map(item => item.periodicity_id);
+                let paymentValues = payments.map(item => item.payment_method_id);
+
+                // Seleccionar los valores correspondientes en los selects
+                $('#product_periodicity_id').val(periodicityValues).trigger('change');
+                $('#product-principal_pay').val(paymentValues).trigger('change');
+            })
+            .catch(e => {
+            });
+
+    }
  
 
 });

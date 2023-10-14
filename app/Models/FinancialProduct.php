@@ -172,12 +172,50 @@ class FinancialProduct extends Model
     public static function saveEdit($request)
     {
         if ($request->product_id == null) {
-            $financial_product = FinancialProduct::create($request->except(['_token', 'product_id', 'is_required']));
+            $financial_product = FinancialProduct::create($request->except(['_token', 'product_id', 'is_required', 'principal_pay', 'periodicity_id']));
         } else {
             $financial_product = FinancialProduct::find($request->product_id);
-            $financial_product->fill($request->except(['_token', 'product_id', 'is_required']));
+            $financial_product->fill($request->except(['_token', 'product_id', 'is_required', 'principal_pay', 'periodicity_id']));
             $financial_product->update();
         }
+        //*guardar las opciones multiples
+        $perodicities = $request->periodicity_id;
+        $principal_pays = $request->principal_pay;
+        
+        $get_periodicities = ProductPeriodicity::where('product_id', $financial_product->id)->get();
+        $get_payments = ProductPaymentMethod::where('product_id', $financial_product->id)->get();
+        foreach ($get_periodicities as $get_periodicity) {
+            ProductPeriodicity::where([
+                                    'product_id'=> $get_periodicity->product_id,
+                                    ])->delete();
+        }
+        
+        foreach ($get_payments as $get_payment) {
+            ProductPaymentMethod::where([
+                                    'product_id'=> $get_payment->product_id,
+                                    ])->delete();
+        }
+       
+       
+
+        foreach ($perodicities as $periodicity_id) {
+            ProductPeriodicity::create(
+                [
+                    'periodicity_id' => $periodicity_id,
+                    'product_id' => $financial_product->id,
+                ]
+            );
+        }
+       
+        foreach ($principal_pays as $principal_pay) {
+            ProductPaymentMethod::create(
+                [
+                    'payment_method_id' => $principal_pay,
+                    'product_id' => $financial_product->id,
+                ]
+            );
+        }
+
         return $financial_product;
     }
     

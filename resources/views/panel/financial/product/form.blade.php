@@ -230,24 +230,30 @@
                                                 </div>
                                                 <div class="tab-pane" id="tabInfoCredit">
                                                     @php
-                                                        $colateral_products = config('financial_enums.colateral_products');
-                                                        $periodicity_products = config('financial_enums.periodicity_products');
-                                                        $interes_rates = config('financial_enums.interes_rates');
-                                                        $principal_pays = config('financial_enums.principal_pays');
+                                                        $colateral_products           = config('financial_enums.colateral_products');
+                                                        $periodicity_products         = config('financial_enums.periodicity_products');
+                                                        $interes_rates                = config('financial_enums.interes_rates');
+                                                        $principal_pays               = config('financial_enums.principal_pays');
                                                         
-                                                        $collateral_id = $financial_product != null ? $financial_product->collateral_id : '';
-                                                        $periodicity_id = $financial_product != null ? $financial_product->periodicity_id : '';
-                                                        $max_credit_amount = $financial_product != null ? $financial_product->max_credit_amount : '';
-                                                        $min_deadline_month = $financial_product != null ? $financial_product->min_deadline_month : '';
-                                                        $max_deadline_month = $financial_product != null ? $financial_product->max_deadline_month : '';
-                                                        $type_interest = $financial_product != null ? $financial_product->type_interest : '';
-                                                        $pay_form = $financial_product != null ? $financial_product->pay_form : '';
-                                                        $annual_int_rate_iva = $financial_product != null ? $financial_product->annual_int_rate_iva : '';
-                                                        $real_cat = $financial_product != null ? $financial_product->real_cat : '';
-                                                        $principal_pay = $financial_product != null ? $financial_product->principal_pay : '';
-                                                        $resolution_time_hours = $financial_product != null ? $financial_product->resolution_time_hours : '';
-                                                        $delivery_time_hours = $financial_product != null ? $financial_product->delivery_time_hours : '';
-                                                        $moratorium_int_rate_vat = $financial_product != null ? $financial_product->moratorium_int_rate_vat : '';
+                                                        $collateral_id                = $financial_product != null ? $financial_product->collateral_id : '';
+                                                        $periodicity_id               = $financial_product != null ? $financial_product->periodicity_id : '';
+                                                        $max_credit_amount            = $financial_product != null ? $financial_product->max_credit_amount : '';
+                                                        
+                                                        $min_deadline_month           = $financial_product != null ? $financial_product->min_deadline_month : '';
+                                                        $max_deadline_month           = $financial_product != null ? $financial_product->max_deadline_month : '';
+                                                        $type_interest                = $financial_product != null ? $financial_product->type_interest : '';
+                                                        $pay_form                     = $financial_product != null ? $financial_product->pay_form : '';
+                                                        $annual_int_rate_iva          = $financial_product != null ? $financial_product->annual_int_rate_iva : '';
+                                                        $real_cat                     = $financial_product != null ? $financial_product->real_cat : '';
+                                                        $principal_pay                = $financial_product != null ? $financial_product->principal_pay : '';
+                                                        $resolution_time_hours        = $financial_product != null ? $financial_product->resolution_time_hours : '';
+                                                        $delivery_time_hours          = $financial_product != null ? $financial_product->delivery_time_hours : '';
+                                                        $moratorium_int_rate_vat      = $financial_product != null ? $financial_product->moratorium_int_rate_vat : '';
+                                                        $min_loan_amount              = $financial_product != null ? $financial_product->min_loan_amount : '';
+                                                        $means_channels_of_disposal   = $financial_product != null ? $financial_product->means_channels_of_disposal : '';
+                                                        $coverage                     = $financial_product != null ? $financial_product->coverage : '';
+                                                        $purpose_of_loan              = $financial_product != null ? $financial_product->purpose_of_loan : '';
+                                                        $minimum_interest_rate        = $financial_product != null ? $financial_product->minimum_interest_rate : '';
                                                     @endphp
                                                     <form method="post" id="frm-financial-buro" action="">
                                                         <div class="row gy-4">
@@ -273,11 +279,10 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="frm-product-name">Periodicidad</label>
                                                                     <div class="form-control-wrap">
-                                                                        <select name="periodicity_id" id=""
-                                                                            class="form-select">
+                                                                        <select name="periodicity_id[]" id="product_periodicity_id"
+                                                                        class="form-select select2multiple" multiple="multiple" data-search="on">
                                                                             @foreach ($periodicity_products as $key => $periodicity_product)
-                                                                                <option value="{{ $key }}"
-                                                                                    {{ $periodicity_id == $key ? ' selected' : '' }}>
+                                                                                <option value="{{ $key }}">
                                                                                     {{ $periodicity_product }}
                                                                                 </option>
                                                                             @endforeach
@@ -295,6 +300,19 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="frm-product-name">Monto minimo del crédito</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="number" name="min_loan_amount"
+                                                                            class="form-control"
+                                                                            value="{{ $min_loan_amount }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="frm-product-name">Plazo mínimo en meses</label>
@@ -331,19 +349,21 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Fórmula de pago (contrato)</label>
+                                                                    <label class="form-label" for="frm-product-name">Tasa de interés mínima anual con IVA</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="text" name="pay_form"
+                                                                        <input type="number" name="minimum_interest_rate"
                                                                             class="form-control"
-                                                                            value="{{ $pay_form }}">
+                                                                            value="{{ $minimum_interest_rate }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                           
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">tasa de interes anual con IVA</label>
+                                                                    <label class="form-label" for="frm-product-name">tasa de interés máxima anual con IVA</label>
                                                                     <div class="form-control-wrap">
                                                                         <input type="number" name="annual_int_rate_iva"
                                                                             class="form-control"
@@ -351,25 +371,16 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                         
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">CAT Real</label>
+                                                                    <label class="form-label" for="frm-product-name">Medio de pago</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="number" name="real_cat"
-                                                                            class="form-control"
-                                                                            value="{{ $real_cat }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Medio de pago principal</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <select name="principal_pay" id=""
-                                                                            class="form-select">
+                                                                        <select name="principal_pay[]" id="product-principal_pay"
+                                                                            class="form-select select2multiple" multiple="multiple" data-search="on">
                                                                             @foreach ($principal_pays as $key => $principal_pays)
                                                                                 <option value="{{ $key }}"
-                                                                                    {{ $principal_pay == $key ? ' selected' : '' }}>
+                                                                                    >
                                                                                     {{ $principal_pays }}
                                                                                 </option>
                                                                             @endforeach
@@ -407,6 +418,41 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="frm-product-name">Medios y canales de disposición</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" name="means_channels_of_disposal"
+                                                                            class="form-control"
+                                                                            value="{{ $means_channels_of_disposal }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="frm-product-name">Cobertura</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" name="coverage"
+                                                                            class="form-control"
+                                                                            value="{{ $coverage }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="frm-product-name">Destino del crédito</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" name="purpose_of_loan"
+                                                                            class="form-control"
+                                                                            value="{{ $purpose_of_loan }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                           
+
                                                             <input type="hidden" id="financial_id" name="financial_id"
                                                             value="{{ $financial_id }}">
                                                             <input type="hidden" id="product_id" name="product_id"
@@ -827,6 +873,17 @@
                                                                             {{ $query_credit == 0 ? 'checked' : '' }}><label
                                                                             class="custom-control-label"
                                                                             for="query_credit2">No</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="frm-product-name">Fórmula de pago (contrato)</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" name="pay_form"
+                                                                            class="form-control"
+                                                                            value="{{ $pay_form }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
