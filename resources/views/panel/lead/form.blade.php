@@ -163,7 +163,7 @@
                                                                 <label class="form-label">Financiera</label>
                                                                 <p class="small">Financiera con la que el prospecto tiene un crédito</p>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[financial_id]" id="lead-financial_id" onchange="getFinancialProduct(null)"   data-search="on">
+                                                                    <select class="form-select js-select2" name="data[financial_id]" id="lead-financial_id"   data-search="on">
                                                                         <option value="">Escribe para buscar</option>
                                                                     </select>
                                                                 </div>
@@ -172,11 +172,14 @@
                                                         
                                                         <div class="col-md-6" id="content-financial_product_id" style="display: none">
                                                             <div class="form-group">
-                                                                <label class="form-label">Producto financiero</label>
-                                                                <p class="small">Producto financiero que tiene el prospecto</p>
+                                                                <label class="form-label">Productos financieros</label>
+                                                                <p class="small">Producto los productos que tiene el prospecto</p>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[financial_product_id]" id="lead-financial-product-id"  data-search="on">
+                                                                    <select class="form-select select2multiple" name="products[]" id="lead-financial-product-id" multiple="multiple"  data-search="on">
                                                                         <option value="">Escribe para buscar</option>
+                                                                        @foreach ($financial_products as $financial_product)
+                                                                            <option value="{{ $financial_product->id }}">{{ $financial_product->commercial_name}} - {{ $financial_product->alias }}</option>
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                             </div>

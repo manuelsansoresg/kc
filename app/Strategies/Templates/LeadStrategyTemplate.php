@@ -4,6 +4,7 @@ namespace App\Strategies\Templates;
 
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -63,6 +64,7 @@ class LeadStrategyTemplate implements TemplateInterface
                 'status_si_no' => $lead->status_si_no,
             );
             $credit = Credit::create($data_lead);
+            CurrentFinancialProduct::moveToLead($lead->id, $credit->id);
             //* create history in client person
             HistoryLog::move($client_person->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
             //* create history in credit

@@ -67,7 +67,7 @@ Route::group(['prefix' => 'lead'], function () {
     //* mover del lugar
     
     Route::get('financial/{lead_id}/show', ['\App\Http\Controllers\Panel\LeadController', 'listFinancial'])->middleware('auth');
-    Route::get('financial/product/{financial_id}/show', ['\App\Http\Controllers\Panel\LeadController', 'listProductFinancial'])->middleware('auth');
+    
 });
 
 
@@ -89,6 +89,7 @@ Route::get('notification/{model}/show', ['\App\Http\Controllers\Panel\Notificati
 //*action
 Route::resource('action', '\App\Http\Controllers\Panel\ActionController')->middleware('auth');
 Route::group(['prefix' => 'action'], function () {
+    Route::get('financial/product/{financial_id}/{type}/show', ['\App\Http\Controllers\Panel\ActionController', 'listProductFinancial'])->middleware('auth');
     Route::get('list/{id}/{model}/{status}', ['\App\Http\Controllers\Panel\ActionController', 'listAction'])->middleware('auth');
     
     Route::get('{status}/view', ['\App\Http\Controllers\Panel\ActionController', 'viewAction'])->middleware('auth');

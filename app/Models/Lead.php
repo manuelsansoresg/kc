@@ -186,7 +186,7 @@ class Lead extends Model
             $lead->fill($data);
             $lead->update();
         }
-       
+        CurrentFinancialProduct::saveEdit($lead->id, $request);
         return $lead;
     }
 
