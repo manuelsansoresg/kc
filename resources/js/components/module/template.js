@@ -576,6 +576,7 @@ $().ready(function () {
 
                     if (type_form == 12) //reduccion
                     {
+                        getFinancialProduct(credit.id, 2);
                         organizationChange(credit.agreement_id, credit.financial_id);
                         $('#name').val(client.name);
                         $('#last_name').val(client.last_name);

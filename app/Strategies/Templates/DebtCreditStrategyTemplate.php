@@ -5,7 +5,9 @@ namespace App\Strategies\Templates;
 use App\Models\Agreement;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\CurrentFinancialProduct;
 use App\Models\File;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\User;
@@ -55,6 +57,8 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $type_form = HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM;
         $options_agreement = Agreement::getAllActive();
         $option_financials = config('financial_enums.periodicity_products');
+        $financial_products = FinancialProduct::getAllByTemplate();
+        //dd($financial_products);
         $elements = array(
             1 => [
                 'title_section' => 'Generales',
@@ -87,15 +91,15 @@ class DebtCreditStrategyTemplate implements TemplateInterface
             ],
             3 => [
                 'title_section' => null,
-                'title' => 'Financiera',
-                'name_field' => 'financial_id',
-                'id_field' => 'lead-financial_id',
-                'comment_admin' => 'Financiera donde tiene su crédito el cliente.',
-                'comment_webApp' => 'Financiera con la que tienes tu crédito actual.',
+                'title' => 'Productos financieros',
+                'name_field' => 'products[]',
+                'id_field' => 'lead-financial-product-id',
+                'comment_admin' => 'Selecciona los productos que tiene el credito.',
+                'comment_webApp' => '',
                 'placeholder' => 'Escribe para buscar',
-                'type' => 'select2',
+                'type' => 'select2multiple',
                 'is_option_array' => false,
-                'options' => null,
+                'options' => $financial_products,
                 'is_required' => true,
                 'is_disabled' => null
             ],
@@ -266,7 +270,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/actions/debtCredit/'.$history_id.'/show',
+                'value' => '/panel/template/steps/debtCredit/'.$history_id.'/show/',
                 'col' => 'col-12'
             ],
         );
@@ -343,8 +347,8 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         }
         
         $total_credit_percent = ($percent_form >= 100) ? 100 : $percent_form;
-
         $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        
         $color_inf_credit = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
 
@@ -360,7 +364,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         if ($status_inf_credit == 'Concluido') {
             $option_inf_report          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['reports']])->render();
         }
-
+        
         $data = array();
         $data[] = array(
             'name' => $view_count_inf_credit,
@@ -414,6 +418,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $max_hour               = 12;
         $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM], $credit->id)[0];
         $hour                   = $in_progress->date_status_progress;
+        
 
         $status[]               = \View::make('panel.module.status', ['status' => 'Opcional'])->render();
         $status[]               = \View::make('panel.module.status', ['status' => $status_percent_form])->render();
@@ -433,8 +438,8 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
         $menu_options   = self::menuOptions($history);
         $color_inf_credit   = 'success';
-
         $data_deadline    = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+        
         $color_inf_credit = $data_deadline['color'];
         $hour             = $data_deadline['lbl_hour'];
 
@@ -448,7 +453,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
         $name[] = 'Carga';
         $name[] = 'Formulario';
-
+        
         $subject[] = HistoryLog::$label_subject[11];
         $subject[] = HistoryLog::$label_subject[12];
 
@@ -483,69 +488,74 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $credit                 = $history->historyCredit;
         $max_hour               = 12;
         $percent_desition       = self::percentDesition($history);
-        $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION], $credit->id)[0];
-        $hour                   = $in_progress->date_status_progress;
-        
-        $menu_options           = self::menuOptionReportStep($history);
-        $name_advisor           = null;
+        $data = null;
         try {
-            $advisor        = $credit->creditAdvisor;
-            $user           = User::find($advisor->id);
-            $role           = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
-            $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-        } catch (\Exception $th) {
-                    //throw $th;
-        }
+            $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION], $credit->id)[0];
+            $hour                   = $in_progress->date_status_progress;
+            $menu_options           = self::menuOptionReportStep($history);
+            $name_advisor           = null;
+            try {
+                $advisor        = $credit->creditAdvisor;
+                $user           = User::find($advisor->id);
+                $role           = (isset(User::$alias_role[$user->getRoleNames()[0]]))? User::$alias_role[$user->getRoleNames()[0]] : '';
+                $name_advisor   = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
+            } catch (\Exception $th) {
+                        //throw $th;
+            }
 
+            
         
-       
-        $name_module_response   = 'KaaxClub';
-        $color_desition         = 'success';
-        $data_deadline          = deadline($hour, $max_hour, 0, 'success');
-        $color_desition         = $data_deadline['color'];
-        $hour                   = $data_deadline['lbl_hour'];
+            $name_module_response   = 'KaaxClub';
+            $color_desition         = 'success';
+            $data_deadline          = deadline($hour, $max_hour, 0, 'success');
+            $color_desition         = $data_deadline['color'];
+            $hour                   = $data_deadline['lbl_hour'];
 
-        $deadline[]   = 'N/A';
-        $deadline[]   = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
+            $deadline[]   = 'N/A';
+            $deadline[]   = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_desition])->render();
 
-        $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
-        $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
+            $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
+            $option[]     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
 
-        
-        $data           = array();
+            
+            $data           = array();
 
-        $name[]         = 'Respuesta de módulo';
-        $name[]         = 'Decisión';
+            $name[]         = 'Respuesta de módulo';
+            $name[]         = 'Decisión';
 
-        $subject[]      = HistoryLog::$label_subject[13];
-        $subject[]      = HistoryLog::$label_subject[15];
+            $subject[]      = HistoryLog::$label_subject[13];
+            $subject[]      = HistoryLog::$label_subject[15];
 
-        $data_actions   = array(
-            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT,
-            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
-        );
-      
-        $get_actions    = HistoryLog::getByStatus($data_actions, $credit->id);
-
-        $link[] = '/panel/kc-check-up/report/answer_module/'.$history_id.'/show';
-        $link[] = '/panel/kc-check-up/report/desition/'.$history_id.'/show?type=2';
-
-        $status_percent_form    = $percent_desition == 100 ? 'Concluido' : 'En curso';
-        $status[]               = \View::make('panel.module.status', ['status' => 'Concluida'])->render();
-        $status[]               = \View::make('panel.module.status', ['status' => $status_percent_form])->render();
-
-
-        foreach ($get_actions as $key => $get_action) {
-            $data[] = array(
-                'name' =>  $name[$key],
-                'subject' => $subject[$key],
-                'status' => $status[$key],
-                'deadline' => $deadline[$key],
-                'advisor' => $name_advisor,
-                'options' => $option[$key],
-                'link' => $link[$key]
+            $data_actions   = array(
+                HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT,
+                HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
             );
+        
+            $get_actions    = HistoryLog::getByStatus($data_actions, $credit->id);
+
+            $link[] = '/panel/kc-check-up/report/answer_module/'.$history_id.'/show';
+            $link[] = '/panel/kc-check-up/report/desition/'.$history_id.'/show?type=2';
+
+            $status_percent_form    = $percent_desition == 100 ? 'Concluido' : 'En curso';
+            $status[]               = \View::make('panel.module.status', ['status' => 'Concluida'])->render();
+            $status[]               = \View::make('panel.module.status', ['status' => $status_percent_form])->render();
+
+
+            foreach ($get_actions as $key => $get_action) {
+                $data[] = array(
+                    'name' =>  $name[$key],
+                    'subject' => $subject[$key],
+                    'status' => $status[$key],
+                    'deadline' => $deadline[$key],
+                    'advisor' => $name_advisor,
+                    'options' => $option[$key],
+                    'link' => $link[$key]
+                );
+            }
+        } catch (\Exception $th) {
+            //throw $th;
         }
+        
         return $data;
     }
 
@@ -649,15 +659,17 @@ class DebtCreditStrategyTemplate implements TemplateInterface
 
     public function percentForm($history)
     {
-        $credit     = $history->historyCredit;
-        $client     = $credit->creditClientPerson;
-        $percent = 0;
-        $total_valid = 0;
+        $credit         = $history->historyCredit;
+        $client         = $credit->creditClientPerson;
+        $percent        = 0;
+        $total_valid    = 0;
+        $products = CurrentFinancialProduct::where(['id_rel' => $credit->id, 'type' => 2])->count();
+
         if ($credit != null && $credit->agreement_id != '' && $client != null && $client->agreement_id != '') {
             $total_valid = $total_valid + 20;
         }
         
-        if ($credit != null && $credit->financial_id != '') {
+        if ($products > 0 ) {
             $total_valid = $total_valid + 20;
         }
 
