@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Action;
 use App\Models\Credit;
+use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\RegisterAction;
@@ -25,6 +26,12 @@ class ActionController extends Controller
     public function index()
     {
         //
+    }
+
+    public function listProductFinancial($id, $type)
+    {
+        $financials = CurrentFinancialProduct::getList($id, $type);
+        return response()->json(['financials' => $financials]);
     }
     
     public function move($id_rel, $status_id, $old_status_id, Request $request)

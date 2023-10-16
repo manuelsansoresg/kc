@@ -1785,6 +1785,7 @@ window.productChange = function (lead_product_id) {
   $('#content-financial_product_id').hide();
   $('#content-aval-o-garantia').hide();
   $('#content-comment').hide();
+  $('#content-financial').hide();
   $('#lead-financial_id').val(null).trigger('change');
 
   if (lead_product_id != null) {
@@ -1792,10 +1793,10 @@ window.productChange = function (lead_product_id) {
   }
 
   var product_id = $("#lead-product-id").val();
-  $('#content-financial').hide();
 
   if (product_id == 2) {
-    $('#content-financial').show();
+    //portabilidad
+    //$('#content-financial').show();
     $('#content-financial_product_id').show();
     $('#content-importe-solicitado').show();
     $('#content-banco_nomina').show();
@@ -1804,6 +1805,7 @@ window.productChange = function (lead_product_id) {
   }
 
   if (product_id == 1) {
+    //credito nuevo
     $('#content-importe-solicitado').show();
     $('#content-banco_nomina').show();
     $('#content-tipo-credito').show();
@@ -1811,6 +1813,7 @@ window.productChange = function (lead_product_id) {
   }
 
   if (product_id == 3) {
+    //Asesoria
     $('#content-aval-o-garantia').show();
     $('#content-comment').show();
     $('#content-aval-o-garantia').hide();
@@ -1847,33 +1850,18 @@ function getFinancial(lead_id, financial_id) {
   });
 }
 
-window.getFinancialProduct = function (product_id) {
-  $('#lead-financial-product-id').empty();
-  var financial_id = $('#lead-financial_id').val();
-  axios.get("/panel/lead/financial/product/" + financial_id + "/show").then(function (response) {
+window.getFinancialProduct = function (id, type) {
+  axios.get("/panel/action/financial/product/" + id + "/" + type + '/show').then(function (response) {
     var result = response.data;
-    $('#lead-financial-product-id').empty();
+    var financials = result.financials;
+    console.log(financials);
+    var financialValues = financials.map(function (item) {
+      return item.product_id;
+    }); // Limpia las selecciones actuales en el select múltiple
 
-    if (result != null) {
-      var lead_financial = $('#lead-financial-product-id');
+    $('#lead-financial-product-id').val(null).trigger('change'); // Seleccionar los valores correspondientes en los selects
 
-      for (var key in result) {
-        var element = result[key];
-        var option = new Option(element.name, element.id, true, true);
-        lead_financial.append(option).trigger('change');
-      }
-
-      console.log('aqui' + product_id);
-
-      if (product_id == null) {
-        $('#lead-financial-product-id').val(null).trigger('change');
-      } else {
-        // Esperar 2 segundos antes de ejecutar el trigger 'change'
-        setTimeout(function () {
-          $('#lead-financial-product-id').val(product_id).trigger('change');
-        }, 2000);
-      }
-    }
+    $('#lead-financial-product-id').val(financialValues).trigger('change');
   })["catch"](function (e) {});
 };
 
@@ -1950,7 +1938,7 @@ function setData(is_change_origen, is_change_organization) {
     console.log(product_id);
     productChange(product_id);
     organizationChange(lead.agreement_id, lead.financial_id, other);
-    getFinancialProduct(lead.financial_product_id);
+    getFinancialProduct(lead.id, 1);
 
     if (is_change_origen == true) {
       $('#lead-origin').val(lead.origin_id);
@@ -1968,10 +1956,10 @@ function setData(is_change_origen, is_change_organization) {
     $('#lead-email').val(lead.email);
     $('#lead-comment').val(lead.comment);
     $('#content-financial').hide();
-
-    if (product_id == 2) {
-      $('#content-financial').show();
-    }
+    /* if (product_id == 2) {
+        $('#content-financial').show();
+        
+    } */
 
     changeOrigen(lead.channel_id);
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");

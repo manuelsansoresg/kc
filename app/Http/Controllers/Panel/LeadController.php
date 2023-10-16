@@ -59,11 +59,7 @@ class LeadController extends Controller
         return response()->json($financials);
     }
     
-    public function listProductFinancial($financial_id)
-    {
-        $financials = FinancialProduct::getList($financial_id);
-        return response()->json($financials);
-    }
+    
 
     public function listOrigin($origin_id)
     {
@@ -116,7 +112,8 @@ class LeadController extends Controller
         $lead_id = null;
         $lead = null;
         $banks = Bank::all();
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks'));
+        $financial_products = FinancialProduct::getAll();
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products'));
     }
 
     /**
@@ -192,8 +189,8 @@ class LeadController extends Controller
         $lead_id = $id;
         $lead = Lead::find($id);
         $banks = Bank::all();
-
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks'));
+        $financial_products = FinancialProduct::getAll();
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products'));
     }
 
     /**

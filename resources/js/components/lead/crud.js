@@ -42,15 +42,16 @@ window.productChange = function(lead_product_id){
     $('#content-financial_product_id').hide();
     $('#content-aval-o-garantia').hide();
     $('#content-comment').hide();
+    $('#content-financial').hide();
 
     $('#lead-financial_id').val(null).trigger('change');
     if (lead_product_id != null) {
         $('#lead-product-id').val(lead_product_id).trigger("change");
     }
     let product_id = $("#lead-product-id").val();
-    $('#content-financial').hide();
-    if (product_id == 2) {
-        $('#content-financial').show();
+    
+    if (product_id == 2) { //portabilidad
+        //$('#content-financial').show();
         $('#content-financial_product_id').show();
         $('#content-importe-solicitado').show();
         $('#content-banco_nomina').show();
@@ -58,14 +59,14 @@ window.productChange = function(lead_product_id){
         $('#content-consulta-buro-credito').show();
     }
     
-    if (product_id == 1) {
+    if (product_id == 1) { //credito nuevo
         $('#content-importe-solicitado').show();
         $('#content-banco_nomina').show();
         $('#content-tipo-credito').show();
         $('#content-consulta-buro-credito').show();
     }
 
-    if (product_id == 3) {
+    if (product_id == 3) { //Asesoria
         $('#content-aval-o-garantia').show();
         $('#content-comment').show();
         $('#content-aval-o-garantia').hide();
@@ -105,33 +106,18 @@ function getFinancial(lead_id, financial_id) {
         });
 }
 
-window.getFinancialProduct = function(product_id) {
-    $('#lead-financial-product-id').empty();
-    let financial_id = $('#lead-financial_id').val();
+window.getFinancialProduct = function(id, type) {
     axios
-        .get("/panel/lead/financial/product/" + financial_id + "/show")
+        .get("/panel/action/financial/product/" + id + "/"+type+'/show')
         .then(function (response) {
-            let result = response.data;
-            $('#lead-financial-product-id').empty();
-            if (result != null) {
-                var lead_financial = $('#lead-financial-product-id');
-
-                for (const key in result) {
-                    const element = result[key];
-                    var option = new Option(element.name, element.id, true, true);
-                    lead_financial.append(option).trigger('change');
-
-                }
-                console.log('aqui'+product_id);
-                if (product_id == null) {
-                    $('#lead-financial-product-id').val(null).trigger('change');
-                } else {
-                     // Esperar 2 segundos antes de ejecutar el trigger 'change'
-                     setTimeout(function() {
-                        $('#lead-financial-product-id').val(product_id).trigger('change');
-                    }, 2000);
-                }
-            }
+            let result    = response.data;
+            let financials   = result.financials;
+            console.log(financials);
+            let financialValues = financials.map(item => item.product_id);
+             // Limpia las selecciones actuales en el select múltiple
+             $('#lead-financial-product-id').val(null).trigger('change');
+             // Seleccionar los valores correspondientes en los selects
+            $('#lead-financial-product-id').val(financialValues).trigger('change');
         })
         .catch(e => {
           
@@ -223,7 +209,9 @@ function setData(is_change_origen, is_change_organization) {
             console.log(product_id);
             productChange(product_id);
             organizationChange(lead.agreement_id, lead.financial_id, other);
-            getFinancialProduct(lead.financial_product_id);
+            
+            getFinancialProduct(lead.id, 1);
+
             if (is_change_origen == true) {
                 $('#lead-origin').val(lead.origin_id);
                 $('#lead-origin').trigger("change");
@@ -245,10 +233,10 @@ function setData(is_change_origen, is_change_organization) {
             
             $('#content-financial').hide();
             
-            if (product_id == 2) {
+            /* if (product_id == 2) {
                 $('#content-financial').show();
                 
-            }
+            } */
             changeOrigen(lead.channel_id);
             
             $('#lead-temperature-id').val(lead.financial_id).trigger("change");
