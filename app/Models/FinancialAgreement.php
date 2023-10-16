@@ -25,7 +25,7 @@ class FinancialAgreement extends Model
 
         $products = $request->products;
         foreach ($products as $key => $product) {
-            $existingProduct = Financial::find($product);
+            $existingProduct = FinancialProduct::find($product);
     
             if ($existingProduct) {
                 $data_financial = array(
