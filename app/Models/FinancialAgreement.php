@@ -17,9 +17,9 @@ class FinancialAgreement extends Model
     public static function saveEdit($agreement_id, $request)
     {
         // Primero, verifica si el acuerdo financiero existe y elimínalo si es el caso.
-        $existingConfiguration = FinancialAgreement::where('agreement_id', $agreement_id)->first();
+        $existingConfiguration = FinancialAgreement::where('agreement_id', $agreement_id);
 
-        if ($existingConfiguration) {
+        if ($existingConfiguration != null) {
             $existingConfiguration->delete();
         }
 
