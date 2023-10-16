@@ -112,6 +112,19 @@ class FinancialProduct extends Model
             ->orderBy('rate_kc', 'DESC')->get();
         return $sql;
     }
+    
+    public static function getAllByTemplate()
+    {
+        $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
+            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
+            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro',
+            DB::raw('CONCAT(commercial_name, " - ", alias) as full_name')
+        )
+            ->join('financials', 'financials.id', 'financial_products.financial_id')
+            ->orderBy('rate_kc', 'DESC')->get();
+        return $sql;
+    }
 
     public static function getByRate($credit)
     {
@@ -122,11 +135,12 @@ class FinancialProduct extends Model
         $financial_agreements   = FinancialAgreement::where('agreement_id', $agreement_id)->get();
         $financial_ids          = array();
         $financial_product_ids  = array();
+        $products = CurrentFinancialProduct::where(['id_rel' => $credit->id , 'type' => 2])->get();
         
         foreach ($financial_agreements as $financial_agreement) {
             $financial_ids[] = $financial_agreement->product_id;
         }
-        //dd($type_product_id, $financial_ids);
+        
         $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
             'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
@@ -152,6 +166,13 @@ class FinancialProduct extends Model
                 (is_null($consulta_buro) || is_null($aval_o_garantia) || is_null($bank_id))
             ) {
                 $financial_product_ids[] = $sql_query->id;
+            }
+        }
+
+        foreach ($products as $product) {
+            // Itera a través de los productos y compara con $financial_product_ids
+            if (!in_array($product->product_id, $financial_product_ids)) {
+                $financial_product_ids[] = $product->product_id;
             }
         }
         //dd($consulta_buro,  $bank_id, $aval_o_garantia, $financial_product_ids);

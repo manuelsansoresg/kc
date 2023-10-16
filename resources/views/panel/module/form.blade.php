@@ -104,6 +104,8 @@
                     </div>
                 </div>
             @endif
+            
+            
            
             @if ($element['type'] == 'div')
                <div  class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}" id="{{ isset($element['id_field'])? $element['id_field'] : ''  }}">
@@ -195,6 +197,29 @@
                                     &nbsp;</label>
                             </div>
                         @endforeach
+                    </div>
+                </div>
+            @endif
+
+            @if ($element['type'] == 'select2multiple')
+            @php
+                $options = $element['options'];
+            @endphp
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
+                    <div class="form-group">
+                        <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                        
+                        <div class="form-control-wrap">
+                            <select class="form-select select2multiple" name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" multiple="multiple"  data-search="on">
+                                <option value="">Escribe para buscar</option>
+                                @if ($options != null)
+                                    @foreach ($options as $option)
+                                        <option value="{{ $option->id }}">{{$option->full_name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <p class="small">{{ $element['comment_admin'] }}</p>
+                        </div>
                     </div>
                 </div>
             @endif

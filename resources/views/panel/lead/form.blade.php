@@ -173,7 +173,7 @@
                                                         <div class="col-md-6" id="content-financial_product_id" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Productos financieros</label>
-                                                                <p class="small">Producto los productos que tiene el prospecto</p>
+                                                                <p class="small">Selecciona los productos que tiene el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                     <select class="form-select select2multiple" name="products[]" id="lead-financial-product-id" multiple="multiple"  data-search="on">
                                                                         <option value="">Escribe para buscar</option>
