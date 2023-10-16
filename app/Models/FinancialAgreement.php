@@ -16,18 +16,25 @@ class FinancialAgreement extends Model
 
     public static function saveEdit($agreement_id, $request)
     {
-        $get_configuration = FinancialAgreement::where('agreement_id', $agreement_id);
-        if ($get_configuration != null) {
-            $get_configuration->delete();
+        // Primero, verifica si el acuerdo financiero existe y elimínalo si es el caso.
+        $existingConfiguration = FinancialAgreement::where('agreement_id', $agreement_id)->first();
+
+        if ($existingConfiguration) {
+            $existingConfiguration->delete();
         }
 
         $products = $request->products;
         foreach ($products as $key => $product) {
-            $data_financial = array(
-                'agreement_id' => $agreement_id,
-                'product_id' => $product ,
-            );
-            FinancialAgreement::create($data_financial);
+            $existingProduct = Financial::find($product);
+    
+            if ($existingProduct) {
+                $data_financial = array(
+                    'agreement_id' => $agreement_id,
+                    'product_id' => $product,
+                );
+    
+                FinancialAgreement::create($data_financial);
+            }
         }
     }
 
