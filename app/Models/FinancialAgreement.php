@@ -16,7 +16,7 @@ class FinancialAgreement extends Model
 
     public static function saveEdit($agreement_id, $request)
     {
-        $get_configuration = FinancialAgreement::find($agreement_id);
+        $get_configuration = FinancialAgreement::where('agreement_id', $agreement_id);
         if ($get_configuration != null) {
             $get_configuration->delete();
         }
