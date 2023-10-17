@@ -7,6 +7,7 @@ use App\Lib\CNubarium;
 use App\Lib\Csendgrid;
 use App\Models\Action;
 use App\Models\Bank;
+use App\Models\CurrentFinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\LeadAdvisor;
@@ -219,6 +220,8 @@ class LeadController extends Controller
      */
     public function destroy($id)
     {
-        //
+        CurrentFinancialProduct::deleteAll($id, 1);
+        $lead = Lead::find($id);
+        $lead->delete();
     }
 }

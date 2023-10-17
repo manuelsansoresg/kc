@@ -40,6 +40,10 @@ require('./components/credit/datatable_in_progress');
 
 
 window.moveElement = function (section, id, idDatatable) {
+     // Deshabilita el botón para evitar clics múltiples
+     const button = document.querySelector('.moveElement');
+     button.disabled = true;
+
     axios
     .get("/panel/"+section+"/"+id+"/move")
     .then(function (response) {
@@ -50,7 +54,12 @@ window.moveElement = function (section, id, idDatatable) {
         }
     })
     .catch(e => {
+    })
+    .finally(() => {
+        // Habilita el botón nuevamente después de que se complete la solicitud Axios
+        button.disabled = false;
     });
+    
 }
 
 window.msgProfile = function () {

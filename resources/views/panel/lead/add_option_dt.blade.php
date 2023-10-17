@@ -23,7 +23,7 @@ $user = Auth::user();
                 <em class="icon ni ni-arrow-right-circle"></em>
             </a>
             @else
-                <a class="btn btn-trigger btn-icon" onclick="moveElement('lead', {{ $id }})" data-bs-toggle="tooltip" data-bs-placement="top"
+                <a class="btn btn-trigger btn-icon moveElement" onclick="moveElement('lead', {{ $id }})" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="Siguiente">
                 <em class="icon ni ni-arrow-right-circle"></em>
             </a>
@@ -51,7 +51,7 @@ $user = Auth::user();
                             </li>
                         @else
                             <li>
-                                <a class="pointer"  onclick="moveElement('lead', {{ $id }})">
+                                <a class="pointer moveElement"  onclick="moveElement('lead', {{ $id }})">
                                     <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
                             </li>
                         @endif

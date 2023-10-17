@@ -63,6 +63,9 @@ class LeadStrategyTemplate implements TemplateInterface
                 'is_vincular_banco' => $lead->is_vincular_banco,
                 'status_si_no' => $lead->status_si_no,
             );
+
+            //validar que el credito no exista con los mismos datos
+            //$exist_credit = 
             $credit = Credit::create($data_lead);
             CurrentFinancialProduct::moveToLead($lead->id, $credit->id);
             //* create history in client person
