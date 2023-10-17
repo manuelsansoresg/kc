@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agreement;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\CurrentFinancialProduct;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -122,12 +123,12 @@ class HomeController extends Controller
                 'status_id' => $status_id,
             );
 
-            $my_product_financial   = FinancialProduct::existMyFinancial($new_financials, $final_financials, $credit->financial_product_id);
-            $my_product             = FinancialProduct::getById($credit->financial_product_id);
-            
-            return view('content_report_debt', compact('client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_product'));
+            $my_product_financial   = FinancialProduct::existMyFinancial($new_financials, $credit->id);
+            $my_products            = CurrentFinancialProduct::getList($credit->id, 2);
+            //dd($my_products);
+            return view('content_report_debt', compact('client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_products'));
         }
-        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial', 'my_product'));
+        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial', 'my_products'));
     }
 
     public function exitReport(Credit $credit)

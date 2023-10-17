@@ -290,19 +290,33 @@ class FinancialProduct extends Model
                         ->first();
     }
 
-    public static function existMyFinancial($financial_products, $final_financial_products, $myFinancial_id)
+    public static function existMyFinancial($financial_products, $credit_id)
     {
 
-        $my_product_financial = FinancialProduct::getById($myFinancial_id);
-        $is_financial = true;
-        foreach ($financial_products as $financial_products) {
-            if ($my_product_financial != null && $my_product_financial->id == $financial_products->id) {
-                $is_financial = false;
+        $my_product_financials = CurrentFinancialProduct::
+                                select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+                                    'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
+                                    'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
+                                    'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
+                                )
+                                ->join('financial_products', 'financial_products.id', 'current_financial_products.product_id')
+                                ->join('financials', 'financials.id', 'financial_products.financial_id')
+                                ->where(['id_rel' => $credit_id, 'type' =>2])
+                                ->orderBy('rate_kc', 'ASC')
+                                ->first();
+        //dd($financial_products);
+        /* foreach ($financial_products as $financial_products) {
+            foreach ($my_product_financials as $my_product_financial) {
+                if ($my_product_financial != null && $my_product_financial->id == $financial_products->id) {
+                    $is_financial = false;
+                }
             }
-        }
+            
+        } */
         
         
-        return $is_financial == true ? $my_product_financial : null;
+        //return $is_financial == true ? $my_product_financial : null;
+        return $my_product_financials;
     }
 
 
