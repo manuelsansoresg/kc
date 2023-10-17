@@ -6,7 +6,7 @@
         @include('layouts.content_report_nav')
     @endif
 @endsection
-
+@inject('current_financial_product', 'App\Models\CurrentFinancialProduct')
 @php
 $chart1 = isset($new_financials[1]) ? $new_financials[1] : null;
 $chart2 = isset($new_financials[0]) ? $new_financials[0] : null;
@@ -43,22 +43,36 @@ $chart4 = $my_product_financial;
                                                     <span class="h1">{{ $client->name }}</span>
                                                 </div> --}}
                                             </div>
-                                            @if ($my_product!= null && $my_product->id == $chart1->id)
+                                            @php
+                                                $is_exist_my_product = $current_financial_product::isExistProduct($chart1->id, $credit->id);
+                                                $total = $current_financial_product::myProductsTotal($credit->id);
+                                            @endphp
+                                            total - {{ $total }}
+                                            @if ($is_exist_my_product == true)
                                                 <div class="text-bottom">
                                                     <div>
-                                                        <span class="h4">Tienes el mejor crédito disponible.</span>
+                                                        @if ($total == 1)
+                                                        <span class="h4"> Tienes la mejor opción, puedes refinanciear tu crédito actual.</span>
+                                                        @else
+                                                        <span class="h4"> Uno de tus créditos actuales es la mejor opción, podemos consolidar todos tus créditos en la mejor opción.</span>
+                                                        @endif
+                                                        
                                                     </div>
                                                 </div>
 
                                                 <div class="text-bottom-end">
                                                     <div>
-                                                        <span class="h4"> Puedes refinanciar tu crédito actual </span>
+                                                        <span class="h4">  </span>
                                                     </div>
                                                 </div>
                                                 @else 
                                                     <div class="text-bottom">
                                                         <div>
-                                                            <span class="h4">Encontramos una mejor opción a tu crédito actual.</span>
+                                                            @if ($total == 1)
+                                                            <span class="h4">Encontramos una mejor opción a tus créditos actuales.</span>
+                                                            @else
+                                                            <span class="h4"> Encontramos una mejor opción a tu crédito actual.</span>
+                                                            @endif
                                                         </div>
                                                     </div>
 
@@ -123,18 +137,21 @@ $chart4 = $my_product_financial;
                             @foreach ($new_financials as $key => $financial_product)
                                 <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10 " data-aos="fade-up" data-aos-delay="100">
                                     <div class="card mb-4 mb-lg-0 shadow-lg rounded-4 border-0 overflow-hidden">
-                                        @if ($key == 1 && $credit->financial_product_id !=  $financial_product->id)
+                                        @php
+                                            $is_existInArrayOne = $current_financial_product::isExistProduct($financial_product->id, $credit->id);
+                                        @endphp
+                                        @if ($key == 1 && $is_existInArrayOne != true)
                                             <span class="badge bg-warning rounded-bottom-0 py-3 fs-6">Mejor opción</span>
                                         @endif
-                                        @if ($key == 1 && $credit->financial_product_id ==  $financial_product->id)
+                                        @if ($key == 1 && $is_existInArrayOne == true )
                                             <span class="badge bg-warning rounded-bottom-0 py-3 fs-6">  Tu crédito actual es la mejor opción</span>
                                         @endif
                                        
-                                        @if ($key != 1 && $credit->financial_product_id ==  $financial_product->id)
+                                        @if ($key != 1 && $is_existInArrayOne == true)
                                         <span class="badge bg-primary rounded-bottom-0 py-3 fs-6">Tú crédito actual</span>
                                         @endif
                                         <div class="px-4 mt-4 mb-2">
-                                            <span><span class="h3 ">{{ $financial_product->commercial_name }}</span> {{ $financial_product->alias }} </span>
+                                            <span>  <span class="h3 ">{{ $financial_product->commercial_name }}</span> {{ $financial_product->alias }} </span>
                                                 <p class="mb-0 text-muted"></p>
                                         </div>
                                         <div class="card-body pt-0 pb-4 px-4">
@@ -223,9 +240,12 @@ $chart4 = $my_product_financial;
                             @if ($final_financials != null)
                                 <div class="row align-items-center justify-content-center">
                                     @foreach ($final_financials as $key => $final_financials)
+                                    @php
+                                            $is_existInArraySecond = $current_financial_product::isExistProduct($final_financials->id, $credit->id);
+                                        @endphp
                                         <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10 mt-5" data-aos="fade-up" data-aos-delay="100">
                                             <div class="card mb-4 mb-lg-0 shadow-lg rounded-4 border-0 overflow-hidden">
-                                                @if ($credit->financial_product_id ==  $final_financials->financial_id)
+                                                @if ($is_existInArraySecond == true)
                                                     <span class="badge bg-primary rounded-bottom-0 py-3 fs-6">Tú crédito actual</span>
                                                 @endif
                                                 <div class="px-4 mt-4 mb-2">
@@ -353,7 +373,7 @@ $chart4 = $my_product_financial;
                                 <div class="col-md-6 col-lg-5 mx-auto">
 
                                     <canvas id="myChartInteres"></canvas>
-                                    @if ($my_product != null)
+                                   {{--  @if ($my_products != null)
                                     <div class="mt-3 text-center" data-aos="fade-up" data-aos-delay="100">
                                          <small>
                                              <p class="text-warning py-0 ">Mejor opción: {{ $chart1->commercial_name }} </p> 
@@ -361,7 +381,7 @@ $chart4 = $my_product_financial;
                                          </small>
                                     </div>
                                         
-                                    @endif
+                                    @endif --}}
                                 </div>
                             </div>
                             <div class="col-12 text-center mt-5"  data-aos="fade-up">
@@ -391,7 +411,7 @@ $chart4 = $my_product_financial;
                                         <div class="row align-items-center">
                                             <div class="col-12">
                                                 <canvas id="myChart"></canvas>
-                                                @if ($my_product != null)
+                                                {{-- @if ($my_product != null)
                                                 <div class="mt-3 text-center" data-aos="fade-up" data-aos-delay="100">
                                                     <small>
                                                         <p class="text-warning py-0 ">Mejor opción: {{ $chart1->commercial_name }} </p> 
@@ -399,7 +419,7 @@ $chart4 = $my_product_financial;
                                                     </small>
                                                 </div>
                                                     
-                                                @endif
+                                                @endif --}}
                                             </div>
     
                                         </div>
@@ -527,7 +547,7 @@ $chart4 = $my_product_financial;
                                         <div class="row align-items-center">
                                             <div class="col-12">
                                                 <canvas id="myChartPlazo"></canvas>
-                                                @if ($my_product != null)
+                                               {{--  @if ($my_product != null)
                                                 <div class="mt-3 text-center" data-aos="fade-up" data-aos-delay="100">
                                                      <small>
                                                          <p class="text-warning py-0 ">Mejor opción: {{ $chart1->commercial_name }} </p> 
@@ -535,7 +555,7 @@ $chart4 = $my_product_financial;
                                                      </small>
                                                 </div>
                                                     
-                                                @endif
+                                                @endif --}}
                                             </div>
     
                                         </div>

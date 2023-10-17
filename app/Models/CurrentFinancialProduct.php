@@ -61,6 +61,24 @@ class CurrentFinancialProduct extends Model
         return $financials;
     }
 
+    public static function isExistProduct($product_id, $credit_id)
+    {
+        $products = CurrentFinancialProduct::getList($credit_id, 2);
+        foreach ($products as $product) {
+            if ($product_id == $product->product_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static function myProductsTotal($credit_id)
+    {
+        $products = CurrentFinancialProduct::getList($credit_id, 2);
+        return count($products);
+    }
+
+
     public static function moveToLead($id_lead, $credit_id) 
     {
         CurrentFinancialProduct::where(['id_rel' => $id_lead, 'type' => 1])
