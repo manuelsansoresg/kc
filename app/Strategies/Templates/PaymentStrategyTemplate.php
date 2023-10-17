@@ -1130,7 +1130,7 @@ class PaymentStrategyTemplate implements TemplateInterface
                         'icon' => 'icon ni ni-report-profit'
                     ],
                     [
-                        'link' => 'https://wa.me//'.$client->cellphone,
+                        'link' => 'https://web.whatsapp.com/send/?phone='.$client->cellphone.'&text&type=phone_number&app_absent=0 ',
                         'target' => '_blank',
                         'onclick' => '',
                         'name' => 'Whatsapp',
