@@ -36,15 +36,16 @@ class LeadStrategyTemplate implements TemplateInterface
                 'agreement_id' => $lead->agreement_id,
             );
             // know if exist client person
-            if (ClientPerson::where('email', $lead->email)->count() == 0) {
+            /* if (ClientPerson::where('email', $lead->email)->count() == 0) {
                 $client_person = ClientPerson::create($data_client_person);
             } else {
                 ClientPerson::where('email', $lead->email)
                             ->update($data_client_person);
                 $client_person = ClientPerson::where('email', $lead->email)->first();
-            }
+            } */
             
-
+            $client_person = ClientPerson::create($data_client_person);
+            
             //* create credit
             $data_lead = array(
                 'client_person_id' => $client_person->id,
@@ -65,7 +66,6 @@ class LeadStrategyTemplate implements TemplateInterface
             );
 
             //validar que el credito no exista con los mismos datos
-            //$exist_credit = 
             $credit = Credit::create($data_lead);
             CurrentFinancialProduct::moveToLead($lead->id, $credit->id);
             //* create history in client person

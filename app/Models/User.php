@@ -120,60 +120,65 @@ class User extends Authenticatable
     }
     public static function saveLeadClientPersona($data, $is_report = false, $history_id)
     {
-        $name       = explode(' ', $data['name']);
-        $password   = 'hola'.$name[0];
         $lead_id    = $data['id'];
-        $user       = null;
-        //*Check that the email does not exist in credits
         $find_lead  = Lead::find($lead_id);
-        $find_user  = User::where('email', $find_lead->email)->first();
-
-        $token = \Str::random(64);
-        $token = str_replace('/', '', $token);
-        
-        PasswordReset::setToken($find_lead->email, $token);
-        $link_password = 'https://app.kaaxclub.com/password/'.$token.'/'.$find_lead->email.'/change';
-        if ($find_user != null) {
-             //* send email new account
-            if ($is_report == false) {
-                $domain = 'https://app.kaaxclub.com';
-                $link_login = $domain.'/login';
-                $send_grid = new Csendgrid($find_lead->email, 'creacion cuenta');
-                $send_grid->setTemplate('d-ea081e65c8014113b50315a103127d13');
-                $send_grid->setParams(['first_name'=> $find_lead->name, 'link_login' => $link_login, 'link_password_change' => $link_password]);
+        if ($find_lead->email != '') {
+            $name       = explode(' ', $data['name']);
+            $password   = 'hola'.$name[0];
+            
+            $user       = null;
+            //*Check that the email does not exist in credits
+            
+            $find_user  = User::where('email', $find_lead->email)->first();
+    
+            $token = \Str::random(64);
+            $token = str_replace('/', '', $token);
+            
+            PasswordReset::setToken($find_lead->email, $token);
+            $link_password = 'https://app.kaaxclub.com/password/'.$token.'/'.$find_lead->email.'/change';
+            if ($find_user != null) {
+                 //* send email new account
+                if ($is_report == false) {
+                    $domain = 'https://app.kaaxclub.com';
+                    $link_login = $domain.'/login';
+                    $send_grid = new Csendgrid($find_lead->email, 'creacion cuenta');
+                    $send_grid->setTemplate('d-ea081e65c8014113b50315a103127d13');
+                    $send_grid->setParams(['first_name'=> $find_lead->name, 'link_login' => $link_login, 'link_password_change' => $link_password]);
+                    $send_grid->send();
+                }
+    
+            } else {
+                //$link_password = 'https://app.kaaxclub.com/password/reset/'.$token.'?email='.$find_lead->email;
+                unset($data['id']);
+                //*create user with leads parameters
+                $user = new User($data);
+                $user->password = bcrypt($password);
+                $user->save();
+                
+    
+                //*assign role user
+                $role = 'Cliente persona';
+                $user->assignRole(ucfirst($role));
+    
+                //*create relation lead to client
+                $data_lead_client = array(
+                    'lead_id' => $lead_id,
+                    'client_person_id' => $user->id
+                );
+                $lead_client = new LeadClient($data_lead_client);
+                $lead_client->save();
+                //* send email new account
+                $domain = 'https://test.kaaxclub.com/reporte/'.$history_id;
+                //* 235b3d5c43c14184b365def8c1d1e160 link cuando se tenga la webapp
+                $body = 'Usuario: '. $user->mail. '<br> Contraseña: '.$password;
+                $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
+                $send_grid->setTemplate('d-b22ee2c485414371995b7ed109e95fb7');
+                $send_grid->setParams(['first_name'=> $data['name'], 'link_account' => $domain, 'body' => $body]);
                 $send_grid->send();
             }
-
-        } else {
-            //$link_password = 'https://app.kaaxclub.com/password/reset/'.$token.'?email='.$find_lead->email;
-            unset($data['id']);
-            //*create user with leads parameters
-            $user = new User($data);
-            $user->password = bcrypt($password);
-            $user->save();
-            
-
-            //*assign role user
-            $role = 'Cliente persona';
-            $user->assignRole(ucfirst($role));
-
-            //*create relation lead to client
-            $data_lead_client = array(
-                'lead_id' => $lead_id,
-                'client_person_id' => $user->id
-            );
-            $lead_client = new LeadClient($data_lead_client);
-            $lead_client->save();
-            //* send email new account
-            $domain = 'https://test.kaaxclub.com/reporte/'.$history_id;
-            //* 235b3d5c43c14184b365def8c1d1e160 link cuando se tenga la webapp
-            $body = 'Usuario: '. $user->mail. '<br> Contraseña: '.$password;
-            $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
-            $send_grid->setTemplate('d-b22ee2c485414371995b7ed109e95fb7');
-            $send_grid->setParams(['first_name'=> $data['name'], 'link_account' => $domain, 'body' => $body]);
-            $send_grid->send();
+            return $user;
         }
-        return $user;
+
     }
     public static function saveClientPersona($data)
     {
