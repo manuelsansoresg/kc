@@ -30,7 +30,7 @@
                 <em class="icon ni ni-report-profit"></em><span>Ver perfil crédito</span></a>
         </li>
         <li>
-            <a class="pointer" href="https://wa.me/{{ $client->cellphone }}" target="_blank">
+            <a class="pointer" href="https://web.whatsapp.com/send/?phone={{ $client->cellphone }}&text&type=phone_number&app_absent=0" target="_blank">
                 <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
         </li>
         <li>

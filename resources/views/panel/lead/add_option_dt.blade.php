@@ -72,7 +72,7 @@ $user = Auth::user();
                                 <em class="icon ni ni-tag"></em><span>Etiquetas</span></a>
                         </li>
                         <li>
-                            <a class="pointer" href="https://wa.me/{{ $lead->cellphone }}" target="_blank">
+                            <a class="pointer" href="https://web.whatsapp.com/send/?phone={{ $lead->cellphone }}&text&type=phone_number&app_absent=0" target="_blank">
                                 <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
                         </li>
                         <li>
