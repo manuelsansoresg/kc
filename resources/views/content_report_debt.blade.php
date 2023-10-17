@@ -148,7 +148,7 @@ $chart4 = $my_product_financial;
                                         @endif
                                        
                                         @if ($key != 1 && $is_existInArrayOne == true)
-                                        <span class="badge bg-primary rounded-bottom-0 py-3 fs-6">Tú crédito actual</span>
+                                        <span class="badge bg-primary rounded-bottom-0 py-3 fs-6">Tu crédito actual</span>
                                         @endif
                                         <div class="px-4 mt-4 mb-2">
                                             <span>  <span class="h3 ">{{ $financial_product->commercial_name }}</span> {{ $financial_product->alias }} </span>
