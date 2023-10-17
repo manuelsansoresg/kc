@@ -16,26 +16,38 @@ class CurrentFinancialProduct extends Model
 
     public static function saveEdit($id, $request, $type = 1)
     {
-        // Primero, verifica si el acuerdo financiero existe y elimínalo si es el caso.
-        $existingConfiguration = CurrentFinancialProduct::where(['id_rel' => $id, 'type' => $type]);
+        if (isset($request->products)) {
+            $products = $request->products;
+            // Primero, verifica si el acuerdo financiero existe y elimínalo si es el caso.
+            $existingConfiguration = CurrentFinancialProduct::where(['id_rel' => $id, 'type' => $type]);
 
+            if ($existingConfiguration != null) {
+                $existingConfiguration->delete();
+            }
+
+            
+            foreach ($products as $key => $product) {
+                $existingProduct = FinancialProduct::find($product);
+        
+                if ($existingProduct) {
+                    $data_financial = array(
+                        'id_rel' => $id,
+                        'product_id' => $product,
+                        'type' => $type,
+                    );
+        
+                    CurrentFinancialProduct::create($data_financial);
+                }
+            }
+        }
+        
+    }
+
+    public static function deleteAll($id, $type = 1)
+    {
+        $existingConfiguration = CurrentFinancialProduct::where(['id_rel' => $id, 'type' => $type]);
         if ($existingConfiguration != null) {
             $existingConfiguration->delete();
-        }
-
-        $products = $request->products;
-        foreach ($products as $key => $product) {
-            $existingProduct = FinancialProduct::find($product);
-    
-            if ($existingProduct) {
-                $data_financial = array(
-                    'id_rel' => $id,
-                    'product_id' => $product,
-                    'type' => $type,
-                );
-    
-                CurrentFinancialProduct::create($data_financial);
-            }
         }
     }
 

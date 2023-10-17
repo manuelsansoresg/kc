@@ -4902,13 +4902,19 @@ __webpack_require__(/*! ./components/credit/product/datatable */ "./resources/js
 __webpack_require__(/*! ./components/credit/datatable_in_progress */ "./resources/js/components/credit/datatable_in_progress.js");
 
 window.moveElement = function (section, id, idDatatable) {
+  // Deshabilita el botón para evitar clics múltiples
+  var button = document.querySelector('.moveElement');
+  button.disabled = true;
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {
     if (idDatatable == null) {
       location.reload();
     } else {
       $('#' + idDatatable).DataTable().ajax.reload();
     }
-  })["catch"](function (e) {});
+  })["catch"](function (e) {})["finally"](function () {
+    // Habilita el botón nuevamente después de que se complete la solicitud Axios
+    button.disabled = false;
+  });
 };
 
 window.msgProfile = function () {
