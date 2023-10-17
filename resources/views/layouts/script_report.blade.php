@@ -9,33 +9,7 @@
             'Consupago (Mejor opción)',
         ];
 
-        const data_options = {
-            labels: labels_options,
-            datasets: [{
-                    label: 'Prestamo',
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 0.5)',
-                    data: [{{ $get_chart['prestamo'] }},20000],
-                    borderWidth: 1,
-
-                },
-                {
-                    label: 'Interés',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor: 'rgba(255, 99, 132, 0.5)', 
-                    data: [{{ $get_chart['interes'] }}, 1000],
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Comisión por apertura',
-                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
-                    borderColor:'rgba(255, 205, 86, 0.5)',
-                    data: [{{ $get_chart['comision_apertura'] }}, 0],
-                    borderWidth: 1,
-                },
-            ] 
-        };
-         /* option */
+        
        
        
 
@@ -539,7 +513,7 @@
             }
             
             
-            if (isScrolledIntoView('#chartOption')) {
+            /* if (isScrolledIntoView('#chartOption')) {
                 if (inView) { return; }
                 inViewOption = true;
                 const myChart_option = new Chart(
@@ -548,7 +522,7 @@
                 );
             } else {
                 inViewOption = false;  
-            }
+            } */
         });
 
         window.showFinalFinancial = function() {
