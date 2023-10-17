@@ -111,12 +111,11 @@ class HomeController extends Controller
                 'interes' => 8500,
                 'comision_apertura' => 0
             );
-            $get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: $chart['Financiera 1'];
+            //$get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: $chart['Financiera 1'];
             $data_report = array(
                 'client' => $client,
                 'credit' => $credit,
                 'financial' => $financial,
-                'get_chart' => $get_chart,
                 'option' => $option,
                 'history_id' => $history_id,
                 'is_best' => $is_best,
@@ -126,7 +125,7 @@ class HomeController extends Controller
             $my_product_financial   = FinancialProduct::existMyFinancial($new_financials, $final_financials, $credit->financial_product_id);
             $my_product             = FinancialProduct::getById($credit->financial_product_id);
             
-            return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_product'));
+            return view('content_report_debt', compact('client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_product'));
         }
         return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial', 'my_product'));
     }
