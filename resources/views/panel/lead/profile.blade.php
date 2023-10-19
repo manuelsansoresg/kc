@@ -259,9 +259,7 @@
                                                                                     class="date">
                                                                                     {{ formatDateNameMonth($get_note->created_at) }}
                                                                                 </span> </span>
-                                                                            {{-- <span class="bq-note-sep sep">|</span>
-                                                                     <span class="bq-note-by">By <span>Softnio</span></span>
-                                                                    <a href="#" class="link link-sm link-danger">Delete Note</a> --}}
+                                                                            
                                                                         </div>
                                                                     </div><!-- .bq-note-item -->
                                                                 </div><!-- .bq-note -->
@@ -455,7 +453,7 @@
 </div>
 {{-- content --}}
     
-    <input type="hidden" id="refresh-dt" value="null">
+    <input type="hidden" id="refresh-dt" value="credit">
     @include('panel.action.modal.form')
     @include('panel.modal.note')
     @include('panel.action.modal.register_action')

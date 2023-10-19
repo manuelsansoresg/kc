@@ -10,3 +10,17 @@ export function showInfo(redirect, idDatatable, title, msg) {
     }
 
 }
+
+window.showNotesLead = function(lead_id)
+{
+    axios
+    .get('/panel/lead/'+lead_id+'/notes/list')
+    .then(function (response) {
+        let result = response.data;
+        $('#content-lead-notes').html(result);
+        $('#modal-lead-list-note').modal('show');
+    })
+    .catch(e => {
+        
+    });
+}
