@@ -2160,8 +2160,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'label'
     }, {
-      data: 'status'
-    }, {
       data: 'options'
     }],
     columnDefs: [{

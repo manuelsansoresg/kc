@@ -55,7 +55,7 @@ class Lead extends Model
                 $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
                 $validate       = (new $leadStrategy)->getValidate($query->id);
                 $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'lead' => $query, 'validate' => $validate])->render();
-                $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query])->render();
+                $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query, 'validate' => $validate,  'validate' => $validate])->render();
                 
                 $lbl_status     = '<span class="text-success">Valido</span>';
                 
@@ -79,7 +79,6 @@ class Lead extends Model
                         'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
                         'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
-                        'status' => $lbl_status,
                         'options' => $option
                     );
                 } else {
@@ -91,7 +90,6 @@ class Lead extends Model
                         'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
                         'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
-                        'status' => $lbl_status,
                         'options' => $option
                     );
                 }
