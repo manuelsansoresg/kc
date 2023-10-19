@@ -157,18 +157,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
-                                                        <div class="col-md-6" id="content-financial" style="display: none">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Financiera</label>
-                                                                <p class="small">Financiera con la que el prospecto tiene un crédito</p>
-                                                                <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[financial_id]" id="lead-financial_id"   data-search="on">
-                                                                        <option value="">Escribe para buscar</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                         
                                                         <div class="col-md-6" id="content-financial_product_id" style="display: none">
                                                             <div class="form-group">
