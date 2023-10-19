@@ -36,7 +36,6 @@
                                             <th>Servicio KC</th>
                                             <th>Organización</th>
                                             <th>Etiqueta</th>
-                                            <th>Asesor</th>
                                             <th>Estatus</th>
                                             <th></th>
                                         </tr>
