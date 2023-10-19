@@ -59,9 +59,14 @@ $user = Auth::user();
                             <a class="pointer" href="/panel/lead/{{ $id }}/edit">
                                 <em class="icon ni ni-edit"></em><span>Editar</span></a>
                         </li>
+                       
                         <li>
                             <a class="pointer" onclick="modalNote({{ $id }}, 'lead')">
                                 <em class="icon ni ni-note-add"></em><span>Agregar nota</span></a>
+                        </li>
+                        <li>
+                            <a class="pointer" onclick="showNotesLead({{ $id }})">
+                                <em class="icon ni ni-notes-alt"></em><span>Notas</span></a>
                         </li>
                         <li>
                             <a href="/panel/lead/{{ $id }}/profile">
