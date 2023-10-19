@@ -42,7 +42,6 @@ window.productChange = function(lead_product_id){
     $('#content-financial_product_id').hide();
     $('#content-aval-o-garantia').hide();
     $('#content-comment').hide();
-    $('#content-financial').hide();
 
     $('#lead-financial_id').val(null).trigger('change');
     if (lead_product_id != null) {
@@ -51,7 +50,6 @@ window.productChange = function(lead_product_id){
     let product_id = $("#lead-product-id").val();
     
     if (product_id == 2) { //portabilidad
-        //$('#content-financial').show();
         $('#content-financial_product_id').show();
         $('#content-importe-solicitado').show();
         $('#content-banco_nomina').show();
@@ -231,12 +229,8 @@ function setData(is_change_origen, is_change_organization) {
             $('#lead-email').val(lead.email);
             $('#lead-comment').val(lead.comment);
             
-            $('#content-financial').hide();
             
-            /* if (product_id == 2) {
-                $('#content-financial').show();
-                
-            } */
+           
             changeOrigen(lead.channel_id);
             
             $('#lead-temperature-id').val(lead.financial_id).trigger("change");
