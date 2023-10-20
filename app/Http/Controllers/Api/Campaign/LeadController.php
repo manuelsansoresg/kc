@@ -4,15 +4,20 @@ namespace App\Http\Controllers\Api\Campaign;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApiLead;
+use App\Models\Lead;
 use Illuminate\Http\Request;
 
 class LeadController extends Controller
 {
     public function store(Request $request)
     {
+        $product_id = $request->servicio == 'reducir_deuda_actual' ? 2 : 1;
         $request_data = array(
-            'servicio' => $request->servicio
+            'product_id' => $product_id,
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'cellphone' => $request->cellphone,
         );
-        ApiLead::create(['data'=> json_encode($request_data)]);
+        Lead::create(['data'=> json_encode($request_data)]);
     }
 }
