@@ -29,4 +29,4 @@ Route::group(['prefix' => 'appkax'], function () {
     Route::get('{history}/{model}/steps', ['\App\Http\Controllers\Api\AppKaxController', 'steps']);
 });
 
-Route::post('api/lead', ['\App\Http\Controllers\Api\Campaign\LeadController', 'store']);
+Route::post('lead', ['\App\Http\Controllers\Api\Campaign\LeadController', 'store']);
