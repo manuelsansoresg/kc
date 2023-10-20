@@ -40,7 +40,7 @@ class HomeController extends Controller
 
     public function apiLead(Request $request)
     {
-        ApiLead::create([$request->all()]);
+        ApiLead::create(['data'=> $request->all()]);
     }
     
     public function surveyHola()
