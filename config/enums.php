@@ -83,8 +83,9 @@ return [
         3 => 'Reunión',
         4 => 'Seguimiento',
         5 => 'Plazo',
-        6 => 'EMail',
-        7 => 'SMS'
+        6 => 'Enviar eMail',
+        7 => 'SMS',
+        8 => 'Tarea'
     ),
     "type_icon_actions" => array(
         1 => 'icon ni ni-call-fill',

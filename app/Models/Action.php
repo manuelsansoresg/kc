@@ -43,7 +43,9 @@ class Action extends Model
     {
         $data = $request->data;
         $data['start_time'] = date('H:i:s', strtotime($data['start_time']));
-        $data['end_time'] = date('H:i:s', strtotime($data['end_time']));
+        if (isset($data['end_time'])) {
+            $data['end_time'] = date('H:i:s', strtotime($data['end_time']));
+        }
         $action = null;
 
         if ($request->action_id == 'null') {

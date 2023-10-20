@@ -17,8 +17,13 @@
             
             <div class="kanban-item-meta">
                 @if ($status == 'in_progress')
+              
                 <ul class="kanban-item-meta-list">
-                    <li><em class="icon ni ni-calendar"></em><span>{{ $action->created_at->diffForHumans() }}</span>
+                    <li><em class="icon ni ni-calendar"></em><span>
+                        {{-- {{ $action->start_date }}
+                        {{ $action->start_time }} --}}
+                        {{ timeRest($action->start_date, $action->start_time) }}
+                        </span>
                     </li>
 
                 </ul>
@@ -41,7 +46,7 @@
                 </ul>
                 @else
                 <ul class="kanban-item-meta-list">
-                    <li><em class="icon ni ni-calendar"></em><span>{{ $action->created_at->diffForHumans() }}</span></li>
+                    <li><em class="icon ni ni-calendar"></em><span>{{ $tiempoRestante }}</span></li>
                     
                 </ul>
                 <ul class="kanban-item-meta-list">

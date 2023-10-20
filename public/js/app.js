@@ -255,6 +255,9 @@ $().ready(function () {
       },
       'data[advisor_id]': {
         required: true
+      },
+      'data[start_time]': {
+        required: true
       }
     },
     submitHandler: function submitHandler(form, event) {
@@ -280,6 +283,10 @@ $().ready(function () {
         } else {
           $('#modal-action').modal('hide');
 
+          if (document.getElementById('is_refresh')) {
+            location.reload(); // Recargar la página
+          }
+
           if (refresh_dt != 'null') {
             (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
           } else {
@@ -301,7 +308,7 @@ function resetAction() {
   $('#modal-action-end_date').val('');
   $('#modal-action-description').val('');
   $('#modal-action-id-action').val('null');
-  $('#modal-action-complete-active').prop("checked", true);
+  $('#modal-action-complete-pending').prop("checked", true);
   $("#lead-asesor-id").val('').trigger('change');
   $("#lead-asesor-id").prop("disabled", false);
 }
@@ -558,10 +565,6 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'name'
     }, {
       data: 'date_in'
-    }, {
-      data: 'date_fin'
-    }, {
-      data: 'advisor'
     }, {
       data: 'options',
       className: 'nk-tb-col-tools text-end'
