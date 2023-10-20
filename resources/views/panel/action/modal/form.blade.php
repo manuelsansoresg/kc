@@ -16,7 +16,7 @@
                     $sections = config('enums.status_actions');
                 @endphp
                 <div class="modal-body modal-body-md">
-                    <h5 class="modal-title">Acción contacto</h5>
+                    <h5 class="modal-title">Nueva acción</h5>
                     <p>* Campos obligatorios</p>
                     <form id="frm-action" action="" class="mt-2">
                         <div class="row g-gs">
@@ -44,7 +44,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="edit-start-date">*Fecha inicio</label>
+                                    <label class="form-label" for="edit-start-date">*Fecha</label>
                                     <div class="form-control-wrap">
                                         <div class="form-icon form-icon-left">
                                             <em class="icon ni ni-calendar"></em>
@@ -56,19 +56,7 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label" for="edit-dead-date">Fecha fin</label>
-                                    <div class="form-control-wrap">
-                                        <div class="form-icon form-icon-left">
-                                            <em class="icon ni ni-calendar"></em>
-                                        </div>
-                                        <input type="text" id="modal-action-end_date" name="data[end_date]" class="form-control date-picker" data-date-format="yyyy-mm-dd">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="edit-dead-date">hora inicio</label>
+                                    <label class="form-label" for="edit-dead-date">*Hora</label>
                                     <div class="form-control-wrap">
                                         <div class="form-icon form-icon-left">
                                             <em class="icon ni ni-clock"></em>
@@ -80,7 +68,7 @@
                            
                             
                           
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label" for="edit-dead-date">Hora fin</label>
                                     <div class="form-control-wrap">
@@ -90,7 +78,7 @@
                                         <input type="text" name="data[end_time]" class="form-control time-picker-fin" id="modal-action-end_time">
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                            
                            
                             <div class="col-12">
@@ -172,7 +160,7 @@
                                             </li>
                                             <li>
                                                 <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input" name="status" id="modal-action-complete-pending" value="0">
+                                                    <input type="radio" class="custom-control-input" name="status" id="modal-action-complete-pending" value="0" checked>
                                                     <label class="custom-control-label" for="modal-action-complete-pending">No</label>
                                                 </div>
                                             </li>

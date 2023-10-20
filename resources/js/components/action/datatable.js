@@ -91,8 +91,6 @@ document.addEventListener('DOMContentLoaded', function () {
             /* { data: 'section' }, */
             { data: 'name' },
             { data: 'date_in' },
-            { data: 'date_fin' },
-            { data: 'advisor' },
             { data: 'options', className: 'nk-tb-col-tools text-end' }
         ],
         columnDefs: [

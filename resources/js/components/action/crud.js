@@ -74,6 +74,9 @@ $().ready(function () {
             'data[advisor_id]': {
                 required: true,
             },
+            'data[start_time]': {
+                required: true,
+            },
         },
         submitHandler: function (form, event) {
             event.preventDefault();
@@ -98,6 +101,9 @@ $().ready(function () {
                         }
                     } else {
                         $('#modal-action').modal('hide');
+                        if (document.getElementById('is_refresh')) {
+                            location.reload(); // Recargar la página
+                        }
                         if (refresh_dt != 'null') {
                             showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
                         } else {
@@ -122,7 +128,8 @@ function resetAction() {
     $('#modal-action-end_date').val('');
     $('#modal-action-description').val('');
     $('#modal-action-id-action').val('null');
-    $('#modal-action-complete-active').prop("checked", true);
+    $('#modal-action-complete-pending').prop("checked", true);
+    
     $("#lead-asesor-id").val('').trigger('change');
     $("#lead-asesor-id").prop("disabled", false);
     

@@ -28,11 +28,10 @@
                                 <table id="dt-lead-acctions" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>Contacto</th>
+                                            <th>Acción</th>
                                             <th>Prospecto</th>
-                                            <th>Fecha inicio</th>
-                                            <th>Fecha fin</th>
-                                            <th>Responsable</th>
+                                            <th>Fecha</th>
+                                            
                                             <th></th>
                                         </tr>
                                     </thead>

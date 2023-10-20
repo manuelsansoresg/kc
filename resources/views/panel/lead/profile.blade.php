@@ -62,7 +62,7 @@
                                             <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                     href="#tabHistorial">Historial</a> </li>
                                             <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                    href="#tabAction">Acciones contacto</a> </li>
+                                                    href="#tabAction">Acciones</a> </li>
                                             <li class="nav-item nav-item-trigger d-xxl-none">
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
                                                     <a href="#" class="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
@@ -345,7 +345,7 @@
                                                 @endphp
                                                 <div class="border-bottom text-center py-3">
                                                     <a class="pointer" onclick="actionModal({{ $lead->id }}, false)">Haz clic
-                                                        para agregar acción contactar</a>
+                                                        para agregar acción</a>
                                                 </div>
                                                 <input type="hidden" id="id-rel-action" value="{{ $lead->id }}">
                                                 <input type="hidden" id="model-action" value="{{ $model_action }}">
@@ -454,6 +454,7 @@
 {{-- content --}}
     
     <input type="hidden" id="refresh-dt" value="credit">
+    <input type="hidden" id="is_refresh" value="true">
     @include('panel.action.modal.form')
     @include('panel.modal.note')
     @include('panel.action.modal.register_action')

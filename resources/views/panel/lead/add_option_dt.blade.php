@@ -82,7 +82,7 @@ $user = Auth::user();
                         </li>
                         <li>
                             <a class="pointer" onclick="actionModal({{ $id }}, true)">
-                                <em class="icon ni ni-calendar-check-fill"></em><span>Acción</span></a>
+                                <em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>
                         </li>
                         @if ($user->hasRole('Asesor') != true)
                             <li>

@@ -1,4 +1,7 @@
 <?php
+
+use Carbon\Carbon;
+
 if (!function_exists('formatDateNameMonth')) {
     function formatDateNameMonth($date, $is_time = true)
     {
@@ -131,3 +134,23 @@ if (!function_exists('reduceDecimal')) {
         return $newNumber;
     }
 }
+
+
+if (!function_exists('timeRest')) {
+    function timeRest($start_date, $start_time)
+    {
+        $now = Carbon::now();
+        // Combina la fecha y la hora en un solo objeto Carbon
+        $combinedDateTime = Carbon::parse($start_date . ' ' . $start_time);
+
+        // Calcula el tiempo restante
+        $diff = $combinedDateTime->diff($now);
+
+        // Obtiene el número de días, horas, minutos y segundos restantes
+        $dias = $diff->days;
+        $horas = $diff->h;
+
+        return "Faltan {$dias} días y {$horas} horas";
+    }
+}
+
