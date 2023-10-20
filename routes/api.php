@@ -28,3 +28,5 @@ Route::resource('rrss', '\App\Http\Controllers\Api\RssController');
 Route::group(['prefix' => 'appkax'], function () {
     Route::get('{history}/{model}/steps', ['\App\Http\Controllers\Api\AppKaxController', 'steps']);
 });
+
+Route::post('api/lead', ['\App\Http\Controllers\Api\Campaign', 'apiLead']);

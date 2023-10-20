@@ -21,6 +21,6 @@ class VerifyCsrfToken extends Middleware
         '/lead/store',
         '/lead/form/store',
         '/survey',
-        '/facebook/api/lead',
+        '/api/lead',
     ];
 }
