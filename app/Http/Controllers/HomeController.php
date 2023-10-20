@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agreement;
+use App\Models\ApiLead;
 use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\CurrentFinancialProduct;
@@ -37,6 +38,11 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function apiLead(Request $request)
+    {
+        ApiLead::create([$request->all()]);
+    }
+    
     public function surveyHola()
     {
         return view('quiz.survey_lead');

@@ -37,6 +37,7 @@ Route::get('/condiciones', function () {
 });
 
 Route::get('hola', ['\App\Http\Controllers\HomeController', 'surveyHola']);
+Route::get('facebook/api/lead', ['\App\Http\Controllers\HomeController', 'apiLead']);
 
 
 Route::get('reporte/{history_id}', ['\App\Http\Controllers\HomeController', 'report']);
