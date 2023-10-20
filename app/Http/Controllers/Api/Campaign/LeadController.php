@@ -11,13 +11,18 @@ class LeadController extends Controller
 {
     public function store(Request $request)
     {
-        $product_id = $request->servicio == 'reducir_deuda_actual' ? 2 : 1;
-        $request_data = array(
-            'product_id' => $product_id,
-            'name' => $request->name,
-            'last_name' => $request->last_name,
-            'cellphone' => $request->cellphone,
-        );
-        Lead::create(['data'=> json_encode($request_data)]);
+        try {
+            $product_id = $request->servicio == 'reducir_deuda_actual' ? 2 : 1;
+            $request_data = array(
+                'product_id' => $product_id,
+                'name' => $request->name,
+                'last_name' => $request->last_name,
+                'cellphone' => $request->cellphone,
+            );
+            Lead::create($request_data);
+            return response()->json(200);
+        } catch (\Exception $th) {
+            return response()->json(500);
+        }
     }
 }
