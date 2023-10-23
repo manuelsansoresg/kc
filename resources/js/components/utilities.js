@@ -24,3 +24,11 @@ window.showNotesLead = function(lead_id)
         
     });
 }
+
+window.showModalActions = function(lead_id)
+{
+    refreshAction(lead_id, 'lead', 'in_progress', 'content-profile-in_progress')
+    refreshAction(lead_id, 'lead', 'completed', 'content-profile-completed')
+
+    $('#modal-list-actions').modal('show');
+}

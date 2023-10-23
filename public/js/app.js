@@ -406,6 +406,10 @@ window.alerDeleteAction = function (id) {
 window.deleteAction = function (id) {
   var refresh_dt = $('#refresh-dt').val();
   axios["delete"]("/panel/action/" + id).then(function (response) {
+    if (document.getElementById('modal-list-actions')) {
+      location.reload(); // Recargar la página
+    }
+
     if (refresh_dt != 'null') {
       (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
     } else {
@@ -4710,6 +4714,12 @@ window.showNotesLead = function (lead_id) {
     $('#content-lead-notes').html(result);
     $('#modal-lead-list-note').modal('show');
   })["catch"](function (e) {});
+};
+
+window.showModalActions = function (lead_id) {
+  refreshAction(lead_id, 'lead', 'in_progress', 'content-profile-in_progress');
+  refreshAction(lead_id, 'lead', 'completed', 'content-profile-completed');
+  $('#modal-list-actions').modal('show');
 };
 
 /***/ }),
