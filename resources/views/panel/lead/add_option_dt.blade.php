@@ -5,10 +5,8 @@ $user = Auth::user();
 <div class="content-options">
     <ul class="nk-tb-actions gx-1">
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a onclick="moveModalLead('Archivar', {{ $id }}, '{{ $m_history::LEAD_ARCHIVE }}', '{{ $m_history::CREATE_PROSPECT }}', 'dt-lead')" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="Archivar">
-                <em class="icon ni ni-archive-fill"></em>
-            </a>
+            <a class="btn btn-trigger btn-icon" href="https://web.whatsapp.com/send/?phone={{ $lead->cellphone }}&text&type=phone_number&app_absent=0"  data-bs-toggle="tooltip" data-bs-placement="top" target="_blank">
+                <em class="icon ni ni-whatsapp"></em><span></span></a>
         </li>
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
             <a href="/panel/lead/{{ $id }}/profile" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Perfíl">
@@ -17,17 +15,8 @@ $user = Auth::user();
     
         </li>
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            @if ($validate['error'] === true)
-                <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="Siguiente" onclick="modalValidate({{ $id }}, 'lead', 'dt-lead')">
-                <em class="icon ni ni-arrow-right-circle"></em>
-            </a>
-            @else
-                <a class="btn btn-trigger btn-icon moveElement" onclick="moveElement('lead', {{ $id }})" data-bs-toggle="tooltip" data-bs-placement="top"
-                title="Siguiente">
-                <em class="icon ni ni-arrow-right-circle"></em>
-            </a>
-            @endif
+            <a class="btn btn-trigger btn-icon" href="/panel/lead/{{ $id }}/edit"  data-bs-toggle="tooltip" data-bs-placement="top">
+                <em class="icon ni ni-edit"></em><span></span></a>
         
         </li>
        
@@ -55,10 +44,7 @@ $user = Auth::user();
                                     <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
                             </li>
                         @endif
-                        <li>
-                            <a class="pointer" href="/panel/lead/{{ $id }}/edit">
-                                <em class="icon ni ni-edit"></em><span>Editar</span></a>
-                        </li>
+                       
                        
                         <li>
                             <a class="pointer" onclick="modalNote({{ $id }}, 'lead')">
@@ -76,10 +62,7 @@ $user = Auth::user();
                             <a class="pointer" onclick="modalTags({{ $id }})">
                                 <em class="icon ni ni-tag"></em><span>Etiquetas</span></a>
                         </li>
-                        <li>
-                            <a class="pointer" href="https://web.whatsapp.com/send/?phone={{ $lead->cellphone }}&text&type=phone_number&app_absent=0" target="_blank">
-                                <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
-                        </li>
+                  
                         <li>
                             <a class="pointer" onclick="actionModal({{ $id }}, true)">
                                 <em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>
