@@ -57,10 +57,14 @@ class LeadController extends Controller
     public function listNotes(Lead $lead)
     {
         $notes = $lead->leadNotes;
-        //dd($notes);
-        //$view           = \View::make('panel.view_content_lead_notes', ['notes' => $notes]);
-        //return $view;
         $view           = \View::make('panel.view_content_lead_notes', ['notes' => $notes])->render();
+        return response()->json($view);
+    }
+    
+    public function listActions(Lead $lead)
+    {
+        $notes = $lead->leadNotes;
+        $view           = \View::make('panel.view_content_lead_actions ', ['notes' => $notes])->render();
         return response()->json($view);
     }
 

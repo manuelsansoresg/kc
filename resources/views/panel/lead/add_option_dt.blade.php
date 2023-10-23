@@ -67,6 +67,10 @@ $user = Auth::user();
                             <a class="pointer" onclick="actionModal({{ $id }}, true)">
                                 <em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>
                         </li>
+                        <li>
+                            <a class="pointer" onclick="showModalActions({{ $id }}, true)">
+                                <em class="icon ni ni-calendar"></em><span>Ver acciones</span></a>
+                        </li>
                         @if ($user->hasRole('Asesor') != true)
                             <li>
                                 <a class="pointer" onclick="modalAdvisor({{ $id }})">

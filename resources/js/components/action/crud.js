@@ -271,6 +271,11 @@ window.deleteAction = function (id) {
     axios
     .delete("/panel/action/"+id)
     .then(function (response) {
+
+        if (document.getElementById('modal-list-actions')) {
+            location.reload(); // Recargar la página
+        }
+
         if (refresh_dt != 'null') {
             showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
         } else {

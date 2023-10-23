@@ -55,7 +55,10 @@ Route::get('agreement/{product_id}/delete', ['\App\Http\Controllers\Panel\Agreem
 Route::resource('lead', '\App\Http\Controllers\Panel\LeadController')->middleware('auth');
 Route::group(['prefix' => 'lead'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\LeadController', 'list'])->middleware('auth');
+    
     Route::get('{lead}/notes/list', ['\App\Http\Controllers\Panel\LeadController', 'listNotes'])->middleware('auth');
+    Route::get('{lead}/actions/list', ['\App\Http\Controllers\Panel\LeadController', 'listActions'])->middleware('auth');
+
     Route::get('{lead_id}/delete', ['\App\Http\Controllers\Panel\LeadController', 'destroy'])->middleware('auth');
     Route::get('{lead_id}/origin', ['\App\Http\Controllers\Panel\LeadController', 'listOrigin'])->middleware('auth');
     
