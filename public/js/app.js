@@ -701,6 +701,59 @@ $().ready(function () {
       $('#admin_email-error-exist').show();
     });
   }
+
+  function getProductComision(product_id) {
+    $('#content-costo-contratacion').html('');
+    $('#comisiones').html('');
+    axios.get("/panel/product-fee/" + product_id).then(function (response) {
+      var result = response.data;
+      $('#content-costo-contratacion').html(result.costoContratacion);
+      $('#comisiones').html(result.comisiones);
+    })["catch"](function (e) {
+      $('#admin_email-error-exist').show();
+    });
+  }
+
+  if (document.getElementById('financial_product_id')) {
+    var product_id = $('#product_id').val();
+    getProductComision(product_id);
+  }
+
+  $("#frm-product-fees").validate({
+    rules: {
+      'data[concepto]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var product_id = $('#financial_product_id').val();
+      var new_form = document.getElementById("frm-product-fees");
+      var data = new FormData(new_form);
+      axios.post("/panel/product-fee", data).then(function (response) {
+        getProductComision(product_id);
+        $('#modal-product-fees').modal('hide');
+        new_form.reset();
+      })["catch"](function (e) {});
+    }
+  }); //modal productfee
+
+  window.modalProductComision = function (product_id, type) {
+    $('#financial_product_id').val(product_id);
+    $('#comision_type').val(type);
+    $('#modal-product-fees').modal('show');
+  };
+
+  window.showValorFijo = function (show_fijo) {
+    $('#content-valor-fijo').hide();
+    $('#content-no-valor-fijo').hide();
+
+    if (show_fijo) {
+      $('#content-valor-fijo').show();
+    } else {
+      $('#content-no-valor-fijo').show();
+    }
+  };
 });
 
 /***/ }),

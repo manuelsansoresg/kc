@@ -491,216 +491,17 @@
                                                     <form method="post" id="frm-financial-comision" action="">
                                                         <div class="row gy-4">
                                                             @csrf
-                                                            <div class="col-12"><span class="preview-title-lg overline-title">Comisión por apertura</span></div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Porcentaje comisión por apertura</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="perc_opening_commission"
-                                                                            class="form-control"
-                                                                            value="{{ $perc_opening_commission }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>    
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Medio de pago</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <select name="means_pay_arrangement_id" id=""
-                                                                            class="form-select">
-                                                                            @foreach ($means_pay_arrangements as $key => $means_pay_arrangement)
-                                                                                <option value="{{ $key }}"
-                                                                                    {{ $means_pay_arrangement_id == $key ? ' selected' : '' }}>
-                                                                                    {{ $means_pay_arrangement }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div> 
-                                                            <div class="col-12"><span class="preview-title-lg overline-title">Seguro de vida</span></div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Porcentaje seguro de vida</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="life_insurance_commission_perc"
-                                                                            class="form-control"
-                                                                            value="{{ $life_insurance_commission_perc }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>    
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Medio de pago</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <select name="means_pay_life_insurance_id" id=""
-                                                                            class="form-select">
-                                                                            @foreach ($means_pay_arrangements as $key => $means_pay_arrangement)
-                                                                                <option value="{{ $key }}"
-                                                                                    {{ $means_pay_life_insurance_id == $key ? ' selected' : '' }}>
-                                                                                    {{ $means_pay_arrangement }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div> 
-                                                            <div class="col-12"><span class="preview-title-lg overline-title">Seguro de desempleo</span></div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Porcentaje seguro de desempleo</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="unemploy_insurance_commission_perc"
-                                                                            class="form-control"
-                                                                            value="{{ $unemploy_insurance_commission_perc }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>    
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Medio de pago</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <select name="means_pay_unemploy_insurance_id" id=""
-                                                                            class="form-select">
-                                                                            @foreach ($means_pay_arrangements as $key => $means_pay_arrangement)
-                                                                                <option value="{{ $key }}"
-                                                                                    {{ $means_pay_unemploy_insurance_id == $key ? ' selected' : '' }}>
-                                                                                    {{ $means_pay_arrangement }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div> 
-                                                            <div class="col-12"><span class="preview-title-lg overline-title">Otras comisiones</span></div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Aclaración improcedente de la cuenta (Movimientos o cargos no reconocidos)</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="unrecognized_transactions_or_charges"
-                                                                            class="form-control"
-                                                                            value="{{ $unrecognized_transactions_or_charges }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Administración o manejo de cuenta</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="administration_or_account_management"
-                                                                            class="form-control"
-                                                                            value="{{ $administration_or_account_management }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Disposición de crédito</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="drawdown_of_receivables"
-                                                                            class="form-control"
-                                                                            value="{{ $drawdown_of_receivables }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Falta de pago</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="non_payment"
-                                                                            class="form-control"
-                                                                            value="{{ $non_payment }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Gastos de cobranza</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="collection_costs"
-                                                                            class="form-control"
-                                                                            value="{{ $collection_costs }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Gastos de investigación y/o formalización</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="inv_formalization_expenses"
-                                                                            class="form-control"
-                                                                            value="{{ $inv_formalization_expenses }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Pago anticipado / Prepago</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="prepayment_prepaid"
-                                                                            class="form-control"
-                                                                            value="{{ $prepayment_prepaid }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Pago tardío o inoportuno</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="late_or_untimely_pay"
-                                                                            class="form-control"
-                                                                            value="{{ $late_or_untimely_pay }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Reimpresión del estado de cuenta</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="statement_reprint"
-                                                                            class="form-control"
-                                                                            value="{{ $statement_reprint }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Reposición de medios de disposición</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <input type="number" name="rep_of_means_of_disposal"
-                                                                            class="form-control"
-                                                                            value="{{ $rep_of_means_of_disposal }}">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            {{-- <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Medio de pago principal</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <select name="means_pay_unemploy_insurance_id" id=""
-                                                                            class="form-select">
-                                                                            @foreach ($means_pay_arrangements as $key => $means_pay_arrangement)
-                                                                                <option value="{{ $key }}"
-                                                                                    {{ $means_pay_unemploy_insurance_id == $key ? ' selected' : '' }}>
-                                                                                    {{ $means_pay_arrangement }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>  --}}
-                                                            <input type="hidden" id="financial_id" name="financial_id"
-                                                            value="{{ $financial_id }}">
-                                                            <input type="hidden" id="product_id" name="product_id"
-                                                                value="{{ $product_id }}">
-                                                            <input type="hidden" name="is_required" value="false">
                                                             <div class="col-12">
-                                                                <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                                                                    <li>
-                                                                        <button class="btn btn-primary">Guardar</button>
-                                                                    </li>
-                                                                </ul>
+                                                                <span class="preview-title-lg overline-title">Costos de contratación <a  onclick="modalProductComision({{ $financial_product->id }}, 1)" class="btn btn-outline-primary  float-end">Agregar</a> </span>
+                                                                <div id="content-costo-contratacion"></div>
                                                             </div>
+                                                            
+                                                            <div class="col-12"><span class="preview-title-lg overline-title">Comisiones  <a  onclick="modalProductComision({{ $financial_product->id }}, 2)" class="btn btn-outline-primary float-end">Agregar</a> </span>
+                                                            <div id="comisiones"></div>
+                                                            </div>
+                                                            
+                                                           
+                                                            
                                                         </div>
                                                     </form>
                                                 </div>
@@ -1395,4 +1196,5 @@
             </div>
         </div>
     </div>
+    @include('panel.modal.product_fees')
 @endsection

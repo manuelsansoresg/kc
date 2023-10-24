@@ -183,5 +183,10 @@ return [
         1 => 'Sí',
         0 => 'No',
     ),
+
+    'fee_reference_percents' => array(
+        1 => 'Sobre monto',
+        2 => 'linea de crédito',
+    )
     
 ];
