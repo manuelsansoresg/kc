@@ -1612,6 +1612,15 @@ $("#frm-financial-contact").submit(function (event) {
     showToast('Producto', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
+$("#frm-financial-requisitos").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-requisitos");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Financiera', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
 $("#frm-financial-rate").submit(function (event) {
   event.preventDefault(); // Obtener los valores de los campos, si se ingresaron
 
