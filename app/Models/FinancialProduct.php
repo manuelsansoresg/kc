@@ -31,22 +31,7 @@ class FinancialProduct extends Model
         'delivery_time_hours',
         'moratorium_int_rate_vat',
 
-        'perc_opening_commission',
-        'means_pay_arrangement_id',
-        'life_insurance_commission_perc',
-        'means_pay_life_insurance_id',
-        'unemploy_insurance_commission_perc',
-        'means_pay_unemploy_insurance_id',
-        'unrecognized_transactions_or_charges',
-        'administration_or_account_management',
-        'drawdown_of_receivables',
-        'non_payment',
-        'collection_costs',
-        'inv_formalization_expenses',
-        'prepayment_prepaid',
-        'late_or_untimely_pay',
-        'statement_reprint',
-        'rep_of_means_of_disposal',
+        
         
         'reca',
         'num_reca',

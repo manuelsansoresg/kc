@@ -137,6 +137,8 @@ Route::group(['prefix' => 'tag'], function () {
 
 Route::resource('financial', '\App\Http\Controllers\Panel\Financial\FinancialController')->middleware('auth');
 
+Route::resource('product-fee', '\App\Http\Controllers\Panel\ProductFeeController')->middleware('auth');
+
 Route::group(['prefix' => 'financial'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Financial\FinancialController', 'list'])->middleware('auth');
     Route::get('product/{financial_id}/list/show', ['\App\Http\Controllers\Panel\Financial\FinancialController', 'listProduct'])->middleware('auth');
