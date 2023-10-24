@@ -73,6 +73,8 @@ $( "#frm-financial-data-pricacy" ).submit(function( event ) {
             
         });
   });
+  
+
 
   $( "#frm-financial-billing" ).submit(function( event ) {
     event.preventDefault();

@@ -120,6 +120,23 @@ $( "#frm-financial-buro" ).submit(function( event ) {
             
         });
   });
+
+  $( "#frm-financial-requisitos" ).submit(function( event ) {
+    event.preventDefault();
+    const new_form = document.getElementById("frm-financial-requisitos");
+    const data = new FormData(new_form);
+
+    axios
+        .post("/panel/financial-product", data)
+        .then(function (response) {
+            let result = response.data;
+            showToast('Financiera', 'Datos guardados', 'success');
+            
+        })
+        .catch(e => {
+            
+        });
+  });
   
   $("#frm-financial-rate").submit(function (event) {
     event.preventDefault();

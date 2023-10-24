@@ -71,6 +71,19 @@ class FinancialProduct extends Model
         'chart_iva',
         'is_vincular_banco',
         'aval_o_garantia',
+
+        'tipo_persona',
+        'edad',
+        'antiguedad_laboral',
+        'antiguedad_residencial',
+        'ingreso_minimo',
+        'buen_historial_crediticio',
+        'aval_garantia',
+        'recibir_sueldo_nomina',
+        'identificacion_oficial_vig',
+        'comprobante_domicilio',
+        'comprobante_ingresos',
+        'doc_complementaria',
     ];
 
     public static function getbyIdFirst($product_id)
@@ -185,41 +198,43 @@ class FinancialProduct extends Model
             $financial_product->update();
         }
         //*guardar las opciones multiples
-        $perodicities = $request->periodicity_id;
-        $principal_pays = $request->principal_pay;
-        
-        $get_periodicities = ProductPeriodicity::where('product_id', $financial_product->id)->get();
-        $get_payments = ProductPaymentMethod::where('product_id', $financial_product->id)->get();
-        foreach ($get_periodicities as $get_periodicity) {
-            ProductPeriodicity::where([
-                                    'product_id'=> $get_periodicity->product_id,
-                                    ])->delete();
-        }
-        
-        foreach ($get_payments as $get_payment) {
-            ProductPaymentMethod::where([
-                                    'product_id'=> $get_payment->product_id,
-                                    ])->delete();
-        }
-       
-       
-
-        foreach ($perodicities as $periodicity_id) {
-            ProductPeriodicity::create(
-                [
-                    'periodicity_id' => $periodicity_id,
-                    'product_id' => $financial_product->id,
-                ]
-            );
-        }
-       
-        foreach ($principal_pays as $principal_pay) {
-            ProductPaymentMethod::create(
-                [
-                    'payment_method_id' => $principal_pay,
-                    'product_id' => $financial_product->id,
-                ]
-            );
+        if (isset($request->periodicity_id)) {
+            $perodicities = $request->periodicity_id;
+            $principal_pays = $request->principal_pay;
+            
+            $get_periodicities = ProductPeriodicity::where('product_id', $financial_product->id)->get();
+            $get_payments = ProductPaymentMethod::where('product_id', $financial_product->id)->get();
+            foreach ($get_periodicities as $get_periodicity) {
+                ProductPeriodicity::where([
+                                        'product_id'=> $get_periodicity->product_id,
+                                        ])->delete();
+            }
+            
+            foreach ($get_payments as $get_payment) {
+                ProductPaymentMethod::where([
+                                        'product_id'=> $get_payment->product_id,
+                                        ])->delete();
+            }
+           
+           
+    
+            foreach ($perodicities as $periodicity_id) {
+                ProductPeriodicity::create(
+                    [
+                        'periodicity_id' => $periodicity_id,
+                        'product_id' => $financial_product->id,
+                    ]
+                );
+            }
+           
+            foreach ($principal_pays as $principal_pay) {
+                ProductPaymentMethod::create(
+                    [
+                        'payment_method_id' => $principal_pay,
+                        'product_id' => $financial_product->id,
+                    ]
+                );
+            }
         }
 
         return $financial_product;

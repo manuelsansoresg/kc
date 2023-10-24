@@ -36,6 +36,10 @@
                                                         href="#tabInfoProduct">Info de producto</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $product_id != null ? '#tabInfoCredit' : '#' }}">Info del crédito</a> </li>
+                                                
+                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                        href="{{ $product_id != null ? '#tabRequisitos' : '#' }}">Requisitos</a> </li>
+
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $product_id != null ? '#tabComision' : '#' }}">Comisiones</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
@@ -467,6 +471,162 @@
                                                             </div>
                                                         </div>
                                                     </form>
+                                                </div>
+                                                <div class="tab-pane" id="tabRequisitos">
+                                                    <form method="post" id="frm-financial-requisitos" action="">
+                                                        @csrf
+                                                        <div class="col-12">
+                                                            <span class="preview-title-lg overline-title"> Solicitante </span>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Tipo de persona</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="tipo_persona" class="form-control" value="{{ $financial_product != null ? $financial_product->tipo_persona : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Edad</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="edad" class="form-control" value="{{ $financial_product != null ? $financial_product->edad : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Antiguedad laboral</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="antiguedad_laboral" class="form-control" value="{{ $financial_product != null ? $financial_product->antiguedad_laboral : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Antiguedad residencial</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="antiguedad_residencial" class="form-control" value="{{ $financial_product != null ? $financial_product->antiguedad_residencial : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Ingreso minimo mensual</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="ingreso_minimo" class="form-control" value="{{ $financial_product != null ? $financial_product->ingreso_minimo : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Buen historial crediticio</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <ul class="custom-control-group g-3 align-center flex-wrap">
+                                                                                <li>
+                                                                                    <div class="custom-control custom-radio">
+                                                                                        <input type="radio" class="custom-control-input" id="buen_historial_crediticio_active"  name="buen_historial_crediticio"  value="1" {{ @$financial_product->buen_historial_crediticio == 1   ? 'checked' : null }}>
+                                                                                        <label class="custom-control-label" for="buen_historial_crediticio_active">Sí  </label>
+                                                                                    </div>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <div class="custom-control custom-radio">
+                                                                                        <input type="radio" class="custom-control-input" id="buen_historial_crediticio_pending" name="buen_historial_crediticio" value="0" {{ @$financial_product->buen_historial_crediticio === 0   ? 'checked' : null }}>
+                                                                                        <label class="custom-control-label" for="buen_historial_crediticio_pending">No</label>
+                                                                                    </div>
+                                                                                </li>
+                                                                               
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Aval o garantía</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <ul class="custom-control-group g-3 align-center flex-wrap">
+                                                                                <li>
+                                                                                    <div class="custom-control custom-radio">
+                                                                                        <input type="radio" class="custom-control-input" id="aval_garantia_active"  name="aval_garantia"  value="1" {{ @$financial_product->aval_garantia == 1   ? 'checked' : null }}>
+                                                                                        <label class="custom-control-label" for="aval_garantia_active">Sí  </label>
+                                                                                    </div>
+                                                                                </li>
+                                                                                <li>
+                                                                                    <div class="custom-control custom-radio">
+                                                                                        <input type="radio" class="custom-control-input" id="aval_garantia_pending" name="aval_garantia" value="0" {{ @$financial_product->aval_garantia == 0   ? 'checked' : null }}>
+                                                                                        <label class="custom-control-label" for="aval_garantia_pending">No</label>
+                                                                                    </div>
+                                                                                </li>
+                                                                               
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                </div>
+
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Recibir sueldo en cuenta de nómina</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="recibir_sueldo_nomina" class="form-control" value="{{ $financial_product != null ? $financial_product->recibir_sueldo_nomina : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 mt-3">
+                                                            <span class="preview-title-lg overline-title"> Documentos </span>
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Identificación oficial vigente</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="identificacion_oficial_vig" class="form-control" value="{{ $financial_product != null ? $financial_product->identificacion_oficial_vig : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Comprobante de domicilio</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="comprobante_domicilio" class="form-control" value="{{ $financial_product != null ? $financial_product->comprobante_domicilio : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Comprobante de ingresos</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="comprobante_ingresos" class="form-control" value="{{ $financial_product != null ? $financial_product->comprobante_ingresos : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label" for="frm-product-name">Documentacion complementaria</label>
+                                                                        <div class="form-control-wrap">
+                                                                            <input type="text" name="doc_complementaria" class="form-control" value="{{ $financial_product != null ? $financial_product->doc_complementaria : null }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden"  name="financial_id"
+                                                            value="{{ $financial_id }}">
+                                                            <input type="hidden"  name="product_id"
+                                                                value="{{ $product_id }}">
+
+                                                        <div class="col-12 mt-3">
+                                                            <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                                                                <li>
+                                                                    <button class="btn btn-primary">Guardar</button>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </form>
+                                                    
+                                                   
                                                 </div>
                                                 <div class="tab-pane" id="tabComision">
                                                     @php
