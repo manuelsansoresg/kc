@@ -120,7 +120,7 @@
                                     <a href="/" class="footer-logo-link logo-link">
                                         <img class="logo-img" src="{{ asset('images/logo-dark.png ')}}" alt="logo">
                                     </a>
-                                    <p class="my-4 footer-para">Tu mejor desición. Facíl y rápido</p>
+                                    <p class="my-4 footer-para">Tu mejor desición. Fácil y rápido.</p>
                                     <ul class="styled-icon">
                                         {{-- <li><a href="#"><em class="icon ni ni-twitter"></em></a></li> --}}
                                         <li><a href="https://facebook.com/kaaxclub/" target="_blank"><em class="icon ni ni-facebook-f"></em></a></li>
