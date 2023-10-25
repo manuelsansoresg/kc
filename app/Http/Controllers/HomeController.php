@@ -69,9 +69,9 @@ class HomeController extends Controller
         }
 
         
-       /*  if ($credit->applied_financial != '') {
+        if ($credit->applied_financial != '') {
             return view('content_expiration_report');
-        } */
+        }
         
         $financial            = $credit->creditFinancial; //financiera transferente
         $client               = $credit->creditClientPerson;
@@ -131,7 +131,7 @@ class HomeController extends Controller
             //dd($my_products);
             return view('content_report_debt', compact('client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_products'));
         }
-        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial', 'my_products'));
+        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
     }
 
     public function exitReport(Credit $credit)
