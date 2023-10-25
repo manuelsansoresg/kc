@@ -309,6 +309,8 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $client->cellphone          = $request->cellphone;
         $client->update();
 
+        CurrentFinancialProduct::saveEdit($id_rel, $request, 2);
+
         if ($history != null) {
             $percent_form   = self::percentForm($history);
             if ($percent_form == 100) {
