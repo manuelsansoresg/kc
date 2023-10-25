@@ -84,6 +84,8 @@ class FinancialProduct extends Model
         'comprobante_domicilio',
         'comprobante_ingresos',
         'doc_complementaria',
+        
+        'regulacion',
     ];
 
     public static function getbyIdFirst($product_id)
@@ -146,13 +148,13 @@ class FinancialProduct extends Model
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
             ->whereIn('financial_products.id', $financial_ids)
-            ->where('financial_products.type_product_id', $type_product_id)
+            //->where('financial_products.type_product_id', $type_product_id)
             ->orderBy('rate_kc', 'DESC')->get();
         $consulta_buro          = $credit->consulta_buro;
         $bank_id                = $credit->bank_id;
         $aval_o_garantia        = $credit->aval_o_garantia;
         $queries = DB::getQueryLog();
-
+        //dd($financial_ids, $type_product_id);
         foreach ($sql as $sql_query) {
             $product_aval_o_garantia = $sql_query->aval_o_garantia;
             $product_is_vincular_banco = $sql_query->is_vincular_banco;
