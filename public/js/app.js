@@ -1869,6 +1869,7 @@ window.productChange = function (lead_product_id) {
     $('#content-banco_nomina').show();
     $('#content-tipo-credito').show();
     $('#content-consulta-buro-credito').show();
+    $('#content-aval-o-garantia').show();
   }
 
   if (product_id == 1) {
@@ -1877,11 +1878,11 @@ window.productChange = function (lead_product_id) {
     $('#content-banco_nomina').show();
     $('#content-tipo-credito').show();
     $('#content-consulta-buro-credito').show();
+    $('#content-aval-o-garantia').show();
   }
 
   if (product_id == 3) {
     //Asesoria
-    $('#content-aval-o-garantia').show();
     $('#content-comment').show();
     $('#content-aval-o-garantia').hide();
   }
