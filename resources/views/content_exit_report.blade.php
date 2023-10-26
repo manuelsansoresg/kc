@@ -13,8 +13,14 @@
 @php
     $lnk_app = isset($_GET['is_app']) ? '?is_app=true' : null;
     $is_app = isset($_GET['is_app']) ? true : false;
+    $type = isset($_GET['type']) ? true : false;
+
     $text1 = 'Un asesor de nuestro equipo te contactará en unos minutos para ayudarte con  el trámite de tu crédito.';
     $text2 = 'Un asesor de nuestro equipo te contactará a la brevedad posible para iniciar el trámite de tu crédito.';
+    if ($type == true) {
+        $text1 = 'Debido a las características de este tipo de crédito, no podemos ayudarte con el trámite, pero podemos apoyarte a resolver las dudas que tengas.';
+        $text2 = 'Debido a las características de este tipo de crédito, no podemos ayudarte con el trámite, pero podemos apoyarte a resolver las dudas que tengas.';
+    }
     $text3 = 'Si tienes alguna duda, no dudes en contactarnos. <i class="fas fa-smile-beam text-warning "></i>';
 @endphp
 {{-- hero --}}
@@ -34,13 +40,22 @@
                                     @if ($is_app == false)
                                     <h2 class="mb-4 aos-init aos-animate display-1" data-aos="fade-up">
                                         <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
+                                        @if ($type == 1)
+                                        ¡Listo!
+                                        @else
                                         ¡Genial!
+                                        @endif
+                                        
                                         <img style="width: 40px" src="{{ asset('images/7626666left.png') }}" alt="">
                                      </h2>
                                     @else
                                     <h2 class="mb-4 aos-init aos-animate display-1 mt-3" data-aos="fade-up">
                                         <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
+                                        @if ($type == 1)
+                                        ¡Listo!
+                                        @else
                                         ¡Genial!
+                                        @endif
                                         <img style="width: 40px" src="{{ asset('images/7626666left.png') }}" alt="">
 
                                     </h2>

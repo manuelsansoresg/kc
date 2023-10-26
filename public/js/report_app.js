@@ -6394,12 +6394,17 @@ $(document).ready(function () {
   confetti();
 });
 
-window.desitionReport = function (credit_id, financial_id, type) {
+window.desitionReport = function (credit_id, financial_id, type, is_tramitar) {
   var is_app = $('#is_app').val();
   var url = "/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept";
   axios.get(url).then(function (response) {
     var reason = response.data;
-    window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
+
+    if (is_tramitar == 1) {
+      window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
+    } else {
+      window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&type=1';
+    }
   })["catch"](function (e) {});
   /* 
   Swal.fire({

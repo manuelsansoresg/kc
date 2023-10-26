@@ -86,6 +86,8 @@ class FinancialProduct extends Model
         'doc_complementaria',
         
         'regulacion',
+        
+        'is_tramitar',
     ];
 
     public static function getbyIdFirst($product_id)
@@ -141,7 +143,7 @@ class FinancialProduct extends Model
             $financial_ids[] = $financial_agreement->product_id;
         }
         
-        $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+        $sql = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
             'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
@@ -177,7 +179,7 @@ class FinancialProduct extends Model
         }
         //dd($consulta_buro,  $bank_id, $aval_o_garantia, $financial_product_ids);
 
-        $result = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
+        $result = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
             'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'

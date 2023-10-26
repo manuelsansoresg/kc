@@ -118,7 +118,7 @@
                                             <span class="fw-bold text-muted">/5 </span>
 
                                             <small class="text-muted font-monospace mb-4 d-block"></small><button
-                                                onclick="desitionReport({{ $credit->id }}, {{ $financial_product->id }}, 1)"
+                                                onclick="desitionReport({{ $credit->id }}, {{ $financial_product->id }}, 1 , {{ $financial_product->is_tramitar  }})"
                                                 type="button"
                                                 class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">Tramitar</button>
                                             <ul class="list-unstyled mb-0 pt-4">
@@ -212,7 +212,7 @@
                                                     <span class="fw-bold text-muted">/5 </span>
     
                                                     <small class="text-muted font-monospace mb-4 d-block"></small><button
-                                                        onclick="desitionReport({{ $credit->id }}, {{ $final_financials->id }}, 1)"
+                                                        onclick="desitionReport({{ $credit->id }}, {{ $final_financials->id }}, 1, {{ $final_financials->is_tramitar }})"
                                                         type="button"
                                                         class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">Tramitar</button>
                                                     <ul class="list-unstyled mb-0 pt-4">

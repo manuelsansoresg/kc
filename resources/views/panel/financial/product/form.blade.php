@@ -143,6 +143,29 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Opción para tramitar</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <ul class="custom-control-group g-3 align-center flex-wrap">
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio" class="custom-control-input" id="is_tramitar_active"  name="is_tramitar"  value="1" {{ ($financial_product != null && $financial_product->is_tramitar == 1) || ($financial_product != null && $financial_product->is_tramitar == null)   ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label" for="is_tramitar_active">Sí </label>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio" class="custom-control-input"  id="is_tramitar_pending" name="is_tramitar" value="0" {{ $financial_product != null && $financial_product->is_tramitar === 2   ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label" for="is_tramitar_pending">No</label>
+                                                                                </div>
+                                                                            </li>
+                                                                        
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
                                                            <div class="col-12">&nbsp;</div>
                                                             <div class="col-md-6">
