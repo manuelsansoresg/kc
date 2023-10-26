@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\ApiLead;
 use App\Models\ClientPerson;
@@ -43,6 +44,12 @@ class HomeController extends Controller
     public function surveyHola()
     {
         return view('quiz.survey_lead');
+    }
+
+    function slackNotification()
+    {
+    
+        Action::accionesVencidas();
     }
 
     public function surveyForm(Request $request)
