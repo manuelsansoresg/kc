@@ -68,6 +68,8 @@ class LeadStrategyTemplate implements TemplateInterface
             //validar que el credito no exista con los mismos datos
             $credit = Credit::create($data_lead);
             CurrentFinancialProduct::moveToLead($lead->id, $credit->id);
+            //*desactivar acciones prospectos
+            Lead::deleteActions($lead->id);
             //* create history in client person
             HistoryLog::move($client_person->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
             //* create history in credit

@@ -43,7 +43,6 @@ class Lead extends Model
         $new_array[] = '#'.$label;
         $actions = Action::where([
             'id_rel' => $lead_id,
-            'type' => 1
         ])->count();
         if ($actions > 0) {
             $label.= '<br> #AcciónEnCurso';
@@ -54,6 +53,16 @@ class Lead extends Model
             return $new_array;
         }
         return $label;
+    }
+
+    public static function deleteActions($lead_id)
+    {
+        $get_actions = Action::where([
+            'id_rel' => $lead_id,
+        ])->get();
+        foreach ($get_actions as $get_action) {
+            Action::updateByModel($get_action->id, 2);
+        }
     }
 
     public static function listDatatable()

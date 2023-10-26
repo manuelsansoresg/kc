@@ -77,10 +77,10 @@ class Action extends Model
         return Action::where(['status' => $status])->get();
     }
 
-    public static function updateByModel($id)
+    public static function updateByModel($id, $status=1)
     {
         $action = Action::find($id);
-        $action->status = 1;
+        $action->status = $status;
         $action->update();
         return $action;
     }
