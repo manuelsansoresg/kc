@@ -305,6 +305,12 @@ class HistoryLog extends Model
 
     public function subHistories($id_rel, $status_id, $history)
     {
+
+        if ($status_id == HistoryLog::LEAD_ARCHIVE) {
+            //*desactivar acciones prospectos
+            Lead::deleteActions($id_rel);
+        }
+
         if ($status_id == HistoryLog::KC_CHECK_UP) {
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, HistoryLog::KC_CHECK_UP_ACTION_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
