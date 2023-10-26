@@ -38,6 +38,24 @@ class Lead extends Model
         'comment',
     ];
 
+    public function tagLead ($lead_id, $label, $is_array = false)
+    {
+        $new_array[] = '#'.$label;
+        $actions = Action::where([
+            'id_rel' => $lead_id,
+            'type' => 1
+        ])->count();
+        if ($actions > 0) {
+            $label.= '<br> #AcciónEnCurso';
+            $new_array[] = '#AcciónEnCurso';
+        }
+
+        if ($is_array == true) {
+            return $new_array;
+        }
+        return $label;
+    }
+
     public static function listDatatable()
     {
        
@@ -62,13 +80,17 @@ class Lead extends Model
                 $product        = $query->productLead;
                 $user           = $query->advisorLead;
                 $agreement      = $query->agreementLead;
+                
     
                 
                 if ($validate['error'] === true) {
                     $lbl_status = '<span class="text-danger">Invalido</span>';
                 }
                 $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
-                $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
+                $label = (isset(config('enums.temperatures')[$query->temperature_id]))? '#'.config('enums.temperatures')[$query->temperature_id] : '';
+
+                $label = self::tagLead($query->id, $label);
+                
                 
                 if ($is_asesor === true &&  Auth::user()->id == $query->asesor_id) {
                     $data[] = array(
@@ -138,7 +160,7 @@ class Lead extends Model
                     'product' => ($product != null) ? $product->alias : '',
                     'origin' => config('enums.origin')[$lead->origin_id],
                     'reason' => $reason,
-                    'label' => config('enums.temperatures')[$lead->temperature_id],
+                    'label' => '#'.config('enums.temperatures')[$lead->temperature_id],
                     'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
                     'status' => $lbl_status,
                     'options' => $option,

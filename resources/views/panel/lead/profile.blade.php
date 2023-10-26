@@ -427,11 +427,19 @@
                                     <div class="card-inner">
                                         <h6 class="overline-title-alt mb-3">Etiquetas</h6>
                                         <ul class="g-1">
-                                            <li class="btn-group">
-                                                
-                                                <a class="btn btn-xs btn-light btn-dim" href="#"> {{ $temperatures[$lead->temperature_id] }} </a>
+                                           
+                                                @php
+                                                    $tags = $m_lead::tagLead($lead->id, $temperatures[$lead->temperature_id], true);
+                                                @endphp
+                                                @foreach ($tags as $tag)
+                                                <li class="btn-group">
+                                                <a class="btn btn-xs btn-light btn-dim" href="#"> {{ $tag }} </a>
                                                 <a class="btn btn-xs btn-icon btn-light btn-dim"><em class="icon ni ni-cross"></em></a>
                                             </li>
+                                                @endforeach
+                                               
+                                               
+                                            
                                            {{--  <li class="btn-group">
                                                 <a class="btn btn-xs btn-light btn-dim" href="#">support</a>
                                                 <a class="btn btn-xs btn-icon btn-light btn-dim" href="#"><em class="icon ni ni-cross"></em></a>
