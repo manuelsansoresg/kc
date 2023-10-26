@@ -105,7 +105,7 @@ class Action extends Model
             $lead = Lead::find($actionsProximasOVencida->id_rel);
             $name = $lead->name.''. $lead->last_name;
             $type    = isset(config('enums.type_actions')[$actionsProximasOVencida->type])? config('enums.type_actions')[$actionsProximasOVencida->type] : null;
-            $notification_slack = new Slack('kaaxClub', 'Acción prospecto '.$type.'-'.$name);
+            $notification_slack = new Slack('kaaxClub', 'Acción prospecto - '.$type.' - '.$name);
             $notification_slack->sendMessage();
 
             $get_action = Action::find($actionsProximasOVencida->id);
