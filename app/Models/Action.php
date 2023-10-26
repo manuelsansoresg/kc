@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Lib\Slack;
 use App\Strategies\Values\ActionValues;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +24,7 @@ class Action extends Model
         'advisor_id',
         'id_rel',
         'status',
+        'is_notification_slack',
     ];
 
     const STATUS = [
@@ -65,6 +68,50 @@ class Action extends Model
         }
 
         return $action;
+    }
+
+    public static function accionesVencidas()
+    {
+
+        // Obtiene la fecha y hora actual del servidor
+        $now = Carbon::now();
+
+        // Define la cantidad de minutos que deseas verificar
+        $minutosDeseados = 10;
+
+        // Calcula la fecha y hora límite para las acciones que faltan 10 minutos o menos para vencer
+        $limiteFuturo = $now->copy()->addMinutes($minutosDeseados);
+
+        // Calcula la fecha y hora límite para las acciones que ya han vencido (pasaron los 10 minutos)
+        $limitePasado = $now->copy()->subMinutes($minutosDeseados);
+
+        // Obtiene todas las acciones que faltan 10 minutos o menos para vencer o que ya han pasado esos 10 minutos
+        $actionsProximasOVencidas = Action::
+            where('is_notification_slack', 0)
+            ->where(function ($query) use ($now, $limiteFuturo, $limitePasado) {
+            $query->where(function ($query) use ($now, $limiteFuturo) {
+                // Filtra las acciones que faltan 10 minutos o menos para vencer
+                $query->whereDate('start_date', '=', $now->toDateString())
+                    ->whereTime('start_time', '>', $now->toTimeString())
+                    ->whereTime('start_time', '<=', $limiteFuturo->toTimeString());
+            })->orWhere(function ($query) use ($limitePasado, $now) {
+                // Filtra las acciones que ya han vencido (pasaron los 10 minutos)
+                $query->whereDate('start_date', '=', $now->toDateString())
+                    ->whereTime('start_time', '<', $limitePasado->toTimeString());
+            });
+        })->get();
+
+        foreach ($actionsProximasOVencidas as $actionsProximasOVencida) {
+            $lead = Lead::find($actionsProximasOVencida->id_rel);
+            $name = $lead->name.''. $lead->last_name;
+            $type    = isset(config('enums.type_actions')[$actionsProximasOVencida->type])? config('enums.type_actions')[$actionsProximasOVencida->type] : null;
+            $notification_slack = new Slack('kaaxClub', 'Acción prospecto '.$type.'-'.$name);
+            $notification_slack->sendMessage();
+
+            $get_action = Action::find($actionsProximasOVencida->id);
+            $get_action->is_notification_slack = 1;
+            $get_action->update();
+        }
     }
 
     public static function getByModel($id_rel, $model, $status = 0)

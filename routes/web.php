@@ -38,6 +38,7 @@ Route::get('/condiciones', function () {
 
 Route::get('hola', ['\App\Http\Controllers\HomeController', 'surveyHola']);
 
+Route::get('slack/notification', ['\App\Http\Controllers\HomeController', 'slackNotification']);
 
 
 Route::get('reporte/{history_id}', ['\App\Http\Controllers\HomeController', 'report']);
