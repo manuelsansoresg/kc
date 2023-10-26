@@ -93,7 +93,12 @@
                                                         </div>
                                                     </ul>
                                                     <div class="pricing-action">
-                                                        <button class="btn btn-outline-light">Elegir</button>
+                                                        @if ($financial_product->is_tramitar == 0)
+                                                            <button class="btn btn-outline-light">Elegir</button>
+                                                            @else
+                                                            <button class="btn btn-outline-light">Tramitar</button>
+                                                        @endif
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
