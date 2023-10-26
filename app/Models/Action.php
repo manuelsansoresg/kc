@@ -87,30 +87,40 @@ class Action extends Model
 
         // Obtiene todas las acciones que faltan 10 minutos o menos para vencer o que ya han pasado esos 10 minutos
         $actionsProximasOVencidas = Action::
-            where('is_notification_slack', 0)
-            ->where(function ($query) use ($now, $limiteFuturo, $limitePasado) {
+        where('is_notification_slack', 0)
+        ->where(function ($query) use ($now, $limiteFuturo, $limitePasado) {
             $query->where(function ($query) use ($now, $limiteFuturo) {
                 // Filtra las acciones que faltan 10 minutos o menos para vencer
-                $query->whereDate('start_date', '=', $now->toDateString())
-                    ->whereTime('start_time', '>', $now->toTimeString())
-                    ->whereTime('start_time', '<=', $limiteFuturo->toTimeString());
+                $query->where(function ($query) use ($now) {
+                    $query->whereDate('start_date', '=', $now->toDateString())
+                        ->whereTime('start_time', '>', $now->toTimeString());
+                })->orWhere(function ($query) use ($now, $limiteFuturo) {
+                    $query->whereDate('start_date', '=', $now->toDateString())
+                        ->whereTime('start_time', '<=', $limiteFuturo->toTimeString());
+                });
             })->orWhere(function ($query) use ($limitePasado, $now) {
                 // Filtra las acciones que ya han vencido (pasaron los 10 minutos)
-                $query->whereDate('start_date', '=', $now->toDateString())
-                    ->whereTime('start_time', '<', $limitePasado->toTimeString());
+                $query->where(function ($query) use ($now, $limitePasado) {
+                    $query->whereDate('start_date', '=', $now->toDateString())
+                        ->whereTime('start_time', '<', $limitePasado->toTimeString());
+                })->orWhere(function ($query) use ($now, $limitePasado) {
+                    $query->whereDate('start_date', '<', $now->toDateString());
+                });
             });
         })->get();
 
         foreach ($actionsProximasOVencidas as $actionsProximasOVencida) {
             $lead = Lead::find($actionsProximasOVencida->id_rel);
-            $name = $lead->name.''. $lead->last_name;
-            $type    = isset(config('enums.type_actions')[$actionsProximasOVencida->type])? config('enums.type_actions')[$actionsProximasOVencida->type] : null;
-            $notification_slack = new Slack('kaaxClub', 'Acción prospecto - '.$type.' - '.$name);
-            $notification_slack->sendMessage();
-
-            $get_action = Action::find($actionsProximasOVencida->id);
-            $get_action->is_notification_slack = 1;
-            $get_action->update();
+            if ($lead != null) {
+                $name = $lead->name.''. $lead->last_name;
+                $type    = isset(config('enums.type_actions')[$actionsProximasOVencida->type])? config('enums.type_actions')[$actionsProximasOVencida->type] : null;
+                $notification_slack = new Slack('kaaxClub', 'Acción prospecto - '.$type.' - '.$name);
+                $notification_slack->sendMessage();
+    
+                $get_action = Action::find($actionsProximasOVencida->id);
+                $get_action->is_notification_slack = 1;
+                $get_action->update();
+            }
         }
     }
 
