@@ -88,6 +88,11 @@ class FinancialProduct extends Model
         'regulacion',
         
         'is_tramitar',
+        
+        'alcance_beneficios',
+        'restriccion_exclusion',
+        'programa_educacion_financiera',
+        'referencia_comparativa',
     ];
 
     public static function getbyIdFirst($product_id)

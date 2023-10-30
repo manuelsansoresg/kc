@@ -137,6 +137,10 @@ Route::group(['prefix' => 'tag'], function () {
 
 Route::resource('financial', '\App\Http\Controllers\Panel\Financial\FinancialController')->middleware('auth');
 
+Route::resource('product-complementary', '\App\Http\Controllers\Panel\Financial\ProductComplementaryServiceController')->middleware('auth');
+Route::get('product-complementary/{product}/{type}', ['\App\Http\Controllers\Panel\Financial\ProductComplementaryServiceController', 'show'])->middleware('auth');
+Route::get('product-complementary/list/{product_id}/refresh', ['\App\Http\Controllers\Panel\Financial\ProductComplementaryServiceController', 'refresh'])->middleware('auth');
+
 Route::resource('product-fee', '\App\Http\Controllers\Panel\ProductFeeController')->middleware('auth');
 
 Route::group(['prefix' => 'financial'], function () {
