@@ -1442,6 +1442,125 @@ $("#frm-financial-buro").submit(function (event) {
     showToast('Financiera', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
+
+if (document.getElementById('alcance_beneficios')) {
+  refreshListComplementary();
+}
+
+function refreshListComplementary() {
+  var product_id = $('#product_id').val();
+  axios.get("/panel/product-complementary/list/" + product_id + "/refresh").then(function (response) {
+    var result = response.data; // Asignar valores al select de alcance_beneficios
+
+    var alcanceSelect = document.getElementById('alcance_beneficios');
+    alcanceSelect.innerHTML = ''; // Limpia el select actual
+
+    result.complementary_alcance.forEach(function (alcance) {
+      var option = document.createElement('option');
+      option.value = alcance.id;
+      option.text = alcance.description;
+      alcanceSelect.appendChild(option);
+    }); // Repite el mismo proceso para los otros selects (restriccion_exclusion, programa_educacion_financiera, referencia_comparativa)
+    // Asignar valores al select de restriccion_exclusion
+
+    var restriccionSelect = document.getElementById('restriccion_exclusion');
+    restriccionSelect.innerHTML = '';
+    result.complementary_restricciones.forEach(function (restriccion) {
+      var option = document.createElement('option');
+      option.value = restriccion.id;
+      option.text = restriccion.description;
+      restriccionSelect.appendChild(option);
+    }); // Asignar valores al select de programa_educacion_financiera
+
+    var programaSelect = document.getElementById('programa_educacion_financiera');
+    programaSelect.innerHTML = '';
+    result.complementary_programas.forEach(function (programa) {
+      var option = document.createElement('option');
+      option.value = programa.id;
+      option.text = programa.description;
+      programaSelect.appendChild(option);
+    }); // Asignar valores al select de referencia_comparativa
+
+    var referenciaSelect = document.getElementById('referencia_comparativa');
+    referenciaSelect.innerHTML = '';
+    result.complementary_referencias.forEach(function (referencia) {
+      var option = document.createElement('option');
+      option.value = referencia.id;
+      option.text = referencia.description;
+      referenciaSelect.appendChild(option);
+    });
+  })["catch"](function (e) {});
+}
+/*  alcance_beneficios
+restriccion_exclusion
+programa_educacion_financiera
+referencia_comparativa */
+
+
+window.modalComplementary = function (type) {
+  // Definir un arreglo con los títulos correspondientes a cada tipo
+  var titles = ['ALCANCE O BENEFICIOS', 'RESTRICCIONES O EXCLUSIONES', 'PROGRAMAS DE EDUCACIÓN FINANCIERA', 'REFERENCIAS CORPORATIVAS'];
+  var product_id = $('#product_id').val(); // Verificar que el tipo esté dentro del rango válido
+
+  if (type >= 1 && type <= titles.length) {
+    // Asignar el valor del título al elemento con ID 'title-complementary'
+    document.getElementById('title-complementary').textContent = titles[type - 1];
+    $('#type-complementary-service').val(type);
+    $('#product-complementary-service').val(product_id);
+    showContentComplementary();
+  } else {
+    // Tratamiento para tipos fuera del rango válido
+    document.getElementById('title-complementary').textContent = 'Título no válido';
+  }
+
+  $('#modal-complementary').modal('show');
+};
+
+$("#frm-complementary").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-complementary");
+  var data = new FormData(new_form);
+  axios.post("/panel/product-complementary", data).then(function (response) {
+    // Resetea el formulario
+    $('#product-complementary-description').val('');
+    $('#product-complementary-id').val('');
+    refreshListComplementary();
+    showContentComplementary();
+  })["catch"](function (e) {});
+});
+
+function showContentComplementary() {
+  var product_id = $('#product_id').val();
+  var type = $('#type-complementary-service').val();
+  axios.get("/panel/product-complementary/" + product_id + '/' + type).then(function (response) {
+    var result = response.data;
+    $('#content-complementary').html(result);
+  })["catch"](function (e) {});
+}
+
+window.deleteComplementary = function (complementary_id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      axios["delete"]("/panel/product-complementary/" + complementary_id).then(function (response) {
+        showContentComplementary();
+      })["catch"](function (e) {});
+    }
+  });
+};
+
+window.editComplementary = function (complementary_id, description) {
+  $('#product-complementary-description').val(description);
+  $('#product-complementary-id').val(complementary_id);
+  var type = $('#type-complementary-service').val();
+  modalComplementary(type);
+};
+
 $("#frm-financial-billing").submit(function (event) {
   event.preventDefault();
   var new_form = document.getElementById("frm-financial-billing");
