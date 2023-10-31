@@ -88,6 +88,12 @@ class FinancialProduct extends Model
         'regulacion',
         
         'is_tramitar',
+
+        'min_loan_amount',
+        'means_channels_of_disposal',
+        'coverage',
+        'purpose_of_loan',
+        'minimum_interest_rate',
         
         'alcance_beneficios',
         'restriccion_exclusion',
