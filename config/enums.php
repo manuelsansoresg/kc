@@ -147,6 +147,16 @@ return [
         
     ),
     
+    'periodicity_comision' => array(
+        1 => 'Mensual',
+        2 => 'Quincenal',
+        3 => 'Catorcenal',
+        4 => 'Semanal',
+        5 => 'Por evento',
+        6 => 'Unica vez',
+        
+    ),
+    
     'sex' => array(
         1 => 'Hombre',
         2 => 'Mujer',
