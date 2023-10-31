@@ -17,7 +17,7 @@
                             </div>
                         </div>
                         @php
-                            $periodicity = config('enums.periodicity');
+                            $periodicity = config('enums.periodicity_comision');
                         @endphp
                         <div class="col-md-12">
                             <div class="form-group">
