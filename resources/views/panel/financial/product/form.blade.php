@@ -506,6 +506,7 @@
                                                                         de interés mínima anual con IVA</label>
                                                                     <div class="form-control-wrap">
                                                                         <input type="number" name="minimum_interest_rate"
+                                                                            step="0.01" min="0"
                                                                             class="form-control"
                                                                             value="{{ $minimum_interest_rate }}">
                                                                     </div>
@@ -519,6 +520,7 @@
                                                                     <div class="form-control-wrap">
                                                                         <input type="number" name="annual_int_rate_iva"
                                                                             class="form-control"
+                                                                            step="0.01" min="0"
                                                                             value="{{ $annual_int_rate_iva }}">
                                                                     </div>
                                                                 </div>
@@ -574,6 +576,7 @@
                                                                         <input type="number"
                                                                             name="moratorium_int_rate_vat"
                                                                             class="form-control"
+                                                                            step="0.01" min="0"
                                                                             value="{{ $moratorium_int_rate_vat }}">
                                                                     </div>
                                                                 </div>
