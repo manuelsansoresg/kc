@@ -634,7 +634,7 @@
                                                                     </div>
                                                                     <div class="col-md-6 mt-3">
                                                                         <span class="preview-title-lg overline-title">
-                                                                            Restricciones o exclusiones <a href=""
+                                                                            Restricciones o exclusiones <a onclick="modalComplementary(2)"
                                                                                 class="mt-n2 btn btn-outline-primary float-end">Agregar</a>
                                                                         </span>
                                                                         <div class="form-group">
@@ -650,7 +650,7 @@
                                                                     <div class="col-md-6 mt-5">
                                                                         <span class="preview-title-lg overline-title">
                                                                             Programas de educacion financiera <a
-                                                                                href=""
+                                                                                onclick="modalComplementary(3)"
                                                                                 class="mt-n2 btn btn-outline-primary float-end">Agregar</a>
                                                                         </span>
                                                                         <div class="form-group">
@@ -666,7 +666,7 @@
                                                                     </div>
                                                                     <div class="col-md-6 mt-5">
                                                                         <span class="preview-title-lg overline-title">
-                                                                            Referencias corporativas <a href=""
+                                                                            Referencias corporativas <a onclick="modalComplementary(4)"
                                                                                 class="mt-n2 btn btn-outline-primary float-end">Agregar</a>
                                                                         </span>
                                                                         <div class="form-group">
