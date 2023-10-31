@@ -91,12 +91,10 @@ class Action extends Model
         ->where(function ($query) use ($now, $limiteFuturo, $limitePasado) {
             $query->where(function ($query) use ($now, $limiteFuturo) {
                 // Filtra las acciones que faltan 10 minutos o menos para vencer
-                $query->where(function ($query) use ($now) {
+                // Filtra las acciones que faltan exactamente 10 minutos para vencer
+                $query->where(function ($query) use ($now, $limiteFuturo) {
                     $query->whereDate('start_date', '=', $now->toDateString())
-                        ->whereTime('start_time', '>', $now->toTimeString());
-                })->orWhere(function ($query) use ($now, $limiteFuturo) {
-                    $query->whereDate('start_date', '=', $now->toDateString())
-                        ->whereTime('start_time', '<=', $limiteFuturo->toTimeString());
+                        ->whereTime('start_time', '=', $limiteFuturo->toTimeString());
                 });
             })->orWhere(function ($query) use ($limitePasado, $now) {
                 // Filtra las acciones que ya han vencido (pasaron los 10 minutos)
