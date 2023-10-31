@@ -964,7 +964,7 @@
                                                             <div class="col-12">
                                                                 <span class="preview-title-lg overline-title">Costos de
                                                                     contratación <a
-                                                                        onclick="modalProductComision({{ $financial_product->id }}, 1)"
+                                                                        onclick="modalProductComision({{ @$financial_product->id }}, 1)"
                                                                         class="btn btn-outline-primary  float-end">Agregar</a>
                                                                 </span>
                                                                 <div id="content-costo-contratacion"></div>
@@ -972,7 +972,7 @@
 
                                                             <div class="col-12"><span
                                                                     class="preview-title-lg overline-title">Comisiones <a
-                                                                        onclick="modalProductComision({{ $financial_product->id }}, 2)"
+                                                                        onclick="modalProductComision({{ @$financial_product->id }}, 2)"
                                                                         class="btn btn-outline-primary float-end">Agregar</a>
                                                                 </span>
                                                                 <div id="comisiones"></div>
