@@ -93,15 +93,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="frm-user-admin-name">Referencia %</label>
                                     <div class="form-control-wrap">
-                                        @php
-                                            $fee_reference_percents = config('enums.fee_reference_percents');
-                                        @endphp
-                                        <select name="data[referencia]" class="form-control">
-                                            <option value="">Selecciona una opción</option>
-                                            @foreach ($fee_reference_percents as $key => $fee_reference_percents)
-                                                <option value="{{ $key }}"> {{ $fee_reference_percents }} </option>
-                                            @endforeach
-                                        </select>
+                                        <input type="text" name="data[referencia]" class="form-control">
                                     </div>
                                 </div>
                             </div>

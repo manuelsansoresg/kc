@@ -43,7 +43,7 @@
         <div class="profile-ud wider">
             <span class="profile-ud-label">Referencia %</span>
             <span class="profile-ud-value">
-                {{ isset(config('enums.fee_reference_percents')[$fees->referencia]) ? config('enums.fee_reference_percents')[$fees->referencia] : null }}
+                {{ $fees->referencia }}
         </div>
     </div>
     @endif
