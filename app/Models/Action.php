@@ -91,6 +91,7 @@ class Action extends Model
                 });
             })->get();
 
+        dd($actionsProximasOVencidas);
         foreach ($actionsProximasOVencidas as $actionsProximasOVencida) {
             $lead = Lead::find($actionsProximasOVencida->id_rel);
             if ($lead != null) {
