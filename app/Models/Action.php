@@ -74,7 +74,6 @@ class Action extends Model
     {
 
         $now = now();  // Obtener la fecha y hora actual del servidor
-
         $actionsProximasOVencidas = Action::
             where('is_notification_slack', 0)
             ->where(function ($query) use ($now) {
