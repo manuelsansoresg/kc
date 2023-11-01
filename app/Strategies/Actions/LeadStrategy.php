@@ -72,7 +72,7 @@ class LeadStrategy implements ActionInterface
         );
         $option         = \View::make('panel.action.add_option_dt', $data_option)->render();
         $name_lead = $lead !== null ? $lead->name.' '.$lead->last_name : null;
-        $date = ($model_action->end_date != null) ? formatDateNameMonth(date('Y-m-d H:i:s', strtotime($model_action->end_date.' '. $model_action->end_time))): null;
+        $date = ($model_action->start_time != null) ? formatDateNameMonth(date('Y-m-d H:i:s', strtotime($model_action->start_time.' '. $model_action->start_time))): null;
         $data = array(
             'type' => $type_actions[$model_action->type],
             'subject' => $model_action->subject,
