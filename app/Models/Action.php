@@ -90,18 +90,17 @@ class Action extends Model
         where('is_notification_slack', 0)
         ->where(function ($query) use ($now, $limiteFuturo, $limitePasado) {
             $query->where(function ($query) use ($now, $limiteFuturo) {
-                // Filtra las acciones que faltan 10 minutos o menos para vencer
                 // Filtra las acciones que faltan exactamente 10 minutos para vencer
                 $query->where(function ($query) use ($now, $limiteFuturo) {
                     $query->whereDate('start_date', '=', $now->toDateString())
                         ->whereTime('start_time', '=', $limiteFuturo->toTimeString());
                 });
-            })->orWhere(function ($query) use ($limitePasado, $now) {
+            })->orWhere(function ($query) use ($limiteFuturo, $now) {
                 // Filtra las acciones que ya han vencido (pasaron los 10 minutos)
-                $query->where(function ($query) use ($now, $limitePasado) {
+                $query->where(function ($query) use ($now, $limiteFuturo) {
                     $query->whereDate('start_date', '=', $now->toDateString())
-                        ->whereTime('start_time', '<', $limitePasado->toTimeString());
-                })->orWhere(function ($query) use ($now, $limitePasado) {
+                        ->whereTime('start_time', '<', $limiteFuturo->toTimeString());
+                })->orWhere(function ($query) use ($now, $limiteFuturo) {
                     $query->whereDate('start_date', '<', $now->toDateString());
                 });
             });
