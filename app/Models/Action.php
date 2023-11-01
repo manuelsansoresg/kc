@@ -74,30 +74,22 @@ class Action extends Model
     {
 
         $now = now();  // Obtener la fecha y hora actual del servidor
-        $limiteFuturo = $now->addMinutes(1);  // Agregar 10 minutos para el límite futuro
         $actionsProximasOVencidas = Action::
             where('is_notification_slack', 0)
-            ->where(function ($query) use ($now, $limiteFuturo) {
-                $query->where(function ($query) use ($now, $limiteFuturo) {
-                    // Filtra las acciones que faltan exactamente 10 minutos para vencer
-                    $query->whereDate('start_date', '=', $now->toDateString())
-                        ->where(function ($query) use ($now, $limiteFuturo) {
-                            $query
-                                ->whereTime('start_time', '=', $limiteFuturo->format('H:i'));
-                        });
-                })
-                ->orWhere(function ($query) use ($now) {
-                    // Filtra las acciones que ya han vencido (pasaron los 10 minutos)
+            ->where(function ($query) use ($now) {
+                $query->where(function ($query) use ($now) {
+                    // Filtra las acciones que están programadas para ejecutarse en este momento o que ya deberían haberse ejecutado
                     $query->where(function ($query) use ($now) {
                         $query->whereDate('start_date', '=', $now->toDateString())
-                            ->whereTime('start_time', '<', $now->format('H:i'));
-                    })->orWhere(function ($query) use ($now) {
-                        $query->whereDate('start_date', '<', $now->toDateString());
+                            ->whereTime('start_time', '<=', $now->format('H:i'));
                     });
+                })
+                ->orWhere(function ($query) use ($now) {
+                    // Filtra las acciones que ya han vencido (han pasado su fecha y hora de finalización)
+                    $query->whereDate('start_date', '<', $now->toDateString());
                 });
             })->get();
-        $servidor = date('H:i');
-
+        
         foreach ($actionsProximasOVencidas as $actionsProximasOVencida) {
             $lead = Lead::find($actionsProximasOVencida->id_rel);
             if ($lead != null) {
