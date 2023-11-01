@@ -15,10 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->call(function () {
-            \App\Models\Action::accionesVencidas(); // Asegúrate de reemplazar 'YourModel' con el modelo real en el que se encuentra la función
-        })->weekdays()->hourlyAt(8)->between('8:00', '20:00');
+
     }
 
     /**
