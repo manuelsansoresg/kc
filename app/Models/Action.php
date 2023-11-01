@@ -75,7 +75,7 @@ class Action extends Model
 
         $now = now();  // Obtener la fecha y hora actual del servidor
         $limiteFuturo = $now->addMinutes(10);  // Agregar 10 minutos para el límite futuro
-
+        
         $actionsProximasOVencidas = Action::
             where('is_notification_slack', 0)
             ->where(function ($query) use ($now, $limiteFuturo) {
@@ -84,7 +84,7 @@ class Action extends Model
                     $query->whereDate('start_date', '=', $now->toDateString())
                         ->where(function ($query) use ($now, $limiteFuturo) {
                             $query
-                                ->whereTime('start_time', '=', $limiteFuturo->format('H:i'));
+                                ->whereTime('start_time', '=', $now->format('H:i'));
                         });
                 })
                 ->orWhere(function ($query) use ($now) {
