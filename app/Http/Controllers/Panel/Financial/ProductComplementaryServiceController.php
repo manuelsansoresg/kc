@@ -58,6 +58,7 @@ class ProductComplementaryServiceController extends Controller
 
     public function refresh($product_id)
     {
+        $financial_products = FinancialProduct::find($product_id);
         $complementary_alcance = ProductComplementaryService::where([
             'product_id' => $product_id,
             'type' => 1
@@ -80,6 +81,7 @@ class ProductComplementaryServiceController extends Controller
             'complementary_restricciones' => $complementary_restricciones,
             'complementary_programas' => $complementary_programas,
             'complementary_referencias' => $complementary_referencias,
+            'my_product' => $financial_products
         ]);
     }
     /**

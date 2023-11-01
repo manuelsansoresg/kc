@@ -1457,38 +1457,48 @@ function refreshListComplementary() {
 
     result.complementary_alcance.forEach(function (alcance) {
       var option = document.createElement('option');
-      option.value = alcance.id;
+      option.value = alcance.description;
       option.text = alcance.description;
       alcanceSelect.appendChild(option);
-    }); // Repite el mismo proceso para los otros selects (restriccion_exclusion, programa_educacion_financiera, referencia_comparativa)
+    });
+    var alcanceBeneficiosArray = result.my_product.alcance_beneficios.split(',');
+    $('#alcance_beneficios').val(alcanceBeneficiosArray).trigger('change');
+    console.log(alcanceBeneficiosArray); // Repite el mismo proceso para los otros selects (restriccion_exclusion, programa_educacion_financiera, referencia_comparativa)
     // Asignar valores al select de restriccion_exclusion
 
     var restriccionSelect = document.getElementById('restriccion_exclusion');
     restriccionSelect.innerHTML = '';
     result.complementary_restricciones.forEach(function (restriccion) {
       var option = document.createElement('option');
-      option.value = restriccion.id;
+      option.value = restriccion.description;
       option.text = restriccion.description;
       restriccionSelect.appendChild(option);
-    }); // Asignar valores al select de programa_educacion_financiera
+    });
+    var alcanceRestriccionArray = result.my_product.restriccion_exclusion.split(',');
+    $('#restriccion_exclusion').val(alcanceRestriccionArray).trigger('change');
+    console.log(alcanceRestriccionArray); // Asignar valores al select de programa_educacion_financiera
 
     var programaSelect = document.getElementById('programa_educacion_financiera');
     programaSelect.innerHTML = '';
     result.complementary_programas.forEach(function (programa) {
       var option = document.createElement('option');
-      option.value = programa.id;
+      option.value = programa.description;
       option.text = programa.description;
       programaSelect.appendChild(option);
-    }); // Asignar valores al select de referencia_comparativa
+    });
+    var alcanceProgramaArray = result.my_product.programa_educacion_financiera.split(',');
+    $('#programa_educacion_financiera').val(alcanceProgramaArray).trigger('change'); // Asignar valores al select de referencia_comparativa
 
     var referenciaSelect = document.getElementById('referencia_comparativa');
     referenciaSelect.innerHTML = '';
     result.complementary_referencias.forEach(function (referencia) {
       var option = document.createElement('option');
-      option.value = referencia.id;
+      option.value = referencia.description;
       option.text = referencia.description;
       referenciaSelect.appendChild(option);
     });
+    var ReferenciaArray = result.my_product.referencia_comparativa.split(',');
+    $('#referencia_comparativa').val(ReferenciaArray).trigger('change');
   })["catch"](function (e) {});
 }
 /*  alcance_beneficios
