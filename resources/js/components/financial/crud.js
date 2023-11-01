@@ -99,7 +99,6 @@ $( "#frm-financial-data-pricacy" ).submit(function( event ) {
 
             const alcanceBeneficiosArray = result.my_product.alcance_beneficios.split(',');
             $('#alcance_beneficios').val(alcanceBeneficiosArray).trigger('change');
-            console.log(alcanceBeneficiosArray);
             // Repite el mismo proceso para los otros selects (restriccion_exclusion, programa_educacion_financiera, referencia_comparativa)
 
             // Asignar valores al select de restriccion_exclusion
@@ -113,7 +112,6 @@ $( "#frm-financial-data-pricacy" ).submit(function( event ) {
             });
             const alcanceRestriccionArray = result.my_product.restriccion_exclusion.split(',');
             $('#restriccion_exclusion').val(alcanceRestriccionArray).trigger('change');
-            console.log(alcanceRestriccionArray);
             // Asignar valores al select de programa_educacion_financiera
             let programaSelect = document.getElementById('programa_educacion_financiera');
             programaSelect.innerHTML = '';

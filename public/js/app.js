@@ -1462,8 +1462,7 @@ function refreshListComplementary() {
       alcanceSelect.appendChild(option);
     });
     var alcanceBeneficiosArray = result.my_product.alcance_beneficios.split(',');
-    $('#alcance_beneficios').val(alcanceBeneficiosArray).trigger('change');
-    console.log(alcanceBeneficiosArray); // Repite el mismo proceso para los otros selects (restriccion_exclusion, programa_educacion_financiera, referencia_comparativa)
+    $('#alcance_beneficios').val(alcanceBeneficiosArray).trigger('change'); // Repite el mismo proceso para los otros selects (restriccion_exclusion, programa_educacion_financiera, referencia_comparativa)
     // Asignar valores al select de restriccion_exclusion
 
     var restriccionSelect = document.getElementById('restriccion_exclusion');
@@ -1475,8 +1474,7 @@ function refreshListComplementary() {
       restriccionSelect.appendChild(option);
     });
     var alcanceRestriccionArray = result.my_product.restriccion_exclusion.split(',');
-    $('#restriccion_exclusion').val(alcanceRestriccionArray).trigger('change');
-    console.log(alcanceRestriccionArray); // Asignar valores al select de programa_educacion_financiera
+    $('#restriccion_exclusion').val(alcanceRestriccionArray).trigger('change'); // Asignar valores al select de programa_educacion_financiera
 
     var programaSelect = document.getElementById('programa_educacion_financiera');
     programaSelect.innerHTML = '';
