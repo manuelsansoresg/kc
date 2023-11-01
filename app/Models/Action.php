@@ -80,15 +80,14 @@ class Action extends Model
             ->where(function ($query) use ($now) {
                 $query->where(function ($query) use ($now) {
                     // Filtra las acciones que están programadas para ejecutarse en este momento
-                    $query->whereDate('end_date', '=', $now->toDateString())
-                        ->whereTime('end_time', '=', $now->format('H:i'));
+                    $query->whereDate('start_date', '=', $now->toDateString())
+                        ->whereTime('start_time', '=', $now->format('H:i'));
                 })
                 ->orWhere(function ($query) use ($now) {
                     // Filtra las acciones que ya han vencido (han pasado su fecha y hora de finalización)
-                    $query->whereDate('end_date', '<', $now->toDateString());
+                    $query->whereDate('start_date', '<', $now->toDateString());
                 });
             })->get();
-
 
         foreach ($actionsProximasOVencidas as $actionsProximasOVencida) {
             $lead = Lead::find($actionsProximasOVencida->id_rel);
