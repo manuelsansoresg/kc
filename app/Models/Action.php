@@ -73,38 +73,31 @@ class Action extends Model
     public static function accionesVencidas()
     {
 
-        // Obtiene la fecha y hora actual del servidor
-        $now = Carbon::now();
+        $now = now();  // Obtener la fecha y hora actual del servidor
+        $limiteFuturo = $now->addMinutes(10);  // Agregar 10 minutos para el límite futuro
 
-        // Define la cantidad de minutos que deseas verificar
-        $minutosDeseados = 10;
-
-        // Calcula la fecha y hora límite para las acciones que faltan 10 minutos o menos para vencer
-        $limiteFuturo = $now->copy()->addMinutes($minutosDeseados);
-
-        // Calcula la fecha y hora límite para las acciones que ya han vencido (pasaron los 10 minutos)
-        $limitePasado = $now->copy()->subMinutes($minutosDeseados);
-
-        // Obtiene todas las acciones que faltan 10 minutos o menos para vencer o que ya han pasado esos 10 minutos
         $actionsProximasOVencidas = Action::
-        where('is_notification_slack', 0)
-        ->where(function ($query) use ($now, $limiteFuturo, $limitePasado) {
-            $query->where(function ($query) use ($now, $limiteFuturo) {
-                // Filtra las acciones que faltan exactamente 10 minutos para vencer
+            where('is_notification_slack', 0)
+            ->where(function ($query) use ($now, $limiteFuturo) {
                 $query->where(function ($query) use ($now, $limiteFuturo) {
-                    $query->whereDate('start_date', '=', $now->toDateString())
-                        ->whereTime('start_time', '=', $limiteFuturo->toTimeString());
+                    // Filtra las acciones que faltan exactamente 10 minutos para vencer
+                    $query->whereDate('end_date', '=', $now->toDateString())
+                        ->where(function ($query) use ($now, $limiteFuturo) {
+                            $query
+                                ->whereTime('end_time', '=', $limiteFuturo->format('H:i'));
+                        });
+                })
+                ->orWhere(function ($query) use ($now) {
+                    // Filtra las acciones que ya han vencido (pasaron los 10 minutos)
+                    $query->where(function ($query) use ($now) {
+                        $query->whereDate('end_date', '=', $now->toDateString())
+                            ->whereTime('end_time', '<', $now->format('H:i'));
+                    })->orWhere(function ($query) use ($now) {
+                        $query->whereDate('end_date', '<', $now->toDateString());
+                    });
                 });
-            })->orWhere(function ($query) use ($limiteFuturo, $now) {
-                // Filtra las acciones que ya han vencido (pasaron los 10 minutos)
-                $query->where(function ($query) use ($now, $limiteFuturo) {
-                    $query->whereDate('start_date', '=', $now->toDateString())
-                        ->whereTime('start_time', '<', $limiteFuturo->toTimeString());
-                })->orWhere(function ($query) use ($now, $limiteFuturo) {
-                    $query->whereDate('start_date', '<', $now->toDateString());
-                });
-            });
-        })->get();
+            })->get();
+        $servidor = date('H:i');
 
         foreach ($actionsProximasOVencidas as $actionsProximasOVencida) {
             $lead = Lead::find($actionsProximasOVencida->id_rel);
