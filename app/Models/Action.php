@@ -79,9 +79,11 @@ class Action extends Model
             where('is_notification_slack', 0)
             ->where(function ($query) use ($now) {
                 $query->where(function ($query) use ($now) {
-                    // Filtra las acciones que están programadas para ejecutarse en este momento
-                    $query->whereDate('start_date', '=', $now->toDateString())
-                        ->whereTime('start_time', '=', $now->format('H:i'));
+                    // Filtra las acciones que están programadas para ejecutarse en este momento o que ya deberían haberse ejecutado
+                    $query->where(function ($query) use ($now) {
+                        $query->whereDate('start_date', '=', $now->toDateString())
+                            ->whereTime('start_time', '<=', $now->format('H:i'));
+                    });
                 })
                 ->orWhere(function ($query) use ($now) {
                     // Filtra las acciones que ya han vencido (han pasado su fecha y hora de finalización)
