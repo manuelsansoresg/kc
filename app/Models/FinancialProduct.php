@@ -205,11 +205,35 @@ class FinancialProduct extends Model
 
     public static function saveEdit($request)
     {
+        // Elementos a excluir del arreglo $request
+        $excludeKeys = ['_token', 'product_id', 'is_required', 'principal_pay', 'periodicity_id'];
+
+        // Crea un nuevo arreglo que excluye los elementos especificados
+        $filteredRequest = $request->except($excludeKeys);
+
+        if (isset($request->alcance_beneficios)) 
+        {
+            $filteredRequest['alcance_beneficios'] =  self::formatInfoCredit($request->alcance_beneficios);
+        }
+        
+        if (isset($request->restriccion_exclusion)) 
+        {
+            $filteredRequest['restriccion_exclusion'] =  self::formatInfoCredit($request->restriccion_exclusion);
+        }
+        if (isset($request->programa_educacion_financiera)) 
+        {
+            $filteredRequest['programa_educacion_financiera'] =  self::formatInfoCredit($request->programa_educacion_financiera);
+        }
+        if (isset($request->referencia_comparativa)) 
+        {
+            $filteredRequest['referencia_comparativa'] =  self::formatInfoCredit($request->referencia_comparativa);
+        }
+
         if ($request->product_id == null) {
-            $financial_product = FinancialProduct::create($request->except(['_token', 'product_id', 'is_required', 'principal_pay', 'periodicity_id']));
+            $financial_product = FinancialProduct::create($filteredRequest);
         } else {
             $financial_product = FinancialProduct::find($request->product_id);
-            $financial_product->fill($request->except(['_token', 'product_id', 'is_required', 'principal_pay', 'periodicity_id']));
+            $financial_product->fill($filteredRequest);
             $financial_product->update();
         }
         //*guardar las opciones multiples
@@ -252,9 +276,22 @@ class FinancialProduct extends Model
             }
         }
 
+       
+
         return $financial_product;
     }
     
+    public function formatInfoCredit($values)
+    {
+        $new_value = '';
+        if (count($values) > 0) {
+            foreach ($values as $value) {
+                $new_value.= $value.',';
+            }
+        }
+        $new_value = trim($new_value, ',');
+        return $new_value;
+    }
     
 
     public static function customSortFinancials($financial_products, $is_limit = false)
