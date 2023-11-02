@@ -1789,6 +1789,43 @@ $("#frm-financial-chart").submit(function (event) {
   })["catch"](function (e) {});
 });
 
+if (document.getElementById('tramite-proceso_tramite')) {
+  var ckeditor = CKEDITOR.replace('tramite-proceso_tramite', {
+    toolbar: [{
+      name: 'basicstyles',
+      items: ['Bold', 'Italic', 'Font', 'FontSize', 'TextColor', 'BGColor', 'RemoveFormat']
+    }, {
+      name: 'paragraph',
+      items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+    }, {
+      name: 'insert',
+      items: ['Table']
+    }],
+    language: 'es-mx'
+  }); //*axios que devuelva el valor proceso_tramite
+
+  var product_id = $('#product_id').val();
+  setTimeout(function () {
+    axios.get("/panel/financial-product/" + product_id + "/getTramite").then(function (response) {
+      var result = response.data;
+      CKEDITOR.instances['tramite-proceso_tramite'].setData(result.proceso_tramite);
+    })["catch"](function (e) {// Manejar errores aquí
+    });
+  }, 2000); // 2000 milisegundos = 2 segundos
+}
+
+$("#frm-financial-tramite").submit(function (event) {
+  event.preventDefault();
+  var desc = CKEDITOR.instances['tramite-proceso_tramite'].getData();
+  $('#tramite-proceso_tramite').val(desc);
+  var new_form = document.getElementById("frm-financial-tramite");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+
 window.deleteFinancialProduct = function (id) {
   axios["delete"]("/panel/financial-product/" + id).then(function (response) {
     (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financial-product', 'Producto', 'Registro borrado');

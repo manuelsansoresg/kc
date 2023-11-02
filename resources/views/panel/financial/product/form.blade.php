@@ -56,6 +56,9 @@
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $product_id != null ? '#tabChart' : '#' }}">Gráficas</a>
                                                 </li>
+                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                        href="{{ $product_id != null ? '#tabTramite' : '#' }}">Trámite</a>
+                                                </li>
                                             </ul>
 
                                             <div class="tab-content">
@@ -1756,6 +1759,34 @@
                                                             <input type="hidden" id="product_id" name="product_id"
                                                                 value="{{ $product_id }}">
                                                             <input type="hidden" name="is_required" value="false">
+                                                            <div class="col-12">
+                                                                <ul
+                                                                    class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                                                                    <li>
+                                                                        <button class="btn btn-primary">Guardar</button>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="tabTramite">
+                                                    <form method="post" id="frm-financial-tramite" action="">
+                                                        <div class="row gy-4">
+                                                            @csrf
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_kc">Describe el proceso del trámite</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" class="form-control ckeditor" name="proceso_tramite" id="tramite-proceso_tramite" required>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" 
+                                                            name="financial_id" value="{{ $financial_id }}">
+                                                            <input type="hidden"  name="product_id"
+                                                                value="{{ $product_id }}">
                                                             <div class="col-12">
                                                                 <ul
                                                                     class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">

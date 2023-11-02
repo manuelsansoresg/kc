@@ -195,6 +195,53 @@ $( "#frm-financial-chart" ).submit(function( event ) {
         });
   });
 
+  if (document.getElementById('tramite-proceso_tramite')) {
+    let ckeditor = CKEDITOR.replace('tramite-proceso_tramite', {
+        toolbar: [
+           { name: 'basicstyles', items: ['Bold', 'Italic', 'Font', 'FontSize', 'TextColor', 'BGColor', 'RemoveFormat'] },
+           { name: 'paragraph', items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+           { name: 'insert', items: [ 'Table'] }
+       ],
+       language: 'es-mx',
+   });
+
+   //*axios que devuelva el valor proceso_tramite
+   
+   let product_id = $('#product_id').val();
+   setTimeout(function () {
+    axios
+        .get("/panel/financial-product/" + product_id + "/getTramite")
+        .then(function (response) {
+            let result = response.data;
+            CKEDITOR.instances['tramite-proceso_tramite'].setData(result.proceso_tramite);
+        })
+        .catch(e => {
+            // Manejar errores aquí
+        });
+}, 2000); // 2000 milisegundos = 2 segundos
+
+  }
+
+  $( "#frm-financial-tramite" ).submit(function( event ) {
+    event.preventDefault();
+    var desc = CKEDITOR.instances['tramite-proceso_tramite'].getData();
+    $('#tramite-proceso_tramite').val(desc);
+
+    const new_form = document.getElementById("frm-financial-tramite");
+    const data = new FormData(new_form);
+
+    axios
+        .post("/panel/financial-product", data)
+        .then(function (response) {
+            let result = response.data;
+            showToast('Producto', 'Datos guardados', 'success');
+            
+        })
+        .catch(e => {
+            
+        });
+  });
+
 
 window.deleteFinancialProduct = function (id) {
     axios

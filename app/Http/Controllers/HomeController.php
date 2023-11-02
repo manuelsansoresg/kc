@@ -143,7 +143,8 @@ class HomeController extends Controller
 
     public function exitReport(Credit $credit)
     {
-        return view('content_exit_report');
+        $product = FinancialProduct::find($credit->financial_product_id);
+        return view('content_exit_report', compact('product'));
     }
 
     public function method($history_id)

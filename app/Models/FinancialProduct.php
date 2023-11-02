@@ -99,6 +99,8 @@ class FinancialProduct extends Model
         'restriccion_exclusion',
         'programa_educacion_financiera',
         'referencia_comparativa',
+        
+        'proceso_tramite',
     ];
 
     public static function getbyIdFirst($product_id)

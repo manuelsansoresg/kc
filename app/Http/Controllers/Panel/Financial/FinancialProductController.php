@@ -42,6 +42,11 @@ class FinancialProductController extends Controller
 
         return response()->json(['periodicities' => $periodicities, 'payments' => $payments]);
     }
+    
+    public function getTramite(FinancialProduct $product)
+    {
+        return response()->json($product);
+    }
 
     /**
      * Store a newly created resource in storage.

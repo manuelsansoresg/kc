@@ -15,7 +15,7 @@
     $is_app = isset($_GET['is_app']) ? true : false;
     $type = isset($_GET['type']) ? true : false;
 
-    $text1 = 'Un asesor de nuestro equipo te contactará en unos minutos para ayudarte con  el trámite de tu crédito.';
+    $text1 = 'Debido a las características de este tipo de crédito, no podemos ayudarte con el trámite, pero podemos apoyarte a resolver las dudas que tengas.';
     $text2 = 'Un asesor de nuestro equipo te contactará a la brevedad posible para iniciar el trámite de tu crédito.';
     if ($type == true) {
         $text1 = 'Debido a las características de este tipo de crédito, no podemos ayudarte con el trámite, pero podemos apoyarte a resolver las dudas que tengas.';
@@ -74,11 +74,22 @@
                                         @if ($is_app == false)
                                         <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
                                             {{ $text1 }}
+                                            
                                         </h2>
+
                                         @else
                                         <h6 class="mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
                                             {{ $text1 }}
+                                            
                                         </h6>
+                                        <div class="row">
+                                            <div class="col-12" style="text-align: left">
+                                                <h6 class="mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+                                                    <br><br>
+                                                    {!! $product!= null ?  $product->proceso_tramite : null !!}
+                                                </h6>
+                                            </div>
+                                        </div>
                                         @endif
                                     @else
                                         @if ($is_app == false)
