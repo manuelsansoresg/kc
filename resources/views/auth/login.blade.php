@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="nk-block-head">
                                     <div class="nk-block-head-content">
-                                        <h5 class="nk-block-title">Loging</h5>
+                                        <h5 class="nk-block-title">Login</h5>
                                         <div class="nk-block-des">
                                             <p>Accede al panel usando tu email y contraseña.</p>
                                         </div>

@@ -23,5 +23,6 @@ class VerifyCsrfToken extends Middleware
         '/survey',
         '/api/lead',
         '/slack/notification',
+        '/login',
     ];
 }
