@@ -193,7 +193,7 @@
                                                                                         class="custom-control-input"
                                                                                         id="is_tramitar_pending"
                                                                                         name="is_tramitar" value="0"
-                                                                                        {{ $financial_product != null && $financial_product->is_tramitar === 2 ? 'checked' : null }}>
+                                                                                        {{ $financial_product != null && $financial_product->is_tramitar === 0 ? 'checked' : null }}>
                                                                                     <label class="custom-control-label"
                                                                                         for="is_tramitar_pending">No</label>
                                                                                 </div>
