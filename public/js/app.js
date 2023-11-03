@@ -3742,6 +3742,7 @@ $().ready(function () {
             $('#current_term').val(credit.current_term);
             $('#current_principal_balance').val(credit.current_principal_balance / 100);
             $('#current_total_balance').val(credit.current_total_balance / 100);
+            $('#tipo_credito').val(credit.tipo_credito).trigger("change");
           }
 
         if (type_form == 23) //form kc-desktop step1

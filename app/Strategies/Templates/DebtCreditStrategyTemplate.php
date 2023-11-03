@@ -58,7 +58,8 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $options_agreement = Agreement::getAllActive();
         $option_financials = config('financial_enums.periodicity_products');
         $financial_products = FinancialProduct::getAllByTemplate();
-        //dd($financial_products);
+        $type_products = config('financial_enums.type_products');
+        
         $elements = array(
             1 => [
                 'title_section' => 'Generales',
@@ -105,6 +106,20 @@ class DebtCreditStrategyTemplate implements TemplateInterface
             ],
             4 => [
                 'title_section' => null,
+                'title' => 'Tipo de crédito que desea el prospecto',
+                'name_field' => 'tipo_credito',
+                'id_field' => 'tipo_credito',
+                'comment_admin' => 'Categoría de crédito.',
+                'comment_webApp' => '',
+                'placeholder' => '',
+                'type' => 'select2',
+                'is_option_array' => true,
+                'options' => $type_products,
+                'is_required' => false,
+                'is_disabled' => null
+            ],
+            5 => [
+                'title_section' => null,
                 'title' => 'Nombres',
                 'name_field' => 'name',
                 'id_field' => 'name',
@@ -117,7 +132,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
-            5 => [
+            6 => [
                 'title_section' => null,
                 'title' => 'Primer apellido',
                 'name_field' => 'last_name',
@@ -131,7 +146,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
-            6 => [
+            7 => [
                 'title_section' => null,
                 'title' => 'Segundo apellido',
                 'name_field' => 'second_last_name',
@@ -145,7 +160,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            7 => [
+            8 => [
                 'title_section' => null,
                 'title' => 'Celular',
                 'name_field' => 'cellphone',
@@ -159,7 +174,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            8 => [
+            9 => [
                 'title_section' => 'Crédito actual',
                 'title' => null,
                 'name_field' => null,
@@ -173,7 +188,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => null,
                 'is_disabled' => null
             ],
-            9 => [
+            10 => [
                 'title_section' => null,
                 'title' => 'pago actual',
                 'name_field' => 'current_payment',
@@ -187,7 +202,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            10 => [
+            11 => [
                 'title_section' => null,
                 'title' => 'Periodicidad actual',
                 'name_field' => 'current_periodicity',
@@ -201,7 +216,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            11 => [
+            12 => [
                 'title_section' => null,
                 'title' => 'Crédito actual',
                 'name_field' => 'current_loan',
@@ -215,7 +230,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            12 => [
+            13 => [
                 'title_section' => null,
                 'title' => 'Plazo actual',
                 'name_field' => 'current_term',
@@ -229,7 +244,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            13 => [
+            14 => [
                 'title_section' => null,
                 'title' => 'Saldo insoluto actual',
                 'name_field' => 'current_principal_balance',
@@ -243,7 +258,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            14 => [
+            15 => [
                 'title_section' => null,
                 'title' => 'Saldo total actual',
                 'name_field' => 'current_total_balance',
@@ -257,7 +272,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null
             ],
-            15 => [
+            16 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
