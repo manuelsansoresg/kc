@@ -178,27 +178,24 @@ class FinancialProduct extends Model
             $product_is_vincular_banco = $sql_query->is_vincular_banco;
             $product_consulta_buro = $sql_query->consulta_buro;
             $bank_ids = $sql_query->bank_ids;
-        
+            
             // Divide la cadena de $bank_ids en un arreglo
             $bank_ids_array = explode(',', $bank_ids);
-            //validar buro 
+            //* si en producto selecciona no solo debe mostrar los que en creditos tengan no 
             if ($product_consulta_buro == 0 && $consulta_buro === 0) {
                 $financial_product_ids[] = $sql_query->id;
-            } elseif($product_consulta_buro == 1 || $product_consulta_buro === null)
+            } elseif ($product_aval_o_garantia == 0 && $aval_o_garantia === 0) {
+                $financial_product_ids[] = $sql_query->id;
+            } elseif ($product_aval_o_garantia == 1 || $product_aval_o_garantia === null) {
+                $financial_product_ids[] = $sql_query->id;
+            }
+            elseif( ($product_consulta_buro == 1 || $product_consulta_buro === null))
             { 
-                if (
-                    ($aval_o_garantia == 1 && $product_aval_o_garantia == 1) ||
-                    (is_null($aval_o_garantia) || is_null($bank_id))
-                ) {
-                    // Validar banco
-                    if ($bank_id == null) { // Si $bank_id es null, todas las condiciones anteriores deben cumplirse
-                        $financial_product_ids[] = $sql_query->id;
-                    } else {
-                        // Si $bank_id no es null, verificar que exista la combinación en el arreglo
-                        if (in_array($bank_id, $bank_ids_array)) {
-                            $financial_product_ids[] = $sql_query->id;
-                        }
-                    }
+                $financial_product_ids[] = $sql_query->id;
+            }
+            elseif ($bank_id != null) {
+                if (in_array($bank_id, $bank_ids_array)) {
+                    $financial_product_ids[] = $sql_query->id;
                 }
             }
         }
