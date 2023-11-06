@@ -137,6 +137,9 @@ $( "#frm-financial-data-pricacy" ).submit(function( event ) {
 
             const ReferenciaArray = result.my_product.referencia_comparativa.split(',');
             $('#referencia_comparativa').val(ReferenciaArray).trigger('change');
+
+            const bankIdsArray = result.my_product.bank_ids.split(',');
+            $('#bank_ids').val(bankIdsArray).trigger('change');
         })
         .catch(e => {
             

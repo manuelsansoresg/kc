@@ -249,8 +249,10 @@
                                                                     <label class="form-label"
                                                                         for="frm-product-name">Banco</label>
                                                                     <div class="form-control-wrap">
-                                                                        <select name="bank_id" id=""
-                                                                            class="form-select">
+                                                                        <select name="bank_ids[]" id="bank_ids"
+                                                                        class="form-select select2multiple"
+                                                                        multiple="multiple" data-search="on"
+                                                                            >
                                                                             <option value="">Selecciona una opción
                                                                             </option>
                                                                             @foreach ($banks as $bank)

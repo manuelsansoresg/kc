@@ -55,7 +55,9 @@
     );
     $current_archive = $m_history_log->getByStatusFirst($status_credit_archive, $credit->id, 1);
 @endphp
-
+{{-- 
+    $m_history_log::$label_status[$current_module->status_id]
+    --}}
 @section('content')
     {{-- content --}}
     <div class="nk-content ">
@@ -694,6 +696,7 @@
                                                     <span class="sub-text">Estatus:</span>
                                                     <span>
                                                         @if ($current_archive == null)
+                                                        
                                                             {{ isset($m_history_log::$label_status[$current_module->status_id]) ? $m_history_log::$label_status[$current_module->status_id] : null; }}
                                                         @endif
                                                     </span>

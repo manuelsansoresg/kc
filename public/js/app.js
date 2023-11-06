@@ -1497,6 +1497,8 @@ function refreshListComplementary() {
     });
     var ReferenciaArray = result.my_product.referencia_comparativa.split(',');
     $('#referencia_comparativa').val(ReferenciaArray).trigger('change');
+    var bankIdsArray = result.my_product.bank_ids.split(',');
+    $('#bank_ids').val(bankIdsArray).trigger('change');
   })["catch"](function (e) {});
 }
 /*  alcance_beneficios
