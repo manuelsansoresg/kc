@@ -175,7 +175,6 @@ class FinancialProduct extends Model
         //dd($financial_ids, $type_product_id);
         
         $financial_product_ids = [];
-        //dd($type_product_id, $sql);
 
         foreach ($sql as $sql_query) {
             $product_aval_o_garantia = $sql_query->aval_o_garantia;
@@ -184,16 +183,27 @@ class FinancialProduct extends Model
             $bank_ids = $sql_query->bank_ids;
 
             $is_aval = true;
+            $is_buro = true;
+            $is_bank = true;
 
-            if ($aval_o_garantia == 0 && $product_aval_o_garantia !== 0) {
+            if ($aval_o_garantia === 0 && $product_aval_o_garantia !== 0) {
                 $is_aval = false;
             }
-
             
-            // Divide la cadena de $bank_ids en un arreglo
-            $bank_ids_array = explode(',', $bank_ids);
+            if ($consulta_buro === 0 && $product_consulta_buro !== 0) {
+                $is_buro = false;
+            }
 
-            if ($is_aval == true) {
+            if ($bank_id != null) {
+                // Divide la cadena de $bank_ids en un arreglo
+                $bank_ids_array = explode(',', $bank_ids);
+                if (!in_array($bank_id, $bank_ids_array)) {
+                    $is_bank = false;
+                }
+            }
+           
+
+            if ($is_aval == true && $is_buro == true && $is_bank == true) {
                 $financial_product_ids[] = $sql_query->id;
             }
             /* 
