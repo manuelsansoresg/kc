@@ -155,6 +155,8 @@ class FinancialProduct extends Model
         foreach ($financial_agreements as $financial_agreement) {
             $financial_ids[] = $financial_agreement->product_id;
         }
+
+        //dd($type_product_id);
         
         $sql = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity', 'bank_ids', 'is_vincular_banco',
@@ -169,35 +171,43 @@ class FinancialProduct extends Model
         $bank_id                = $credit->bank_id;
         $aval_o_garantia        = $credit->aval_o_garantia;
         $queries = DB::getQueryLog();
+        //dd($queries);
         //dd($financial_ids, $type_product_id);
         
         $financial_product_ids = [];
+        //dd($type_product_id, $sql);
 
         foreach ($sql as $sql_query) {
             $product_aval_o_garantia = $sql_query->aval_o_garantia;
             $product_is_vincular_banco = $sql_query->is_vincular_banco;
             $product_consulta_buro = $sql_query->consulta_buro;
             $bank_ids = $sql_query->bank_ids;
+
+            $is_aval = true;
+
+            if ($aval_o_garantia == 0 && $product_aval_o_garantia !== 0) {
+                $is_aval = false;
+            }
+
             
             // Divide la cadena de $bank_ids en un arreglo
             $bank_ids_array = explode(',', $bank_ids);
+
+            if ($is_aval == true) {
+                $financial_product_ids[] = $sql_query->id;
+            }
+            /* 
             //* si en producto selecciona no solo debe mostrar los que en creditos tengan no 
             if ($product_consulta_buro == 0 && $consulta_buro === 0) {
                 $financial_product_ids[] = $sql_query->id;
             } elseif ($product_aval_o_garantia == 0 && $aval_o_garantia === 0) {
                 $financial_product_ids[] = $sql_query->id;
-            } elseif ($product_aval_o_garantia == 1 || $product_aval_o_garantia === null) {
-                $financial_product_ids[] = $sql_query->id;
-            }
-            elseif( ($product_consulta_buro == 1 || $product_consulta_buro === null))
-            { 
-                $financial_product_ids[] = $sql_query->id;
-            }
+            } 
             elseif ($bank_id != null) {
                 if (in_array($bank_id, $bank_ids_array)) {
                     $financial_product_ids[] = $sql_query->id;
                 }
-            }
+            } */
         }
         foreach ($products as $product) {
             // Itera a través de los productos y compara con $financial_product_ids
