@@ -194,7 +194,7 @@ class FinancialProduct extends Model
                 $is_buro = false;
             }
 
-            if ($bank_id > 0) {
+            if ($bank_id > 0 && $bank_ids !== null ) {
                 // Divide la cadena de $bank_ids en un arreglo
                 $bank_ids_array = explode(',', $bank_ids);
                 if (!in_array($bank_id, $bank_ids_array)) {
