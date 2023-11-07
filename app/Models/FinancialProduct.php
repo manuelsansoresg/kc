@@ -206,18 +206,7 @@ class FinancialProduct extends Model
             if ($is_aval == true && $is_buro == true && $is_bank == true) {
                 $financial_product_ids[] = $sql_query->id;
             }
-            /* 
-            //* si en producto selecciona no solo debe mostrar los que en creditos tengan no 
-            if ($product_consulta_buro == 0 && $consulta_buro === 0) {
-                $financial_product_ids[] = $sql_query->id;
-            } elseif ($product_aval_o_garantia == 0 && $aval_o_garantia === 0) {
-                $financial_product_ids[] = $sql_query->id;
-            } 
-            elseif ($bank_id != null) {
-                if (in_array($bank_id, $bank_ids_array)) {
-                    $financial_product_ids[] = $sql_query->id;
-                }
-            } */
+           
         }
         foreach ($products as $product) {
             // Itera a través de los productos y compara con $financial_product_ids

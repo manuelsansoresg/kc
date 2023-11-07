@@ -63,6 +63,8 @@ class LeadStrategyTemplate implements TemplateInterface
                 'applied_financial_product' => $lead->financial_product_id,
                 'is_vincular_banco' => $lead->is_vincular_banco,
                 'status_si_no' => $lead->status_si_no,
+                'aval_o_garantia' => $lead->aval_o_garantia,
+                'consulta_buro' => $lead->consulta_buro,
             );
 
             //validar que el credito no exista con los mismos datos
