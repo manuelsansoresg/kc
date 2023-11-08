@@ -76,12 +76,13 @@ class ProductComplementaryServiceController extends Controller
             'type' => 4
         ])->get();
 
+
         return response()->json([
             'complementary_alcance' => $complementary_alcance,
             'complementary_restricciones' => $complementary_restricciones,
             'complementary_programas' => $complementary_programas,
             'complementary_referencias' => $complementary_referencias,
-            'my_product' => $financial_products
+            'my_product' => $financial_products,
         ]);
     }
     /**

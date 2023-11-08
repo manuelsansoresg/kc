@@ -43,9 +43,11 @@
                                     </p>
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary btn-lg hover-lift me-3 iframe-link" href="https://app.kaaxclub.com/" style="text-transform: inherit">Ir a la App <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                                <a class="btn btn-primary btn-lg hover-lift me-3" href="#!">Ayuda <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
-                                                <a class="btn btn-primary btn-lg hover-lift me-3" href="#!">Salir <span class="material-symbols-rounded fs-5 ms-2 align-middle lh-1">arrow_forward</span>
+                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://kaaxclub.com" style="text-transform: inherit">OK 
+                                            </a>
+                                            <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
+                                                    >Contacto 
+                                                    <img width="18" class="mt-n2" src="/images/whatsapp-logo-1-1.png" alt="">
                                             </a>
                                         </div>
                                     </div>

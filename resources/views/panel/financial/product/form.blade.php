@@ -193,7 +193,7 @@
                                                                                         class="custom-control-input"
                                                                                         id="is_tramitar_pending"
                                                                                         name="is_tramitar" value="0"
-                                                                                        {{ $financial_product != null && $financial_product->is_tramitar === 2 ? 'checked' : null }}>
+                                                                                        {{ $financial_product != null && $financial_product->is_tramitar === 0 ? 'checked' : null }}>
                                                                                     <label class="custom-control-label"
                                                                                         for="is_tramitar_pending">No</label>
                                                                                 </div>
@@ -249,8 +249,10 @@
                                                                     <label class="form-label"
                                                                         for="frm-product-name">Banco</label>
                                                                     <div class="form-control-wrap">
-                                                                        <select name="bank_id" id=""
-                                                                            class="form-select">
+                                                                        <select name="bank_ids[]" id="bank_ids"
+                                                                        class="form-select select2multiple"
+                                                                        multiple="multiple" data-search="on"
+                                                                            >
                                                                             <option value="">Selecciona una opción
                                                                             </option>
                                                                             @foreach ($banks as $bank)

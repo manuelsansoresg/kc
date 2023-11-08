@@ -54,7 +54,7 @@ class FinancialProduct extends Model
         'abusive_clause11',
         'abusive_clause12',
         'abusive_clause13',
-        'bank_id',
+        'bank_ids', //este campo se renombro antes era bank_id
         'consulta_buro',
         'rate_kc',
         'rate_cat',
@@ -155,9 +155,11 @@ class FinancialProduct extends Model
         foreach ($financial_agreements as $financial_agreement) {
             $financial_ids[] = $financial_agreement->product_id;
         }
+
+        //dd($type_product_id);
         
         $sql = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
+            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity', 'bank_ids', 'is_vincular_banco',
             'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
         )
@@ -169,21 +171,43 @@ class FinancialProduct extends Model
         $bank_id                = $credit->bank_id;
         $aval_o_garantia        = $credit->aval_o_garantia;
         $queries = DB::getQueryLog();
+        //dd($queries);
         //dd($financial_ids, $type_product_id);
+        
+        $financial_product_ids = [];
+
         foreach ($sql as $sql_query) {
             $product_aval_o_garantia = $sql_query->aval_o_garantia;
             $product_is_vincular_banco = $sql_query->is_vincular_banco;
             $product_consulta_buro = $sql_query->consulta_buro;
-        
-            if (($consulta_buro == 1 && $product_consulta_buro == 1) ||
-                ($aval_o_garantia == 1 && $product_aval_o_garantia == 1) ||
-                ($product_is_vincular_banco == 1 && (!is_null($bank_id) && $bank_id > 0)) ||
-                (is_null($consulta_buro) || is_null($aval_o_garantia) || is_null($bank_id))
-            ) {
+            $bank_ids = $sql_query->bank_ids;
+
+            $is_aval = true;
+            $is_buro = true;
+            $is_bank = true;
+
+            if ($aval_o_garantia === 0 && $product_aval_o_garantia !== 0) {
+                $is_aval = false;
+            }
+            
+            if ($consulta_buro === 0 && $product_consulta_buro !== 0) {
+                $is_buro = false;
+            }
+
+            if ($bank_id > 0 && $bank_ids !== null ) {
+                // Divide la cadena de $bank_ids en un arreglo
+                $bank_ids_array = explode(',', $bank_ids);
+                if (!in_array($bank_id, $bank_ids_array)) {
+                    $is_bank = false;
+                }
+            }
+           
+
+            if ($is_aval == true && $is_buro == true && $is_bank == true) {
                 $financial_product_ids[] = $sql_query->id;
             }
+           
         }
-
         foreach ($products as $product) {
             // Itera a través de los productos y compara con $financial_product_ids
             if (!in_array($product->product_id, $financial_product_ids)) {
@@ -229,6 +253,11 @@ class FinancialProduct extends Model
         if (isset($request->referencia_comparativa)) 
         {
             $filteredRequest['referencia_comparativa'] =  self::formatInfoCredit($request->referencia_comparativa);
+        }
+       
+        if (isset($request->bank_ids)) 
+        {
+            $filteredRequest['bank_ids'] =  self::formatInfoCredit($request->bank_ids);
         }
 
         if ($request->product_id == null) {

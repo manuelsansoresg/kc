@@ -1497,6 +1497,8 @@ function refreshListComplementary() {
     });
     var ReferenciaArray = result.my_product.referencia_comparativa.split(',');
     $('#referencia_comparativa').val(ReferenciaArray).trigger('change');
+    var bankIdsArray = result.my_product.bank_ids.split(',');
+    $('#bank_ids').val(bankIdsArray).trigger('change');
   })["catch"](function (e) {});
 }
 /*  alcance_beneficios
@@ -3742,6 +3744,7 @@ $().ready(function () {
             $('#current_term').val(credit.current_term);
             $('#current_principal_balance').val(credit.current_principal_balance / 100);
             $('#current_total_balance').val(credit.current_total_balance / 100);
+            $('#tipo_credito').val(credit.tipo_credito).trigger("change");
           }
 
         if (type_form == 23) //form kc-desktop step1
