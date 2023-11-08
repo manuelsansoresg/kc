@@ -272,7 +272,20 @@
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Consulta buró de crédito</span>
                                                                         <span class="profile-ud-value">
-                                                                            {{ $credit->consulta_buro == 1 ? 'Sí' : 'No' }}
+                                                                            @if ($credit->consulta_buro != null)
+                                                                                {{ $credit->consulta_buro == 1 ? 'Sí' : 'No' }}
+                                                                            @endif
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Aval o garantía</span>
+                                                                        <span class="profile-ud-value">
+                                                                            @if ($credit->aval_o_garantia != null)
+                                                                                {{ $credit->aval_o_garantia == 1 ? 'Sí' : 'No' }}
+                                                                            @endif
                                                                         </span>
                                                                     </div>
                                                                 </div>
