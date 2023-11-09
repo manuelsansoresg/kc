@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Campaign;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApiLead;
+use App\Models\HistoryLog;
 use App\Models\Lead;
 use Illuminate\Http\Request;
 
@@ -19,7 +20,8 @@ class LeadController extends Controller
                 'last_name' => $request->last_name,
                 'cellphone' => $request->cellphone,
             );
-            Lead::create($request_data);
+            $lead = Lead::create($request_data);
+            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
             return response()->json(200);
         } catch (\Exception $th) {
             return response()->json(500);
