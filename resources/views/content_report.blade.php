@@ -204,7 +204,7 @@
                                             <label for="staticEmail" class="col-10 col-md-6 col-form-label text-white">Mostrar opciones que consultan buró de crédito:</label>
                                             <div class="col-2 col-md-6 ">
                                                 <div class="form-check form-switch mt-2">
-                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->consulta_buro}}, 1)" name="consulta_buro" id="switchburo" value="1" {{ $credit->consulta_buro == 1 ? 'checked' : null }}><label for="switchburo" class="form-check-label"></label>
+                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->consulta_buro == null ? 1 : $credit->consulta_buro }}, 1)" name="consulta_buro" id="switchburo" value="1" {{ $credit->consulta_buro == 1 ? 'checked' : null }}><label for="switchburo" class="form-check-label"></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -212,7 +212,7 @@
                                             <label for="staticEmail" class="col-10 col-md-6 col-form-label text-white">Mostrar opciones que soliciten aval:</label>
                                             <div class="col-2 col-md-6 ">
                                                 <div class="form-check form-switch mt-2">
-                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->aval_o_garantia}}, 2)" name="aval_o_garantia" id="switchaval" value="1" {{ $credit->aval_o_garantia == 1 ? 'checked' : null }}><label for="switchaval" class="form-check-label"></label>
+                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->aval_o_garantia == null ? 1 : $credit->aval_o_garantia}}, 2)" name="aval_o_garantia" id="switchaval" value="1" {{ $credit->aval_o_garantia == 1 ? 'checked' : null }}><label for="switchaval" class="form-check-label"></label>
                                                 </div>
                                             </div>
                                         </div>
