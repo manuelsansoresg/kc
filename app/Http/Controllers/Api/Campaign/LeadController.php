@@ -20,6 +20,7 @@ class LeadController extends Controller
                 'last_name' => $request->last_name,
                 'cellphone' => $request->cellphone,
                 'origin_id' => 4,
+                'channel_id' => 1,
 
             );
             $lead = Lead::create($request_data);
