@@ -6431,6 +6431,56 @@ for (var i = 0; i < iframeLinks.length; i++) {
     window.top.location.href = this.href;
   });
 }
+
+window.changeFilterReport = function (status, tipo) {
+  var titulo1 = ['Se mostrarán créditos que "SI" consultan buró de crédito', 'Se mostrarán créditos que "NO" consultan buró de crédito'];
+  var titulo2 = ['Se mostrarán créditos que "SI" soliciten aval', 'Se mostrarán créditos que "NO" soliciten aval'];
+  var titulo = titulo1[status];
+
+  if (tipo == 2) {
+    titulo = titulo2[status];
+  }
+
+  sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+    title: titulo,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar'
+  }).then(function (result) {
+    if (result.value) {
+      // Obtén referencia al formulario por su ID
+      var form = document.getElementById('frm-filter'); // Crea un objeto FormData con los datos del formulario
+
+      var formData = new FormData(form);
+      axios.post('/reporte/products/store', formData).then(function (response) {
+        var result = response.data; // Recargar la página
+
+        window.location.reload();
+      })["catch"](function (e) {// Manejar errores
+      });
+    }
+  });
+};
+/* if (document.getElementById('content-products')) {
+    refreshReportProduct();
+}
+
+function refreshReportProduct ()
+{
+    
+    axios
+        .get('/reporte/products/show')
+        .then(function (response) {
+            let result = response.data;
+            $('#content-products').html(result.view);
+            Livewire.emit('reportRefresh');
+            
+        })
+        .catch(e => {
+            
+        });
+} */
 })();
 
 /******/ })()

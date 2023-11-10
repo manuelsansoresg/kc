@@ -66,8 +66,11 @@ class HomeController extends Controller
 
     public function report($history_id, $credit_id = null)
     {
+        
+        session(['report_history_id' => $history_id]);
+        
+        $history    = HistoryLog::find($history_id);
         if ($credit_id == null) {
-            $history    = HistoryLog::find($history_id);
             $credit     = $history->historyCredit;
         } else {
             $get_action   = HistoryLog::getByStatusFirst([HistoryLog::KC_CHECK_UP], $credit_id);
@@ -88,7 +91,6 @@ class HomeController extends Controller
         $financials           = $agreement != null ? $agreement->financialAgreement : null;
         $financial_products   = FinancialProduct::getByRate($credit);
         $new_financials       = FinancialProduct::customSortFinancials($financial_products);
-        //dd($new_financials);
         $existing_ids = $new_financials->pluck('id')->toArray();
         $final_financials = FinancialProduct::customSortFinancials($financial_products->whereNotIn('id', $existing_ids), true);
 
@@ -122,7 +124,6 @@ class HomeController extends Controller
                 'interes' => 8500,
                 'comision_apertura' => 0
             );
-            //$get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: $chart['Financiera 1'];
             $data_report = array(
                 'client' => $client,
                 'credit' => $credit,
@@ -135,10 +136,50 @@ class HomeController extends Controller
 
             $my_product_financial   = FinancialProduct::existMyFinancial($new_financials, $credit->id);
             $my_products            = CurrentFinancialProduct::getList($credit->id, 2);
-            //dd($my_products);
             return view('content_report_debt', compact('client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_products'));
         }
         return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
+    }
+
+    public function storeReportProduct(Request $request)
+    {
+        $new_data = array(
+            'consulta_buro'  => isset($request->consulta_buro)? $request->consulta_buro : 0, 
+            'aval_o_garantia' => isset($request->aval_o_garantia)? $request->aval_o_garantia : 0, 
+        );
+
+        $report_history_id    = session('report_history_id');
+        $history              = HistoryLog::find($report_history_id);
+        $get_credit           = Credit::find($history->id_rel);
+        $get_credit->fill($new_data); 
+        $get_credit->update();
+    }
+
+    public function productsShow()
+    {
+        $history_id           = session('report_history_id');
+        $history              = HistoryLog::find($history_id);
+        $credit               = $history->historyCredit;
+        $financial_products   = FinancialProduct::getByRate($credit);
+        $new_financials       = FinancialProduct::customSortFinancials($financial_products);
+        $existing_ids         = $new_financials->pluck('id')->toArray();
+        $final_financials     = FinancialProduct::customSortFinancials($financial_products->whereNotIn('id', $existing_ids), true);
+        $my_product_financial = FinancialProduct::existMyFinancial($new_financials, $credit->id);
+        $view                 = \View::make('content_report_products', ['new_financials' => $new_financials, 'credit' => $credit, 'final_financials' => $final_financials])->render();
+
+        $chart1 = isset($new_financials[1]) ? $new_financials[1] : null;
+        $chart2 = isset($new_financials[0]) ? $new_financials[0] : null;
+        $chart3 = isset($new_financials[2]) ? $new_financials[2] : null;
+        $chart4 = $my_product_financial;
+
+        return response()->json([
+            'view' => $view,
+            'chart1' => $chart1,
+            'chart2' => $chart2,
+            'chart3' => $chart3,
+            'chart4' => $chart4,
+        ]);
+        
     }
 
     public function exitReport(Credit $credit)

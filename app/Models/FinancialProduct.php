@@ -141,8 +141,9 @@ class FinancialProduct extends Model
         return $sql;
     }
 
-    public static function getByRate($credit)
+    public static function getByRate($credit, $request = null)
     {
+       
         DB::connection()->enableQueryLog();
         $agreement_id           = $credit->agreement_id;
         $type_product_id        = $credit->tipo_credito;
@@ -175,6 +176,8 @@ class FinancialProduct extends Model
         //dd($financial_ids, $type_product_id);
         
         $financial_product_ids = [];
+
+        
 
         foreach ($sql as $sql_query) {
             $product_aval_o_garantia = $sql_query->aval_o_garantia;
