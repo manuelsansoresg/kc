@@ -19,6 +19,8 @@ class LeadController extends Controller
                 'name' => $request->name,
                 'last_name' => $request->last_name,
                 'cellphone' => $request->cellphone,
+                'origin_id' => 4,
+
             );
             $lead = Lead::create($request_data);
             HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
