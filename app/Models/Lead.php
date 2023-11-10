@@ -336,6 +336,10 @@ class Lead extends Model
                 //* WebApp
                 $channel = config('enums.channel_web_app');
                 break;
+            case '4':
+                //* WebApp
+                $channel = config('enums.channel_rss');
+                break;
         }
         return $channel;
     }

@@ -38,6 +38,10 @@ return [
         1 => 'Creación de cuenta',
         2 => 'Formulario',
     ),
+    
+    'channel_rss' => array(
+        1 => 'Facebook',
+    ),
     'reason_archive' => array(
         1 => 'No interesado',
         2 => 'Sin convenio',
