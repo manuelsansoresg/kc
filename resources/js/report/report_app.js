@@ -70,6 +70,7 @@ for (var i = 0; i < iframeLinks.length; i++) {
 
 window.changeFilterReport = function(status, tipo)
 {
+    console.log(status);
     let titulo1 = ['Se mostrarán créditos que "SI" consultan buró de crédito', 'Se mostrarán créditos que "NO" consultan buró de crédito'];
     let titulo2 = ['Se mostrarán créditos que "SI" soliciten aval', 'Se mostrarán créditos que "NO" soliciten aval'];
 
