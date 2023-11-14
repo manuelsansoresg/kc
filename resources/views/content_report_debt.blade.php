@@ -38,16 +38,12 @@ $chart4 = $my_product_financial;
                                                 <div class="textcontainer">
                                                     <span class="particletext confetti h1">¡Felicidades {{ $client->name }}!</span>
                                                 </div>
-                                               {{--  <div>
-                                                    <span class="h1">¡Felicidades! </span>
-                                                    <span class="h1">{{ $client->name }}</span>
-                                                </div> --}}
+                                              
                                             </div>
                                             @php
-                                                $is_exist_my_product = $current_financial_product::isExistProduct($chart1->id, $credit->id);
-                                                $total = $current_financial_product::myProductsTotal($credit->id);
+                                                $is_exist_my_product = @$current_financial_product::isExistProduct($chart1->id, $credit->id);
+                                                $total = @$current_financial_product::myProductsTotal($credit->id);
                                             @endphp
-                                            total - {{ $total }}
                                             @if ($is_exist_my_product == true)
                                                 <div class="text-bottom">
                                                     <div>
