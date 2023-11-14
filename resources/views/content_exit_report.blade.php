@@ -155,7 +155,7 @@
                                     
                                 </div>
                             </div>
-                            <p class="mt-4 text-center">
+                            <p class="mt-4 text-center text-sm fst-italic">
                                 El otorgamiento del crédito está sujeto a las políticas de la financiera. El monto, el plazo y la tasa de interés pueden variar dependiendo de la capacidad crediticia del solicitante.
                             </p>
                         </div>

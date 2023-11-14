@@ -37,6 +37,7 @@
             a.appendChild(r);
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
     </script>
+     @livewireStyles
 </head>
 
 <body class="dark-mode">
@@ -127,9 +128,13 @@
     integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-    <script src="{{ asset('/js/report_app.js') }}"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     @yield('add_script')
-
+    
+    @livewireScripts
+    <script src="{{ asset('/js/report_app.js') }}"></script>
     
 
 </body>

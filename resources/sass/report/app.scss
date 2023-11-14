@@ -317,3 +317,14 @@
 .text-sm{
   font-size: 12px !important;
 }
+
+#margin-filter{
+   margin-left: 359px;
+}
+
+
+@media only screen and (max-width: 767px) {
+   #margin-filter {
+       margin-left: 0; /* Quítale el margen en dispositivos móviles */
+   }
+}
