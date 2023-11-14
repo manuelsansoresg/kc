@@ -236,6 +236,29 @@ $chart4 = $my_product_financial;
                         @endif
                         <div class="col-12 text-center mt-4 pb-4" data-aos="fade-up" data-aos-delay="100">
                             Estás viendo las 3 mejores opciones. Puedes ver todas las opciones <a  class="text-primary" style="cursor: pointer" onclick="showFinalFinancial()">aquí</a>
+                            <div class="">
+                                <div  style="text-align: left" id="margin-filter">
+                                    <form action="" id="frm-filter" method="POST">
+                                        <div class="mb-3 row mt-5">
+                                            <label for="staticEmail" class="col-10 col-md-6 col-form-label text-white">Mostrar opciones que consultan buró de crédito:</label>
+                                            <div class="col-2 col-md-6 ">
+                                                <div class="form-check form-switch mt-2">
+                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->consulta_buro === null ? 1 : $credit->consulta_buro }}, 1)" name="consulta_buro" id="switchburo" value="1" {{ $credit->consulta_buro == 1 ? 'checked' : null }}><label for="switchburo" class="form-check-label"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 row mt-n3">
+                                            <label for="staticEmail" class="col-10 col-md-6 col-form-label text-white">Mostrar opciones que soliciten aval:</label>
+                                            <div class="col-2 col-md-6 ">
+                                                <div class="form-check form-switch mt-2">
+                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->aval_o_garantia === null ? 1 : $credit->aval_o_garantia}}, 2)" name="aval_o_garantia" id="switchaval" value="1" {{ $credit->aval_o_garantia == 1 ? 'checked' : null }}><label for="switchaval" class="form-check-label"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                         {{-- pintar el resto de financieras --}}
                         <div id="final-financials" style="display: none">
