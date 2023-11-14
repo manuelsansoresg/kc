@@ -14,11 +14,13 @@ class LeadController extends Controller
     {
         try {
             $product_id = $request->servicio == 'reducir_deuda_actual' ? 2 : 1;
+            $cellphone = preg_replace('/^\+52/', '', $request->cellphone);
+            
             $request_data = array(
                 'product_id' => $product_id,
                 'name' => $request->name,
                 'last_name' => $request->last_name,
-                'cellphone' => $request->cellphone,
+                'cellphone' => $cellphone,
                 'origin_id' => 4,
                 'channel_id' => 1,
                 'email' => $request->email,
