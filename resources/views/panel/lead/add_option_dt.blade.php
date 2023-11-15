@@ -59,6 +59,10 @@ $user = Auth::user();
                                 <em class="icon ni ni-user-fill"></em><span>Perfíl</span></a>
                         </li>
                         <li>
+                            <a class="pointer" onclick="modalPreviewProfile({{ $id }})">
+                                <em class="icon ni ni-user-list-fill"></em><span>Vistazo</span></a>
+                        </li>
+                        <li>
                             <a class="pointer" onclick="modalTags({{ $id }})">
                                 <em class="icon ni ni-tag"></em><span>Etiquetas</span></a>
                         </li>

@@ -38,9 +38,14 @@ class Lead extends Model
         'comment',
     ];
 
-    public function tagLead ($lead_id, $label, $is_array = false)
+    public static function tagLead ($lead_id, $label, $is_array = false)
     {
-        $new_array[] = '#'.$label;
+        //dd($label);
+        if ($label != null) {
+            $new_array[] = '#'.$label;
+            $label = '#'. $label;
+        }
+
         $actions = Action::where([
             'id_rel' => $lead_id,
         ])->count();
@@ -96,7 +101,7 @@ class Lead extends Model
                     $lbl_status = '<span class="text-danger">Invalido</span>';
                 }
                 $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
-                $label = (isset(config('enums.temperatures')[$query->temperature_id]))? '#'.config('enums.temperatures')[$query->temperature_id] : '';
+                $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
 
                 $label = self::tagLead($query->id, $label);
                 

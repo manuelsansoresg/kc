@@ -66,7 +66,9 @@ Route::group(['prefix' => 'lead'], function () {
     
     Route::post('{lead_id}/advisor/store', ['\App\Http\Controllers\Panel\LeadController', 'advisorStore'])->middleware('auth');
     Route::post('{lead_id}/client-person/store', ['\App\Http\Controllers\Panel\LeadController', 'storeClientPerson'])->middleware('auth');
-    Route::post('{lead_id}/tag/update', ['\App\Http\Controllers\Panel\LeadController', 'updateTag'])->middleware('auth');
+    Route::post('{lead}/tag/update', ['\App\Http\Controllers\Panel\LeadController', 'updateTag'])->middleware('auth');
+
+    Route::get('{lead}/preview/profile', ['\App\Http\Controllers\Panel\LeadController', 'previewProfile'])->middleware('auth');
 
     //* mover del lugar
     
