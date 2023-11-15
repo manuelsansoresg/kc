@@ -68,7 +68,8 @@ class LeadStrategy implements ActionInterface
         $type_actions   = config('enums.type_actions');
         $data_option = array(
             'status' => $status,
-            'model' => $model_action
+            'model' => $model_action,
+            'lead' => $lead,
         );
         $option         = \View::make('panel.action.add_option_dt', $data_option)->render();
         $name_lead = $lead !== null ? $lead->name.' '.$lead->last_name : null;

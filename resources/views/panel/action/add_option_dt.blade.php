@@ -43,6 +43,12 @@ $user = Auth::user();
                             <a href="/panel/lead/{{ $model->id_rel }}/profile">
                                 <em class="icon ni ni-user-fill"></em><span>Ver perfíl</span></a>
                         </li>
+                        @if (isset($lead))
+                        <li>
+                            <a href="https://web.whatsapp.com/send/?phone={{ $lead->cellphone }}&text&type=phone_number&app_absent=0"  target="_blank">
+                                <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
+                        </li>
+                        @endif
                         @if ($status == 'in_progress')
                        
                         <li>
