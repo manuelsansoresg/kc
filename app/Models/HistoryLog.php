@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Lib\Slack;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -368,6 +369,9 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $id_rel, 0);
             //*Cuando es crédito nuevo y viene de KC-Checkup
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
+            
+            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Control desk');
+            $notification_slack->sendMessage();
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
@@ -385,6 +389,8 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_2, $id_rel, 0);
             //*Cuando es crédito nuevo y viene de KC-Checkup
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
+            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Swap');
+            $notification_slack->sendMessage();
         }
         
         if ($status_id == HistoryLog::KC_PAYMENT) { // finish delivery and enter kcpayment
