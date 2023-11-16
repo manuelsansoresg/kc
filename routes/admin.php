@@ -56,7 +56,7 @@ Route::resource('lead', '\App\Http\Controllers\Panel\LeadController')->middlewar
 Route::group(['prefix' => 'lead'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\LeadController', 'list'])->middleware('auth');
     
-    Route::get('{lead}/notes/list', ['\App\Http\Controllers\Panel\LeadController', 'listNotes'])->middleware('auth');
+    
     Route::get('{lead}/actions/list', ['\App\Http\Controllers\Panel\LeadController', 'listActions'])->middleware('auth');
 
     Route::get('{lead_id}/delete', ['\App\Http\Controllers\Panel\LeadController', 'destroy'])->middleware('auth');
@@ -79,6 +79,8 @@ Route::group(['prefix' => 'lead'], function () {
 
 Route::get('{id}/{model}/validate/show', ['\App\Http\Controllers\Panel\PanelController', 'showValidate'])->middleware('auth');
 Route::post('{model}/note', ['\App\Http\Controllers\Panel\PanelController', 'noteStore'])->middleware('auth');
+Route::get('{model}/{id_rel}/notes/list', ['\App\Http\Controllers\Panel\PanelController', 'listNotes'])->middleware('auth');
+Route::get('{model}/{id_rel}/advisor/show', ['\App\Http\Controllers\Panel\PanelController', 'showAdvisor'])->middleware('auth');
 
 Route::group(['prefix' => 'archive'], function () {
     Route::get('view/{module}', ['\App\Http\Controllers\Panel\LeadController', 'archiveView'])->middleware('auth');

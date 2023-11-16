@@ -344,7 +344,7 @@
                                                     $actions = config('enums.type_actions');
                                                 @endphp
                                                 <div class="border-bottom text-center py-3">
-                                                    <a class="pointer" onclick="actionModal({{ $lead->id }}, false)">Haz clic
+                                                    <a class="pointer" onclick="actionModal({{ $lead->id }}, false, true)">Haz clic
                                                         para agregar acción</a>
                                                 </div>
                                                 <input type="hidden" id="id-rel-action" value="{{ $lead->id }}">

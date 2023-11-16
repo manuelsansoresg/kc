@@ -54,12 +54,7 @@ class LeadController extends Controller
         return response()->json(['data' => $users]);
     }
 
-    public function listNotes(Lead $lead)
-    {
-        $notes = $lead->leadNotes;
-        $view           = \View::make('panel.view_content_lead_notes', ['notes' => $notes])->render();
-        return response()->json($view);
-    }
+    
     
     public function listActions(Lead $lead)
     {

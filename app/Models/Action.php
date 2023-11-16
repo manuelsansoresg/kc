@@ -30,16 +30,21 @@ class Action extends Model
     const STATUS = [
         'in_progress' => 0,
         'completed' => 1,
+        'credit_in_progress' => 2,
+        'credit_completed' => 2,
     ];
     const MODEL = [
         'lead' => 1,
+        'credit' => 2,
     ];
     
     const KEY_MODEL = [
         1 => 'lead',
+        2 => 'credit',
     ];
     const NAME_MODEL = [
         1 => 'Prospectos',
+        2 => 'Creditos',
     ];
 
     public static function saveEdit($request)
@@ -59,7 +64,7 @@ class Action extends Model
             $action->update();
         }
 
-        //*assign advisir if not exist in lead
+        //*assign advisor if not exist in lead
         $lead = Lead::find($data['id_rel']);
         if ($lead != null && $lead->asesor_id == '') {
             $lead->asesor_id = $data['advisor_id'];

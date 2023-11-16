@@ -47,7 +47,7 @@ class LeadStrategy implements ActionInterface
     {
         return $this->lead;
     }
-    public function list($id, $model, $status)
+    public function listAction($id, $model, $status)
     {
         $status   = Action::STATUS[$status];
         $model    = Action::MODEL[$model];

@@ -217,7 +217,7 @@ class ActionController extends Controller
     public function listAction($id, $model, $status)
     {
         $leadStrategy   = ActionValues::STRATEGY[$model];
-        $list       = (new $leadStrategy)->list($id, $model, $status);
+        $list       = (new $leadStrategy)->listAction($id, $model, $status);
         return response()->json($list);
     }
 

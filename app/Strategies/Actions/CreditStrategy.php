@@ -20,8 +20,13 @@ class CreditStrategy implements ActionInterface
     }
 
     
-    public function list($id, $model, $status)
+    public function listAction($id, $model, $status)
     {
+        $status   = Action::STATUS[$status];
+        $model    = Action::MODEL[$model];
+        $actions   = Action::getByModel($id, $model, $status);
+        $list = \View::make('panel.action.list_action', [ 'actions' => $actions, 'status' => $status, 'model' => $model])->render();
+        return $list;
     }
 
     public function saveNote($request)

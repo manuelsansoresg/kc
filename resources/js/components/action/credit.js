@@ -62,7 +62,7 @@ function getNotes() {
 }
 
 window.creditRefresh = function () {
-    $('#modal-lead-note').modal('hide');
+    $('#modal-note').modal('hide');
     getTags();
     getNotes();
 }
