@@ -625,7 +625,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/actions/debtCredit/'.$history->id.'/show',
                     'onclick' => '',
-                    'name' => 'Lista de acciones',
+                    'name' => 'Lista de tareas',
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
@@ -633,7 +633,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/report/debtCredit/'.$history->id.'/show',
                     'onclick' => '',
-                    'name' => 'Lista de acciones',
+                    'name' => 'Lista de tareas',
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
@@ -798,7 +798,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'active' => true
             ),
             3 => array(
-                'title' => 'acciones',
+                'title' => 'tareas',
                 'link' => '/panel/template/steps/debtCredit/'.$history->id.'/show',
                 'active' => null
                ),

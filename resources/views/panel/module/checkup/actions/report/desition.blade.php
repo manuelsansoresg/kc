@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Acciones')
+@section('title', 'Tareas')
 @inject('financial', 'App\Models\Financial')
 @inject('m_financial_product', 'App\Models\FinancialProduct')
 @section('content')
@@ -10,14 +10,14 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Acciones/ Decisión</h3>
+                                <h3 class="nk-block-title page-title">Tareas/ Decisión</h3>
                                 <div class="nk-block-des text-soft">
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item active"><a href="/panel/kc-check-up">KC - Check up</a>
                                             <li class="breadcrumb-item active"><a href="/panel/template/steps/{{ $model }}/{{  $history->id }}/show">Etapas</a>
-                                            <li class="breadcrumb-item active"><a href="/panel/template/report/{{ $model }}/{{  $history->id }}/show">Acciones</a>
+                                            <li class="breadcrumb-item active"><a href="/panel/template/report/{{ $model }}/{{  $history->id }}/show">Tareas</a>
                                             <li class="breadcrumb-item active"><a
                                                     href="/panel/kc-check-up">{{ $credit->id }} - REPORTE</a>
                                             </li>

@@ -114,7 +114,7 @@
                                                                         <table class="table">
                                                                             <thead>
                                                                                 <tr>
-                                                                                    <th>Acción</th>
+                                                                                    <th>Tarea</th>
                                                                                     <th class="d-none d-md-table-cell">Asunto</th>
                                                                                     <th>Estatus</th>
                                                                                     <th class="d-none d-md-table-cell">Deadline</th>
