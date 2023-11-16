@@ -244,7 +244,7 @@ class ActionController extends Controller
      */
     public function list($status)
     {
-        $list = Action::listDt($status);
+        $list = Action::listDt($status, 1);
         return response()->json(['data' => $list]);
     }
 

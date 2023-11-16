@@ -115,9 +115,9 @@ class Action extends Model
         return Action::where(['id_rel' => $id_rel, 'section'=> $model, 'status' => $status])->get();
     }
     
-    public static function getByStatus($status = 0)
+    public static function getByStatus($status = 0, $model = 1)
     {
-        return Action::where(['status' => $status])->get();
+        return Action::where(['status' => $status, 'section' => $model])->get();
     }
 
     public static function updateByModel($id, $status=1)
@@ -144,10 +144,10 @@ class Action extends Model
         return $data_action;
     }
 
-    public static function listDt($status)
+    public static function listDt($status, $model)
     {
         $status         = Action::STATUS[$status];
-        $list_actions   = Action::getByStatus($status);
+        $list_actions   = Action::getByStatus($status, $model);
         $data           = array();
         foreach ($list_actions as $list_action) {
             $model          = Action::KEY_MODEL[$list_action->section];
