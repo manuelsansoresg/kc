@@ -6394,30 +6394,63 @@ $(document).ready(function () {
   confetti();
 });
 
-window.desitionReport = function (credit_id, financial_id, type, is_tramitar) {
-  var is_app = $('#is_app').val();
-  var url = "/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept";
-  axios.get(url).then(function (response) {
-    var reason = response.data;
+window.showReportOtherBanks = function () {
+  $('#new_banks').show();
+};
 
-    if (is_tramitar == 1) {
-      window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
+window.changeCreditBank = function (credit_id, id) {
+  var bank_id = id;
+
+  if (id == null) {
+    bank_id = $('#report-bank-id').val();
+  }
+
+  axios.post('/panel/credit/storeBank', {
+    credit_id: credit_id,
+    bank_id: bank_id
+  }).then(function (response) {
+    var result = response.data;
+    window.location.reload();
+  })["catch"](function (e) {// Manejar errores
+  });
+};
+
+window.closeCreditBank = function (credit_id, id) {};
+
+function verifificarTramitar(credit_id, type) {
+  $('#content-bank').html('');
+  $('#new_banks').hide();
+  axios.get('/panel/kc-check-up/' + credit_id + '/' + type + '/report/verify').then(function (response) {
+    var result = response.data;
+    var status = result.status;
+    var banks = result.banks;
+
+    if (status == 200) {
+      /* let is_app = $('#is_app').val();
+      let url = "/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept";
+      axios
+          .get(url)
+          .then(function (response) {
+              let reason = response.data;
+              if (is_tramitar == 1) {
+                  window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app;
+              } else {
+                  window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app+'&type=1';
+              }
+              
+          })
+          .catch(e => {
+              
+          }); */
     } else {
-      window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&type=1';
+      $('#content-bank').html(banks);
+      $('#modal-bank').modal('show');
     }
   })["catch"](function (e) {});
-  /* 
-  Swal.fire({
-     title: '¿Estás seguro?',
-     icon: 'warning',
-     showCancelButton: true,
-     confirmButtonText: 'Sí',
-     cancelButtonText: 'Mejor no'
-  }).then(function (result) {
-  if (result.isConfirmed) {
-      
-  }
-  }); */
+}
+
+window.desitionReport = function (credit_id, financial_id, type, is_tramitar) {
+  verifificarTramitar(credit_id, financial_id);
 }; // Agregar un controlador de eventos a todos los enlaces dentro del iframe
 
 

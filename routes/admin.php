@@ -173,6 +173,8 @@ Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('/report/answer_module/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'actionReport'])->middleware('auth');
     Route::get('/report/desition/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionReport'])->middleware('auth');
     Route::get('/report/desition/{credit_id}/{financial_id}/{type}/accept', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionAccept']);
+    
+    Route::get('{credit_id}/{product_id}/report/verify', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'verifyReport'])->middleware('auth');
 });
 
 Route::resource('kc-control-desk', '\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController')->middleware('auth');
@@ -235,6 +237,9 @@ Route::group(['prefix' => 'credit'], function () {
     Route::get('product/{status}/list', ['\App\Http\Controllers\Panel\Credit\CreditController', 'productList'])->middleware('auth');
     
     Route::post('{credit_id}/advisor/store', ['\App\Http\Controllers\Panel\Credit\CreditController', 'advisorStore'])->middleware('auth');
+    
+    //*actualizar banco
+    Route::post('storeBank', ['\App\Http\Controllers\Panel\Credit\CreditController', 'storeBank'])->middleware('auth');
 
     
 });

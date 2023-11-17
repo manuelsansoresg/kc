@@ -115,7 +115,7 @@
                                         </div>
                                         <div class="card-body pt-0 pb-4 px-4">
                                             <span class="h4 display-9"><span class="fw-light small"></span>Calificación:
-                                                {{ reduceDecimal($financial_product->rate_kc, 2) }}</span>
+                                                {{ reduceDecimal($financial_product->rate_kc, 2) }} ( {{ $financial_product->id }} ) </span>
                                             <span class="fw-bold text-muted">/5 </span>
     
                                             <small class="text-muted font-monospace mb-4 d-block"></small><button
@@ -728,8 +728,8 @@
         {{-- intereses --}}
     </div>
     
+    @include('panel.modal.bank')    
 @endsection
-
 @section('add_script')
     @include('layouts.script_report')
 @endsection

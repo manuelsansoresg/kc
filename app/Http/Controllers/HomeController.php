@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\ApiLead;
+use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\CurrentFinancialProduct;
@@ -93,7 +94,7 @@ class HomeController extends Controller
         $new_financials       = FinancialProduct::customSortFinancials($financial_products);
         $existing_ids = $new_financials->pluck('id')->toArray();
         $final_financials = FinancialProduct::customSortFinancials($financial_products->whereNotIn('id', $existing_ids), true);
-
+        $banks = Bank::all();
         $my_product_financial = null;
         $my_product           = null;
 
@@ -136,9 +137,9 @@ class HomeController extends Controller
 
             $my_product_financial   = FinancialProduct::existMyFinancial($new_financials, $credit->id);
             $my_products            = CurrentFinancialProduct::getList($credit->id, 2);
-            return view('content_report_debt', compact('client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_products'));
+            return view('content_report_debt', compact('banks', 'client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_products'));
         }
-        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
+        return view('content_report', compact('banks', 'client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
     }
 
     public function storeReportProduct(Request $request)

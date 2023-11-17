@@ -445,6 +445,18 @@
   margin-left: 359px;
 }
 
+body.dark-mode .form-control {
+  background-color: black !important;
+}
+
+.text-bank {
+  font-size: 1.1rem;
+}
+
+.btn-block-bank {
+  width: 55%;
+}
+
 @media only screen and (max-width: 767px) {
   #margin-filter {
     margin-left: 0; /* Quítale el margen en dispositivos móviles */
