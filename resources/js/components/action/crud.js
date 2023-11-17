@@ -292,7 +292,7 @@ window.deleteAction = function (id) {
     $('#modal-action').modal('show');
 } */
 
-window.setModalAction = function (action_id, disabled) {
+window.setModalAction = function (action_id, disabled, section) {
     
     if (disabled == true) {
         $('#frm-action input, textarea, select').attr('disabled', 'disabled');
@@ -322,11 +322,10 @@ window.setModalAction = function (action_id, disabled) {
             $("#modal-action-end_date").val(action.end_date);
             $("#modal-action-description").val(action.description);
             $("#modal-action-id-rel").val(action.id_rel);
-            //$("#lead-asesor-id").val(advisor.id).trigger('change');
-            /* if (lead != null) {
-                $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
-            }  */
+            
             $('#modal-action').modal('show');
+
+            $('#lead-asesor-id').val(action.advisor_id).trigger("change");
             
             if (action.status == 1) {
                 $('#modal-action-complete-active').prop("checked", true);

@@ -422,7 +422,7 @@ window.deleteAction = function (id) {
 } */
 
 
-window.setModalAction = function (action_id, disabled) {
+window.setModalAction = function (action_id, disabled, section) {
   if (disabled == true) {
     $('#frm-action input, textarea, select').attr('disabled', 'disabled');
     $('#modal-action-save').hide();
@@ -446,13 +446,9 @@ window.setModalAction = function (action_id, disabled) {
       $("#modal-action-start_time").val(action.start_time);
       $("#modal-action-end_date").val(action.end_date);
       $("#modal-action-description").val(action.description);
-      $("#modal-action-id-rel").val(action.id_rel); //$("#lead-asesor-id").val(advisor.id).trigger('change');
-
-      /* if (lead != null) {
-          $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
-      }  */
-
+      $("#modal-action-id-rel").val(action.id_rel);
       $('#modal-action').modal('show');
+      $('#lead-asesor-id').val(action.advisor_id).trigger("change");
 
       if (action.status == 1) {
         $('#modal-action-complete-active').prop("checked", true);
@@ -542,7 +538,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 document.addEventListener('DOMContentLoaded', function () {
   var status = $('#dt-action-status').val();
-  var table = NioApp.DataTable('#dt-lead-acctions', {
+  var model = $('#model').val();
+  var table = NioApp.DataTable('#dt-actions', {
     processing: true,
     responsive: {
       details: {
@@ -559,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     },
-    ajax: '/panel/action/' + status + '/dt/show',
+    ajax: '/panel/action/' + status + '/' + model + '/dt/show',
     columns: [{
       data: 'type'
     },

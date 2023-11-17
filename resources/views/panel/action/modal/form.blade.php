@@ -154,13 +154,13 @@
                                         <ul class="custom-control-group g-3 align-center flex-wrap">
                                             <li>
                                                 <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input"  name="status" id="modal-action-complete-active" value="1">
+                                                    <input type="radio" class="custom-control-input"  name="data[status]" id="modal-action-complete-active" value="1">
                                                     <label class="custom-control-label" for="modal-action-complete-active">Sí</label>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="custom-control custom-radio">
-                                                    <input type="radio" class="custom-control-input" name="status" id="modal-action-complete-pending" value="0" checked>
+                                                    <input type="radio" class="custom-control-input" name="data[status]" id="modal-action-complete-pending" value="0" checked>
                                                     <label class="custom-control-label" for="modal-action-complete-pending">No</label>
                                                 </div>
                                             </li>

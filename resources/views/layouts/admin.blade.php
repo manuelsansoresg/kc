@@ -96,6 +96,30 @@
                                     </li>
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
+                                    <li class="nk-menu-item has-sub">
+                                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-check-circle-cut"></em></span>
+                                            <span class="nk-menu-text">Acciones Módulos</span>
+                                        </a>
+                                        <ul class="nk-menu-sub">
+
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/action/in_progress/credit/view" class="nk-menu-link">
+                                                    <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
+                                                    <span class="nk-menu-text">En curso</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/action/completed/credit/view" class="nk-menu-link">
+                                                    <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
+                                                    <span class="nk-menu-text">Concluidas</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                        </ul>
+
+                                    </li>
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-check-circle-cut"></em></span>

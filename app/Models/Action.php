@@ -96,11 +96,21 @@ class Action extends Model
             })->get();
         
         foreach ($actionsProximasOVencidas as $actionsProximasOVencida) {
-            $lead = Lead::find($actionsProximasOVencida->id_rel);
-            if ($lead != null) {
+            $title = 'Acción prospecto';
+            if ($actionsProximasOVencida->section == 1 ) {
+                $lead = Lead::find($actionsProximasOVencida->id_rel);
                 $name = $lead->name.' '. $lead->last_name;
+            } else {
+                $credit = Credit::find($actionsProximasOVencida->id_rel);
+                $client = $credit->creditClientPerson;
+                $name = $client->name.' '. $client->last_name;
+                $title = 'Acción módulo';
+            }
+
+            if ($lead != null) {
+                
                 $type    = isset(config('enums.type_actions')[$actionsProximasOVencida->type])? config('enums.type_actions')[$actionsProximasOVencida->type] : null;
-                $notification_slack = new Slack('kaaxClub', 'Acción prospecto - '.$type.' - '.$name);
+                $notification_slack = new Slack('kaaxClub', $title.' - '.$type.' - '.$name);
                 $notification_slack->sendMessage();
     
                 $get_action = Action::find($actionsProximasOVencida->id);

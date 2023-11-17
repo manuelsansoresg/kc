@@ -33,9 +33,10 @@
                             title="Marcar como completada" onclick="modalRegisterAction({{ $model}}, {{ $action->id }})"><em
                                 class="icon ni ni-check-round"></em></a>
                     </li>
+                    
                     <li>
                         <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="Editar" onclick="setModalAction({{ $action->id }}, true)"><em
+                            title="Editar" onclick="setModalAction({{ $action->id }}, true, {{ $action->section}})"><em
                                 class="icon ni ni-edit-alt"></em></a>
                     </li>
                     <li>
@@ -54,7 +55,7 @@
                         <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Marcar como pendiente" onclick="deleteRegisterAction({{ $action->id }}, true)"><em class="icon ni ni-minus-circle-fill"></em></a>
                     </li>
                     <li>
-                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver registro de accion" onclick="setModalAction({{ $action->id }}, true)"><em class="icon ni ni-todo-fill"></em></a>
+                        <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver registro de accion" onclick="setModalAction({{ $action->id }}, true, {{ $action->section}} )"><em class="icon ni ni-todo-fill"></em></a>
                     </li>
                     {{-- <li>
                         <a class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Marcar como pendiente" onclick=""><em class="icon ni ni-minus-round"></em></a>

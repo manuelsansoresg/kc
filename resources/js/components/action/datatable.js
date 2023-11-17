@@ -55,7 +55,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     let status = $('#dt-action-status').val();
-    let table = NioApp.DataTable('#dt-lead-acctions', {
+    let model = $('#model').val();
+    let table = NioApp.DataTable('#dt-actions', {
         processing: true,
         responsive: {
             details: {
@@ -85,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         
         },
-        ajax: '/panel/action/'+status+'/dt/show',
+        ajax: '/panel/action/'+status+'/'+model+'/dt/show',
         columns: [
             { data: 'type' },
             /* { data: 'section' }, */
