@@ -65,7 +65,7 @@ function verifificarTramitar(credit_id, type)
         let status = result.status;
         let banks = result.banks;
         if (status == 200) {
-            /* let is_app = $('#is_app').val();
+            let is_app = $('#is_app').val();
             let url = "/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept";
             axios
                 .get(url)
@@ -80,7 +80,7 @@ function verifificarTramitar(credit_id, type)
                 })
                 .catch(e => {
                     
-                }); */
+                });
         } else {
             $('#content-bank').html(banks);
             $('#modal-bank').modal('show');

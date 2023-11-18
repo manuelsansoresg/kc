@@ -6426,22 +6426,17 @@ function verifificarTramitar(credit_id, type) {
     var banks = result.banks;
 
     if (status == 200) {
-      /* let is_app = $('#is_app').val();
-      let url = "/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept";
-      axios
-          .get(url)
-          .then(function (response) {
-              let reason = response.data;
-              if (is_tramitar == 1) {
-                  window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app;
-              } else {
-                  window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app+'&type=1';
-              }
-              
-          })
-          .catch(e => {
-              
-          }); */
+      var is_app = $('#is_app').val();
+      var url = "/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept";
+      axios.get(url).then(function (response) {
+        var reason = response.data;
+
+        if (is_tramitar == 1) {
+          window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
+        } else {
+          window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&type=1';
+        }
+      })["catch"](function (e) {});
     } else {
       $('#content-bank').html(banks);
       $('#modal-bank').modal('show');
