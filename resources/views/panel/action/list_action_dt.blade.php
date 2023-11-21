@@ -25,11 +25,15 @@
                     <div class="nk-block nk-block-lg">
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
-                                <table id="dt-lead-acctions" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
+                                <table id="dt-actions" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Acción</th>
-                                            <th>Prospecto</th>
+                                            @if ($model == 'lead')
+                                                <th>Prospecto</th>
+                                                @else
+                                                <th>Cliente</th>
+                                            @endif
                                             <th>Fecha</th>
                                             
                                             <th></th>
@@ -45,6 +49,7 @@
         </div>
     </div>
     <input type="hidden" id="refresh-dt" value="dt-acctions">
+    <input type="hidden" id="model" value="{{ $model }}">
     @include('panel.action.modal.form')
     @include('panel.action.modal.register_action')
 @endsection

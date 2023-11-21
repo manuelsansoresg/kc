@@ -124,7 +124,7 @@ class Credit extends Model
                 
                 $hour             = $data_deadline['lbl_hour'];
                 $status_id        = $history->status_id;
-                $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
+                $option           = \View::make('panel.module.checkup.add_option_only_checkup_dt', ['id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
 
                 if ($history->status_id === HistoryLog::KC_AFTER_MARKET || $history->status_id === HistoryLog::KC_CONTROL_DESK || $history->status_id === HistoryLog::KC_DELIVERY || $history->status_id === HistoryLog::KC_PAYMENT) {
                     $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
@@ -373,6 +373,10 @@ class Credit extends Model
         return $routes;
     }
     
+    public function advisorCredit()
+    {
+        return $this->belongsTo(User::class, 'asesor_id');
+    }
 
     public function creditClientPerson()
     {
@@ -437,5 +441,10 @@ class Credit extends Model
     public function survey()
     {
         return $this->hasOne(Survey::class);
+    }
+
+    public function creditNotes()
+    {
+        return $this->hasMany(CreditNotes::class);
     }
 }

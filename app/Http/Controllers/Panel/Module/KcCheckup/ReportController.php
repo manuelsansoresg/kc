@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Module\KcCheckup;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bank;
 use App\Models\Credit;
 use App\Models\File;
 use App\Models\FinancialProduct;
@@ -86,6 +87,27 @@ class ReportController extends Controller
         $model      = ($history != null && $history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) ? 'debtCredit' : 'newCredit';
 
         return view('panel.module.checkup.actions.report.desition', compact('credit', 'product', 'financials', 'client', 'history_id', 'history', 'model'));
+    }
+
+    public function verifyReport($credit_id, $product_id)
+    {
+        $product = FinancialProduct::find($product_id);
+        $status = 200;
+        $content = '';
+        $banks = '';
+        $credit = Credit::find($credit_id);
+        if ($product!= null && $product->is_tramitar == 1 && $product->is_vincular_banco == 1 && ($credit != null && $credit->bank_id === null)) {
+            $status = 500;
+            $content = '';
+            $bank_ids_array = explode(',', $product->bank_ids);
+            $banks = Bank::whereIn('id', $bank_ids_array)->get();
+            $banks = \View::make('panel.product.button_banks', ['banks' => $banks, 'credit' => $credit])->render();
+        }
+        return response()->json([
+            'status' => $status,
+            'content' => $content,
+            'banks' => $banks,
+        ]);
     }
 
     public function desitionAccept($credit_id, $financial_id, $type)

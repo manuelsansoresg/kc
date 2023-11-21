@@ -13,7 +13,7 @@
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
-                                            <li class="breadcrumb-item"><a class="pointer">ACCIONES MÓDULOS</a></li>
+                                            <li class="breadcrumb-item"><a class="pointer">TAREAS MÓDULOS</a></li>
                                             <li class="breadcrumb-item active">{{ strtoupper($title) }}</li>
                                         </ul>
                                     </nav>

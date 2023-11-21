@@ -7,6 +7,8 @@ use App\Lib\CNubarium;
 use App\Lib\Csendgrid;
 use App\Lib\CSurveySparrow;
 use App\Lib\Pusher;
+use App\Models\Credit;
+use App\Models\Lead;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
@@ -47,6 +49,34 @@ class PanelController extends Controller
         $actionStrategy   = ActionValues::STRATEGY[$model];
         $note       = (new $actionStrategy)->saveNote($request);
         return response()->json(200);
+    }
+
+    public function listNotes($model, $id_rel)
+    {
+        
+        if ($model == 'lead') {
+            $lead = Lead::find($id_rel);
+            $notes = $lead->leadNotes;
+        } else {
+            $credit = Credit::find($id_rel);
+            $notes = $credit->creditNotes;
+        }
+        
+        $view           = \View::make('panel.view_content_lead_notes', ['notes' => $notes])->render();
+        return response()->json($view);
+    }
+
+    public function showAdvisor($model, $id_rel)
+    {
+
+        if ($model == 'lead') {
+            $lead = Lead::find($id_rel);
+            $advisor    = $lead->advisorLead;
+        } else {
+            $credit = Credit::find($id_rel);
+            $advisor    = $credit->advisorCredit;
+        }
+        return response()->json(['advisor' => $advisor]);
     }
 
     public function move($model, $id)

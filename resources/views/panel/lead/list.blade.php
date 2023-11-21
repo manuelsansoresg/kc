@@ -58,4 +58,5 @@
     @include('panel.modal.validate')
     @include('panel.action.modal.form')
     @include('panel.action.modal.register_action')
+    @include('panel.modal.preview_profile')
 @endsection

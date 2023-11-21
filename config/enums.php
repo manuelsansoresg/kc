@@ -98,7 +98,8 @@ return [
         4 => 'icon ni ni-clock-fill',
         5 => 'icon ni ni-flag-fill',
         6 => 'icon ni ni-mail-fill',
-        7 => 'icon ni ni-chat-fill'
+        7 => 'icon ni ni-chat-fill',
+        8 => 'icon ni ni-note-add',
     ),
     "status_actions" => array(
         1 => 'prospecto'

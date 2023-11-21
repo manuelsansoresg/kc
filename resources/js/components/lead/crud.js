@@ -404,6 +404,21 @@ $().ready(function () {
 
 });
 
+/* modal vista previa perfil */
+window.modalPreviewProfile =  function(lead_id)
+{
+    $('content-preview-profile').html('');
+    axios
+    .get("/panel/lead/"+lead_id+"/preview/profile")
+    .then(function (response) {
+        let result = response.data;
+        $('#content-preview-profile').html(result);
+        $('#modal-preview-profile').modal('show');
+    })
+    .catch(e => {
+    });
+}
+
 window.modalPasswod = function (user_id) {
     $('#password_user_id').val(user_id);
     $('#modal-user-password').modal('show');

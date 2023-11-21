@@ -11,24 +11,26 @@ export function showInfo(redirect, idDatatable, title, msg) {
 
 }
 
-window.showNotesLead = function(lead_id)
+window.showNotes = function(id_rel, is_lead)
 {
+    let model = is_lead == true ? 'lead' : 'credit';
     axios
-    .get('/panel/lead/'+lead_id+'/notes/list')
+    .get('/panel/'+model+'/'+id_rel+'/notes/list')
     .then(function (response) {
         let result = response.data;
-        $('#content-lead-notes').html(result);
-        $('#modal-lead-list-note').modal('show');
+        $('#content-notes').html(result);
+        $('#modal-list-note').modal('show');
     })
     .catch(e => {
         
     });
 }
 
-window.showModalActions = function(lead_id)
+window.showModalActions = function(lead_id, is_lead)
 {
-    refreshAction(lead_id, 'lead', 'in_progress', 'content-profile-in_progress')
-    refreshAction(lead_id, 'lead', 'completed', 'content-profile-completed')
+    let model = is_lead == true ? 'lead' : 'credit';
+    refreshAction(lead_id, model, 'in_progress', 'content-profile-in_progress')
+    refreshAction(lead_id, model, 'completed', 'content-profile-completed')
 
     $('#modal-list-actions').modal('show');
 }

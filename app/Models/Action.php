@@ -30,16 +30,21 @@ class Action extends Model
     const STATUS = [
         'in_progress' => 0,
         'completed' => 1,
+        'credit_in_progress' => 2,
+        'credit_completed' => 2,
     ];
     const MODEL = [
         'lead' => 1,
+        'credit' => 2,
     ];
     
     const KEY_MODEL = [
         1 => 'lead',
+        2 => 'credit',
     ];
     const NAME_MODEL = [
         1 => 'Prospectos',
+        2 => 'Creditos',
     ];
 
     public static function saveEdit($request)
@@ -59,7 +64,7 @@ class Action extends Model
             $action->update();
         }
 
-        //*assign advisir if not exist in lead
+        //*assign advisor if not exist in lead
         $lead = Lead::find($data['id_rel']);
         if ($lead != null && $lead->asesor_id == '') {
             $lead->asesor_id = $data['advisor_id'];
@@ -91,11 +96,21 @@ class Action extends Model
             })->get();
         
         foreach ($actionsProximasOVencidas as $actionsProximasOVencida) {
-            $lead = Lead::find($actionsProximasOVencida->id_rel);
-            if ($lead != null) {
+            $title = 'Acción prospecto';
+            if ($actionsProximasOVencida->section == 1 ) {
+                $lead = Lead::find($actionsProximasOVencida->id_rel);
                 $name = $lead->name.' '. $lead->last_name;
+            } else {
+                $credit = Credit::find($actionsProximasOVencida->id_rel);
+                $client = $credit->creditClientPerson;
+                $name = $client->name.' '. $client->last_name;
+                $title = 'Acción módulo';
+            }
+
+            if ($lead != null) {
+                
                 $type    = isset(config('enums.type_actions')[$actionsProximasOVencida->type])? config('enums.type_actions')[$actionsProximasOVencida->type] : null;
-                $notification_slack = new Slack('kaaxClub', 'Acción prospecto - '.$type.' - '.$name);
+                $notification_slack = new Slack('kaaxClub', $title.' - '.$type.' - '.$name);
                 $notification_slack->sendMessage();
     
                 $get_action = Action::find($actionsProximasOVencida->id);
@@ -110,9 +125,9 @@ class Action extends Model
         return Action::where(['id_rel' => $id_rel, 'section'=> $model, 'status' => $status])->get();
     }
     
-    public static function getByStatus($status = 0)
+    public static function getByStatus($status = 0, $model = 1)
     {
-        return Action::where(['status' => $status])->get();
+        return Action::where(['status' => $status, 'section' => $model])->get();
     }
 
     public static function updateByModel($id, $status=1)
@@ -139,10 +154,10 @@ class Action extends Model
         return $data_action;
     }
 
-    public static function listDt($status)
+    public static function listDt($status, $model)
     {
         $status         = Action::STATUS[$status];
-        $list_actions   = Action::getByStatus($status);
+        $list_actions   = Action::getByStatus($status, $model);
         $data           = array();
         foreach ($list_actions as $list_action) {
             $model          = Action::KEY_MODEL[$list_action->section];

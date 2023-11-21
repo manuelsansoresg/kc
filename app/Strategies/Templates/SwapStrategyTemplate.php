@@ -2105,7 +2105,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=5',
                     'onclick' => '',
-                    'name' => 'Ver acción',
+                    'name' => 'Ver tareas',
                     'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
@@ -2116,7 +2116,7 @@ class SwapStrategyTemplate implements TemplateInterface
 
     public function menuOptionsStep($history, $type_lbl = 1)
     {
-        $lbl_action = $type_lbl === 1 ? 'Lista de acciones' : 'Ver acción';
+        $lbl_action = $type_lbl === 1 ? 'Lista de tareas' : 'Ver tareas';
         $menu = array(
             'actionstep1' => array(
                 [
@@ -2511,7 +2511,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 'active' => true
             ),
             3 => array(
-                'title' => 'acciones',
+                'title' => 'tareas',
                 'link' => null,
                 'active' => true
                ),
@@ -2540,7 +2540,7 @@ class SwapStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             3 => array(
-             'title' => 'acciones',
+             'title' => 'tareas',
              'link' => '/panel/template/steps/swap/'.$history->id.'/show',
              'active' => null
             ),

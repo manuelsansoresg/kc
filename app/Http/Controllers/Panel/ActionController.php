@@ -200,10 +200,10 @@ class ActionController extends Controller
         return view('panel.action.list', compact('title', 'status'));
     }
    
-    public function viewActionLead($status)
+    public function viewActionDt($status, $model)
     {
         $title = ($status == 'in_progress')? 'En curso': 'Concluidas';
-        return view('panel.action.list_lead', compact('title', 'status'));
+        return view('panel.action.list_action_dt', compact('title', 'status', 'model'));
     }
     
     /**
@@ -217,7 +217,7 @@ class ActionController extends Controller
     public function listAction($id, $model, $status)
     {
         $leadStrategy   = ActionValues::STRATEGY[$model];
-        $list       = (new $leadStrategy)->list($id, $model, $status);
+        $list       = (new $leadStrategy)->listAction($id, $model, $status);
         return response()->json($list);
     }
 
@@ -242,9 +242,10 @@ class ActionController extends Controller
      * @param [type] $status
      * @return void
      */
-    public function list($status)
+    public function list($status, $model)
     {
-        $list = Action::listDt($status);
+        $model = $model == 'lead' ? 1 : 2;
+        $list = Action::listDt($status, $model);
         return response()->json(['data' => $list]);
     }
 

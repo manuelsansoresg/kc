@@ -1,14 +1,15 @@
 import { showInfo, addEmptySelectSearch } from '../utilities';
 
 
-window.actionModal = function (id, is_new) {
-   /*  if (document.getElementById('modal-action-id-rel-lead')) {
-        getPerson(id);
+window.actionModal = function (id, is_new, is_lead) {
+    let model = is_lead == true ? 'lead' : 'credit';
+    let section = is_lead == true ?  1 : 2;
 
-    } */
     resetAction();
-    getAdvisorLead(id);
+    getAdvisorLead(model, id);
+   
     $('#modal-action-id-rel').val(id);
+    $('#modal-action-id-section').val(section);
     if (is_new == 'true') {
         $('#modal-action-id-action').val(null);
     }
@@ -27,12 +28,11 @@ if (document.getElementById('frm-action')) {
    
 }
 
-function getAdvisorLead(lead_id) {
+function getAdvisorLead(model, id_rel) {
     axios
-        .get("/panel/lead/" + lead_id)
+        .get("/panel/"+model+"/" + id_rel+'/advisor/show')
         .then(function (response) {
             let result              = response.data;
-            let lead                = result.lead;
             let advisor             = result.advisor;
 
             if (advisor != null) {
@@ -292,7 +292,7 @@ window.deleteAction = function (id) {
     $('#modal-action').modal('show');
 } */
 
-window.setModalAction = function (action_id, disabled) {
+window.setModalAction = function (action_id, disabled, section) {
     
     if (disabled == true) {
         $('#frm-action input, textarea, select').attr('disabled', 'disabled');
@@ -322,11 +322,10 @@ window.setModalAction = function (action_id, disabled) {
             $("#modal-action-end_date").val(action.end_date);
             $("#modal-action-description").val(action.description);
             $("#modal-action-id-rel").val(action.id_rel);
-            //$("#lead-asesor-id").val(advisor.id).trigger('change');
-            /* if (lead != null) {
-                $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
-            }  */
+            
             $('#modal-action').modal('show');
+
+            $('#lead-asesor-id').val(action.advisor_id).trigger("change");
             
             if (action.status == 1) {
                 $('#modal-action-complete-active').prop("checked", true);

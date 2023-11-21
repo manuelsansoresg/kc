@@ -63,6 +63,15 @@ class CreditController extends Controller
         );
     }
 
+    public function storeBank(Request $request)
+    {
+        $bank_id = $request->bank_id;
+        $credit_id = $request->credit_id;
+        $credit = Credit::find($credit_id);
+        $credit->bank_id = $bank_id;
+        $credit->update();
+    }
+
     public function listReference($history_id)
     {
         $history    = HistoryLog::find($history_id);

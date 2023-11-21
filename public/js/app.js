@@ -49,7 +49,7 @@ function getNotes() {
 }
 
 window.creditRefresh = function () {
-  $('#modal-lead-note').modal('hide');
+  $('#modal-note').modal('hide');
   getTags();
   getNotes();
 };
@@ -193,13 +193,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
 
 
-window.actionModal = function (id, is_new) {
-  /*  if (document.getElementById('modal-action-id-rel-lead')) {
-       getPerson(id);
-    } */
+window.actionModal = function (id, is_new, is_lead) {
+  var model = is_lead == true ? 'lead' : 'credit';
+  var section = is_lead == true ? 1 : 2;
   resetAction();
-  getAdvisorLead(id);
+  getAdvisorLead(model, id);
   $('#modal-action-id-rel').val(id);
+  $('#modal-action-id-section').val(section);
 
   if (is_new == 'true') {
     $('#modal-action-id-action').val(null);
@@ -216,10 +216,9 @@ if (document.getElementById('frm-action')) {
   });
 }
 
-function getAdvisorLead(lead_id) {
-  axios.get("/panel/lead/" + lead_id).then(function (response) {
+function getAdvisorLead(model, id_rel) {
+  axios.get("/panel/" + model + "/" + id_rel + '/advisor/show').then(function (response) {
     var result = response.data;
-    var lead = result.lead;
     var advisor = result.advisor;
 
     if (advisor != null) {
@@ -423,7 +422,7 @@ window.deleteAction = function (id) {
 } */
 
 
-window.setModalAction = function (action_id, disabled) {
+window.setModalAction = function (action_id, disabled, section) {
   if (disabled == true) {
     $('#frm-action input, textarea, select').attr('disabled', 'disabled');
     $('#modal-action-save').hide();
@@ -447,13 +446,9 @@ window.setModalAction = function (action_id, disabled) {
       $("#modal-action-start_time").val(action.start_time);
       $("#modal-action-end_date").val(action.end_date);
       $("#modal-action-description").val(action.description);
-      $("#modal-action-id-rel").val(action.id_rel); //$("#lead-asesor-id").val(advisor.id).trigger('change');
-
-      /* if (lead != null) {
-          $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
-      }  */
-
+      $("#modal-action-id-rel").val(action.id_rel);
       $('#modal-action').modal('show');
+      $('#lead-asesor-id').val(action.advisor_id).trigger("change");
 
       if (action.status == 1) {
         $('#modal-action-complete-active').prop("checked", true);
@@ -543,7 +538,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 document.addEventListener('DOMContentLoaded', function () {
   var status = $('#dt-action-status').val();
-  var table = NioApp.DataTable('#dt-lead-acctions', {
+  var model = $('#model').val();
+  var table = NioApp.DataTable('#dt-actions', {
     processing: true,
     responsive: {
       details: {
@@ -560,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     },
-    ajax: '/panel/action/' + status + '/dt/show',
+    ajax: '/panel/action/' + status + '/' + model + '/dt/show',
     columns: [{
       data: 'type'
     },
@@ -1916,22 +1912,22 @@ window.modalNote = function (note_id, model_note) {
   $('#id_rel').val(note_id);
   $('#model_note').val(model_note);
   $('#modal-lead-description').val('');
-  $('#modal-lead-note').modal('show');
+  $('#modal-note').modal('show');
 };
 
 var refresh = {
   'credit': creditRefresh
 };
-$("#frm-lead-note").submit(function (event) {
+$("#frm-note").submit(function (event) {
   event.preventDefault();
   var model_note = $('#model_note').val();
   var refresh_dt = $('#refresh-dt').val();
-  var new_form = document.getElementById("frm-lead-note");
+  var new_form = document.getElementById("frm-note");
   var data = new FormData(new_form);
   axios.post("/panel/" + model_note + "/note", data).then(function (response) {
     if (refresh_dt != 'null') {
       (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
-      $('#modal-lead-note').modal('hide');
+      $('#modal-note').modal('hide');
     } else {
       refresh[model_note]();
     }
@@ -2326,6 +2322,16 @@ $().ready(function () {
     }
   });
 });
+/* modal vista previa perfil */
+
+window.modalPreviewProfile = function (lead_id) {
+  $('content-preview-profile').html('');
+  axios.get("/panel/lead/" + lead_id + "/preview/profile").then(function (response) {
+    var result = response.data;
+    $('#content-preview-profile').html(result);
+    $('#modal-preview-profile').modal('show');
+  })["catch"](function (e) {});
+};
 
 window.modalPasswod = function (user_id) {
   $('#password_user_id').val(user_id);
@@ -4938,17 +4944,19 @@ function showInfo(redirect, idDatatable, title, msg) {
   }
 }
 
-window.showNotesLead = function (lead_id) {
-  axios.get('/panel/lead/' + lead_id + '/notes/list').then(function (response) {
+window.showNotes = function (id_rel, is_lead) {
+  var model = is_lead == true ? 'lead' : 'credit';
+  axios.get('/panel/' + model + '/' + id_rel + '/notes/list').then(function (response) {
     var result = response.data;
-    $('#content-lead-notes').html(result);
-    $('#modal-lead-list-note').modal('show');
+    $('#content-notes').html(result);
+    $('#modal-list-note').modal('show');
   })["catch"](function (e) {});
 };
 
-window.showModalActions = function (lead_id) {
-  refreshAction(lead_id, 'lead', 'in_progress', 'content-profile-in_progress');
-  refreshAction(lead_id, 'lead', 'completed', 'content-profile-completed');
+window.showModalActions = function (lead_id, is_lead) {
+  var model = is_lead == true ? 'lead' : 'credit';
+  refreshAction(lead_id, model, 'in_progress', 'content-profile-in_progress');
+  refreshAction(lead_id, model, 'completed', 'content-profile-completed');
   $('#modal-list-actions').modal('show');
 };
 

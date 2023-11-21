@@ -56,7 +56,7 @@ Route::resource('lead', '\App\Http\Controllers\Panel\LeadController')->middlewar
 Route::group(['prefix' => 'lead'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\LeadController', 'list'])->middleware('auth');
     
-    Route::get('{lead}/notes/list', ['\App\Http\Controllers\Panel\LeadController', 'listNotes'])->middleware('auth');
+    
     Route::get('{lead}/actions/list', ['\App\Http\Controllers\Panel\LeadController', 'listActions'])->middleware('auth');
 
     Route::get('{lead_id}/delete', ['\App\Http\Controllers\Panel\LeadController', 'destroy'])->middleware('auth');
@@ -66,7 +66,9 @@ Route::group(['prefix' => 'lead'], function () {
     
     Route::post('{lead_id}/advisor/store', ['\App\Http\Controllers\Panel\LeadController', 'advisorStore'])->middleware('auth');
     Route::post('{lead_id}/client-person/store', ['\App\Http\Controllers\Panel\LeadController', 'storeClientPerson'])->middleware('auth');
-    Route::post('{lead_id}/tag/update', ['\App\Http\Controllers\Panel\LeadController', 'updateTag'])->middleware('auth');
+    Route::post('{lead}/tag/update', ['\App\Http\Controllers\Panel\LeadController', 'updateTag'])->middleware('auth');
+
+    Route::get('{lead}/preview/profile', ['\App\Http\Controllers\Panel\LeadController', 'previewProfile'])->middleware('auth');
 
     //* mover del lugar
     
@@ -77,6 +79,8 @@ Route::group(['prefix' => 'lead'], function () {
 
 Route::get('{id}/{model}/validate/show', ['\App\Http\Controllers\Panel\PanelController', 'showValidate'])->middleware('auth');
 Route::post('{model}/note', ['\App\Http\Controllers\Panel\PanelController', 'noteStore'])->middleware('auth');
+Route::get('{model}/{id_rel}/notes/list', ['\App\Http\Controllers\Panel\PanelController', 'listNotes'])->middleware('auth');
+Route::get('{model}/{id_rel}/advisor/show', ['\App\Http\Controllers\Panel\PanelController', 'showAdvisor'])->middleware('auth');
 
 Route::group(['prefix' => 'archive'], function () {
     Route::get('view/{module}', ['\App\Http\Controllers\Panel\LeadController', 'archiveView'])->middleware('auth');
@@ -97,9 +101,9 @@ Route::group(['prefix' => 'action'], function () {
     Route::get('list/{id}/{model}/{status}', ['\App\Http\Controllers\Panel\ActionController', 'listAction'])->middleware('auth');
     
     Route::get('{status}/view', ['\App\Http\Controllers\Panel\ActionController', 'viewAction'])->middleware('auth');
-    Route::get('{status}/lead/view', ['\App\Http\Controllers\Panel\ActionController', 'viewActionLead'])->middleware('auth');
+    Route::get('{status}/{model}/view', ['\App\Http\Controllers\Panel\ActionController', 'viewActionDt'])->middleware('auth');
     
-    Route::get('{status}/dt/show', ['\App\Http\Controllers\Panel\ActionController', 'list'])->middleware('auth');
+    Route::get('{status}/{model}/dt/show', ['\App\Http\Controllers\Panel\ActionController', 'list'])->middleware('auth');
     Route::get('module/{name_status}', ['\App\Http\Controllers\Panel\ActionController', 'viewModuleAction'])->middleware('auth');
     Route::get('module/{name_status}/list', ['\App\Http\Controllers\Panel\ActionController', 'listModuleAction'])->middleware('auth');
 
@@ -169,6 +173,8 @@ Route::group(['prefix' => 'kc-check-up'], function () {
     Route::get('/report/answer_module/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'actionReport'])->middleware('auth');
     Route::get('/report/desition/{history_id}/show', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionReport'])->middleware('auth');
     Route::get('/report/desition/{credit_id}/{financial_id}/{type}/accept', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'desitionAccept']);
+    
+    Route::get('{credit_id}/{product_id}/report/verify', ['\App\Http\Controllers\Panel\Module\KcCheckup\ReportController', 'verifyReport'])->middleware('auth');
 });
 
 Route::resource('kc-control-desk', '\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController')->middleware('auth');
@@ -231,6 +237,9 @@ Route::group(['prefix' => 'credit'], function () {
     Route::get('product/{status}/list', ['\App\Http\Controllers\Panel\Credit\CreditController', 'productList'])->middleware('auth');
     
     Route::post('{credit_id}/advisor/store', ['\App\Http\Controllers\Panel\Credit\CreditController', 'advisorStore'])->middleware('auth');
+    
+    //*actualizar banco
+    Route::post('storeBank', ['\App\Http\Controllers\Panel\Credit\CreditController', 'storeBank'])->middleware('auth');
 
     
 });

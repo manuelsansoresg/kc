@@ -3164,7 +3164,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function menuOptionsStep($history, $type_lbl = 1)
     {
-        $lbl_action = $type_lbl === 1 ? 'Lista de acciones' : 'Ver acción';
+        $lbl_action = $type_lbl === 1 ? 'Lista de tareas' : 'Ver tareas';
         $menu = array(
             'actionstep1' => array(
                 [
@@ -3567,7 +3567,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'active' => true
             ),
             3 => array(
-                'title' => 'acciones',
+                'title' => 'tareas',
                 'link' => '/panel/template/steps/controlDesk/'. $history->id.'/show',
                 'active' => null
             ),

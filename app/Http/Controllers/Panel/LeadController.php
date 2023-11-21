@@ -54,12 +54,7 @@ class LeadController extends Controller
         return response()->json(['data' => $users]);
     }
 
-    public function listNotes(Lead $lead)
-    {
-        $notes = $lead->leadNotes;
-        $view           = \View::make('panel.view_content_lead_notes', ['notes' => $notes])->render();
-        return response()->json($view);
-    }
+    
     
     public function listActions(Lead $lead)
     {
@@ -224,6 +219,30 @@ class LeadController extends Controller
     {
         Lead::saveEdit($request);
         return response()->json(200);
+    }
+
+    public function previewProfile(Lead $lead)
+    {
+        $agreement = $lead->agreementLead;
+        $product = $lead->productLead;
+        $tipo_credito = isset(config('financial_enums.type_products')[$lead->tipo_credito]) ? config('financial_enums.type_products')[$lead->tipo_credito]  : null;
+        $origins = config('enums.origin');
+        $channel = Lead::getChanelByOrigin($lead->origin_id);
+        $user = $lead->advisorLead;
+        $temperatures = config('enums.temperatures');
+        $tags = Lead::tagLead($lead->id, $temperatures[$lead->temperature_id], true);
+        $notes = $lead->leadNotes;
+
+        $view_lead = \View::make('panel.view_content_preview_profile', [
+            'lead' => $lead, 'agreement' => $agreement, 'product' => $product,
+            'tipo_credito' => $tipo_credito, 'origins' => $origins,
+            'channel' => $channel, 'user' => $user,
+            'tags' => $tags,
+            'notes' => $notes,
+
+        
+        ])->render();
+        return response()->json($view_lead);
     }
 
     /**

@@ -57,4 +57,7 @@
     @include('panel.modal.validate')
     @include('panel.action.modal.form')
     @include('panel.action.modal.register_action')
+    @include('panel.modal.list_actions')
+    @include('panel.modal.list_notes')
+    @include('panel.credit.modal.tag')
 @endsection

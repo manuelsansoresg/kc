@@ -103,7 +103,7 @@
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabHistorial">Historial</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                        href="#tabActions">Acciónes</a> </li>
+                                                        href="#tabActions">Tareas</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabRequest">Solicitud</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"

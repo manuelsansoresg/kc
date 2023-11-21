@@ -16,10 +16,11 @@
         </li>
         @if ($percent_form == 100)
             <li>
-                <a class="pointer" href="/reporte/{{ $id }}">
+                <a class="pointer" target="_blank" href="/reporte/{{ $id }}">
                     <em class="icon ni ni-reports"></em><span>Ver reporte</span></a>
             </li>
         @endif
+      
         
         <li>
             <a class="pointer" href="/panel/client/{{ $client->id }}">

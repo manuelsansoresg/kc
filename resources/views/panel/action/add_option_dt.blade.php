@@ -4,7 +4,10 @@ $user = Auth::user();
 <div class="content-options">
     <ul class="nk-tb-actions gx-1">
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a href="/panel/lead/{{ $model->id_rel }}/profile" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Perfíl">
+            @php
+                $url_profile = isset($credit) ? '/panel/credit/'.$model->id_rel : '/panel/lead/'.$model->id_rel.'/profile';
+            @endphp
+            <a href="{{ $url_profile }}" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Perfíl">
                 <em class="icon ni ni-user-fill"></em>
             </a>
         </li>
@@ -17,7 +20,7 @@ $user = Auth::user();
         </li>
         @else
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a class="btn btn-trigger btn-icon" onclick="setModalAction({{ $model->id }}, false)" data-bs-toggle="tooltip" data-bs-placement="top"
+            <a class="btn btn-trigger btn-icon" onclick="setModalAction({{ $model->id }}, false, {{ $model->section }})" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="Ver registro">
                 <em class="icon ni ni-todo-fill"></em>
             </a>
@@ -40,9 +43,15 @@ $user = Auth::user();
                 <div class="dropdown-menu dropdown-menu-end">
                     <ul class="link-list-opt no-bdr">
                         <li>
-                            <a href="/panel/lead/{{ $model->id_rel }}/profile">
+                            <a href="{{ $url_profile }}">
                                 <em class="icon ni ni-user-fill"></em><span>Ver perfíl</span></a>
                         </li>
+                        @if (isset($lead))
+                        <li>
+                            <a href="https://web.whatsapp.com/send/?phone={{ $lead->cellphone }}&text&type=phone_number&app_absent=0"  target="_blank">
+                                <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
+                        </li>
+                        @endif
                         @if ($status == 'in_progress')
                        
                         <li>
@@ -50,7 +59,7 @@ $user = Auth::user();
                                 <em class="icon ni ni-check-circle-fill"></em><span>Marcar como completada</span></a>
                         </li>
                         <li>
-                            <a class="pointer" onclick="setModalAction({{ $model->id }}, false)">
+                            <a class="pointer" onclick="setModalAction({{ $model->id }}, false, {{ $model->section }})">
                                 <em
                                     class="icon ni ni-edit-alt"></em><span>Editar</span></a>
                         </li>
