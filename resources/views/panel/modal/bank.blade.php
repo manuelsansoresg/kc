@@ -6,7 +6,7 @@
                 
                 <div class="text-center">
                     <p class="mt-3 text-bank">Este crédito sólo se puede tramitar si recibes tu nómina en alguno de los siguientes bancos.</p>
-                    <p class="text-bank">Si vez tu banco, selecciónalo:</p>
+                    <p class="text-bank">Si ves tu banco, selecciónalo:</p>
                 </div>
                 <div id="content-bank">
 
