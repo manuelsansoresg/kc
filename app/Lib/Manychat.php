@@ -1,0 +1,54 @@
+<?php
+namespace App\Lib;
+
+class Manychat
+{
+
+    private $token = '861553:f8756129f4f78730b10f9acdeaacf5bd';
+
+    private function setCurl($path, $data = null , $method = 'POST')
+    {
+        $url = 'https://api.manychat.com/fb/'.$path;
+        $json_data = json_encode($data);
+
+        // Configuración de la solicitud cURL
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+        if ($data != null) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
+        }
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Content-Type: application/json",
+            "Authorization: Bearer $this->token"
+        ]);
+    
+        // Ejecutar la solicitud cURL y obtener la respuesta
+        $response = curl_exec($ch);
+    
+        // Verificar si hubo algún error
+        if (curl_errno($ch)) {
+            echo 'Error en la solicitud cURL: ' . curl_error($ch);
+        }
+    
+        // Cerrar la sesión cURL
+        curl_close($ch);
+    
+        // Retornar la respuesta de la API
+        return $response;
+    }
+
+
+    public function findByName ($name)
+    {
+        $encodedName = urlencode($name);
+        return self::setCurl('subscriber/findByName?name='.$encodedName, null, 'GET');
+    }
+
+    public function altaUsuario($data) {
+        
+         return self::setCurl('subscriber/createSubscriber', $data);
+    }
+    
+    
+}

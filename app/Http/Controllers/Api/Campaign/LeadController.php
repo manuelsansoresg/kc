@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Campaign;
 
 use App\Http\Controllers\Controller;
+use App\Lib\Manychat;
 use App\Models\ApiLead;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -26,7 +27,27 @@ class LeadController extends Controller
                 'email' => $request->email,
 
             );
+
+            //*crear usuario manychat
+            $data = array(
+                "first_name" => $request->name,
+                "last_name" => $request->last_name,
+                "phone" => $cellphone,
+                "whatsapp_phone" => "+52".$cellphone,
+                "email" => $request->email,
+                "has_opt_in_sms" => true,
+                "has_opt_in_email" => true,
+            );
+            $manychat = new Manychat();
+            $result = json_decode($manychat->altaUsuario($data));
+            if ($result->status != 'error') {
+                $data_manychat = $result->data;
+                $request_data['manychat_id'] = $data_manychat->id;
+            }
+
             $lead = Lead::create($request_data);
+            
+
             HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
             return response()->json(200);
         } catch (\Exception $th) {
