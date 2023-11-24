@@ -36,6 +36,7 @@ class Lead extends Model
         'financial_product_id',
         'aval_o_garantia',
         'comment',
+        'manychat_id',
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)

@@ -136,10 +136,12 @@
                                                                                             <td class="d-none d-md-table-cell">{{ $list_actions['advisor'] }}
                                                                                             </td>
                                                                                             <td>
-                                                                                                @if (isset($list_actions['link']))
-                                                                                                    <a href="{{ $list_actions['link'] }}"
-                                                                                                        class="">Abrir</a>
-                                                                                                @endif
+                                                                                                @hasrole('Administrador')
+                                                                                                    @if (isset($list_actions['link']))
+                                                                                                        <a href="{{ $list_actions['link'] }}"
+                                                                                                            class="">Abrir</a>
+                                                                                                    @endif
+                                                                                                @endhasrole
                                                                                             </td>
                                                                                         </tr>
                                                                                     </tbody>
