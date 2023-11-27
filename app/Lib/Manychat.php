@@ -53,6 +53,16 @@ class Manychat
         
          return self::setCurl('subscriber/createSubscriber', $data);
     }
+
+    public function setCustomFields($subscriber_id, $field_id, $field_value)
+    {
+        $data = array(
+            'subscriber_id' => $subscriber_id,
+            'field_id' => $field_id,
+            'field_value' => $field_value,
+        );
+        return self::setCurl('subscriber/createSubscriber', $data);
+    }
     
     
 }

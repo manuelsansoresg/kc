@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Lib\Csendgrid;
+use App\Lib\Manychat;
 use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
@@ -223,7 +224,21 @@ class Lead extends Model
             $lead = Lead::find($request->lead_id);
             $lead->fill($data);
             $lead->update();
+
+            //*actualizar campos manychat si el manychat_id existe
+            if ($lead->manychat_id != null) {
+                $get_lead = Lead::find($lead->id);
+                $get_advisor = $get_lead->advisorLead;
+                $advisor = $get_advisor!= null ? $get_advisor->name.' '.$get_advisor->last_name  : null;
+                $get_product = $get_lead->productLead;
+                $product = $get_product != null ? $get_product->alias : null;
+                $manychat = new Manychat();
+
+                //$manychat->setCustomFields($lead->manychat_id, config('enums.custom_fields_many_chat')['Asesor'], $advisor);
+                $manychat->setCustomFields($lead->manychat_id, config('enums.custom_fields_many_chat')['Servicio KC'], $product);
+            }
         }
+        
         CurrentFinancialProduct::saveEdit($lead->id, $request);
         return $lead;
     }

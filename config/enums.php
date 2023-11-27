@@ -202,6 +202,19 @@ return [
     'fee_reference_percents' => array(
         1 => 'Sobre monto',
         2 => 'linea de crédito',
+    ),
+    
+    'custom_fields_many_chat' => array(
+        'Asesor' =>  10202836,
+        'Aval o garantía' =>  10202831,
+        'Banco' =>  10202826,
+        'Canal' =>  10202835,
+        'Consulta buró' =>  10202828,
+        'Importe solicitado' =>  10202821,
+        'Organización' =>  10202821,
+        'Origen' =>  10202833,
+        'Servicio KC' =>  10202817,
+        'Tipo de crédito' =>  10202818,
     )
     
 ];
