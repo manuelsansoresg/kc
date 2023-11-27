@@ -4,10 +4,14 @@ $user = Auth::user();
 @inject('m_history', 'App\Models\HistoryLog')
 <div class="content-options">
     <ul class="nk-tb-actions gx-1">
-        <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a class="btn btn-trigger btn-icon" href="https://web.whatsapp.com/send/?phone={{ $lead->cellphone }}&text&type=phone_number&app_absent=0"  data-bs-toggle="tooltip" data-bs-placement="top" target="_blank">
-                <em class="icon ni ni-whatsapp"></em><span></span></a>
-        </li>
+        @if ($lead->manychat_id != null)
+            <li class="nk-tb-action-hidden d-sm-none d-md-block">
+            
+                <a class="btn btn-trigger btn-icon" href="https://manychat.com/fb861553/chat/{{ $lead->manychat_id }}"  data-bs-toggle="tooltip" data-bs-placement="top" target="_blank">
+                    <em class="icon ni ni-whatsapp"></em><span></span>  </a>
+            </li>
+        @endif
+        
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
             <a href="/panel/lead/{{ $id }}/profile" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Perfíl">
                 <em class="icon ni ni-user-fill"></em>
