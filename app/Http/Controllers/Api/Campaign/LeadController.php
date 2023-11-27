@@ -37,10 +37,11 @@ class LeadController extends Controller
                 "email" => $request->email,
                 "has_opt_in_sms" => true,
                 "has_opt_in_email" => true,
+                "consent_phrase" => 'kc',
             );
             $manychat = new Manychat();
             $result = json_decode($manychat->altaUsuario($data));
-            if ($result->status != 'error') {
+            if ($result->status == 'success') {
                 $data_manychat = $result->data;
                 $request_data['manychat_id'] = $data_manychat->id;
             }
