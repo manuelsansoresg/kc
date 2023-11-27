@@ -42,7 +42,11 @@ class Manychat
     public function findByName ($name)
     {
         $encodedName = urlencode($name);
-        return self::setCurl('subscriber/findByName?name='.$encodedName, null, 'GET');
+        $get_info =  json_decode(self::setCurl('subscriber/findByName?name='.$encodedName, null, 'GET'));
+        if ($get_info->status == 'success' && count($get_info->data)> 0) {
+            return $get_info->data;
+        }
+        return false;
     }
 
     public function altaUsuario($data) {
