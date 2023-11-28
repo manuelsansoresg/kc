@@ -232,7 +232,7 @@ class Lead extends Model
                 $advisor        = $get_advisor!= null ? $get_advisor->name.' '.$get_advisor->last_name  : null;
                 $get_product    = $get_lead->productLead;
                 $product        = $get_product != null ? $get_product->alias : null;
-                $get_bank       = $get_lead->bankLead;
+                $get_bank       = Bank::find($get_lead->bank_id);
                 $bank           = $get_bank != null ? $get_bank->name : null;
                 $manychat       = new Manychat();
                 $get_origin     = Lead::getChanelByOrigin($get_lead->origin_id);
@@ -246,7 +246,7 @@ class Lead extends Model
                 $type_credit    = isset($type_products[$get_lead->tipo_credito]) ? $type_products[$get_lead->tipo_credito] : null;
 
                 //$manychat->setCustomFields($lead->manychat_id, config('enums.custom_fields_many_chat')['Asesor'], $advisor);
-                /* $data = array(
+                $data = array(
                     'Asesor' => $advisor,
                     'Aval o garantía' => (bool)$get_lead->aval_o_garantia,
                     'Banco' => $bank,
@@ -259,7 +259,7 @@ class Lead extends Model
                     'Tipo de crédito' => $type_credit,
         
                 );
-                $set = $manychat->setCustomFields($data, $lead->manychat_id); */
+                $set = $manychat->setCustomFields($data, $lead->manychat_id);
             }
         }
         
