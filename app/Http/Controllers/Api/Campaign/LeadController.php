@@ -32,8 +32,8 @@ class LeadController extends Controller
             $data = array(
                 "first_name" => $request->name,
                 "last_name" => $request->last_name,
-                "phone" => $cellphone,
-                "whatsapp_phone" => "+52".$cellphone,
+                "phone" => "+521".$cellphone,
+                "whatsapp_phone" => "521".$cellphone,
                 "email" => $request->email,
                 "has_opt_in_sms" => true,
                 "has_opt_in_email" => true,
