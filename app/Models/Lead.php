@@ -227,15 +227,39 @@ class Lead extends Model
 
             //*actualizar campos manychat si el manychat_id existe
             if ($lead->manychat_id != null) {
-                $get_lead = Lead::find($lead->id);
-                $get_advisor = $get_lead->advisorLead;
-                $advisor = $get_advisor!= null ? $get_advisor->name.' '.$get_advisor->last_name  : null;
-                $get_product = $get_lead->productLead;
-                $product = $get_product != null ? $get_product->alias : null;
-                $manychat = new Manychat();
+                $get_lead       = Lead::find($lead->id);
+                $get_advisor    = $get_lead->advisorLead;
+                $advisor        = $get_advisor!= null ? $get_advisor->name.' '.$get_advisor->last_name  : null;
+                $get_product    = $get_lead->productLead;
+                $product        = $get_product != null ? $get_product->alias : null;
+                $get_bank       = $get_lead->bankLead;
+                $bank           = $get_bank != null ? $get_bank->name : null;
+                $manychat       = new Manychat();
+                $get_origin     = Lead::getChanelByOrigin($get_lead->origin_id);
+                $channel        = isset($get_origin[$get_lead->channel_id])? $get_origin[$get_lead->channel_id] : null;
+                $get_agreement  = $get_lead->agreementLead;
+                $agreement      = $get_agreement!= null ? $get_agreement->name : null;
+                $get_origins    = config('enums.origin');
+                $origin         = isset($get_origins[$get_lead->origin_id]) ? $get_origins[$get_lead->origin_id] : null;
+                
+                $type_products  = config('financial_enums.type_products');
+                $type_credit    = isset($type_products[$get_lead->tipo_credito]) ? $type_products[$get_lead->tipo_credito] : null;
 
                 //$manychat->setCustomFields($lead->manychat_id, config('enums.custom_fields_many_chat')['Asesor'], $advisor);
-                $manychat->setCustomFields($lead->manychat_id, config('enums.custom_fields_many_chat')['Servicio KC'], $product);
+                $data = array(
+                    'Asesor' => $advisor,
+                    'Aval o garantía' => (bool)$get_lead->aval_o_garantia,
+                    'Banco' => $bank,
+                    'Canal' => $channel,
+                    'Consulta buró' => (bool)$get_lead->consulta_buro,
+                    'Importe solicitado' => $get_lead->importe_solicitado,
+                    'Organización' => $agreement,
+                    'Origen' => $origin,
+                    'Servicio KC' => $product,
+                    'Tipo de crédito' => $type_credit,
+        
+                );
+                $set = $manychat->setCustomFields($data, $lead->manychat_id);
             }
         }
         
@@ -386,6 +410,11 @@ class Lead extends Model
     public function leadNotes()
     {
         return $this->hasMany(LeadNote::class);
+    }
+
+    public function bankLead()
+    {
+        return $this->hasMany(Bank::class, 'bank_id');
     }
 
     public function history()
