@@ -6417,7 +6417,7 @@ window.changeCreditBank = function (credit_id, id) {
 
 window.closeCreditBank = function (credit_id, id) {};
 
-function verifificarTramitar(credit_id, type) {
+function verifificarTramitar(credit_id, financial_id, type, is_tramitar) {
   $('#content-bank').html('');
   $('#new_banks').hide();
   axios.get('/panel/kc-check-up/' + credit_id + '/' + type + '/report/verify').then(function (response) {
@@ -6427,8 +6427,8 @@ function verifificarTramitar(credit_id, type) {
 
     if (status == 200) {
       var is_app = $('#is_app').val();
-      var url = "/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept";
-      axios.get(url).then(function (response) {
+      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
+        console.log(response.data);
         var reason = response.data;
 
         if (is_tramitar == 1) {
@@ -6445,7 +6445,7 @@ function verifificarTramitar(credit_id, type) {
 }
 
 window.desitionReport = function (credit_id, financial_id, type, is_tramitar) {
-  verifificarTramitar(credit_id, financial_id);
+  verifificarTramitar(credit_id, financial_id, type, is_tramitar);
 }; // Agregar un controlador de eventos a todos los enlaces dentro del iframe
 
 

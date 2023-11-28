@@ -54,7 +54,7 @@ window.closeCreditBank = function(credit_id, id)
     
 }
 
-function verifificarTramitar(credit_id, type)
+function verifificarTramitar(credit_id, financial_id, type, is_tramitar)
 {
     $('#content-bank').html('');
     $('#new_banks').hide();
@@ -66,10 +66,10 @@ function verifificarTramitar(credit_id, type)
         let banks = result.banks;
         if (status == 200) {
             let is_app = $('#is_app').val();
-            let url = "/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept";
             axios
-                .get(url)
+                .get("/panel/kc-check-up/report/desition/"+credit_id+"/"+financial_id+ "/" +type+"/accept")
                 .then(function (response) {
+                    console.log(response.data);
                     let reason = response.data;
                     if (is_tramitar == 1) {
                         window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app;
@@ -79,7 +79,6 @@ function verifificarTramitar(credit_id, type)
                     
                 })
                 .catch(e => {
-                    
                 });
         } else {
             $('#content-bank').html(banks);
@@ -93,7 +92,7 @@ function verifificarTramitar(credit_id, type)
 }
 
 window.desitionReport = function(credit_id, financial_id, type, is_tramitar) {
-    verifificarTramitar(credit_id, financial_id);
+    verifificarTramitar(credit_id, financial_id, type, is_tramitar);
 }
 
 // Agregar un controlador de eventos a todos los enlaces dentro del iframe

@@ -9,71 +9,7 @@
             'Consupago (Mejor opción)',
         ];
 
-        
        
-       
-
-         const config_options = {
-            type: 'bar',
-            data: data_options,
-            options: {
-                responsive: true,
-                animation: {
-                    delay: (context) => {
-                        let delay = 0;
-                        if (context.type === 'data') {
-                            delay = context.dataIndex * 300 + context.datasetIndex * 100;
-                        }
-                        return delay;
-                    },
-                },
-                indexAxis: 'y',
-                plugins: {
-                    legend: {
-                            display: true,
-                            labels: {
-                                color: "white",
-                                font: {
-                                    weight: 'bold',
-                                    size: '13'
-                                },
-                            }
-                        },
-                        title: {
-                            display: false,
-                        },
-                        datalabels: {
-                            display: false,
-                            
-                        },
-                },
-                scales: {
-                    x: {
-            stacked: true,
-            ticks: {
-                color: 'white',
-                
-                font: {
-                    weight: 'bold',
-                },
-                display: true
-            }
-        },
-        y: {
-            stacked: true,
-            ticks: {
-                color: [color_financiera1, color_financiera2],
-                
-                font: {
-                    weight: 'bold',
-                    size: '13'
-                },
-                
-            }
-        }
-                }
-            },
-        };
         /* option */
     </script>
     @endif

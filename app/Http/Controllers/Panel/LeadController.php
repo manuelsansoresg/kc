@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Lib\CNubarium;
 use App\Lib\Csendgrid;
+use App\Lib\Manychat;
 use App\Models\Action;
 use App\Models\Bank;
 use App\Models\CurrentFinancialProduct;
@@ -38,8 +39,26 @@ class LeadController extends Controller
      */
     public function index()
     {
-        
+        /* $manychat = new Manychat();
+        $data_usuario = array(
+            "first_name" => 'Manuel',
+            "last_name" => 'Sansores',
+            "phone" => "+5219991575581",
+            "whatsapp_phone" => "5219991575581",
+            "email" => 'manuelsansoresg@gmail.com',
+            "has_opt_in_sms" => true,
+            "has_opt_in_email" => true,
+            "consent_phrase" => 'kc',
+        );
+        dd($manychat->altaUsuario($data_usuario)); */
+        /* //$manychat->setCustomFields($lead->manychat_id, config('enums.custom_fields_many_chat')['Asesor'], $advisor);
+        $data = array(
+            'Servicio KC' => 'Crédito nuevo',
+            'Aval o garantía' => true,
 
+        );
+        $set = $manychat->setCustomFields($data, 1995087542);
+        dd($set); */
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
         if ($is_financiera === true) {
             return redirect('panel/kc-delivery');
