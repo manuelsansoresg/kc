@@ -54,14 +54,22 @@ class Manychat
          return self::setCurl('subscriber/createSubscriber', $data);
     }
 
-    public function setCustomFields($subscriber_id, $field_id, $field_value)
+    public function setCustomFields($data, $subscriber_id)
     {
+        $fields = array();
+        foreach ($data as $key => $data) {
+            $fields[] = array(
+                'field_id' => config('enums.custom_fields_many_chat')[$key],
+                'field_name' => $key,
+                'field_value' => $data,
+            );
+        }
+        
         $data = array(
             'subscriber_id' => $subscriber_id,
-            'field_id' => $field_id,
-            'field_value' => $field_value,
+            'fields' => $fields,
         );
-        return self::setCurl('subscriber/createSubscriber', $data);
+        return self::setCurl('subscriber/setCustomFields', $data);
     }
     
     
