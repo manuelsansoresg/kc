@@ -30,11 +30,8 @@ class LeadController extends Controller
 
             );
 
-            
-
-            $lead = Lead::create($request_data);
-
             //*crear usuario manychat
+            $manychat = new Manychat();
             $data = array(
                 "first_name" => $request->name,
                 "last_name" => $request->last_name,
@@ -45,11 +42,19 @@ class LeadController extends Controller
                 "has_opt_in_email" => true,
                 "consent_phrase" => 'kc',
             );
-            $manychat = new Manychat();
             $result = json_decode($manychat->altaUsuario($data));
             if ($result->status == 'success') {
                 $data_manychat = $result->data;
                 $request_data['manychat_id'] = $data_manychat->id;
+            }
+            
+
+            $lead = Lead::create($request_data);
+
+            
+            
+            if ($result->status == 'success') {
+                
 
                 //*modificar los valores de manychat 
                 $get_lead       = Lead::find($lead->id);
@@ -59,7 +64,7 @@ class LeadController extends Controller
                 $product        = $get_product != null ? $get_product->alias : null;
                 $get_bank       = Bank::find($get_lead->bank_id);
                 $bank           = $get_bank != null ? $get_bank->name : null;
-                $manychat       = new Manychat();
+                
                 $get_origin     = Lead::getChanelByOrigin($get_lead->origin_id);
                 $channel        = isset($get_origin[$get_lead->channel_id])? $get_origin[$get_lead->channel_id] : null;
                 $get_agreement  = $get_lead->agreementLead;
@@ -77,7 +82,7 @@ class LeadController extends Controller
                     'Tipo de crédito' => $type_credit,
 
                 );
-                $manychat->setCustomFields($data, $data_manychat->id);
+                $manychat->setCustomFields($data, $get_lead->manychat_id);
                 
             }
 
