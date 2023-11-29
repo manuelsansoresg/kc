@@ -95,20 +95,20 @@ class Action extends Model
                 });
             })->get();
         
+        //dd($actionsProximasOVencidas);
+
         foreach ($actionsProximasOVencidas as $actionsProximasOVencida) {
             $title = 'Acción prospecto';
-            if ($actionsProximasOVencida->section == 1 ) {
-                $lead = Lead::find($actionsProximasOVencida->id_rel);
-                $name = $lead->name.' '. $lead->last_name;
-            } else {
-                $credit = Credit::find($actionsProximasOVencida->id_rel);
-                $client = $credit->creditClientPerson;
-                $name = $client->name.' '. $client->last_name;
-                $title = 'Acción módulo';
-            }
-
-            if ($lead != null) {
-                
+            try {
+                if ($actionsProximasOVencida->section === 1 ) {
+                    $lead = Lead::find($actionsProximasOVencida->id_rel);
+                    $name = $lead->name.' '. $lead->last_name;
+                } else {
+                    $credit = Credit::find($actionsProximasOVencida->id_rel);
+                    $client = $credit->creditClientPerson;
+                    $name = $client->name.' '. $client->last_name;
+                    $title = 'Acción módulo';
+                }
                 $type    = isset(config('enums.type_actions')[$actionsProximasOVencida->type])? config('enums.type_actions')[$actionsProximasOVencida->type] : null;
                 $notification_slack = new Slack('kaaxClub', $title.' - '.$type.' - '.$name);
                 $notification_slack->sendMessage();
@@ -116,7 +116,11 @@ class Action extends Model
                 $get_action = Action::find($actionsProximasOVencida->id);
                 $get_action->is_notification_slack = 1;
                 $get_action->update();
+            } catch (\Throwable $th) {
+                
             }
+
+            
         }
     }
 
