@@ -80,7 +80,7 @@ class LeadController extends Controller
                     'Tipo de crédito' => $type_credit,
 
                 );
-                sleep(2);
+                sleep(10);
                 $manychat->setCustomFields($data, $get_lead->manychat_id);
                 
             }
