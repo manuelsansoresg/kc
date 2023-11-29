@@ -30,6 +30,10 @@ class LeadController extends Controller
 
             );
 
+            
+
+            $lead = Lead::create($request_data);
+
             //*crear usuario manychat
             $data = array(
                 "first_name" => $request->name,
@@ -47,12 +51,6 @@ class LeadController extends Controller
                 $data_manychat = $result->data;
                 $request_data['manychat_id'] = $data_manychat->id;
 
-                
-            }
-
-            $lead = Lead::create($request_data);
-
-            if ($result->status == 'success') {
                 //*modificar los valores de manychat 
                 $get_lead       = Lead::find($lead->id);
                 $get_advisor    = $get_lead->advisorLead;
@@ -80,8 +78,10 @@ class LeadController extends Controller
 
                 );
                 $manychat->setCustomFields($data, $data_manychat->id);
+                
             }
-            
+
+           
             
             HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
             return response()->json(200);
