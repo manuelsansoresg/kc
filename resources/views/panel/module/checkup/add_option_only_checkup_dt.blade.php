@@ -40,6 +40,13 @@
                                     <em class="icon ni ni-reports"></em><span>Ver reporte</span></a>
                             </li>
                         @endif
+
+                        @if ($status_id == 6)
+                        <li>
+                            <a class="pointer" onclick="copyToClipBoardReport()">
+                                <em class="icon ni ni-copy"></em><span>copiar URL</span></a>
+                        </li>
+                        @endif
                         <li>
                             <a class="pointer" onclick="modalNote({{ $credit_id }}, 'credit')">
                                 <em class="icon ni ni-note-add"></em><span>Agregar nota</span></a>
@@ -90,6 +97,7 @@
                                 <em class="icon ni ni-headphone"></em><span>Asignar asesor</span></a>
                         </li>
                     </ul>
+                    <input type="hidden" id="url_report" value="{{ asset('reporte/'.$id ) }}">
                 </div>
             </div>
         </li>
