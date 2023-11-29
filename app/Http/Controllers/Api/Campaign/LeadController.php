@@ -47,12 +47,10 @@ class LeadController extends Controller
                 $data_manychat = $result->data;
                 $request_data['manychat_id'] = $data_manychat->id;
             }
-            
 
             $lead = Lead::create($request_data);
+            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
 
-            
-            
             if ($result->status == 'success') {
                 
 
@@ -86,10 +84,6 @@ class LeadController extends Controller
                 $manychat->setCustomFields($data, $get_lead->manychat_id);
                 
             }
-
-           
-            
-            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
             return response()->json(200);
         } catch (\Exception $th) {
             return response()->json(500);
