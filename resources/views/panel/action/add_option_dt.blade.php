@@ -48,8 +48,9 @@ $user = Auth::user();
                         </li>
                         @if (isset($lead))
                         <li>
-                            <a href="https://web.whatsapp.com/send/?phone={{ $lead->cellphone }}&text&type=phone_number&app_absent=0"  target="_blank">
-                                <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
+                            <a href="https://manychat.com/fb861553/chat/{{ $lead->manychat_id }}"  target="_blank">
+                                <em class="icon ni ni-chat-circle"></em>
+                                <span>ManyChat</span></a>
                         </li>
                         @endif
                         @if ($status == 'in_progress')
