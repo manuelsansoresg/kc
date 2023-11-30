@@ -7,8 +7,8 @@ $user = Auth::user();
         @if ($lead->manychat_id != null)
             <li class="nk-tb-action-hidden d-sm-none d-md-block">
             
-                <a class="btn btn-trigger btn-icon" href="https://manychat.com/fb861553/chat/{{ $lead->manychat_id }}"  data-bs-toggle="tooltip" data-bs-placement="top" target="_blank">
-                    <em class="icon ni ni-whatsapp"></em><span></span>  </a>
+                <a class="btn btn-trigger" href="https://manychat.com/fb861553/chat/{{ $lead->manychat_id }}"  data-bs-toggle="tooltip" data-bs-placement="top" target="_blank">
+                    <em class="icon ni ni-chat-circle"></em><span></span>  </a>
             </li>
         @endif
         
@@ -48,6 +48,12 @@ $user = Auth::user();
                                     <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
                             </li>
                         @endif
+
+                        <li>
+                            <a class="pointer" href="/panel/lead/{{ $id }}/edit"  data-bs-toggle="tooltip" data-bs-placement="top">
+                                <em class="icon ni ni-edit"></em><span>Editar</span></a>
+                        
+                        </li>
                        
                        
                         <li>

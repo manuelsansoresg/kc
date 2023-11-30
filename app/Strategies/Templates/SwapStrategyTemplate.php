@@ -1940,11 +1940,11 @@ class SwapStrategyTemplate implements TemplateInterface
                     'icon' => 'icon ni ni-report-profit'
                 ],
                 [
-                    'link' => 'https://web.whatsapp.com/send/?phone='.$client->cellphone.'&text&type=phone_number&app_absent=0 ',
+                    'link' => 'https://manychat.com/fb861553/chat/'.$credit->manychat_id,
                     'target' => '_blank',
                     'onclick' => '',
-                    'name' => 'Whatsapp',
-                    'icon' => 'icon ni ni-whatsapp'
+                    'name' => 'ManyChat',
+                    'icon' => 'icon ni ni-chat-circle'
                 ],
                 
                 [

@@ -44,10 +44,11 @@ return [
     ),
     'reason_archive' => array(
         1 => 'No interesado',
-        2 => 'Sin convenio',
+        2 => 'No tramitable',
         3 => 'Otro',
         4 => 'Conversión',
         5 => 'Asesoría',
+        6 => 'Dejó de contestar',
     ),
     
     'credit_reason_archive' => array(
@@ -56,14 +57,18 @@ return [
     ),
     
     'credit_reason_reject' => array(
-        1 => 'No viable',
-        2 => 'no sujeto de crédito',
+        1 => 'Sin capacidad de pago',
+        2 => 'Mal historial crediticio',
         3 => 'otro',
+        4 => 'Fraude',        
     ),
    
     'credit_reason_cancel' => array(
-        1 => 'Decisión cliente',
-        3 => 'otro',
+        1 => 'Pérdida de interés',
+        2 => 'Otro',
+        3 => 'Dejó de contestar',
+        4 => 'Optó por otro servicio',
+        5 => 'No tramitable',
     ),
 
     'pagado' => array(

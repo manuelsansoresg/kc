@@ -2,8 +2,8 @@
 <div class="content-options">
     <ul class="nk-tb-actions gx-1">
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a class="btn btn-trigger btn-icon" href="https://web.whatsapp.com/send/?phone={{ $client->cellphone }}&text&type=phone_number&app_absent=0"  data-bs-toggle="tooltip" data-bs-placement="top" target="_blank" title="WhatsApp">
-                <em class="icon ni ni-whatsapp"></em><span></span></a>
+            <a class="btn btn-trigger btn-icon" href="https://manychat.com/fb861553/chat/{{ $query->manychat_id }}"  data-bs-toggle="tooltip" data-bs-placement="top" target="_blank" title="ManyChat">
+                <em class="icon ni ni-chat-circle"></em><span></span></a>
         </li>
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
             <a onclick="showModalActions({{ $credit_id }}, false)" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Ver acciones">
@@ -40,6 +40,13 @@
                                     <em class="icon ni ni-reports"></em><span>Ver reporte</span></a>
                             </li>
                         @endif
+
+                        @if ($status_id == 6)
+                        <li>
+                            <a class="pointer" onclick="copyToClipBoardReport()">
+                                <em class="icon ni ni-copy"></em><span>copiar URL</span></a>
+                        </li>
+                        @endif
                         <li>
                             <a class="pointer" onclick="modalNote({{ $credit_id }}, 'credit')">
                                 <em class="icon ni ni-note-add"></em><span>Agregar nota</span></a>
@@ -69,8 +76,8 @@
                                 <em class="icon ni ni-report-profit"></em><span>Ver perfil crédito</span></a>
                         </li>
                         <li>
-                            <a class="pointer" href="https://web.whatsapp.com/send/?phone={{ $client->cellphone }}&text&type=phone_number&app_absent=0" target="_blank">
-                                <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
+                            <a class="pointer" href="https://manychat.com/fb861553/chat/{{ $query->manychat_id }}" target="_blank">
+                                <em class="icon ni ni-chat-circle"></em><span>ManyChat</span></a>
                         </li>
                         <li>
                             <a onclick="moveModal('Cancelar', {{ $credit_id }}, '{{ $m_history::CREDIT_CANCELED }}', '{{ $status_id }}', 'dt-check-up')" class="pointer">
@@ -90,6 +97,7 @@
                                 <em class="icon ni ni-headphone"></em><span>Asignar asesor</span></a>
                         </li>
                     </ul>
+                    <input type="hidden" id="url_report" value="{{ asset('reporte/'.$id ) }}">
                 </div>
             </div>
         </li>

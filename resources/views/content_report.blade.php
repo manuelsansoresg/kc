@@ -106,7 +106,7 @@
                             @foreach ($new_financials as $key => $financial_product)
                                 <div class="col-lg-4 px-md-1 px-lg-4 col-sm-10 " data-aos="fade-up" data-aos-delay="100">
                                     <div class="card mb-4 mb-lg-0 shadow-lg rounded-4 border-0 overflow-hidden">
-                                        @if ($key == 1)
+                                        @if ($key == 0)
                                             <span class="badge bg-warning rounded-bottom-0 py-3 fs-6">Mejor opción</span>
                                         @endif
                                         <div class="px-4 mt-4 mb-2">
