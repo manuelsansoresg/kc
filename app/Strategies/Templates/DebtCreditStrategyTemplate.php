@@ -717,16 +717,15 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         foreach ($get_actions as $key => $get_action) {
             $status = $get_action->status_progress;
             $status_progress += $status != null ? $status : 0;
-            $current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM ? 'Información del crédito': 'Reporte';
         }
 
         $percent =  (($status_progress) / 2) * 100;
-
+        $current_show = $status_progress < 1 ? 'Información del crédito': 'Reporte';
         if ($show_current_show == true) {
-            return reduceDecimal($current_show);
+            return $current_show;
         }
         
-        return $percent;
+        return reduceDecimal($percent);
     }
 
     public function getFile($template_config_id)
