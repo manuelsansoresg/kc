@@ -334,26 +334,7 @@ class FinancialProduct extends Model
         $sortedFinancials = $financial_products->sortByDesc('rate_kc')->values();
 
         if ($is_limit == false) {
-            
-            // Verificar si hay al menos 3 elementos
-            if ($sortedFinancials->count() >= 3) {
-                // Obtener el elemento con la tasa más alta (en medio)
-                $middleElement = $sortedFinancials->first();
-    
-                // Obtener los elementos restantes (excluyendo el primero que ya está en $middleElement)
-                $remainingElements = $sortedFinancials->slice(1);
-    
-                // Obtener los dos elementos más cercanos al elemento del medio en términos de rate_kc
-                $closestElements = $remainingElements->sortBy(function ($element) use ($middleElement) {
-                    return abs($element['rate_kc'] - $middleElement['rate_kc']);
-                })->take(2)->values();
-    
-                // Crear un nuevo arreglo con los tres elementos en el orden deseado
-                $sortedFinancials = collect([$closestElements[0], $middleElement, $closestElements[1]]);
-            } else {
-                // Si no hay al menos 3 elementos, devolver el arreglo original
-                return $sortedFinancials;
-            }
+            $sortedFinancials = $sortedFinancials->take(3);
         } else {
             if ($is_limit && $sortedFinancials->count() >= 4) {
                 // Obtener los elementos después del tercero

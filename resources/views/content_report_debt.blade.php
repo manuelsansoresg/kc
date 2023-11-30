@@ -136,14 +136,14 @@ $chart4 = $my_product_financial;
                                         @php
                                             $is_existInArrayOne = $current_financial_product::isExistProduct($financial_product->id, $credit->id);
                                         @endphp
-                                        @if ($key == 1 && $is_existInArrayOne != true)
+                                        @if ($key == 0 && $is_existInArrayOne != true)
                                             <span class="badge bg-warning rounded-bottom-0 py-3 fs-6">Mejor opción</span>
                                         @endif
-                                        @if ($key == 1 && $is_existInArrayOne == true )
+                                        @if ($key == 0 && $is_existInArrayOne == true )
                                             <span class="badge bg-warning rounded-bottom-0 py-3 fs-6">  Tu crédito actual es la mejor opción</span>
                                         @endif
                                        
-                                        @if ($key != 1 && $is_existInArrayOne == true)
+                                        @if ($key != 0 && $is_existInArrayOne == true)
                                         <span class="badge bg-primary rounded-bottom-0 py-3 fs-6">Tu crédito actual</span>
                                         @endif
                                         <div class="px-4 mt-4 mb-2">
