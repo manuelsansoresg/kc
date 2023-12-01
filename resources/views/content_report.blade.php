@@ -595,21 +595,23 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <th scope="row" class="text-start">
+                                                    <th scope="row" class="text-start text-small">
                                                         {{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}
                                                     </th>
                                                     <td><span class="fs-6">
-                                                            <span class="fw-light small"></span>Calificación:
+                                                            <span class="fw-light small text-small text-small"></span>
+                                                            <span class="calificacion">Calificación:</span>
                                                             {{ isset($chart1->rate_contract) ? $chart1->rate_contract : null }}<span
                                                                 class="small">/5</span>
                                                         </span></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row" class="text-start">
+                                                    <th scope="row" class="text-start text-small text-small">
                                                         {{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}
                                                     </th>
                                                     <td><span class="fs-6">
-                                                            <span class="fw-light small"></span>Calificación:
+                                                            <span class="fw-light small text-small text-small"></span>
+                                                            <span class="calificacion">Calificación:</span>
                                                             {{ isset($chart2->rate_contract) ? $chart2->rate_contract : null }}<span
                                                                 class="small">/5</span>
                                                         </span></td>
@@ -619,7 +621,8 @@
                                                         {{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}
                                                     </th>
                                                     <td><span class="fs-6">
-                                                            <span class="fw-light small"></span>Calificación:
+                                                            <span class="fw-light small text-small"></span>
+                                                            <span class="calificacion">Calificación:</span>
                                                             {{ isset($chart3->rate_contract) ? $chart3->rate_contract : null }}<span
                                                                 class="small">/5</span>
                                                         </span></td>
