@@ -372,7 +372,7 @@
                         },
                         datalabels: {
                             formatter: function(value, context) {
-                                return value + ' años';
+                                return value + ' meses';
                             }
                         },
                 },

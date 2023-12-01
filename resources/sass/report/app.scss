@@ -339,4 +339,10 @@ body.dark-mode .form-control {
    #margin-filter {
        margin-left: 0; /* Quítale el margen en dispositivos móviles */
    }
+   .text-small {
+      font-size: 11px !important; /* Tamaño de fuente para versiones móviles */
+    }
+    .calificacion { 
+      display: none !important;
+    }
 }

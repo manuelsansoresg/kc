@@ -548,20 +548,23 @@ class HistoryLog extends Model
     {
         $lbl_module = array(
             HistoryLog::KC_CHECK_UP => 'KC - Check up',
-            HistoryLog::KC_SWAP => 'KC - After market',
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION => 'KC - Check up',
+            HistoryLog::KC_SWAP => 'KC - Swap',
             HistoryLog::KC_CONTROL_DESK => 'KC - Control desk',
             HistoryLog::KC_DELIVERY => 'KC - Delivery',
         );
         $data_actions = array(
             HistoryLog::KC_CHECK_UP,
+            HistoryLog::KC_CHECK_UP_DEBT_REDUCTION,
+            HistoryLog::KC_SWAP,
             HistoryLog::KC_CONTROL_DESK,
             HistoryLog::KC_DELIVERY,
-            HistoryLog::KC_SWAP,
         );
         $status_progress = 0;
         $current_status = 'KC - Check up';
         $id_current_status = HistoryLog::KC_CHECK_UP;
         $get_action = HistoryLog::getLastStatus($data_actions, $credit_id);
+        //dd($get_action, $credit_id);
 
         if ($get_action != null) {
             $status_id = $get_action->status_id;

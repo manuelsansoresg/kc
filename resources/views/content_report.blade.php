@@ -92,8 +92,8 @@
         </div>
     </section>
     @php
-        $chart1 = isset($new_financials[1]) ? $new_financials[1] : null;
-        $chart2 = isset($new_financials[0]) ? $new_financials[0] : null;
+        $chart1 = isset($new_financials[0]) ? $new_financials[0] : null;
+        $chart2 = isset($new_financials[1]) ? $new_financials[1] : null;
         $chart3 = isset($new_financials[2]) ? $new_financials[2] : null;
         $chart4 = $my_product_financial;
     @endphp
@@ -463,24 +463,24 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <th scope="row" class="text-start">
+                                                            <th scope="row" class="text-start text-small">
                                                                 {{ $chart1 == null ? '' : $chart1->commercial_name }} </th>
                                                             <td><span
-                                                                    class="fs-6">{{ $chart1 != null && $chart1->chart_comision_apertura == 1 ? 'SÍ' : 'NO' }}</span>
+                                                                    class="fs-6 text-small">{{ $chart1 != null && $chart1->chart_comision_apertura == 1 ? 'SÍ' : 'NO' }}</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <th scope="row" class="text-start">
+                                                            <th scope="row" class="text-start text-small">
                                                                 {{ $chart2 == null ? '' : $chart2->commercial_name }}</th>
                                                             <td><span
-                                                                    class="fs-6">{{ $chart2 != null && $chart2->chart_comision_apertura == 1 ? 'SÍ' : 'NO' }}</span>
+                                                                    class="fs-6 text-small">{{ $chart2 != null && $chart2->chart_comision_apertura == 1 ? 'SÍ' : 'NO' }}</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <th scope="row" class="text-start">
+                                                            <th scope="row" class="text-start text-small">
                                                                 {{ $chart3 == null ? '' : $chart3->commercial_name }}</th>
                                                             <td><span
-                                                                    class="fs-6">{{ $chart3 != null && $chart3->chart_comision_apertura == 1 ? 'SÍ' : 'NO' }}</span>
+                                                                    class="fs-6 text-small">{{ $chart3 != null && $chart3->chart_comision_apertura == 1 ? 'SÍ' : 'NO' }}</span>
                                                             </td>
                                                         </tr>
     
@@ -595,31 +595,34 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <th scope="row" class="text-start">
+                                                    <th scope="row" class="text-start text-small">
                                                         {{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}
                                                     </th>
-                                                    <td><span class="fs-6">
-                                                            <span class="fw-light small"></span>Calificación:
+                                                    <td><span class="fs-6 text-small">
+                                                            <span class="fw-light small"></span>
+                                                            <span class="calificacion">Calificación:</span>
                                                             {{ isset($chart1->rate_contract) ? $chart1->rate_contract : null }}<span
                                                                 class="small">/5</span>
                                                         </span></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row" class="text-start">
+                                                    <th scope="row" class="text-start text-small text-small">
                                                         {{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}
                                                     </th>
-                                                    <td><span class="fs-6">
-                                                            <span class="fw-light small"></span>Calificación:
+                                                    <td><span class="fs-6 text-small">
+                                                            <span class="fw-light small"></span>
+                                                            <span class="calificacion">Calificación:</span>
                                                             {{ isset($chart2->rate_contract) ? $chart2->rate_contract : null }}<span
                                                                 class="small">/5</span>
                                                         </span></td>
                                                 </tr>
                                                 <tr>
-                                                    <th scope="row" class="text-start">
+                                                    <th scope="row" class="text-start text-small">
                                                         {{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}
                                                     </th>
-                                                    <td><span class="fs-6">
-                                                            <span class="fw-light small"></span>Calificación:
+                                                    <td><span class="fs-6 text-small">
+                                                            <span class="fw-light small"></span>
+                                                            <span class="calificacion">Calificación:</span>
                                                             {{ isset($chart3->rate_contract) ? $chart3->rate_contract : null }}<span
                                                                 class="small">/5</span>
                                                         </span></td>
@@ -670,31 +673,34 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <th scope="row" class="text-start">
+                                                        <th scope="row" class="text-start text-small">
                                                             {{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}
                                                         </th>
-                                                        <td><span class="fs-6">
-                                                                <span class="fw-light small"></span>Calificación:
+                                                        <td><span class="fs-6 text-small">
+                                                                <span class="fw-light small"></span>
+                                                                <span class="calificacion">Calificación:</span>
                                                                 {{ isset($chart1->rate_privacity) ? $chart1->rate_privacity : null }}<span
                                                                     class="small">/5</span>
                                                             </span></td>
                                                     </tr>
                                                     <tr>
-                                                        <th scope="row" class="text-start">
+                                                        <th scope="row" class="text-start text-small">
                                                             {{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}
                                                         </th>
-                                                        <td><span class="fs-6">
-                                                                <span class="fw-light small"></span>Calificación:
+                                                        <td><span class="fs-6 text-small">
+                                                                <span class="fw-light small"></span>
+                                                                <span class="calificacion">Calificación:</span>
                                                                 {{ isset($chart2->rate_privacity) ? $chart2->rate_privacity : null }}<span
                                                                     class="small">/5</span>
                                                             </span></td>
                                                     </tr>
                                                     <tr>
-                                                        <th scope="row" class="text-start">
+                                                        <th scope="row" class="text-start text-small">
                                                             {{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}
                                                         </th>
-                                                        <td><span class="fs-6">
-                                                                <span class="fw-light small"></span>Calificación:
+                                                        <td><span class="fs-6 text-small">
+                                                                <span class="fw-light small"></span>
+                                                                <span class="calificacion">Calificación:</span>
                                                                 {{ isset($chart3->rate_privacity) ? $chart3->rate_privacity : null }}<span
                                                                     class="small">/5</span>
                                                             </span></td>
