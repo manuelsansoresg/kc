@@ -695,7 +695,7 @@
                                                             </span></td>
                                                     </tr>
                                                     <tr>
-                                                        <th scope="row" class="text-start">
+                                                        <th scope="row" class="text-start text-small">
                                                             {{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}
                                                         </th>
                                                         <td><span class="fs-6 text-small">
