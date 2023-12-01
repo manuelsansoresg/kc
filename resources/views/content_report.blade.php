@@ -463,21 +463,21 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <th scope="row" class="text-start">
+                                                            <th scope="row" class="text-start text-small">
                                                                 {{ $chart1 == null ? '' : $chart1->commercial_name }} </th>
                                                             <td><span
                                                                     class="fs-6">{{ $chart1 != null && $chart1->chart_comision_apertura == 1 ? 'SÍ' : 'NO' }}</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <th scope="row" class="text-start">
+                                                            <th scope="row" class="text-start text-small">
                                                                 {{ $chart2 == null ? '' : $chart2->commercial_name }}</th>
                                                             <td><span
                                                                     class="fs-6">{{ $chart2 != null && $chart2->chart_comision_apertura == 1 ? 'SÍ' : 'NO' }}</span>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <th scope="row" class="text-start">
+                                                            <th scope="row" class="text-start text-small">
                                                                 {{ $chart3 == null ? '' : $chart3->commercial_name }}</th>
                                                             <td><span
                                                                     class="fs-6">{{ $chart3 != null && $chart3->chart_comision_apertura == 1 ? 'SÍ' : 'NO' }}</span>
