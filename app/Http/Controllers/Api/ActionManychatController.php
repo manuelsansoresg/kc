@@ -16,14 +16,16 @@ class ActionManychatController extends Controller
         );
         
         if ($head[$section]) {
-            $select_head = $head[$section][0];
-            $head_value = $head[$section][1];
-            $data = $request->all();
-            $manychat_id = $data['id'];
-            $custom_fields = $data['custom_fields'];
-            $select_custom_field = $custom_fields[$head_value]; 
+            $select_head            = $head[$section][0];
+            $head_value             = $head[$section][1];
+            $data                   = $request->all();
+            $manychat_id            = $data['id'];
+            $custom_fields          = $data['custom_fields'];
+            $select_custom_field    = $custom_fields[$head_value];
+
             self::saveAction($select_head, $select_custom_field, $manychat_id);
             return response()->json(200);
+            
             return response()->json([
                 'manychat_id' => $manychat_id,
                 'id' => $data['id'],
@@ -38,8 +40,11 @@ class ActionManychatController extends Controller
 
     public function saveAction($action, $value, $manychat_id)
     {
-        $lead = Lead::find($manychat_id);
-        $lead->$action = $value;
-        $lead->update();
+        if ($value != null) {
+            $lead = Lead::find($manychat_id);
+            $lead->$action = $value;
+            $lead->update();
+        }
+        
     }
 }
