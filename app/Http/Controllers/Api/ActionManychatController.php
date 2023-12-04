@@ -28,6 +28,7 @@ class ActionManychatController extends Controller
                 'id' => $data['id'],
                 'custom_fields' => $custom_fields,
                 'select_custom_field' => $select_custom_field,
+                'head_value' => $head_value,
             ]);
         }
         return response()->json(500);
