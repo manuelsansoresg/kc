@@ -11,7 +11,7 @@ class ActionManychatController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $manychat_id = $data;
+        $manychat_id = $data['id'];
        /*  $data = array(
             'name' => $request->all()
         ); */
