@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Agreement;
 use App\Models\ApiActionManychat;
 use App\Models\Lead;
 use Illuminate\Http\Request;
@@ -23,7 +24,8 @@ class ActionManychatController extends Controller
             $custom_fields          = $data['custom_fields'];
             $select_custom_field    = $custom_fields[$head_value];
 
-            self::saveAction($select_head, $select_custom_field, $manychat_id);
+            self::saveOrganization($select_head, $select_custom_field, $manychat_id);
+
             return response()->json(200);
             
             return response()->json([
@@ -36,6 +38,16 @@ class ActionManychatController extends Controller
         }
         return response()->json(500);
         
+    }
+
+    public function saveOrganization($action, $value, $manychat_id)
+    {
+        if ($value != null) {
+            $agreement = Agreement::where('name', $value)->first();
+            if ($agreement != null) {
+                self::saveAction($action, $agreement->id, $manychat_id);
+            }
+        }
     }
 
     public function saveAction($action, $value, $manychat_id)
