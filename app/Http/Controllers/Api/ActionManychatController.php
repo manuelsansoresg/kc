@@ -24,7 +24,7 @@ class ActionManychatController extends Controller
             $custom_fields          = $data['custom_fields'];
             $select_custom_field    = $custom_fields[$head_value];
 
-            self::saveOrganization($select_head, $select_custom_field, $manychat_id);
+            self::saveOrganization($select_head, 'YUC - Educación Media Superior', $manychat_id);
 
             return response()->json(200);
             
