@@ -15,7 +15,7 @@
     <meta name="description"
         content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="/assets_admin/images/favicon.png">
+    <link href="{{ asset('images/favicon.ico') }}" rel="icon">
     <!-- Page Title  -->
     <title>@yield('title')</title>
     <!-- StyleSheets  -->
