@@ -11,11 +11,14 @@ class ActionManychatController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $manychat_id = $data['id'];
+        $manychat_id = $data;
        /*  $data = array(
             'name' => $request->all()
         ); */
         //ApiActionManychat::create($data);
-        return response()->json($manychat_id);
+        return response()->json([
+            'manychat_id' => $manychat_id,
+            'id' => $data['id']
+        ]);
     }
 }
