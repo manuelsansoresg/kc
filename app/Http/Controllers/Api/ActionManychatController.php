@@ -22,7 +22,8 @@ class ActionManychatController extends Controller
             $manychat_id = $data['id'];
             $custom_fields = $data['custom_fields'];
             $select_custom_field = $custom_fields[$head_value]; 
-            //self::saveAction($select_head, $select_custom_field, $manychat_id);
+            self::saveAction($select_head, $select_custom_field, $manychat_id);
+            return response()->json(200);
             return response()->json([
                 'manychat_id' => $manychat_id,
                 'id' => $data['id'],
