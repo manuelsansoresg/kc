@@ -13,7 +13,7 @@ class ActionManychatController extends Controller
         $data = array(
             'name' => $request->all()
         );
-        ApiActionManychat::create($data);
-        return response()->json(200);
+        //ApiActionManychat::create($data);
+        return response()->json($data);
     }
 }
