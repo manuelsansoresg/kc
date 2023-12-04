@@ -28,13 +28,13 @@ class ActionManychatController extends Controller
 
             //return response()->json(200);
             
-            return response()->json([
+            /* return response()->json([
                 'manychat_id' => $manychat_id,
                 'id' => $data['id'],
                 'custom_fields' => $custom_fields,
                 'select_custom_field' => $select_custom_field,
                 'head_value' => $head_value,
-            ]);
+            ]); */
         }
         return response()->json(500);
         
@@ -50,13 +50,13 @@ class ActionManychatController extends Controller
                 )
             );
             if ($agreement != null) {
-                return response()->json(
+                /* return response()->json(
                     array(
                         $action, $agreement->id, $manychat_id
                     )
-                );
+                ); */
 
-                self::saveAction($action, $agreement->id, $manychat_id);
+                /* self::saveAction($action, $agreement->id, $manychat_id); */
             }
         }
     }
