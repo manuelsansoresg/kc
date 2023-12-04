@@ -25,16 +25,9 @@ class ActionManychatController extends Controller
             $select_custom_field    = $custom_fields[$head_value];
             $organization           = self::saveOrganization($select_head, 'YUC - Educación Media Superior', $manychat_id);
 
-            return response()->json([
-                'select_head' => $select_head,
-                'value' => 'YUC - Educación Media Superior',
-                'manychat_id' => $manychat_id,
-                'organization' => $organization,
-            ]);
-
             
 
-            //return response()->json(200);
+            return response()->json(200);
             
             /* return response()->json([
                 'manychat_id' => $manychat_id,
@@ -44,7 +37,7 @@ class ActionManychatController extends Controller
                 'head_value' => $head_value,
             ]); */
         }
-        /* return response()->json(500); */
+        return response()->json(500);
         
     }
 
@@ -57,7 +50,6 @@ class ActionManychatController extends Controller
 
             }
         }
-        return 'error';
     }
 
     public function saveAction($action, $value, $manychat_id)
