@@ -36,7 +36,7 @@ class ActionManychatController extends Controller
                 'head_value' => $head_value,
             ]); */
         }
-        return response()->json(500);
+        /* return response()->json(500); */
         
     }
 
