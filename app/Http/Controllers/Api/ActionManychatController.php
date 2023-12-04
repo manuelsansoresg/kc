@@ -23,7 +23,8 @@ class ActionManychatController extends Controller
             $manychat_id            = $data['id'];
             $custom_fields          = $data['custom_fields'];
             $select_custom_field    = $custom_fields[$head_value];
-            $organization = self::saveOrganization($select_head, 'YUC - Educación Media Superior', $manychat_id);
+            $organization           = self::saveOrganization($select_head, 'YUC - Educación Media Superior', $manychat_id);
+
             return response()->json([
                 'select_head' => $select_head,
                 'value' => 'YUC - Educación Media Superior',
@@ -51,15 +52,8 @@ class ActionManychatController extends Controller
     {
         if ($value != null) {
             $agreement = Agreement::where('name', $value)->first();
-            return $agreement;
             if ($agreement != null) {
-                /* return response()->json(
-                    array(
-                        $action, $agreement->id, $manychat_id
-                    )
-                ); */
-
-                /* self::saveAction($action, $agreement->id, $manychat_id); */
+                return self::saveAction($action, $agreement->id, $manychat_id);
             }
         }
         return 'error';
@@ -67,11 +61,9 @@ class ActionManychatController extends Controller
 
     public function saveAction($action, $value, $manychat_id)
     {
-        if ($value != null) {
-            $lead = Lead::find($manychat_id);
-            $lead->$action = $value;
-            $lead->update();
-        }
-        
+        $lead = Lead::find($manychat_id);
+        $lead->$action = $value;
+        $lead->update();
+        return $lead;
     }
 }
