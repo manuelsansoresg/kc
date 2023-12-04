@@ -50,6 +50,7 @@ class ActionManychatController extends Controller
                         $action, $agreement->id, $manychat_id
                     )
                 );
+                
                 self::saveAction($action, $agreement->id, $manychat_id);
             }
         }
