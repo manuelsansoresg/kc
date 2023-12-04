@@ -42,22 +42,20 @@ class ActionManychatController extends Controller
 
     public function saveOrganization($action, $value, $manychat_id)
     {
-        if ($value != null) {
-            $agreement = Agreement::where('name', $value)->first();
-            return response()->json(
+        $agreement = Agreement::where('name', $value)->first();
+        return response()->json(
+            array(
+                $value, $manychat_id, $action
+            )
+        );
+        if ($agreement != null) {
+            /* return response()->json(
                 array(
-                    $value, $manychat_id, $action
+                    $action, $agreement->id, $manychat_id
                 )
-            );
-            if ($agreement != null) {
-                /* return response()->json(
-                    array(
-                        $action, $agreement->id, $manychat_id
-                    )
-                ); */
+            ); */
 
-                /* self::saveAction($action, $agreement->id, $manychat_id); */
-            }
+            /* self::saveAction($action, $agreement->id, $manychat_id); */
         }
     }
 
