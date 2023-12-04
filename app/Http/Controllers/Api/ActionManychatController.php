@@ -53,7 +53,8 @@ class ActionManychatController extends Controller
         if ($value != null) {
             $agreement = Agreement::where('name', $value)->first();
             if ($agreement != null) {
-                return self::saveAction($action, $agreement->id, $manychat_id);
+                //return self::saveAction($action, $agreement->id, $manychat_id);
+                return array($action, $agreement->id);
             }
         }
         return 'error';
