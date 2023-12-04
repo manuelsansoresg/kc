@@ -55,7 +55,7 @@ class ActionManychatController extends Controller
             if ($agreement != null) {
                 //return self::saveAction($action, $agreement->id, $manychat_id);
                 return array($action, $agreement->id);
-                
+
             }
         }
         return 'error';
@@ -63,10 +63,10 @@ class ActionManychatController extends Controller
 
     public function saveAction($action, $value, $manychat_id)
     {
-        $lead = Lead::find($manychat_id);
+       /*  $lead = Lead::find($manychat_id);
         $lead->update([
             $action => $value
         ]);
-        return $lead;
+        return $lead; */
     }
 }
