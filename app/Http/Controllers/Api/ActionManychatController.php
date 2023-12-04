@@ -61,6 +61,7 @@ class ActionManychatController extends Controller
 
     public function saveAction($action, $value, $manychat_id)
     {
+        return $action;
         $lead = Lead::find($manychat_id);
         $lead->$action = $value;
         $lead->update();
