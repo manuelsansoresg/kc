@@ -23,14 +23,15 @@ class ActionManychatController extends Controller
             $manychat_id            = $data['id'];
             $custom_fields          = $data['custom_fields'];
             $select_custom_field    = $custom_fields[$head_value];
-
+            $organization = self::saveOrganization($select_head, 'YUC - Educación Media Superior', $manychat_id);
             return response()->json([
                 'select_head' => $select_head,
                 'value' => 'YUC - Educación Media Superior',
                 'manychat_id' => $manychat_id,
+                'organization' => $organization,
             ]);
 
-            self::saveOrganization($select_head, 'YUC - Educación Media Superior', $manychat_id);
+            
 
             //return response()->json(200);
             
@@ -48,21 +49,20 @@ class ActionManychatController extends Controller
 
     public function saveOrganization($action, $value, $manychat_id)
     {
-        $agreement = Agreement::where('name', $value)->first();
-        return response()->json(
-            array(
-                $value, $manychat_id, $action
-            )
-        );
-        if ($agreement != null) {
-            /* return response()->json(
-                array(
-                    $action, $agreement->id, $manychat_id
-                )
-            ); */
+        if ($value != null) {
+            $agreement = Agreement::where('name', $value)->first();
+            return $agreement;
+            if ($agreement != null) {
+                /* return response()->json(
+                    array(
+                        $action, $agreement->id, $manychat_id
+                    )
+                ); */
 
-            /* self::saveAction($action, $agreement->id, $manychat_id); */
+                /* self::saveAction($action, $agreement->id, $manychat_id); */
+            }
         }
+        return 'error';
     }
 
     public function saveAction($action, $value, $manychat_id)
