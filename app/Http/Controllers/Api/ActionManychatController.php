@@ -26,7 +26,7 @@ class ActionManychatController extends Controller
 
             self::saveOrganization($select_head, 'YUC - Educación Media Superior', $manychat_id);
 
-            return response()->json(200);
+            //return response()->json(200);
             
             return response()->json([
                 'manychat_id' => $manychat_id,
