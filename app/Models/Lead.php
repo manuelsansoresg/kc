@@ -42,7 +42,7 @@ class Lead extends Model
 
     public static function tagLead ($lead_id, $label, $is_array = false)
     {
-        //dd($label);
+        $new_array = array();
         if ($label != null) {
             $new_array[] = '#'.$label;
             $label = '#'. $label;
@@ -112,7 +112,7 @@ class Lead extends Model
                     $data[] = array(
                         'id' => $query->id,
                         'name' => $lead_view,
-                        'date' => formatDateNameMonth($query->created_at),
+                        'date' => formatDateNameMonthHour($query->created_at),
                         'product' => ($product != null) ? $product->alias : '',
                         'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
@@ -123,7 +123,7 @@ class Lead extends Model
                     $data[] = array(
                         'id' => $query->id,
                         'name' => $lead_view,
-                        'date' => formatDateNameMonth($query->created_at),
+                        'date' => formatDateNameMonthHour($query->created_at),
                         'product' => ($product != null) ? $product->alias : '',
                         'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
