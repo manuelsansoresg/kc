@@ -9,6 +9,7 @@ class FinancialAgreement extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'agreement_id',
         'product_id',
     ];
@@ -28,7 +29,9 @@ class FinancialAgreement extends Model
             $existingProduct = FinancialProduct::find($product);
     
             if ($existingProduct) {
+                $maxId = FinancialAgreement::max('id');
                 $data_financial = array(
+                    'id' => $maxId,
                     'agreement_id' => $agreement_id,
                     'product_id' => $product,
                 );
