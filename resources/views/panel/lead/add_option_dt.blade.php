@@ -13,8 +13,8 @@ $user = Auth::user();
         @endif
         
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a href="/panel/lead/{{ $id }}/profile" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Perfíl">
-                <em class="icon ni ni-user-fill"></em>
+            <a onclick="modalPreviewProfile({{ $id }})" class="btn btn-trigger btn-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Perfíl">
+                <em class="icon ni ni-user-list-fill"></em>
             </a>
     
         </li>
