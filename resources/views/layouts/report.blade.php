@@ -61,7 +61,7 @@
                     </div>
                     <p class="text-muted">Tu mejor decisión. Fácil y rápido </p>
                 </div>
-                <div class="col-md-3 mx-auto col-lg-2 mb-5">
+              {{--   <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
                         <li><a href="/reporte/{{ @$history_id }}/metodologia">Metodología</a></li>
                         <li><a href="https://kaaxclub.com/ayuda">Ayuda</a></li>
@@ -72,7 +72,7 @@
                         <li><a href="https://app.kaaxclub.com/">App</a></li>
                         <li><a href="https://kaaxclub.com/contacto">Contacto</a></li>
                     </ul>
-                </div>
+                </div> --}}
                 <div class="col-lg-4 mb-5">
                     <div class="d-flex flex-wrap social-links mb-5 align-items-center">
                         <a href="https://facebook.com/kaaxclub/" target="_blank"><svg
@@ -108,9 +108,9 @@
                             </svg></a> --}}
                         </div>
                
-                    </form><small class="text-muted">
+                    </form>{{-- <small class="text-muted">
                         © Yalkú Servicios. 
-                    </small>
+                    </small> --}}
                 </div>
             </div>
         </div>
