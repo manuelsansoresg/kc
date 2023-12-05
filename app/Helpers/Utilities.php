@@ -24,6 +24,29 @@ if (!function_exists('formatDateNameMonth')) {
     }
 }
 
+if (!function_exists('formatDateNameMonthHour')) {
+    function formatDateNameMonthHour($date, $is_time = true)
+    {
+        $monhts = array('01' => 'Ene', '02' => 'Feb', '03' => 'Mar', '04' => 'Abr', '05' => 'May',
+                    '06' => 'Jun', '07' => 'Jul', '08' => 'Ago', '09' => 'Sep',
+                    '10' => 'Oct', '11' => 'Nov', '12' => 'Dic'
+                );
+        $format_date = date('d-m-y', strtotime($date));
+        $format_hour = date('h:i a', strtotime($date));
+        $day = substr($format_date, 0, 3);
+        $month  = $monhts[substr($format_date, 3, 2)];
+        $year_hour           = substr($format_date, 6);
+        $year           = substr($format_date, 6, 3);
+        
+        $new_date =$day.$month.'<br>'.$format_hour;
+
+        if ($is_time == false) {
+            $new_date =$day.$month.'-'.$year;
+        }
+        return $new_date;
+    }
+}
+
 
 if (!function_exists('deadline')) {
     function deadline($date_init, $max_hour, $percent, $color, $show_max_hour = false)
