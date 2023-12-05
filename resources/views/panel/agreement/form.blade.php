@@ -56,7 +56,7 @@
                                             <div class="form-control-wrap">
                                                 <select class="form-select select2multiple" multiple="multiple" name="products[]" id="agreement-financials"   data-search="on">
                                                 @foreach ($products as $product)
-                                                    <option value="{{ $product->id }}"> {{ $product->commercial_name}} - {{ $product->alias }} </option>
+                                                    <option value="{{ $product->id }}"> {{ $product->commercial_name}} - {{ $product->name }} </option>
                                                 @endforeach
                                                 </select>
                                                 
