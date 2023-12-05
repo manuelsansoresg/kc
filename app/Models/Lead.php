@@ -42,7 +42,7 @@ class Lead extends Model
 
     public static function tagLead ($lead_id, $label, $is_array = false)
     {
-        //dd($label);
+        $new_array = array();
         if ($label != null) {
             $new_array[] = '#'.$label;
             $label = '#'. $label;

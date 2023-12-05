@@ -127,11 +127,11 @@
                         @endphp
                         
                     @endforeach
-                    <p> {{ $last_note->description }}</p>
+                    <p> {{ isset($last_note->description) ? $last_note->description : null }}</p>
                     <p class="text-end text-small">
                       
                             <small>
-                                {{ formatDateNameMonth($last_note->created_at) }}
+                                {{ isset($last_note->created_at) ? formatDateNameMonth($last_note->created_at) : null }}
                             </small>
                         
                     </p>
