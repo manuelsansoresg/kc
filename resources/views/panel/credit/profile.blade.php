@@ -175,6 +175,14 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
+                                                               
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">ID Prospecto</span>
+                                                                        <span class="profile-ud-value"> {{ $credit->lead_id }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
 
                                                             </div><!-- .profile-ud-list -->
                                                         </div><!-- .nk-block -->

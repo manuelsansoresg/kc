@@ -111,7 +111,7 @@ $chart4 = $my_product_financial;
                 d="M0 0L50 16.9167C100 33.8333 200 67.6667 300 77.3333C400 87 500 72.5 600 62.8333C700 53.1667 800 48.3333 900 55.5833C1000 62.8333 1100 82.1667 1150 91.8333L1200 101.5V145H1150C1100 145 1000 145 900 145C800 145 700 145 600 145C500 145 400 145 300 145C200 145 100 145 50 145H0V0Z"
                 fill="currentColor"></path>
         </svg>
-        <div class="container pt-11 pt-lg-5 pb-9">
+        <div class="container pt-3 pt-lg-5 pb-9">
             <div class="row pb-8 pb-lg-5">
                 <div class="col-lg-10 col-xl-8 mx-auto text-center">
                     <h1 class="display-4 mb-0" data-aos="fade-up" data-aos-delay="100">Calificación de KaaxClub</h1>
@@ -125,8 +125,8 @@ $chart4 = $my_product_financial;
     </section>
    
     <section class="position-relative">
-        <div class="container-fluid pb-9 pb-lg-0 position-relative mt-n12">
-            <div class="bg-body shadow-lg rounded-4 py-5">
+        <div class="container-fluid pb-0 pb-lg-0 position-relative mt-n12">
+            <div class="bg-body shadow-lg rounded-4 py-0 py-md-5">
                 <div class="container mb-9 mb-lg-5">
                     <div class="row align-items-center justify-content-center">
                         @if ($new_financials != null)
@@ -366,7 +366,7 @@ $chart4 = $my_product_financial;
     </section>
 
     <a name="section-simulacion" id="section-simulacion" />
-    <section class="position-relative  bg-style-1">
+    <section class="d-flex position-relative  bg-style-1 mt-n5 mt-md-0">
         <div class="container py-9 py-lg-11 position-relative z-index-1">
 
             <div class="row justify-content-between align-items-start">

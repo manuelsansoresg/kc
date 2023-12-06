@@ -96,6 +96,7 @@ class Credit extends Model
         'is_vincular_banco',
         'aval_o_garantia',
         'manychat_id',
+        'lead_id',
     ];
 
     public static function listDatatable($status)

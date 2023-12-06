@@ -221,6 +221,7 @@ class Lead extends Model
             $send_grid = new Csendgrid();
             $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name);
         } else {
+            unset($data['origin_id']);
             $lead = Lead::find($request->lead_id);
             $lead->fill($data);
             $lead->update();
