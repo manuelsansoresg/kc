@@ -66,6 +66,7 @@ class LeadStrategyTemplate implements TemplateInterface
                 'aval_o_garantia' => $lead->aval_o_garantia,
                 'consulta_buro' => $lead->consulta_buro,
                 'manychat_id' => $lead->manychat_id,
+                'lead_id' => $lead->id,
             );
 
             //validar que el credito no exista con los mismos datos
