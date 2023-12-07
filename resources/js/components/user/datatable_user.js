@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ajax: '/panel/user/search?query='+queryParam,
         
         columns: [
+            { data: 'id' },
             { data: 'name' },
             { data: 'cellphone' },
             { data: 'origin' },

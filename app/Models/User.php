@@ -347,6 +347,7 @@ class User extends Authenticatable
                 $link = '/panel/lead/'.$lead->id.'/profile';
             }
             $data[] = array(
+                'id' => $result->id,
                 'name' => $result->name,
                 'cellphone' => $result->cellphone,
                 'origin' => $result->source,

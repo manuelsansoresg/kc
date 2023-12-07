@@ -22,6 +22,7 @@
                             <table id="dt-search-user" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Nombre</th>
                                         <th>Teléfono</th>
                                         <th>Origen</th>
