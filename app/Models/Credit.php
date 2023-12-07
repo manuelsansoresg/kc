@@ -200,41 +200,43 @@ class Credit extends Model
         $users        = array();
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);
-            $product          = $query->creditProduct;
-            $alias_product    = $product !== null ? $product->alias : null;
-            $client           = $query->creditClientPerson;
-            $advisor          = $query->creditAdvisor;
-            $menu_options   = self::menuOptionCredit($history);
-
-            $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive', 35 => 'pagado', 55 => 'delivered');
-            $reason = isset(config('enums.'.$reason_enums[$history->status_id])[$history->reason]) ? config('enums.'.$reason_enums[$history->status_id])[$history->reason] : null;
-
-            $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['archive']])->render();
-            $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
-            $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
-            
-            $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
-            $is_advisor     = Auth::user()->hasRole('Asesor');
-            if ($is_advisor === true && Auth::user()->id === $advisor->id) {
-                $users[] = array(
-                    'id' => $query->id,
-                    'product' => $content_product,
-                    'reason' => $reason,
-                    'date' => formatDateNameMonth($history->created_at),
-                    'client' => $content_client,
-                    'advisor' => $name_advisor,
-                    'options' => $option
-                );
-            } else {
-                $users[] = array(
-                    'id' => $query->id,
-                    'product' => $content_product,
-                    'reason' => $reason,
-                    'date' => formatDateNameMonth($history->created_at),
-                    'client' => $content_client,
-                    'advisor' => $name_advisor,
-                    'options' => $option
-                );
+            if ($query !== null) {
+                $product          = $query->creditProduct;
+                $alias_product    = $product !== null ? $product->alias : null;
+                $client           = @$query->creditClientPerson;
+                $advisor          = $query->creditAdvisor;
+                $menu_options   = self::menuOptionCredit($history);
+    
+                $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive', 35 => 'pagado', 55 => 'delivered');
+                $reason = isset(config('enums.'.$reason_enums[$history->status_id])[$history->reason]) ? config('enums.'.$reason_enums[$history->status_id])[$history->reason] : null;
+    
+                $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['archive']])->render();
+                $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
+                $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
+                
+                $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
+                $is_advisor     = Auth::user()->hasRole('Asesor');
+                if ($is_advisor === true && Auth::user()->id === $advisor->id) {
+                    $users[] = array(
+                        'id' => $query->id,
+                        'product' => $content_product,
+                        'reason' => $reason,
+                        'date' => formatDateNameMonth($history->created_at),
+                        'client' => $content_client,
+                        'advisor' => $name_advisor,
+                        'options' => $option
+                    );
+                } else {
+                    $users[] = array(
+                        'id' => $query->id,
+                        'product' => $content_product,
+                        'reason' => $reason,
+                        'date' => formatDateNameMonth($history->created_at),
+                        'client' => $content_client,
+                        'advisor' => $name_advisor,
+                        'options' => $option
+                    );
+                }
             }
         }
         return $users;
