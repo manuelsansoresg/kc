@@ -23,6 +23,21 @@
                                     </select>
                                 </div>
                             </div>
+                            
+                            <div id="content-lead" style="display: none">
+                                <div class="form-check">
+                                    <input class="form-check-input" name="data[envio_identifacion]" type="checkbox" value="1" id="envio_identificacion">
+                                    <label class="form-label" for="envio_identificacion">Envió identificación</label>
+                                    
+                                </div>
+                                
+                                <div class="form-check">
+                                    <input class="form-check-input" name="data[envio_documentacion_completa]" type="checkbox" value="1" id="envio_documentacion_completa">
+                                    <label class="form-label" for="envio_documentacion_completa">Envió documentación completa</label>
+                                    
+                                </div>
+                            </div>
+                          
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Comentario</label>
                                 <div class="form-control-wrap">

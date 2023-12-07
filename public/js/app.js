@@ -1035,6 +1035,7 @@ window.moveModalLead = function (title, id, statusid, old_status_id, dt) {
   $('#dt').val(dt);
   $('#modal-archive-title').html(title);
   getReason('ArchivarLead');
+  $('#content-lead').show();
   $('#modal-archive').modal('show');
 };
 

@@ -102,7 +102,9 @@ class HistoryLog extends Model
         'status',
         'user_id',
         'status_progress', //* 0 en curso 1 finalizada
-        'date_status_progress' //* fecha en que se actualiza el status
+        'date_status_progress', //* fecha en que se actualiza el status
+        'envio_identifacion', //* se usa en archivos
+        'envio_documentacion_completa', //* se usa en archivos
     ];
 
     public static $label_status = [
