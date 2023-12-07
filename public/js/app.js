@@ -1023,6 +1023,11 @@ window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#dt').val(dt);
   $('#modal-archive-title').html(title);
   getReason(title);
+
+  if (title == 'Archivar' || title == 'Cancelar') {
+    $('#content-lead').show();
+  }
+
   $('#modal-archive').modal('show');
 };
 
