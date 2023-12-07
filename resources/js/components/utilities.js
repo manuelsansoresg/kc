@@ -34,3 +34,20 @@ window.showModalActions = function(lead_id, is_lead)
 
     $('#modal-list-actions').modal('show');
 }
+
+/* window.searchClient = function (event)
+{
+    if (event.key === 'Enter') {
+        //event.preventDefault();
+        let query = $('#query').val();
+        axios
+            .post('/panel/user/search', {query:query})
+            .then(function (response) {
+                let result = response.data;
+                console.log(result);
+            })
+            .catch(e => {
+                
+            });
+    }
+} */

@@ -4918,6 +4918,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/user/datatable_user.js":
+/*!********************************************************!*\
+  !*** ./resources/js/components/user/datatable_user.js ***!
+  \********************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var queryParam = new URLSearchParams(window.location.search).get('query');
+  var table = NioApp.DataTable('#dt-search-user', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/user/search?query=' + queryParam,
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'cellphone'
+    }, {
+      data: 'origin'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/utilities.js":
 /*!**********************************************!*\
   !*** ./resources/js/components/utilities.js ***!
@@ -4959,6 +5006,22 @@ window.showModalActions = function (lead_id, is_lead) {
   refreshAction(lead_id, model, 'completed', 'content-profile-completed');
   $('#modal-list-actions').modal('show');
 };
+/* window.searchClient = function (event)
+{
+    if (event.key === 'Enter') {
+        //event.preventDefault();
+        let query = $('#query').val();
+        axios
+            .post('/panel/user/search', {query:query})
+            .then(function (response) {
+                let result = response.data;
+                console.log(result);
+            })
+            .catch(e => {
+                
+            });
+    }
+} */
 
 /***/ }),
 
@@ -5091,6 +5154,8 @@ __webpack_require__(/*! ./components/user/crud */ "./resources/js/components/use
 __webpack_require__(/*! ./components/user/datatable_admin */ "./resources/js/components/user/datatable_admin.js");
 
 __webpack_require__(/*! ./components/user/datatable_financiera */ "./resources/js/components/user/datatable_financiera.js");
+
+__webpack_require__(/*! ./components/user/datatable_user */ "./resources/js/components/user/datatable_user.js");
 
 __webpack_require__(/*! ./components/product/datatable_product */ "./resources/js/components/product/datatable_product.js");
 
