@@ -295,15 +295,37 @@ class User extends Authenticatable
 
         // Si no se encontraron resultados por cellphone, buscar por nombre completo
         if ($mergedResults->isEmpty()) {
-            $results = Lead::whereRaw("CONCAT(name, ' ', last_name, ' ', second_last_name) LIKE ?", '%' . $query . '%')
+            $results = Lead::
+            where(function ($queryBuilder) use ($query) {
+                $nameParts = explode(' ', $query);
+                foreach ($nameParts as $part) {
+                    $queryBuilder->orWhere('name', 'LIKE', '%' . $part . '%')
+                                 ->orWhere('last_name', 'LIKE', '%' . $part . '%')
+                                 ->orWhere('second_last_name', 'LIKE', '%' . $part . '%');
+                }
+            })
                 ->select('id', 'name', 'last_name', 'second_last_name', 'cellphone')
                 ->get();
 
-            $clientPersons = ClientPerson::whereRaw("CONCAT(name, ' ', last_name, ' ', second_last_name) LIKE ?", '%' . $query . '%')
+            $clientPersons = ClientPerson::where(function ($queryBuilder) use ($query) {
+                $nameParts = explode(' ', $query);
+                foreach ($nameParts as $part) {
+                    $queryBuilder->orWhere('name', 'LIKE', '%' . $part . '%')
+                                 ->orWhere('last_name', 'LIKE', '%' . $part . '%')
+                                 ->orWhere('second_last_name', 'LIKE', '%' . $part . '%');
+                }
+            })
                 ->select('id', 'name', 'last_name', 'second_last_name', 'cellphone')
                 ->get();
 
             // Agregar una etiqueta para distinguir el origen de los resultados
+            $results = $results->map(function ($result) {
+                $result->source = 'Prospecto';
+                $result->name = $result->name . ' ' . $result->last_name . ' ' . $result->second_last_name;
+                unset($result->last_name, $result->second_last_name); // Eliminar campos no necesarios
+                return $result;
+            });
+
             $clientPersons = $clientPersons->map(function ($result) {
                 $result->source = 'Crédito';
                 $result->name = $result->name . ' ' . $result->last_name . ' ' . $result->second_last_name;
@@ -314,10 +336,11 @@ class User extends Authenticatable
             // Fusionar los resultados de ambos modelos
             $results = $results->merge($clientPersons);
         }
+        
         $data = array();
         foreach ($results as $result) {
             if ($result->source == 'Crédito') {
-                $credit = Credit::find($result->id);
+                $credit = Credit::where('client_person_id',$result->id)->first();
                 $link = '/panel/credit/'.$credit->id;
             } else {
                 $lead = Lead::find($result->id);
