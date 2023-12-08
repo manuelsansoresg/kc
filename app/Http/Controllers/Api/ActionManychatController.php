@@ -25,7 +25,7 @@ class ActionManychatController extends Controller
             $manychat_id            = $data['id'];
             $custom_fields          = $data['custom_fields'];
             //$select_custom_field    = $custom_fields[$head_value];
-            $select_custom_field    = 'American express';
+            $select_custom_field    = 'manuel';
             
             self::saveOrganization($section, $select_head, $select_custom_field, $manychat_id);
             self::saveBank($section, $select_head, $select_custom_field, $manychat_id);
