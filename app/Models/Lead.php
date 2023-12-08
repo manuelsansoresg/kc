@@ -166,8 +166,10 @@ class Lead extends Model
             if ($lead != null) {
                 $product      = $lead != null ? $lead->productLead : null;
                 $user         = $lead != null ? $lead->advisorLead : null;
+                $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
+                $validate       = (new $leadStrategy)->getValidate($query->id);
     
-                $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $lead])->render();
+                $content_lead         = \View::make('panel.lead.content_lead', ['lead' => $lead, 'validate' => $validate])->render();
                 $reason = (isset(config('enums.reason_archive')[$query->reason]))? config('enums.reason_archive')[$query->reason] : '';
                 $data[] = array(
                     'id' => $lead->id,

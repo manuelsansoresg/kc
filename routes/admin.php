@@ -38,7 +38,9 @@ Route::group(['prefix' => 'user'], function () {
 
     Route::post('tyc/accept', ['\App\Http\Controllers\Panel\User\AdminController', 'tycAccept'])->middleware('auth');
 
-
+    //*busqueda
+    Route::get('search/view', ['\App\Http\Controllers\Panel\User\AdminController', 'searchView'])->middleware('auth');
+    Route::get('search', ['\App\Http\Controllers\Panel\User\AdminController', 'search'])->middleware('auth');
     
 });
 

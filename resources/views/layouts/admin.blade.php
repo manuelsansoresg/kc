@@ -406,6 +406,15 @@
                                 </a>
                             </div><!-- .nk-header-brand -->
 
+                            
+
+                            <div class="nk-header-search ms-3 ms-xl-0">
+                                <em class="icon ni ni-search"></em>
+                                <form action="/panel/user/search/view" method="GET">
+                                    <input type="text"  name="query" id="query" value="{{ old('query') }}"  class="form-control border-transparent form-focus-none" placeholder="Buscar ..">
+                                </form>
+                            </div><!-- .nk-header-news -->
+
                             <div class="nk-header-tools">
                                 <ul class="nk-quick-nav">
                                     <li class="dropdown language-dropdown d-none d-sm-block me-n1">
