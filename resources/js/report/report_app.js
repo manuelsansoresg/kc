@@ -106,7 +106,7 @@ for (var i = 0; i < iframeLinks.length; i++) {
   });
 }
 
-window.changeFilterReport = function(status, tipo)
+window.changeFilterReport = function(status, tipo, id)
 {
     console.log(status);
     let titulo1 = ['Se mostrarán créditos que "SI" consultan buró de crédito', 'Se mostrarán créditos que "NO" consultan buró de crédito'];
@@ -142,6 +142,9 @@ window.changeFilterReport = function(status, tipo)
                 .catch(e => {
                     // Manejar errores
                 });
+        } else {
+            //cancelar
+            $("#" + id).prop("checked", !$("#" + id).prop("checked"));
         }
       });
 

@@ -6460,7 +6460,7 @@ for (var i = 0; i < iframeLinks.length; i++) {
   });
 }
 
-window.changeFilterReport = function (status, tipo) {
+window.changeFilterReport = function (status, tipo, id) {
   console.log(status);
   var titulo1 = ['Se mostrarán créditos que "SI" consultan buró de crédito', 'Se mostrarán créditos que "NO" consultan buró de crédito'];
   var titulo2 = ['Se mostrarán créditos que "SI" soliciten aval', 'Se mostrarán créditos que "NO" soliciten aval'];
@@ -6488,6 +6488,9 @@ window.changeFilterReport = function (status, tipo) {
         window.location.reload();
       })["catch"](function (e) {// Manejar errores
       });
+    } else {
+      //cancelar
+      $("#" + id).prop("checked", !$("#" + id).prop("checked"));
     }
   });
 };
