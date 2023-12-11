@@ -282,7 +282,13 @@
     }
 
     .animated-title  .h4 {
-        font-size: 14px !important;
+      font-family: var(--bs-body-font-family) !important;
+      font-size: 1rem !important;
+      font-weight: var(--bs-body-font-weight) !important;
+    }
+
+    .text-calificacion h1{
+      font-size: calc(1.3rem + .6vw) !important;
     }
 
     #hero-img{
@@ -347,4 +353,5 @@ body.dark-mode .form-control {
     .calificacion { 
       display: none !important;
     }
+    
 }

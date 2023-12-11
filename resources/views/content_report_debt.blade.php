@@ -32,11 +32,11 @@ $chart4 = $my_product_financial;
                             <div class="row align-items-center">
                                 <div class="col-md-12 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0 py-0 py-md-5" data-aos="fade-up"
                                     data-aos-delay="100">
-                                    <div class="row align-items-center py-0 py-md-5">
+                                    <div class="row align-items-center py-3 py-md-5">
                                         <div class="animated-title">
                                             <div class="text-top ">
                                                 <div class="textcontainer">
-                                                    <span class="particletext confetti h1">¡Felicidades {{ $client->name }}!</span>
+                                                    <span class="particletext confetti h1 text-left col-12">¡Felicidades {{ $client->name }}!</span>
                                                 </div>
                                               
                                             </div>
@@ -113,7 +113,7 @@ $chart4 = $my_product_financial;
         </svg>
         <div class="container pt-3 pt-lg-5 pb-9">
             <div class="row pb-8 pb-lg-5">
-                <div class="col-lg-10 col-xl-8 mx-auto text-center">
+                <div class="col-lg-10 col-xl-8 mx-auto text-center text-calificacion">
                     <h1 class="display-4 mb-0" data-aos="fade-up" data-aos-delay="100">Calificación de KaaxClub</h1>
                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
                         Analizamos a detalle y otorgamos una puntuación a cada financiera para ayudarte a tomar la mejor
