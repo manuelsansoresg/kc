@@ -82,7 +82,7 @@ class LeadController extends Controller
                 );
                 sleep(2);
                 $manychat->setCustomFields($data, $get_lead->manychat_id);
-                
+                $manychat->addTag('Prospecto', $get_lead->manychat_id);
             }
             return response()->json(200);
         } catch (\Exception $th) {
