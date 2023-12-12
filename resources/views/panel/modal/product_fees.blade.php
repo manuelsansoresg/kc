@@ -12,7 +12,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Concepto</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" name="data[concepto]" class="form-control">
+                                    <input type="text" name="data[concepto]" id="concepto" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -23,7 +23,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Periodicidad</label>
                                 <div class="form-control-wrap">
-                                    <select name="data[periodicidad]" class="form-control">
+                                    <select name="data[periodicidad]" id="periodicidad" class="form-control">
                                         <option value="">Selecciona una opción</option>
                                         @foreach ($periodicity as $key =>  $periodicity)
                                             <option value="{{ $key }}"> {{ $periodicity }} </option>
@@ -37,7 +37,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Moneda</label>
                                 <div class="form-control-wrap">
-                                    <select name="data[moneda]" class="form-control">
+                                    <select name="data[moneda]" id="moneda" class="form-control">
                                         <option value="">Selecciona una opción</option>
                                         <option value="1">Pesos</option>
                                     </select>
@@ -75,7 +75,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="frm-user-admin-name">Valor</label>
                                     <div class="form-control-wrap">
-                                        <input type="number" name="data[valor]" class="form-control">
+                                        <input type="number" name="data[valor]" id="valor" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -86,19 +86,20 @@
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Porcentaje</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" name="data[porcentaje]" class="form-control">
+                                    <input type="number" name="data[porcentaje]" id="porcentaje" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-label" for="frm-user-admin-name">Referencia %</label>
                                     <div class="form-control-wrap">
-                                        <input type="text" name="data[referencia]" class="form-control">
+                                        <input type="text" name="data[referencia]" id="referencia" class="form-control">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
+                        <input type="hidden" id="product_fee" name="product_fee" name="">
                         <input type="hidden" id="financial_product_id" name="data[financial_product_id]">
                         <input type="hidden" name="data[type]" id="comision_type">
                         

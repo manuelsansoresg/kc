@@ -148,6 +148,7 @@ Route::get('product-complementary/{product}/{type}', ['\App\Http\Controllers\Pan
 Route::get('product-complementary/list/{product_id}/refresh', ['\App\Http\Controllers\Panel\Financial\ProductComplementaryServiceController', 'refresh'])->middleware('auth');
 
 Route::resource('product-fee', '\App\Http\Controllers\Panel\ProductFeeController')->middleware('auth');
+Route::get('product-fee/{productFee}/showproductFee', ['\App\Http\Controllers\Panel\ProductFeeController', 'showproductFee'])->middleware('auth');
 
 Route::group(['prefix' => 'financial'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Financial\FinancialController', 'list'])->middleware('auth');

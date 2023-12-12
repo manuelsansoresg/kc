@@ -23,15 +23,13 @@ class ProductFee extends Model
     {
         $data = $request->data;
         
-
-        $productFee = ProductFee::create($data);
-        /* if ($data['financial_product_id'] == null) {
+        if ($request->product_fee == 'null') {
+            $productFee = ProductFee::create($data);
         } else {
-            $productFee = ProductFee::find($request->product_id);
+            $productFee = ProductFee::find($request->product_fee);
             $productFee->fill($data);
             $productFee->update();
         }
-        return $productFee; */
         return $productFee;
     }
 
