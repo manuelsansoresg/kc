@@ -209,13 +209,15 @@
                                                                 </span>
                                                                 
                                                             </th>
+                                                            <th class="tb-tnx-id"><span class="">Fecha</span></th>
                                                             {{-- <th class="tb-tnx-amount is-alt">
                                                                 <span class="tb-tnx-total">Total</span>
                                                                 <span class="tb-tnx-status d-none d-md-inline-block">Status</span>
                                                             </th>
-                                                            <th class="tb-tnx-action">
+                                                             --}}
+                                                             <th class="tb-tnx-action">
                                                                 <span>&nbsp;</span>
-                                                            </th> --}}
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -232,6 +234,14 @@
                                                                         {{ $client_person->alias }}
                                                                     @endif
                                                                     
+                                                                </td>
+                                                                
+                                                                
+                                                                <td>
+                                                                    {{ formatDateNameMonth($client_person->created_at, false) }}
+                                                                </td>
+                                                                <td>
+                                                                    <a href="/panel/credit/{{ $credit->id }}">Abrir</a>
                                                                 </td>
                                                                 
                                                             </tr>
