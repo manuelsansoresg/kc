@@ -11,6 +11,10 @@ $user = Auth::user();
                 <em class="icon ni ni-user-fill"></em>
             </a>
         </li>
+        <li class="nk-tb-action-hidden d-sm-none d-md-block">
+            <a class="btn btn-trigger btn-icon" onclick="setModalAction({{ $model->id }}, false, {{ $model->section }})">
+                <em class="icon ni ni-eye"></em><span></span></a>
+        </li>
         @if ($status == 'in_progress')
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
             <a class="btn btn-trigger btn-icon" onclick="modalRegisterAction({{ $model->section}},{{ $model->id }})" data-bs-toggle="tooltip" data-bs-placement="top"
