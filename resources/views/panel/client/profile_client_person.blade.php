@@ -2,6 +2,7 @@
 @section('title', 'Perfíl cliente persona')
 
 @inject('m_lead', 'App\Models\Lead')
+@inject('m_client', 'App\Models\ClientPerson')
 @inject('m_history_log', 'App\Models\HistoryLog')
 @inject('m_action', 'App\Models\Action')
 
@@ -223,15 +224,16 @@
                                                     <tbody>
                                                         @foreach ($credits as $credit)
                                                             @php
-                                                                $client_person = $credit->creditProduct;
+                                                                $client_person = $m_client::find($credit->client_person_id);
+                                                                $product = $credit->creditProduct;
                                                             @endphp
                                                             <tr class="tb-tnx-item">
                                                                 <td class="tb-tnx-id">
                                                                    {{ $credit->id }}
                                                                 </td>
                                                                 <td class="tb-tnx-info">
-                                                                    @if ($client_person !== null)
-                                                                        {{ $client_person->alias }}
+                                                                    @if ($product !== null)
+                                                                        {{ $product->alias }}
                                                                     @endif
                                                                     
                                                                 </td>
