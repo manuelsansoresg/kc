@@ -284,7 +284,7 @@ class User extends Authenticatable
         });
 
         $clientPersons = $clientPersons->map(function ($result) {
-            $result->source = 'Credito';
+            $result->source = 'Cliente';
             $result->name = $result->name . ' ' . $result->last_name . ' ' . $result->second_last_name;
             unset($result->last_name, $result->second_last_name); // Eliminar campos no necesarios
             return $result;
@@ -327,7 +327,7 @@ class User extends Authenticatable
             });
 
             $clientPersons = $clientPersons->map(function ($result) {
-                $result->source = 'Crédito';
+                $result->source = 'Cliente';
                 $result->name = $result->name . ' ' . $result->last_name . ' ' . $result->second_last_name;
                 unset($result->last_name, $result->second_last_name); // Eliminar campos no necesarios
                 return $result;
@@ -339,9 +339,9 @@ class User extends Authenticatable
         
         $data = array();
         foreach ($results as $result) {
-            if ($result->source == 'Crédito') {
+            if ($result->source == 'Cliente') {
                 $credit = Credit::where('client_person_id',$result->id)->first();
-                $link = '/panel/credit/'.$credit->id;
+                $link = '/panel/client/'.$result->id.'?tab=credits';
             } else {
                 $lead = Lead::find($result->id);
                 $link = '/panel/lead/'.$lead->id.'/profile';

@@ -47,13 +47,15 @@
                             <div class="card-inner card-inner-lg">
                                 <div class="nk-block">
                                     <div class="nk-data data-list">
-                                        
+                                        @php
+                                            $tab = isset($_GET["tab"])? $_GET["tab"] : null;
+                                        @endphp
                                         <ul class="nav nav-tabs">
-                                            <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab"
+                                            <li class="nav-item"> <a class="nav-link {{ $tab == null ? 'active' : null}}" data-bs-toggle="tab"
                                                     href="#tabGeneral">General</a> </li>
                                             <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                     href="#tabHistorial">Historial</a> </li>
-                                            <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                            <li class="nav-item"> <a class="nav-link {{ $tab == 'credits' ? 'active' : null}}" data-bs-toggle="tab"
                                                     href="#tabCredits">Créditos</a> </li>
                                             <li class="nav-item nav-item-trigger d-xxl-none">
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
@@ -63,7 +65,7 @@
                                             
                                         </ul>
                                         <div class="tab-content">
-                                            <div class="tab-pane active" id="tabGeneral">
+                                            <div class="tab-pane {{ $tab == null ? 'active' : null}}" id="tabGeneral">
                                                 <div class="card-inner">
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-line">
@@ -199,7 +201,7 @@
                                                     
                                                 @endforeach
                                             </div>
-                                            <div class="tab-pane" id="tabCredits">
+                                            <div class="tab-pane {{ $tab == 'credits' ? 'active' : null}}" id="tabCredits">
                                                 <table class="table table-tranx">
                                                     <thead>
                                                         <tr class="tb-tnx-head">

@@ -4983,6 +4983,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var queryParam = new URLSearchParams(window.location.search).get('query');
   var table = NioApp.DataTable('#dt-search-user', {
     processing: true,
+    searching: false,
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {

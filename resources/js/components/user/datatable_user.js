@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let table = NioApp.DataTable('#dt-search-user', {
         processing: true,
+        searching: false,
         responsive: {
             details: {
                 renderer: function ( api, rowIdx, columns ) {

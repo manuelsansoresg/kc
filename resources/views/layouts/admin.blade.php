@@ -409,7 +409,7 @@
                             
 
                             <div class="nk-header-search ms-3 ms-xl-0">
-                                <em class="icon ni ni-search"></em>
+                                <em class="icon ni ni-search" id="icon-search"></em>
                                 <form action="/panel/user/search/view" method="GET">
                                     <input type="text"  name="query" id="query" value="{{ old('query') }}"  class="form-control border-transparent form-focus-none" placeholder="Buscar ..">
                                 </form>
