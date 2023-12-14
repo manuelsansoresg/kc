@@ -187,9 +187,9 @@
                                             </ul>
                                           
                                             <div class="text-center mt-3 text-sm">
-                                                <a href="#">Requisitos</a>
-                                                <a href="#"> - Comisiones</a>
-                                                <a href="#" onclick="infoFinanciera({{ $financial_product->id }})"> - Características</a>
+                                                <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'requisitos')">Requisitos</a>
+                                                <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'comisiones')"> - Comisiones</a>
+                                                <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'caracteristicas')"> - Características</a>
                                             </div>
                                         </div>
                                     </div>

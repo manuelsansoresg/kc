@@ -151,10 +151,10 @@ window.changeFilterReport = function(status, tipo, id)
     
 }
 
-window.infoFinanciera = function(product_id)
+window.infoFinanciera = function(product_id, section)
 {
     axios
-    .get('/reporte/'+product_id+'/info')
+    .get('/reporte/'+product_id+'/info?section='+section)
     .then(function (response) {
         let result = response.data;
        $('#content-info').html(result.caracteristicas);
