@@ -102,77 +102,28 @@
                                 <span class="text-primary h6">COSTOS DE CONTRATACIÓN</span>
                             </div>
                             <div class="col-12 mt-3">
-                                <div class="table-responsive mt-5">
-                                    <table class="table">
+                                @foreach ($fees_comision as $key => $fees)
+                                    @if ($fees->type == 1)
+                                        <p class="mt-1">{{ $fees->concepto }} - ${{ format_price($fees->valor) }} {{ isset(config('enums.periodicity')[$fees->periodicidad]) ? config('enums.periodicity')[$fees->periodicidad] : null }}</p>
+                                    @else
+                                        <p class="mt-1">{{ $fees->concepto }} - {{ $fees->porcentaje }}% {{ $fees->referencia }} {{ isset(config('enums.periodicity')[$fees->periodicidad]) ? config('enums.periodicity')[$fees->periodicidad] : null }}</p>
+                                    @endif
                                     
-                                        
-                                        @foreach ($fees_comision as $key => $fees)
-                                            @if ($key == 0)
-                                            <thead>
-                                                <tr>
-                                                <th>Concepto</th>
-                                                <th>Periodicidad</th>
-                                                @if ($fees->type == 1)
-                                                <th>Valor</th>
-                                                @else
-                                                <th>Porcentaje</th>
-                                                @endif
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            @endif
-                                            <tr>
-                                                <td>{{ $fees->concepto }}</td>
-                                                <td>  {{ isset(config('enums.periodicity')[$fees->periodicidad]) ? config('enums.periodicity')[$fees->periodicidad] : null }}</td>
-                                                @if ($fees->type == 1)
-                                                <td> {{ format_price($fees->valor) }}</td>
-                                                @else
-                                                <td>{{ $fees->porcentaje }}</td>
-                                                @endif
-                                               
-                                            </tr>
-                                            
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                @endforeach
                             </div>
-                            <div class="col-12">
+                            <div class="col-12 mt-3">
                                 <span class="text-primary h6">COMISIONES</span>
                             </div>
                             <div class="col-12">
-                                <div class="table-responsive mt-5">
-                                    <table class="table">
-                                        @foreach ($fees_result as $key_comision => $fees_comision)
-                                            @if ($key_comision == 0)
-                                            <thead>
-                                                <tr>
-                                                <th>Concepto</th>
-                                                <th>Periodicidad</th>
-                                                @if ($fees_comision->type == 1)
-                                                <th>Valor</th>
-                                                @else
-                                                <th>Porcentaje</th>
-                                                @endif
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            @endif
-                                            <tr>
-                                                <td>{{ $fees_comision->concepto }}</td>
-                                                <td>  {{ isset(config('enums.periodicity')[$fees_comision->periodicidad]) ? config('enums.periodicity')[$fees_comision->periodicidad] : null }}</td>
-                                                @if ($fees_comision->type == 1)
-                                                <td> {{ format_price($fees_comision->valor) }}</td>
-                                                @else
-                                                <td>{{ $fees_comision->porcentaje }}</td>
-                                                @endif
-                                               
-                                            </tr>
-                                            
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                               
+                                @foreach ($fees_result as $key_comision => $fees_comision)
+                                    @if ($fees_comision->type == 1)
+                                        <p class="mt-1">{{ $fees_comision->concepto }} - ${{ format_price($fees_comision->valor) }} {{ isset(config('enums.periodicity')[$fees_comision->periodicidad]) ? config('enums.periodicity')[$fees_comision->periodicidad] : null }}</p>
+                                    @else
+                                        <p class="mt-1">{{ $fees_comision->concepto }} - {{ $fees_comision->porcentaje }}% {{ $fees_comision->referencia }} {{ isset(config('enums.periodicity')[$fees_comision->periodicidad]) ? config('enums.periodicity')[$fees_comision->periodicidad] : null }}</p>
+                                    @endif   
+                                @endforeach
+                                        
                             </div>
                         </div>
                     </div>
