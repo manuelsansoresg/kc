@@ -96,6 +96,86 @@
                     </div>
                 </div>
                 <div class="tab-pane {{ $section == 'comisiones' ? 'active' : null }}" id="tabComisiones">
+                    <div class="container">
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <span class="text-primary h6">COSTOS DE CONTRATACIÓN</span>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <div class="table-responsive mt-5">
+                                    <table class="table">
+                                    
+                                        
+                                        @foreach ($fees_comision as $key => $fees)
+                                            @if ($key == 0)
+                                            <thead>
+                                                <tr>
+                                                <th>Concepto</th>
+                                                <th>Periodicidad</th>
+                                                @if ($fees->type == 1)
+                                                <th>Valor</th>
+                                                @else
+                                                <th>Porcentaje</th>
+                                                @endif
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @endif
+                                            <tr>
+                                                <td>{{ $fees->concepto }}</td>
+                                                <td>  {{ isset(config('enums.periodicity')[$fees->periodicidad]) ? config('enums.periodicity')[$fees->periodicidad] : null }}</td>
+                                                @if ($fees->type == 1)
+                                                <td> {{ format_price($fees->valor) }}</td>
+                                                @else
+                                                <td>{{ $fees->porcentaje }}</td>
+                                                @endif
+                                               
+                                            </tr>
+                                            
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <span class="text-primary h6">COMISIONES</span>
+                            </div>
+                            <div class="col-12">
+                                <div class="table-responsive mt-5">
+                                    <table class="table">
+                                        @foreach ($fees_result as $key_comision => $fees_comision)
+                                            @if ($key_comision == 0)
+                                            <thead>
+                                                <tr>
+                                                <th>Concepto</th>
+                                                <th>Periodicidad</th>
+                                                @if ($fees_comision->type == 1)
+                                                <th>Valor</th>
+                                                @else
+                                                <th>Porcentaje</th>
+                                                @endif
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @endif
+                                            <tr>
+                                                <td>{{ $fees_comision->concepto }}</td>
+                                                <td>  {{ isset(config('enums.periodicity')[$fees_comision->periodicidad]) ? config('enums.periodicity')[$fees_comision->periodicidad] : null }}</td>
+                                                @if ($fees_comision->type == 1)
+                                                <td> {{ format_price($fees_comision->valor) }}</td>
+                                                @else
+                                                <td>{{ $fees_comision->porcentaje }}</td>
+                                                @endif
+                                               
+                                            </tr>
+                                            
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="tab-pane {{ $section == 'caracteristicas' ? 'active' : null }}" id="tabCaracteristicas">

@@ -216,7 +216,10 @@ class FinancialProduct extends Model
             'doc_complementaria' => $product->doc_complementaria,
         );
 
-        $view_caracteristicas = \View::make('report.viewCaracteristicas', ['caracteristicas' => $caracteristicas, 'requisitos' => $requisitos])->render();
+        $fees_comision = ProductFee::where(['financial_product_id'=> $product->id, 'type' => 1])->get();
+        $fees_result = ProductFee::where(['financial_product_id'=> $product->id, 'type' => 2])->get();
+
+        $view_caracteristicas = \View::make('report.viewCaracteristicas', ['caracteristicas' => $caracteristicas, 'requisitos' => $requisitos, 'fees_comision' => $fees_comision, 'fees_result' => $fees_result])->render();
         $data = array(
             'caracteristicas' => $view_caracteristicas,
         );
