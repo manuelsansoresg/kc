@@ -194,7 +194,29 @@ class FinancialProduct extends Model
             'programa_educacion_financiera' => $programa_educacion_financiera,
             'referencia_comparativa' => $referencia_comparativa,
         );
-        $view_caracteristicas = \View::make('report.viewCaracteristicas', ['caracteristicas' => $caracteristicas])->render();
+
+        $historial_crediticio = $product->buen_historial_crediticio == 1 ? 'Sí' : 'No';
+        $historial_crediticio = $product->buen_historial_crediticio != 1 || $product->buen_historial_crediticio != 1 ? null : $historial_crediticio;
+        
+        $aval_garantia = $product->buen_aval_garantia == 1 ? 'Sí' : 'No';
+        $aval_garantia = $product->buen_aval_garantia != 1 || $product->buen_aval_garantia != 1 ? null : $aval_garantia;
+
+        $requisitos = array(
+            'tipo_persona' => $product->tipo_persona,
+            'edad' => $product->edad,
+            'antiguedad_laboral' => $product->antiguedad_laboral,
+            'antiguedad_residencial' => $product->antiguedad_residencial,
+            'ingreso_minimo' => format_price($product->ingreso_minimo),
+            'buen_historial_crediticio' => $historial_crediticio,
+            'aval_garantia' => $aval_garantia,
+            'recibir_sueldo_nomina' => $product->recibir_sueldo_nomina,
+            'identificacion_oficial_vig' => $product->identificacion_oficial_vig,
+            'comprobante_domicilio' => $product->comprobante_domicilio,
+            'comprobante_ingresos' => $product->comprobante_ingresos,
+            'doc_complementaria' => $product->doc_complementaria,
+        );
+
+        $view_caracteristicas = \View::make('report.viewCaracteristicas', ['caracteristicas' => $caracteristicas, 'requisitos' => $requisitos])->render();
         $data = array(
             'caracteristicas' => $view_caracteristicas,
         );

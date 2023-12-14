@@ -18,6 +18,82 @@
             <div class="tab-content">
 
                 <div class="tab-pane  {{ $section == 'requisitos' ? 'active' : null }}" id="tabRequisitos">
+                    <div class="container">
+                        <div class="row mt-3">
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Tipo de persona</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['tipo_persona'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Edad</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['edad'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Antiguedad laboral</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['antiguedad_laboral'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Antiguedad residencial</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['antiguedad_residencial'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Ingreso minimo mensual</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['ingreso_minimo'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Buen historial crediticio</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['buen_historial_crediticio'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Aval o garantía</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['aval_garantia'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Recibir sueldo en cuenta de nómina</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['recibir_sueldo_nomina'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Identificación oficial vigente</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['identificacion_oficial_vig'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Comprobante de domicilio</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['comprobante_domicilio'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Comprobante de ingresos</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['comprobante_ingresos'] }}
+                                </span>
+                            </div>
+                            <div class="col-12 col-md-6 mt-2">
+                                <span class="profile-ud-label fw-bold">Documentacion complementaria</span>
+                                <span class="profile-ud-value">
+                                    {{ $requisitos['doc_complementaria'] }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="tab-pane {{ $section == 'comisiones' ? 'active' : null }}" id="tabComisiones">
                 </div>
