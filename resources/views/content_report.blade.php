@@ -185,9 +185,11 @@
     
                                                 </li>
                                             </ul>
-                                            <div class="text-center mt-3">
-                                                <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver
-                                                    simulación</a>
+                                          
+                                            <div class="text-center mt-3 text-sm">
+                                                <a href="#">Requisitos</a>
+                                                <a href="#"> - Comisiones</a>
+                                                <a href="#" onclick="infoFinanciera({{ $financial_product->id }})"> - Características</a>
                                             </div>
                                         </div>
                                     </div>
@@ -742,6 +744,7 @@
     </div>
     
     @include('panel.modal.bank')    
+    @include('report.modal_info')    
 @endsection
 @section('add_script')
     @include('layouts.script_report')

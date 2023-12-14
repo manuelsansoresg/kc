@@ -142,6 +142,12 @@ class HomeController extends Controller
         return view('content_report', compact('banks', 'client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
     }
 
+    public function infoProduct(FinancialProduct $product)
+    {
+        $info = FinancialProduct::returnInfo($product);
+        return response()->json($info);
+    }
+
     public function storeReportProduct(Request $request)
     {
         $new_data = array(

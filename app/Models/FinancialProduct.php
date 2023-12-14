@@ -141,6 +141,66 @@ class FinancialProduct extends Model
         return $sql;
     }
 
+    public static function returnInfo($product)
+    {
+        $colateral_products   = config('financial_enums.colateral_products');
+        $periodicity_products = config('financial_enums.periodicity_products');
+        $interes_rates        = config('financial_enums.interes_rates');
+        $principal_pays       = config('financial_enums.principal_pays');
+        $colateral            = isset($colateral_products[$product->collateral_id]) ? $colateral_products[$product->collateral_id] : null;
+        $type_interest        = isset($interes_rates[$product->type_interest]) ? $interes_rates[$product->type_interest] : null;
+        
+
+        $get_periodicities    = ProductPeriodicity::where('product_id', $product->id)->get();
+        $get_payments         = ProductPaymentMethod::where('product_id', $product->id)->get();
+        $periodicity          = '';
+        $payment              = '';
+
+        foreach ($get_periodicities as $periodicities) {
+            $periodicity .= $periodicity_products[$periodicities->periodicity_id].',';
+        }
+        
+        foreach ($get_payments as $get_payment) {
+            $payment .= $principal_pays[$get_payment->payment_method_id].',';
+        }
+
+        $periodicity                      = trim($periodicity, ',');
+        $payment                          = trim($payment, ',');
+        $alcance_beneficios               = ($product->alcance_beneficios === '0') ? '' : $product->alcance_beneficios;
+        $restriccion_exclusion            = ($product->restriccion_exclusion === '0') ? '' : $product->restriccion_exclusion;
+        $programa_educacion_financiera    = ($product->programa_educacion_financiera === '0') ? '' : $product->programa_educacion_financiera;
+        $referencia_comparativa           = ($product->referencia_comparativa === '0') ? '' : $product->referencia_comparativa;
+
+
+        $caracteristicas = array(
+            'colateral' => $colateral,
+            'periodicidad' => $periodicity,
+            'max_credit_amount' => format_price($product->max_credit_amount),
+            'min_loan_amount' => format_price($product->min_loan_amount),
+            'min_deadline_month' => $product->min_deadline_month,
+            'max_deadline_month' => $product->max_deadline_month,
+            'type_interest' => $type_interest,
+            'minimum_interest_rate' => $product->minimum_interest_rate,
+            'annual_int_rate_iva' => $product->annual_int_rate_iva,
+            'payment' => $payment,
+            'resolution_time_hours' => $product->resolution_time_hours,
+            'delivery_time_hours' => $product->delivery_time_hours,
+            'moratorium_int_rate_vat' => $product->moratorium_int_rate_vat,
+            'means_channels_of_disposal' => $product->means_channels_of_disposal,
+            'coverage' => $product->coverage,
+            'purpose_of_loan' => $product->purpose_of_loan,
+            'alcance_beneficios' => $alcance_beneficios,
+            'restriccion_exclusion' => $restriccion_exclusion,
+            'programa_educacion_financiera' => $programa_educacion_financiera,
+            'referencia_comparativa' => $referencia_comparativa,
+        );
+        $view_caracteristicas = \View::make('report.viewCaracteristicas', ['caracteristicas' => $caracteristicas])->render();
+        $data = array(
+            'caracteristicas' => $view_caracteristicas,
+        );
+        return $data;
+     }
+
     public static function getByRate($credit, $request = null)
     {
        

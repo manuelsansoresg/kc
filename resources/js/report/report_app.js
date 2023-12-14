@@ -151,22 +151,17 @@ window.changeFilterReport = function(status, tipo, id)
     
 }
 
-/* if (document.getElementById('content-products')) {
-    refreshReportProduct();
-}
-
-function refreshReportProduct ()
+window.infoFinanciera = function(product_id)
 {
-    
     axios
-        .get('/reporte/products/show')
-        .then(function (response) {
-            let result = response.data;
-            $('#content-products').html(result.view);
-            Livewire.emit('reportRefresh');
-            
-        })
-        .catch(e => {
-            
-        });
-} */
+    .get('/reporte/'+product_id+'/info')
+    .then(function (response) {
+        let result = response.data;
+       $('#content-info').html(result.caracteristicas);
+       $('#modal-info').modal('show');
+
+    })
+    .catch(e => {
+        // Manejar errores
+    });
+}

@@ -42,6 +42,8 @@ Route::get('slack/notification', ['\App\Http\Controllers\HomeController', 'slack
 
 
 Route::get('reporte/{history_id}', ['\App\Http\Controllers\HomeController', 'report']);
+Route::get('reporte/{product}/info', ['\App\Http\Controllers\HomeController', 'infoProduct']);
+
 Route::post('reporte/products/store', ['\App\Http\Controllers\HomeController', 'storeReportProduct']);
 Route::get('reporte/products/show', ['\App\Http\Controllers\HomeController', 'productsShow']);
 
