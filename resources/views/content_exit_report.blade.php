@@ -93,7 +93,7 @@
                                             @if ($status_email == true && $is_tramitar == false)
                                                 <p class="h4 fw-bold pb-3">{{ $text1_email }}</p>
                                             @endif
-                                            @if ($client->email == '' && $is_email_update == false )
+                                            @if ($client->email == '' && $is_email_update == false && $is_tramitar == false)
                                                <div class="row justify-content-center">
                                                     <div class="col-12 col-md-6">
                                                         <form action="" id="frm-report-email">
@@ -120,7 +120,7 @@
                                             @if ($status_email == true && $is_tramitar == false)
                                             <p class="h4 fw-bold pb-3">{{ $text1_email }}</p>
                                             @endif
-                                            @if ($client->email == '' && $is_email_update == false )
+                                            @if ($client->email == '' && $is_email_update == false && $is_tramitar == false)
                                                <div class="row justify-content-center">
                                                     <div class="col-12 col-md-6">
                                                         <form action="" id="frm-report-email">
