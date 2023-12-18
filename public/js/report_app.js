@@ -6503,6 +6503,23 @@ window.infoFinanciera = function (product_id, section) {
   })["catch"](function (e) {// Manejar errores
   });
 };
+
+$("#frm-report-email").submit(function (event) {
+  event.preventDefault(); // Obtén referencia al formulario por su ID
+
+  var form = document.getElementById('frm-report-email'); // Crea un objeto FormData con los datos del formulario
+
+  var formData = new FormData(form);
+  axios.post('/reporte/product/email/update', formData).then(function (response) {
+    var result = response.data;
+    var credit_id = $('#credit_id').val();
+    var is_app = $('#is_app').val();
+    var is_email_update = $('#is_email_update').val(); // Recargar la página
+
+    window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&is_email_update=true';
+  })["catch"](function (e) {// Manejar errores
+  });
+});
 })();
 
 /******/ })()

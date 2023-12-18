@@ -192,7 +192,28 @@ class HomeController extends Controller
     public function exitReport(Credit $credit)
     {
         $product = FinancialProduct::find($credit->financial_product_id);
-        return view('content_exit_report', compact('product'));
+        $status_email = true;
+        if ($product!= null && $product->is_tramitar == 1 && $product->is_vincular_banco == 1 && ($credit != null && $credit->bank_id === null)) {
+            $status_email = true; //*no 
+        }
+        FinancialProduct::returnInfo($product, $credit, true);
+        $view_info = FinancialProduct::returnInfo($product);
+        $client           = ClientPerson::find($credit->client_person_id);
+        return view('content_exit_report', compact('product', 'status_email',  'view_info', 'credit', 'client'));
+    }
+
+    public function updateAndSendEmail(Request $request)
+    {
+        $data             = $request->data;
+        $credit           = Credit::find($request->credit_id);
+        $client           = ClientPerson::find($credit->client_person_id);
+        $client->email    = $data['email'];
+        $client->update();
+        $product          = FinancialProduct::find($request->product_id);
+        
+        
+        FinancialProduct::returnInfo($product, $credit, true);
+       
     }
 
     public function method($history_id)

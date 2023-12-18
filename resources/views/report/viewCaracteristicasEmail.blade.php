@@ -1,9 +1,77 @@
-<div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Informacion</title>
+</head>
+<body>
+    <table class="table">
+       <tbody>
+        <tr>
+            <td colspan="2"> <b>REQUISITOS</b> </td>
+        </tr>
+        <tr>
+            <td>Tipo de persona</td>
+            <td>{{ $requisitos['tipo_persona'] }}</td>
+        </tr>
+        <tr>
+            <td>Edad</td>
+            <td>{{ $requisitos['edad'] }}</td>
+        </tr>
+        <tr>
+            <td>Antiguedad laboral</td>
+            <td>{{ $requisitos['antiguedad_laboral'] }}</td>
+        </tr>
+        <tr>
+            <td>Antiguedad residencial</td>
+            <td>{{ $requisitos['antiguedad_residencial'] }}</td>
+        </tr>
+        <tr>
+            <td>Ingreso minimo mensual</td>
+            <td>{{ $requisitos['ingreso_minimo'] }}</td>
+        </tr>
+        <tr>
+            <td>Buen historial crediticio</td>
+            <td>{{ $requisitos['buen_historial_crediticio'] }}</td>
+        </tr>
+        <tr>
+            <td>Aval o garantía</td>
+            <td>{{ $requisitos['aval_garantia'] }}</td>
+        </tr>
+        <tr>
+            <td>Recibir sueldo en cuenta de nómina</td>
+            <td>{{ $requisitos['recibir_sueldo_nomina'] }}</td>
+        </tr>
+        <tr>
+            <td>Identificación oficial vigente</td>
+            <td>{{ $requisitos['identificacion_oficial_vig'] }}</td>
+        </tr>
+        <tr>
+            <td>Comprobante de domicilio</td>
+            <td>{{ $requisitos['comprobante_domicilio'] }}</td>
+        </tr>
+        <tr>
+            <td>Comprobante de ingresos</td>
+            <td>{{ $requisitos['comprobante_ingresos'] }}</td>
+        </tr>
+        <tr>
+            <td>Documentacion complementaria</td>
+            <td>{{ $requisitos['doc_complementaria'] }}</td>
+        </tr>
+       </tbody>
+    </table>
+   
+</body>
+</html>
+{{-- <div class="container">
     <div class="row">
         <div class="col-12">
-            @php
-                $section = isset($_GET["section"])? $_GET["section"] : 'requisitos';
-            @endphp
+           
             <ul class="nav nav-tabs">
                 <li class="nav-item"> <a class="nav-link {{ $section == 'requisitos' ? 'active' : null }}" data-bs-toggle="tab"
                         href="#tabRequisitos">REQUISITOS</a> 
@@ -20,78 +88,7 @@
                 <div class="tab-pane  {{ $section == 'requisitos' ? 'active' : null }}" id="tabRequisitos">
                     <div class="container">
                         <div class="row mt-3">
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Tipo de persona</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['tipo_persona'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Edad</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['edad'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Antiguedad laboral</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['antiguedad_laboral'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Antiguedad residencial</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['antiguedad_residencial'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Ingreso minimo mensual</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['ingreso_minimo'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Buen historial crediticio</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['buen_historial_crediticio'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Aval o garantía</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['aval_garantia'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Recibir sueldo en cuenta de nómina</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['recibir_sueldo_nomina'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Identificación oficial vigente</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['identificacion_oficial_vig'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Comprobante de domicilio</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['comprobante_domicilio'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Comprobante de ingresos</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['comprobante_ingresos'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Documentacion complementaria</span>
-                                <span class="profile-ud-value">
-                                    {{ $requisitos['doc_complementaria'] }}
-                                </span>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -104,9 +101,9 @@
                             <div class="col-12 mt-3">
                                 @foreach ($fees_comision as $key => $fees)
                                     @if ($fees->type == 1)
-                                        <p class="mt-1">{{ $fees->concepto }} - ${{ format_price($fees->valor) }} {{ isset(config('enums.periodicity_comision')[$fees->periodicidad]) ? config('enums.periodicity_comision')[$fees->periodicidad] : null }}</p>
+                                        <p class="mt-1">{{ $fees->concepto }} - ${{ format_price($fees->valor) }} {{ isset(config('enums.periodicity')[$fees->periodicidad]) ? config('enums.periodicity')[$fees->periodicidad] : null }}</p>
                                     @else
-                                        <p class="mt-1">{{ $fees->concepto }} - {{ $fees->porcentaje }}% {{ $fees->referencia }} {{ isset(config('enums.periodicity_comision')[$fees->periodicidad]) ? config('enums.periodicity_comision')[$fees->periodicidad] : null }}</p>
+                                        <p class="mt-1">{{ $fees->concepto }} - {{ $fees->porcentaje }}% {{ $fees->referencia }} {{ isset(config('enums.periodicity')[$fees->periodicidad]) ? config('enums.periodicity')[$fees->periodicidad] : null }}</p>
                                     @endif
                                     
                                 @endforeach
@@ -118,9 +115,9 @@
                                
                                 @foreach ($fees_result as $key_comision => $fees_comision)
                                     @if ($fees_comision->type == 1)
-                                        <p class="mt-1">{{ $fees_comision->concepto }} - ${{ format_price($fees_comision->valor) }} {{ isset(config('enums.periodicity_comision')[$fees_comision->periodicidad]) ? config('enums.periodicity_comision')[$fees_comision->periodicidad] : null }}</p>
+                                        <p class="mt-1">{{ $fees_comision->concepto }} - ${{ format_price($fees_comision->valor) }} {{ isset(config('enums.periodicity')[$fees_comision->periodicidad]) ? config('enums.periodicity')[$fees_comision->periodicidad] : null }}</p>
                                     @else
-                                        <p class="mt-1">{{ $fees_comision->concepto }} - {{ $fees_comision->porcentaje }}% {{ $fees_comision->referencia }} {{ isset(config('enums.periodicity_comision')[$fees_comision->periodicidad]) ? config('enums.periodicity_comision')[$fees_comision->periodicidad] : null }}</p>
+                                        <p class="mt-1">{{ $fees_comision->concepto }} - {{ $fees_comision->porcentaje }}% {{ $fees_comision->referencia }} {{ isset(config('enums.periodicity')[$fees_comision->periodicidad]) ? config('enums.periodicity')[$fees_comision->periodicidad] : null }}</p>
                                     @endif   
                                 @endforeach
                                         
@@ -271,9 +268,6 @@
                 </div>
             </div>
         </div>
-        {{-- <div class="col-12">
-            <span
-            class="preview-title-lg overline-title text-primary ">CARACTERÍSTICAS</span>
-        </div> --}}
+    
         
-</div>
+</div> --}}
