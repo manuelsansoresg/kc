@@ -72,7 +72,7 @@ function verifificarTramitar(credit_id, financial_id, type, is_tramitar)
                     console.log(response.data);
                     let reason = response.data;
                     if (is_tramitar == 1) {
-                        window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app;
+                        window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app+'&is_tramitar=true';
                     } else {
                         window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app+'&type=1';
                     }

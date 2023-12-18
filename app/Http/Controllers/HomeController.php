@@ -91,6 +91,7 @@ class HomeController extends Controller
         $agreement            = $credit->creditAgreement;
         $financials           = $agreement != null ? $agreement->financialAgreement : null;
         $financial_products   = FinancialProduct::getByRate($credit);
+        //dd($financial_products);
         $new_financials       = FinancialProduct::customSortFinancials($financial_products);
         $existing_ids = $new_financials->pluck('id')->toArray();
         $final_financials = FinancialProduct::customSortFinancials($financial_products->whereNotIn('id', $existing_ids), true);

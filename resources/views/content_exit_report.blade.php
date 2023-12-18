@@ -14,6 +14,7 @@
     $lnk_app = isset($_GET['is_app']) ? '?is_app=true' : null;
     $is_app = isset($_GET['is_app']) ? true : false;
     $is_email_update = isset($_GET['is_email_update']) ? true : false;
+    $is_tramitar = isset($_GET['is_tramitar']) ? true : false;
     $type = isset($_GET['type']) ? true : false;
 
     $text1          = 'Debido a las características de este tipo de crédito, no podemos ayudarte con el trámite, pero podemos apoyarte a resolver las dudas que tengas.';
@@ -32,6 +33,9 @@
     if ($type == true) {
         $text1 = 'Debido a las características de este tipo de crédito, no podemos ayudarte con el trámite, pero podemos apoyarte a resolver las dudas que tengas.';
         $text2 = 'Debido a las características de este tipo de crédito, no podemos ayudarte con el trámite, pero podemos apoyarte a resolver las dudas que tengas.';
+    }
+    if ($is_tramitar == true) {
+        $text1 = $text2;
     }
     $text3 = 'Si tienes alguna duda, no dudes en contactarnos. <i class="fas fa-smile-beam text-warning "></i>';
 @endphp
@@ -53,7 +57,7 @@
                                     <h4 class="mb-4 aos-init aos-animate display-7" data-aos="fade-up">
                                         
                                         <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
-                                        @if ($type == 1)
+                                        @if ($is_tramitar == true)
                                         ¡Listo!
                                         @else
                                         ¡Genial!
@@ -64,7 +68,7 @@
                                     @else
                                     <h2 class="mb-4 aos-init aos-animate display-7 mt-3" data-aos="fade-up">
                                         <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
-                                        @if ($type == 1)
+                                        @if ($is_tramitar == true)
                                         ¡Listo!
                                         @else
                                         ¡Genial!
@@ -86,7 +90,7 @@
                                     @if ($dayOK && $timeOK)
                                         @if ($is_app == false)
                                         <h2 class="display-7 mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-                                            @if ($status_email == true)
+                                            @if ($status_email == true && $is_tramitar == false)
                                                 <p class="h4 fw-bold pb-3">{{ $text1_email }}</p>
                                             @endif
                                             @if ($client->email == '' && $is_email_update == false )
@@ -113,7 +117,7 @@
 
                                         @else
                                         <h6 class="mb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
-                                            @if ($status_email == true)
+                                            @if ($status_email == true && $is_tramitar == false)
                                             <p class="h4 fw-bold pb-3">{{ $text1_email }}</p>
                                             @endif
                                             @if ($client->email == '' && $is_email_update == false )
@@ -164,7 +168,7 @@
                                         @endif
                                     @endif
                                     
-                                    @if ($status_email == true)
+                                    @if ($status_email == true && $is_tramitar == false)
                                         <div class="col-12 py-3">
                                             {!! $view_info['caracteristicas'] !!}
                                         </div>
