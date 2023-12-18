@@ -221,7 +221,7 @@ class FinancialProduct extends Model
         $fees_comision = ProductFee::where(['financial_product_id'=> $product->id, 'type' => 1])->get();
         $fees_result = ProductFee::where(['financial_product_id'=> $product->id, 'type' => 2])->get();
         if ($is_email == false) {
-            $view_caracteristicas = \View::make('report.viewCaracteristicas', ['caracteristicas' => $caracteristicas, 'requisitos' => $requisitos, 'fees_comision' => $fees_comision, 'fees_result' => $fees_result])->render();
+            $view_caracteristicas = \View::make('report.viewCaracteristicas', ['caracteristicas' => $caracteristicas,  'tramite' => $product->proceso_tramite, 'requisitos' => $requisitos, 'fees_comision' => $fees_comision, 'fees_result' => $fees_result])->render();
             $data = array(
                 'caracteristicas' => $view_caracteristicas,
             );
@@ -233,6 +233,7 @@ class FinancialProduct extends Model
             $view_caracteristicas = \View::make('report.viewCaracteristicasEmail', ['caracteristicas' => $caracteristicas, 'requisitos' => $requisitos, 'fees_comision' => $fees_comision, 'fees_result' => $fees_result])->render();
             $new_fees_comision = array();
             $new_fees_result = array();
+            
             //dd($fees_comision);
             foreach ($fees_comision as $fees) {
                 if ($fees->type == 1) {
@@ -269,7 +270,7 @@ class FinancialProduct extends Model
                 'alias_producto' => $product->alias,
                 'fees_comision' => $new_fees_comision, 
                 'fees_result' => $new_fees_result,
-                'fees_result' => $new_fees_result,
+                'tramite' => $product->proceso_tramite,
             );
             $data_sendgrid = array_merge($data_sendgrid, $requisitos, $caracteristicas);
             $send_grid = new Csendgrid($client->email, 'creacion cuenta');

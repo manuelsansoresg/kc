@@ -199,6 +199,7 @@ class HomeController extends Controller
         FinancialProduct::returnInfo($product, $credit, true);
         $view_info = FinancialProduct::returnInfo($product);
         $client           = ClientPerson::find($credit->client_person_id);
+        
         return view('content_exit_report', compact('product', 'status_email',  'view_info', 'credit', 'client'));
     }
 

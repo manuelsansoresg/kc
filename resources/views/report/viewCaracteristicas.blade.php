@@ -2,9 +2,12 @@
     <div class="row">
         <div class="col-12">
             @php
-                $section = isset($_GET["section"])? $_GET["section"] : 'requisitos';
+                $section = isset($_GET["section"])? $_GET["section"] : 'tramite';
             @endphp
             <ul class="nav nav-tabs">
+                <li class="nav-item"> <a class="nav-link {{ $section == 'tramite' ? 'active' : null }}" data-bs-toggle="tab"
+                        href="#tabTramite">TRÁMITE</a> 
+                </li>
                 <li class="nav-item"> <a class="nav-link {{ $section == 'requisitos' ? 'active' : null }}" data-bs-toggle="tab"
                         href="#tabRequisitos">REQUISITOS</a> 
                 </li>
@@ -17,6 +20,13 @@
             </ul>
             <div class="tab-content">
 
+                <div class="tab-pane  {{ $section == 'tramite' ? 'active' : null }}" id="tabTramite">
+                    <div class="container">
+                        <div class="row mt-3">
+                            {!! $tramite !!}
+                        </div>
+                    </div>
+                </div>
                 <div class="tab-pane  {{ $section == 'requisitos' ? 'active' : null }}" id="tabRequisitos">
                     <div class="container">
                         <div class="row mt-3">
