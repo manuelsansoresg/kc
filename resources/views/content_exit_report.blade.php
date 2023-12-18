@@ -23,7 +23,7 @@
     
     $status_correo = true;
     if ($client->email == '' && $is_email_update == false) {
-        $text1_email = 'Por favor, proporciona tu dirección de correo electrónico a continuación para que podamos enviarte todos los detalles importantes. Una vez que lo hayas hecho, te enviaremos un correo electrónico con la información que estás buscando.';
+        $text1_email = 'Por favor, proporciona tu dirección de correo electrónico a continuación para que podamos enviarte esta información.';
     }
     if ($is_email_update ) {
         # code...
@@ -50,7 +50,8 @@
                             <div class="row position-relative">
                                 <div class="col-lg-9 col-md-10 mx-auto text-center">
                                     @if ($is_app == false)
-                                    <h2 class="mb-4 aos-init aos-animate display-2" data-aos="fade-up">
+                                    <h4 class="mb-4 aos-init aos-animate display-7" data-aos="fade-up">
+                                        
                                         <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
                                         @if ($type == 1)
                                         ¡Listo!
@@ -59,9 +60,9 @@
                                         @endif
                                         
                                         <img style="width: 40px" src="{{ asset('images/7626666left.png') }}" alt="">
-                                     </h2>
+                                     </h4>
                                     @else
-                                    <h2 class="mb-4 aos-init aos-animate display-1 mt-3" data-aos="fade-up">
+                                    <h2 class="mb-4 aos-init aos-animate display-7 mt-3" data-aos="fade-up">
                                         <img style="width: 40px" src="{{ asset('images/7626666.png') }}" alt="">
                                         @if ($type == 1)
                                         ¡Listo!
@@ -88,7 +89,7 @@
                                             @if ($status_email == true)
                                                 <p class="h4 fw-bold pb-3">{{ $text1_email }}</p>
                                             @endif
-                                            @if ($status_correo == true && $status_email == true && $is_email_update != true)
+                                            @if ($client->email == '' && $is_email_update == false )
                                                <div class="row justify-content-center">
                                                     <div class="col-12 col-md-6">
                                                         <form action="" id="frm-report-email">
@@ -115,7 +116,7 @@
                                             @if ($status_email == true)
                                             <p class="h4 fw-bold pb-3">{{ $text1_email }}</p>
                                             @endif
-                                            @if ($status_correo == true && $status_email == true && $is_email_update != true)
+                                            @if ($client->email == '' && $is_email_update == false )
                                                <div class="row justify-content-center">
                                                     <div class="col-12 col-md-6">
                                                         <form action="" id="frm-report-email">
@@ -204,16 +205,24 @@
                                         </div>
                                         @endif
                                     @else
-                                    <div class="d-flex flex-wrap justify-content-center pb-3">
-                                        <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://kaaxclub.com" style="text-transform: inherit">OK 
-                                            </a>
+                                    <div class="row justify-content-center">
+                                        <div class="col-6 col-md-3 text-center">
                                             <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
-                                                >Contacto 
-                                                <img width="18" class="mt-n2" src="/images/whatsapp-logo-1-1.png" alt="">
+                                            >
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    Contacto 
+                                                    <img width="18" class="ms-2" src="/images/whatsapp-logo-1-1.png" alt="">
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-6 col-md-3 text-center">
+                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://kaaxclub.com" style="text-transform: inherit">OK 
                                             </a>
                                         </div>
                                     </div>
+
+                                    
+                                   
                                     @endif
 
                                     
