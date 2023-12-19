@@ -24,7 +24,7 @@
     
     $status_correo = true;
     if ($client->email == '' && $is_email_update == false) {
-        $text1_email = 'Por favor, proporciona tu dirección de correo electrónico a continuación para que podamos enviarte esta información.';
+        $text1_email = 'Proporciona tu email para que te enviemos esta información.';
     }
     if ($is_email_update ) {
         # code...
@@ -98,7 +98,7 @@
                                                     <div class="col-12 col-md-6">
                                                         <form action="" id="frm-report-email">
                                                             <div class="mb-3">
-                                                                <input type="email" class="form-control" name="data[email]" placeholder="">
+                                                                <input type="email" class="form-control" name="data[email]" placeholder="Escribe tu email">
                                                             </div>
                                                             <div class="mb-3 ">
                                                                 <button class="btn btn-primary">Enviar</button>
@@ -125,7 +125,7 @@
                                                     <div class="col-12 col-md-6">
                                                         <form action="" id="frm-report-email">
                                                             <div class="mb-3">
-                                                                <input type="email" class="form-control" name="data[email]" placeholder="">
+                                                                <input type="email" class="form-control" name="data[email]" placeholder="Escribe tu email">
                                                             </div>
                                                             <div class="mb-3 ">
                                                                 <button class="btn btn-primary">Enviar</button>
