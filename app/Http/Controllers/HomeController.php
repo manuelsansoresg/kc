@@ -18,6 +18,7 @@ use App\Models\TokenForms;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
@@ -45,6 +46,14 @@ class HomeController extends Controller
     public function surveyHola()
     {
         return view('quiz.survey_lead');
+    }
+
+    public function whatsapp()
+    {
+        $whatsappUrl = 'https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%20información';
+
+        // Redireccionar a la URL de WhatsApp
+        return Redirect::to($whatsappUrl);
     }
 
     function slackNotification()

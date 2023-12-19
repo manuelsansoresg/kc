@@ -37,6 +37,7 @@ Route::get('/condiciones', function () {
 });
 
 Route::get('hola', ['\App\Http\Controllers\HomeController', 'surveyHola']);
+Route::get('whatsapp', ['\App\Http\Controllers\HomeController', 'whatsapp']);
 
 Route::get('slack/notification', ['\App\Http\Controllers\HomeController', 'slackNotification']);
 
