@@ -50,7 +50,7 @@
                 <section class="position-relative">
                     <div class="bg-dark w-100 h-50 bottom-0 start-0 position-absolute"></div>
                     <div class="container position-relative">
-                        <div class="px-4 {{ $is_app == false ? 'py-7 py-lg-9' : 'py-0 py-lg-9' }} rounded-4 position-relative z-index-1 overflow-hidden text-white bg-secondary">
+                        <div class="px-4 {{ $is_app == false ? 'py-7 py-lg-9' : 'py-0 py-lg-9' }} rounded-4 position-relative z-index-1 overflow-hidden text-white bg-dark2">
                             <div class="row position-relative">
                                 <div class="col-lg-9 col-md-10 mx-auto text-center">
                                     @if ($is_app == false)

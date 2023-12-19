@@ -273,6 +273,11 @@
 
 /* animation confeti */
 
+.bg-dark2{
+   --bs-bg-opacity: 1;
+   background-color: rgb(52, 54, 58) !important;
+}
+
 /* mediaquery */
 @media (max-width: 576px) {
     .animated-title {

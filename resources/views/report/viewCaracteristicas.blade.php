@@ -31,73 +31,73 @@
                     <div class="container">
                         <div class="row mt-3">
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Tipo de persona</span>
+                                <span class="profile-ud-label fw-bold text-primary">Tipo de persona</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['tipo_persona'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Edad</span>
+                                <span class="profile-ud-label fw-bold text-primary">Edad</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['edad'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Antiguedad laboral</span>
+                                <span class="profile-ud-label fw-bold text-primary">Antiguedad laboral</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['antiguedad_laboral'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Antiguedad residencial</span>
+                                <span class="profile-ud-label fw-bold text-primary">Antiguedad residencial</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['antiguedad_residencial'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Ingreso minimo mensual</span>
+                                <span class="profile-ud-label fw-bold text-primary">Ingreso minimo mensual</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['ingreso_minimo'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Buen historial crediticio</span>
+                                <span class="profile-ud-label fw-bold text-primary">Buen historial crediticio</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['buen_historial_crediticio'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Aval o garantía</span>
+                                <span class="profile-ud-label fw-bold text-primary">Aval o garantía</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['aval_garantia'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Recibir sueldo en cuenta de nómina</span>
+                                <span class="profile-ud-label fw-bold text-primary">Recibir sueldo en cuenta de nómina</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['recibir_sueldo_nomina'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Identificación oficial vigente</span>
+                                <span class="profile-ud-label fw-bold text-primary">Identificación oficial vigente</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['identificacion_oficial_vig'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Comprobante de domicilio</span>
+                                <span class="profile-ud-label fw-bold text-primary">Comprobante de domicilio</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['comprobante_domicilio'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Comprobante de ingresos</span>
+                                <span class="profile-ud-label fw-bold text-primary">Comprobante de ingresos</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['comprobante_ingresos'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Documentacion complementaria</span>
+                                <span class="profile-ud-label fw-bold text-primary">Documentacion complementaria</span>
                                 <span class="profile-ud-value">
                                     {{ $requisitos['doc_complementaria'] }}
                                 </span>
@@ -143,74 +143,74 @@
                     <div class="container">
                         <div class="row mt-3">
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Colateral (Garantía):</span>
+                                <span class="profile-ud-label fw-bold text-primary">Colateral (Garantía):</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['colateral'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Periodicidad:</span>
+                                <span class="profile-ud-label fw-bold text-primary">Periodicidad:</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['periodicidad'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Monto máximo de crédito:</span>
+                                <span class="profile-ud-label fw-bold text-primary">Monto máximo de crédito:</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['max_credit_amount'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Monto minimo del crédito:</span>
+                                <span class="profile-ud-label fw-bold text-primary">Monto minimo del crédito:</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['min_loan_amount'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Plazo mínimo en meses:</span>
+                                <span class="profile-ud-label fw-bold text-primary">Plazo mínimo en meses:</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['min_deadline_month'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Plazo máximo en meses:</span>
+                                <span class="profile-ud-label fw-bold text-primary">Plazo máximo en meses:</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['max_deadline_month'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Tipo de interés:</span>
+                                <span class="profile-ud-label fw-bold text-primary">Tipo de interés:</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['type_interest'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Tasa de interés mínima anual con IVA:</span>
+                                <span class="profile-ud-label fw-bold text-primary">Tasa de interés mínima anual con IVA:</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['minimum_interest_rate'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">tasa de interés máxima anual con IVA:</span>
+                                <span class="profile-ud-label fw-bold text-primary">tasa de interés máxima anual con IVA:</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['annual_int_rate_iva'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Medio de pago:</span>
+                                <span class="profile-ud-label fw-bold text-primary">Medio de pago:</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['payment'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Tiempo de resolución en horas
+                                <span class="profile-ud-label fw-bold text-primary">Tiempo de resolución en horas
                                     :</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['resolution_time_hours'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Tiempo de entrega en horas
+                                <span class="profile-ud-label fw-bold text-primary">Tiempo de entrega en horas
                     
                                     :</span>
                                 <span class="profile-ud-value">
@@ -218,7 +218,7 @@
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Tasa de interés moratoria con IVA
+                                <span class="profile-ud-label fw-bold text-primary">Tasa de interés moratoria con IVA
                     
                                     :</span>
                                 <span class="profile-ud-value">
@@ -226,7 +226,7 @@
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Medios y canales de disposición
+                                <span class="profile-ud-label fw-bold text-primary">Medios y canales de disposición
                     
                                     :</span>
                                 <span class="profile-ud-value">
@@ -234,47 +234,34 @@
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Cobertura
+                                <span class="profile-ud-label fw-bold text-primary">Cobertura
                                     :</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['coverage'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Destino del crédito
+                                <span class="profile-ud-label fw-bold text-primary">Destino del crédito
                                     :</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['purpose_of_loan'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Alcance  o  beneficios
+                                <span class="profile-ud-label fw-bold text-primary">Alcance  o  beneficios
                                     :</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['alcance_beneficios'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Restricciones o exclusiones
+                                <span class="profile-ud-label fw-bold text-primary">Restricciones o exclusiones
                                     :</span>
                                 <span class="profile-ud-value">
                                     {{ $caracteristicas['restriccion_exclusion'] }}
                                 </span>
                             </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Programas de educacion financiera
-                                    :</span>
-                                <span class="profile-ud-value">
-                                    {{ $caracteristicas['programa_educacion_financiera'] }}
-                                </span>
-                            </div>
-                            <div class="col-12 col-md-6 mt-2">
-                                <span class="profile-ud-label fw-bold">Referencias corporativas
-                                    :</span>
-                                <span class="profile-ud-value">
-                                    {{ $caracteristicas['referencia_comparativa'] }}
-                                </span>
-                            </div>
+                            
                         </div>
                     </div>
 
