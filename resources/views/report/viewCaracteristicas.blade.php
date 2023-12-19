@@ -23,7 +23,7 @@
                 <div class="tab-pane  {{ $section == 'tramite' ? 'active' : null }}" id="tabTramite">
                     <div class="container">
                         <div class="row mt-3">
-                            {!! $tramite !!}
+                            {!! $tramite != 0 ? $tramite : null !!}
                         </div>
                     </div>
                 </div>
