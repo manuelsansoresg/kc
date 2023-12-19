@@ -313,9 +313,10 @@
         
                                                         </li>
                                                     </ul>
-                                                    <div class="text-center mt-3">
-                                                        <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver
-                                                            simulación</a>
+                                                    <div class="text-center mt-3 text-sm">
+                                                        <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'requisitos')">Requisitos</a>
+                                                        <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'comisiones')"> - Comisiones</a>
+                                                        <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'caracteristicas')"> - Características</a>
                                                     </div>
                                                 </div>
                                             </div>

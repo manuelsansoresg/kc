@@ -6499,6 +6499,7 @@ window.infoFinanciera = function (product_id, section) {
   axios.get('/reporte/' + product_id + '/info?section=' + section).then(function (response) {
     var result = response.data;
     $('#content-info').html(result.caracteristicas);
+    $('#tabTramite').hide();
     $('#modal-info').modal('show');
   })["catch"](function (e) {// Manejar errores
   });

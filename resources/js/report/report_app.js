@@ -158,6 +158,7 @@ window.infoFinanciera = function(product_id, section)
     .then(function (response) {
         let result = response.data;
        $('#content-info').html(result.caracteristicas);
+       $('#tabTramite').hide();
        $('#modal-info').modal('show');
 
     })

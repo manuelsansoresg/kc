@@ -5,7 +5,7 @@
                 $section = isset($_GET["section"])? $_GET["section"] : 'tramite';
             @endphp
             <ul class="nav nav-tabs">
-                <li class="nav-item"> <a class="nav-link {{ $section == 'tramite' ? 'active' : null }}" data-bs-toggle="tab"
+                <li class="nav-item" id="tabTramite"> <a class="nav-link {{ $section == 'tramite' ? 'active' : null }}" data-bs-toggle="tab"
                         href="#tabTramite">TRÁMITE</a> 
                 </li>
                 <li class="nav-item"> <a class="nav-link {{ $section == 'requisitos' ? 'active' : null }}" data-bs-toggle="tab"
