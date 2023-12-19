@@ -17,6 +17,7 @@ class ProductFee extends Model
         'porcentaje',
         'referencia',
         'type',
+        'is_valor_fijo',
     ];
 
     public static function saveEdit($request)

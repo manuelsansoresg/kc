@@ -54,13 +54,13 @@
                                     <ul class="custom-control-group g-3 align-center flex-wrap">
                                         <li>
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" onclick="showValorFijo(true)" id="type_active"  name="data[type]"  value="1">
+                                                <input type="radio" class="custom-control-input" onclick="showValorFijo(true)" id="type_active"  name="data[is_valor_fijo]"  value="1">
                                                 <label class="custom-control-label" for="type_active">Sí  </label>
                                             </div>
                                         </li>
                                         <li>
                                             <div class="custom-control custom-radio">
-                                                <input type="radio" class="custom-control-input" onclick="showValorFijo(false)" id="type_pending" name="data[type]" value="0">
+                                                <input type="radio" class="custom-control-input" onclick="showValorFijo(false)" id="type_pending" name="data[is_valor_fijo]" value="0">
                                                 <label class="custom-control-label" for="type_pending">No</label>
                                             </div>
                                         </li>

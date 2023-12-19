@@ -105,7 +105,7 @@ $().ready(function () {
                 $('#periodicidad').val(result.periodicidad);
                 $('#moneda').val(result.moneda);
                 
-                if (result.type === 1) {
+                if (result.is_valor_fijo == 1) {
                     $('#type_active').prop('checked', true).click();
                 } else {
                     $('#type_pending').prop('checked', true).click();
