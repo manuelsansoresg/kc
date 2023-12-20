@@ -43,7 +43,8 @@ class ActionManychatController extends Controller
     public function storeLead(Request $request)
     {
         $data           = $request->all();
-        $manychat_id    = $data['id'];
+        $manychat_id    = 24082108694769684;
+        //$manychat_id    = $data['id'];
         $lead           = Lead::find($manychat_id);
         if ($lead != null) {
             $template       = TemplateValues::STRATEGY['lead'];
