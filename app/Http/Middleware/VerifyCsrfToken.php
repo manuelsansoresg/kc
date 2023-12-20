@@ -25,6 +25,7 @@ class VerifyCsrfToken extends Middleware
         '/slack/notification',
         '/reporte/*',
         '/action/manychat/{section}',
+        '/action/manychat/lead/store',
         '/panel/user/search'
     ];
 }

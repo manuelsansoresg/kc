@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Lib\Manychat;
 use App\Models\Agreement;
 use App\Models\ApiActionManychat;
 use App\Models\Bank;
 use App\Models\Lead;
+use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
 class ActionManychatController extends Controller
@@ -36,6 +38,17 @@ class ActionManychatController extends Controller
         }
         return response()->json(500);
         
+    }
+
+    public function storeLead(Request $request)
+    {
+        $data           = $request->all();
+        $manychat_id    = $data['id'];
+        $lead           = Lead::find($manychat_id);
+        $template       = TemplateValues::STRATEGY['lead'];
+        (new $template)->move($lead->id);
+        $manychat = new Manychat();
+        $manychat->addTag('UrlReporte', $manychat_id);
     }
 
     public function saveOrganization($section, $action, $value, $manychat_id)
