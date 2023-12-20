@@ -43,15 +43,14 @@ class ActionManychatController extends Controller
     public function storeLead(Request $request)
     {
         $data           = $request->all();
-        $manychat_id    = 24082108694769684;
-        //$manychat_id    = $data['id'];
+        $manychat_id    = $data['id'];
         $lead           = Lead::where('manychat_id', $manychat_id)->first();
         if ($lead != null) {
             $template       = TemplateValues::STRATEGY['lead'];
             $history_id = (new $template)->move($lead->id);
             $manychat = new Manychat();
             $data = array(
-                'URL Reporte' => 'https://test.kaaxclub.com/reporte/'.$history_id->id,
+                'URL Reporte' => 'https://kaaxclub.com/reporte/'.$history_id->id,
 
             );
             $manychat->setCustomFields($data, $manychat_id);
