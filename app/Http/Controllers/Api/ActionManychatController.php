@@ -53,7 +53,7 @@ class ActionManychatController extends Controller
             $manychat->addTag('UrlReporte', $manychat_id);
             return response()->json(200);
         }
-        return response()->json(500);
+        return response()->json($lead);
     }
 
     public function saveOrganization($section, $action, $value, $manychat_id)
