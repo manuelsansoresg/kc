@@ -1142,7 +1142,9 @@ window.modalValidate = function (id, model) {
   })["catch"](function (e) {});
 };
 
-window.desition = function (credit_id, financial_id, type) {
+window.desition = function (history_id, credit_id, financial_id, type, status_id, is_elegir) {
+  var url_redirect = type == 1 ? '/panel/kc-check-up' : '/panel/kc-swap';
+  var param_get = is_elegir == 0 ? '?is_notify=true' : '?is_notify=false';
   Swal.fire({
     title: '¿Estás seguro?',
     icon: 'warning',
@@ -1151,13 +1153,13 @@ window.desition = function (credit_id, financial_id, type) {
     cancelButtonText: 'Mejor no'
   }).then(function (result) {
     if (result.value) {
-      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
+      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept" + param_get).then(function (response) {
         var reason = response.data;
 
-        if (type == 1) {
-          window.location = '/panel/kc-check-up';
+        if (is_elegir == 0) {
+          deliveryFinish(history_id, status_id, url_redirect, false);
         } else {
-          window.location = '/panel/kc-swap';
+          window.location = url_redirect;
         }
       })["catch"](function (e) {});
     }

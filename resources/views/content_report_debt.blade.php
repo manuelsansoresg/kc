@@ -157,7 +157,7 @@ $chart4 = $my_product_financial;
                                             <span class="fw-bold text-muted">/5 </span>
 
                                             <small class="text-muted font-monospace mb-4 d-block"></small><button
-                                                onclick="desitionReport({{ $credit->id }}, {{ $financial_product->id }}, 2, {{ $financial_product->is_tramitar  }})"
+                                                onclick="desitionReport({{ $history_id}}, {{ $status_id }}, {{ $credit->id }}, {{ $financial_product->id }}, 2, {{ $financial_product->is_tramitar  }})"
                                                 type="button"
                                                 class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
                                                 {{ $financial_product->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
@@ -286,7 +286,7 @@ $chart4 = $my_product_financial;
                                                     <span class="fw-bold text-muted">/5 </span>
     
                                                     <small class="text-muted font-monospace mb-4 d-block"></small><button
-                                                        onclick="desitionReport({{ $credit->id }}, {{ $final_financials->id }}, 2, {{ $final_financials->is_tramitar }}))"
+                                                        onclick="desitionReport({{ $history_id}}, {{ $status_id }}, {{ $credit->id }}, {{ $final_financials->id }}, 2, {{ $final_financials->is_tramitar }}))"
                                                         type="button"
                                                         class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
                                                         {{ $final_financials->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}

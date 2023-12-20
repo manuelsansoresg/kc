@@ -6417,7 +6417,31 @@ window.changeCreditBank = function (credit_id, id) {
 
 window.closeCreditBank = function (credit_id, id) {};
 
-function verifificarTramitar(credit_id, financial_id, type, is_tramitar) {
+window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
+  if (is_modal == true) {
+    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        actionDeliveryFinish(id, statusid, urlredirect);
+      }
+    });
+  } else {
+    actionDeliveryFinish(id, statusid, urlredirect);
+  }
+};
+
+function actionDeliveryFinish(id, statusid, urlredirect) {
+  axios.get("/panel/action/" + id + "/" + statusid + "/finish").then(function (response) {
+    window.location = urlredirect;
+  })["catch"](function (e) {});
+}
+
+function verifificarTramitar(history_id, status_id, credit_id, financial_id, type, is_tramitar) {
   $('#content-bank').html('');
   $('#new_banks').hide();
   axios.get('/panel/kc-check-up/' + credit_id + '/' + type + '/report/verify').then(function (response) {
@@ -6429,12 +6453,12 @@ function verifificarTramitar(credit_id, financial_id, type, is_tramitar) {
       var is_app = $('#is_app').val();
       axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
         console.log(response.data);
-        var reason = response.data;
 
         if (is_tramitar == 1) {
           window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&is_tramitar=true';
         } else {
-          window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&type=1';
+          //window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app+'&type=1';
+          deliveryFinish(history_id, status_id, '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&type=1', false);
         }
       })["catch"](function (e) {});
     } else {

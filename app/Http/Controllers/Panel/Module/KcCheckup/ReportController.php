@@ -115,37 +115,41 @@ class ReportController extends Controller
        
         $credit     = Credit::find($credit_id);
         $get_financial_product = FinancialProduct::find($financial_id);
-
+        $is_notify = isset($_GET['is_notify']) ? $_GET['is_notify'] : 'false';
         if ($credit != null) {
             if ($type == 1) { // credito nuevo
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION, null, false);
-                
-
-                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_DESITION, $credit->id, 1);//marcar como finalizada
-                File::updateModel($credit->id, HistoryLog::KC_CONTROL_DESK, [HistoryLog::KC_CHECK_UP, HistoryLog::ADD_PROSPECT]);
                 
                 $credit->applied_financial = $get_financial_product->financial_id;
                 $credit->financial_product_id = $get_financial_product->id;
                 $credit->update();
+                if ($is_notify == 'false') {
+                    HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION, null, false);
+                    HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_DESITION, $credit->id, 1);//marcar como finalizada
+                    File::updateModel($credit->id, HistoryLog::KC_CONTROL_DESK, [HistoryLog::KC_CHECK_UP, HistoryLog::ADD_PROSPECT]);
+                    
+                    $history = HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CHECK_UP);
+                    
+                    $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
+                    (new $notification_add)->send($credit->id);
+                }
                 
-                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CHECK_UP);
-                
-                $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
-                (new $notification_add)->send($credit->id);
             } else {//reduccion
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, null, false);
-              
 
-                HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, $credit->id, 1);
-                File::updateModel($credit->id, HistoryLog::KC_SWAP, [HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::ADD_PROSPECT]);
                 $credit->applied_financial = $get_financial_product->financial_id;
                 $credit->financial_product_id = $get_financial_product->id;
                 $credit->update();
+                if ($is_notify == false) {
+                    HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, null, false);
 
-                HistoryLog::move($credit->id, HistoryLog::KC_SWAP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
-                
-                $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcSwap'];
-                (new $notification_add)->send($credit->id);
+                    HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, $credit->id, 1);
+                    File::updateModel($credit->id, HistoryLog::KC_SWAP, [HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::ADD_PROSPECT]);
+                    
+
+                    $history = HistoryLog::move($credit->id, HistoryLog::KC_SWAP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
+                    
+                    $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcSwap'];
+                    (new $notification_add)->send($credit->id);
+                }
             }
         }
         return response()->json('ok');
