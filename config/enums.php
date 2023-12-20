@@ -221,6 +221,7 @@ return [
         'Origen' =>  10202833,
         'Servicio KC' =>  10202817,
         'Tipo de crédito' =>  10202818,
+        'URL Reporte' =>  10298820,
     )
     
 ];
