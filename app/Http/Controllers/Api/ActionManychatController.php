@@ -49,6 +49,7 @@ class ActionManychatController extends Controller
         (new $template)->move($lead->id);
         $manychat = new Manychat();
         $manychat->addTag('UrlReporte', $manychat_id);
+        return response()->json(200);
     }
 
     public function saveOrganization($section, $action, $value, $manychat_id)
