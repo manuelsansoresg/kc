@@ -45,7 +45,7 @@ class ActionManychatController extends Controller
         $data           = $request->all();
         $manychat_id    = 24082108694769684;
         //$manychat_id    = $data['id'];
-        $lead           = Lead::find($manychat_id);
+        $lead           = Lead::where('manychat_id', $manychat_id)->first();
         if ($lead != null) {
             $template       = TemplateValues::STRATEGY['lead'];
             (new $template)->move($lead->id);
@@ -53,7 +53,7 @@ class ActionManychatController extends Controller
             $manychat->addTag('UrlReporte', $manychat_id);
             return response()->json(200);
         }
-        return response()->json($lead);
+        return response()->json(500);
     }
 
     public function saveOrganization($section, $action, $value, $manychat_id)
