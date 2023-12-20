@@ -44,6 +44,7 @@ class ActionController extends Controller
     {
         $credit = Credit::find($history->id_rel);
         $credit_id = $credit->id;
+        //*agregar que cuando viene de control desk haga lo mismo si viniera de delivery
         
         if ($status_id == HistoryLog::KC_DELIVERY_FORM_STEP_3) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit_id, 1);
@@ -70,6 +71,17 @@ class ActionController extends Controller
             //desactivate delivery
             HistoryLog::where(['id_rel' => $credit_id, 'status_id' => HistoryLog::KC_DELIVERY, 'status' => 1])
                         ->update(['status' => 0]);
+        } elseif ($status_id == HistoryLog::KC_CONTROL_DESK) {
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, HistoryLog::KC_PAYMENT, null, false);
+            // send push
+            $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcPayment'];
+            (new $notification_add)->send($credit->id);
+            $credit->delivered = 1;
+
+            HistoryLog::where(['id_rel' => $credit_id, 'status_id' => HistoryLog::KC_CONTROL_DESK, 'status' => 1])
+                        ->update(['status' => 0]);
+
         }
         $credit->update();
     }

@@ -1057,11 +1057,29 @@ function move(id, form, modal, datatable, title, msg) {
   })["catch"](function (e) {});
 }
 
-window.deliveryFinish = function (id, statusid, urlredirect) {
+window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
+  if (is_modal == true) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        actionDeliveryFinish(id, statusid, urlredirect);
+      }
+    });
+  } else {
+    actionDeliveryFinish(id, statusid, urlredirect);
+  }
+};
+
+function actionDeliveryFinish(id, statusid, urlredirect) {
   axios.get("/panel/action/" + id + "/" + statusid + "/finish").then(function (response) {
     window.location = urlredirect;
   })["catch"](function (e) {});
-};
+}
 
 window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#frm-archive').trigger("reset");
