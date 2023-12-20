@@ -45,11 +45,14 @@ class ActionManychatController extends Controller
         $data           = $request->all();
         $manychat_id    = $data['id'];
         $lead           = Lead::find($manychat_id);
-        $template       = TemplateValues::STRATEGY['lead'];
-        (new $template)->move($lead->id);
-        $manychat = new Manychat();
-        $manychat->addTag('UrlReporte', $manychat_id);
-        return response()->json(200);
+        if ($lead != null) {
+            $template       = TemplateValues::STRATEGY['lead'];
+            (new $template)->move($lead->id);
+            $manychat = new Manychat();
+            $manychat->addTag('UrlReporte', $manychat_id);
+            return response()->json(200);
+        }
+        return response()->json(500);
     }
 
     public function saveOrganization($section, $action, $value, $manychat_id)
