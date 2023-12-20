@@ -17,6 +17,7 @@ class LeadStrategyTemplate implements TemplateInterface
     public function move($id, $is_report = false)
     {
         $lead = Lead::find($id);
+        $history_id = null;
         if ($lead !== null) {
             $product = $lead->productLead;
             //* add clientslog archive conversion
@@ -75,7 +76,7 @@ class LeadStrategyTemplate implements TemplateInterface
             //*desactivar acciones prospectos
             Lead::deleteActions($lead->id);
             //* create history in client person
-            HistoryLog::move($client_person->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
+            $history_id = HistoryLog::move($client_person->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
             //* create history in credit
             HistoryLog::move($credit->id, HistoryLog::CREATE_CLIENT_PERSON, HistoryLog::CREATE_CLIENT_PERSON);
             //*in progress
@@ -99,6 +100,7 @@ class LeadStrategyTemplate implements TemplateInterface
             Lead::createClientPerson($lead->id, $is_report, $history->id);
 
         }
+        return $history_id;
     }
 
     public function breadcrumb($history, $type = null)

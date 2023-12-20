@@ -48,9 +48,13 @@ class ActionManychatController extends Controller
         $lead           = Lead::where('manychat_id', $manychat_id)->first();
         if ($lead != null) {
             $template       = TemplateValues::STRATEGY['lead'];
-            (new $template)->move($lead->id);
+            $history_id = (new $template)->move($lead->id);
             $manychat = new Manychat();
-            $manychat->addTag('UrlReporte', $manychat_id);
+            $data = array(
+                'URL Reporte' => 'https://test.kaaxclub.com/reporte/'.$history_id,
+
+            );
+            $manychat->setCustomFields($data, $manychat_id);
             return response()->json(200);
         }
         return response()->json(500);
