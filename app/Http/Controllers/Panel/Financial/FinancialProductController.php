@@ -56,7 +56,7 @@ class FinancialProductController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->is_required == 'true') {
+        /* if ($request->is_required == 'true') {
             if ($request->product_id == null) {
                 $request->validate(
                     [
@@ -76,7 +76,7 @@ class FinancialProductController extends Controller
                     ]
                 );
             }
-        }
+        } */
         $financial = FinancialProduct::saveEdit($request);
         return response()->json($financial);
     }

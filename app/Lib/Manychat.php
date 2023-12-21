@@ -5,6 +5,11 @@ class Manychat
 {
 
     private $token = '861553:f8756129f4f78730b10f9acdeaacf5bd';
+    private $tags = array(
+        'Prospecto' => 40308012,
+        
+        
+    );
 
     private function setCurl($path, $data = null , $method = 'POST')
     {
@@ -71,6 +76,24 @@ class Manychat
         );
         return self::setCurl('subscriber/setCustomFields', $data);
     }
+
     
     
+    public function addTag($tag, $subscriber_id)
+    {
+        $data = array(
+            'subscriber_id' => $subscriber_id,
+            'tag_id' => $this->tags[$tag],
+        );
+        return self::setCurl('subscriber/addTag', $data);
+    }
+    
+    public function removeTag($tag, $subscriber_id)
+    {
+        $data = array(
+            'subscriber_id' => $subscriber_id,
+            'tag_id' => $this->tags[$tag],
+        );
+        return self::setCurl('subscriber/removeTag', $data);
+    }
 }

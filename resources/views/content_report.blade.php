@@ -25,11 +25,11 @@
                             <div class="row align-items-center">
                                 <div class="col-md-12 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0 py-0 py-md-5" data-aos="fade-up"
                                     data-aos-delay="100">
-                                    <div class="row align-items-center py-0 py-md-5">
+                                    <div class="row align-items-center py-3 py-md-5">
                                         <div class="animated-title">
                                             <div class="text-top ">
                                                 <div class="textcontainer">
-                                                    <span class="particletext confetti h1 text-left">¡Felicidades {{ $client->name }}!</span>
+                                                    <span class="particletext confetti h1 text-left col-12">¡Felicidades {{ $client->name }}!</span>
                                                 </div>
                                                {{--  <div>
                                                     <span class="h1">¡Felicidades! </span>
@@ -81,7 +81,7 @@
         </svg>
         <div class="container pt-3 pt-lg-5 pb-9">
             <div class="row pb-8 pb-lg-5">
-                <div class="col-lg-10 col-xl-8 mx-auto text-center">
+                <div class="col-lg-10 col-xl-8 mx-auto text-center text-calificacion">
                     <h1 class="display-4 mb-0" data-aos="fade-up" data-aos-delay="100">Calificación de KaaxClub</h1>
                     <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
                         Analizamos a detalle y otorgamos una puntuación a cada financiera para ayudarte a tomar la mejor
@@ -114,12 +114,12 @@
                                                 <p class="mb-0 text-muted"></p>
                                         </div>
                                         <div class="card-body pt-0 pb-4 px-4">
-                                            <span class="h4 display-9"><span class="fw-light small"></span>Calificación:
-                                                {{ reduceDecimal($financial_product->rate_kc, 2) }}  </span>
+                                            <span class="h4 display-9 fw-normal"><span class="fw-normal small"></span>Calificación:
+                                                <span class="fw-bold">{{ reduceDecimal($financial_product->rate_kc, 2) }} </span> </span>
                                             <span class="fw-bold text-muted">/5 </span>
     
                                             <small class="text-muted font-monospace mb-4 d-block"></small><button
-                                                onclick="desitionReport({{ $credit->id }}, {{ $financial_product->id }}, 1 , {{ $financial_product->is_tramitar  }})"
+                                                onclick="desitionReport({{ $history_id}}, {{ $status_id }}, {{ $credit->id }}, {{ $financial_product->id }}, 1 , {{ $financial_product->is_tramitar  }})"
                                                 type="button"
                                                 class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
                                                 {{ $financial_product->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
@@ -179,15 +179,17 @@
                                                 <li class="mb-1">
                                                     <span
                                                         class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                    <span>Consulta buró de crédito :</span><span
+                                                    <span>Buró de crédito :</span><span
                                                         class="text-muted">  {{ $financial_product->consulta_buro == 1 ? 'Sí' : 'No' }} </span>
                                                    
     
                                                 </li>
                                             </ul>
-                                            <div class="text-center mt-3">
-                                                <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver
-                                                    simulación</a>
+                                          
+                                            <div class="text-center mt-3 text-sm">
+                                                <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'requisitos')">Requisitos</a>
+                                                <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'comisiones')"> - Comisiones</a>
+                                                <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'caracteristicas')"> - Características</a>
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +207,7 @@
                                             <label for="staticEmail" class="col-10 col-md-6 col-form-label text-white">Mostrar opciones que soliciten aval:</label>
                                             <div class="col-2 col-md-6 ">
                                                 <div class="form-check form-switch mt-2">
-                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->aval_o_garantia === null ? 1 : $credit->aval_o_garantia}}, 2)" name="aval_o_garantia" id="switchaval" value="1" {{ $credit->aval_o_garantia == 1 ? 'checked' : null }}><label for="switchaval" class="form-check-label"></label>
+                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->aval_o_garantia === null ? 1 : $credit->aval_o_garantia}}, 2, 'switchaval')" name="aval_o_garantia" id="switchaval" value="1" {{ $credit->aval_o_garantia == 1 ? 'checked' : null }}><label for="switchaval" class="form-check-label"></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -213,7 +215,7 @@
                                             <label for="staticEmail" class="col-10 col-md-6 col-form-label text-white">Mostrar opciones que consultan buró de crédito:</label>
                                             <div class="col-2 col-md-6 ">
                                                 <div class="form-check form-switch mt-2">
-                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->consulta_buro === null ? 1 : $credit->consulta_buro }}, 1)" name="consulta_buro" id="switchburo" value="1" {{ $credit->consulta_buro == 1 ? 'checked' : null }}><label for="switchburo" class="form-check-label"></label>
+                                                    <input type="checkbox" class="form-check-input" onchange="changeFilterReport({{$credit->consulta_buro === null ? 1 : $credit->consulta_buro }}, 1, 'switchburo')" name="consulta_buro" id="switchburo" value="1" {{ $credit->consulta_buro == 1 ? 'checked' : null }}><label for="switchburo" class="form-check-label"></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -238,12 +240,15 @@
                                                         <p class="mb-0 text-muted"></p>
                                                 </div>
                                                 <div class="card-body pt-0 pb-4 px-4">
-                                                    <span class="h4 display-9"><span class="fw-light small"></span>Calificación:
-                                                        {{ reduceDecimal($final_financials->rate_kc, 2) }}</span>
+                                                    <span class="h4 display-9 fw-normal"><span class="fw-light small"></span>Calificación:
+                                                        <span class="fw-bold">
+                                                            {{ reduceDecimal($final_financials->rate_kc, 2) }}
+                                                        </span>
+                                                    </span>
                                                     <span class="fw-bold text-muted">/5 </span>
     
                                                     <small class="text-muted font-monospace mb-4 d-block"></small><button
-                                                        onclick="desitionReport({{ $credit->id }}, {{ $final_financials->id }}, 1, {{ $final_financials->is_tramitar }})"
+                                                        onclick="desitionReport({{ $history_id}}, {{ $status_id }}, {{ $credit->id }}, {{ $final_financials->id }}, 1, {{ $final_financials->is_tramitar }})"
                                                         type="button"
                                                         class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
                                                         {{ $final_financials->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
@@ -302,15 +307,16 @@
                                                         <li class="mb-1">
                                                             <span
                                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
-                                                            <span>Consulta buró de crédito :</span><span
+                                                            <span>Buró de crédito :</span><span
                                                                 class="text-muted">  {{ $final_financials->consulta_buro == 1 ? 'Sí' : 'No' }} </span>
                                                            
         
                                                         </li>
                                                     </ul>
-                                                    <div class="text-center mt-3">
-                                                        <a href="#" onclick="scrollToAnchor('section-simulacion')">Ver
-                                                            simulación</a>
+                                                    <div class="text-center mt-3 text-sm">
+                                                        <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'requisitos')">Requisitos</a>
+                                                        <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'comisiones')"> - Comisiones</a>
+                                                        <a href="#" onclick="infoFinanciera({{ $financial_product->id }}, 'caracteristicas')"> - Características</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -387,7 +393,7 @@
                         <div class="tab-content">
                             <div class="tab-pane fade active show" id="analytics1" role="tabpanel">
                                 <div class="row align-items-center">
-                                    <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0" data-aos="fade-up"
+                                    <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0 order-2 order-md-1" data-aos="fade-up"
                                         data-aos-delay="100">
                                         <div class="row align-items-center">
                                             <div class="col-12">
@@ -396,7 +402,7 @@
     
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-lg-5 mx-auto">
+                                    <div class="col-md-6 col-lg-5 mx-auto order-1 order-md-2">
                                         <h2 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4"
                                             data-aos="fade-up"> Costo Anual Total Real
                                         </h2>
@@ -513,7 +519,7 @@
                         <div class="tab-content">
                             <div class="tab-pane fade active show" id="analytics1" role="tabpanel">
                                 <div class="row align-items-center">
-                                    <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0" data-aos="fade-up"
+                                    <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0 order-2 order-md-1" data-aos="fade-up"
                                         data-aos-delay="100">
                                         <div class="row align-items-center">
                                             <div class="col-12">
@@ -522,7 +528,7 @@
     
                                         </div>
                                     </div>
-                                    <div class="col-md-6 col-lg-5 mx-auto">
+                                    <div class="col-md-6 col-lg-5 mx-auto order-1 order-md-2">
                                         <h2 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4"
                                             data-aos="fade-up"> Plazo máximo
                                         </h2>
@@ -552,178 +558,182 @@
     
         {{-- contrato --}}
         <a name="section-contrato" />
-        <section class="bg-dark position-relative">
-            <div class="bg-blur position-absolute start-0 top-0 w-100 h-100 opacity-25"></div><svg
-                class="position-absolute start-0 bottom-0 w-100 fill-body-bg" height="40%" preserveAspectRatio="none"
-                viewBox="0 0 1200 145" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M0 0L50 16.9167C100 33.8333 200 67.6667 300 77.3333C400 87 500 72.5 600 62.8333C700 53.1667 800 48.3333 900 55.5833C1000 62.8333 1100 82.1667 1150 91.8333L1200 101.5V145H1150C1100 145 1000 145 900 145C800 145 700 145 600 145C500 145 400 145 300 145C200 145 100 145 50 145H0V0Z"
-                    fill="currentColor"></path>
-            </svg>
-            <div class="container pt-11 pt-lg-13 position-relative z-index-1">
-                <div class="row pb-9 pb-lg-11 pt-lg-5">
-                    <div class="col-lg-11 mx-auto text-center">
-    
-                        <div class="row align-items-center">
-                            <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
+        <section class="position-relative bg-style-1">
+            <div class="container py-9 py-lg-11 position-relative z-index-1">
+                <div class="mb-6 mb-lg-9 mx-auto text-center w-lg-50">
+       
+       
+                </div>
+                <div class="row justify-content-between align-items-start">
+                    <div class="col-12">
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" id="analytics1" role="tabpanel">
                                 <div class="row align-items-center">
-                                    <h2 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4" data-aos="fade-up">
-                                        Contrato
-                                    </h2>
-                                    <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80 text-start"
-                                        data-aos="fade-up" data-aos-delay="100">Revisamos por ti cada uno de los contratos,
-                                        esos que nunca se leen, en busca de cláusulas abusivas o engañosas que puedan
-                                        perjudicarte.
-                                    </p>
-    
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-5 mx-auto" data-aos="fade-up" data-aos-delay="100">
-    
-                                <div class="container">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped text-center text-nowrap mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th>
-                                                        <h6 class="mb-0">Calificación
-                                                        </h6>
-                                                    </th>
-    
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th scope="row" class="text-start text-small">
-                                                        {{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}
-                                                    </th>
-                                                    <td><span class="fs-6 text-small">
-                                                            <span class="fw-light small"></span>
-                                                            <span class="calificacion">Calificación:</span>
-                                                            {{ isset($chart1->rate_contract) ? $chart1->rate_contract : null }}<span
-                                                                class="small">/5</span>
-                                                        </span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row" class="text-start text-small text-small">
-                                                        {{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}
-                                                    </th>
-                                                    <td><span class="fs-6 text-small">
-                                                            <span class="fw-light small"></span>
-                                                            <span class="calificacion">Calificación:</span>
-                                                            {{ isset($chart2->rate_contract) ? $chart2->rate_contract : null }}<span
-                                                                class="small">/5</span>
-                                                        </span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row" class="text-start text-small">
-                                                        {{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}
-                                                    </th>
-                                                    <td><span class="fs-6 text-small">
-                                                            <span class="fw-light small"></span>
-                                                            <span class="calificacion">Calificación:</span>
-                                                            {{ isset($chart3->rate_contract) ? $chart3->rate_contract : null }}<span
-                                                                class="small">/5</span>
-                                                        </span></td>
-                                                </tr>
-                                            </tbody>
-    
-                                        </table>
+                                    <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
+                                        <div class="row align-items-center">
+                                            <h1 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4"
+                                                data-aos="fade-up" data-aos-delay="100">Contrato.</h1>
+                                            <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
+                                                Revisamos por ti cada uno de los contratos,
+                                                esos que nunca se leen, en busca de cláusulas abusivas o engañosas que puedan
+                                                perjudicarte.
+       
+                                            </p>
+       
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-5 mx-auto" data-aos="fade-up" data-aos-delay="100">
+       
+                                        <div class="container">
+       
+                                           <div class="table-responsive">
+                                               <table class="table table-striped text-center text-nowrap mb-0">
+                                                   <thead>
+                                                       <tr>
+                                                           <th></th>
+                                                           <th>
+                                                               <h6 class="mb-0">Calificación
+                                                               </h6>
+                                                           </th>
+           
+                                                       </tr>
+                                                   </thead>
+                                                   <tbody>
+                                                       <tr>
+                                                           <th scope="row" class="text-start text-small">
+                                                               {{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}
+                                                           </th>
+                                                           <td><span class="fs-6 text-small">
+                                                                   <span class="fw-light small"></span>
+                                                                   <span class="calificacion">Calificación:</span>
+                                                                   {{ isset($chart1->rate_contract) ? $chart1->rate_contract : null }}<span
+                                                                       class="small">/5</span>
+                                                               </span></td>
+                                                       </tr>
+                                                       <tr>
+                                                           <th scope="row" class="text-start text-small text-small">
+                                                               {{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}
+                                                           </th>
+                                                           <td><span class="fs-6 text-small">
+                                                                   <span class="fw-light small"></span>
+                                                                   <span class="calificacion">Calificación:</span>
+                                                                   {{ isset($chart2->rate_contract) ? $chart2->rate_contract : null }}<span
+                                                                       class="small">/5</span>
+                                                               </span></td>
+                                                       </tr>
+                                                       <tr>
+                                                           <th scope="row" class="text-start text-small">
+                                                               {{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}
+                                                           </th>
+                                                           <td><span class="fs-6 text-small">
+                                                                   <span class="fw-light small"></span>
+                                                                   <span class="calificacion">Calificación:</span>
+                                                                   {{ isset($chart3->rate_contract) ? $chart3->rate_contract : null }}<span
+                                                                       class="small">/5</span>
+                                                               </span></td>
+                                                       </tr>
+                                                   </tbody>
+           
+                                               </table>
+                                           </div>
+                                        </div>
+       
+       
                                     </div>
                                 </div>
                             </div>
+       
+       
+                            <div></div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+       
         {{-- contrato --}}
     
         {{-- privacidad de datos --}}
         <a name="section-priv-datos" />
-        <section class="bg-dark position-relative">
-            <div class="bg-blur position-absolute start-0 top-0 w-100 h-100 opacity-25"></div><svg
-                class="position-absolute start-0 bottom-0 w-100 fill-body-bg" height="40%" preserveAspectRatio="none"
-                viewBox="0 0 1200 145" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                    d="M0 0L50 16.9167C100 33.8333 200 67.6667 300 77.3333C400 87 500 72.5 600 62.8333C700 53.1667 800 48.3333 900 55.5833C1000 62.8333 1100 82.1667 1150 91.8333L1200 101.5V145H1150C1100 145 1000 145 900 145C800 145 700 145 600 145C500 145 400 145 300 145C200 145 100 145 50 145H0V0Z"
-                    fill="currentColor"></path>
-            </svg>
-            <div class="container pt-11 pt-md-13 position-relative z-index-1">
-                <div class="row pb-9 pb-lg-11 pt-lg-5">
-                    <div class="col-lg-11 mx-auto text-center">
-    
-    
-                        <div class="row align-items-center">
-                            <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0">
+        <section class="position-relative bg-dark">
+            <div class="container py-9 py-lg-11 position-relative z-index-1">
+                <div class="row justify-content-between align-items-start">
+                    <div class="col-12">
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" id="analytics1" role="tabpanel">
                                 <div class="row align-items-center">
-                                    <div class="container">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped text-center text-nowrap mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th>
-                                                            <h6 class="mb-0">Calificación
-                                                            </h6>
-                                                        </th>
-    
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th scope="row" class="text-start text-small">
-                                                            {{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}
-                                                        </th>
-                                                        <td><span class="fs-6 text-small">
-                                                                <span class="fw-light small"></span>
-                                                                <span class="calificacion">Calificación:</span>
-                                                                {{ isset($chart1->rate_privacity) ? $chart1->rate_privacity : null }}<span
-                                                                    class="small">/5</span>
-                                                            </span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="text-start text-small">
-                                                            {{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}
-                                                        </th>
-                                                        <td><span class="fs-6 text-small">
-                                                                <span class="fw-light small"></span>
-                                                                <span class="calificacion">Calificación:</span>
-                                                                {{ isset($chart2->rate_privacity) ? $chart2->rate_privacity : null }}<span
-                                                                    class="small">/5</span>
-                                                            </span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row" class="text-start text-small">
-                                                            {{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}
-                                                        </th>
-                                                        <td><span class="fs-6 text-small">
-                                                                <span class="fw-light small"></span>
-                                                                <span class="calificacion">Calificación:</span>
-                                                                {{ isset($chart3->rate_privacity) ? $chart3->rate_privacity : null }}<span
-                                                                    class="small">/5</span>
-                                                            </span></td>
-                                                    </tr>
-                                                </tbody>
-    
-                                            </table>
+                                    <div class="col-md-6 pe-md-5 pe-lg-7 col-sm-9 mb-6 mb-lg-0 order-2 order-md-1" data-aos="fade-up"
+                                        data-aos-delay="100">
+                                        <div class="row align-items-center">
+                                            <div class="container">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped text-center text-nowrap mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>
+                                                                    <h6 class="mb-0">Calificación
+                                                                    </h6>
+                                                                </th>
+            
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <th scope="row" class="text-start text-small">
+                                                                    {{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}
+                                                                </th>
+                                                                <td><span class="fs-6 text-small">
+                                                                        <span class="fw-light small"></span>
+                                                                        <span class="calificacion">Calificación:</span>
+                                                                        {{ isset($chart1->rate_privacity) ? $chart1->rate_privacity : null }}<span
+                                                                            class="small">/5</span>
+                                                                    </span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row" class="text-start text-small">
+                                                                    {{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}
+                                                                </th>
+                                                                <td><span class="fs-6 text-small">
+                                                                        <span class="fw-light small"></span>
+                                                                        <span class="calificacion">Calificación:</span>
+                                                                        {{ isset($chart2->rate_privacity) ? $chart2->rate_privacity : null }}<span
+                                                                            class="small">/5</span>
+                                                                    </span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row" class="text-start text-small">
+                                                                    {{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}
+                                                                </th>
+                                                                <td><span class="fs-6 text-small">
+                                                                        <span class="fw-light small"></span>
+                                                                        <span class="calificacion">Calificación:</span>
+                                                                        {{ isset($chart3->rate_privacity) ? $chart3->rate_privacity : null }}<span
+                                                                            class="small">/5</span>
+                                                                    </span></td>
+                                                            </tr>
+                                                        </tbody>
+            
+                                                    </table>
+                                                </div>
+                                            </div>
+        
                                         </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-5 mx-auto order-1 order-md-2">
+                                        <h2 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4"
+                                            data-aos="fade-up"> Privacidad de datos
+                                        </h2>
+                                        <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
+                                            La protección de tus datos personales es tu derecho. Leemos y revisamos los avisos de
+                                            privacidad para asegurarnos de que tus datos se usen de manera correcta
+        
+                                        </p>
+                                        
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-lg-5 mx-auto" data-aos="fade-up" data-aos-delay="100">
-                                <h2 class="position-relative ms-md-n3 ms-lg-0 ms-0 me-lg-n5 fs-1 mb-4" data-aos="fade-up">
-                                    Privacidad de datos
-                                </h2>
-                                <p class="mb-5 lead text-white text-opacity-75 mx-auto w-lg-80 text-start" data-aos="fade-up"
-                                    data-aos-delay="100">
-                                    La protección de tus datos personales es tu derecho. Leemos y revisamos los avisos de
-                                    privacidad para asegurarnos de que tus datos se usen de manera correcta
-    
-                                </p>
-    
-                            </div>
+                            <div></div>
                         </div>
                     </div>
                 </div>
@@ -735,6 +745,7 @@
     </div>
     
     @include('panel.modal.bank')    
+    @include('report.modal_info')    
 @endsection
 @section('add_script')
     @include('layouts.script_report')

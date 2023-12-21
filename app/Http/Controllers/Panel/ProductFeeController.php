@@ -59,6 +59,11 @@ class ProductFeeController extends Controller
        ]);
     }
 
+    public function showproductFee(ProductFee $productFee)
+    {
+        return response()->json($productFee);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -90,6 +95,6 @@ class ProductFeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        ProductFee::find($id)->delete();
     }
 }

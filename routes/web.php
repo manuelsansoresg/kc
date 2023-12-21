@@ -37,11 +37,14 @@ Route::get('/condiciones', function () {
 });
 
 Route::get('hola', ['\App\Http\Controllers\HomeController', 'surveyHola']);
+Route::get('whatsapp', ['\App\Http\Controllers\HomeController', 'whatsapp']);
 
 Route::get('slack/notification', ['\App\Http\Controllers\HomeController', 'slackNotification']);
 
 
 Route::get('reporte/{history_id}', ['\App\Http\Controllers\HomeController', 'report']);
+Route::get('reporte/{product}/info', ['\App\Http\Controllers\HomeController', 'infoProduct']);
+
 Route::post('reporte/products/store', ['\App\Http\Controllers\HomeController', 'storeReportProduct']);
 Route::get('reporte/products/show', ['\App\Http\Controllers\HomeController', 'productsShow']);
 
@@ -49,6 +52,7 @@ Route::get('app/reporte/{history_id}/{credit_id}', ['\App\Http\Controllers\HomeC
 Route::get('reporte/{history_id}/metodologia', ['\App\Http\Controllers\HomeController', 'method']);
 
 Route::get('reporte/{credit}/status/finish', ['\App\Http\Controllers\HomeController', 'exitReport']);
+Route::post('/reporte/product/email/update', ['\App\Http\Controllers\HomeController', 'updateAndSendEmail']);
 
 Route::get('credit-resume/{credit}', ['\App\Http\Controllers\HomeController', 'resumeCredit']);
 

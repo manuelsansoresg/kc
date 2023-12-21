@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Lib\Manychat;
 use App\Lib\Slack;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
@@ -310,6 +311,10 @@ class HistoryLog extends Model
     {
 
         if ($status_id == HistoryLog::LEAD_ARCHIVE) {
+            $get_lead = Lead::find($id_rel);
+            //*remover etiqueta manychat
+            $manychat = new Manychat();
+            $manychat->removeTag('Prospecto', $get_lead->manychat_id);
             //*desactivar acciones prospectos
             Lead::deleteActions($id_rel);
         }

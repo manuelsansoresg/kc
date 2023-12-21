@@ -710,6 +710,54 @@ $().ready(function () {
     });
   }
 
+  window.editProductFee = function (productFee, product_id, type) {
+    $('#frm-product-fees')[0].reset();
+    $('#product_fee').val(productFee);
+    $('#financial_product_id').val(product_id);
+    $('#comision_type').val(type);
+    axios.get("/panel/product-fee/" + productFee + '/showproductFee').then(function (response) {
+      var result = response.data;
+
+      if (result != null) {
+        $('#concepto').val(result.concepto);
+        $('#periodicidad').val(result.periodicidad);
+        $('#moneda').val(result.moneda);
+
+        if (result.is_valor_fijo == 1) {
+          $('#type_active').prop('checked', true).click();
+        } else {
+          $('#type_pending').prop('checked', true).click();
+        }
+
+        $('#valor').val(result.valor);
+        $('#porcentaje').val(result.porcentaje);
+        $('#referencia').val(result.referencia);
+        $('#modal-product-fees').modal('show');
+      }
+    })["catch"](function (e) {});
+  };
+  /* borrar comisiones */
+
+
+  window.deleteProductFee = function (product_fee_id) {
+    var product_id = $('#product_id').val();
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, elimina',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        axios["delete"]("/panel/product-fee/" + product_fee_id).then(function (response) {
+          getProductComision(product_id);
+        })["catch"](function (e) {});
+      }
+    });
+  };
+  /* borrar comisiones */
+
+
   if (document.getElementById('financial_product_id')) {
     var product_id = $('#product_id').val();
     getProductComision(product_id);
@@ -734,7 +782,8 @@ $().ready(function () {
     }
   }); //modal productfee
 
-  window.modalProductComision = function (product_id, type) {
+  window.modalProductComision = function (product_fee, product_id, type) {
+    $('#product_fee').val(product_fee);
     $('#financial_product_id').val(product_id);
     $('#comision_type').val(type);
     $('#modal-product-fees').modal('show');
@@ -1008,11 +1057,29 @@ function move(id, form, modal, datatable, title, msg) {
   })["catch"](function (e) {});
 }
 
-window.deliveryFinish = function (id, statusid, urlredirect) {
+window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
+  if (is_modal == true) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        actionDeliveryFinish(id, statusid, urlredirect);
+      }
+    });
+  } else {
+    actionDeliveryFinish(id, statusid, urlredirect);
+  }
+};
+
+function actionDeliveryFinish(id, statusid, urlredirect) {
   axios.get("/panel/action/" + id + "/" + statusid + "/finish").then(function (response) {
     window.location = urlredirect;
   })["catch"](function (e) {});
-};
+}
 
 window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#frm-archive').trigger("reset");
@@ -1075,7 +1142,9 @@ window.modalValidate = function (id, model) {
   })["catch"](function (e) {});
 };
 
-window.desition = function (credit_id, financial_id, type) {
+window.desition = function (history_id, credit_id, financial_id, type, status_id, is_elegir) {
+  var url_redirect = type == 1 ? '/panel/kc-check-up' : '/panel/kc-swap';
+  var param_get = is_elegir == 0 ? '?is_notify=true' : '?is_notify=false';
   Swal.fire({
     title: '¿Estás seguro?',
     icon: 'warning',
@@ -1084,13 +1153,13 @@ window.desition = function (credit_id, financial_id, type) {
     cancelButtonText: 'Mejor no'
   }).then(function (result) {
     if (result.value) {
-      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
+      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept" + param_get).then(function (response) {
         var reason = response.data;
 
-        if (type == 1) {
-          window.location = '/panel/kc-check-up';
+        if (is_elegir == 0) {
+          deliveryFinish(history_id, status_id, url_redirect, false);
         } else {
-          window.location = '/panel/kc-swap';
+          window.location = url_redirect;
         }
       })["catch"](function (e) {});
     }
@@ -4934,6 +5003,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var queryParam = new URLSearchParams(window.location.search).get('query');
   var table = NioApp.DataTable('#dt-search-user', {
     processing: true,
+    searching: false,
     responsive: {
       details: {
         renderer: function renderer(api, rowIdx, columns) {

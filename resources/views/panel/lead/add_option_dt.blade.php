@@ -99,10 +99,10 @@ $user = Auth::user();
                             <a class="pointer" onclick="moveModalLead('Archivar', {{ $id }}, '{{ $m_history::LEAD_ARCHIVE }}', '{{ $m_history::CREATE_PROSPECT }}', 'dt-lead')">
                                 <em class="icon ni ni-archive"></em><span>Archivar</span></a>
                         </li>
-                        <li>
+                        {{-- <li>
                             <a class="pointer" onclick="deleteLead({{ $id }})">
                                 <em class="icon ni ni-trash"></em><span>Borrar</span></a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
             </div>

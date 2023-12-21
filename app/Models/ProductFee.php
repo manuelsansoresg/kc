@@ -17,21 +17,20 @@ class ProductFee extends Model
         'porcentaje',
         'referencia',
         'type',
+        'is_valor_fijo',
     ];
 
     public static function saveEdit($request)
     {
         $data = $request->data;
         
-
-        $productFee = ProductFee::create($data);
-        /* if ($data['financial_product_id'] == null) {
+        if ($request->product_fee == 'null') {
+            $productFee = ProductFee::create($data);
         } else {
-            $productFee = ProductFee::find($request->product_id);
+            $productFee = ProductFee::find($request->product_fee);
             $productFee->fill($data);
             $productFee->update();
         }
-        return $productFee; */
         return $productFee;
     }
 

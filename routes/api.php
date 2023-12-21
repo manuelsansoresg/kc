@@ -31,3 +31,4 @@ Route::group(['prefix' => 'appkax'], function () {
 
 Route::post('lead', ['\App\Http\Controllers\Api\Campaign\LeadController', 'store']);
 Route::post('action/manychat/{section}', ['\App\Http\Controllers\Api\ActionManychatController', 'store']);
+Route::post('action/manychat/lead/store', ['\App\Http\Controllers\Api\ActionManychatController', 'storeLead']);

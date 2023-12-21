@@ -2,6 +2,7 @@
 @section('title', 'Perfíl cliente persona')
 
 @inject('m_lead', 'App\Models\Lead')
+@inject('m_client', 'App\Models\ClientPerson')
 @inject('m_history_log', 'App\Models\HistoryLog')
 @inject('m_action', 'App\Models\Action')
 
@@ -46,13 +47,15 @@
                             <div class="card-inner card-inner-lg">
                                 <div class="nk-block">
                                     <div class="nk-data data-list">
-                                        
+                                        @php
+                                            $tab = isset($_GET["tab"])? $_GET["tab"] : null;
+                                        @endphp
                                         <ul class="nav nav-tabs">
-                                            <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab"
+                                            <li class="nav-item"> <a class="nav-link {{ $tab == null ? 'active' : null}}" data-bs-toggle="tab"
                                                     href="#tabGeneral">General</a> </li>
                                             <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                     href="#tabHistorial">Historial</a> </li>
-                                            <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                            <li class="nav-item"> <a class="nav-link {{ $tab == 'credits' ? 'active' : null}}" data-bs-toggle="tab"
                                                     href="#tabCredits">Créditos</a> </li>
                                             <li class="nav-item nav-item-trigger d-xxl-none">
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
@@ -62,7 +65,7 @@
                                             
                                         </ul>
                                         <div class="tab-content">
-                                            <div class="tab-pane active" id="tabGeneral">
+                                            <div class="tab-pane {{ $tab == null ? 'active' : null}}" id="tabGeneral">
                                                 <div class="card-inner">
                                                     <div class="nk-block">
                                                         <div class="nk-block-head nk-block-head-line">
@@ -198,7 +201,7 @@
                                                     
                                                 @endforeach
                                             </div>
-                                            <div class="tab-pane" id="tabCredits">
+                                            <div class="tab-pane {{ $tab == 'credits' ? 'active' : null}}" id="tabCredits">
                                                 <table class="table table-tranx">
                                                     <thead>
                                                         <tr class="tb-tnx-head">
@@ -209,29 +212,40 @@
                                                                 </span>
                                                                 
                                                             </th>
+                                                            <th class="tb-tnx-id"><span class="">Fecha</span></th>
                                                             {{-- <th class="tb-tnx-amount is-alt">
                                                                 <span class="tb-tnx-total">Total</span>
                                                                 <span class="tb-tnx-status d-none d-md-inline-block">Status</span>
                                                             </th>
-                                                            <th class="tb-tnx-action">
+                                                             --}}
+                                                             <th class="tb-tnx-action">
                                                                 <span>&nbsp;</span>
-                                                            </th> --}}
+                                                            </th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($credits as $credit)
                                                             @php
-                                                                $client_person = $credit->creditProduct;
+                                                                $client_person = $m_client::find($credit->client_person_id);
+                                                                $product = $credit->creditProduct;
                                                             @endphp
                                                             <tr class="tb-tnx-item">
                                                                 <td class="tb-tnx-id">
                                                                    {{ $credit->id }}
                                                                 </td>
                                                                 <td class="tb-tnx-info">
-                                                                    @if ($client_person !== null)
-                                                                        {{ $client_person->alias }}
+                                                                    @if ($product !== null)
+                                                                        {{ $product->alias }}
                                                                     @endif
                                                                     
+                                                                </td>
+                                                                
+                                                                
+                                                                <td>
+                                                                    {{ formatDateNameMonth($client_person->created_at, false) }}
+                                                                </td>
+                                                                <td>
+                                                                    <a href="/panel/credit/{{ $credit->id }}">Abrir</a>
                                                                 </td>
                                                                 
                                                             </tr>

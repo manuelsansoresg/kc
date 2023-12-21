@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Lib\Csendgrid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class FinancialProduct extends Model
 {
@@ -140,6 +142,145 @@ class FinancialProduct extends Model
             ->orderBy('rate_kc', 'DESC')->get();
         return $sql;
     }
+
+    public static function returnInfo($product, $credit = null, $is_email = false)
+    {
+        $colateral_products   = config('financial_enums.colateral_products');
+        $periodicity_products = config('financial_enums.periodicity_products');
+        $interes_rates        = config('financial_enums.interes_rates');
+        $principal_pays       = config('financial_enums.principal_pays');
+        $colateral            = isset($colateral_products[$product->collateral_id]) ? $colateral_products[$product->collateral_id] : null;
+        $type_interest        = isset($interes_rates[$product->type_interest]) ? $interes_rates[$product->type_interest] : null;
+        
+
+        $get_periodicities    = ProductPeriodicity::where('product_id', $product->id)->get();
+        $get_payments         = ProductPaymentMethod::where('product_id', $product->id)->get();
+        $periodicity          = '';
+        $payment              = '';
+
+        foreach ($get_periodicities as $periodicities) {
+            $periodicity .= $periodicity_products[$periodicities->periodicity_id].',';
+        }
+        
+        foreach ($get_payments as $get_payment) {
+            $payment .= $principal_pays[$get_payment->payment_method_id].',';
+        }
+
+        $periodicity                      = trim($periodicity, ',');
+        $payment                          = trim($payment, ',');
+        $alcance_beneficios               = ($product->alcance_beneficios === '0') ? '' : $product->alcance_beneficios;
+        $restriccion_exclusion            = ($product->restriccion_exclusion === '0') ? '' : $product->restriccion_exclusion;
+        $programa_educacion_financiera    = ($product->programa_educacion_financiera === '0') ? '' : $product->programa_educacion_financiera;
+        $referencia_comparativa           = ($product->referencia_comparativa === '0') ? '' : $product->referencia_comparativa;
+
+
+        $caracteristicas = array(
+            'colateral' => $colateral,
+            'periodicidad' => $periodicity,
+            'max_credit_amount' => format_price($product->max_credit_amount),
+            'min_loan_amount' => format_price($product->min_loan_amount),
+            'min_deadline_month' => $product->min_deadline_month,
+            'max_deadline_month' => $product->max_deadline_month,
+            'type_interest' => $type_interest,
+            'minimum_interest_rate' => $product->minimum_interest_rate,
+            'annual_int_rate_iva' => $product->annual_int_rate_iva,
+            'payment' => $payment,
+            'resolution_time_hours' => $product->resolution_time_hours,
+            'delivery_time_hours' => $product->delivery_time_hours,
+            'moratorium_int_rate_vat' => $product->moratorium_int_rate_vat,
+            'means_channels_of_disposal' => $product->means_channels_of_disposal,
+            'coverage' => $product->coverage,
+            'purpose_of_loan' => $product->purpose_of_loan,
+            'alcance_beneficios' => $alcance_beneficios,
+            'restriccion_exclusion' => $restriccion_exclusion,
+            'programa_educacion_financiera' => $programa_educacion_financiera,
+            'referencia_comparativa' => $referencia_comparativa,
+        );
+
+        $historial_crediticio = $product->buen_historial_crediticio == 1 ? 'Sí' : 'No';
+        $historial_crediticio = $product->buen_historial_crediticio != 1 || $product->buen_historial_crediticio != 1 ? null : $historial_crediticio;
+        
+        $aval_garantia = $product->buen_aval_garantia == 1 ? 'Sí' : 'No';
+        $aval_garantia = $product->buen_aval_garantia != 1 || $product->buen_aval_garantia != 1 ? null : $aval_garantia;
+
+        $requisitos = array(
+            'tipo_persona' => $product->tipo_persona,
+            'edad' => $product->edad,
+            'antiguedad_laboral' => $product->antiguedad_laboral,
+            'antiguedad_residencial' => $product->antiguedad_residencial,
+            'ingreso_minimo' => format_price($product->ingreso_minimo),
+            'buen_historial_crediticio' => $historial_crediticio,
+            'aval_garantia' => $aval_garantia,
+            'recibir_sueldo_nomina' => $product->recibir_sueldo_nomina,
+            'identificacion_oficial_vig' => $product->identificacion_oficial_vig,
+            'comprobante_domicilio' => $product->comprobante_domicilio,
+            'comprobante_ingresos' => $product->comprobante_ingresos,
+            'doc_complementaria' => $product->doc_complementaria,
+        );
+
+        $fees_comision = ProductFee::where(['financial_product_id'=> $product->id, 'type' => 1])->get();
+        $fees_result = ProductFee::where(['financial_product_id'=> $product->id, 'type' => 2])->get();
+        if ($is_email == false) {
+            $view_caracteristicas = \View::make('report.viewCaracteristicas', ['caracteristicas' => $caracteristicas,  'tramite' => $product->proceso_tramite, 'requisitos' => $requisitos, 'fees_comision' => $fees_comision, 'fees_result' => $fees_result])->render();
+            $data = array(
+                'caracteristicas' => $view_caracteristicas,
+            );
+            return $data;
+        }
+        if ($credit != null && !Session::has('send_email')) {
+            $client = $credit->creditClientPerson;
+            $financial = Financial::find($product->financial_id);
+            $view_caracteristicas = \View::make('report.viewCaracteristicasEmail', ['caracteristicas' => $caracteristicas, 'requisitos' => $requisitos, 'fees_comision' => $fees_comision, 'fees_result' => $fees_result])->render();
+            $new_fees_comision = array();
+            $new_fees_result = array();
+            
+            //dd($fees_comision);
+            foreach ($fees_comision as $fees) {
+                if ($fees->type == 1) {
+                    $concepto = isset(config('enums.periodicity_comision')[$fees->periodicidad]) ? config('enums.periodicity_comision')[$fees->periodicidad] : null;
+                    $new_fees_comision[] = array(
+                       'name' =>  $fees->concepto.'- $'.format_price($fees->valor).' '.$concepto,
+                    );
+                } else {
+                    $concepto = isset(config('enums.periodicity_comision')[$fees->periodicidad]) ? config('enums.periodicity_comision')[$fees->periodicidad] : null;
+                    $new_fees_comision[] = array(
+                        'name' =>  $fees->concepto.'- '.$fees->porcentaje.'% '.$fees->referencia.' '. $concepto ,
+                    );
+                }
+                
+            }
+            
+            foreach ($fees_result as $fees_comision) {
+                if ($fees_comision->type == 1) {
+                    $concepto = isset(config('enums.periodicity_comision')[$fees_comision->periodicidad]) ? config('enums.periodicity_comision')[$fees_comision->periodicidad] : null ;
+                    $new_fees_result[] = array(
+                        'name' =>  $fees_comision->type. $fees_comision->concepto.'- $'.format_price($fees_comision->valor).' '. $concepto,
+                    );
+                } else {
+                    $concepto = isset(config('enums.periodicity_comision')[$fees_comision->periodicidad]) ? config('enums.periodicity_comision')[$fees_comision->periodicidad] : null;
+                    $new_fees_result[] = array(
+                        'name' =>  $fees_comision->type.$fees_comision->concepto.'- '.$fees_comision->porcentaje.'% '.$fees_comision->referencia.' '. $concepto ,
+                    );
+                }
+                
+            }
+            $data_sendgrid = array(
+                'first_name' => $client->name. ' '.$client->last_name. ' '.$client->second_last_name,
+                'financiera' => $financial->commercial_name,
+                'alias_producto' => $product->alias,
+                'fees_comision' => $new_fees_comision, 
+                'fees_result' => $new_fees_result,
+                'tramite' => $product->proceso_tramite,
+            );
+            $data_sendgrid = array_merge($data_sendgrid, $requisitos, $caracteristicas);
+            $send_grid = new Csendgrid($client->email, 'creacion cuenta');
+            $send_grid->setTemplate('d-5504f61ffde84a6a9aa400a6970031b3');
+            $send_grid->setParams($data_sendgrid);
+            $send_grid->send();
+            Session::put('send_email', true);
+        }
+       
+     }
 
     public static function getByRate($credit, $request = null)
     {

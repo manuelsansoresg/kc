@@ -2218,6 +2218,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $status_reject    = HistoryLog::CREDIT_REJECTED;
         $status_archive   = HistoryLog::CREDIT_ARCHIVE;
         $old_status       = $history->old_status_id;
+        $url_finish       = "panel/kc-control-desk";
 
         $menu = array(
             'options' => array(
@@ -2271,6 +2272,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'onclick' => 'modalAdvisorCredit('. $credit->id.')',
                     'name' => 'Asignar asesor',
                     'icon' => 'icon ni ni-headphone'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => "deliveryFinish({$history->id}, {$history->status_id}, '{$url_finish}', true)",
+                    'name' => 'Concluir',
+                    'icon' => 'icon ni ni-stop-circle-fill'
                 ]
             ),
         );

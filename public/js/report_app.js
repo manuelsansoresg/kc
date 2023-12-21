@@ -6417,7 +6417,31 @@ window.changeCreditBank = function (credit_id, id) {
 
 window.closeCreditBank = function (credit_id, id) {};
 
-function verifificarTramitar(credit_id, financial_id, type, is_tramitar) {
+window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
+  if (is_modal == true) {
+    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        actionDeliveryFinish(id, statusid, urlredirect);
+      }
+    });
+  } else {
+    actionDeliveryFinish(id, statusid, urlredirect);
+  }
+};
+
+function actionDeliveryFinish(id, statusid, urlredirect) {
+  axios.get("/panel/action/" + id + "/" + statusid + "/finish").then(function (response) {
+    window.location = urlredirect;
+  })["catch"](function (e) {});
+}
+
+function verifificarTramitar(history_id, status_id, credit_id, financial_id, type, is_tramitar) {
   $('#content-bank').html('');
   $('#new_banks').hide();
   axios.get('/panel/kc-check-up/' + credit_id + '/' + type + '/report/verify').then(function (response) {
@@ -6429,12 +6453,12 @@ function verifificarTramitar(credit_id, financial_id, type, is_tramitar) {
       var is_app = $('#is_app').val();
       axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
         console.log(response.data);
-        var reason = response.data;
 
         if (is_tramitar == 1) {
-          window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
+          window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&is_tramitar=true';
         } else {
-          window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&type=1';
+          //window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app+'&type=1';
+          deliveryFinish(history_id, status_id, '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&type=1', false);
         }
       })["catch"](function (e) {});
     } else {
@@ -6460,7 +6484,7 @@ for (var i = 0; i < iframeLinks.length; i++) {
   });
 }
 
-window.changeFilterReport = function (status, tipo) {
+window.changeFilterReport = function (status, tipo, id) {
   console.log(status);
   var titulo1 = ['Se mostrarán créditos que "SI" consultan buró de crédito', 'Se mostrarán créditos que "NO" consultan buró de crédito'];
   var titulo2 = ['Se mostrarán créditos que "SI" soliciten aval', 'Se mostrarán créditos que "NO" soliciten aval'];
@@ -6488,28 +6512,39 @@ window.changeFilterReport = function (status, tipo) {
         window.location.reload();
       })["catch"](function (e) {// Manejar errores
       });
+    } else {
+      //cancelar
+      $("#" + id).prop("checked", !$("#" + id).prop("checked"));
     }
   });
 };
-/* if (document.getElementById('content-products')) {
-    refreshReportProduct();
-}
 
-function refreshReportProduct ()
-{
-    
-    axios
-        .get('/reporte/products/show')
-        .then(function (response) {
-            let result = response.data;
-            $('#content-products').html(result.view);
-            Livewire.emit('reportRefresh');
-            
-        })
-        .catch(e => {
-            
-        });
-} */
+window.infoFinanciera = function (product_id, section) {
+  axios.get('/reporte/' + product_id + '/info?section=' + section).then(function (response) {
+    var result = response.data;
+    $('#content-info').html(result.caracteristicas);
+    $('#tabTramite').hide();
+    $('#modal-info').modal('show');
+  })["catch"](function (e) {// Manejar errores
+  });
+};
+
+$("#frm-report-email").submit(function (event) {
+  event.preventDefault(); // Obtén referencia al formulario por su ID
+
+  var form = document.getElementById('frm-report-email'); // Crea un objeto FormData con los datos del formulario
+
+  var formData = new FormData(form);
+  axios.post('/reporte/product/email/update', formData).then(function (response) {
+    var result = response.data;
+    var credit_id = $('#credit_id').val();
+    var is_app = $('#is_app').val();
+    var is_email_update = $('#is_email_update').val(); // Recargar la página
+
+    window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&is_email_update=true';
+  })["catch"](function (e) {// Manejar errores
+  });
+});
 })();
 
 /******/ })()
