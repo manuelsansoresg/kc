@@ -6545,6 +6545,8 @@ $("#frm-report-email").submit(function (event) {
   })["catch"](function (e) {// Manejar errores
   });
 });
+
+if (document.getElementById('is_validate_modal_product')) {}
 })();
 
 /******/ })()

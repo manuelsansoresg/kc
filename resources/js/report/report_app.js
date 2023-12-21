@@ -220,3 +220,8 @@ $( "#frm-report-email" ).submit(function( event ) {
             // Manejar errores
         });
 });
+
+
+if (document.getElementById('is_validate_modal_product')) {
+    
+}
