@@ -9,7 +9,7 @@
                         <div class="nk-block-head-content">
                             <div class="container">
                                 <div class="row justify-content-center">
-                                    <div class="col-12 col-md-9">
+                                    <div class="col-12 col-md-10">
                                         <h3 class="nk-block-title page-title">Etapas</h3>
                                         <div class="nk-block-des text-soft">
                                             <nav>
@@ -67,7 +67,7 @@
                     <div class="nk-block nk-block-lg">
                         <div class="container">
                             <div class="row justify-content-center">
-                                <div class="col-12 col-md-9">
+                                <div class="col-12 col-md-10">
                                     <div class="card card-bordered card-preview">
                                         <div class="card-inner">
                                             <div class="row text-secondary d-none d-md-flex">
