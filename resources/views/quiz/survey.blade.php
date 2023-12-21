@@ -50,7 +50,7 @@
                             </a>
                             <div class="text-block" data-aos="fade-up"
                             data-aos-duration="5000">
-                                <img class="nk-survey-gfx mb-5" src="/assets_admin/images/gfx/survey.svg"
+                                <img class="nk-survey-gfx mb-5" src="{{ asset('images/apple-touch-icon.png') }}"
                                     alt="">
                                 <h3 class="text-white">Encuesta de satisfacción</h3>
                                 <p>Tú opinion es muy importante, nos ayuda a mejorar.</p>
