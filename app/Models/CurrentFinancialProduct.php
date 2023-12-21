@@ -45,6 +45,20 @@ class CurrentFinancialProduct extends Model
         
     }
 
+    public static function setOtherProduct($credit_id, $type = 2)
+    {
+        $get = FinancialProduct::where('name', 'Otro')->first();
+        if ($get != null) {
+            $data_financial = array(
+                'id_rel' => $credit_id,
+                'product_id' => $get->id,
+                'type' => $type,
+            );
+
+            CurrentFinancialProduct::create($data_financial);
+        }
+    }
+
     public static function deleteAll($id, $type = 1)
     {
         $existingConfiguration = CurrentFinancialProduct::where(['id_rel' => $id, 'type' => $type]);

@@ -805,10 +805,11 @@ $chart4 = $my_product_financial;
     
         {{-- intereses --}}
     </div>
-    <input type="hidden" id="is_validate_modal_product" value="true">
-    <input type="hidden" id="credit_id" value="{{ $credit->id }}">
+    <input type="hidden" id="is_validate_modal_product" value="{{ $total_product }}">
+    
     @include('panel.modal.bank')    
     @include('report.modal_info')   
+    @include('report.modal_product')   
 @endsection
 
 @section('add_script')

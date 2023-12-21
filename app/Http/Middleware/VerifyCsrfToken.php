@@ -26,6 +26,6 @@ class VerifyCsrfToken extends Middleware
         '/reporte/*',
         '/action/manychat/{section}',
         '/action/manychat/lead/store',
-        '/panel/user/search'
+        '/panel/user/search',
     ];
 }
