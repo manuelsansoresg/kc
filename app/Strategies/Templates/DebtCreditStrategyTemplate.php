@@ -682,11 +682,11 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $total_valid    = 0;
 
         if ($credit != null && $credit->agreement_id != '' && $client != null && $client->agreement_id != '') {
-            $total_valid = $total_valid + 20;
+            $total_valid = $total_valid + 30;
         }
         
         if ($client != null && $client->name != null) {
-            $total_valid = $total_valid + 20;
+            $total_valid = $total_valid + 30;
         }
 
         if ($client != null && $client->last_name != null) {
