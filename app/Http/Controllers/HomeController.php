@@ -87,7 +87,7 @@ class HomeController extends Controller
             $history      = HistoryLog::find($get_action->id);
             $credit       = Credit::find($credit_id);
         }
-
+        session(['credit_id' => $credit->id]);
         
         if ($credit->applied_financial != '') {
             return view('content_expiration_report');
@@ -147,7 +147,10 @@ class HomeController extends Controller
 
             $my_product_financial   = FinancialProduct::existMyFinancial($new_financials, $credit->id);
             $my_products            = CurrentFinancialProduct::getList($credit->id, 2);
-            return view('content_report_debt', compact('banks', 'client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_products'));
+            $total_product          = count($my_products);
+            $financial_products     = FinancialProduct::getAllByTemplate();
+
+            return view('content_report_debt', compact('banks', 'client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'financial_products', 'final_financials', 'my_product_financial', 'my_products', 'total_product'));
         }
         return view('content_report', compact('banks', 'client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
     }
@@ -225,6 +228,19 @@ class HomeController extends Controller
         
         FinancialProduct::returnInfo($product, $credit, true);
        
+    }
+    
+    public function updateProduct(Request $request)
+    {
+        $creditId = session('credit_id');
+        CurrentFinancialProduct::saveEdit($creditId, $request, 2);
+       
+    }
+    
+    public function ProductNotFound()
+    {
+        $creditId = session('credit_id');
+        CurrentFinancialProduct::setOtherProduct($creditId);
     }
 
     public function method($history_id)

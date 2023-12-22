@@ -288,12 +288,11 @@ class FinancialProduct extends Model
         DB::connection()->enableQueryLog();
         $agreement_id           = $credit->agreement_id;
         $type_product_id        = $credit->tipo_credito;
-       
+
         $financial_agreements   = FinancialAgreement::where('agreement_id', $agreement_id)->get();
         $financial_ids          = array();
         $financial_product_ids  = array();
         $products = CurrentFinancialProduct::where(['id_rel' => $credit->id , 'type' => 2])->get();
-        
         foreach ($financial_agreements as $financial_agreement) {
             $financial_ids[] = $financial_agreement->product_id;
         }

@@ -53,6 +53,10 @@ Route::get('reporte/{history_id}/metodologia', ['\App\Http\Controllers\HomeContr
 
 Route::get('reporte/{credit}/status/finish', ['\App\Http\Controllers\HomeController', 'exitReport']);
 Route::post('/reporte/product/email/update', ['\App\Http\Controllers\HomeController', 'updateAndSendEmail']);
+Route::post('/reporte/product/credit/update', ['\App\Http\Controllers\HomeController', 'updateProduct']);
+Route::get('/reporte/product/credit/notFound', ['\App\Http\Controllers\HomeController', 'ProductNotFound']);
+
+
 
 Route::get('credit-resume/{credit}', ['\App\Http\Controllers\HomeController', 'resumeCredit']);
 

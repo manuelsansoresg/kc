@@ -6545,6 +6545,38 @@ $("#frm-report-email").submit(function (event) {
   })["catch"](function (e) {// Manejar errores
   });
 });
+$(document).ready(function () {
+  $('.select2multiple').select2({
+    theme: "bootstrap-5",
+    placeholder: "Escribe para buscar.."
+  });
+
+  if (document.getElementById('is_validate_modal_product')) {
+    var is_validate_modal_product = $('#is_validate_modal_product').val();
+
+    if (is_validate_modal_product == '0') {
+      $('#modal-product').modal('show');
+    }
+  }
+
+  window.cancelModalProduct = function () {
+    axios.get('/reporte/product/credit/notFound').then(function (response) {
+      window.location.reload();
+    })["catch"](function (e) {// Manejar errores
+    });
+  };
+
+  window.continueModalProduct = function () {
+    // Obtén referencia al formulario por su ID
+    var form = document.getElementById('frm-modal-product'); // Crea un objeto FormData con los datos del formulario
+
+    var formData = new FormData(form);
+    axios.post('/reporte/product/credit/update', formData).then(function (response) {
+      window.location.reload();
+    })["catch"](function (e) {// Manejar errores
+    });
+  };
+});
 })();
 
 /******/ })()

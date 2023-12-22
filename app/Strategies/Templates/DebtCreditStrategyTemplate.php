@@ -101,7 +101,7 @@ class DebtCreditStrategyTemplate implements TemplateInterface
                 'type' => 'select2multiple',
                 'is_option_array' => false,
                 'options' => $financial_products,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             4 => [
@@ -680,18 +680,13 @@ class DebtCreditStrategyTemplate implements TemplateInterface
         $client         = $credit->creditClientPerson;
         $percent        = 0;
         $total_valid    = 0;
-        $products = CurrentFinancialProduct::where(['id_rel' => $credit->id, 'type' => 2])->count();
 
         if ($credit != null && $credit->agreement_id != '' && $client != null && $client->agreement_id != '') {
-            $total_valid = $total_valid + 20;
+            $total_valid = $total_valid + 30;
         }
         
-        if ($products > 0 ) {
-            $total_valid = $total_valid + 20;
-        }
-
         if ($client != null && $client->name != null) {
-            $total_valid = $total_valid + 20;
+            $total_valid = $total_valid + 30;
         }
 
         if ($client != null && $client->last_name != null) {

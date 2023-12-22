@@ -16,14 +16,16 @@ class CurrentFinancialProduct extends Model
 
     public static function saveEdit($id, $request, $type = 1)
     {
+        // Primero, verifica si el acuerdo financiero existe y elimínalo si es el caso.
+        $existingConfiguration = CurrentFinancialProduct::where(['id_rel' => $id, 'type' => $type]);
+
+        if ($existingConfiguration != null) {
+            $existingConfiguration->delete();
+        }
+        
         if (isset($request->products)) {
             $products = $request->products;
-            // Primero, verifica si el acuerdo financiero existe y elimínalo si es el caso.
-            $existingConfiguration = CurrentFinancialProduct::where(['id_rel' => $id, 'type' => $type]);
-
-            if ($existingConfiguration != null) {
-                $existingConfiguration->delete();
-            }
+            
 
             
             foreach ($products as $key => $product) {
@@ -41,6 +43,20 @@ class CurrentFinancialProduct extends Model
             }
         }
         
+    }
+
+    public static function setOtherProduct($credit_id, $type = 2)
+    {
+        $get = FinancialProduct::where('name', 'Otro')->first();
+        if ($get != null) {
+            $data_financial = array(
+                'id_rel' => $credit_id,
+                'product_id' => $get->id,
+                'type' => $type,
+            );
+
+            CurrentFinancialProduct::create($data_financial);
+        }
     }
 
     public static function deleteAll($id, $type = 1)
