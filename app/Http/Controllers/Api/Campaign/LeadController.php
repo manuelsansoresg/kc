@@ -51,39 +51,34 @@ class LeadController extends Controller
             $lead = Lead::create($request_data);
             HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
 
-            if ($result->status == 'success') {
-                
+            //*modificar los valores de manychat 
+            $get_lead       = Lead::find($lead->id);
+            $get_advisor    = $get_lead->advisorLead;
+            $advisor        = $get_advisor!= null ? $get_advisor->name.' '.$get_advisor->last_name  : null;
+            $get_product    = $get_lead->productLead;
+            $product        = $get_product != null ? $get_product->alias : null;
+            $get_bank       = Bank::find($get_lead->bank_id);
+            $bank           = $get_bank != null ? $get_bank->name : null;
+            
+            $get_origin     = Lead::getChanelByOrigin($get_lead->origin_id);
+            $channel        = isset($get_origin[$get_lead->channel_id])? $get_origin[$get_lead->channel_id] : null;
+            $get_agreement  = $get_lead->agreementLead;
+            $agreement      = $get_agreement!= null ? $get_agreement->name : null;
+            $get_origins    = config('enums.origin');
+            $origin         = isset($get_origins[$get_lead->origin_id]) ? $get_origins[$get_lead->origin_id] : null;
+            
+            $type_products  = config('financial_enums.type_products');
+            $type_credit    = isset($type_products[$get_lead->tipo_credito]) ? $type_products[$get_lead->tipo_credito] : null;
+            $data = array(
+                'Servicio KC' => $product,
+                'Canal' => $channel,
+                'Importe solicitado' => $request->importe_solicitado,
+                'Origen' => $origin,
+                'Tipo de crédito' => $type_credit,
 
-                //*modificar los valores de manychat 
-                $get_lead       = Lead::find($lead->id);
-                $get_advisor    = $get_lead->advisorLead;
-                $advisor        = $get_advisor!= null ? $get_advisor->name.' '.$get_advisor->last_name  : null;
-                $get_product    = $get_lead->productLead;
-                $product        = $get_product != null ? $get_product->alias : null;
-                $get_bank       = Bank::find($get_lead->bank_id);
-                $bank           = $get_bank != null ? $get_bank->name : null;
-                
-                $get_origin     = Lead::getChanelByOrigin($get_lead->origin_id);
-                $channel        = isset($get_origin[$get_lead->channel_id])? $get_origin[$get_lead->channel_id] : null;
-                $get_agreement  = $get_lead->agreementLead;
-                $agreement      = $get_agreement!= null ? $get_agreement->name : null;
-                $get_origins    = config('enums.origin');
-                $origin         = isset($get_origins[$get_lead->origin_id]) ? $get_origins[$get_lead->origin_id] : null;
-                
-                $type_products  = config('financial_enums.type_products');
-                $type_credit    = isset($type_products[$get_lead->tipo_credito]) ? $type_products[$get_lead->tipo_credito] : null;
-                $data = array(
-                    'Servicio KC' => $product,
-                    'Canal' => $channel,
-                    'Importe solicitado' => $request->importe_solicitado,
-                    'Origen' => $origin,
-                    'Tipo de crédito' => $type_credit,
-
-                );
-                sleep(2);
-                $manychat->setCustomFields($data, $get_lead->manychat_id);
-                $manychat->addTag('Prospecto', $get_lead->manychat_id);
-            }
+            );
+            $manychat->setCustomFields($data, $get_lead->manychat_id);
+            $manychat->addTag('Prospecto', $get_lead->manychat_id);
             return response()->json(200);
         } catch (\Exception $th) {
             return response()->json(500);
