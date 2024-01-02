@@ -106,6 +106,7 @@ class HistoryLog extends Model
         'date_status_progress', //* fecha en que se actualiza el status
         'envio_identifacion', //* se usa en archivos
         'envio_documentacion_completa', //* se usa en archivos
+        'is_credit', //* 0 lead 1= credits
     ];
 
     public static $label_status = [
