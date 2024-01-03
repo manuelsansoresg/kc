@@ -59,6 +59,24 @@ class ActionManychatController extends Controller
         return response()->json(500);
     }
 
+    public function storeLeadWaComplete(Request $request)
+    {
+        $data             = $request->all();
+        $custom_fields    = $data['custom_fields'];
+
+        $data_lead = array(
+            'name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'manychat_id' => $data['id'],
+            'product_id' => $custom_fields['Servicio KC'],
+            'origin_id' => 2,
+            'channel_id' => 2,
+
+        );
+        Lead::create($data_lead);
+        return response()->json(200);
+    }
+
     public function saveOrganization($section, $action, $value, $manychat_id)
     {
         if ($value != null && $section == 'organizacion') {
