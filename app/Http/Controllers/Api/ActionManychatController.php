@@ -19,6 +19,7 @@ class ActionManychatController extends Controller
         $head = array(
             'organizacion' => array('agreement_id', 'Organización'),
             'banco' => array('bank_id', 'Banco'),
+            'servicio-kc' => array('product_id', 'Servicio KC'),
         );
         
         if ($head[$section]) {
@@ -31,8 +32,7 @@ class ActionManychatController extends Controller
             
             self::saveOrganization($section, $select_head, $select_custom_field, $manychat_id);
             self::saveBank($section, $select_head, $select_custom_field, $manychat_id);
-
-            
+            self::saveServicio($section, $select_head, $select_custom_field, $manychat_id);
 
             return response()->json(200);
             
@@ -106,6 +106,14 @@ class ActionManychatController extends Controller
                 }
 
             }
+        }
+    }
+
+    public function saveServicio($section, $action, $value, $manychat_id)
+    {
+        if ($value != null && $section == 'servicio-kc') {
+            $get_product = Product::where('alias', $value)->first();
+            return self::saveAction($action, $get_product->id, $manychat_id);
         }
     }
 
