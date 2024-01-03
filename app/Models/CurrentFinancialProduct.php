@@ -47,7 +47,7 @@ class CurrentFinancialProduct extends Model
 
     public static function setOtherProduct($credit_id, $type = 2)
     {
-        $get = FinancialProduct::where('name', 'Otro')->first();
+        $get = FinancialProduct::where('name', 'Otro Crédito')->first();
         if ($get != null) {
             $data_financial = array(
                 'id_rel' => $credit_id,

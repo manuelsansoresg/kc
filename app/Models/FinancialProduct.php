@@ -139,7 +139,7 @@ class FinancialProduct extends Model
             DB::raw('CONCAT(commercial_name, " - ", alias) as full_name')
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
-            ->orderBy('rate_kc', 'DESC')->get();
+            ->orderBy('commercial_name', 'ASC')->get();
         return $sql;
     }
 

@@ -27,5 +27,6 @@ class VerifyCsrfToken extends Middleware
         '/action/manychat/{section}',
         '/action/manychat/lead/store',
         '/panel/user/search',
+        '/action/manychat/wa-complete/lead/store',
     ];
 }

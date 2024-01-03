@@ -14,7 +14,7 @@ return [
         1 => 'Asesor',
         2 => 'WebPage',
         3 => 'WebApp',
-        4 => 'Publididad',
+        4 => 'Publicidad',
     ),
     'temperatures' => array(
         '' => '',
