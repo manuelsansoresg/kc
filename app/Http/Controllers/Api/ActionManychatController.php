@@ -8,6 +8,7 @@ use App\Models\Agreement;
 use App\Models\ApiActionManychat;
 use App\Models\Bank;
 use App\Models\Lead;
+use App\Models\Product;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
@@ -63,12 +64,13 @@ class ActionManychatController extends Controller
     {
         $data             = $request->all();
         $custom_fields    = $data['custom_fields'];
+        $get_product = Product::where('alias', $custom_fields['Servicio KC'])->first();
 
         $data_lead = array(
             'name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'manychat_id' => $data['id'],
-            'product_id' => $custom_fields['Servicio KC'],
+            'product_id' => $get_product,
             'origin_id' => 2,
             'channel_id' => 2,
 
