@@ -597,6 +597,7 @@
                                                         $enum_credit_delivery       = $get_survey != null && isset(config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']])? config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']] :  null;
                                                         $enum_kc_attention          = $get_survey != null && isset(config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']])? config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']] :  null;
                                                         $enum_financial_attention   = $get_survey != null && isset(config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']])? config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']] :  null;
+                                                        $enum_recomendacion_amigos   = $get_survey != null && isset(config('enum_survey.surevey_recomendacion_amigos')[$get_survey['surevey_recomendacion_amigos']])? config('enum_survey.surevey_recomendacion_amigos')[$get_survey['surevey_recomendacion_amigos']] :  null;
                                                         $comment                    = $get_survey != null && isset($get_survey['survey_note'])? $get_survey['survey_note'] :  null;
                                                     @endphp     
                                                     <div class="nk-block">
@@ -614,7 +615,7 @@
                                                             </div>
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
-                                                                    <span class="profile-ud-label">¿Cómo calificarías la atención que recibiste en KaaxClub?</span>
+                                                                    <span class="profile-ud-label">Qué tan satisfecho está con la claridad y transparencia de la información que te proporcionamos?</span>
                                                                     <span class="profile-ud-value">
                                                                         @if ($enum_kc_attention != null)
                                                                             <img src="{{ asset($enum_kc_attention) }}" alt="">
@@ -629,6 +630,17 @@
                                                                     <span class="profile-ud-value">
                                                                         @if ($enum_financial_attention != null)
                                                                             <img src="{{ asset($enum_financial_attention) }}" alt="">
+                                                                        @endif
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">¿En una escala del 0 al 10 ¿Qué tan probable es que nos recomiendes con un conocido?</span>
+                                                                    <span class="profile-ud-value">
+                                                                        @if ($enum_recomendacion_amigos != null)
+                                                                            <img src="{{ asset($enum_recomendacion_amigos) }}" alt="">
                                                                         @endif
                                                                     </span>
                                                                 </div>

@@ -15,6 +15,7 @@ class QuizCreditStrategy implements SurveyInterface
             'surevey_credit_delivery' => $request->surevey_credit_delivery,
             'surevey_kc_attention' => $request->surevey_kc_attention,
             'surevey_financial_attention' => $request->surevey_financial_attention,
+            'surevey_recomendacion_amigos' => $request->surevey_recomendacion_amigos,
             'survey_note' => $request->survey_note,
         );
     }
@@ -28,7 +29,6 @@ class QuizCreditStrategy implements SurveyInterface
             'id_survey' => 1,
             'origin' => 1,
         );
-        
         $get_survey = Survey::where($data_survey)->count();
         if ($get_survey == 0) {
             $survey = new Survey($data_survey);
@@ -54,6 +54,7 @@ class QuizCreditStrategy implements SurveyInterface
                 'surevey_credit_delivery' => $answer->surevey_credit_delivery,
                 'surevey_kc_attention' => $answer->surevey_kc_attention,
                 'surevey_financial_attention' => $answer->surevey_financial_attention,
+                'surevey_recomendacion_amigos' => $answer->surevey_recomendacion_amigos,
                 'survey_note' => $answer->survey_note,
             );
         }
