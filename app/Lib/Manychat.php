@@ -7,8 +7,7 @@ class Manychat
     private $token = '861553:f8756129f4f78730b10f9acdeaacf5bd';
     private $tags = array(
         'Prospecto' => 40308012,
-        
-        
+        'ReporteElegido' => 40772467,
     );
 
     private function setCurl($path, $data = null , $method = 'POST')
