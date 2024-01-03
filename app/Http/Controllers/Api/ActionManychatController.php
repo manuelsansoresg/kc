@@ -70,7 +70,7 @@ class ActionManychatController extends Controller
             'name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'manychat_id' => $data['id'],
-            'product_id' => $get_product,
+            'product_id' => $get_product->id,
             'origin_id' => 2,
             'channel_id' => 2,
 
