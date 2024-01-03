@@ -222,6 +222,7 @@ return [
         'Servicio KC' =>  10202817,
         'Tipo de crédito' =>  10202818,
         'URL Reporte' =>  10298820,
+        'URL Encuesta' =>  10357823,
     )
     
 ];
