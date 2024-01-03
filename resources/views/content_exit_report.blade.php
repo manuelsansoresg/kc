@@ -104,7 +104,7 @@
                                                                 <button class="btn btn-primary">Enviar</button>
                                                             </div>
                                                             <input type="hidden" name="credit_id" id="credit_id" value="{{ $credit->id }}">
-                                                            <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
+                                                            <input type="hidden" name="product_id" id="product_id" value="{{ $product != null ?  $product->id : null }}">
                                                             <input type="hidden" id="is_app" value="{{ $is_app }}">
                                                             <input type="hidden" id="is_email_update" value="{{ $is_email_update }}">
                                                         </form>
@@ -131,8 +131,8 @@
                                                                 <button class="btn btn-primary">Enviar</button>
                                                             </div>
                                                             <input type="hidden" name="credit_id" id="credit_id" value="{{ $credit->id }}">
-                                                            <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
-                                                            <input type="hidden" id="is_app" value="{{ $is_app }}">
+                                                            <input type="hidden" name="product_id" id="product_id" value="{{ $product != null ?  $product->id : null }}">
+                                                            <input type="hidden" id="is_app" value="{{ @$is_app }}">
                                                             <input type="hidden" id="is_email_update" value="{{ $is_email_update }}">
                                                         </form>
                                                     </div>

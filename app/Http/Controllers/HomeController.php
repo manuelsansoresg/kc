@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\Manychat;
 use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\ApiLead;
@@ -204,14 +205,23 @@ class HomeController extends Controller
 
     public function exitReport(Credit $credit)
     {
-        $product = FinancialProduct::find($credit->financial_product_id);
-        $status_email = true;
+        $product        = FinancialProduct::find($credit->financial_product_id);
+        $status_email   = true;
+        $view_info      = null;
+
         if ($product!= null && $product->is_tramitar == 1 && $product->is_vincular_banco == 1 && ($credit != null && $credit->bank_id === null)) {
             $status_email = true; //*no 
         }
-        FinancialProduct::returnInfo($product, $credit, true);
-        $view_info = FinancialProduct::returnInfo($product);
+        if ($product != null) {
+            FinancialProduct::returnInfo($product, $credit, true);
+            $view_info = FinancialProduct::returnInfo($product);
+        }
         $client           = ClientPerson::find($credit->client_person_id);
+        $manychat_id = $credit->manychat_id;
+        if ($manychat_id  != null) {
+            $many_chat = new Manychat();
+            $many_chat->addTag('ReporteElegido', $manychat_id);
+        }
         
         return view('content_exit_report', compact('product', 'status_email',  'view_info', 'credit', 'client'));
     }
