@@ -12,7 +12,7 @@ return [
     ),
     'origin' => array(
         1 => 'Asesor',
-        2 => 'WebPage',
+        2 => 'Web/RRSS',
         3 => 'WebApp',
         4 => 'Publicidad',
     ),
