@@ -462,6 +462,7 @@
         });
 
         window.showFinalFinancial = function() {
+            $('#leyend-opciones').hide();
             $('#final-financials').show('slow');
         }
     </script>

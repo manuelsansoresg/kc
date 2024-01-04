@@ -223,7 +223,7 @@
                                     </form>
                                 </div>
                             </div>
-                            <p class="mt-5">
+                            <p class="mt-5" id="leyend-opciones">
                                 Estás viendo las 3 mejores opciones. Puedes ver todas las opciones <a  class="text-primary" style="cursor: pointer" onclick="showFinalFinancial()">aquí</a>
                             </p>
                         </div>
