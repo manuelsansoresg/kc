@@ -2,6 +2,8 @@
 
 namespace App\Strategies\Survey;
 
+use App\Lib\Manychat;
+use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Models\Survey;
 use App\Strategies\SurveyInterface;
@@ -37,6 +39,14 @@ class QuizCreditStrategy implements SurveyInterface
             HistoryLog::where(['id_rel' => $request->credit_id, 'status_id' => HistoryLog::KC_AFTER_MARKET, 'status' => 1])
                         ->update(['status' => 0]);
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $request->credit_id, 1);
+
+            $credit             = Credit::find($request->credit_id);
+            $manychat_id = $credit->manychat_id;
+            if ($manychat_id  != null) {
+                $many_chat = new Manychat();
+                $many_chat->addTag('EncuestaRespondida', $manychat_id);
+            }
+            
         }
     }
 

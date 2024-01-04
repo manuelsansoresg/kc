@@ -432,10 +432,10 @@ class HistoryLog extends Model
                 $many_chat->addTag('EncuestaLista', $manychat_id);
 
                 $data = array(
-                    'URL Encuesta' => 'https://test.kaaxclub.com/survey/'.$credit->id,
+                    'URL Encuesta' => 'https://kaaxclub.com/survey/'.$credit->id,
     
                 );
-                $manychat->setCustomFields($data, $manychat_id);
+                $many_chat->setCustomFields($data, $manychat_id);
             }
         
         }
