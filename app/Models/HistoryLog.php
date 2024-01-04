@@ -419,10 +419,25 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $id_rel, 0);
         }
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
+            $credit             = Credit::find($id_rel);
+
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $id_rel, 0);
             //*inicializar las acciones
             HistoryLog::move($id_rel, HistoryLog::KC_AFTER_FORM, HistoryLog::KC_AFTER_FORM);
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $id_rel, 0);
+            
+            $manychat_id = $credit->manychat_id;
+            if ($manychat_id  != null) {
+                $many_chat = new Manychat();
+                $many_chat->addTag('EncuestaLista', $manychat_id);
+
+                $data = array(
+                    'URL Encuesta' => 'https://kaaxclub.com/survey/'.$credit->id,
+    
+                );
+                $many_chat->setCustomFields($data, $manychat_id);
+            }
+        
         }
         if ($status_id == HistoryLog::CREDITS_PAID) {
             self::updateReason($history, 'pagado');

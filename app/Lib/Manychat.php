@@ -8,6 +8,8 @@ class Manychat
     private $tags = array(
         'Prospecto' => 40308012,
         'ReporteElegido' => 40772467,
+        'EncuestaLista' => 40873610,
+        'EncuestaRespondida' => 40873625,
     );
 
     private function setCurl($path, $data = null , $method = 'POST')

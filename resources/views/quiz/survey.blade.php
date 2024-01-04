@@ -91,8 +91,7 @@
                                                                     id="surevey_credit_delivery-2" required
                                                                     value="2">
                                                                 <label class="custom-control-label"
-                                                                    for="surevey_credit_delivery-2">Sí pero un plazo o
-                                                                    monto distinto.</label>
+                                                                    for="surevey_credit_delivery-2">Está en trámite.</label>
                                                             </div>
                                                         </li>
                                                         <li>
@@ -102,7 +101,7 @@
                                                                     id="surevey_credit_delivery-3" required
                                                                     value="3">
                                                                 <label class="custom-control-label"
-                                                                    for="surevey_credit_delivery-3">No lo recibí.</label>
+                                                                    for="surevey_credit_delivery-3">No lo he tramitado.</label>
                                                             </div>
                                                         </li>
                                                     </ul>
@@ -162,8 +161,7 @@
                                                 
                                             </div>
                                             <div class="nk-stepper-step">
-                                                <h5 class="title mb-4">¿Cómo calificarías la atención la financiera que
-                                                    te otorgó el crédito?</h5>
+                                                <h5 class="title mb-4">¿Qué tan satisfecho está con la claridad y transparencia de la información que te proporcionamos?</h5>
                                                 <div class="row g-4">
                                                     <div class="col-12">
                                                         <div class="form-group">
@@ -210,6 +208,65 @@
                                                                         <div class="custom-control custom-control-sm custom-radio custom-control-pro">
                                                                             <input type="radio" class="custom-control-input" id="surevey_financial_attention-s1" name="surevey_financial_attention" value="1">
                                                                             <label class="custom-control-label" for="surevey_financial_attention-s1">
+                                                                                <span class="user-card"> <span class="sq_icon">
+                                                                                        <img class="img-radio-survey" src="{{ asset('images/survey1.svg') }}" alt=""> </span>
+                                                                                    <span class="user-info"> <span class="lead-text">1</span> </span> </span> </label>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="nk-stepper-step">
+                                                <h5 class="title mb-4">¿En una escala del 0 al 10 ¿Qué tan probable es que nos recomiendes con un conocido?</h5>
+                                                <div class="row g-4">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <ul class="custom-control-group custom-control-vertical custom-control-stacked w-100">
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-radio custom-control-pro">
+                                                                            <input type="radio" class="custom-control-input" id="surevey_recomendacion_amigos-s5" name="surevey_recomendacion_amigos" value="5">
+                                                                            <label class="custom-control-label" for="surevey_recomendacion_amigos-s5">
+                                                                                <span class="user-card"> <span class="sq_icon">
+                                                                                        <img class="img-radio-survey" src="{{ asset('images/survey5.svg') }}" alt=""> </span>
+                                                                                    <span class="user-info"> <span class="lead-text">5
+                                                                                        </span> </span> </span> </label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-radio custom-control-pro">
+                                                                            <input type="radio" class="custom-control-input" id="surevey_recomendacion_amigos-s4" name="surevey_recomendacion_amigos" value="4">
+                                                                            <label class="custom-control-label" for="surevey_recomendacion_amigos-s4">
+                                                                                <span class="user-card"> <span class="sq_icon">
+                                                                                        <img class="img-radio-survey" src="{{ asset('images/survey4.svg') }}" alt=""> </span>
+                                                                                    <span class="user-info"> <span class="lead-text">4</span> </span> </span> </label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-radio custom-control-pro">
+                                                                            <input type="radio" class="custom-control-input" id="surevey_recomendacion_amigos-s3" name="surevey_recomendacion_amigos" value="3">
+                                                                            <label class="custom-control-label" for="surevey_recomendacion_amigos-s3">
+                                                                                <span class="user-card"> <span class="sq_icon">
+                                                                                        <img class="img-radio-survey" src="{{ asset('images/survey3.svg') }}" alt=""> </span>
+                                                                                    <span class="user-info"> <span class="lead-text">3</span> </span> </span> </label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-radio custom-control-pro">
+                                                                            <input type="radio" class="custom-control-input" id="surevey_recomendacion_amigos-s2" name="surevey_recomendacion_amigos" value="2">
+                                                                            <label class="custom-control-label" for="surevey_recomendacion_amigos-s2">
+                                                                                <span class="user-card"> <span class="sq_icon">
+                                                                                        <img class="img-radio-survey" src="{{ asset('images/survey2.svg') }}" alt=""> </span>
+                                                                                    <span class="user-info"> <span class="lead-text">2</span> </span> </span> </label>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li>
+                                                                        <div class="custom-control custom-control-sm custom-radio custom-control-pro">
+                                                                            <input type="radio" class="custom-control-input" id="surevey_recomendacion_amigos-s1" name="surevey_recomendacion_amigos" value="1">
+                                                                            <label class="custom-control-label" for="surevey_recomendacion_amigos-s1">
                                                                                 <span class="user-card"> <span class="sq_icon">
                                                                                         <img class="img-radio-survey" src="{{ asset('images/survey1.svg') }}" alt=""> </span>
                                                                                     <span class="user-info"> <span class="lead-text">1</span> </span> </span> </label>

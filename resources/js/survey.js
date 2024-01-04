@@ -32,7 +32,7 @@ $(document).ready(function() {
             $('#btn-back').hide();
             $('#btn-finish').hide();
         }
-        if (count_steeper == 4) {
+        if (count_steeper == 5) {
             console.log('ejecutar guardado');
             var btnBack = document.getElementById("btnBack");
             btnBack.style.display = "none";
