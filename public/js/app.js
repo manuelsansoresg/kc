@@ -1952,6 +1952,8 @@ if (document.getElementById('dt-financial-product')) {
         },
         ajax: '/panel/financial/product/' + financial_id + '/list/show',
         columns: [{
+          data: 'id'
+        }, {
           data: 'name'
         }, {
           data: 'status'

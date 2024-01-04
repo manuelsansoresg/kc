@@ -99,9 +99,16 @@ class Financial extends Model
         foreach ($get_list as $query) {
             $option = \View::make('panel.financial.product.add_option_dt', ['id' => $query->id])->render();
             
+            $lbl_status = '<span class="text-success">Sí</span>';
+            if ($query->status == 0) {
+                $lbl_status = '<span class="text-danger">No</span>';
+            }
+    
+            
             $data[] = array(
-                'name' => $query->id,
-                'status' => $query->name,
+                'id' => $query->id,
+                'name' => $query->name,
+                'status' => $lbl_status,
                 'options' => $option
             );
         }
