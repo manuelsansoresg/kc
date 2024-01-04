@@ -767,7 +767,7 @@
                                                                     <tr>
                                                                         <th>ID</th>
                                                                         <th>Nombre</th>
-                                                                        <th>Activoa</th>
+                                                                        <th>Activo</th>
                                                                         <th></th>
                                                                     </tr>
                                                                 </thead>
