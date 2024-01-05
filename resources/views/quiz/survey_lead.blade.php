@@ -79,7 +79,7 @@
                                         <h6 class="text-white" data-aos="fade-up" data-aos-duration="9000">
                                             Vamos a analizar y calificar tus opciones para generar un reporte y puedas elegir tu mejor opción.
                                             <br><br>
-                                            Después  de que elijas, te ayudaremos con el támite para que todo salga bien.
+                                            Después  de que elijas, te ayudaremos con el trámite para que todo salga bien.
                                            
                                         </h6>
                                     @endif
