@@ -18,6 +18,7 @@ class LeadStrategyTemplate implements TemplateInterface
     {
         $lead = Lead::find($id);
         $history_id = null;
+        $history = null;
         if ($lead !== null) {
             $product = $lead->productLead;
             //* add clientslog archive conversion
@@ -100,7 +101,7 @@ class LeadStrategyTemplate implements TemplateInterface
             Lead::createClientPerson($lead->id, $is_report, $history->id);
 
         }
-        return $history_id;
+        return $history;
     }
 
     public function breadcrumb($history, $type = null)
