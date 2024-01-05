@@ -165,7 +165,7 @@ class FinancialProduct extends Model
         foreach ($get_payments as $get_payment) {
             $payment .= $principal_pays[$get_payment->payment_method_id].',';
         }
-
+        
         $periodicity                      = trim($periodicity, ',');
         $payment                          = trim($payment, ',');
         $alcance_beneficios               = ($product->alcance_beneficios === '0') ? '' : $product->alcance_beneficios;

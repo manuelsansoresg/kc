@@ -279,6 +279,7 @@ class HistoryLog extends Model
         $data['status_id']        = $status_id;
         $data['old_status_id']    = $old_status_id;
         $data['status']           = 1;
+        
         $get_status = HistoryLog::where($data)->first();
         self::removeInProgress($id_rel, $status_id);
         
@@ -299,7 +300,7 @@ class HistoryLog extends Model
                 $data['user_id']    = Auth::user()->id;
             } catch (\Exception $th) {
             }
-
+            $data['is_credit']        = $status_id > 4 ?  1 : 0;
             $history = new HistoryLog($data);
             $history->save();
             self::subHistories($id_rel, $status_id, $history);
