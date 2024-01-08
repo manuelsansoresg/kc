@@ -303,12 +303,12 @@ class Lead extends Model
             $send_grid->createContact($get_lead->email, $get_lead->first_name, $get_lead->last_name);
             HistoryLog::move($get_lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         }
-
+        $history = null;
         if ($number_step == 6) {
             $template   = TemplateValues::STRATEGY['lead'];
-            (new $template)->move($get_lead->id);
+            $history = (new $template)->move($get_lead->id);
         }
-        return $get_lead;
+        return array('lead' => $get_lead, 'history' => $history);
     }
 
     //* validate save form include iframe in domain appp.kaaxclub

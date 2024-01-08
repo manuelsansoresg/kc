@@ -20,6 +20,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -161,6 +162,8 @@ class HomeController extends Controller
         $info = FinancialProduct::returnInfo($product);
         return response()->json($info);
     }
+    
+   
 
     public function storeReportProduct(Request $request)
     {
@@ -294,7 +297,7 @@ class HomeController extends Controller
     public function leadStore(Request  $request)
     {
         $lead = Lead::saveLeadSurvey($request);
-        return response()->json(['lead' => $lead]);
+        return response()->json(['lead' => $lead['lead'], 'history' => $lead['history']]);
     }
 
     public function leadFormStore(Request  $request)
