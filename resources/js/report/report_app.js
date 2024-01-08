@@ -227,12 +227,13 @@ $(document).ready(function() {
         placeholder: "Escribe para buscar..",
         
     });
+    
     if (document.getElementById('is_validate_modal_product')) {
         
 
         let is_validate_modal_product = $('#is_validate_modal_product').val();
         if (is_validate_modal_product == '0') {
-            $('#modal-product').modal('show');
+            //$('#modal-product').modal('show');
         }
     }
 
