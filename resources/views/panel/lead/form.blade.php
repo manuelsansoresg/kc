@@ -115,7 +115,7 @@
                                                         <div class="col-md-6" id="content-tipo-credito" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Tipo de crédito que desea el prospecto</label>
-                                                                <p class="small">Categoría de  crédito</p>
+                                                                <p class="small">Categoría de crédito</p>
                                                                 <div class="form-control-wrap">
                                                                     @php
                                                                         $type_products = config('financial_enums.type_products');

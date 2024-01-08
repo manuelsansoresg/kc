@@ -97,4 +97,9 @@ class Manychat
         );
         return self::setCurl('subscriber/removeTag', $data);
     }
+
+    public function getInfoUser($subscriber_id)
+    {
+        return self::setCurl('subscriber/getInfo?subscriber_id='.$subscriber_id, null, 'GET');
+    }
 }
