@@ -88,7 +88,7 @@
                                     @if ($dayOK && $timeOK)
                                     <div class="row justify-content-center mt-3" >
                                         <div class="col-12 col-md-6">
-                                            <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary btn-lg btn-block py-3 pointer"
+                                            <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero información." class="btn btn-primary btn-lg btn-block py-3 pointer"
                                                 >Contactar asesor &nbsp;
                                                 <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
                                             </a>
