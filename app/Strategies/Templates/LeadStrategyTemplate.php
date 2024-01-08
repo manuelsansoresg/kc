@@ -2,12 +2,16 @@
 
 namespace App\Strategies\Templates;
 
+use App\Lib\Manychat;
+use App\Models\Agreement;
+use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\Lead;
+use App\Models\Product;
 use App\Strategies\TemplateInterface;
 use App\Strategies\Values\SendNotificationsValues;
 use stdClass;
@@ -16,7 +20,10 @@ class LeadStrategyTemplate implements TemplateInterface
 {
     public function move($id, $is_report = false)
     {
-        $lead = Lead::find($id);
+        $get_lead = Lead::find($id);
+        self::setCustomFieldsManyChat($get_lead->id);
+
+        $lead = Lead::find($id);;
         $history_id = null;
         $history = null;
         if ($lead !== null) {
@@ -102,6 +109,68 @@ class LeadStrategyTemplate implements TemplateInterface
 
         }
         return $history;
+    }
+
+    public function setCustomFieldsManyChat($lead_id)
+    {
+        $lead = Lead::find($lead_id);
+        $manychat_id = $lead->manychat_id;
+        $manychat = new Manychat();
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $status = $info->status;
+        $data_lead = array();
+        if ($status != 'error') {
+            $data = $info->data;
+            $custom_fields = $data->custom_fields;
+            foreach ($custom_fields as $key => $custom_field) {
+                
+                if ($lead->asesor_id == null && $custom_field->name == 'Asesor') {
+                    $data_lead['asesor_id'] = $custom_field->value;
+                }
+                
+                if ($lead->aval_o_garantia == null && $custom_field->name == 'Aval o garantía') {
+                    $data_lead['aval_o_garantia'] = $custom_field->value == true ? 1 : 0;
+                }
+                
+                if ($lead->bank_id == null && $custom_field->name == 'Banco') {
+                    $get_bank = Bank::where('name', $custom_field->value)->first();
+                    $data_lead['bank_id'] = $get_bank->id;
+                }
+                
+                if ($lead->channel_id == null && $custom_field->name == 'Canal') {
+                    $channel_id = config('enums.channel_asesor')[$custom_field->value];
+                    $data_lead['channel_id'] = $channel_id;
+                }
+                
+                if ($lead->consulta_buro == null && $custom_field->name == 'Consulta buró') {
+                    $channel_id = config('enums.channel_asesor')[$custom_field->value];
+                    $data_lead['consulta_buro'] = $custom_field->value == true ? 1 : 0;
+                }
+                
+                if ($lead->consulta_buro == null && $custom_field->name == 'Organización') {
+                    $agreement = Agreement::where('name', $custom_field->value)->first();
+                    $data_lead['agreement_id'] = $agreement->id;
+                }
+                
+                if ($lead->origin_id == null && $custom_field->name == 'Origen') {
+                    $data_lead['origin_id'] = 2;
+                }
+                
+                if ($lead->product_id == null && $custom_field->name == 'Servicio KC') {
+                    $get_product = Product::where('alias', $custom_field->value)->first();
+                    $data_lead['product_id'] = $get_product->id;
+                }
+                
+                
+                if ($lead->tipo_credito == null && $custom_field->name == 'Tipo de crédito') {
+                    $type_products = config('financial_enums.type_products')[$custom_field->value];
+                    $data_lead['tipo_credito'] = $type_products;
+                }
+
+            }
+            $lead->update($data_lead);
+        }
+
     }
 
     public function breadcrumb($history, $type = null)
