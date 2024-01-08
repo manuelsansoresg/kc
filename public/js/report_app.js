@@ -6554,8 +6554,7 @@ $(document).ready(function () {
   if (document.getElementById('is_validate_modal_product')) {
     var is_validate_modal_product = $('#is_validate_modal_product').val();
 
-    if (is_validate_modal_product == '0') {
-      $('#modal-product').modal('show');
+    if (is_validate_modal_product == '0') {//$('#modal-product').modal('show');
     }
   }
 
