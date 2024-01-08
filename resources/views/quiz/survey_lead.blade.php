@@ -239,15 +239,15 @@
                                                                    </span> </label>
                                                         </div>
                                                     </li>
-                                                   {{--  <li>
+                                                    <li>
                                                         <div class="custom-control custom-control-sm custom-radio custom-control-pro">
                                                             <input type="radio" class="custom-control-input" id="surevey_kc_attention-s6" name="data[product_id]" value="2" onclick="chooseOptionCredit()">
                                                             <label class="custom-control-label bg-dark" for="surevey_kc_attention-s6">
                                                                 <span class="user-card"> <span class="sq_icon">
-                                                                    Ya tengo un crédito, quiero mejorarlo </span>
+                                                                    Quiero reducir mi deuda </span>
                                                                    </span> </label>
                                                         </div>
-                                                    </li> --}}
+                                                    </li>
                                                 </ul>
                                                 {{-- <a onclick="chooseOptionCredit(1)" class="btn btn-primary btn-lg" style="cursor: pointer;">Quiero un crédito nuevo</a>
                                                 <a onclick="chooseOptionCredit(2)" class="btn btn-primary btn-lg" style="cursor: pointer;">Ya tengo un crédito, quiero mejorarlo</a> --}}
