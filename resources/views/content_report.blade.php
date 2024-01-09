@@ -44,7 +44,7 @@
 
                                             <div class="text-bottom-end">
                                                 <div>
-                                                    <span class="h4">Te ayudaremos con el trámite para que todo salga bien. </span>
+                                                    <p>Te ayudaremos con el trámite para que todo salga bien. </p>
                                                 </div>
                                             </div>
 

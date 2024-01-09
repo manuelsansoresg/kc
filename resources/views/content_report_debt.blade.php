@@ -74,7 +74,7 @@ $chart4 = $my_product_financial;
 
                                                     <div class="text-bottom-end">
                                                         <div>
-                                                            <span class="h4"> Te ayudaremos a cambiarte a la mejor opción </span>
+                                                            <p> Te ayudaremos a cambiarte a la mejor opción </p>
                                                         </div>
                                                     </div>
                                             @endif
