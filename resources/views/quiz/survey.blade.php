@@ -303,7 +303,7 @@
                                         <ul class="nk-stepper-pagination pt-4 gx-4 gy-2 stepper-pagination">
                                             <li class="step-prev"><button
                                                     class="btn btn-dim btn-primary" id="btnBack" onclick="backStepper()">Regresar</button></li>
-                                            <li class="step-next"><button class="btn btn-primary" onclick="continueStepper()">Continuar</button>
+                                            <li class="step-next"><button class="btn btn-primary" onclick="continueStepper()" id="btn-continuar">Continuar</button>
                                             </li>
                                             <li class="step-submit" onclick="">
                                                 <div class="col-12">
