@@ -163,7 +163,15 @@ $chart4 = $my_product_financial;
                                                 {{ $financial_product->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
                                             </button>
                                             <ul class="list-unstyled mb-0 pt-4">
-                                                <li class="mb-2">
+                                                <li class="mb-1">
+                                                    <span
+                                                        class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                    <span>Entrega: <span class="text-muted">{{ $financial_product->delivery_time_hours }} horas</span> </span>
+                                                   
+    
+                                                </li>
+
+                                                {{-- <li class="mb-2">
                                                     <span
                                                         class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
                                                     <span>CAT REAL: {{ reduceDecimal($financial_product->rate_cat, 1) }}</span><span
@@ -204,7 +212,7 @@ $chart4 = $my_product_financial;
                                                     </span><span class="text-sm text-muted">/5 </span>
                                                     <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp;
                                                         Ver</a>
-                                                </li>
+                                                </li> --}}
                                                 <li class="mb-1">
                                                     <span
                                                         class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
@@ -292,7 +300,16 @@ $chart4 = $my_product_financial;
                                                         {{ $final_financials->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
                                                     </button>
                                                     <ul class="list-unstyled mb-0 pt-4">
+
                                                         <li class="mb-2">
+                                                            <span
+                                                                class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
+                                                            <span>Entrega: <span class="text-muted">{{ $final_financials->delivery_time_hours }} horas</span> </span>
+                                                           
+            
+                                                        </li>
+
+                                                        {{-- <li class="mb-2">
                                                             <span
                                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
                                                             <span>CAT REAL: {{ reduceDecimal($final_financials->rate_cat, 1) }}</span><span
@@ -333,7 +350,7 @@ $chart4 = $my_product_financial;
                                                             </span><span class="text-sm text-muted">/5 </span>
                                                             <a href="#" onclick="scrollToAnchor('section-priv-datos')"> &nbsp;
                                                                 Ver</a>
-                                                        </li>
+                                                        </li> --}}
                                                         <li class="mb-1">
                                                             <span
                                                                 class="material-symbols-rounded align-middle text-warning fs-4 me-3">fiber_manual_record</span>
