@@ -272,7 +272,7 @@ class Lead extends Model
 
     public static function saveLeadSurvey($request)
     {
-
+        
         $data_lead                = $request->data;
         $number_step              = $request->number_step;
         $data_lead['origin_id']   = 2;
@@ -286,6 +286,24 @@ class Lead extends Model
         }
         $get_lead = Lead::find($lead_id);
         if ($get_lead == null) {
+             //*crear usuario manychat
+             $manychat = new Manychat();
+             $data_manychat = array(
+                 "first_name" => $request->name,
+                 "last_name" => $request->last_name,
+                 "phone" => "+521".$request->cellphone,
+                 "whatsapp_phone" => "521".$request->cellphone,
+                 "email" => $request->email,
+                 "has_opt_in_sms" => true,
+                 "has_opt_in_email" => true,
+                 "consent_phrase" => 'kc',
+             );
+             $result = json_decode($manychat->altaUsuario($data_manychat));
+             if ($result->status == 'success') {
+                $data_manychat              = $result->data;
+                $data_lead['manychat_id']   = $data_manychat->id;
+            }
+
             $get_lead = new Lead($data_lead);
             $get_lead->save();
             $is_new = true;
@@ -295,6 +313,9 @@ class Lead extends Model
         }
 
         if ($number_step == 1) {
+           
+
+
             //* Execute notification in create lead
             $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
             (new $notification)->send($get_lead->id);
