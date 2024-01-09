@@ -220,7 +220,7 @@
                                                 </div>
                                             </div>
                                             <div class="nk-stepper-step">
-                                                <h5 class="title mb-4">¿En una escala del 0 al 10 ¿Qué tan probable es que nos recomiendes con un conocido?</h5>
+                                                <h5 class="title mb-4">¿En una escala del 1 al 5 ¿Qué tan probable es que nos recomiendes con un conocido?</h5>
                                                 <div class="row g-4">
                                                     <div class="col-12">
                                                         <div class="form-group">
