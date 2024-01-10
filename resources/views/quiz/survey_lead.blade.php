@@ -88,7 +88,7 @@
                                     @if ($dayOK && $timeOK)
                                     <div class="row justify-content-center mt-3" >
                                         <div class="col-12 col-md-6">
-                                            <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary btn-lg btn-block py-3 pointer"
+                                            <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero información." class="btn btn-primary btn-lg btn-block py-3 pointer"
                                                 >Contactar asesor &nbsp;
                                                 <img width="18" src="/images/whatsapp-logo-1-1.png" alt="">
                                             </a>
@@ -239,15 +239,15 @@
                                                                    </span> </label>
                                                         </div>
                                                     </li>
-                                                   {{--  <li>
+                                                    <li>
                                                         <div class="custom-control custom-control-sm custom-radio custom-control-pro">
                                                             <input type="radio" class="custom-control-input" id="surevey_kc_attention-s6" name="data[product_id]" value="2" onclick="chooseOptionCredit()">
                                                             <label class="custom-control-label bg-dark" for="surevey_kc_attention-s6">
                                                                 <span class="user-card"> <span class="sq_icon">
-                                                                    Ya tengo un crédito, quiero mejorarlo </span>
+                                                                    Quiero reducir mi deuda </span>
                                                                    </span> </label>
                                                         </div>
-                                                    </li> --}}
+                                                    </li>
                                                 </ul>
                                                 {{-- <a onclick="chooseOptionCredit(1)" class="btn btn-primary btn-lg" style="cursor: pointer;">Quiero un crédito nuevo</a>
                                                 <a onclick="chooseOptionCredit(2)" class="btn btn-primary btn-lg" style="cursor: pointer;">Ya tengo un crédito, quiero mejorarlo</a> --}}
@@ -263,16 +263,15 @@
                                         </div>
                                         <div class="nk-stepper-step">
                                             <div class="pt-4 pb-2">
-                                                <h5 class="title mb-2 fw-bold">¡Genial!</h5>
-                                                <p>Te hemos enviado un <b>correo electrónico</b> con el análisis de las opciones de crédito disponibles para ti. 
-                                                    <br>
+                                                <h5 class="title mb-2 fw-bold">¡Genial! Aquí está tu reporte.</h5>
+                                                <p>
                                                     Una vez que elijas la mejor opción, te ayudaremos con el trámite.
                                                 </p>
                                                 @if ($dayOK && $timeOK)
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a href="https://kaaxclub.com/" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
-                                                            >OK</a>
+                                                        <a href="#" id="url_report" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
+                                                            >Ver reporte</a>
                                                     </div>
                                                 </div>
     
@@ -301,7 +300,7 @@
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12">
                                                        <p class="text-muted font-italic" style="font-style: italic;">
-                                                        Si no ves el correo electrónico. Consulta la bandeja de spam
+                                                        También te lo enviamos por email, si no lo vez, consulta la bandeja de spam
                                                        </p>
                                                     </div>
                                                 </div>
@@ -473,7 +472,18 @@
                 .then(function(response) {
                     let result = response.data;
                     let lead = result.lead;
+                    let history = result.history;
                     $('#lead_id').val(lead.id);
+                    if (history != null) {
+                        //*cambiar URL a produccion
+                        let resultReport = 'https://test.kaaxclub.com/reporte/' + history.id;
+                        document.getElementById('url_report').setAttribute('href', resultReport);
+                        
+                    }
+                    /* axios.get('/reporte/survey/getURL')
+                    .then(function(response) {
+                    }) */
+                    
                     if (is_redirect == true) {
                         window.location = 'https://kaaxclub.com';
                     }

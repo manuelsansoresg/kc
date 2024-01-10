@@ -50,8 +50,10 @@
                             </a>
                             <div class="text-block" data-aos="fade-up"
                             data-aos-duration="5000">
-                                <img class="nk-survey-gfx mb-5" src="{{ asset('images/apple-touch-icon.png') }}"
-                                    alt="">
+                                <div class="d-none d-md-block">
+                                    <img class="nk-survey-gfx mb-5" src="{{ asset('images/apple-touch-icon.png') }}"
+                                        alt="">
+                                </div>
                                 <h3 class="text-white">Encuesta de satisfacción</h3>
                                 <p>Tú opinion es muy importante, nos ayuda a mejorar.</p>
                             </div>
@@ -220,7 +222,7 @@
                                                 </div>
                                             </div>
                                             <div class="nk-stepper-step">
-                                                <h5 class="title mb-4">¿En una escala del 0 al 10 ¿Qué tan probable es que nos recomiendes con un conocido?</h5>
+                                                <h5 class="title mb-4">¿En una escala del 1 al 5 ¿Qué tan probable es que nos recomiendes con un conocido?</h5>
                                                 <div class="row g-4">
                                                     <div class="col-12">
                                                         <div class="form-group">
@@ -301,7 +303,7 @@
                                         <ul class="nk-stepper-pagination pt-4 gx-4 gy-2 stepper-pagination">
                                             <li class="step-prev"><button
                                                     class="btn btn-dim btn-primary" id="btnBack" onclick="backStepper()">Regresar</button></li>
-                                            <li class="step-next"><button class="btn btn-primary" onclick="continueStepper()">Continuar</button>
+                                            <li class="step-next"><button class="btn btn-primary" onclick="continueStepper()" id="btn-continuar">Continuar</button>
                                             </li>
                                             <li class="step-submit" onclick="">
                                                 <div class="col-12">

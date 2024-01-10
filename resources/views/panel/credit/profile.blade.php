@@ -637,7 +637,7 @@
                                                             
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
-                                                                    <span class="profile-ud-label">¿En una escala del 0 al 10 ¿Qué tan probable es que nos recomiendes con un conocido?</span>
+                                                                    <span class="profile-ud-label">¿En una escala del 1 al 5 ¿Qué tan probable es que nos recomiendes con un conocido?</span>
                                                                     <span class="profile-ud-value">
                                                                         @if ($enum_recomendacion_amigos != null)
                                                                             <img src="{{ asset($enum_recomendacion_amigos) }}" alt="">

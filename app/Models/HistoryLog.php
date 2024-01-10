@@ -344,6 +344,9 @@ class HistoryLog extends Model
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, $id_rel, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $id_rel, 0);
             }
+
+            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Check up');
+            $notification_slack->sendMessage();
         }
         
         if ($status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
@@ -418,6 +421,9 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT, $id_rel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_1, $id_rel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $id_rel, 0);
+
+            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Payments');
+            $notification_slack->sendMessage();
         }
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
             $credit             = Credit::find($id_rel);

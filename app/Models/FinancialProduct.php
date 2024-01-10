@@ -300,7 +300,7 @@ class FinancialProduct extends Model
         //dd($type_product_id);
         
         $sql = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity', 'bank_ids', 'is_vincular_banco',
+            'rate_comision', 'rate_deadline', 'rate_contract', 'delivery_time_hours', 'rate_privacity', 'bank_ids', 'is_vincular_banco',
             'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
         )
@@ -362,7 +362,7 @@ class FinancialProduct extends Model
 
         $result = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
-            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
+            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'delivery_time_hours', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
