@@ -267,5 +267,20 @@ $(document).ready(function() {
                 // Manejar errores
             });
     }
+
+    window.filterImporte = function()
+    {
+        let importe   = $('#importe').val();
+        let plazo     = $('#plazo').val();
+        axios
+            .post('/reporte/product/importePlazo', {importe:importe ,plazo:plazo})
+            .then(function (response) {
+                window.location.reload();
+
+            })
+            .catch(e => {
+                // Manejar errores
+            });
+    }
 });
 

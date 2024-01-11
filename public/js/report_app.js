@@ -6575,6 +6575,18 @@ $(document).ready(function () {
     })["catch"](function (e) {// Manejar errores
     });
   };
+
+  window.filterImporte = function () {
+    var importe = $('#importe').val();
+    var plazo = $('#plazo').val();
+    axios.post('/reporte/product/importePlazo', {
+      importe: importe,
+      plazo: plazo
+    }).then(function (response) {
+      window.location.reload();
+    })["catch"](function (e) {// Manejar errores
+    });
+  };
 });
 })();
 

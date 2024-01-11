@@ -89,7 +89,9 @@ class HomeController extends Controller
             $history      = HistoryLog::find($get_action->id);
             $credit       = Credit::find($credit_id);
         }
+
         session(['credit_id' => $credit->id]);
+        $plazo   = Session::get('plazo');
         
         if ($credit->applied_financial != '') {
             return view('content_expiration_report');
@@ -106,6 +108,7 @@ class HomeController extends Controller
         $new_financials       = FinancialProduct::customSortFinancials($financial_products);
         $existing_ids = $new_financials->pluck('id')->toArray();
         $final_financials = FinancialProduct::customSortFinancials($financial_products->whereNotIn('id', $existing_ids), true);
+        //dd($final_financials);
         $banks = Bank::all();
         $my_product_financial = null;
         $my_product           = null;
@@ -152,9 +155,9 @@ class HomeController extends Controller
             $total_product          = count($my_products);
             $financial_products     = FinancialProduct::getAllByTemplate();
 
-            return view('content_report_debt', compact('banks', 'client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'financial_products', 'final_financials', 'my_product_financial', 'my_products', 'total_product'));
+            return view('content_report_debt', compact('banks', 'plazo', 'client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'financial_products', 'final_financials', 'my_product_financial', 'my_products', 'total_product'));
         }
-        return view('content_report', compact('banks', 'client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
+        return view('content_report', compact('banks', 'client', 'plazo', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
     }
 
     public function infoProduct(FinancialProduct $product)
@@ -254,6 +257,21 @@ class HomeController extends Controller
     {
         $creditId = session('credit_id');
         CurrentFinancialProduct::setOtherProduct($creditId);
+    }
+
+    public function importePlazo(Request $request)
+    {
+         // Obtener los valores de importe y plazo de la solicitud POST
+        $importe    = $request->input('importe');
+        $plazo      = $request->input('plazo');
+        $creditId   = Session::get('credit_id');
+        if ($importe != null) {
+            Credit::find($creditId)->update(['importe_solicitado' => $importe]);
+        }
+                // Almacenar los valores en variables de sesión
+        Session::put('importe', $importe);
+        Session::put('plazo', $plazo);
+
     }
 
     public function method($history_id)

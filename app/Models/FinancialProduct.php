@@ -284,7 +284,9 @@ class FinancialProduct extends Model
 
     public static function getByRate($credit, $request = null)
     {
-       
+        $importe   = Session::get('importe');
+        $plazo   = Session::get('plazo');
+
         DB::connection()->enableQueryLog();
         $agreement_id           = $credit->agreement_id;
         $type_product_id        = $credit->tipo_credito;
@@ -293,10 +295,29 @@ class FinancialProduct extends Model
         $financial_ids          = array();
         $financial_product_ids  = array();
         $products = CurrentFinancialProduct::where(['id_rel' => $credit->id , 'type' => 2])->get();
-        foreach ($financial_agreements as $financial_agreement) {
-            $financial_ids[] = $financial_agreement->product_id;
+
+        // Verificar si los valores de importe o plazo son distintos
+        
+        if ($importe != '') {
+            // Obtener los product_id del modelo LoanSimulation con principal igual a $importe
+            $product_loan = LoanSimulation::where('principal', $importe)->pluck('product_id')->toArray();
         }
 
+        if ($plazo != '' ) {
+            // Obtener los product_id del modelo LoanSimulation con term igual a $plazo
+            $product_loan = LoanSimulation::where('term', $plazo)->pluck('product_id')->toArray();
+        }
+        
+        if (!empty($product_loan)) {
+            // Unir y filtrar duplicados
+            $financial_ids = array_unique(array_merge($financial_ids, $product_loan));
+        } else {
+            foreach ($financial_agreements as $financial_agreement) {
+                $financial_ids[] = $financial_agreement->product_id;
+            }
+        }
+        
+        
         //dd($type_product_id);
         
         $sql = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
@@ -305,6 +326,7 @@ class FinancialProduct extends Model
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
+            
             ->whereIn('financial_products.id', $financial_ids)
             ->where('financial_products.type_product_id', $type_product_id)
             ->where('financial_products.status', 1)
@@ -363,9 +385,10 @@ class FinancialProduct extends Model
         $result = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
             'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'delivery_time_hours', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
+            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro', 'principal', 'term'
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
+            ->leftJoin('loan_simulations', 'loan_simulations.product_id', 'financial_products.id')
             ->whereIn('financial_products.id', $financial_product_ids)
             ->orderBy('rate_kc', 'DESC')->get();
         

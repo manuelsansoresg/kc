@@ -81,12 +81,15 @@
         </svg>
         <div class="container pt-3 pt-lg-5 pb-9">
             <div class="row pb-8 pb-lg-5">
-                <div class="col-lg-10 col-xl-8 mx-auto text-center text-calificacion">
-                    <h1 class="display-4 mb-0" data-aos="fade-up" data-aos-delay="100">Calificación de KaaxClub</h1>
-                    <p class="mb-4" data-aos="fade-up" data-aos-delay="100">
-                        Analizamos a detalle y otorgamos una puntuación a cada financiera para ayudarte a tomar la mejor
-                        decisión.
-                    </p>
+                <div class="col-lg-10 col-xl-8 mx-auto text-center text-calificacion" data-aos="fade-up" data-aos-delay="100" style="z-index: 999999">
+                    <p class="mb-0" data-aos="fade-up" data-aos-delay="100">Simula tu crédito</p>
+                    <h1 class="display-4 mb-4" data-aos="fade-uh1" data-aos-delay="100">
+                      {{ $credit->importe_solicitado!= null ? '$'.format_price($credit->importe_solicitado) : '$10,000.00' }} <span class="fs-4"> {{ $plazo == '' ? '24 meses' : $plazo.' meses' }}</span>
+                    </h1>
+                    <div class="col-12 text-center" data-aos="fade-up" data-aos-delay="100">
+                        <a href="#"  data-bs-toggle="modal" data-bs-target="#modal-importe">Cambiar importe</a>
+                        <a href="#"  data-bs-toggle="modal" data-bs-target="#modal-plazo"> - Cambiar plazo</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,6 +127,9 @@
                                                 class="w-100 btn btn-lg {{ $key == 0 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
                                                 {{ $financial_product->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
                                             </button>
+                                            <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
+                                                <span>  <span class="h3 ">{{ $financial_product->principal != '' ? '$'.format_price($financial_product->principal). ' mensuales*' : null }} </span>  </span>
+                                            </p>
                                             <ul class="list-unstyled mb-0 pt-4">
                                                 <li class="mb-1">
                                                     <span
@@ -259,6 +265,9 @@
                                                         class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
                                                         {{ $final_financials->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
                                                     </button>
+                                                    <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
+                                                        <span>  <span class="h3 ">{{ $final_financials->principal != '' ? '$'.format_price($final_financials->principal). ' mensuales*' : null }} </span>  </span>
+                                                    </p>
                                                     <ul class="list-unstyled mb-0 pt-4">
                                                         
                                                         <li class="mb-2">
@@ -761,6 +770,8 @@
     
     @include('panel.modal.bank')    
     @include('report.modal_info')    
+    @include('report.modal_importe')   
+    @include('report.modal_plazo')   
 @endsection
 @section('add_script')
     @include('layouts.script_report')
