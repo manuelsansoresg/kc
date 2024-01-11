@@ -92,6 +92,7 @@ class HomeController extends Controller
 
         session(['credit_id' => $credit->id]);
         $plazo   = Session::get('plazo');
+
         
         if ($credit->applied_financial != '') {
             return view('content_expiration_report');
@@ -112,7 +113,10 @@ class HomeController extends Controller
         $banks = Bank::all();
         $my_product_financial = null;
         $my_product           = null;
-
+        
+        Credit::where('id', $credit->id)
+                ->where('date_open_report', '=' , null)
+                ->update(['date_open_report'=> date('Y-m-d H:i:s')]);
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             $is_best = false;
             $chart['Financiera 1'] = array(
