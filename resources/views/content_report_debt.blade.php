@@ -274,6 +274,9 @@ $chart4 = $my_product_financial;
                             <p class="mt-5" id="leyend-opciones">
                                 Estás viendo las 3 mejores opciones. Puedes ver todas las opciones <a  class="text-primary" style="cursor: pointer" onclick="showFinalFinancial()">aquí</a>
                             </p>
+                            <p class="mt-5 text-sm">
+                                *Esta simulación tiene carácter informativo y no representa una oferta definitiva. Los valores presentados pueden variar dependiendo de las condiciones y tu perfil crediticio.
+                            </p>
                         </div>
                         {{-- pintar el resto de financieras --}}
                         <div id="final-financials" style="display: none">
