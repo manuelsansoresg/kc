@@ -308,13 +308,8 @@ class FinancialProduct extends Model
             $product_loan = LoanSimulation::where('term', $plazo)->pluck('product_id')->toArray();
         }
         
-        if (!empty($product_loan)) {
-            // Unir y filtrar duplicados
-            $financial_ids = array_unique(array_merge($financial_ids, $product_loan));
-        } else {
-            foreach ($financial_agreements as $financial_agreement) {
-                $financial_ids[] = $financial_agreement->product_id;
-            }
+        foreach ($financial_agreements as $financial_agreement) {
+            $financial_ids[] = $financial_agreement->product_id;
         }
         
         
@@ -388,7 +383,6 @@ class FinancialProduct extends Model
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro', 'principal', 'term'
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
-            ->leftJoin('loan_simulations', 'loan_simulations.product_id', 'financial_products.id')
             ->whereIn('financial_products.id', $financial_product_ids)
             ->orderBy('rate_kc', 'DESC')->get();
         
