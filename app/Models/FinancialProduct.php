@@ -380,7 +380,7 @@ class FinancialProduct extends Model
         $result = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
             'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'delivery_time_hours', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro', 'principal', 'term'
+            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
             ->whereIn('financial_products.id', $financial_product_ids)
