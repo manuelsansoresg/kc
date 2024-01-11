@@ -26,7 +26,7 @@ class LeadController extends Controller
                 'origin_id' => 4,
                 'channel_id' => 1,
                 'email' => $request->email,
-                'importe_solicitado' => $request->importe_solicitado,
+                /* 'importe_solicitado' => $request->importe_solicitado, */
 
             );
 
@@ -72,7 +72,7 @@ class LeadController extends Controller
             $data = array(
                 'Servicio KC' => $product,
                 'Canal' => $channel,
-                'Importe solicitado' => $request->importe_solicitado,
+                /* 'Importe solicitado' => $request->importe_solicitado, */
                 'Origen' => $origin,
                 'Tipo de crédito' => $type_credit,
 
