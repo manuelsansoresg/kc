@@ -17,7 +17,7 @@ class CreateLoanSimulations extends Migration
             $table->id();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->decimal('principal')->nullable();
-            $table->decimal('term')->nullable();
+            $table->integer('term')->nullable();
             $table->decimal('payment')->nullable();
             
             $table->foreign('product_id')->references('id')->on('financial_products')->onDelete('cascade');
