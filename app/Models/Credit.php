@@ -97,7 +97,8 @@ class Credit extends Model
         'aval_o_garantia',
         'manychat_id',
         'lead_id',
-        'date_open_report'
+        'date_open_report',
+        
     ];
 
     public static function listDatatable($status)
