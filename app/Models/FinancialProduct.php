@@ -298,7 +298,7 @@ class FinancialProduct extends Model
 
         // Verificar si los valores de importe o plazo son distintos
         
-        if ($importe != '') {
+        /* if ($importe != '') {
             // Obtener los product_id del modelo LoanSimulation con principal igual a $importe
             $product_loan = LoanSimulation::where('principal', $importe)->pluck('product_id')->toArray();
         }
@@ -306,7 +306,7 @@ class FinancialProduct extends Model
         if ($plazo != '' ) {
             // Obtener los product_id del modelo LoanSimulation con term igual a $plazo
             $product_loan = LoanSimulation::where('term', $plazo)->pluck('product_id')->toArray();
-        }
+        } */
         
         foreach ($financial_agreements as $financial_agreement) {
             $financial_ids[] = $financial_agreement->product_id;
