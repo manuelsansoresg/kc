@@ -391,7 +391,6 @@ class FinancialProduct extends Model
         
         return $result;
     }
-
     
     public function pagoProducto($tasa_referencia)
     {
