@@ -277,7 +277,9 @@
                                                     @php
                                                         $lblPago =  $final_financials->fp_simulation_rate > 0 ? '$'.format_price($m_financial_product->pagoProducto($final_financials->fp_simulation_rate)) : null;
                                                     @endphp
+                                                     <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
                                                     <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
+                                                     </p>
                                                     <ul class="list-unstyled mb-0 pt-4">
                                                         
                                                         <li class="mb-2">

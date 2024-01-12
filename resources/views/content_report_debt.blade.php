@@ -166,10 +166,13 @@ $chart4 = $my_product_financial;
                                                 class="w-100 btn btn-lg {{ $key == 0 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
                                                 {{ $financial_product->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
                                             </button>
+                                            <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
                                             @php
-                                                $lblPago =  $financial_product->fp_simulation_rate > 0 ? '$'.format_price($m_financial_product->pagoProducto($financial_product->fp_simulation_rate)) : null;
+                                                $lblPago =  $financial_product->fp_simulation_rate != null ? '$'.format_price($m_financial_product->pagoProducto($financial_product->fp_simulation_rate)) : null;
                                             @endphp
+                                            
                                             <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
+                                            </p>
                                             <ul class="list-unstyled mb-0 pt-4">
                                                 <li class="mb-1">
                                                     <span
@@ -313,7 +316,9 @@ $chart4 = $my_product_financial;
                                                     @php
                                                         $lblPago =  $final_financials->fp_simulation_rate > 0 ? '$'.format_price($m_financial_product->pagoProducto($final_financials->fp_simulation_rate)) : null;
                                                     @endphp
-                                                    <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
+                                                     <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
+                                                        <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
+                                                     </p>
                                                     <ul class="list-unstyled mb-0 pt-4">
 
                                                         <li class="mb-2">
