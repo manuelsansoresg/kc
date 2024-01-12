@@ -269,13 +269,13 @@ class HomeController extends Controller
         $importe    = $request->input('importe');
         $plazo      = $request->input('plazo');
         $creditId   = Session::get('credit_id');
+        
         if ($importe != null) {
-            Credit::find($creditId)->update(['importe_solicitado' => $importe]);
+            Credit::where('id', $creditId)->update(['importe_solicitado' => $importe]);
         }
                 // Almacenar los valores en variables de sesión
         Session::put('importe', $importe);
         Session::put('plazo', $plazo);
-
     }
 
     public function method($history_id)
