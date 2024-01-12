@@ -136,6 +136,7 @@ if (!function_exists('format_price')) {
     }
 }
 
+
 if (!function_exists('format_priceWithoutDecimal')) {
     function format_priceWithoutDecimal($price)
     {
