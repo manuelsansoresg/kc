@@ -399,7 +399,9 @@ class FinancialProduct extends Model
         $prestamo   = Session::get('importe') == null ? $credit->importe_solicitado : Session::get('importe');
         $plazo      = Session::get('plazo') == null ? 24 : Session::get('plazo');
         $finance    = new Finance();
-
+        if ($prestamo == null) {
+            $prestamo = 10000;
+        }
         try {
             $pago_periodico   = $finance->payment($tasa_referencia, $plazo, -$prestamo);
         } catch (\Exception $th) {
