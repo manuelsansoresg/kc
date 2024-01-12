@@ -136,6 +136,21 @@ if (!function_exists('format_price')) {
     }
 }
 
+
+if (!function_exists('format_priceWithoutDecimal')) {
+    function format_priceWithoutDecimal($price)
+    {
+        if (!$price || !is_numeric($price)) {
+            return 0;
+        }
+
+        $formattedPrice = number_format($price, 2, '.', ',');
+        $formattedPrice = explode('.', $formattedPrice)[0];
+    
+        return $formattedPrice;
+    }
+}
+
 if (!function_exists('reduceDecimal')) {
     function reduceDecimal($number, $max_decimal = 2)
     {

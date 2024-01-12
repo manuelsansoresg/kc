@@ -55,6 +55,8 @@ Route::get('reporte/{credit}/status/finish', ['\App\Http\Controllers\HomeControl
 Route::post('/reporte/product/email/update', ['\App\Http\Controllers\HomeController', 'updateAndSendEmail']);
 Route::post('/reporte/product/credit/update', ['\App\Http\Controllers\HomeController', 'updateProduct']);
 Route::get('/reporte/product/credit/notFound', ['\App\Http\Controllers\HomeController', 'ProductNotFound']);
+Route::post('/reporte/product/importePlazo', ['\App\Http\Controllers\HomeController', 'importePlazo']);
+
 
 
 

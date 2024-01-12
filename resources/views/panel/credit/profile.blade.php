@@ -297,6 +297,16 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Reporte visto</span>
+                                                                        <span class="profile-ud-value">
+                                                                            @if ($credit->date_open_report != null)
+                                                                               {{ formatDateNameMonth($credit->date_open_report) }}
+                                                                            @endif
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                                                                
 
                                                             </div><!-- .profile-ud-list -->

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Lib\Csendgrid;
+use App\Lib\pear\Finance;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -103,6 +104,7 @@ class FinancialProduct extends Model
         'referencia_comparativa',
         
         'proceso_tramite',
+        'fp_simulation_rate',
     ];
 
     public static function getbyIdFirst($product_id)
@@ -284,7 +286,9 @@ class FinancialProduct extends Model
 
     public static function getByRate($credit, $request = null)
     {
-       
+        $importe   = Session::get('importe');
+        $plazo   = Session::get('plazo');
+
         DB::connection()->enableQueryLog();
         $agreement_id           = $credit->agreement_id;
         $type_product_id        = $credit->tipo_credito;
@@ -293,10 +297,24 @@ class FinancialProduct extends Model
         $financial_ids          = array();
         $financial_product_ids  = array();
         $products = CurrentFinancialProduct::where(['id_rel' => $credit->id , 'type' => 2])->get();
+
+        // Verificar si los valores de importe o plazo son distintos
+        
+        /* if ($importe != '') {
+            // Obtener los product_id del modelo LoanSimulation con principal igual a $importe
+            $product_loan = LoanSimulation::where('principal', $importe)->pluck('product_id')->toArray();
+        }
+
+        if ($plazo != '' ) {
+            // Obtener los product_id del modelo LoanSimulation con term igual a $plazo
+            $product_loan = LoanSimulation::where('term', $plazo)->pluck('product_id')->toArray();
+        } */
+        
         foreach ($financial_agreements as $financial_agreement) {
             $financial_ids[] = $financial_agreement->product_id;
         }
-
+        
+        
         //dd($type_product_id);
         
         $sql = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
@@ -305,6 +323,7 @@ class FinancialProduct extends Model
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
+            
             ->whereIn('financial_products.id', $financial_ids)
             ->where('financial_products.type_product_id', $type_product_id)
             ->where('financial_products.status', 1)
@@ -363,7 +382,7 @@ class FinancialProduct extends Model
         $result = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
             'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'delivery_time_hours', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
+            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro', 'fp_simulation_rate'
         )
             ->join('financials', 'financials.id', 'financial_products.financial_id')
             ->whereIn('financial_products.id', $financial_product_ids)
@@ -371,6 +390,24 @@ class FinancialProduct extends Model
         
         
         return $result;
+    }
+    
+    public function pagoProducto($tasa_referencia)
+    {
+        $creditId   = Session::get('credit_id');
+        $credit     = Credit::find($creditId);
+        $prestamo   = Session::get('importe') == null ? $credit->importe_solicitado : Session::get('importe');
+        $plazo      = Session::get('plazo') == null ? 24 : Session::get('plazo');
+        $finance    = new Finance();
+        if ($prestamo == null) {
+            $prestamo = 10000;
+        }
+        try {
+            $pago_periodico   = $finance->payment($tasa_referencia, $plazo, -$prestamo);
+        } catch (\Exception $th) {
+            return null;
+        }
+        return $pago_periodico;
     }
 
     public static function saveEdit($request)
