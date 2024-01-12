@@ -397,9 +397,11 @@ class FinancialProduct extends Model
         $prestamo         = Session::get('importe');
         $plazo            = Session::get('plazo');
         $finance          = new Finance();
-        $pago_periodico   = $finance->payment($tasa_referencia, $plazo, -$prestamo);
-
-        return $$pago_periodico;
+        if ($tasa_referencia != 0) {
+            $pago_periodico   = $finance->payment($tasa_referencia, $plazo, -$prestamo);
+            return $$pago_periodico;
+        }
+        return null;
     }
 
     public static function saveEdit($request)
