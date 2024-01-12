@@ -167,7 +167,7 @@ $chart4 = $my_product_financial;
                                                 {{ $financial_product->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
                                             </button>
                                             @php
-                                                $lblPago =  $financial_product->fp_simulation_rate != '' ? '$'.format_price($m_financial_product->pagoProducto($financial_product->fp_simulation_rate)) : null;
+                                                $lblPago =  $financial_product->fp_simulation_rate > 0 ? '$'.format_price($m_financial_product->pagoProducto($financial_product->fp_simulation_rate)) : null;
                                             @endphp
                                             <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
                                             <ul class="list-unstyled mb-0 pt-4">
@@ -311,7 +311,7 @@ $chart4 = $my_product_financial;
                                                         {{ $final_financials->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
                                                     </button>
                                                     @php
-                                                        $lblPago =  $final_financials->fp_simulation_rate != '' ? '$'.format_price($m_financial_product->pagoProducto($final_financials->fp_simulation_rate)) : null;
+                                                        $lblPago =  $final_financials->fp_simulation_rate > 0 ? '$'.format_price($m_financial_product->pagoProducto($final_financials->fp_simulation_rate)) : null;
                                                     @endphp
                                                     <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
                                                     <ul class="list-unstyled mb-0 pt-4">
