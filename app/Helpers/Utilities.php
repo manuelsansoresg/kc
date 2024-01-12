@@ -157,6 +157,8 @@ if (!function_exists('format_priceWithoutDecimal')) {
     }
 }
 
+
+
 if (!function_exists('reduceDecimal')) {
     function reduceDecimal($number, $max_decimal = 2)
     {
