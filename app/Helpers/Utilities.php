@@ -126,13 +126,34 @@ if (!function_exists('deadlineKc')) {
     }
 }
 if (!function_exists('format_price')) {
-    function format_price($price)
+    function format_price($price, $decimal = 2)
     {
         if (!$price || !is_numeric($price)) {
             return 0;
         }
 
-        return number_format($price, 2, '.', ',');
+        $formattedPrice = number_format($price, $decimal, '.', ',');
+
+        // Verificar si $decimal es igual a 0 para eliminar los decimales
+        if ($decimal == 0) {
+            $formattedPrice = explode('.', $formattedPrice)[0];
+        }
+    
+        return $decimal;
+    }
+}
+
+if (!function_exists('format_priceWithoutDecimal')) {
+    function format_priceWithoutDecimal($price)
+    {
+        if (!$price || !is_numeric($price)) {
+            return 0;
+        }
+
+        $formattedPrice = number_format($price, 2, '.', ',');
+        $formattedPrice = explode('.', $formattedPrice)[0];
+    
+        return $formattedPrice;
     }
 }
 

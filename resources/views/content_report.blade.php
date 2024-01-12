@@ -129,7 +129,7 @@
                                             </button>
                                             <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
                                                 @php
-                                                    $lblPago =  $financial_product->fp_simulation_rate > 0 ? '$'.format_price($m_financial_product->pagoProducto($financial_product->fp_simulation_rate)) : null;
+                                                    $lblPago =  $financial_product->fp_simulation_rate > 0 ? '$'.format_priceWithoutDecimal($m_financial_product->pagoProducto($financial_product->fp_simulation_rate)) : null;
                                                 @endphp
                                                 <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
                                             </p>
@@ -275,7 +275,7 @@
                                                         <span>  <span class="h3 ">{{ $final_financials->principal != '' ? '$'.format_price($final_financials->principal). ' mensuales*' : null }} </span>  </span>
                                                     </p> --}}
                                                     @php
-                                                        $lblPago =  $final_financials->fp_simulation_rate > 0 ? '$'.format_price($m_financial_product->pagoProducto($final_financials->fp_simulation_rate)) : null;
+                                                        $lblPago =  $final_financials->fp_simulation_rate > 0 ? '$'.format_priceWithoutDecimal($m_financial_product->pagoProducto($final_financials->fp_simulation_rate)) : null;
                                                     @endphp
                                                      <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
                                                     <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>

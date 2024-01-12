@@ -168,7 +168,7 @@ $chart4 = $my_product_financial;
                                             </button>
                                             <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
                                             @php
-                                                $lblPago =  $financial_product->fp_simulation_rate != null ? '$'.format_price($m_financial_product->pagoProducto($financial_product->fp_simulation_rate)) : null;
+                                                $lblPago =  $financial_product->fp_simulation_rate != null ? '$'.format_priceWithoutDecimal($m_financial_product->pagoProducto($financial_product->fp_simulation_rate)) : null;
                                             @endphp
                                             
                                             <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
@@ -314,10 +314,10 @@ $chart4 = $my_product_financial;
                                                         {{ $final_financials->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
                                                     </button>
                                                     @php
-                                                        $lblPago =  $final_financials->fp_simulation_rate > 0 ? '$'.format_price($m_financial_product->pagoProducto($final_financials->fp_simulation_rate)) : null;
+                                                        $lblPago =  $final_financials->fp_simulation_rate > 0 ? '$'.format_priceWithoutDecimal($m_financial_product->pagoProducto($final_financials->fp_simulation_rate)) : null;
                                                     @endphp
                                                      <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
-                                                        <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
+                                                    <span>  <span class="h3 ">  {{ $lblPago }} </span>  {{ $lblPago != null ? 'mensuales*' : null }}    </span>
                                                      </p>
                                                     <ul class="list-unstyled mb-0 pt-4">
 
