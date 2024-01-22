@@ -270,7 +270,7 @@
                                                 @if ($dayOK && $timeOK)
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a href="#" id="url_report" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
+                                                        <a href="#" id="url_report" class="btn btn-primary btn-lg btn-block pointer my-3 btn-block"
                                                             >Ver reporte &nbsp;  <img width="18" src="/images/rocket.png" alt=""> </a>
                                                     </div>
                                                 </div>
