@@ -32,6 +32,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.rtl.min.css" />
 
     <link href="{{ asset('images/favicon.ico') }}" rel="icon">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F7L6QJC7RG"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-F7L6QJC7RG');
+    </script>
+
      <!-- Hotjar Tracking Code for https://www.kaaxclub.com -->
      <script>
         (function(h,o,t,j,a,r){
