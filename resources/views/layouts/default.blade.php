@@ -16,6 +16,16 @@
     <link rel="stylesheet" href="/assets/css/style.css?ver=100">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/app.css?ver=100">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7L6QJC7RG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7L6QJC7RG');
+</script>
+
     <!-- Hotjar Tracking Code for https://www.kaaxclub.com -->
 <script>
     (function(h,o,t,j,a,r){
