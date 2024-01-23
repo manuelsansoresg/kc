@@ -273,13 +273,14 @@ class Lead extends Model
     public static function saveLeadSurvey($request)
     {
         
-        $data_lead                = $request->data;
-        $number_step              = $request->number_step;
-        $data_lead['origin_id']   = 2;
-        $data_lead['channel_id']  = 1;
-        $data_lead['type_id']     = 1;
-        $lead_id                  = $request->lead_id;
-        $is_new                   = false;
+        $data_lead                    = $request->data;
+        $number_step                  = $request->number_step;
+        $data_lead['origin_id']       = 2;
+        $data_lead['channel_id']      = 1;
+        $data_lead['type_id']         = 1;
+        $data_lead['tipo_credito']    = 2; //credito personal
+        $lead_id                      = $request->lead_id;
+        $is_new                       = false;
 
         if ($data_lead['agreement_id'] == '00') {
             unset($data_lead['agreement_id']);
@@ -313,8 +314,6 @@ class Lead extends Model
         }
 
         if ($number_step == 1) {
-           
-
 
             //* Execute notification in create lead
             $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
