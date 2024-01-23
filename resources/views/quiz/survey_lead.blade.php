@@ -426,12 +426,10 @@
                 }
                
                 if (count_steeper == 4) {
-                    console.log('ejecutar guardado');
                     saveLead(false);
                 }
                 
                 if (count_steeper > 3) {
-                    console.log('ejecutar guardado');
                     saveLead(false);
                 }
                 animateStepper();
