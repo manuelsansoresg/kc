@@ -17,26 +17,38 @@ class FinancialAgreement extends Model
 
     public static function saveEdit($agreement_id, $request)
     {
-        // Primero, verifica si el acuerdo financiero existe y elimínalo si es el caso.
-        $existingConfiguration = FinancialAgreement::where('agreement_id', $agreement_id);
+        // Obtén los productos existentes para este acuerdo financiero
+        $existingProducts = FinancialAgreement::where('agreement_id', $agreement_id)->pluck('product_id')->toArray();
 
-        if ($existingConfiguration != null) {
-            $existingConfiguration->delete();
-        }
-
+        // Obtén los productos del request
         $products = $request->products;
+
+        // Identifica los productos a eliminar y eliminarlos de la lista existente
+        $productsToDelete = array_diff($existingProducts, $products);
+
+        // Elimina los productos que ya no están en la lista
+        FinancialAgreement::where('agreement_id', $agreement_id)->whereIn('product_id', $productsToDelete)->delete();
+
+        // Itera sobre los productos del request
         foreach ($products as $key => $product) {
             $existingProduct = FinancialProduct::find($product);
-    
+
             if ($existingProduct) {
-                $maxId = FinancialAgreement::max('id');
-                $data_financial = array(
-                    'id' => $maxId,
-                    'agreement_id' => $agreement_id,
-                    'product_id' => $product,
-                );
-    
-                FinancialAgreement::create($data_financial);
+                // Verifica si el registro ya existe antes de crearlo
+                $existingConfiguration = FinancialAgreement::where('agreement_id', $agreement_id)
+                    ->where('product_id', $product)
+                    ->first();
+
+                if (!$existingConfiguration) {
+                    $maxId = FinancialAgreement::max('id');
+                    $data_financial = array(
+                        'id' => $maxId,
+                        'agreement_id' => $agreement_id,
+                        'product_id' => $product,
+                    );
+
+                    FinancialAgreement::create($data_financial);
+                }
             }
         }
     }
