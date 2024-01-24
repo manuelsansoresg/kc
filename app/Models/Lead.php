@@ -50,6 +50,7 @@ class Lead extends Model
 
         $actions = Action::where([
             'id_rel' => $lead_id,
+            'section' => 1,
         ])->count();
         if ($actions > 0) {
             $label.= '<br> #AcciónEnCurso';
