@@ -35,6 +35,7 @@ function setDataUser(product_id) {
         });
 }
 
+
 window.deleteProduct = function (product_id) {
     axios
         .get("panel/product/"+product_id+"/delete")

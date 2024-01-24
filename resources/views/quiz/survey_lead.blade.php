@@ -5,10 +5,10 @@
 <head>
     <base href="../../../../">
     <meta charset="utf-8">
-    <meta name="author" content="Softnio">
+    <meta name="author" content="kaaxclub">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description"
-        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+        content="Tu mejor decisión. Fácil y rápido">
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="/images/favicon-32x32.png">
     <!-- Page Title  -->
@@ -270,8 +270,8 @@
                                                 @if ($dayOK && $timeOK)
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a href="#" id="url_report" class="btn btn-primary btn-lg btn-block py-3 pointer my-3 btn-block"
-                                                            >Ver reporte</a>
+                                                        <a href="#" id="url_report" class="btn btn-primary btn-lg btn-block pointer my-3 btn-block"
+                                                            >Ver reporte &nbsp;  <img width="18" src="/images/rocket.png" alt=""> </a>
                                                     </div>
                                                 </div>
     
@@ -300,7 +300,7 @@
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12">
                                                        <p class="text-muted font-italic" style="font-style: italic;">
-                                                        También te lo enviamos por email, si no lo vez, consulta la bandeja de spam
+                                                        También te lo enviamos por email, si no lo ves, consulta la bandeja de spam
                                                        </p>
                                                     </div>
                                                 </div>
@@ -425,8 +425,11 @@
                     loading();
                 }
                
+                if (count_steeper == 4) {
+                    saveLead(false);
+                }
+                
                 if (count_steeper > 3) {
-                    console.log('ejecutar guardado');
                     saveLead(false);
                 }
                 animateStepper();

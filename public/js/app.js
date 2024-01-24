@@ -1914,7 +1914,7 @@ window.alerDeleteFinancialProduct = function (id) {
     cancelButtonText: 'Mejor no'
   }).then(function (result) {
     if (result.value) {
-      deleteProduct(id);
+      deleteFinancialProduct(id);
     }
   });
 };
