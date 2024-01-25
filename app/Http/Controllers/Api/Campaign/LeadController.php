@@ -24,6 +24,7 @@ class LeadController extends Controller
                 'last_name' => $request->last_name,
                 'cellphone' => $cellphone,
                 'origin_id' => 4,
+                'tipo_credito' => 2,
                 'channel_id' => 1,
                 'email' => $request->email,
                 /* 'importe_solicitado' => $request->importe_solicitado, */
