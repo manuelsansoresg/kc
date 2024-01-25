@@ -62,8 +62,11 @@ class PanelController extends Controller
             $notes = $credit->creditNotes;
         }
         
-        $view           = \View::make('panel.view_content_lead_notes', ['notes' => $notes])->render();
-        return response()->json($view);
+        $view       = \View::make('panel.view_content_lead_notes', ['notes' => $notes])->render();
+        $addNote = '<a class="pointer" onclick="AddNoteIntoNotes('.$id_rel.', \'lead\')">
+        <em class="icon ni ni-note-add"></em><span>Agregar nota</span></a>';
+
+        return response()->json(['notes' => $view, 'addNote' => $addNote]);
     }
 
     public function showAdvisor($model, $id_rel)
