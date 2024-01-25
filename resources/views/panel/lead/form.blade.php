@@ -255,7 +255,7 @@
                                                                         <option value="">Escribe para buscar</option>
                                                                         @endif
                                                                         @foreach ($origins as $key=>$origin)
-                                                                            <option value="{{ $key }}" {{ $key == 1 ? 'selected' : null }}>{{ $origin }}
+                                                                            <option value="{{ $key }}" {{ $lead === null && $key == 1  ? 'selected' : null }} {{ $lead != null && $lead->origin_id == $key ? 'selected' : null  }} >{{ $origin }}
                                                                             </option>
                                                                         @endforeach
                                                                     </select>

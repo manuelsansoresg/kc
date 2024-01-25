@@ -195,8 +195,13 @@ class Lead extends Model
 
         $is_asesor = Auth::user()->hasRole('Asesor');
 
-        $data['consulta_buro'] = $data['consulta_buro'] === null ? 1 : $data['consulta_buro'];  
-        $data['aval_o_garantia'] = $data['aval_o_garantia'] === null ? 1 : $data['aval_o_garantia']; 
+        if (isset($data['consulta_buro'])) {
+            $data['consulta_buro'] = $data['consulta_buro'] === null ? 1 : $data['consulta_buro'];  
+        }
+
+        if (isset($data['aval_o_garantia'])) {
+            $data['aval_o_garantia'] = $data['aval_o_garantia'] === null ? 1 : $data['aval_o_garantia']; 
+        }
 
         if (isset($data['agreement_id']) && $data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
             unset($data['agreement_id']);
