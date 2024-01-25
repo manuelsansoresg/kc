@@ -56,10 +56,10 @@ $user = Auth::user();
                         </li>
                        
                        
-                        <li>
+                       {{--  <li>
                             <a class="pointer" onclick="modalNote({{ $id }}, 'lead')">
                                 <em class="icon ni ni-note-add"></em><span>Agregar nota</span></a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a class="pointer" onclick="showNotes({{ $id }}, true)">
                                 <em class="icon ni ni-notes-alt"></em><span>Notas</span></a>
@@ -77,10 +77,10 @@ $user = Auth::user();
                                 <em class="icon ni ni-tag"></em><span>Etiquetas</span></a>
                         </li>
                   
-                        <li>
+                       {{--  <li>
                             <a class="pointer" onclick="actionModal({{ $id }}, true, true)">
                                 <em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a class="pointer" onclick="showModalActions({{ $id }}, true)">
                                 <em class="icon ni ni-calendar"></em><span>Ver acciones</span></a>

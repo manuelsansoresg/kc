@@ -208,6 +208,22 @@ window.actionModal = function (id, is_new, is_lead) {
   $('#modal-action').modal('show');
 };
 
+window.addActionIntoActions = function (id, is_new, is_lead) {
+  $('#modal-list-actions').modal('hide');
+  var model = is_lead == true ? 'lead' : 'credit';
+  var section = is_lead == true ? 1 : 2;
+  resetAction();
+  getAdvisorLead(model, id);
+  $('#modal-action-id-rel').val(id);
+  $('#modal-action-id-section').val(section);
+
+  if (is_new == 'true') {
+    $('#modal-action-id-action').val(null);
+  }
+
+  $('#modal-action').modal('show');
+};
+
 if (document.getElementById('frm-action')) {
   $('#modal-action-type').select2({
     dropdownParent: $('#modal-action'),
@@ -5075,9 +5091,18 @@ window.showNotes = function (id_rel, is_lead) {
   var model = is_lead == true ? 'lead' : 'credit';
   axios.get('/panel/' + model + '/' + id_rel + '/notes/list').then(function (response) {
     var result = response.data;
-    $('#content-notes').html(result);
+    $('#content-notes').html(result.notes);
+    $('#addNote').html(result.addNote);
     $('#modal-list-note').modal('show');
   })["catch"](function (e) {});
+};
+
+window.AddNoteIntoNotes = function (note_id, model_note) {
+  $('#modal-list-note').modal('hide');
+  $('#id_rel').val(note_id);
+  $('#model_note').val(model_note);
+  $('#modal-lead-description').val('');
+  $('#modal-note').modal('show');
 };
 
 window.showModalActions = function (lead_id, is_lead) {
@@ -5085,6 +5110,8 @@ window.showModalActions = function (lead_id, is_lead) {
   refreshAction(lead_id, model, 'in_progress', 'content-profile-in_progress');
   refreshAction(lead_id, model, 'completed', 'content-profile-completed');
   $('#modal-list-actions').modal('show');
+  var addAction = '<a class="pointer" onclick="addActionIntoActions(' + lead_id + ', true, true)"><em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>';
+  $('#addActions').html(addAction);
 };
 /* window.searchClient = function (event)
 {
