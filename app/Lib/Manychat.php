@@ -10,6 +10,7 @@ class Manychat
         'ReporteElegido' => 40772467,
         'EncuestaLista' => 40873610,
         'EncuestaRespondida' => 40873625,
+        'ReporteVisto' => 40580494,
     );
 
     private function setCurl($path, $data = null , $method = 'POST')

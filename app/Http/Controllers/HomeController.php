@@ -114,9 +114,15 @@ class HomeController extends Controller
         $my_product_financial = null;
         $my_product           = null;
         
+        if ($credit->date_open_report == null) {
+            $many_chat = new Manychat();
+            $many_chat->addTag('ReporteVisto', $credit->manychat_id);
+        }
+
         Credit::where('id', $credit->id)
                 ->where('date_open_report', '=' , null)
                 ->update(['date_open_report'=> date('Y-m-d H:i:s')]);
+
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             $is_best = false;
             $chart['Financiera 1'] = array(
