@@ -89,7 +89,18 @@
                                                                     <input type="email" class="form-control" name="data[email]" id="lead-email">
                                                                 </div>
                                                             </div>
+                                                            
                                                         </div>
+                                                        @if ($lead_id != null)
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">ID Manychat</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="data[manychat_id]" id="lead-manychat_id">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @endif
                 
                                                         <hr class="preview-hr">
 
