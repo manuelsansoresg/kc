@@ -89,6 +89,7 @@
                                                                     <input type="email" class="form-control" name="data[email]" id="lead-email">
                                                                 </div>
                                                             </div>
+                                                            
                                                         </div>
                                                         @if ($lead_id != null)
                                                         <div class="col-md-6">
