@@ -38,7 +38,10 @@ window.AddNoteIntoNotes = function(note_id, model_note)
 }
 window.showModalActions = function(lead_id, is_lead)
 {
-    let model = is_lead == true ? 'lead' : 'credit';
+    $('#id-rel-action').val(lead_id);
+    $('#model-action').val('lead');
+
+let model = is_lead == true ? 'lead' : 'credit';
     refreshAction(lead_id, model, 'in_progress', 'content-profile-in_progress')
     refreshAction(lead_id, model, 'completed', 'content-profile-completed')
 

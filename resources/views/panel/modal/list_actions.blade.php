@@ -24,4 +24,6 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="id-rel-action" value="">
+    <input type="hidden" id="model-action" value="">
 </div>

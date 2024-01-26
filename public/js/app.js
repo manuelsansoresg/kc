@@ -374,6 +374,7 @@ $().ready(function () {
 
         if (refresh_dt != 'null') {
           (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+          refreshListActions();
         } else {
           refreshListActions();
         }
@@ -398,6 +399,7 @@ window.deleteRegisterAction = function (action_id) {
   axios["delete"]("/panel/register-action/" + action_id).then(function (response) {
     if (refresh_dt != 'null') {
       (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+      refreshListActions();
     } else {
       refreshListActions();
     }
@@ -5106,6 +5108,8 @@ window.AddNoteIntoNotes = function (note_id, model_note) {
 };
 
 window.showModalActions = function (lead_id, is_lead) {
+  $('#id-rel-action').val(lead_id);
+  $('#model-action').val('lead');
   var model = is_lead == true ? 'lead' : 'credit';
   refreshAction(lead_id, model, 'in_progress', 'content-profile-in_progress');
   refreshAction(lead_id, model, 'completed', 'content-profile-completed');

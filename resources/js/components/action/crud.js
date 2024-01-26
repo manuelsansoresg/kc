@@ -217,6 +217,7 @@ $().ready(function () {
                     $('#modal-register-action').modal('hide');
                     if (refresh_dt != 'null') {
                         showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+                        refreshListActions();
                     } else {
                         refreshListActions();
                     }
@@ -263,6 +264,7 @@ window.deleteRegisterAction = function(action_id) {
     .then(function (response) {
         if (refresh_dt != 'null') {
             showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+            refreshListActions();
         } else {
             refreshListActions();
         }
