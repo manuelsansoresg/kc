@@ -8,6 +8,7 @@
                 <form method="post" id="frm-note" action="">
                     @csrf
                     <div class="row gy-4">
+                       
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-label" for="frm-user-admin-name">Nota</label>

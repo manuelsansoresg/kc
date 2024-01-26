@@ -63,6 +63,7 @@ $status = config('enums.status_register_actions');
                         </div>
                     </div>
                 </form>
+                
             </div>
         </div>
     </div>

@@ -47,7 +47,7 @@
                 </ul>
                 @else
                 <ul class="kanban-item-meta-list">
-                    <li><em class="icon ni ni-calendar"></em><span>{{ $tiempoRestante }}</span></li>
+                    <li><em class="icon ni ni-calendar"></em><span>{{ timeRest($action->start_date, $action->start_time) }}</span></li>
                     
                 </ul>
                 <ul class="kanban-item-meta-list">

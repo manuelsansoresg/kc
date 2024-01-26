@@ -18,6 +18,26 @@ window.actionModal = function (id, is_new, is_lead) {
 
 }
 
+window.addActionIntoActions = function(id, is_new, is_lead)
+{
+    $('#modal-list-actions').modal('hide');
+
+    let model = is_lead == true ? 'lead' : 'credit';
+    let section = is_lead == true ?  1 : 2;
+
+    resetAction();
+    getAdvisorLead(model, id);
+   
+    $('#modal-action-id-rel').val(id);
+    $('#modal-action-id-section').val(section);
+    if (is_new == 'true') {
+        $('#modal-action-id-action').val(null);
+    }
+   
+    $('#modal-action').modal('show');
+
+}
+
 
 if (document.getElementById('frm-action')) {
     $('#modal-action-type').select2({
@@ -197,6 +217,7 @@ $().ready(function () {
                     $('#modal-register-action').modal('hide');
                     if (refresh_dt != 'null') {
                         showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+                        refreshListActions();
                     } else {
                         refreshListActions();
                     }
@@ -243,6 +264,7 @@ window.deleteRegisterAction = function(action_id) {
     .then(function (response) {
         if (refresh_dt != 'null') {
             showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+            refreshListActions();
         } else {
             refreshListActions();
         }
