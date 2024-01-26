@@ -229,6 +229,9 @@ function setData(is_change_origen, is_change_organization) {
             $('#lead-second_last_name').val(lead.second_last_name);
             $('#lead-cellphone').val(lead.cellphone);
             $('#lead-email').val(lead.email);
+            if (document.getElementById('lead-manychat_id')) {
+                $('#lead-manychat_id').val(lead.manychat_id);
+            }
             $('#lead-comment').val(lead.comment);
             
             
