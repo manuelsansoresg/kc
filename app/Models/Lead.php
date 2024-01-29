@@ -205,6 +205,8 @@ class Lead extends Model
 
         if (isset($data['agreement_id']) && $data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
             unset($data['agreement_id']);
+            $new_agreement = Agreement::create([ 'name' => $request->new_agreement, 'description' => $request->new_agreement, 'status' => 1]);
+            $data['agreement_id'] = $new_agreement->id;
         }
         if ($request->lead_id == null) {
             if ($is_asesor === true) {

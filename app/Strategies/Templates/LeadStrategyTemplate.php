@@ -7,6 +7,7 @@ use App\Models\Agreement;
 use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\CreditNotes;
 use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\HistoryLog;
@@ -53,6 +54,8 @@ class LeadStrategyTemplate implements TemplateInterface
                 $client_person = ClientPerson::where('email', $lead->email)->first();
             } */
             
+            
+
             $client_person = ClientPerson::create($data_client_person);
             
             //* create credit
@@ -80,6 +83,16 @@ class LeadStrategyTemplate implements TemplateInterface
 
             //validar que el credito no exista con los mismos datos
             $credit = Credit::create($data_lead);
+            //obtener las notas de los prospectos
+            $leadNotes = $lead->leadNotes;
+            foreach ($leadNotes as $leadNote) {
+                $dataCreditNote = array(
+                    'credit_id' => $credit->id,
+                    'note_id' => $leadNote->note_id
+                );
+                CreditNotes::create($dataCreditNote);
+            }
+
             CurrentFinancialProduct::moveToLead($lead->id, $credit->id);
             //*desactivar acciones prospectos
             Lead::deleteActions($lead->id);

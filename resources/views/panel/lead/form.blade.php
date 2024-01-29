@@ -150,14 +150,13 @@
                                                                 <div class="form-control-wrap">
                                                                    
                                                                     <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null)"  data-search="on">
-                                                                        @if ($lead_id == null)
-                                                                            <option></option>
-                                                                        @endif
+                                                                        <option></option>
+                                                                      
                 
                                                                         @foreach ($agreements as $agreement)
                                                                             <option value="{{ $agreement->id }}">{{ $agreement->name }}</option>
                                                                         @endforeach
-                                                                    <option value="0">Otro</option>
+                                                                        <option value="0">Otro</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
