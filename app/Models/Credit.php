@@ -98,6 +98,7 @@ class Credit extends Model
         'manychat_id',
         'lead_id',
         'date_open_report',
+        'income',
         
     ];
 

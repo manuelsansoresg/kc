@@ -192,6 +192,16 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        
+                                                        <div class="col-md-6" id="content-importe-solicitado" >
+                                                            <div class="form-group">
+                                                                <label class="form-label">Ingreso mensual</label>
+                                                                <p class="small">Neto aproximado</p>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="data[income]" id="income">
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                         
                                                        

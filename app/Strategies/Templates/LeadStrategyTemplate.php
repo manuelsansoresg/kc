@@ -79,6 +79,7 @@ class LeadStrategyTemplate implements TemplateInterface
                 'consulta_buro' => $lead->consulta_buro,
                 'manychat_id' => $lead->manychat_id,
                 'lead_id' => $lead->id,
+                'income' => $lead->income,
             );
 
             //validar que el credito no exista con los mismos datos
