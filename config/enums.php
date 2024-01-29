@@ -43,7 +43,7 @@ return [
         1 => 'Facebook',
     ),
     'reason_archive' => array(
-        1 => 'No interesado',
+        1 => 'Nunca contestó',
         2 => 'No tramitable',
         3 => 'Otro',
         4 => 'Conversión',

@@ -2289,6 +2289,7 @@ function setData(is_change_origen, is_change_organization) {
     changeOrigen(lead.channel_id);
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
     $('#importe_solicitado').val(lead.importe_solicitado);
+    $('#income').val(lead.income);
     $('#bank_id').val(lead.bank_id).trigger("change");
     $('#tipo_credito').val(lead.tipo_credito).trigger("change");
     $('#consulta_buro').val(lead.consulta_buro).trigger("change");

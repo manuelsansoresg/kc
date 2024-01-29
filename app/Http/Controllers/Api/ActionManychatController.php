@@ -21,6 +21,7 @@ class ActionManychatController extends Controller
             'banco' => array('bank_id', 'Banco'),
             'servicio-kc' => array('product_id', 'Servicio KC'),
             'tipo-credito' => array('tipo_credito', 'Tipo de crédito'),
+            'ingresos' => array('income', 'Ingresos'),
         );
         
         if ($head[$section]) {
@@ -35,6 +36,7 @@ class ActionManychatController extends Controller
             self::saveBank($section, $select_head, $select_custom_field, $manychat_id);
             self::saveServicio($section, $select_head, $select_custom_field, $manychat_id);
             self::saveTipoCredito($section, $select_head, $select_custom_field, $manychat_id);
+            self::saveIngreso($section, $select_head, $select_custom_field, $manychat_id);
 
             return response()->json(200);
             
@@ -127,6 +129,15 @@ class ActionManychatController extends Controller
         
         if ($lead != null && $section == 'tipo-credito') {
             Lead::where('manychat_id', $manychat_id)->update(['tipo_credito' => $tipo_credito]);
+        }
+    }
+    
+    public function saveIngreso($section, $action, $value, $manychat_id)
+    {
+        $lead = Lead::where('manychat_id', $manychat_id)->first();
+        
+        if ($lead != null && $section == 'ingresos') {
+            Lead::where('manychat_id', $manychat_id)->update([$action => $value]);
         }
     }
 
