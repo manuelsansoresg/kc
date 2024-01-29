@@ -19,8 +19,11 @@ $user = Auth::user();
     
         </li>
         <li class="nk-tb-action-hidden d-sm-none d-md-block">
-            <a class="btn btn-trigger btn-icon" href="/panel/lead/{{ $id }}/edit"  data-bs-toggle="tooltip" data-bs-placement="top">
-                <em class="icon ni ni-edit"></em><span></span></a>
+            {{-- <a class="btn btn-trigger btn-icon" href="/panel/lead/{{ $id }}/edit"  data-bs-toggle="tooltip" data-bs-placement="top">
+                <em class="icon ni ni-edit"></em><span></span></a> --}}
+
+                <a class="btn btn-trigger btn-icon" onclick="showNotes({{ $id }}, true)" data-bs-toggle="tooltip" data-bs-placement="top">
+                    <em class="icon ni ni-notes-alt"></em></span></a>
         
         </li>
        
