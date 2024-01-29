@@ -16,7 +16,7 @@ window.organizationChange = function(lead_agreement_id, financial_id, other){
         lead_agreement_id = 0;
         $('#new_agreement').val(other);
     }
-
+    //alert(lead_agreement_id);
     if (lead_agreement_id != null) {
         $('#lead-agreement').val(lead_agreement_id).trigger("change");
     }
