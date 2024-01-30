@@ -71,7 +71,7 @@ class ActionController extends Controller
             //desactivate delivery
             HistoryLog::where(['id_rel' => $credit_id, 'status_id' => HistoryLog::KC_DELIVERY, 'status' => 1])
                         ->update(['status' => 0]);
-        } elseif ($status_id == HistoryLog::KC_CONTROL_DESK || $status_id == HistoryLog::KC_CHECK_UP || $status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
+        } elseif ($status_id == HistoryLog::KC_CONTROL_DESK || $status_id == HistoryLog::KC_SWAP || $status_id == HistoryLog::KC_CHECK_UP || $status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             //*inicializar las acciones de la siguiente etapa en curso
             HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, HistoryLog::KC_PAYMENT, null, false);
             // send push
