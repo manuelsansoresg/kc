@@ -47,10 +47,10 @@
                                 <em class="icon ni ni-copy"></em><span>copiar URL</span></a>
                         </li>
                         @endif
-                        <li>
+                        {{-- <li>
                             <a class="pointer" onclick="modalNote({{ $credit_id }}, 'credit')">
                                 <em class="icon ni ni-note-add"></em><span>Agregar nota</span></a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a class="pointer" onclick="showNotes({{ $credit_id }}, false)">
                                 <em class="icon ni ni-notes-alt"></em><span>Notas</span></a>
@@ -59,10 +59,10 @@
                             <a class="pointer" onclick="modalCreditTag({{ $credit_id }})">
                                 <em class="icon ni ni-tag"></em><span>Etiquetas</span></a>
                         </li>
-                        <li>
+                      {{--   <li>
                             <a class="pointer" onclick="actionModal({{ $credit_id }}, true, false)">
                                 <em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a class="pointer" onclick="showModalActions({{ $credit_id }}, false)">
                                 <em class="icon ni ni-calendar"></em><span>Ver acciones</span></a>

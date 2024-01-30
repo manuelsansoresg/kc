@@ -63,7 +63,7 @@ class PanelController extends Controller
         }
         
         $view       = \View::make('panel.view_content_lead_notes', ['notes' => $notes])->render();
-        $addNote = '<a class="pointer" onclick="AddNoteIntoNotes('.$id_rel.', \'lead\')">
+        $addNote = '<a class="pointer" onclick="AddNoteIntoNotes('.$id_rel.', \''.$model.'\')">
         <em class="icon ni ni-note-add"></em><span>Agregar nota</span></a>';
 
         return response()->json(['notes' => $view, 'addNote' => $addNote]);

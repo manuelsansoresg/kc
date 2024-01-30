@@ -5115,13 +5115,13 @@ window.AddNoteIntoNotes = function (note_id, model_note) {
 };
 
 window.showModalActions = function (lead_id, is_lead) {
-  $('#id-rel-action').val(lead_id);
-  $('#model-action').val('lead');
   var model = is_lead == true ? 'lead' : 'credit';
+  $('#id-rel-action').val(lead_id);
+  $('#model-action').val(model);
   refreshAction(lead_id, model, 'in_progress', 'content-profile-in_progress');
   refreshAction(lead_id, model, 'completed', 'content-profile-completed');
   $('#modal-list-actions').modal('show');
-  var addAction = '<a class="pointer" onclick="addActionIntoActions(' + lead_id + ', true, true)"><em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>';
+  var addAction = '<a class="pointer" onclick="addActionIntoActions(' + lead_id + ', true, ' + is_lead + ')"><em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>';
   $('#addActions').html(addAction);
 };
 /* window.searchClient = function (event)
