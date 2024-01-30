@@ -134,19 +134,15 @@ class ReportController extends Controller
                 }
                 
             } else {//reduccion
-
                 $credit->applied_financial = $get_financial_product->financial_id;
                 $credit->financial_product_id = $get_financial_product->id;
                 $credit->update();
-                if ($is_notify == false) {
+                if ($is_notify == 'false') {
                     HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, null, false);
-
                     HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, $credit->id, 1);
                     File::updateModel($credit->id, HistoryLog::KC_SWAP, [HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::ADD_PROSPECT]);
-                    
 
                     $history = HistoryLog::move($credit->id, HistoryLog::KC_SWAP, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
-                    
                     $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcSwap'];
                     (new $notification_add)->send($credit->id);
                 }
