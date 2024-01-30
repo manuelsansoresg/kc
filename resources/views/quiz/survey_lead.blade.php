@@ -223,7 +223,7 @@
     
     
                                         <div class="nk-stepper-step">
-                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span> por último
+                                            <h5 class="title mb-3 mt-5"><span class="span-name"> </span>, por último
                                                 dinos qué es lo que deseas</h5>
                                             <div class="form-group"><label class="form-label text-white"
                                                     for="sv1-cellphone">
