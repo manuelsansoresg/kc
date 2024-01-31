@@ -125,7 +125,7 @@ class ActionManychatController extends Controller
     public function saveTipoCredito($section, $action, $value, $manychat_id)
     {
         $lead = Lead::where('manychat_id', $manychat_id)->first();
-        $tipo_credito = $value != 'Crédito personal' ? 2 : 3; 
+        $tipo_credito = $value == 'Crédito personal' ? 2 : 3; 
         
         if ($lead != null && $section == 'tipo-credito') {
             Lead::where('manychat_id', $manychat_id)->update(['tipo_credito' => $tipo_credito]);
