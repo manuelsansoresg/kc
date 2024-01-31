@@ -323,6 +323,9 @@
                 setCount(count_steeper_real);
                 console.log(count_steeper);
                 $('#number_step').val(count_steeper);
+                if (count_steeper == 4) {
+                    saveLead(false);
+                }
                 if (count_steeper == 3) {
                     loading();
                     $('#btn-back').hide();

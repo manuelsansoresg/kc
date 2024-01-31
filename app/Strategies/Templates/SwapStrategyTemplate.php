@@ -1917,6 +1917,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $status_reject    = HistoryLog::CREDIT_REJECTED;
         $status_archive   = HistoryLog::CREDIT_ARCHIVE;
         $old_status       = $history->old_status_id;
+        $url_finish       = "panel/kc-control-desk";
 
         $menu = array(
             'options' => array(
@@ -1964,6 +1965,12 @@ class SwapStrategyTemplate implements TemplateInterface
                     'onclick' => 'moveModal("Archivar",' . $credit->id . ',' . $status_archive . ',' . $old_status . ',"dt-kc-swap")',
                     'name' => 'Archivar',
                     'icon' => 'icon ni ni-archive-fill'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => "deliveryFinish({$history->id}, {$history->status_id}, '{$url_finish}', true)",
+                    'name' => 'Concluir',
+                    'icon' => 'icon ni ni-stop-circle-fill'
                 ]
             ),
         );
