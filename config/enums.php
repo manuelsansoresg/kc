@@ -88,6 +88,7 @@ return [
     //*actions
     "type_actions" => array(
         1 => 'Llamada',
+        10 => 'Cotización',
         2 => 'Chat',
         3 => 'Reunión',
         4 => 'Seguimiento',
