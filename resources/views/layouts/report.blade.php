@@ -53,7 +53,7 @@
             a.appendChild(r);
         })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
     </script>
-     @livewireStyles
+     {{-- @livewireStyles --}}
 </head>
 
 <body class="dark-mode">
@@ -151,7 +151,7 @@
     
     @yield('add_script')
     
-    @livewireScripts
+    {{-- @livewireScripts --}}
     <script src="{{ asset('/js/report_app.js') }}"></script>
     
 
