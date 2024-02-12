@@ -164,7 +164,7 @@ $chart4 = $my_product_financial;
                                                 onclick="desitionReport({{ $history_id}}, {{ $status_id }}, {{ $credit->id }}, {{ $financial_product->id }}, 2, {{ $financial_product->is_tramitar  }})"
                                                 type="button"
                                                 class="w-100 btn btn-lg {{ $key == 0 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
-                                                {{ $financial_product->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
+                                                {{ $financial_product->is_tramitar == 1 ? 'Seleccionar' : 'Seleccionar' }}
                                             </button>
                                             <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
                                             @php
@@ -311,7 +311,7 @@ $chart4 = $my_product_financial;
                                                         onclick="desitionReport({{ $history_id}}, {{ $status_id }}, {{ $credit->id }}, {{ $final_financials->id }}, 2, {{ $final_financials->is_tramitar }})"
                                                         type="button"
                                                         class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
-                                                        {{ $final_financials->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
+                                                        {{ $final_financials->is_tramitar == 1 ? 'Seleccionar' : 'Seleccionar' }}
                                                     </button>
                                                     @php
                                                         $lblPago =  $final_financials->fp_simulation_rate > 0 ? '$'.format_priceWithoutDecimal($m_financial_product->pagoProducto($final_financials->fp_simulation_rate)) : null;

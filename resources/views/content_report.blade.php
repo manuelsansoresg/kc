@@ -125,7 +125,7 @@
                                                 onclick="desitionReport({{ $history_id}}, {{ $status_id }}, {{ $credit->id }}, {{ $financial_product->id }}, 1 , {{ $financial_product->is_tramitar  }})"
                                                 type="button"
                                                 class="w-100 btn btn-lg {{ $key == 0 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
-                                                {{ $financial_product->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
+                                                {{ $financial_product->is_tramitar == 1 ? 'Seleccionar' : 'Seleccionar' }}
                                             </button>
                                             <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
                                                 @php
@@ -269,7 +269,7 @@
                                                         onclick="desitionReport({{ $history_id}}, {{ $status_id }}, {{ $credit->id }}, {{ $final_financials->id }}, 1, {{ $final_financials->is_tramitar }})"
                                                         type="button"
                                                         class="w-100 btn btn-lg {{ $key == 1 ? 'btn-gradient-primary' : 'btn-gradient-secondary' }} hover-lift">
-                                                        {{ $final_financials->is_tramitar == 1 ? 'Tramitar' : 'Elegir' }}
+                                                        {{ $final_financials->is_tramitar == 1 ? 'Seleccionar' : 'Seleccionar' }}
                                                     </button>
                                                     {{-- <p class="mt-4" data-aos="fade-up" data-aos-delay="100">
                                                         <span>  <span class="h3 ">{{ $final_financials->principal != '' ? '$'.format_price($final_financials->principal). ' mensuales*' : null }} </span>  </span>
