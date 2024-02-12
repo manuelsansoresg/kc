@@ -373,8 +373,9 @@ $().ready(function () {
         $('#modal-register-action').modal('hide');
 
         if (refresh_dt != 'null') {
-          (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
-          refreshListActions();
+          /* showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+          refreshListActions(); */
+          location.reload();
         } else {
           refreshListActions();
         }

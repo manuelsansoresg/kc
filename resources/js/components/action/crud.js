@@ -216,8 +216,9 @@ $().ready(function () {
                     let result = response.data;
                     $('#modal-register-action').modal('hide');
                     if (refresh_dt != 'null') {
-                        showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
-                        refreshListActions();
+                        /* showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+                        refreshListActions(); */
+                        location.reload();
                     } else {
                         refreshListActions();
                     }
