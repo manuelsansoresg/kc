@@ -6441,6 +6441,10 @@ function actionDeliveryFinish(id, statusid, urlredirect) {
   })["catch"](function (e) {});
 }
 
+window.desitionReport = function (history_id, status_id, credit_id, financial_id, type, is_tramitar) {
+  verifificarTramitar(history_id, status_id, credit_id, financial_id, type, is_tramitar);
+};
+
 function verifificarTramitar(history_id, status_id, credit_id, financial_id, type, is_tramitar) {
   $('#content-bank').html('');
   $('#new_banks').hide();
@@ -6466,11 +6470,7 @@ function verifificarTramitar(history_id, status_id, credit_id, financial_id, typ
       $('#modal-bank').modal('show');
     }
   })["catch"](function (e) {});
-}
-
-window.desitionReport = function (credit_id, financial_id, type, is_tramitar) {
-  verifificarTramitar(credit_id, financial_id, type, is_tramitar);
-}; // Agregar un controlador de eventos a todos los enlaces dentro del iframe
+} // Agregar un controlador de eventos a todos los enlaces dentro del iframe
 
 
 var iframeLinks = document.querySelectorAll('.iframe-link');
