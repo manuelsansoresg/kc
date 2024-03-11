@@ -51,7 +51,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             1 => [
                 'name' => 'Identificación oficial',
                 'comment' => 'INE vigente',
-                'is_required' => true,
+                'is_required' => false,
                 'is_date' => false,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
@@ -62,7 +62,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             2 => [
                 'name' => 'Recibo de nómina',
                 'comment' => 'Más reciente',
-                'is_required' => true,
+                'is_required' => false,
                 'is_date' => true,
                 'max_size' => 2,
                 'max_file' => 2,
@@ -72,7 +72,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             3 => [
                 'name' => 'Comprobante de domicilio',
                 'comment' => 'Más reciente',
-                'is_required' => true,
+                'is_required' => false,
                 'is_date' => true,
                 'max_size' => 2,
                 'max_file' => 2,
@@ -3500,7 +3500,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $model = File::MODEL['controlDesk'];
         $percent = 0;
 
-        $total_valid = $step == null ? 4 : 1;
+        $total_valid = $step == null ? 1 : 1;
 
         $count_file = 0;
         $percent_file = 0;
@@ -3605,6 +3605,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function setTitle()
     {
+        
         return 'Acción formulario';
     }
     

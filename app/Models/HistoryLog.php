@@ -184,7 +184,7 @@ class HistoryLog extends Model
         18 => 'Rechazado',
         19 => 'En curso',
         20 => 'Nuevo crédito en KC - Check up',
-        22 => 'Documentos cliente',
+        22 => 'Docs Solicitante',
         23 => 'Determinar crédito max',
         24 => 'Crédito deseado',
         25 => 'Edo Cta',
