@@ -3552,7 +3552,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $titles = array(
             '1' => 'Determinar crédito max',
             '2' => 'Crédito deseado',
-            '3_1' => 'Llenado de solicitud',
+            '3_1' => 'Solicitud',
             '3_2' => 'Entrevista',
             '4' => 'Análisis KYC',
             '5' => 'Contactar financiera',
