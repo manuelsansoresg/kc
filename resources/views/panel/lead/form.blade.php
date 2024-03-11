@@ -78,7 +78,8 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Celular</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="data[cellphone]"  id="lead-cellphone">
+                                                                    <input type="text" class="form-control" name="data[cellphone]"  id="lead-cellphone" onchange="checkDataLeadExist(this, 'cellphone')">
+                                                                    <label id="cellphone-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -86,7 +87,19 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Email</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email">
+                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email" onchange="checkDataLeadExist(this, 'email')">
+                                                                    <label id="email-msg" class="text-danger"></label>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">RFC</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="data[rfc]" minlength="10" id="lead-rfc" onchange="checkDataLeadExist(this, 'rfc')" required>
+                                                                    <label id="rfc-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
                                                             

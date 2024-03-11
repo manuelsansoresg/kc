@@ -13,6 +13,7 @@ class LeadStrategy implements ValidateStagesInterface
         $error                = false;
         $error_organization   = false;
         $error_email          = false;
+        $error_rfc          = false;
         $error_product        = false;
         $error_tipo_credito   = false;
 
@@ -36,6 +37,10 @@ class LeadStrategy implements ValidateStagesInterface
                 $error_email = true;
             }
             
+            if ($get_lead->rfc === null) {
+                $error_rfc = true;
+            }
+            
     
             /* if ($error_organization == true || $error_product == true || $error_tipo_credito == true || $error_email == true) {
                 $error = true;
@@ -51,6 +56,7 @@ class LeadStrategy implements ValidateStagesInterface
                 'Tipo de  crédito' => $error_tipo_credito,
                 'Organización' => $error_organization,
                 'Email' => $error_email,
+                'RFC' => $error_rfc,
             );
         }
         $data_error = array(

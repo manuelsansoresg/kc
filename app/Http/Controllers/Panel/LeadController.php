@@ -8,6 +8,7 @@ use App\Lib\Csendgrid;
 use App\Lib\Manychat;
 use App\Models\Action;
 use App\Models\Bank;
+use App\Models\ClientPerson;
 use App\Models\CurrentFinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -73,7 +74,11 @@ class LeadController extends Controller
         return response()->json(['data' => $users]);
     }
 
-    
+    public function checkData($valInput , $id)
+    {
+        $getLead = ClientPerson::checkDataModel($valInput,$id);
+        return response()->json(['exist' => $getLead]);
+    }
     
     public function listActions(Lead $lead)
     {

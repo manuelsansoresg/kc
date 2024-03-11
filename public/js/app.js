@@ -2281,6 +2281,7 @@ function setData(is_change_origen, is_change_organization) {
     $('#lead-second_last_name').val(lead.second_last_name);
     $('#lead-cellphone').val(lead.cellphone);
     $('#lead-email').val(lead.email);
+    $('#lead-rfc').val(lead.rfc);
 
     if (document.getElementById('lead-manychat_id')) {
       $('#lead-manychat_id').val(lead.manychat_id);
@@ -2294,10 +2295,32 @@ function setData(is_change_origen, is_change_organization) {
     $('#bank_id').val(lead.bank_id).trigger("change");
     $('#tipo_credito').val(lead.tipo_credito).trigger("change");
     $('#consulta_buro').val(lead.consulta_buro).trigger("change");
+    checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
+
+    checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+
+    checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
 }
+
+window.checkDataLeadExist = function (valInput, id) {
+  var getValue = valInput.value;
+  var messageElement = document.getElementById(id + '-msg');
+
+  if (valInput != '') {
+    messageElement.textContent = "";
+    axios.get("/panel/lead/" + getValue + "/" + id + "/check").then(function (response) {
+      var result = response.data;
+      var isExist = result.exist;
+
+      if (isExist > 0) {
+        messageElement.textContent = "Ya está en uso";
+      }
+    })["catch"](function (e) {});
+  }
+};
 
 window.deleteLead = function (lead_id) {
   axios.get("panel/lead/" + lead_id + "/delete").then(function (response) {

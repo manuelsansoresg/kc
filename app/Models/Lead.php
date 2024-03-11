@@ -39,6 +39,7 @@ class Lead extends Model
         'comment',
         'manychat_id',
         'income',
+        'rfc'
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)
@@ -78,8 +79,6 @@ class Lead extends Model
     {
        
         $is_asesor = Auth::user()->hasRole('Asesor');
-        
-        
 
         $get_list = HistoryLog::getByStatus([HistoryLog::CREATE_PROSPECT]);
         //dd($get_list);

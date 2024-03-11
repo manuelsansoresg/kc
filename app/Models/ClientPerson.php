@@ -78,6 +78,12 @@ class ClientPerson extends Model
         'workplace_local_phone_extension',
     ];
 
+    public static function checkDataModel($valueInput , $id)
+    {
+        $cp =  ClientPerson::where($id, $valueInput)->count();
+        return $cp;
+    }
+
     public function credit()
     {
         return $this->hasMany(Credit::class);
