@@ -19,6 +19,12 @@ class DocumentController extends Controller
     {
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $files            = (new $actionStrategy)->configUpload();
+        $title = 'Acción carga';
+        try {
+            $title = (new $actionStrategy)->setTitleDocument();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         $history          = HistoryLog::find($history_id);
         $credit           = $history->historyCredit;
         $credit_id        = $credit->id;
@@ -26,7 +32,7 @@ class DocumentController extends Controller
         $product          = $credit->creditProduct;
         
 
-        return view('panel.credit.files', compact('files', 'credit_id', 'model', 'product', 'credit', 'client', 'history'));
+        return view('panel.credit.files', compact('title', 'files', 'credit_id', 'model', 'product', 'credit', 'client', 'history'));
     }
 
     /**

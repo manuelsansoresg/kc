@@ -3328,71 +3328,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $total_valid = $total_valid + 1;
         }
 
-        if ($client != null && $client->nationality != null) {
+        
+        if ($client != null && $client->bank_name != null) {
             $total_valid = $total_valid + 1;
         }
 
-        if ($client != null && $client->curp != null) {
-            $total_valid = $total_valid + 1;
-        }
-        if ($client != null && $client->client_postal_code != null) {
-            $total_valid = $total_valid + 1;
-        }
 
-        if ($client != null && $client->client_street != null) {
+        if ($client != null && $client->bank_clabe != null) {
             $total_valid = $total_valid + 1;
         }
-        if ($client != null && $client->client_home_external_number != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->client_colony != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->client_city != null) {
-            $total_valid = $total_valid + 1;
-        }
-        if ($client != null && $client->client_state != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->client_country != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->monthly_income != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_postal_code != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_street != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_home_external_number != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_colony != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_city != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_state != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_country != null) {
-            $total_valid = $total_valid + 1;
-        }
-        $percent =  ($total_valid / 19)  * 100;
+        $percent =  ($total_valid / 4)  * 100;
         return reduceDecimal($percent);
     }
 
@@ -3546,9 +3491,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $breadcumbs;
     }
 
-    public function optionBreadcumblistAction($history, $step)
+    private function getTitles()
     {
-        $section = \Request::segment(2);
         $titles = array(
             '1' => 'Determinar crédito max',
             '2' => 'Crédito deseado',
@@ -3557,6 +3501,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             '4' => 'Análisis KYC',
             '5' => 'Contactar financiera',
         );
+        return $titles;
+    }
+   
+    private function getTitlesFiles()
+    {
+        $titles = array(
+            '1' => 'Docs Solicitante',
+            '3' => 'Edo Cta',
+        );
+        return $titles;
+    }
+
+    public function optionBreadcumblistAction($history, $step)
+    {
+        $section = \Request::segment(2);
+        $titles = $this->getTitles();
         $breadcumbs = array(
             0 => array(
                 'title' => 'Inicio',
@@ -3605,8 +3565,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function setTitle()
     {
-        
-        return 'Acción formulario';
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+        $titles = $this->getTitles();
+        return isset($titles[$step]) ? 'Formulario - '.$titles[$step] : 'Acción formulario';
+    }
+    
+    public function setTitleDocument()
+    {
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+        $titles = $this->getTitlesFiles();
+        return isset($titles[$step]) ? 'Carga - '.$titles[$step] : 'Acción carga';
     }
     
 }

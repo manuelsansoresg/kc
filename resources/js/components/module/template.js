@@ -154,43 +154,22 @@ $().ready(function () {
                 minlength: 13,
                 maxlength:13
             },
-            'client_person[nationality]': {
-                required: true,
-            },
-
-            'client_person[birth_state]': {
-                required: true,
-            },
+            
             'client_person[curp]': {
-                required: true,
+                required: false,
                 minlength: 18,
                 maxlength:18
             },
             'client_person[client_postal_code]': {
-                required: true,
+                required: false,
                 number: true,
                 minlength: 5,
                 maxlength:5
             },
-            'client_person[client_street]': {
+            'client_person[bank_name]': {
                 required: true,
             },
-            'client_person[client_home_external_number]': {
-                required: true,
-            },
-            'client_person[client_colony]': {
-                required: true,
-            },
-            'client_person[client_city]': {
-                required: true,
-            },
-            'client_person[client_state]': {
-                required: true,
-            },
-            'client_person[client_country]': {
-                required: true,
-            },
-            
+           
             'client_person[bank_card_number]': {
                 number: true,
                 minlength: 16,
@@ -204,36 +183,20 @@ $().ready(function () {
             'client_person[bank_clabe]': {
                 number: true,
                 minlength: 18,
-                maxlength:18
+                maxlength:18,
+                required: true,
             },
             'client_person[monthly_income]': {
-                required: true,
+                required: false,
                 number: true,
             },
             'client_person[workplace_postal_code]': {
-                required: true,
+                required: false,
                 number: true,
                 minlength: 5,
                 maxlength:5
             },
-            'client_person[workplace_street]': {
-                required: true,
-            },
-            'client_person[workplace_home_external_number]': {
-                required: true,
-            },
-            'client_person[workplace_colony]': {
-                required: true,
-            },
-            'client_person[workplace_city]': {
-                required: true,
-            },
-            'client_person[workplace_state]': {
-                required: true,
-            },
-            'client_person[workplace_country]': {
-                required: true,
-            },
+            
 
 
         },
