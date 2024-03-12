@@ -177,6 +177,7 @@ return [
     'interviewer' => array(
         1 => 'KaaxClub',
         2 => 'Financiera',
+        3 => 'No necesario',
     ),
     'marital_status' => array(
         1 => 'Soltero',

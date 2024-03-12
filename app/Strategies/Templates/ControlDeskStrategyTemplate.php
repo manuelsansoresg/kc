@@ -534,7 +534,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             6 => [
@@ -548,7 +548,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             7 => [
@@ -562,7 +562,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             8 => [
@@ -590,7 +590,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             10 => [
@@ -604,7 +604,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             11 => [
@@ -618,7 +618,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             12 => [
@@ -646,7 +646,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             14 => [
@@ -660,7 +660,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             15 => [
@@ -674,7 +674,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             16 => [
@@ -688,7 +688,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             17 => [
@@ -717,7 +717,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => false,
+                'is_required' => true,
                 'is_disabled' => null
             ],
             19 => [
@@ -759,7 +759,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => false,
+                'is_required' => true,
                 'is_disabled' => null
             ],
             22 => [
@@ -801,7 +801,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             25 => [
@@ -815,7 +815,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             26 => [
@@ -829,7 +829,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             27 => [
@@ -843,7 +843,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             28 => [
@@ -871,7 +871,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             30 => [
@@ -885,7 +885,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             31 => [
@@ -899,7 +899,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             32 => [
@@ -913,7 +913,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             33 => [
