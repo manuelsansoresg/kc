@@ -53,7 +53,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function setURLDocument()
     {
-        return '/panel/kc-delivery';
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+        if ($step == '5_3') {
+            return '/panel/kc-delivery';
+        }
+        return null;
     }
 
     public function uploadStep1()
@@ -125,7 +129,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function uploadstep5()
     {
         $elements = array(
-            4 => [
+            6 => [
                 'name' => 'Solicitud de terminación anticipada de contrato (Firmada)',
                 'comment' => null,
                 'is_required' => true,
@@ -2392,6 +2396,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_form_step5_2           = reduceDecimal(self::percentFormStep5_2($history)); //etapa 5
         $percent_form_step5_3           = reduceDecimal(self::percentFormStep5_3($credit->id, '5_3')); //etapa 5
 
+
         $new_step3_1 = $percent_form_step3_1 == 100 ? 1 : 0;
         $new_step3_2 = $percent_form_step3_2 == 100 ? 1 : 0;
 
@@ -3061,15 +3066,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         try {
             $credit         = $history->historyCredit;
             $color_inf_credit             = 'success';
-            $percent_form                 = self::percentFormStep5_3($credit->id);
+            $percent_form                 = self::percentFormStep5_3($credit->id, '5_3');
             if ($percent_form == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3, $credit->id, 1);
-                HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, $history->old_status_id);
-
-                $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
-                (new $notification_add)->send($credit->id);
-
             }
             $max_hour                     = self::HOUR_STEP_5_3;
             $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3], $credit->id)[0];
@@ -3085,20 +3085,26 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return null;
     }
 
-    public function finish($creditId)
+    public function finish($creditId, $step)
     {
         $credit = Credit::find($creditId);
         $percent_form =  self::percentFormStep5_3($creditId);
-        if ($percent_form == 100) {
+        
+        if ($step == '5_3' && $percent_form == 100) {
+            
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_2, $credit->id, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3, $credit->id, 1);
+            
             HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK);
+            HistoryLog::where(['id_rel' => $credit->id, 'status_id' => HistoryLog::KC_CONTROL_DESK, 'status' => 1])
+                        ->update(['status' => 0]);
 
-            $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
-            (new $notification_add)->send($credit->id);
+            /* $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
+            (new $notification_add)->send($credit->id); */
 
         }
-
+        
     }
 
     public function actionStep5($history_id, $step_origin = null)
@@ -3124,7 +3130,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $percent_form_2         = self::percentFormStep5($history);
         $percent_form_2_2       = self::percentFormStep5_2($history);
-        $percent_form_2_3       = self::percentFile($credit->id, '5');
+        $percent_form_2_3       = self::percentFormStep5_3($credit->id, '5_3');
 
         $status_step5           = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
         $status_step5_2         = ($percent_form_2_2 >= 100) ? 'Concluido' : 'En curso';
@@ -3582,6 +3588,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_file = 0;
         $config_files = self::configUpload($step);
         $total        = 0;
+        //dd($config_files);
         foreach ($config_files as $key => $config_file) {
             $file = File::where([
                 'model' => $model,

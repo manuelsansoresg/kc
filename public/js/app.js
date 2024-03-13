@@ -168,7 +168,12 @@ if (document.getElementById('action-model')) {
       submitHandler: function submitHandler(form, event) {
         event.preventDefault();
         var new_form = document.getElementById("frm-action-files");
-        var data = new FormData(new_form);
+        var data = new FormData(new_form); // Extract the step value from the URL
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var step = urlParams.get('step'); // Add the step value to the FormData
+
+        data.append('step', step);
         axios.post("/panel/files/template/date", data).then(function (response) {
           var result = response.data;
           var url_redirect = null;
