@@ -51,7 +51,10 @@ class HistoryLog extends Model
     const KC_CONTROL_DESK_FORM_STEP_3_2       = 27;
     
     const KC_CONTROL_DESK_FORM_STEP_4         = 28;
-    const KC_CONTROL_DESK_FORM_STEP_5         = 29;
+    
+    const KC_CONTROL_DESK_FORM_STEP_5         = 57;
+    const KC_CONTROL_DESK_FORM_STEP_5_2       = 58;
+    const KC_CONTROL_DESK_FORM_STEP_5_3       = 59;
     
     const KC_DELIVERY                         = 30;
     const KC_DELIVERY_FORM                    = 31;
@@ -168,6 +171,9 @@ class HistoryLog extends Model
         54 => 'Formulario',
         55 => 'KC - Delivery',
         56 => 'After market',
+        57 => 'Formulario',
+        58 => 'Formulario',
+        59 => 'Carga',
     ];
     
     public static $label_subject = [
@@ -219,6 +225,9 @@ class HistoryLog extends Model
         54 => 'Verificar pago',
         55 => '',
         56 => '',
+        57 => 'Preparar documento',
+        58 => 'Confirmar',
+        59 => 'Documento firmado',
     ];
 
     public static $name_model = [
@@ -268,6 +277,9 @@ class HistoryLog extends Model
         54 => 'payment',
         55 => 'delivery',
         56 => 'afterMarket',
+        57 => 'controlDesk',
+        58 => 'controlDesk',
+        59 => 'controlDesk',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $update_old_status = true)

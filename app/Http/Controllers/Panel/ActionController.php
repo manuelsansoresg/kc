@@ -168,7 +168,19 @@ class ActionController extends Controller
 
     public function storeFilesDateTemplate(Request $request)
     {
+        $models = File::MODEL;
         TemplateFile::saveTemplate($request);
+        if ($request->model == 'controlDesk') {
+            $actionStrategy   = TemplateValues::STRATEGY[$request->model];
+            $finish       = (new $actionStrategy)->finish($request->id_rel);
+        }
+        
+       /*  $data_where = array(
+            'model' => $models[$request->model],
+            'id_rel' => $request->id_rel
+        );
+        $files = File::where($data_where)->count(); */
+        
     }
 
     public function showFiles($model, Request $request)

@@ -369,6 +369,18 @@ $().ready(function () {
         }
     });
 
+    $("#frm-template_control_desk_step5_2").validate({
+        rules: {
+            'credit[signed]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step5_2', 'controlDesk');
+        }
+    });
+
     $("#frm-template_delivery_step2").validate({
         rules: {
             'credit[changed_commission]': {

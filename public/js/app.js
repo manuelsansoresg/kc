@@ -3666,6 +3666,17 @@ $().ready(function () {
       saveForm('frm-template_control_desk_step5', 'controlDesk');
     }
   });
+  $("#frm-template_control_desk_step5_2").validate({
+    rules: {
+      'credit[signed]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step5_2', 'controlDesk');
+    }
+  });
   $("#frm-template_delivery_step2").validate({
     rules: {
       'credit[changed_commission]': {
