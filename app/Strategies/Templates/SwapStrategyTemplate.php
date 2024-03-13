@@ -1523,7 +1523,6 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form_2_2       = self::percentFormStep2_2($history);
         $percent_form_2_3       = self::percentFile($credit->id, '2');
         $percent_form_2_4       = self::percentFormStep2_3($history);
-        
 
         $name_advisor = null;
         try {
