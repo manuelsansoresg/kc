@@ -176,7 +176,6 @@ class ActionController extends Controller
             $actionStrategy   = TemplateValues::STRATEGY[$request->model];
             $finish       = (new $actionStrategy)->finish($request->id_rel, $step);
         }
-        return $finish;
         
        /*  $data_where = array(
             'model' => $models[$request->model],

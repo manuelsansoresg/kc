@@ -3100,8 +3100,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             HistoryLog::where(['id_rel' => $credit->id, 'status_id' => HistoryLog::KC_CONTROL_DESK, 'status' => 1])
                         ->update(['status' => 0]);
 
-            /* $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
-            (new $notification_add)->send($credit->id); */
+            $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
+            (new $notification_add)->send($credit->id);
 
         }
         
