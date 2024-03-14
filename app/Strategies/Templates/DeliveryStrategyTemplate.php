@@ -527,7 +527,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data = array();
         $data[] = array(
             'name' => $view_count_inf_credit,
-            'step' => 'Entrega info',
+            'step' => 'Enviar info',
             'status' => $status_step1,
             'progress' => $view_percent_step1,
             'deadline' =>'',
@@ -536,13 +536,13 @@ class DeliveryStrategyTemplate implements TemplateInterface
         
         $data[] = array(
             'name' => $view_count_step2,
-            'step' => 'Firma de docs',
+            'step' => 'Activar crédito',
             'status' => $status_step2,
             'progress' => $view_percent_step2,
             'deadline' =>'',
             'options' => $option_step2,
         );
-        $data[] = array(
+        /* $data[] = array(
             'name' => $view_count_step3,
             'step' => 'Analisis',
             'status' => $status_step3,
@@ -557,7 +557,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'progress' => $view_percent_step4,
             'deadline' =>'',
             'options' => $option_step4,
-        );
+        ); */
         
        
         return $data;
@@ -670,7 +670,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
 
         $data[] = array(
-            'name' => 'Email',
+            'name' => 'API',
             'subject' => $subject1,
             'status' => $viewStatus1,
             'deadline' => $view_dead_line,
@@ -743,7 +743,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
 
         $data[] = array(
-            'name' => 'Formulario',
+            'name' => 'API',
             'subject' => $subject1,
             'status' =>  $viewStatus1,
             'deadline' => $view_dead_line_step2,
