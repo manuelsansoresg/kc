@@ -99,6 +99,8 @@ class Credit extends Model
         'lead_id',
         'date_open_report',
         'income',
+        'investor_id',
+        'start_period_id',
         
     ];
 
