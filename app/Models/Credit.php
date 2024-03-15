@@ -101,6 +101,7 @@ class Credit extends Model
         'income',
         'investor_id',
         'start_period_id',
+        's2_credit_id'
         
     ];
 
