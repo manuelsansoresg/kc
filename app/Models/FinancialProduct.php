@@ -105,6 +105,13 @@ class FinancialProduct extends Model
         
         'proceso_tramite',
         'fp_simulation_rate',
+
+        'opening_commission_type',
+        'opening_commission_rate',
+        'opening_commission_amount',
+        'collection_commission_rate',
+        'annual_interest_rate',
+        'daily_interest_rate',
     ];
 
     public static function getbyIdFirst($product_id)
