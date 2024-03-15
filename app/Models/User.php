@@ -35,7 +35,12 @@ class User extends Authenticatable
         'rol_id',
         'is_rss',
         'is_access_config',
-        'tyc_accept'
+        'tyc_accept',
+        'agreement_id',
+        'bank_name',
+        'bank_card_number',
+        'bank_account_number',
+        'bank_clabe',
 
     ];
 
@@ -69,6 +74,7 @@ class User extends Authenticatable
     public static function getUserRole($role)
     {
         $users =  User::select(
+            'agreement_id',
             'id',
             'name',
             'last_name',
@@ -115,6 +121,10 @@ class User extends Authenticatable
 
         if ($request->type_user == 'cliente-financiera') {
             $role = 'Cliente financiera';
+        }
+
+        if ($request->type_user == 'cliente-inversionista') {
+            $role = 'Cliente inversionista';
         }
         $user->assignRole(ucfirst($role));
     }
@@ -219,13 +229,14 @@ class User extends Authenticatable
             $get_users    = self::getUserRole('Cliente persona');
         } elseif ($type == 4) {
             $get_users    = self::getUserRole('Cliente financiera');
+        } elseif ($type == 5) {
+            $get_users    = self::getUserRole('Cliente inversionista');
         } else {
             $get_users    = self::getUserRole('Asesor');
         }
 
 
         $users        = array();
-
         foreach ($get_users as $user) {
             $client_person = ClientPerson::where('email', $user->email)->first();
             $id = isset($client_person->id) ?  $client_person->id : null;
@@ -234,8 +245,11 @@ class User extends Authenticatable
             if ($user->status == 'No') {
                 $lbl_status = '<span class="text-danger">No</span>';
             }
-            if ($type != 4) {
+            if ($type == 5) {
+                $agreement = $user->agreement;
+
                 $users[] = array(
+                    'agreement' => $agreement->name,
                     'name' => $user->name,
                     'last_name' => $user->last_name,
                     'second_last_name' => $user->second_last_name,
@@ -245,18 +259,30 @@ class User extends Authenticatable
                     'options' => $option
                 );
             } else {
-                $financial = $user->financial;
-                $type_person = config('enums.type_person');
-
-                $users[] = array(
-                    'financial' => ($financial != null) ? $financial->commercial_name : '',
-                    'type_person' => $type_person[$user->type_person],
-                    'name' => $user->last_name . ' ' . $user->name,
-                    'email' => $user->email,
-                    'cellphone' => $user->cellphone,
-                    'status' => $lbl_status,
-                    'options' => $option
-                );
+                if ($type != 4) {
+                    $users[] = array(
+                        'name' => $user->name,
+                        'last_name' => $user->last_name,
+                        'second_last_name' => $user->second_last_name,
+                        'cellphone' => $user->cellphone,
+                        'email' => $user->email,
+                        'status' => $lbl_status,
+                        'options' => $option
+                    );
+                } else {
+                    $financial = $user->financial;
+                    $type_person = config('enums.type_person');
+    
+                    $users[] = array(
+                        'financial' => ($financial != null) ? $financial->commercial_name : '',
+                        'type_person' => $type_person[$user->type_person],
+                        'name' => $user->last_name . ' ' . $user->name,
+                        'email' => $user->email,
+                        'cellphone' => $user->cellphone,
+                        'status' => $lbl_status,
+                        'options' => $option
+                    );
+                }
             }
         }
         return $users;
@@ -366,6 +392,11 @@ class User extends Authenticatable
     public function financial()
     {
         return $this->belongsTo(Financial::class, 'financial_id');
+    }
+    
+    public function agreement()
+    {
+        return $this->belongsTo(Agreement::class, 'agreement_id');
     }
 
     public function lead()

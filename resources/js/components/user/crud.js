@@ -62,6 +62,13 @@ function setDataUser(user_id) {
         $('#cellphone').val(result.cellphone);
         $('#email').val(result.email);
         $('#status option[value="'+result.status+'"]').attr("selected", "selected");
+        if (result.agreement_id != '') {
+            $('#agreement_id option[value="'+result.agreement_id+'"]').attr("selected", "selected");
+            $('#bank_name').val(result.bank_name);
+            $('#bank_card_number').val(result.bank_card_number);
+            $('#bank_account_number').val(result.bank_account_number);
+            $('#bank_clabe').val(result.bank_clabe);
+        }
         $('#is_access_config option[value="'+result.is_access_config+'"]').attr("selected", "selected");
         
 
@@ -192,6 +199,73 @@ $().ready(function () {
             event.preventDefault();
             $('#admin_email-error-exist').hide();
             const new_form = document.getElementById("frmfinanciera");
+            const data = new FormData(new_form);
+    
+            axios
+            .post("/panel/user/administrador", data)
+            .then(function (response) {
+                let result = response.data;
+                showInfo(2, 'dt-financiera', 'Datos actualizados', 'Información actualizada correctamente');
+                $('#modal-user-admin').modal('hide');
+            })
+            .catch(e => {
+                let response = e.response;
+                let errors =  response.data.errors;
+                if (errors.email) {
+                    $('#admin_email-error-exist').show();
+                }
+                console.log(e.response);
+             });
+            
+            }
+    });
+    
+    $("#frm-inversionista").validate({
+        rules: {
+            agreement_id: {
+                required: true,
+            },
+            type_person: {
+                required: true,
+            },
+            rol_id: {
+                required: true,
+            },
+           
+            name: {
+                required: true,
+            },
+            last_name: {
+                required: true,
+            },
+            
+            cellphone: {
+                number: true,
+                minlength: 10
+            },
+            email: {
+                required: true,
+                email: true
+            },
+
+            password: {
+                required: true,
+                minlength: 8
+            },
+
+            pass_confirm: {
+                required: true,
+                minlength: 8,
+                equalTo: "#password"
+            },
+            status: {
+                required: true,
+            },
+        },
+        submitHandler: function(form, event){
+            event.preventDefault();
+            $('#admin_email-error-exist').hide();
+            const new_form = document.getElementById("frm-inversionista");
             const data = new FormData(new_form);
     
             axios

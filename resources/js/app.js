@@ -6,6 +6,7 @@ require('./components/datatable');
 require('./components/user/crud');
 require('./components/user/datatable_admin');
 require('./components/user/datatable_financiera');
+require('./components/user/datatable_inversionista');
 require('./components/user/datatable_user');
 require('./components/product/datatable_product');
 require('./components/product/crud');

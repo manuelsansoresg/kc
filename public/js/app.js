@@ -4759,6 +4759,15 @@ function setDataUser(user_id) {
     $('#cellphone').val(result.cellphone);
     $('#email').val(result.email);
     $('#status option[value="' + result.status + '"]').attr("selected", "selected");
+
+    if (result.agreement_id != '') {
+      $('#agreement_id option[value="' + result.agreement_id + '"]').attr("selected", "selected");
+      $('#bank_name').val(result.bank_name);
+      $('#bank_card_number').val(result.bank_card_number);
+      $('#bank_account_number').val(result.bank_account_number);
+      $('#bank_clabe').val(result.bank_clabe);
+    }
+
     $('#is_access_config option[value="' + result.is_access_config + '"]').attr("selected", "selected");
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
@@ -4866,6 +4875,65 @@ $().ready(function () {
       event.preventDefault();
       $('#admin_email-error-exist').hide();
       var new_form = document.getElementById("frmfinanciera");
+      var data = new FormData(new_form);
+      axios.post("/panel/user/administrador", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera', 'Datos actualizados', 'Información actualizada correctamente');
+        $('#modal-user-admin').modal('hide');
+      })["catch"](function (e) {
+        var response = e.response;
+        var errors = response.data.errors;
+
+        if (errors.email) {
+          $('#admin_email-error-exist').show();
+        }
+
+        console.log(e.response);
+      });
+    }
+  });
+  $("#frm-inversionista").validate({
+    rules: {
+      agreement_id: {
+        required: true
+      },
+      type_person: {
+        required: true
+      },
+      rol_id: {
+        required: true
+      },
+      name: {
+        required: true
+      },
+      last_name: {
+        required: true
+      },
+      cellphone: {
+        number: true,
+        minlength: 10
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 8
+      },
+      pass_confirm: {
+        required: true,
+        minlength: 8,
+        equalTo: "#password"
+      },
+      status: {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#admin_email-error-exist').hide();
+      var new_form = document.getElementById("frm-inversionista");
       var data = new FormData(new_form);
       axios.post("/panel/user/administrador", data).then(function (response) {
         var result = response.data;
@@ -4999,6 +5067,57 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'financial'
     }, {
       data: 'type_person'
+    }, {
+      data: 'name'
+    }, {
+      data: 'email'
+    }, {
+      data: 'cellphone'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/user/datatable_inversionista.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/user/datatable_inversionista.js ***!
+  \*****************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var table = NioApp.DataTable('#dt-inversionista', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/user/' + route + '/list/show',
+    columns: [{
+      data: 'agreement'
     }, {
       data: 'name'
     }, {
@@ -5274,6 +5393,8 @@ __webpack_require__(/*! ./components/user/crud */ "./resources/js/components/use
 __webpack_require__(/*! ./components/user/datatable_admin */ "./resources/js/components/user/datatable_admin.js");
 
 __webpack_require__(/*! ./components/user/datatable_financiera */ "./resources/js/components/user/datatable_financiera.js");
+
+__webpack_require__(/*! ./components/user/datatable_inversionista */ "./resources/js/components/user/datatable_inversionista.js");
 
 __webpack_require__(/*! ./components/user/datatable_user */ "./resources/js/components/user/datatable_user.js");
 

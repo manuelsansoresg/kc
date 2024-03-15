@@ -187,6 +187,11 @@
                                                                 class="nk-menu-link"><span class="nk-menu-text">Cliente
                                                                     financiera</span></a>
                                                         </li>
+                                                        <li class="nk-menu-item">
+                                                            <a href="/panel/user/cliente-inversionista"
+                                                                class="nk-menu-link"><span class="nk-menu-text">Cliente
+                                                                    inversionista</span></a>
+                                                        </li>
 
                                                     </ul>
                                                 </li>
