@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Lib\Manychat;
 use App\Lib\Slack;
+use App\Models\kaaxSidecc\CreditKaaxSidecc;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -401,6 +402,7 @@ class HistoryLog extends Model
         if ($status_id == HistoryLog::KC_DELIVERY) {
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $id_rel, 0);
+            CreditKaaxSidecc::sendCreditKaaxSidecc($id_rel);
         }
 
         if ($status_id == HistoryLog::KC_SWAP) {

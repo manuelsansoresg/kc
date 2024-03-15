@@ -63,6 +63,19 @@ return [
             ]) : [],
         ],
 
+        'kaax_sidecc' => [
+			'driver' => 'mysql',
+			'host' => env('DB_HOST_KC_SIDECC', 'srv1016.hstgr.io'),
+			'port' => env('DB_PORTKC_SIDECC', '3306'),
+			'database' => env('DB_DATABASE_KC_SIDECC', 'forge'),
+			'username' => env('DB_USERNAME_KC_SIDECC', 'forge'),
+			'password' => env('DB_PASSWORD_KC_SIDECC', 'forge'),
+			'charset' => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix' => '',
+			'strict' => false,
+		],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
