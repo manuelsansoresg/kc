@@ -107,12 +107,12 @@ $().ready(function () {
 
     $("#frm-template_control_desk_step2").validate({
         rules: {
-            'credit[applied_financial_product]': {
+           /*  'credit[applied_financial_product]': {
                 required: true,
             },
             'credit[applied_loan_type]': {
                 required: true,
-            },
+            }, */
 
             'credit[applied_import]': {
                 required: true,
