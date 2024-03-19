@@ -12,6 +12,20 @@ class CreditKaaxSidecc extends Model
     protected $connection = 'kaax_sidecc';
     protected $table = 'credits';
 
+    const CREATED_AT = 'created';
+    const UPDATED_AT = 'updated';
+
+    protected $fillable = [
+        'client_id', 'agreement_id', 'tipo_tramite', 'folio', 'active', 'is_prom
+        otoer', 'liquidacion_terceros', 'tipo_firma', 'status_online', 'fecha_cobro',
+        'fecha_dispersion', 'dispersion', 'file_vobo', 'vobo_aceptado', 'origen',
+        'promoter_id',
+        'sueldo_calculadora_simple', 'valor_slider_simple', 'plazo_calculadora_simple', 'pago_calculadora_simple',
+        'capacidad_pago', 'valor_slider_avanzada', 'plazo_calculadora_avanzada', 'pago_calculadora_avanzada',
+        'ajuste_refinanciamiento', 'ajuste_liquidacion_terceros',
+        'operacion', 'razon', 'origin_type_credit', 'determinacion_credito', 'kc_credit_id'
+    ];
+
     public static function sendCreditKaaxSidecc($id_rel)
     {
         $credit = Credit::find($id_rel);

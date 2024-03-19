@@ -3088,7 +3088,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function finish($creditId, $step)
     {
         $credit = Credit::find($creditId);
-        $percent_form =  self::percentFormStep5_3($creditId);
+        $percent_form =  self::percentFormStep5_3($creditId, $step);
         
         if ($step == '5_3' && $percent_form == 100) {
             
@@ -3096,7 +3096,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_2, $credit->id, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3, $credit->id, 1);
             
-            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_CONTROL_DESK);
+            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_DELIVERY);
             HistoryLog::where(['id_rel' => $credit->id, 'status_id' => HistoryLog::KC_CONTROL_DESK, 'status' => 1])
                         ->update(['status' => 0]);
 

@@ -65,15 +65,19 @@ return [
 
         'kaax_sidecc' => [
 			'driver' => 'mysql',
-			'host' => env('DB_HOST_KC_SIDECC', 'srv1016.hstgr.io'),
-			'port' => env('DB_PORTKC_SIDECC', '3306'),
-			'database' => env('DB_DATABASE_KC_SIDECC', 'forge'),
-			'username' => env('DB_USERNAME_KC_SIDECC', 'forge'),
-			'password' => env('DB_PASSWORD_KC_SIDECC', 'forge'),
+			'host' =>'ls-b3c0a489394b99c30c0731cb5016005ea4b669e2.cvjjctjlogpe.us-east-1.rds.amazonaws.com',
+			'port' =>'3306',
+			'database' => 'kaaxclub-sidecc',
+			'username' => 'dbmasteruser',
+			'password' => 'cc?C;%9{?4)J8:mb~F653c3YUn|bH<[y',
 			'charset' => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix' => '',
-			'strict' => false,
+			'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
 		],
 
         'pgsql' => [

@@ -171,7 +171,6 @@ class ActionController extends Controller
         $models = File::MODEL;
         TemplateFile::saveTemplate($request);
         $step = $request->step;
-
         if ($request->model == 'controlDesk' && $step == '5_3') {
             $actionStrategy   = TemplateValues::STRATEGY[$request->model];
             $finish       = (new $actionStrategy)->finish($request->id_rel, $step);
