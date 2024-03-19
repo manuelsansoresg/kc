@@ -318,7 +318,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => $financial,
                 'is_required' => true,
-                'is_disabled' => 'disabled'
+                'is_disabled' => null
             ],
             3 => [
                 'title_section' => null,
@@ -332,7 +332,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => $product,
                 'is_required' => true,
-                'is_disabled' => 'disabled'
+                'is_disabled' => null
             ],
             4 => [
                 'title_section' => null,
