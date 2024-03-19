@@ -44,6 +44,7 @@ class CreditKaaxSidecc extends Model
             'pago_calculadora_avanzada' => $credit->applied_payment,
         );
         $creditKaax = CreditKaaxSidecc::create($data_credit);
+        ClientsLogKaaxSidecc::addCrmLog($creditKaax->id, 'en-entrega', 'en-entrega');
 
         $data_client_credit_info = array(
             'credit_id' => $creditKaax->id,
