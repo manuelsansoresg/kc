@@ -5,6 +5,8 @@ namespace App\Models\kaaxSidecc;
 use App\Models\Credit;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use GuzzleHttp\Client;
+use GuzzleHttp;
 
 class CreditKaaxSidecc extends Model
 {
@@ -71,5 +73,14 @@ class CreditKaaxSidecc extends Model
             'credit_id' => $creditKaax->id,
         );
         CollectionKaaxSidecc::create($data_collections);
+
+        // Crear una nueva instancia del cliente HTTP
+        $client = new Client();
+
+        // Preparar la solicitud GET
+        $request = new GuzzleHttp\Psr7\Request('GET', 'https://kaaxclub.sidecc.xyz/credit/' . $creditKaax->id . '/createTa');
+
+        // Enviar la solicitud y obtener la respuesta
+        $response = $client->send($request);
     }
 }
