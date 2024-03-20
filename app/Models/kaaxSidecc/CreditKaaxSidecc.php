@@ -80,7 +80,7 @@ class CreditKaaxSidecc extends Model
         $client = new Client();
 
         // Preparar la solicitud GET
-        $request = new GuzzleHttp\Psr7\Request('GET', 'https://kaaxclub.sidecc.xyz/credit/' . $creditKaax->id . '/createTa');
+        $request = new GuzzleHttp\Psr7\Request('GET', 'https://kaaxclub.sidecc.xyz/api/credit/' . $creditKaax->id . '/createTa');
 
         // Enviar la solicitud y obtener la respuesta
         $response = $client->send($request);
