@@ -33,9 +33,19 @@ class CreditKaaxSidecc extends Model
         $credit = Credit::find($id_rel);
         $client = $credit->creditClientPerson;
 
+        //*buscar si existe cliente en sidecc
+        $data_client = array(
+            'apellido_1' => $client->last_name,
+            'apellido_2' => $client->second_last_name,
+            'nombre' => $client->name,
+            'rfc' => $client->rfc,
+        );
+        
+        $clientKaaxSidecc = ClientKaaxSidecc::updateOrCreate(['rfc' => $client->rfc], $data_client);
+
         $data_credit = array(
             'kc_credit_id' => $credit->id,
-            'client_id' => $client->id,
+            'client_id' => $clientKaaxSidecc->id,
             'agreement_id' => $credit->agreement_id,
             'tipo_tramite' => $credit->applied_loan_type,
             'valor_slider_simple' => $credit->applied_import,
@@ -50,7 +60,7 @@ class CreditKaaxSidecc extends Model
 
         $data_client_credit_info = array(
             'credit_id' => $creditKaax->id,
-            'kc_credit_id'=>$credit->credit_id,  
+            'kc_credit_id'=>$credit->id,  
             'capital'=> $credit->applied_import,  
             'plazo_quincenas'=>$credit->applied_term,  
             'descuento'=>$credit->applied_payment,  
@@ -59,20 +69,12 @@ class CreditKaaxSidecc extends Model
         );
         $client_credit_info_kaax = ClientsCreditInfoKaaxSidecc::create($data_client_credit_info);
 
-        $data_collections = array(
-            'kc_credit_id' => $credit->id, 
-            'client_id' => $credit->client_person_id, 
-            'agreement_id' => $credit->agreement_id, 
-            'capital' => $credit->applied_import, 
-            'plazo' => $credit->applied_term, 
-            'descuento' => $credit->applied_payment, 
-            'nombre' => $client->last_name.' '.$client->second_last_name.' '.$client->name,
-            'numero_empleado' => $client->employee_number,
-            'area_laboral' => $client->employee_area,
-            'rfc' => $client->rfc,
+        $data_job_info = array(
             'credit_id' => $creditKaax->id,
+            'numero_trabajador' => $client->employee_number, 
+            'area_laboral' => $client->employee_area, 
         );
-        CollectionKaaxSidecc::create($data_collections);
+        ClientsJobInfoKaaxSidecc::create($data_job_info);
 
         // Crear una nueva instancia del cliente HTTP
         $client = new Client();
