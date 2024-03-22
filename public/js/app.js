@@ -4937,7 +4937,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/user/administrador", data).then(function (response) {
         var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera', 'Datos actualizados', 'Información actualizada correctamente');
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-inversionista', 'Datos actualizados', 'Información actualizada correctamente');
         $('#modal-user-admin').modal('hide');
       })["catch"](function (e) {
         var response = e.response;

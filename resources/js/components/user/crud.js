@@ -272,7 +272,7 @@ $().ready(function () {
             .post("/panel/user/administrador", data)
             .then(function (response) {
                 let result = response.data;
-                showInfo(2, 'dt-financiera', 'Datos actualizados', 'Información actualizada correctamente');
+                showInfo(2, 'dt-inversionista', 'Datos actualizados', 'Información actualizada correctamente');
                 $('#modal-user-admin').modal('hide');
             })
             .catch(e => {

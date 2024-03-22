@@ -125,6 +125,10 @@ class User extends Authenticatable
 
         if ($request->type_user == 'cliente-inversionista') {
             $role = 'Cliente inversionista';
+            $userId = Auth::user()->id;
+            if (Investor::where('user_id', $userId)->count() == 0) {
+                Investor::create(['user_id' => $userId]);
+            }
         }
         $user->assignRole(ucfirst($role));
     }
