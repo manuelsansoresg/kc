@@ -1179,8 +1179,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data_actions = array(
             HistoryLog::KC_DELIVERY_FORM,
             HistoryLog::KC_DELIVERY_FORM_STEP_2,
-            HistoryLog::KC_DELIVERY_FORM_STEP_3,
-            HistoryLog::KC_DELIVERY_FORM_STEP_4,
+           /*  HistoryLog::KC_DELIVERY_FORM_STEP_3,
+            HistoryLog::KC_DELIVERY_FORM_STEP_4, */
         );
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
@@ -1193,16 +1193,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
         }
         
         if ($status_progress == 0) {
-            $current_show = 'Entrega info';
-        } elseif ($status_progress == 1) {
-            $current_show = 'Firma de docs';
-        } elseif ($status_progress == 2) {
-            $current_show = 'Analisis';
-        } elseif ($status_progress > 2) {
-            $current_show = 'Entrega crédito';
+            $current_show = 'Enviar info a s2';
+        }  elseif ($status_progress > 1) {
+            $current_show = 'Activar crédito';
         }
         //dd($status_progress, $current_show);
-        $percent =  (($status_progress) / 4) * 100;
+        $percent =  (($status_progress) / 2) * 100;
 
         if ($show_current_show == true) {
             return $current_show;
