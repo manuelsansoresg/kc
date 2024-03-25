@@ -41,6 +41,10 @@ class User extends Authenticatable
         'bank_card_number',
         'bank_account_number',
         'bank_clabe',
+        'investment_bank_name',
+        'investment_bank_account_holder',
+        'investment_bank_account_number',
+        'investment_bank_clabe',
 
     ];
 

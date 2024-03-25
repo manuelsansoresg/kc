@@ -161,6 +161,40 @@
                                             value="">
                                     </div>
                                 </div>
+                                <hr>
+                                <h6>Banco inversionista</h6>
+
+                                <div class="col-md-6" id="content-password">
+                                    <div class="form-group">
+                                        <label class="form-label" for="frm-user-admin-pass">*Nombre del banco</label>
+                                        <input type="text" name="investment_bank_name" class="form-control" id="investment_bank_name"
+                                            value="">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6" id="content-password">
+                                    <div class="form-group">
+                                        <label class="form-label" for="frm-user-admin-pass">Cuentahabiente</label>
+                                        <input type="text" name="investment_bank_account_holder" class="form-control" id="investment_bank_account_holder"
+                                            value="">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6" id="content-password">
+                                    <div class="form-group">
+                                        <label class="form-label" for="frm-user-admin-pass">Nùmero de cuenta</label>
+                                        <input type="text" name="investment_bank_account_number" class="form-control" id="investment_bank_account_number"
+                                            value="">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6" id="content-password">
+                                    <div class="form-group">
+                                        <label class="form-label" for="frm-user-admin-pass">*CLABE interbancaria</label>
+                                        <input type="text" name="investment_bank_clabe" class="form-control" id="investment_bank_clabe"
+                                            value="">
+                                    </div>
+                                </div>
 
                                 <input type="hidden" id="user_id" name="user_id">
                                 <input type="hidden" id="type_user" name="type_user">
