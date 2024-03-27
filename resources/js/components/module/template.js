@@ -529,6 +529,37 @@ $().ready(function () {
         }
     });
 
+
+    /* wallet */
+
+    $("#frm-template_wallet_step1").validate({
+        rules: {
+            'transaction[investor_id]': {
+                required: true,
+            },
+            'transaction[bank_transfer_type]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_wallet_step1', 'wallet');
+        }
+    });
+    
+    $("#frm-template_wallet_step1_2").validate({
+        rules: {
+            'transaction[operation_status]': {
+                required: true,
+            },
+           
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_wallet_step1_2', 'wallet');
+        }
+    });
+
     //*get data
     if (document.getElementById('id_rel')) {
         let id_rel = $('#id_rel').val();
@@ -536,11 +567,12 @@ $().ready(function () {
 
         if (id_rel != '') {
             axios
-                .get("/panel/action-form/" + id_rel)
+                .get("/panel/action-form/" + id_rel+"/"+type_form+'/form/get')
                 .then(function (response) {
                     let result = response.data;
                     let credit = result.credit;
                     let client = result.client;
+                    let transaction = result.transaction;
                     
 
                     if (type_form == 8) { //checkup
@@ -734,6 +766,20 @@ $().ready(function () {
                     if (type_form == 41) //form kc-swap step 2 form 2
                     {
                         $('#signed').val(credit.signed).trigger("change");
+                    }
+
+                    if (type_form == 61) //form kc-wallet step1
+                    {
+                         
+                        $('#investor_id').val(transaction.investor_id).trigger("change");
+                        $('#bank_transfer_type').val(transaction.bank_transfer_type).trigger("change");
+                        $('#operation_number').val(transaction.operation_number);
+                        $('#amount').val(transaction.amount);
+                    }
+                    
+                    if (type_form == 63) //form kc-wallet step2
+                    {
+                        $('#operation_status').val(transaction.operation_status).trigger("change");
                     }
 
                 })

@@ -111,6 +111,7 @@
                                             @endforeach
                                             <input type="hidden" id="action-model" name="model" value="{{ $model }}">
                                             <input type="hidden" id="action-id_rel" name="id_rel" value="{{ $credit_id }}">
+                                          
                                             @if ($url_redirect == null)
                                                 <input type="hidden" id="url_redirect"value="/panel/template/steps/{{ $model }}/{{ $history->id }}/show">
                                                 @else

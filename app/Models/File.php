@@ -27,6 +27,7 @@ class File extends Model
         'delivery' => 30,
         'swap' => 37,
         'payment' => 49,
+        'wallet' => 61,
     ];
 
     public static function upload($model, $id_rel, $request, $template_config_id = null)

@@ -16,11 +16,11 @@ class CreateTableTransactions extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('investor_id')->nullable();
-            $table->integer('transaction_type');
-            $table->decimal('amount', 8, 2);
-            $table->decimal('capital', 8, 2);
-            $table->decimal('interest', 8, 2);
-            $table->decimal('iva', 8, 2);
+            $table->integer('transaction_type')->nullable();
+            $table->decimal('amount', 8, 2)->nullable();
+            $table->decimal('capital', 8, 2)->nullable();
+            $table->decimal('interest', 8, 2)->nullable();
+            $table->decimal('iva', 8, 2)->nullable();
             $table->timestamps();
 
         });

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,5 +16,55 @@ class Transaction extends Model
         'capital',
         'interest',
         'iva',
+        'bank_transfer_type',
+        'operation_number',
+        'operation_status',
     ];
+
+    public static function saveEdit($request)
+    {
+        $data = $request->transaction;
+        if ($request->id_rel == null)
+        {
+            $transaction = Transaction::create($data);
+            HistoryLog::move($transaction->id, HistoryLog::KC_WALLET, HistoryLog::KC_WALLET);
+           
+        } else {
+            $transaction = Transaction::where('id', $request->id_rel)
+                            ->update($data);
+        }
+        return $transaction;
+    }
+
+    public static function listDatatable($status)
+    {
+        $get_list    = HistoryLog::getByStatus($status);
+        $transactions        = array();
+        foreach ($get_list as $history) {
+            $transaction = Transaction::find($history->id_rel);
+            $getOrdenante = User::find($transaction->investor_id);
+            $ordenante = $getOrdenante->name.' '. $getOrdenante->last_name.' '. $getOrdenante->second_last_name;
+            $model            = HistoryLog::$name_model[$history->status_id];
+            $templateStrategy = TemplateValues::STRATEGY[$model];
+            $percent          = (new $templateStrategy)->getPercent($history);
+            $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => null, 'percent' => $percent])->render();
+            $in_progress      = (new $templateStrategy)->getPercent($history, true);
+            $dead_line        = (new $templateStrategy)->moduleDeadline($history);
+            $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
+            $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+
+            $transactions[] = array(
+                'id' => $history->id_rel,
+                'date' => date('Y-m-d', strtotime($transaction->created_at)),
+                'ordenante' => $ordenante,
+                'importe' => $transaction->amount,
+                'progress' => $progress_bar,
+                'in_progress' => $in_progress,
+                'deadline' => $dead_line,
+                'options' => $option
+            );
+        }
+        return $transactions;
+    }
 }
+

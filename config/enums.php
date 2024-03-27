@@ -225,6 +225,17 @@ return [
         'Tipo de crédito' =>  10202818,
         'URL Reporte' =>  10298820,
         'URL Encuesta' =>  10357823,
-    )
+    ),
+
+    "funding_operation" => array(
+        1 => 'Mismo banco',
+        2 => 'SPEI'
+    ),
+    
+    "operation_status" => array(
+        0 => 'En revisión',
+        1 => 'Exitosa',
+        2 => 'Fallida'
+    ),
     
 ];

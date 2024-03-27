@@ -282,6 +282,48 @@
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
+                                {{-- modulo KC - WALLET --}}
+                                @hasrole('Administrador|Asesor|Cliente financiera')
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">KC - WALLET</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="#" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Resumen</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="#" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Mis préstamos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-wallet" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Agregar fondos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-wallet" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Retirar fondos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="#" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Historial de movimientos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="#" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Ayuda</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                @endhasrole
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">CRÉDITOS</h6>

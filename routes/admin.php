@@ -230,6 +230,12 @@ Route::group(['prefix' => 'kc-check-up-debt-reduction'], function () {
 
 Route::resource('kc-check-up-actions', '\App\Http\Controllers\Panel\Module\ActionController')->middleware('auth');
 
+Route::resource('kc-wallet', '\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController')->middleware('auth');
+
+Route::group(['prefix' => 'kc-wallet'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'list'])->middleware('auth');
+});
+
 
 //*credit
 Route::resource('credit', '\App\Http\Controllers\Panel\Credit\CreditController')->middleware('auth');
@@ -259,6 +265,7 @@ Route::resource('action-document', '\App\Http\Controllers\Panel\Credit\DocumentC
 
 Route::group(['prefix' => 'action-form'], function () {
     Route::get('{model}/{history_id}/form', ['\App\Http\Controllers\Panel\Module\FormController', 'index'])->middleware('auth');
+    Route::get('{id}/{type_form}/form/get', ['\App\Http\Controllers\Panel\Module\FormController', 'show'])->middleware('auth');
     
     
 

@@ -96,6 +96,14 @@ class HistoryLog extends Model
     const KC_PAYMENT_UNPAID_ARCHIVE           = 51;
     const KC_AFTER_MARKET_ARCHIVE             = 56;
     
+    //deposit founds
+    const KC_WALLET                           = 60;
+    const KC_WALLET_ADD_FORM                  = 61;
+    const KC_WALLET_ADD_UPLOAD                = 62;
+
+    const KC_WALLET_ADD_FORM_STEP_2           = 63;
+    const KC_WALLET_ADD_UPLOAD_STEP_2         = 64;
+    
 
     protected $fillable = [
         'id_rel',
@@ -175,6 +183,7 @@ class HistoryLog extends Model
         57 => 'Formulario',
         58 => 'Formulario',
         59 => 'Carga',
+        60 => 'KC - Wallet',
     ];
     
     public static $label_subject = [
@@ -229,6 +238,11 @@ class HistoryLog extends Model
         57 => 'Preparar documento',
         58 => 'Confirmar',
         59 => 'Documento firmado',
+        60 => '',
+        61 => 'Datos transferencia',
+        62 => 'Comprobante transferencia',
+        63 => 'Verificar transferencia',
+        64 => 'Evidencia',
     ];
 
     public static $name_model = [
@@ -281,6 +295,11 @@ class HistoryLog extends Model
         57 => 'controlDesk',
         58 => 'controlDesk',
         59 => 'controlDesk',
+        60 => 'wallet',
+        61 => 'wallet',
+        62 => 'wallet',
+        63 => 'wallet',
+        64 => 'wallet',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $update_old_status = true)
@@ -313,7 +332,7 @@ class HistoryLog extends Model
                 $data['user_id']    = Auth::user()->id;
             } catch (\Exception $th) {
             }
-            $data['is_credit']        = $status_id > 4 ?  1 : 0;
+            $data['is_credit']        = $status_id > 4 &&  $status_id != HistoryLog::KC_WALLET_ADD_FORM ? 1 : 0;
             $history = new HistoryLog($data);
             $history->save();
             self::subHistories($id_rel, $status_id, $history);
@@ -439,6 +458,14 @@ class HistoryLog extends Model
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Payments');
             $notification_slack->sendMessage();
         }
+
+        if ($status_id == HistoryLog::KC_WALLET) {
+            HistoryLog::move($id_rel, HistoryLog::KC_WALLET_ADD_FORM, HistoryLog::KC_WALLET_ADD_FORM);
+            HistoryLog::move($id_rel, HistoryLog::KC_WALLET_ADD_UPLOAD, HistoryLog::KC_WALLET_ADD_UPLOAD);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM, $id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD, $id_rel, 0);
+        }
+
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
             $credit             = Credit::find($id_rel);
 
@@ -510,6 +537,7 @@ class HistoryLog extends Model
 
     public static function getByStatus($status_id, $id_rel = null, $status = 1)
     {
+        \DB::enableQueryLog();
         $history = HistoryLog::wherein('status_id', $status_id);
         if ($id_rel != null) {
             $history->where('id_rel', $id_rel);
@@ -519,6 +547,7 @@ class HistoryLog extends Model
         }
         $history = $history->orderBy('created_at', 'DESC')
                     ->get();
+        //dd(\DB::getQueryLog());
         return $history;
     }
 

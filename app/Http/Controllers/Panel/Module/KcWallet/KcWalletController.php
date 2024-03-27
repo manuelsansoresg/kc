@@ -1,56 +1,28 @@
 <?php
 
-namespace App\Http\Controllers\Panel\Credit;
+namespace App\Http\Controllers\Panel\Module\KcWallet;
 
 use App\Http\Controllers\Controller;
-use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Models\Transaction;
-use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
-class DocumentController extends Controller
+class KcWalletController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($model, $history_id)
+    public function index()
     {
-        $actionStrategy   = TemplateValues::STRATEGY[$model];
-        $files            = (new $actionStrategy)->configUpload();
-        $title = 'Acción carga';
-        $url_redirect = null;
-        try {
-            $title = (new $actionStrategy)->setTitleDocument();
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
+        return view('panel.module.wallet.list');
+    }
 
-        try {
-            $url_redirect = (new $actionStrategy)->setURLDocument();
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-
-        $history          = HistoryLog::find($history_id);
-        $credit = null;
-        $credit_id = $history->id_rel;
-        $client = null;
-        $product = null;
-        $transaction = null;
-
-        if ($model != 'wallet') {
-            $credit           = $history->historyCredit;
-            $client           = $credit->creditClientPerson;
-            $product          = $credit->creditProduct;
-        } else {
-            $transaction = Transaction::find($history->id_rel);
-            
-        }
-        
-        return view('panel.credit.files', compact('title', 'files', 'credit_id', 'model', 'product', 'credit', 'client', 'history', 'url_redirect', 'transaction'));
+    public function list()
+    {
+        $users = Transaction::listDatatable([HistoryLog::KC_WALLET_ADD_FORM]);
+        return response()->json(['data' => $users]);
     }
 
     /**
@@ -62,6 +34,8 @@ class DocumentController extends Controller
     {
         //
     }
+
+    
 
     /**
      * Store a newly created resource in storage.
@@ -75,14 +49,14 @@ class DocumentController extends Controller
     }
 
     /**
-     * *Show uploaded files in credits
+     * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-       
+        //
     }
 
     /**
