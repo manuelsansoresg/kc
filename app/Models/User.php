@@ -97,6 +97,29 @@ class User extends Authenticatable
         return $users;
     }
 
+    public static function getUserRoleInvestor($role)
+    {
+        $users =  User::select(
+            'agreement_id',
+            'investors.id',
+            'name',
+            'last_name',
+            'second_last_name',
+            'cellphone',
+            'email',
+            DB::raw('(CASE 
+            WHEN status = "1" THEN "Sí" 
+            WHEN status = "0" THEN "No" 
+            END) AS status'),
+            'financial_id',
+            'type_person'
+        )
+        ->join('investors', 'investors.user_id', 'users.id')
+            ->role($role)
+            ->get();
+        return $users;
+    }
+
     public static function saveEdit($request)
     {
         $is_save = false;
@@ -129,7 +152,7 @@ class User extends Authenticatable
 
         if ($request->type_user == 'cliente-inversionista') {
             $role = 'Cliente inversionista';
-            $userId = Auth::user()->id;
+            $userId = $user->id;
             if (Investor::where('user_id', $userId)->count() == 0) {
                 Investor::create(['user_id' => $userId]);
             }

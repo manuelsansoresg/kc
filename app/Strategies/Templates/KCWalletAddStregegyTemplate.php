@@ -109,7 +109,8 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
     {
         $name_form = 'frm-template_wallet_step1';
         $type_form    = HistoryLog::KC_WALLET_ADD_FORM;
-        $users = User::getUserRole('Cliente inversionista');
+        $users = User::getUserRoleInvestor('Cliente inversionista');
+        //dd($users);
         $funding_operation_type = config('enums.funding_operation');
 
         $urlRedirect = $history_id == 'null' ? '/panel/kc-wallet' : '/panel/template/steps/wallet/'.$history_id.'/show';
