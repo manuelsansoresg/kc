@@ -28,6 +28,8 @@ class Transaction extends Model
         {
             $transaction = Transaction::create($data);
             HistoryLog::move($transaction->id, HistoryLog::KC_WALLET, HistoryLog::KC_WALLET);
+            HistoryLog::move($transaction->id, HistoryLog::KC_WALLET_ADD_FORM, HistoryLog::KC_WALLET_ADD_FORM);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM, $transaction->id, 1);
            
         } else {
             $transaction = Transaction::where('id', $request->id_rel)
@@ -57,7 +59,7 @@ class Transaction extends Model
                 'id' => $history->id_rel,
                 'date' => date('Y-m-d', strtotime($transaction->created_at)),
                 'ordenante' => $ordenante,
-                'importe' => $transaction->amount,
+                'importe' => format_price($transaction->amount),
                 'progress' => $progress_bar,
                 'in_progress' => $in_progress,
                 'deadline' => $dead_line,

@@ -93,7 +93,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'name' => 'Evidencia de transferencia',
                 'comment' => '',
                 'is_required' => true,
-                'is_date' => true,
+                'is_date' => false,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
                 'type' => 'image/*, .pdf',
@@ -312,8 +312,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $percent = 0;
 
         $total_valid = 0;
-        
-        if ($transaction != null && $transaction->operation_status !== 'null') {
+        if ($transaction != null && ($transaction->operation_status === 0 || $transaction->operation_status != null )) {
             $total_valid = 100;
         }
         
@@ -564,7 +563,6 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $percent_upload   = self::percentFile($history->id_rel);
         
         $percent_step1   = reduceDecimal((self::percentForm($history) + self::percentFile($history->id_rel) ) / 2);
-        
         $percent_step2   = reduceDecimal((self::percentForm2($history) + self::percentFile($history->id_rel, 2) ) / 2);
 
         if ($percent_step1 == 100) {
@@ -618,6 +616,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         );
         //dd($data_actions);
         $get_actions = HistoryLog::getByStatus($data_actions, $transaction->id);
+        //dd($get_actions);
         $status_progress = 0;
         $current_show = ''; 
         foreach ($get_actions as $key => $get_action) {
@@ -625,10 +624,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             $status_progress += $status != null ? $status : 0;
             //$current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
         }
-        if ($status_progress <= 1) {
-            $current_show = 'Confirmación de entrega';
-        } elseif ($status_progress > 1) {
-            $current_show = 'Reducción de análisis';
+        if ($status_progress <= 2) {
+            $current_show = 'Información transferencia';
+        } elseif ($status_progress > 2) {
+            $current_show = 'Verificar transferencia';
         }
 
         $percent =  $status_progress > 0 ? (($status_progress) / 4) * 100 : 0;

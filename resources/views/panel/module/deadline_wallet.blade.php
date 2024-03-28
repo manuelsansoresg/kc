@@ -14,6 +14,6 @@
 @endphp
 
 <span class="badge badge-dim bg-{{ $color_inf }}">
-    <em class="icon ni ni-clock"></em>
+   
     <span>{{ $label }} </span>
 </span>

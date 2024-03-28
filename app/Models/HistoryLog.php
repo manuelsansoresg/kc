@@ -460,9 +460,9 @@ class HistoryLog extends Model
         }
 
         if ($status_id == HistoryLog::KC_WALLET) {
-            HistoryLog::move($id_rel, HistoryLog::KC_WALLET_ADD_FORM, HistoryLog::KC_WALLET_ADD_FORM);
+            
             HistoryLog::move($id_rel, HistoryLog::KC_WALLET_ADD_UPLOAD, HistoryLog::KC_WALLET_ADD_UPLOAD);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM, $id_rel, 0);
+            
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD, $id_rel, 0);
         }
 
