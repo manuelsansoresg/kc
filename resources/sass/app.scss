@@ -106,6 +106,28 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
   font-size: 16px;
  }
 
+ ul.ul-primary {
+  list-style-type: none; /* Remove default bullets */
+  padding-left: 15px; /* Adjust text indentation */
+}
+
+ul.ul-primary li::before {
+  content: "• "; /* First dot */
+  font-weight: bold;
+  color: #333;
+}
+
+ul.ul-primary li::after {
+  content: " •"; /* Second dot, with a space before */
+  font-weight: normal;
+  color: #ccc;
+}
+
+ul.ul-primary li::after {
+  display: none; /* Hide the second dot */
+}
+
+
  /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
   .text-elije {
