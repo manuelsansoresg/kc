@@ -861,10 +861,29 @@ function saveForm(id_form, model) {
         .post("/panel/action-form", data)
         .then(function (response) {
             let result = response.data;
+            
             if (url_redirect == null) {
                 window.history.back();
             }
-            window.location = url_redirect;
+            if (document.getElementById('url_redirect_finish')) {
+                // Obtener el valor de "id"
+                const id = result.id;
+              
+                // Obtener el elemento "url_redirect_finish"
+                const urlRedirectFinishElement = document.getElementById('url_redirect_finish');
+              
+                // Obtener el valor actual de data-redirect
+                const currentDataRedirect = urlRedirectFinishElement.getAttribute('data-redirect');
+              
+                // Reemplazar {history_id} con el valor de "id"
+                const updatedDataRedirect = currentDataRedirect.replace('{history_id}', id);
+              
+                // Actualizar el valor de data-redirect
+                urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
+                window.location = updatedDataRedirect;
+              }
+              
+            //window.location = url_redirect;
         })
         .catch(e => {
         });

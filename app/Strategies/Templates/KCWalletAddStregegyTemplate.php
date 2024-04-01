@@ -114,7 +114,18 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $funding_operation_type = config('enums.funding_operation');
 
         $urlRedirect = $history_id == 'null' ? '/panel/kc-wallet' : '/panel/template/steps/wallet/'.$history_id.'/show';
+        $buttonLinkExtraFinish = null;
 
+        if ($history_id == 'null') {
+            $buttonLinkExtraFinish = array(
+                'name' => 'Continuar',
+                'id' => 'url_redirect_finish',
+                'class' => 'btn btn-primary',
+                'link' => '#',
+                'data-redirect' => '/panel/template/action-document/wallet/{history_id}?step=1_2'
+            );
+        }
+        
         $elements = array(
             1 => [
                 'title_section' => null,
@@ -194,7 +205,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             ],
         );
 
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'buttonLinkExtraFinish' => $buttonLinkExtraFinish, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
 
@@ -284,6 +295,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM_STEP_2, $history->id_rel, 1);
             }
         }
+        return $transaction;
     }
 
     public function percentForm($history)

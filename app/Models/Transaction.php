@@ -28,14 +28,14 @@ class Transaction extends Model
         {
             $transaction = Transaction::create($data);
             HistoryLog::move($transaction->id, HistoryLog::KC_WALLET, HistoryLog::KC_WALLET);
-            HistoryLog::move($transaction->id, HistoryLog::KC_WALLET_ADD_FORM, HistoryLog::KC_WALLET_ADD_FORM);
+            $getTransaction = HistoryLog::move($transaction->id, HistoryLog::KC_WALLET_ADD_FORM, HistoryLog::KC_WALLET_ADD_FORM);
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM, $transaction->id, 1);
            
         } else {
-            $transaction = Transaction::where('id', $request->id_rel)
+            $getTransaction = Transaction::where('id', $request->id_rel)
                             ->update($data);
         }
-        return $transaction;
+        return $getTransaction;
     }
 
     public static function listDatatable($status)
@@ -45,7 +45,7 @@ class Transaction extends Model
         foreach ($get_list as $history) {
             $transaction = Transaction::find($history->id_rel);
             $getOrdenante = User::find($transaction->investor_id);
-            $ordenante = $getOrdenante->name.' '. $getOrdenante->last_name.' '. $getOrdenante->second_last_name;
+            $ordenante =  $getOrdenante != null ?  $getOrdenante->name.' '. $getOrdenante->last_name.' '. $getOrdenante->second_last_name : null;
             $model            = HistoryLog::$name_model[$history->status_id];
             $templateStrategy = TemplateValues::STRATEGY[$model];
             $percent          = (new $templateStrategy)->getPercent($history);

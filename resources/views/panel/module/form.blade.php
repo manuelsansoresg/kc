@@ -325,6 +325,9 @@
                         @if ($type_form == 43) {{-- swap --}}
                             <a  onclick="saltarSwap()" class="btn btn-primary">Saltar</a>
                         @endif
+                        @if (isset($buttonLinkExtraFinish) && $buttonLinkExtraFinish != null)
+                            <button class="{{ $buttonLinkExtraFinish['class'] }}" data-redirect="{{ $buttonLinkExtraFinish['data-redirect'] }}" id="{{ $buttonLinkExtraFinish['id'] }}"> {{ $buttonLinkExtraFinish['name'] }} </button>
+                        @endif
                     </li>
                 </ul>
             </div>

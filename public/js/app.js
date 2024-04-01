@@ -4186,7 +4186,20 @@ function saveForm(id_form, model) {
       window.history.back();
     }
 
-    window.location = url_redirect;
+    if (document.getElementById('url_redirect_finish')) {
+      // Obtener el valor de "id"
+      var id = result.id; // Obtener el elemento "url_redirect_finish"
+
+      var urlRedirectFinishElement = document.getElementById('url_redirect_finish'); // Obtener el valor actual de data-redirect
+
+      var currentDataRedirect = urlRedirectFinishElement.getAttribute('data-redirect'); // Reemplazar {history_id} con el valor de "id"
+
+      var updatedDataRedirect = currentDataRedirect.replace('{history_id}', id); // Actualizar el valor de data-redirect
+
+      urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
+      window.location = updatedDataRedirect;
+    } //window.location = url_redirect;
+
   })["catch"](function (e) {});
 } //*boton saltar en swap etapa 2_3   
 
