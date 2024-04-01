@@ -63,7 +63,8 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => null,
-                'is_disabled' => null
+                'is_disabled' => null,
+                
             ],
             2 => [
                 'title_section' => null,

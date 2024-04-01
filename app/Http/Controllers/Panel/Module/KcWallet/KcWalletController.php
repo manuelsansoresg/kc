@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Panel\Module\KcWallet;
 
 use App\Http\Controllers\Controller;
 use App\Models\HistoryLog;
+use App\Models\Investor;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class KcWalletController extends Controller
@@ -23,6 +25,14 @@ class KcWalletController extends Controller
     {
         $users = Transaction::listDatatable([HistoryLog::KC_WALLET_ADD_FORM]);
         return response()->json(['data' => $users]);
+    }
+
+    public function getInvestor(Investor $investor)
+    {
+        $user = User::find($investor->user_id);
+        $legend = \View::make('panel.module.wallet.legendInvestor', ['user' => $user])->render();
+        
+        return response()->json($legend);
     }
 
     /**

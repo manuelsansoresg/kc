@@ -62,6 +62,7 @@
                     </div><!-- .nk-block-head -->
                     <div class="nk-block nk-block-lg mt-n3">
                         <p>* Campos obligatorios</p>
+                        <div id="content-legend"></div>
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
                                 <div class="preview-block">

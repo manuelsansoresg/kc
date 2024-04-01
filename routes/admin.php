@@ -119,6 +119,8 @@ Route::group(['prefix' => 'action'], function () {
     Route::get('{history}/{status_id}/finish', ['\App\Http\Controllers\Panel\ActionController', 'moveDeliveryFinish'])->middleware('auth');
     //concluir atajo
     Route::get('{history}/complete', ['\App\Http\Controllers\Panel\ActionController', 'complete'])->middleware('auth');
+    
+    
 });
 
 //*dropzone file
@@ -234,6 +236,8 @@ Route::resource('kc-wallet', '\App\Http\Controllers\Panel\Module\KcWallet\KcWall
 
 Route::group(['prefix' => 'kc-wallet'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'list'])->middleware('auth');
+    
+    Route::get('{investor}/investor/get', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'getInvestor'])->middleware('auth');
 });
 
 

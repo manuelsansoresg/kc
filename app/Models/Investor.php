@@ -19,4 +19,5 @@ class Investor extends Model
         'total_available',
         'collection_commission',
     ];
+
 }

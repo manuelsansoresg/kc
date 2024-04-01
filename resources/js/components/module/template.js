@@ -546,6 +546,22 @@ $().ready(function () {
             saveForm('frm-template_wallet_step1', 'wallet');
         }
     });
+
+    //if exist implement onchange select
+    window.getValue = function(get)
+    {
+        $('#content-legend').html('');
+        let ordenante = get.value;
+        console.log(ordenante);
+        axios
+            .get("/panel/kc-wallet/" + ordenante+"/investor/get")
+            .then(function (response) {
+                let result = response.data;
+                $('#content-legend').html(result);
+            })
+            .catch(e => {
+            });
+    }
     
     $("#frm-template_wallet_step1_2").validate({
         rules: {
