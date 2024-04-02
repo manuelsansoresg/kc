@@ -137,7 +137,11 @@
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
                             <input type="number" class="form-control" {{ $element['is_disabled'] }}
-                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}">
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}"
+                                @if (isset($element['negativeNumber']) && $element['negativeNumber'] == true)
+                                data-negative-number
+                                @endif
+                                >
                             @if ($element['comment_admin'] != null)
                                 <small>{{ $element['comment_admin'] }}</small>
                             @endif

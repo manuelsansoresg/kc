@@ -103,6 +103,12 @@ class HistoryLog extends Model
 
     const KC_WALLET_ADD_FORM_STEP_2           = 63;
     const KC_WALLET_ADD_UPLOAD_STEP_2         = 64;
+
+    const KC_DOWN_WALLET                     = 65;
+    const KC_DOWN_WALLET_ADD_FORM            = 66;
+
+    const KC_DOWN_WALLET_ADD_FORM_STEP_2     = 67;
+    const KC_DOWN_WALLET_ADD_UPLOAD_STEP_2   = 68;
     
 
     protected $fillable = [
@@ -243,6 +249,10 @@ class HistoryLog extends Model
         62 => 'Comprobante transferencia',
         63 => 'Verificar transferencia',
         64 => 'Evidencia',
+        65 => '',
+        66 => 'Retiro',
+        67 => '',
+        68 => '',
     ];
 
     public static $name_model = [
@@ -300,6 +310,10 @@ class HistoryLog extends Model
         62 => 'wallet',
         63 => 'wallet',
         64 => 'wallet',
+        65 => 'kc-down-wallet',
+        66 => 'kc-down-wallet',
+        67 => 'kc-down-wallet',
+        68 => 'kc-down-wallet',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $update_old_status = true)
@@ -458,7 +472,7 @@ class HistoryLog extends Model
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Payments');
             $notification_slack->sendMessage();
         }
-
+        
         if ($status_id == HistoryLog::KC_WALLET) {
             
             HistoryLog::move($id_rel, HistoryLog::KC_WALLET_ADD_UPLOAD, HistoryLog::KC_WALLET_ADD_UPLOAD);

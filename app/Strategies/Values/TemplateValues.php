@@ -7,6 +7,7 @@ use App\Strategies\Templates\ControlDeskStrategyTemplate;
 use App\Strategies\Templates\DebtCreditStrategyTemplate;
 use App\Strategies\Templates\DeliveryStrategyTemplate;
 use App\Strategies\Templates\KCWalletAddStregegyTemplate;
+use App\Strategies\Templates\KCWalletDownAddStregegyTemplate;
 use App\Strategies\Templates\LeadStrategyTemplate;
 use App\Strategies\Templates\NewCreditStrategyTemplate;
 use App\Strategies\Templates\PaymentStrategyTemplate;
@@ -24,5 +25,6 @@ final class TemplateValues
         'swap' => SwapStrategyTemplate::class,
         'payment' => PaymentStrategyTemplate::class,
         'wallet' => KCWalletAddStregegyTemplate::class,
+        'kc-down-wallet' => KCWalletDownAddStregegyTemplate::class,
     ];
 }

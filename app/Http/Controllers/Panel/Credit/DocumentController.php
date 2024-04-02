@@ -40,8 +40,7 @@ class DocumentController extends Controller
         $client = null;
         $product = null;
         $transaction = null;
-
-        if ($model != 'wallet') {
+        if ($model != 'wallet' && $model != 'kc-down-wallet') {
             $credit           = $history->historyCredit;
             $client           = $credit->creditClientPerson;
             $product          = $credit->creditProduct;

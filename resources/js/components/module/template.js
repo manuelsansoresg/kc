@@ -576,11 +576,68 @@ $().ready(function () {
         }
     });
 
+    //* wallet-down
+    $("#frm-template_wallet_down_step1").validate({
+        rules: {
+            'transaction[investor_id]': {
+                required: true,
+            },
+            
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            const amountInput = document.getElementById('amount');
+            let isError = false;
+             // Validate only if `amountInput` exists and has `data-negative-number` attribute
+            if (amountInput && amountInput.hasAttribute('data-negative-number')) {
+                const amountValue = parseFloat(amountInput.value);
+
+                // Ensure `amountValue` is a valid number before checking negativity
+                if (!isNaN(amountValue)) {
+                if (amountValue >= 0) {
+                    event.preventDefault();
+                    Swal.fire({
+                        text: 'El valor debe ser un número negativo.',
+                        icon: 'warning',
+                    })
+                    isError = true;
+                    amountInput.focus();
+                }
+                } else {
+                // Handle invalid input (e.g., non-numeric characters)
+                Swal.fire({
+                    text: 'El valor debe ser un número válido.',
+                    icon: 'warning',
+                })
+                isError = true;
+                amountInput.focus();
+                }
+            }
+            if (isError === false) {
+                saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
+            }
+        }
+    });
+
+    $("#frm-template_wallet_down_step2").validate({
+        rules: {
+            'transaction[operation_status]': {
+                required: true,
+            },
+           
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_wallet_down_step2', 'kc-down-wallet');
+        }
+    });
+    
+
     //*get data
     if (document.getElementById('id_rel')) {
         let id_rel = $('#id_rel').val();
         let type_form = $('#type_form').val();
-
+        console.log(type_form);
         if (id_rel != '') {
             axios
                 .get("/panel/action-form/" + id_rel+"/"+type_form+'/form/get')
@@ -797,6 +854,12 @@ $().ready(function () {
                     {
                         $('#operation_status').val(transaction.operation_status).trigger("change");
                     }
+                    if (type_form == 66) //form kc-wallet step1
+                    {
+                        $('#investor_id').val(transaction.investor_id).trigger("change");
+                        $('#transaction_type').val(transaction.transaction_type);
+                        $('#amount').val(transaction.amount);
+                    }
 
                 })
                 .catch(e => {
@@ -883,7 +946,7 @@ function saveForm(id_form, model) {
                 window.location = updatedDataRedirect;
               }
               
-            //window.location = url_redirect;
+            window.location = url_redirect;
         })
         .catch(e => {
         });

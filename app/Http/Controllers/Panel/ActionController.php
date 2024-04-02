@@ -176,7 +176,7 @@ class ActionController extends Controller
             $finish       = (new $actionStrategy)->finish($request->id_rel, $step);
         }
         //terminar archivo wallet
-        if ($request->model == 'wallet' && $step == '2') {
+        if (($request->model == 'wallet' || $request->model == 'kc-down-wallet') && $step == '2') {
             $actionStrategy   = TemplateValues::STRATEGY[$request->model];
             $finish       = (new $actionStrategy)->finish($request->id_rel, $step);
         }

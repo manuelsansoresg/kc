@@ -28,6 +28,7 @@ class File extends Model
         'swap' => 37,
         'payment' => 49,
         'wallet' => 61,
+        'kc-down-wallet' => 65,
     ];
 
     public static function upload($model, $id_rel, $request, $template_config_id = null)

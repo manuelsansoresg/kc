@@ -8,13 +8,13 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Agregar fondos</h3>
+                                <h3 class="nk-block-title page-title">Retirar fondos</h3>
                                 <div class="nk-block-des text-soft">
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item ">KC - Wallet</li>
-                                            <li class="breadcrumb-item active">Agregar fondos</li>
+                                            <li class="breadcrumb-item active">Retirar fondos</li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -28,12 +28,12 @@
                     <div class="nk-block nk-block-lg">
                         <div class="row">
                             <div class="col-12 py-3 text-end">
-                              <a href="/panel/action-form/wallet/null/form?step=1" class="btn btn-primary">Agregar fondos</a>
+                              <a href="/panel/action-form/kc-down-wallet/null/form?step=1" class="btn btn-primary">Retirar fondos</a>
                             </div>
                           </div>
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
-                                <table id="dt-wallet" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
+                                <table id="dt-down-wallet" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>ID</th>

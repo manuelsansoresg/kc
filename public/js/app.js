@@ -3248,6 +3248,63 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-down-wallet', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-down-wallet/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'date'
+    }, {
+      data: 'ordenante'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-down-wallet tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-kc-swap', {
     processing: true,
     responsive: {
@@ -3916,11 +3973,64 @@ $().ready(function () {
       event.preventDefault();
       saveForm('frm-template_wallet_step1_2', 'wallet');
     }
+  }); //* wallet-down
+
+  $("#frm-template_wallet_down_step1").validate({
+    rules: {
+      'transaction[investor_id]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var amountInput = document.getElementById('amount');
+      var isError = false; // Validate only if `amountInput` exists and has `data-negative-number` attribute
+
+      if (amountInput && amountInput.hasAttribute('data-negative-number')) {
+        var amountValue = parseFloat(amountInput.value); // Ensure `amountValue` is a valid number before checking negativity
+
+        if (!isNaN(amountValue)) {
+          if (amountValue >= 0) {
+            event.preventDefault();
+            Swal.fire({
+              text: 'El valor debe ser un número negativo.',
+              icon: 'warning'
+            });
+            isError = true;
+            amountInput.focus();
+          }
+        } else {
+          // Handle invalid input (e.g., non-numeric characters)
+          Swal.fire({
+            text: 'El valor debe ser un número válido.',
+            icon: 'warning'
+          });
+          isError = true;
+          amountInput.focus();
+        }
+      }
+
+      if (isError === false) {
+        saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
+      }
+    }
+  });
+  $("#frm-template_wallet_down_step2").validate({
+    rules: {
+      'transaction[operation_status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_down_step2', 'kc-down-wallet');
+    }
   }); //*get data
 
   if (document.getElementById('id_rel')) {
     var id_rel = $('#id_rel').val();
     var type_form = $('#type_form').val();
+    console.log(type_form);
 
     if (id_rel != '') {
       axios.get("/panel/action-form/" + id_rel + "/" + type_form + '/form/get').then(function (response) {
@@ -4130,6 +4240,13 @@ $().ready(function () {
           {
             $('#operation_status').val(transaction.operation_status).trigger("change");
           }
+
+        if (type_form == 66) //form kc-wallet step1
+          {
+            $('#investor_id').val(transaction.investor_id).trigger("change");
+            $('#transaction_type').val(transaction.transaction_type);
+            $('#amount').val(transaction.amount);
+          }
       })["catch"](function (e) {});
     }
   }
@@ -4198,8 +4315,9 @@ function saveForm(id_form, model) {
 
       urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
       window.location = updatedDataRedirect;
-    } //window.location = url_redirect;
+    }
 
+    window.location = url_redirect;
   })["catch"](function (e) {});
 } //*boton saltar en swap etapa 2_3   
 

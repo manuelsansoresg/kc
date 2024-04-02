@@ -240,6 +240,13 @@ Route::group(['prefix' => 'kc-wallet'], function () {
     Route::get('{investor}/investor/get', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'getInvestor'])->middleware('auth');
 });
 
+Route::resource('kc-down-wallet', '\App\Http\Controllers\Panel\Module\KcWallet\KcDownWalletController')->middleware('auth');
+
+Route::group(['prefix' => 'kc-down-wallet'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcDownWalletController', 'list'])->middleware('auth');
+    
+    Route::get('{investor}/investor/get', ['\App\Http\Controllers\Panel\Module\KcWallet\KcDownWalletController', 'getInvestor'])->middleware('auth');
+});
 
 //*credit
 Route::resource('credit', '\App\Http\Controllers\Panel\Credit\CreditController')->middleware('auth');

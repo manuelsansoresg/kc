@@ -21,17 +21,17 @@ class FormController extends Controller
     {
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $history          = HistoryLog::find($history_id);
-        $credit           = $model != 'wallet' && $history != null ? $history->historyCredit : null;
-        $credit_id = $model != 'wallet' && $history != null ? $credit->id : null;
+        $credit           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $history->historyCredit : null;
+        $credit_id = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->id : null;
         $form             = (new $actionStrategy)->configForm($credit_id, $history_id);
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
         $title            = (new $actionStrategy)->setTitle($history);
-        $client           = $model != 'wallet' && $history != null ? $credit->creditClientPerson : null;
-        $product          = $model != 'wallet' && $history != null ? $credit->creditProduct : null;
-        $id_rel           = $model != 'wallet' && $history != null ? $credit->id : null;
+        $client           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditClientPerson : null;
+        $product          = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditProduct : null;
+        $id_rel           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->id : null;
         
 
-        if ($model == 'wallet' && $history_id != 'null') {
+        if (($model == 'wallet' || $model == 'kc-down-wallet') && $history_id != 'null') {
             $id_rel = $history->id_rel;
         }
         return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
@@ -73,7 +73,7 @@ class FormController extends Controller
         $client = null;
         $transaction = null;
 
-        if ($type_form != HistoryLog::KC_WALLET_ADD_FORM && $type_form != HistoryLog::KC_WALLET_ADD_FORM_STEP_2) {
+        if ($type_form != HistoryLog::KC_WALLET_ADD_FORM && $type_form != HistoryLog::KC_WALLET_ADD_FORM_STEP_2 && $type_form != HistoryLog::KC_DOWN_WALLET_ADD_FORM && $type_form != HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2) {
             $credit   = Credit::find($id);
             $client   = $credit->creditClientPerson;
         } else {
