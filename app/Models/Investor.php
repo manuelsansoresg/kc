@@ -18,6 +18,8 @@ class Investor extends Model
         'loan_available',
         'total_available',
         'collection_commission',
+        'lendable',
+        'withdraw_available',
     ];
 
 }
