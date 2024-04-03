@@ -128,11 +128,10 @@
                                                                             disponible</span><span
                                                                             class="item-value">{{ format_price($totalDisponible) }}</span>
                                                                     </li>
-                                                                    <li><span class="item-label">Capital
-                                                                            pendiente</span><span
+                                                                    <li><span class="item-label">Prestable</span><span
                                                                             class="item-value">{{ format_price($totalPrestable) }}</span>
                                                                     </li>
-                                                                    <li class="total"><span class="item-label">Prestable</span><span class="item-value">  {{ format_price($totalDisponible - $totalPrestable) }} </span></li>
+                                                                    <li class="total"><span class="item-label">Disponible para el retiro</span><span class="item-value">  {{ format_price($totalDisponible - $totalPrestable) }} </span></li>
 
                                                                 </ul>
                                                             </div>
