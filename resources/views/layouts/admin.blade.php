@@ -288,7 +288,7 @@
                                     <h6 class="overline-title text-primary-alt">KC - WALLET</h6>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
-                                    <a href="#" class="nk-menu-link">
+                                    <a href="/panel/inversionista/{{ Auth::user()->id }}" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
                                         <span class="nk-menu-text">Resumen</span>
                                     </a>

@@ -127,6 +127,84 @@ ul.ul-primary li::after {
   display: none; /* Hide the second dot */
 }
 
+/* estilos resumen wallet */
+.nk-iv-wg2-amount.ui-v2 {
+  font-size: 1.875rem;
+  border-bottom: 2px solid #6576ff;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.nk-iv-wg2-list li {
+  padding-top: .3rem;
+  padding-bottom: .3rem
+}
+
+.nk-iv-wg2-list .small,.nk-iv-wg2-list small {
+  font-size: .86em
+}
+
+.nk-iv-wg2-list .item-value {
+  font-weight: 500;
+  font-size: .8125rem;
+  color: #364a63;
+  float: right
+}
+
+.nk-iv-wg2-list .total {
+  border-top: 1px solid #dbdfea;
+  margin-top: .3rem;
+  padding-top: .55rem;
+  font-weight: 700
+}
+
+.nk-iv-wg2-amount {
+  font-size: 2.25rem;
+  letter-spacing: -.03em;
+  line-height: 1.15em;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.nk-wg-card:after {
+  content: "";
+  position: absolute;
+  height: .25rem;
+  background-color: transparent;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  border-radius: 0 0 3px 3px
+}
+
+.nk-wg-card.is-s1:after {
+  background-color: #364a63
+}
+
+.nk-wg-card.is-s2:after {
+  background-color: #6576ff
+}
+
+.nk-wg-card.is-s3:after {
+  background-color: #1ee0ac
+}
+
+.nk-iv-wg2-text:not(:last-child) {
+  margin-bottom: 2.5rem
+}
+
+.nk-wg-card.is-s3:after {
+  background-color: #1ee0ac;
+}
+
+.nk-wg-card.is-s1:after {
+  background-color: #364a63;
+}
+
+/* /estilos resumen wallet */
+
 
  /* Estilos para pantallas móviles */
 @media (max-width: 767px) {

@@ -1,15 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Panel\Module\KcWallet;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\HistoryLog;
 use App\Models\Investor;
-use App\Models\Transaction;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class KcWalletController extends Controller
+class InvestorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,23 +14,7 @@ class KcWalletController extends Controller
      */
     public function index()
     {
-        return view('panel.module.wallet.list');
-    }
-
-    public function list()
-    {
-        $users = Transaction::listDatatable([HistoryLog::KC_WALLET_ADD_FORM]);
-        return response()->json(['data' => $users]);
-    }
-
-   
-
-    public function getInvestor(Investor $investor)
-    {
-        $user = User::find($investor->user_id);
-        $legend = \View::make('panel.module.wallet.legendInvestor', ['user' => $user])->render();
         
-        return response()->json($legend);
     }
 
     /**
@@ -46,8 +26,6 @@ class KcWalletController extends Controller
     {
         //
     }
-
-    
 
     /**
      * Store a newly created resource in storage.
@@ -68,7 +46,8 @@ class KcWalletController extends Controller
      */
     public function show($id)
     {
-        //
+        $investor = Investor::where('user_id', $id)->first();
+        return view('panel.module.wallet.resumen', compact('investor'));
     }
 
     /**
