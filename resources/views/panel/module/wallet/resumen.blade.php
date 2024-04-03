@@ -9,7 +9,7 @@
                     <div class="nk-block nk-block-lg">
                         <div class="container">
                             <div class="row justify-content-center vh-100">
-                                <div class="col-md-6 col-lg-3">
+                                <div class="col-md-6 col-lg-4">
                                     <div class="nk-wg-card is-dark card card-bordered">
                                         <div class="card-inner">
                                             <div class="nk-iv-wg2">
@@ -91,7 +91,7 @@
                                 </div>
 
                                 {{-- second card --}}
-                                <div class="col-md-6 col-lg-3">
+                                <div class="col-md-6 col-lg-4">
                                     <div class="nk-wg-card is-s1 card card-bordered">
                                         <div class="card-inner">
                                             <div class="nk-iv-wg2">
@@ -151,7 +151,7 @@
 
                                 </div>
                                 {{-- third card --}}
-                                <div class="col-md-6 col-lg-3">
+                                <div class="col-md-6 col-lg-4">
                                     <div class="nk-wg-card is-s3  card card-bordered">
                                         <div class="card-inner">
                                             <div class="nk-iv-wg2">
