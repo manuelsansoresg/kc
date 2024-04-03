@@ -38,7 +38,7 @@
                                                     <div class="card-inner h-100">
                                                         <div class="nk-iv-wg2">
                                                             <div class="nk-iv-wg2-title">
-                                                                <h6 class="title">Disponible para el retiro</h6>
+                                                                <h6 class="title">Balance total</h6>
                                                             </div>
                                                             <div class="nk-iv-wg2-text">
                                                                 @php
@@ -115,7 +115,7 @@
                                                     <div class="card-inner h-100">
                                                         <div class="nk-iv-wg2">
                                                             <div class="nk-iv-wg2-title">
-                                                                <h6 class="title">Balance total</h6>
+                                                                <h6 class="title">Disponible para el retiro</h6>
                                                             </div>
                                                             <div class="nk-iv-wg2-text">
                                                                
@@ -132,7 +132,7 @@
                                                                             pendiente</span><span
                                                                             class="item-value">{{ format_price($totalPrestable) }}</span>
                                                                     </li>
-                                                                    <li class="total"><span class="item-label">Disponible para el retiro</span><span class="item-value">  {{ format_price($totalDisponible - $totalPrestable) }} </span></li>
+                                                                    <li class="total"><span class="item-label">Prestable</span><span class="item-value">  {{ format_price($totalDisponible - $totalPrestable) }} </span></li>
 
                                                                 </ul>
                                                             </div>
