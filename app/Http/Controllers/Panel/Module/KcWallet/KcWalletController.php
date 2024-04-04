@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Panel\Module\KcWallet;
 use App\Http\Controllers\Controller;
 use App\Models\HistoryLog;
 use App\Models\Investor;
+use App\Models\kaaxSidecc\Collection;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KcWalletController extends Controller
 {
@@ -35,6 +37,16 @@ class KcWalletController extends Controller
         $legend = \View::make('panel.module.wallet.legendInvestor', ['user' => $user])->render();
         
         return response()->json($legend);
+    }
+
+    public function misPrestamos()
+    {
+        $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
+        $collections = null;
+        if ($getInvestor != null) {
+            $collections = Collection::where('investor_id', $getInvestor->id)->get();
+        }
+        return view('panel.module.wallet.mis_prestamos', compact('collections'));
     }
 
     /**
