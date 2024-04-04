@@ -21,6 +21,18 @@ class Transaction extends Model
         'operation_status',
     ];
 
+    public static function setTotalCapital($investorId)
+    {
+        $total =  Transaction::where(['investor_id' => $investorId, 'operation_status' => 1])
+        ->selectRaw('SUM(capital) AS total_capital')
+        ->first();
+        if ($total != null) {
+            Investor::where('id', $investorId)->update([
+                'total_capital' => $total->total_capital
+            ]);
+        }
+    }
+
     public static function saveEdit($request, $is_down = false)
     {
         $data = $request->transaction;
@@ -40,8 +52,9 @@ class Transaction extends Model
         } else {
             $getTransaction = Transaction::where('id', $request->id_rel)
                             ->update($data);
+            $transaction = $getTransaction;
         }
-        return $getTransaction;
+        return array('transaction' => $transaction, 'getTransaction' => $getTransaction);
     }
 
     public static function listDatatable($status)
