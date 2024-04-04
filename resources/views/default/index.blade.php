@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('hero')
-    <div class="hero-wrap hero-wrap-2 section-space">
+    <div class="hero-wrap hero-wrap-2 section-space kc">
         <div class="container">
             <div class="row align-items-center flex-md-row-reverse justify-content-between">
                 <div class="col-lg-5 col-12 col-md-6">
@@ -21,28 +21,38 @@
                             Le damos crédito a tus necesidades.
                         </h1>
                         <p class="hero-text mb-4 pb-4">
-                            <b>Tramita desde tu teléfono.</b>
+                            <b>Selecciona una opción y tramita desde tu teléfono.</b>
                         </p>
                         <!-- button group -->
                         <div class="row mt-n2 mt-md-0">
                             <div class="col-12 col-md-12">
-                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">Adelanto de nómina</a>
-                                <div class="mt-0 mt-md-3 text-center">
-                                    <small class="text-muted text-center">Cobra tus días trabajados antes del día de pago</small>
-                                </div>
+                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">
+                                    Adelanto de nómina
+                                    <br>
+                                    Cobra tus días trabajados antes del día de pago
+                                </a>
+                               {{--  <div class="mt-0 mt-md-3 text-center">
+                                    <small class="text-muted text-center">
+                                        
+                                    </small>
+                                </div> --}}
                             </div>
-                            <div class="col-12 col-md-12">
-                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero un crédito nuevo"  class="btn col-12 btn-dark btn-block">Reduce tu deuda actual</a>
-                                <div class="mt-0 mt-md-3 text-center">
+                            <div class="col-12 col-md-12 mt-3">
+                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero un crédito nuevo"  class="btn col-12 btn-dark btn-block">
+                                    Reduce tu deuda actual
+                                    <br>
+                                    Cámbiate a un mejor crédito
+                                </a>
+                               {{--  <div class="mt-0 mt-md-3 text-center">
                                     <small class="text-muted text-center">Cámbiate a un mejor crédito</small>
-                                </div>
+                                </div> --}}
                             </div>
-                            <div class="col-12 col-md-12">
+                           {{--  <div class="col-12 col-md-12">
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">Crédito personal</a>
                                 <div class="mt-0 mt-md-3 text-center">
                                     <small class="text-muted text-center">Obtén un crédito con las mejores condiciones</small>
                                 </div>
-                            </div>
+                            </div> --}}
                            {{--  <div class="d-flex col-12 text-center text-md-start">
                              <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block">Quiero reducir mi deuda</a>
                              
@@ -73,13 +83,13 @@
     <section class="section-space-b feature-section">
         <div class="container">
             <div class="section-head text-center">
-                <h2 class="mb-3">Beneficios</h2>
+                <h2 class="mb-3 color-primary">Beneficios</h2>
                 <p>Trámite fácil y rápido</p>
             </div><!-- end section-head -->
             <div class="row">
                 <div class="col-12 col-md-4">
                     <div class="card  card-bordered  px-2 py-2">
-                        <h6 class="text-center mt-3">Adelanto de nómina</h6>
+                        <h6 class="text-center mt-3 color-primary">Adelanto de nómina</h6>
                         <hr>
                         <ul class="ul-primary">
                             <li>Acceso a su salario ya trabajado</li>
@@ -94,7 +104,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <div class="card  card-bordered  px-2 py-2">
-                        <h6 class="text-center mt-3">Reduce tu deuda actual</h6>
+                        <h6 class="text-center mt-3 color-primary">Reduce tu deuda actual</h6>
                         <hr>
                         <ul class="ul-primary">
                             <li>Menos pagos mensuales</li>
@@ -108,7 +118,7 @@
                 
                 <div class="col-12 col-md-4">
                     <div class="card  card-bordered  px-2 py-2">
-                        <h6 class="text-center mt-3">Crédito personal</h6>
+                        <h6 class="text-center mt-3 color-primary">Crédito personal</h6>
                         <hr>
                         <ul class="ul-primary">
                             <li>Mejor tasa de interés</li>
@@ -126,51 +136,22 @@
     <section class="section-space-b feature-section">
         <div class="container">
             <div class="section-head text-center">
-                <h2 class="mb-3">Cómo funciona</h2>
+                <h2 class="mb-3 color-primary">Cómo funciona</h2>
                 <p>Asesoría y atención personal
                 </p>
             </div><!-- end section-head -->
-            
-            <div class="row g-gs justify-content-center">
-                <div class="col-10 col-sm-6 col-lg-3">
-                    <div class="card-hiw card-hiw-s3">
-                        <div class="d-flex align-items-center mb-3">
-                            {{-- <img class="iconimg" src="/images/02_reporte.png" alt=""> --}}
-                            <h5>1. Comunícate con nosotros</h5>
-                        </div>
-                      
-                    </div>
-                    {{-- <p class="card-text-s1">Calificamos todas tus opciónes</p> --}}
-                </div><!-- end col -->
-                <div class="col-10 col-sm-6 col-lg-3">
-                    <div class="card-hiw card-hiw-s3">
-                        <div class="d-flex align-items-center mb-3">
-                            {{-- <img class="iconimg" src="/images/02_decide.png" alt=""> --}}
-                            <h5>2. Elige el servicio que más te convenga</h5>
-                        </div>
-                       
-                    </div>
-                    {{-- <p class="card-text-s1">Elija la mejor opción para ti</p> --}}
-                </div><!-- end col -->
-                <div class="col-10 col-sm-6 col-lg-3">
-                    <div class="card-hiw card-hiw-s3">
-                        <div class="d-flex align-items-center mb-3">
-                            {{-- <img class="iconimg" src="/images/03_tramita.png" alt=""> --}}
-                            <h5>3. Recibe el dinero en tu cuenta</h5>
-                        </div>
-                        {{-- <p class="card-text-s1">Te ayudamos con el trámite en cada paso</p> --}}
-                    </div>
-                </div><!-- end col -->
-                <div class="col-10 col-sm-6 col-lg-3">
-                    <div class="card-hiw card-hiw-s3">
-                        <div class="d-flex align-items-center mb-3">
-                            {{-- <img class="iconimg" src="/images/04_recibe_dinero.png" alt=""> --}}
-                            <h5>4.  Paga automáticamente desde tu nómina</h5>
-                        </div>
-                       {{--  <p class="card-text-s1">Disfruta los beneficios de la mejor opción</p> --}}
-                    </div>
-                </div><!-- end col -->
-            </div>
+         <div class="row">
+            <div class="col-12 col-md-6 text-center">
+                <img src="{{ asset('images/01_mano.png') }}" id="img-cell" alt="">
+              </div>
+              <div class="col-12 col-md-6 d-flex flex-column">
+                <h5 class="mt-4"> <span class="span-h5 color-primary"> 1. </span> Comunícate con nosotros</h5>
+                <h5 class="mt-4"> <span class="span-h5 color-primary"> 2. </span> Elige el servicio que más te convenga</h5>
+                <h5 class="mt-4"> <span class="span-h5 color-primary"> 3. </span> Recibe el dinero en tu cuenta</h5>
+                <h5 class="mt-4"> <span class="span-h5 color-primary"> 4. </span> Paga automáticamente desde tu nómina</h5>
+              </div>
+         </div>
+           
 
         </div><!-- end container -->
     </section><!-- end feature-section-->
@@ -198,7 +179,7 @@
             <div class="section-head text-center">
                {{--  <h2 class="mb-3">Ahorra hasta un X %
                 </h2> --}}
-                <p>KaaxClub es un servicio exclusivo para las empresas afiliadas.</p>
+                
             </div><!-- end section-head -->
             <div class="row g-gs justify-content-center">
                 <div class="col-10 col-sm-6 col-lg-3">
@@ -241,6 +222,9 @@
                        
                     </div>
                 </div><!-- end col -->
+                <div class="col-12 text-center">
+                    <p>KaaxClub es un servicio exclusivo para las empresas afiliadas.</p>
+                </div>
             </div>
         </div><!-- end container -->
     </section><!-- end how-it-work-section -->

@@ -199,6 +199,28 @@ ul.ul-primary li::after {
 }
 
 /* /estilos resumen wallet */
+.kc .btn {
+  font-size: 1.2rem !important;
+}
+
+.color-primary {
+  color: #5e4c98 !important;
+}
+
+ul.ul-primary li::before {
+  content: "• "; /* First dot */
+  font-weight: bold;
+  color: #8091a7 !important;
+}
+
+.span-h5 {
+  font-size: 1.4rem !important;
+}
+
+#img-cell {
+  width: 50%;
+}
+
 /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
   .text-elije {
@@ -206,6 +228,12 @@ ul.ul-primary li::after {
   }
   #content-progress-steps {
     margin-left: 0px;
+  }
+  .kc .btn {
+    font-size: 1rem !important;
+  }
+  #img-cell {
+    width: 50%;
   }
 }
 @media (max-width: 767px) {
