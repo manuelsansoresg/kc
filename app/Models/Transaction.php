@@ -61,7 +61,7 @@ class Transaction extends Model
     public static function listDatatable($status)
     {
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
-        $userIdInvestor = true;
+        $userIdInvestor = null;
         if ($is_investor === true) {
             $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
             $userIdInvestor = $getInvestor != null ? $getInvestor->id : null;
