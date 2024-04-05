@@ -4,9 +4,11 @@ namespace App\Strategies\Templates;
 
 use App\Models\File;
 use App\Models\HistoryLog;
+use App\Models\Investor;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\TemplateInterface;
+use Illuminate\Support\Facades\Auth;
 use ParagonIE\Sodium\Core\Curve25519\H;
 
 class KCWalletDownAddStregegyTemplate implements TemplateInterface
@@ -117,7 +119,10 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $buttonLinkExtraFinish = null;
 
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
-        
+        $typeInvestor = $is_investor ===true ? 'hidden' : 'select2';
+        $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
+        $optionInvestor = $is_investor === true ? $getInvestor->id : $users;
+
         $elements = array(
             1 => [
                 'title_section' => null,
@@ -127,9 +132,10 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'select2',
+                'type' => $typeInvestor,
                 'is_option_array' => false,
-                'options' => $users,
+                'options' => $optionInvestor,
+                'value' => $optionInvestor,
                 'is_required' => true,
                 'is_disabled' => null,
                 'onchange' => null,

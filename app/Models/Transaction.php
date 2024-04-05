@@ -68,30 +68,34 @@ class Transaction extends Model
         }
         $get_list    = HistoryLog::getByStatus($status);
         $transactions        = array();
+        //dd($userIdInvestor);
         foreach ($get_list as $history) {
-            $transaction = $userIdInvestor == null ? Transaction::find($history->id_rel) : Transaction::where('investor_id', $userIdInvestor)->first();
-            $investor = Investor::find($transaction->investor_id);
-            $getOrdenante = $investor != null ? User::find($investor->user_id) : null;
-            $ordenante =  $getOrdenante != null ?  $getOrdenante->name.' '. $getOrdenante->last_name.' '. $getOrdenante->second_last_name : null;
-            $model            = HistoryLog::$name_model[$history->status_id];
-            $templateStrategy = TemplateValues::STRATEGY[$model];
-            $percent          = (new $templateStrategy)->getPercent($history);
-            $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => null, 'percent' => $percent])->render();
-            $in_progress      = (new $templateStrategy)->getPercent($history, true);
-            $dead_line        = (new $templateStrategy)->moduleDeadline($history);
-            $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
-            $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
 
-            $transactions[] = array(
-                'id' => $history->id_rel,
-                'date' => date('Y-m-d', strtotime($transaction->created_at)),
-                'ordenante' => $ordenante,
-                'importe' => format_price($transaction->amount),
-                'progress' => $progress_bar,
-                'in_progress' => $in_progress,
-                'deadline' => $dead_line,
-                'options' => $option
-            );
+            $transaction =  Transaction::find($history->id_rel);
+            if (($is_investor === true && $transaction->investor_id === $userIdInvestor) || ($is_investor === false) ) {
+                $investor = Investor::find($transaction->investor_id);
+                $getOrdenante = $investor != null ? User::find($investor->user_id) : null;
+                $ordenante =  $getOrdenante != null ?  $getOrdenante->name.' '. $getOrdenante->last_name.' '. $getOrdenante->second_last_name : null;
+                $model            = HistoryLog::$name_model[$history->status_id];
+                $templateStrategy = TemplateValues::STRATEGY[$model];
+                $percent          = (new $templateStrategy)->getPercent($history);
+                $progress_bar     = \View::make('panel.module.checkup.progressbar', [ 'client' => null, 'percent' => $percent])->render();
+                $in_progress      = (new $templateStrategy)->getPercent($history, true);
+                $dead_line        = (new $templateStrategy)->moduleDeadline($history);
+                $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
+                $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+    
+                $transactions[] = array(
+                    'id' => $transaction->id,
+                    'date' => date('Y-m-d', strtotime($transaction->created_at)),
+                    'ordenante' => $ordenante,
+                    'importe' => format_price($transaction->amount),
+                    'progress' => $progress_bar,
+                    'in_progress' => $in_progress,
+                    'deadline' => $dead_line,
+                    'options' => $option
+                );
+            }
         }
         return $transactions;
     }
