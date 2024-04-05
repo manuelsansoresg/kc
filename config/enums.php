@@ -238,4 +238,12 @@ return [
         2 => 'Fallida'
     ),
     
+    "status_credit" => array(
+        230 => 'Activo',
+        231 => 'Baja',
+        232 => 'Defunción',
+        233 => 'Condonado',
+        234 => 'Liquidado',
+    ),
+    
 ];

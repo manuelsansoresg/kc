@@ -36,7 +36,7 @@
                                             <div class="tb-tnx-status">
                                             
                                                 <span class="badge badge-dot bg-warning"></span>
-                                                {{ $collection->status }}
+                                                {{ isset(config('enums.status_credit')[$collection->status])? config('enums.status_credit')[$collection->status] : null }}
                                             </div>
                                         </td>
                                     </tr>
