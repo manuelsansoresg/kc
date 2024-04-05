@@ -4314,7 +4314,10 @@ function saveForm(id_form, model) {
       var updatedDataRedirect = currentDataRedirect.replace('{history_id}', id); // Actualizar el valor de data-redirect
 
       urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
-      window.location = updatedDataRedirect;
+      console.log(updatedDataRedirect);
+      /* window.location = updatedDataRedirect; */
+
+      url_redirect = updatedDataRedirect;
     }
 
     window.location = url_redirect;
