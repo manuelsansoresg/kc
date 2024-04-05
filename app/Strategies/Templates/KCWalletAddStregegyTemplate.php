@@ -4,9 +4,11 @@ namespace App\Strategies\Templates;
 
 use App\Models\File;
 use App\Models\HistoryLog;
+use App\Models\Investor;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\TemplateInterface;
+use Illuminate\Support\Facades\Auth;
 use ParagonIE\Sodium\Core\Curve25519\H;
 
 class KCWalletAddStregegyTemplate implements TemplateInterface
@@ -19,6 +21,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
     public function setURLDocument()
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        if ($step == '1_2' && $is_investor === true) {
+            return '/panel/kc-wallet';
+        }
         if ($step == '2') {
             return '/panel/kc-wallet';
         }
@@ -125,7 +131,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'data-redirect' => '/panel/template/action-document/wallet/{history_id}?step=1_2'
             );
         }
-        
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        $typeInvestor = $is_investor ===true ? 'hidden' : 'select2';
+        $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
+        $optionInvestor = $is_investor === true ? $getInvestor->id : $users;
         $elements = array(
             1 => [
                 'title_section' => null,
@@ -135,9 +144,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
-                'type' => 'select2',
+                'type' => $typeInvestor,
                 'is_option_array' => false,
-                'options' => $users,
+                'options' => $optionInvestor,
+                'value' => $optionInvestor,
                 'is_required' => true,
                 'is_disabled' => null,
                 'onchange' => 'getValue(this)',
@@ -504,6 +514,14 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         return $data;
     }
 
+    public function checkTaskAndFinish($idRel)
+    {
+        $percent_form =  self::percentFile($idRel);
+        if ($percent_form == 100) {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD, $idRel, 1);
+        }
+    }
+
     public function finish($idRel, $step)
     {
         $percent_form =  self::percentFile($idRel, 2);
@@ -622,6 +640,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
     public function getPercent($history, $show_current_show = false)
     {
+        self::checkTaskAndFinish($history->id_rel);
         $transaction     = Transaction::find($history->id_rel);
         $data_actions = array(
             HistoryLog::KC_WALLET_ADD_FORM,

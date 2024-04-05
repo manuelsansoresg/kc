@@ -40,29 +40,13 @@ class LeadController extends Controller
      */
     public function index()
     {
-        /* $manychat = new Manychat();
-        $data_usuario = array(
-            "first_name" => 'Manuel',
-            "last_name" => 'Sansores',
-            "phone" => "+5219991575581",
-            "whatsapp_phone" => "5219991575581",
-            "email" => 'manuelsansoresg@gmail.com',
-            "has_opt_in_sms" => true,
-            "has_opt_in_email" => true,
-            "consent_phrase" => 'kc',
-        );
-        dd($manychat->altaUsuario($data_usuario)); */
-        /* //$manychat->setCustomFields($lead->manychat_id, config('enums.custom_fields_many_chat')['Asesor'], $advisor);
-        $data = array(
-            'Servicio KC' => 'Crédito nuevo',
-            'Aval o garantía' => true,
-
-        );
-        $set = $manychat->setCustomFields($data, 1995087542);
-        dd($set); */
+        
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
         if ($is_financiera === true) {
             return redirect('panel/kc-delivery');
+        } elseif ($is_investor  === true) {
+            return redirect('panel/inversionista/'.Auth::user()->id);
         }
         $model        = $this->model;
         return view('panel.lead.list', compact('model'));

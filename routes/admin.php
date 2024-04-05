@@ -36,7 +36,8 @@ Route::group(['prefix' => 'user'], function () {
     //*cliente inversionista
     Route::resource('cliente-inversionista', '\App\Http\Controllers\Panel\User\ClienteInversionistaController')->middleware('auth');
     Route::get('cliente-inversionista/list/show', ['\App\Http\Controllers\Panel\User\ClienteInversionistaController', 'list'])->middleware('auth');
-    
+    Route::post('cliente-inversionista/password/update', ['\App\Http\Controllers\Panel\User\ClienteInversionistaController', 'updatePassword'])->middleware('auth');
+
     //*esta ruta equivale tanto como administrador como asesor
     Route::get('administrador/{id}/delete', ['\App\Http\Controllers\Panel\User\AdminController', 'destroy'])->middleware('auth');
 

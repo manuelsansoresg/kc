@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Transaction extends Model
 {
@@ -59,10 +60,16 @@ class Transaction extends Model
 
     public static function listDatatable($status)
     {
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        $userIdInvestor = true;
+        if ($is_investor === true) {
+            $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
+            $userIdInvestor = $getInvestor != null ? $getInvestor->id : null;
+        }
         $get_list    = HistoryLog::getByStatus($status);
         $transactions        = array();
         foreach ($get_list as $history) {
-            $transaction = Transaction::find($history->id_rel);
+            $transaction = $userIdInvestor == null ? Transaction::find($history->id_rel) : Transaction::where('investor_id', $userIdInvestor)->first();
             $investor = Investor::find($transaction->investor_id);
             $getOrdenante = $investor != null ? User::find($investor->user_id) : null;
             $ordenante =  $getOrdenante != null ?  $getOrdenante->name.' '. $getOrdenante->last_name.' '. $getOrdenante->second_last_name : null;

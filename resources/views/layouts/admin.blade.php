@@ -283,7 +283,7 @@
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
                                 {{-- modulo KC - WALLET --}}
-                                @hasrole('Administrador|Asesor|Cliente financiera')
+                                @hasrole('Administrador|Asesor|Cliente financiera|Cliente inversionista')
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">KC - WALLET</h6>
                                 </li><!-- .nk-menu-item -->
