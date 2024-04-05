@@ -61,6 +61,11 @@
                         </div>
                     </div><!-- .nk-block-head -->
                     <div class="nk-block nk-block-lg mt-n3">
+                        <div id="content-legend-kc-down-bank" class="py-2" style="display: none">
+                            <div class="alert alert-primary " role="alert">
+                                Nota: El dinero se depositará a la cuenta registrada en máximo un día habil
+                              </div>
+                        </div>
                         <p>* Campos obligatorios</p>
                         <div id="content-legend"></div>
                         <div class="card card-bordered card-preview">

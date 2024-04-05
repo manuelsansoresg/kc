@@ -3963,6 +3963,10 @@ $().ready(function () {
     })["catch"](function (e) {});
   };
 
+  if (document.getElementById('type_form') && $('#type_form').val() == '66') {
+    $('#content-legend-kc-down-bank').show();
+  }
+
   $("#frm-template_wallet_step1_2").validate({
     rules: {
       'transaction[operation_status]': {
@@ -3978,6 +3982,9 @@ $().ready(function () {
   $("#frm-template_wallet_down_step1").validate({
     rules: {
       'transaction[investor_id]': {
+        required: true
+      },
+      'transaction[amount]': {
         required: true
       }
     },

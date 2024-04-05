@@ -131,7 +131,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'options' => $users,
                 'is_required' => true,
                 'is_disabled' => null,
-                'onchange' => 'getValue(this)',
+                'onchange' => null,
             ],
 
             2 => [
@@ -152,7 +152,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
 
             4 => [
                 'title_section' => null,
-                'title' => 'Importe de transferencia',
+                'title' => 'Importe a retirar',
                 'name_field' => 'transaction[amount]',
                 'id_field' => 'amount',
                 'comment_admin' => null,
@@ -161,7 +161,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => false,
+                'is_required' => true,
                 'is_disabled' => null,
                 'negativeNumber'=> true
             ],
