@@ -239,6 +239,7 @@ Route::group(['prefix' => 'kc-wallet'], function () {
     Route::get('resumen/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'resumen'])->middleware('auth');
     
     Route::get('mis-prestamos/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'misPrestamos'])->middleware('auth');
+    Route::get('{investor}/investor/get', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'getInvestor'])->middleware('auth');
 });
 
 Route::resource('inversionista', '\App\Http\Controllers\InvestorController')->middleware('auth');
@@ -248,7 +249,7 @@ Route::resource('kc-down-wallet', '\App\Http\Controllers\Panel\Module\KcWallet\K
 Route::group(['prefix' => 'kc-down-wallet'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcDownWalletController', 'list'])->middleware('auth');
     
-    Route::get('{investor}/investor/get', ['\App\Http\Controllers\Panel\Module\KcWallet\KcDownWalletController', 'getInvestor'])->middleware('auth');
+    
 });
 
 //*credit
