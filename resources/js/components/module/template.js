@@ -555,7 +555,6 @@ $().ready(function () {
     {
         $('#content-legend').html('');
         let ordenante = get.value;
-        console.log(ordenante);
         axios
             .get("/panel/kc-wallet/" + ordenante+"/investor/get")
             .then(function (response) {
@@ -570,7 +569,15 @@ $().ready(function () {
         $('#content-legend-kc-down-bank').show();
     }
 
-   
+    if(document.getElementById('frm-template_wallet_step1'))
+    {
+        const investorIdInput = document.getElementById('investor_id');
+        // Check if investor_id element exists and is a hidden input
+        if (investorIdInput && investorIdInput.type === 'hidden') {
+            getValue(investorIdInput);
+        
+        }
+    }
     
     $("#frm-template_wallet_step1_2").validate({
         rules: {
@@ -584,6 +591,8 @@ $().ready(function () {
             saveForm('frm-template_wallet_step1_2', 'wallet');
         }
     });
+
+
 
     //* wallet-down
     $("#frm-template_wallet_down_step1").validate({
@@ -620,7 +629,7 @@ $().ready(function () {
     if (document.getElementById('id_rel')) {
         let id_rel = $('#id_rel').val();
         let type_form = $('#type_form').val();
-        console.log(type_form);
+        
         if (id_rel != '') {
             axios
                 .get("/panel/action-form/" + id_rel+"/"+type_form+'/form/get')
@@ -849,6 +858,9 @@ $().ready(function () {
                 });
         }
     }
+
+ 
+
     
 });
 
@@ -926,7 +938,7 @@ function saveForm(id_form, model) {
               
                 // Actualizar el valor de data-redirect
                 urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
-                console.log(updatedDataRedirect);
+                
                 /* window.location = updatedDataRedirect; */
                 url_redirect = updatedDataRedirect;
               }
@@ -1055,3 +1067,4 @@ window.swapCreditContinue = function(history_id) {
         .catch(e => {
         });
 }
+
