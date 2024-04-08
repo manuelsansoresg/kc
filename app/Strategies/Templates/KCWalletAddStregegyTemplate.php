@@ -193,7 +193,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => false,
+                'is_required' => true,
                 'is_disabled' => null
             ],
             5 => [

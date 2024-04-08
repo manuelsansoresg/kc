@@ -540,6 +540,9 @@ $().ready(function () {
             'transaction[bank_transfer_type]': {
                 required: true,
             },
+            'transaction[amount]': {
+                required: true,
+            },
         },
         submitHandler: function (form, event) {
             event.preventDefault();
