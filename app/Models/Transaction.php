@@ -37,7 +37,7 @@ class Transaction extends Model
     public static function saveEdit($request, $is_down = false)
     {
         $data = $request->transaction;
-        if ($data['transaction_type'] == 2) {
+        if (isset($data['transaction_type']) && $data['transaction_type'] == 2) {
             $data['amount'] = -$data['amount'];
         }
         if ($request->id_rel == null)
