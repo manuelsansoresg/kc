@@ -313,3 +313,7 @@ Route::group(['prefix' => 'template'], function () {
 Route::get('reason/{type}/list', ['\App\Http\Controllers\HomeController', 'reason'])->middleware('auth');
 Route::get('notification/show', ['\App\Http\Controllers\HomeController', 'showNotification'])->middleware('auth');
 Route::get('notification/read', ['\App\Http\Controllers\HomeController', 'readNotification'])->middleware('auth');
+
+Route::get('/ayuda', function () {
+    return view('panel.ayuda');
+});

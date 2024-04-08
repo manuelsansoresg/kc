@@ -89,3 +89,6 @@ Route::get('/aviso-de-privacidad', function () {
 Route::get('/terminos-y-condiciones', function () {
     return view('terminos_y_condiciones');
 });
+
+
+
