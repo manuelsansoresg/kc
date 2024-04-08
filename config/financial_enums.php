@@ -22,9 +22,11 @@ return [
     'type_products' => array(
         '' => 'Selecciona una opción',
         //1 => 'Crédito nómina',
-        2 => 'Crédito personal',
-        3 => 'Tarjeta de crédito',
+        //2 => 'Crédito personal',
+        //3 => 'Tarjeta de crédito',
         //4 => 'Crédito pensionados',
+        5 => 'Crédito Kaaxclub nómina',
+        6 => 'Salario bajo demanda',
     ),
     
     'colateral_products' => array(
