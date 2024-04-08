@@ -170,7 +170,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null,
-                'negativeNumber'=> true
+                'negativeNumber'=> false
             ],
             5 => [
                 'title_section' => null,

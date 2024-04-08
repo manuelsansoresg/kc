@@ -598,36 +598,7 @@ $().ready(function () {
         },
         submitHandler: function (form, event) {
             event.preventDefault();
-            const amountInput = document.getElementById('amount');
-            let isError = false;
-             // Validate only if `amountInput` exists and has `data-negative-number` attribute
-            if (amountInput && amountInput.hasAttribute('data-negative-number')) {
-                const amountValue = parseFloat(amountInput.value);
-
-                // Ensure `amountValue` is a valid number before checking negativity
-                if (!isNaN(amountValue)) {
-                if (amountValue >= 0) {
-                    event.preventDefault();
-                    Swal.fire({
-                        text: 'El valor debe ser un número negativo.',
-                        icon: 'warning',
-                    })
-                    isError = true;
-                    amountInput.focus();
-                }
-                } else {
-                // Handle invalid input (e.g., non-numeric characters)
-                Swal.fire({
-                    text: 'El valor debe ser un número válido.',
-                    icon: 'warning',
-                })
-                isError = true;
-                amountInput.focus();
-                }
-            }
-            if (isError === false) {
-                saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
-            }
+            saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
         }
     });
 
@@ -870,7 +841,7 @@ $().ready(function () {
                     {
                         $('#investor_id').val(transaction.investor_id).trigger("change");
                         $('#transaction_type').val(transaction.transaction_type);
-                        $('#amount').val(transaction.amount);
+                        $('#amount').val(Math.abs(transaction.amount));
                     }
 
                 })

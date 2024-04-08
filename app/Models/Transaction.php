@@ -37,6 +37,9 @@ class Transaction extends Model
     public static function saveEdit($request, $is_down = false)
     {
         $data = $request->transaction;
+        if ($data['transaction_type'] == 2) {
+            $data['amount'] = -$data['amount'];
+        }
         if ($request->id_rel == null)
         {
             $transaction = Transaction::create($data);
@@ -51,8 +54,9 @@ class Transaction extends Model
             }
            
         } else {
-            $getTransaction = Transaction::where('id', $request->id_rel)
+             Transaction::where('id', $request->id_rel)
                             ->update($data);
+            $getTransaction =Transaction::where('id', $request->id_rel)->first();
             $transaction = $getTransaction;
         }
         return array('transaction' => $transaction, 'getTransaction' => $getTransaction);
