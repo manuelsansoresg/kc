@@ -26,11 +26,23 @@ class Transaction extends Model
     {
         $total =  Transaction::where(['investor_id' => $investorId, 'operation_status' => 1])
         ->selectRaw('SUM(capital) AS total_capital')
+        ->selectRaw('SUM(amount) AS total_available')
         ->first();
         if ($total != null) {
             Investor::where('id', $investorId)->update([
-                'total_capital' => $total->total_capital
+                'total_capital' => $total->total_capital,
+                'total_available' => $total->total_available,
             ]);
+            $investor = Investor::selectRaw('LEAST(total_available, lendable) AS loan_available')
+                        ->selectRaw('CASE WHEN loan_available IS NULL THEN 0 ELSE total_available - loan_available END AS withdraw_available')
+                        ->where('id', $investorId)->first();
+            
+                        Investor::where('id', $investorId)->upate(
+                [
+                    'loan_available' => $investor->loan_available,
+                    'withdraw_available' => $investor->withdraw_available,
+                ]
+            );
         }
     }
 
