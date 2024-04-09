@@ -269,9 +269,10 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 //*inicializar las acciones de la siguiente etapa en curso
                 HistoryLog::move($history->id_rel, HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, null, false);
                 HistoryLog::move($history->id_rel, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, null, false);
+                $getTransaction = $transaction['transaction'];
+                Transaction::setTotalCapital($getTransaction->investor_id);
                 if ($percent2 < 100) {
-                    $getTransaction = $transaction['transaction'];
-                    Transaction::setTotalCapital($getTransaction->investor_id);
+                   
                     HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, $history->id_rel, 0);
                     HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, $history->id_rel, 0);
                 }
