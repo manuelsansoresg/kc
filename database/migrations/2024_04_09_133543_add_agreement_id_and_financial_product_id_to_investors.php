@@ -14,8 +14,8 @@ class AddAgreementIdAndFinancialProductIdToInvestors extends Migration
     public function up()
     {
         Schema::table('investors', function (Blueprint $table) {
-            $table->bigInteger('agreements_id')->nullable();
-            $table->bigInteger('financial_products_id')->nullable();
+            $table->bigInteger('agreements_id')->nullable()->after('withdraw_available');
+            $table->bigInteger('financial_products_id')->nullable()->after('withdraw_available');
         });
     }
 
