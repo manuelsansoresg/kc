@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFieldLendableToInvestors extends Migration
+class AddAgreementIdAndFinancialProductIdToInvestors extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AddFieldLendableToInvestors extends Migration
     public function up()
     {
         Schema::table('investors', function (Blueprint $table) {
-            $table->integer('lendable')->nullable()->after('collection_commission');
-            $table->decimal('withdraw_available', 8, 2)->nullable()->after('collection_commission');
+            $table->bigInteger('agreements_id')->nullable();
+            $table->bigInteger('financial_products_id')->nullable();
         });
     }
 
@@ -27,8 +27,8 @@ class AddFieldLendableToInvestors extends Migration
     public function down()
     {
         Schema::table('investors', function (Blueprint $table) {
-            $table->dropColumn('lendable');
-            $table->dropColumn('withdraw_available');
+            $table->dropColumn('agreements_id');
+            $table->dropColumn('financial_products_id');
         });
     }
 }

@@ -20,6 +20,8 @@ class Investor extends Model
         'collection_commission',
         'lendable',
         'withdraw_available',
+        'agreements_id',
+        'financial_products_id',
     ];
 
 }
