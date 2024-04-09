@@ -61,13 +61,15 @@ class AgreementController extends Controller
     public function show($id)
     {
         $agreement = Agreement::find($id);
-        $get_financials = $agreement->financialAgreement;
+        $get_financials = FinancialAgreement::where('agreement_id', $agreement->id)->get();
         //$products = $get_financials->financial;
         //dd($get_financials);
         $financials = array();
-        foreach ($get_financials as $financial) {
-            $product = FinancialProduct::getbyIdFirst($financial->product_id);
-            $financials[]= $product;
+        if ($get_financials != null) {
+            foreach ($get_financials as $financial) {
+                $product = FinancialProduct::getbyIdFirst($financial->product_id);
+                $financials[]= $product;
+            }
         }
         //$financials = trim($financials, ',');
         $data = array('agreement' => $agreement, 'financials' => $financials);
