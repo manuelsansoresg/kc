@@ -112,6 +112,7 @@ class FinancialProduct extends Model
         'collection_commission_rate',
         'annual_interest_rate',
         'daily_interest_rate',
+        'loan_available'
     ];
 
     public static function getbyIdFirst($product_id)

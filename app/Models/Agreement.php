@@ -11,7 +11,8 @@ class Agreement extends Model
     protected $fillable = [
         'name',
         'description',
-        'status'
+        'status',
+        'loan_available'
     ];
 
 
