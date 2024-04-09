@@ -2181,6 +2181,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
                 HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, null, false);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $credit->id, 0);
+                Credit::setTotalCapital($credit->id);
             }
 
             if ($percent_form_step2 == 100) {

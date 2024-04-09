@@ -507,6 +507,12 @@ class HistoryLog extends Model
         if ($status_id == HistoryLog::CREDITS_PAID) {
             self::updateReason($history, 'pagado');
         }
+
+        if ($status_id == HistoryLog::CREDIT_CANCELED) {
+            Credit::setTotalCapital($id_rel);
+        }
+
+        
     }
 
     public function removeInProgress($id_rel, $status_id)

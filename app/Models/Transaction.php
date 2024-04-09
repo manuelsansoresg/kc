@@ -25,13 +25,13 @@ class Transaction extends Model
     public static function setTotalCapital($investorId)
     {
         $total =  Transaction::where(['investor_id' => $investorId, 'operation_status' => 1])
-        ->selectRaw('SUM(capital) AS total_capital')
+        //->selectRaw('SUM(capital) AS total_capital')
         ->selectRaw('SUM(amount) AS total_available')
         ->first();
         
         if ($total != null) {
             Investor::where('id', $investorId)->update([
-                'total_capital' => $total->total_capital,
+                //'total_capital' => $total->total_capital,
                 'total_available' => $total->total_available,
             ]);
             $investor = Investor::selectRaw('LEAST(total_available, lendable) AS loan_available')
