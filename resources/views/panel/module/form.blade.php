@@ -320,12 +320,14 @@
 
        
         @if ($type_form != 31)
-        @if (!isset($show_btn))
+        
             <div class="col-12">
                 <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                     <li>
                         {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
+                        @if (!isset($show_btn))
                         <button class="btn btn-primary">{{ $name_button }}</button>
+                        @endif
                         @if ($type_form == 43) {{-- swap --}}
                             <a  onclick="saltarSwap()" class="btn btn-primary">Saltar</a>
                         @endif
@@ -335,7 +337,7 @@
                     </li>
                 </ul>
             </div>
-        @endif
+       
             
         @endif
     </div>

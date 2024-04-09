@@ -121,7 +121,9 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $urlRedirect = $history_id == 'null' ? '/panel/kc-wallet' : '/panel/template/steps/wallet/'.$history_id.'/show';
         $buttonLinkExtraFinish = null;
 
-        if ($history_id == 'null') {
+       
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        if ($history_id == 'null' && $is_investor === true) {
             $buttonLinkExtraFinish = array(
                 'name' => 'Continuar',
                 'id' => 'url_redirect_finish',
@@ -130,10 +132,12 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'data-redirect' => '/panel/template/action-document/wallet/{history_id}?step=1_2'
             );
         }
-        $is_investor = Auth::user()->hasRole('Cliente inversionista');
         $typeInvestor = $is_investor ===true ? 'hidden' : 'select2';
         $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
         $optionInvestor = $is_investor === true ? $getInvestor->id : $users;
+        
+        
+
         $elements = array(
             1 => [
                 'title_section' => null,
@@ -214,7 +218,15 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             ],
         );
 
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'buttonLinkExtraFinish' => $buttonLinkExtraFinish, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+
+        $data = array(
+            'elements' => $elements, 'history_id' => $history_id,  'buttonLinkExtraFinish' => $buttonLinkExtraFinish, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form
+        );
+
+        if ($is_investor === true) {
+            $data['show_btn'] = true;
+        }
+        $list = \View::make('panel.module.form', $data)->render();
         return $list;
     }
 
