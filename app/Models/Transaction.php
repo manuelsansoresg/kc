@@ -35,12 +35,13 @@ class Transaction extends Model
                 'total_available' => $total->total_available,
             ]);
             $investor = Investor::selectRaw('LEAST(total_available, lendable) AS loan_available')
-                        ->selectRaw('CASE WHEN loan_available IS NULL THEN 0 ELSE total_available - loan_available END AS withdraw_available')
+                        ->selectRaw('total_available')
                         ->where('id', $investorId)->first();
-                        Investor::where('id', $investorId)->update(
+                        
+            Investor::where('id', $investorId)->update(
                 [
                     'loan_available' => $investor->loan_available,
-                    'withdraw_available' => $investor->withdraw_available,
+                    'withdraw_available' => $investor->total_available - $investor->loan_available  ,
                 ]
             );
         }
