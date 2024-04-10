@@ -39,7 +39,9 @@ class Lead extends Model
         'comment',
         'manychat_id',
         'income',
-        'rfc'
+        'rfc',
+        'applied_financial_product',
+        'applied_loan_type',
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)

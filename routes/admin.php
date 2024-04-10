@@ -57,6 +57,7 @@ Route::get('product/{product_id}/delete', ['\App\Http\Controllers\Panel\ProductC
 Route::resource('agreement', '\App\Http\Controllers\Panel\AgreementController')->middleware('auth');
 Route::get('agreement/list/show', ['\App\Http\Controllers\Panel\AgreementController', 'list'])->middleware('auth');
 Route::get('agreement/{product_id}/delete', ['\App\Http\Controllers\Panel\AgreementController', 'destroy'])->middleware('auth');
+Route::get('agreement/{agreement}/financial-product/show', ['\App\Http\Controllers\Panel\AgreementController', 'getFinancialProducts'])->middleware('auth');
 
 //*leads
 Route::resource('lead', '\App\Http\Controllers\Panel\LeadController')->middleware('auth');

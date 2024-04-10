@@ -27,6 +27,19 @@ class AgreementController extends Controller
         return response()->json(['data' => $users]);
     }
 
+    public function getFinancialProducts(Agreement $agreement)
+    {
+        $get_financials = FinancialAgreement::where('agreement_id', $agreement->id)->get();
+        $financials = array();
+        if ($get_financials != null) {
+            foreach ($get_financials as $financial) {
+                $getProduct = FinancialProduct::getbyIdFirst($financial->product_id);
+                $financials[$getProduct->id]= $getProduct->commercial_name.' - '.$getProduct->name;
+            }
+        }
+        return response()->json($financials);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

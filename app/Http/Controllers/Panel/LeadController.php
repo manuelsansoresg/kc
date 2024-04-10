@@ -131,7 +131,8 @@ class LeadController extends Controller
         $lead = null;
         $banks = Bank::all();
         $financial_products = FinancialProduct::getAll();
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products'));
+        $loan_type    = config('enums.loan_type');
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type'));
     }
 
     /**
@@ -208,7 +209,8 @@ class LeadController extends Controller
         $lead = Lead::find($id);
         $banks = Bank::all();
         $financial_products = FinancialProduct::getAll();
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products'));
+        $loan_type    = config('enums.loan_type');
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type'));
     }
 
     /**

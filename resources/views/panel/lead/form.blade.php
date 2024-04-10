@@ -162,7 +162,7 @@
                                                                 <p class="small">Institución o empresa donde labora el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                    
-                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null)"  data-search="on">
+                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null, null, null)"  data-search="on">
                                                                         <option></option>
                                                                       
                 
@@ -180,6 +180,32 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <div class="col-md-6" id="content-producto-financiero" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Producto financiero</label>
+                                                                <p class="small">&nbsp;</p>
+                                                                <div class="form-control-wrap">
+                                                                    <select class="form-control" name="data[applied_financial_product]" id="applied_financial_product">
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6" id="content-tipo_tramite" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Tipo de trámite</label>
+                                                                <p class="small">&nbsp;</p>
+                                                                <div class="form-control-wrap">
+                                                                   <select class="form-control" name="data[applied_loan_type]" id="applied_loan_type">
+                                                                    @foreach ($loan_type as $key=> $loan_type)
+                                                                        <option value="{{ $key }}"> {{ $loan_type }} </option>
+                                                                    @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
                                                         
                                                         <div class="col-md-6" id="content-financial_product_id" style="display: none">
                                                             <div class="form-group">
@@ -215,9 +241,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                         
-                                                       
+                                                        
                                                         <div class="col-md-6" id="content-banco_nomina" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Banco nómina </label>
