@@ -7,6 +7,7 @@ use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\File;
 use App\Models\Financial;
+use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -285,6 +286,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $type_form    = HistoryLog::KC_CONTROL_DESK_FORM_STEP_2;
         $financial    = Financial::select('id', 'commercial_name as name')->get();
         $product      = FinancialProduct::getProductByFinancial($credit->applied_financial);
+        $get_financials = FinancialAgreement::where('agreement_id', $credit->agreement_id)->get();
+        $financials = array();
+        if ($get_financials != null) {
+            foreach ($get_financials as $financial) {
+                $getProduct = FinancialProduct::getbyIdFirst($financial->product_id);
+                $financials[$getProduct->id]= $getProduct->commercial_name.' - '.$getProduct->name;
+            }
+        }
 
         $loan_type    = config('enums.loan_type');
         $sign_type    = config('enums.sign_type');
@@ -306,7 +315,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => null,
                 'is_disabled' => null
             ],
-            2 => [
+           /*  2 => [
                 'title_section' => null,
                 'title' => 'Financiera',
                 'name_field' => 'credit[applied_financial]',
@@ -319,7 +328,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => $financial,
                 'is_required' => false,
                 'is_disabled' => null
-            ],
+            ], */
             3 => [
                 'title_section' => null,
                 'title' => 'Producto financiero',
@@ -329,8 +338,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'comment_webApp' =>  null,
                 'placeholder' => '',
                 'type' => 'select2',
-                'is_option_array' => false,
-                'options' => $product,
+                'is_option_array' => true,
+                'options' => $financials,
                 'is_required' => false,
                 'is_disabled' => null
             ],

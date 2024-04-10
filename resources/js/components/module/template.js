@@ -679,7 +679,7 @@ $().ready(function () {
                     if (type_form == 24) //form kc-desktop step2
                     {
                         $('#applied_financial').val(credit.applied_financial).trigger("change");
-                        $('#applied_financial_product').val(credit.financial_product_id).trigger("change");
+                        $('#applied_financial_product').val(credit.applied_financial_product).trigger("change");
                         $('#applied_loan_type').val(credit.applied_loan_type).trigger("change");
                         $('#applied_loan_discount').val(credit.applied_loan_discount);
                         $('#applied_sign_type').val(credit.applied_sign_type).trigger("change");
