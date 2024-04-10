@@ -45,6 +45,7 @@ class User extends Authenticatable
         'investment_bank_account_holder',
         'investment_bank_account_number',
         'investment_bank_clabe',
+        'financial_products_id'
 
     ];
 
