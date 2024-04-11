@@ -123,7 +123,7 @@ class Credit extends Model
     
         // Update the total_capital field for the current credit
         $credit = Credit::find($creditId);
-        Investor::where('id', $credit->investor_id)->update([
+        Investor::where('financial_products_id', $credit->applied_financial_product)->update([
             'total_capital' => $totalAppliedImport
         ]);
         

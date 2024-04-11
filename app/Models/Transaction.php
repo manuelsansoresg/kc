@@ -28,8 +28,10 @@ class Transaction extends Model
         $total =  Transaction::where(['investor_id' => $investorId, 'operation_status' => 1])
         ->selectRaw('SUM(amount) AS total_available')
         ->first();
+
         if ($total != null) {
-            Investor::where('id', $investorId)->update([
+            Investor::where('id', $investorId)
+            ->update([
                 'total_available' => $total->total_available - $investor->total_capital + $investor->total_collected,
             ]);
         }
@@ -45,11 +47,12 @@ class Transaction extends Model
                         ->selectRaw('total_available')
                         ->where('id', $investorId)->first();
                         
-            Investor::where('id', $investorId)->update(
-                [
-                    'loan_available' => $investor->loan_available,
-                    'withdraw_available' => $investor->total_available - $investor->loan_available  ,
-                ]
+            Investor::where('id', $investorId)
+                    ->update(
+                    [
+                        'loan_available' => $investor->loan_available,
+                        'withdraw_available' => $investor->total_available - $investor->loan_available  ,
+                    ]
             );
         }
     }
