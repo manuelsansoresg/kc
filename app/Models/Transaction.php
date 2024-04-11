@@ -29,7 +29,7 @@ class Transaction extends Model
         ->selectRaw('SUM(amount) AS total_available')
         ->first();
 
-        if ($total != null) {
+        if ($total != null && $investor != null) {
             Investor::where('id', $investorId)
             ->update([
                 'total_available' => $total->total_available - $investor->total_capital + $investor->total_collected,

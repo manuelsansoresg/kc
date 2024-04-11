@@ -2203,7 +2203,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, $credit->id, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, $credit->id, 0);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, $credit->id, 0);
-                if ($request->applied_loan_type) {
+                $getVars = $request->credit;
+                if (isset($getVars['applied_financial_product'])) {
                     Credit::setTotalCapital($credit->id);
                 }
             }
