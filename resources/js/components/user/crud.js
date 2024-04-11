@@ -76,6 +76,9 @@ function setDataUser(user_id) {
 
         }
         $('#is_access_config option[value="'+result.is_access_config+'"]').attr("selected", "selected");
+        if (document.getElementById('financial_products_id')) {
+            $('#financial_products_id option[value="'+result.financial_products_id+'"]').attr("selected", "selected");
+        }
         
 
     })
@@ -228,7 +231,7 @@ $().ready(function () {
     
     $("#frm-inversionista").validate({
         rules: {
-            agreement_id: {
+            financial_products_id: {
                 required: true,
             },
             type_person: {

@@ -5028,6 +5028,10 @@ function setDataUser(user_id) {
     }
 
     $('#is_access_config option[value="' + result.is_access_config + '"]').attr("selected", "selected");
+
+    if (document.getElementById('financial_products_id')) {
+      $('#financial_products_id option[value="' + result.financial_products_id + '"]').attr("selected", "selected");
+    }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
@@ -5153,7 +5157,7 @@ $().ready(function () {
   });
   $("#frm-inversionista").validate({
     rules: {
-      agreement_id: {
+      financial_products_id: {
         required: true
       },
       type_person: {
@@ -5376,8 +5380,6 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     ajax: '/panel/user/' + route + '/list/show',
     columns: [{
-      data: 'agreement'
-    }, {
       data: 'name'
     }, {
       data: 'email'

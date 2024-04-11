@@ -33,7 +33,6 @@
                                 <table id="dt-inversionista" class="display nowrap nk-tb-list nk-tb-ulist dataTable no-footer" style="width:100%">
                                     <thead>
                                         <tr class="nk-tb-item nk-tb-head">
-                                            <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Organización</span></th>
                                             <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Nombre</span></th>
                                             <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Email</span></th>
                                             <th class="nk-tb-col"><span class="sub-text"><span class="sub-text">Celular</span></th>

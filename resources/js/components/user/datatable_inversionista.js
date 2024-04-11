@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         ajax: '/panel/user/'+route+'/list/show',
         columns: [
-            { data: 'agreement' },
             { data: 'name' },
             { data: 'email' },
             { data: 'cellphone' },

@@ -155,7 +155,7 @@ class User extends Authenticatable
             $role = 'Cliente inversionista';
             $userId = $user->id;
             if (Investor::where('user_id', $userId)->count() == 0) {
-                Investor::create(['user_id' => $userId]);
+                Investor::create(['user_id' => $userId, 'financial_products_id' => $user->financial_products_id ]);
             }
         }
         $user->assignRole(ucfirst($role));

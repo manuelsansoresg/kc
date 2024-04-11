@@ -1,3 +1,7 @@
+@inject('m_financial_product', 'App\Models\FinancialProduct')
+@php
+    $products = $m_financial_product->getAll();
+@endphp
 <div class="modal fade" id="modal-user-admin" tabindex="-1" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content"><a href="#" class="close" data-bs-dismiss="modal"><em
@@ -21,13 +25,13 @@
                         <div class="tab-pane active" id="tabItem1">
                             <div class="row gy-4">
                                 <div class="col-md-6">
-                                    <div class="form-group"><label class="form-label">*Organización</label>
+                                    <div class="form-group"><label class="form-label">*Producto financiero</label>
                                         <div class="form-control-wrap">
-                                            <select name="agreement_id" class="form-control" id="agreement_id">
-                                                <option></option>
-                                                @foreach ($agreements as $agreement)
-                                                <option value="{{ $agreement->id }}">{{ $agreement->name }}</option>
-                                                @endforeach
+
+                                            <select class="form-control"  name="financial_products_id" id="financial_products_id">
+                                            @foreach ($products as $product)
+                                                <option value="{{ $product->id }}"> {{ $product->commercial_name}} - {{ $product->name }} </option>
+                                            @endforeach
                                             </select>
                                         </div>
                                     </div>
