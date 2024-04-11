@@ -2,13 +2,14 @@
 @section('title', 'Resumen')
 
 @section('content')
+
     <div class="nk-content ">
         <div class="container-fluid">
             <div class="nk-content-inner">
                 <div class="nk-content-body">
                     <div class="nk-block nk-block-lg">
                         <div class="container">
-                            <div class="row justify-content-center vh-100">
+                            <div class="row justify-content-center">
                                 <div class="col-md-6 col-lg-4">
                                     <div class="nk-wg-card is-dark card card-bordered">
                                         <div class="card-inner">
@@ -173,4 +174,5 @@
                 </div>
             </div>
         </div>
+    </div>
     @endsection
