@@ -24,14 +24,14 @@ class Transaction extends Model
 
     public static function getTotalCapital($investorId)
     {
+        $investor = Investor::find($investorId);
         $total =  Transaction::where(['investor_id' => $investorId, 'operation_status' => 1])
         ->selectRaw('SUM(amount) AS total_available')
-        ->selectRaw('total_capital')
         ->selectRaw('total_collected')
         ->first();
         if ($total != null) {
             Investor::where('id', $investorId)->update([
-                'total_available' => $total->total_available - $total->total_capital + $total->total_collected,
+                'total_available' => $total->total_available - $investor->total_capital + $total->total_collected,
             ]);
         }
         return $total;
