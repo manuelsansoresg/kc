@@ -27,7 +27,6 @@ class Transaction extends Model
         $investor = Investor::find($investorId);
         $total =  Transaction::where(['investor_id' => $investorId, 'operation_status' => 1])
         ->selectRaw('SUM(amount) AS total_available')
-        ->selectRaw('total_collected')
         ->first();
         if ($total != null) {
             Investor::where('id', $investorId)->update([
