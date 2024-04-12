@@ -462,14 +462,15 @@
                                 </a>
                             </div><!-- .nk-header-brand -->
 
-                            
-
+                            @if ( Request::segment(2) != 'inversionista' &&  Request::segment(2) != 'kc-wallet' && Request::segment(2) != 'kc-down-wallet' && Request::segment(2) != 'ayuda' )
                             <div class="nk-header-search ms-3 ms-xl-0">
                                 <em class="icon ni ni-search" id="icon-search"></em>
                                 <form action="/panel/user/search/view" method="GET">
                                     <input type="text"  name="query" id="query" value="{{ old('query') }}"  class="form-control border-transparent form-focus-none" placeholder="Buscar ..">
                                 </form>
                             </div><!-- .nk-header-news -->
+                            @endif
+
 
                             <div class="nk-header-tools">
                                 <ul class="nk-quick-nav">
