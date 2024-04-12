@@ -434,8 +434,12 @@ class HistoryLog extends Model
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $id_rel, 0);
             CreditKaaxSidecc::sendCreditKaaxSidecc($id_rel);
+
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $id_rel, 1);
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2, null, false);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $id_rel, 0);
         }
 
         if ($status_id == HistoryLog::KC_SWAP) {
