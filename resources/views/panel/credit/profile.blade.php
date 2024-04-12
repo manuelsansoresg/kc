@@ -247,7 +247,7 @@
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
                                                                         @php
-                                                                            $credit_product = $m_financial_product::getById($credit->financial_product_id);
+                                                                            $credit_product = $m_financial_product::getById($credit->applied_financial_product);
                                                                         @endphp
                                                                         <span class="profile-ud-label">Producto financiero</span>
                                                                         <span class="profile-ud-value"> {{ $credit_product!= null ? $credit_product->name : null}}

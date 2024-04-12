@@ -3672,7 +3672,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         try {
             $config = self::configUpload()[$template_config_id];
         } catch (\Exception $th) {
-            $config = self::uploadStep3()[$template_config_id];
+            $config = self::uploadStep3()[5];
         }
 
         return $config;
