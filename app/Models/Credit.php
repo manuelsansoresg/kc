@@ -108,21 +108,22 @@ class Credit extends Model
     public static function setTotalCapital($creditId)
     {
         $totalAppliedImport = 0;
-    
+        $getCredit = Credit::find($creditId);
         // Filter distinct credits from history_logs excluding status_id = 16
-        $distinctCredits = Credit::select('credits.applied_import', 'credits.id')
-            ->join('investors', 'investors.financial_products_id', 'credits.applied_financial_product')
-            ->join('history_logs', 'credits.id', '=', 'history_logs.id_rel')
-            //->where('history_logs.status_id', '<>', 16)
-            ->get(); // Use distinct to avoid duplicates
-    
+        
+        $distinctCredits = Credit::select('applied_import', 'id')
+        ->where('credits.applied_financial_product', $getCredit->applied_financial_product)
+        ->get(); // Use distinct to avoid duplicates
+        
         // Calculate the sum of applied_import for distinct credits
         foreach ($distinctCredits as $distinctCredit) {
+            
             $isExistCancelled = HistoryLog::where([
                                 'status_id' => HistoryLog::CREDIT_CANCELED,
-                                'id_rel' => $distinctCredits->id,
+                                'id_rel' => $distinctCredit->id,
                                 'is_credit' => 1
                                 ])->first();
+            
             if ($isExistCancelled === null) {
                 $totalAppliedImport = $totalAppliedImport + $distinctCredit->applied_import;
             }
