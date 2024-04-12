@@ -39,4 +39,4 @@ Route::get('credit/{credit}/{s2_credit_id}/{tipo}/set', ['\App\Http\Controllers\
 
 Route::get('credit/{credit}/{s2_credit_id}/{tipo}/set', ['\App\Http\Controllers\Api\CreditController', 'activar']);
 
-Route::get('investor/{investor}/setTotalCapital', ['\App\Http\Controllers\Api\CreditController', 'apiSetTotalCapital']);
+Route::get('investor/{product}/setTotalCapital', ['\App\Http\Controllers\Api\CreditController', 'apiSetTotalCapital']);

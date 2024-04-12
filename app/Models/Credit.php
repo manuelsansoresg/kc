@@ -134,8 +134,10 @@ class Credit extends Model
         Investor::where('financial_products_id', $credit->applied_financial_product)->update([
             'total_capital' => $totalAppliedImport
         ]);
-        
-        Transaction::setTotalCapital($credit->investor_id);
+        $getInvestors = Investor::where('financial_products_id', $credit->applied_financial_product)->get();
+        foreach ($getInvestors as $getInvestor) {
+            Transaction::setTotalCapital($getInvestor->id);
+        }
         
     }
     

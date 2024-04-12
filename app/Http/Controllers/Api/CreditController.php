@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Investor;
 use App\Models\Transaction;
@@ -37,8 +38,11 @@ class CreditController extends Controller
         ]);
     }
 
-    public function apiSetTotalCapital(Investor $investor)
+    public function apiSetTotalCapital(FinancialProduct $product)
     {
-        Transaction::setTotalCapital($investor->id);
+        $getInvestors = Investor::where('financial_products_id', $product->id)->get();
+        foreach ($getInvestors as $getInvestor) {
+            Transaction::setTotalCapital($getInvestor->id);
+        }
     }
 }
