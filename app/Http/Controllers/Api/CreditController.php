@@ -38,9 +38,9 @@ class CreditController extends Controller
         ]);
     }
 
-    public function apiSetTotalCapital(FinancialProduct $product)
+    public function apiSetTotalCapital($financial_product_id)
     {
-        $getInvestors = Investor::where('financial_products_id', $product->id)->get();
+        $getInvestors = Investor::where('financial_products_id', $financial_product_id)->get();
         foreach ($getInvestors as $getInvestor) {
             Transaction::setTotalCapital($getInvestor->id);
         }
