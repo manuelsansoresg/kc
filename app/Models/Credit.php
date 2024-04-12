@@ -135,7 +135,7 @@ class Credit extends Model
             'total_capital' => $totalAppliedImport
         ]);
         
-        Transaction::getTotalCapital($credit->investor_id);
+        Transaction::setTotalCapital($credit->investor_id);
         
     }
     

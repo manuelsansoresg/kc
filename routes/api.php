@@ -36,3 +36,7 @@ Route::post('action/manychat/lead/store', ['\App\Http\Controllers\Api\ActionMany
 Route::post('action/manychat/wa-complete/lead/store', ['\App\Http\Controllers\Api\ActionManychatController', 'storeLeadWaComplete']);
 
 Route::get('credit/{credit}/{s2_credit_id}/{tipo}/set', ['\App\Http\Controllers\Api\CreditController', 'activar']);
+
+Route::get('credit/{credit}/{s2_credit_id}/{tipo}/set', ['\App\Http\Controllers\Api\CreditController', 'activar']);
+
+Route::get('investor/{investor}/setTotalCapital', ['\App\Http\Controllers\Api\CreditController', 'apiSetTotalCapital']);

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\HistoryLog;
+use App\Models\Investor;
+use App\Models\Transaction;
 use App\Strategies\Values\SendNotificationsValues;
 use Illuminate\Http\Request;
 
@@ -33,5 +35,10 @@ class CreditController extends Controller
         ->update([
            'status' => 0
         ]);
+    }
+
+    public function apiSetTotalCapital(Investor $investor)
+    {
+        Transaction::setTotalCapital($investor->id);
     }
 }
