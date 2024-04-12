@@ -44,6 +44,7 @@ class LeadStrategyTemplate implements TemplateInterface
                 'cellphone' => $lead->cellphone,
                 'email' => $lead->email,
                 'agreement_id' => $lead->agreement_id,
+                'rfc' => $lead->rfc,
             );
             // know if exist client person
 
