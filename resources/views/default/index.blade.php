@@ -29,7 +29,7 @@
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">
                                     Adelanto de nómina
                                     <br>
-                                    Cobra tus días trabajados antes del día de pago
+                                    <span class="text-small">Cobra tus días trabajados antes del día de pago</span>
                                 </a>
                                {{--  <div class="mt-0 mt-md-3 text-center">
                                     <small class="text-muted text-center">
@@ -41,15 +41,15 @@
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero un crédito nuevo"  class="btn col-12 btn-dark btn-block">
                                     Reduce tu deuda actual
                                     <br>
-                                    Cámbiate a un mejor crédito
+                                     <span class="text-small">Cámbiate a un mejor crédito </span>
                                 </a>
                             </div>
                          
                             <div class="col-12 col-md-12 mt-3">
-                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero un crédito nuevo"  class="btn col-12 btn-highlight btn-block">
+                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero un crédito nuevo"  class="btn col-12 btn-highlight-two btn-block">
                                     Crédito personal
                                     <br>
-                                    Obtén un crédito con las mejores condiciones
+                                     <span class="text-small">Obtén un crédito con las mejores condiciones </span>
                                 </a>
                             </div>
                            {{--  <div class="col-12 col-md-12">

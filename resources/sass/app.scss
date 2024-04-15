@@ -70,6 +70,12 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     border-color: #6576ff !important;
 }
 
+.btn-highlight-two {
+  color: #ffffff;
+  background-color: #a1d7f8 !important;
+  border-color: #a1d7f8 !important;
+}
+
 // Medium devices (tablets, 768px and up)
 @media (min-width: 992px) { 
     .content-options{
@@ -207,9 +213,13 @@ ul.ul-primary li::after {
 
 .kc .btn
 {
-  font-size: 1rem !important;
+  font-size: 1.2rem !important;
   font-weight: 900 !important;
 } 
+
+.kc .text-small{
+  font-size: 0.8rem !important;
+}
 
 .color-primary{
   color: #5e4c98 !important;
@@ -246,7 +256,7 @@ ul.ul-primary li::before {
   }
   .kc .btn
   {
-    font-size: 1rem !important;
+    font-size: 1.2rem !important;
    
   } 
 
