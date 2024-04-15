@@ -212,10 +212,12 @@ class User extends Authenticatable
                 $domain = 'https://kaaxclub.com/reporte/' . $history_id;
                 //* 235b3d5c43c14184b365def8c1d1e160 link cuando se tenga la webapp
                 $body = 'Usuario: ' . $user->mail . '<br> Contraseña: ' . $password;
-                $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
+                
+                //*TODO: desactivar correo el reporte con las mejores opciones esta listo
+                /* $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
                 $send_grid->setTemplate('d-b22ee2c485414371995b7ed109e95fb7');
                 $send_grid->setParams(['first_name' => $data['name'], 'link_account' => $domain, 'body' => $body]);
-                $send_grid->send();
+                $send_grid->send(); */
             }
             return $user;
         }
