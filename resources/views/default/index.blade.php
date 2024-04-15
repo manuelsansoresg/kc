@@ -43,9 +43,14 @@
                                     <br>
                                     Cámbiate a un mejor crédito
                                 </a>
-                               {{--  <div class="mt-0 mt-md-3 text-center">
-                                    <small class="text-muted text-center">Cámbiate a un mejor crédito</small>
-                                </div> --}}
+                            </div>
+                         
+                            <div class="col-12 col-md-12 mt-3">
+                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero un crédito nuevo"  class="btn col-12 btn-highlight btn-block">
+                                    Crédito personal
+                                    <br>
+                                    Obtén un crédito con las mejores condiciones
+                                </a>
                             </div>
                            {{--  <div class="col-12 col-md-12">
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">Crédito personal</a>

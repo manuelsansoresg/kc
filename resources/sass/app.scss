@@ -207,7 +207,8 @@ ul.ul-primary li::after {
 
 .kc .btn
 {
-  font-size: 1.2rem !important;
+  font-size: 1rem !important;
+  font-weight: 900 !important;
 } 
 
 .color-primary{
@@ -232,6 +233,9 @@ ul.ul-primary li::before {
   min-height: 82vh !important;
 }
 
+
+
+
  /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
   .text-elije {
@@ -243,6 +247,7 @@ ul.ul-primary li::before {
   .kc .btn
   {
     font-size: 1rem !important;
+   
   } 
 
   #img-cell{
