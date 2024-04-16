@@ -440,6 +440,9 @@ class HistoryLog extends Model
             //*inicializar las acciones de la siguiente etapa en curso
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2, null, false);
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $id_rel, 0);
+
+            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Delivery');
+            $notification_slack->sendMessage();
         }
 
         if ($status_id == HistoryLog::KC_SWAP) {
