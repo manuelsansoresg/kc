@@ -304,8 +304,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             1 => [
                 'title_section' => 'Crédito solicitado',
                 'title' => null,
+                'col' => 'col-md-6',
                 'name_field' => null,
                 'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => null,
+                'is_disabled' => null
+            ],
+            2 => [
+                'title_section' => '&nbsp;',
+                'col' => 'col-md-6 text-primary h5',
+                'title' => null,
+                'name_field' => null,
+                'id_field' => 'text-loan',
                 'comment_admin' => null,
                 'comment_webApp' => null,
                 'placeholder' => null,
@@ -334,6 +350,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'title' => 'Producto financiero',
                 'name_field' => 'credit[applied_financial_product]',
                 'id_field' => 'applied_financial_product',
+                'onchange' => 'getLoanAvailableByProduct(this)',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
@@ -341,7 +358,18 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => true,
                 'options' => $financials,
                 'is_required' => false,
-                'is_disabled' => null
+                'is_disabled' => null,
+                /* 'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'type' => 'div',
+                        'name_field' => null,
+                        'col' => 'col-md-6 text-primary h6',
+                        'id_field' => 'text-loan',
+                        'onclick' => 'kycCreditHistory(' . $history_id . ', 1)'
+                    ),
+                    
+                ) */
             ],
             4 => [
                 'title_section' => null,
@@ -489,6 +517,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'title' => null,
                 'name_field' => 'url_redirect',
                 'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
+                'col' => 'col-12'
+            ],
+            15 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'input_loan',
+                'id_field' => 'input_loan',
                 'comment_admin' => '',
                 'comment_webApp' =>  null,
                 'placeholder' => '',

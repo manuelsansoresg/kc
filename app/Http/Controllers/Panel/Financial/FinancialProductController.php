@@ -89,7 +89,8 @@ class FinancialProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $financialProduct = FinancialProduct::find($id);
+        return response()->json($financialProduct);
     }
 
     /**

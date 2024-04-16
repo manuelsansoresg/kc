@@ -3599,9 +3599,45 @@ $().ready(function () {
     },
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
-      saveForm('frm-template_control_desk_step2', 'controlDesk');
+      var input_loan = $('#input_loan').val();
+      var applied_import = $('#applied_import').val();
+
+      if (input_loan != '' && parseFloat(applied_import) > parseFloat(input_loan)) {
+        Swal.fire({
+          text: 'El importe solicitado no puede ser mayor al disponible',
+          icon: 'warning'
+        });
+      } else {
+        saveForm('frm-template_control_desk_step2', 'controlDesk');
+      }
     }
   });
+
+  window.getLoanAvailableByProduct = function (product) {
+    $('#text-loan').html('');
+    $('#input_loan').val('');
+    var productId = product.value;
+    axios.get("/panel/financial-product/" + productId).then(function (response) {
+      var result = response.data;
+
+      if (result != null && result.loan_available != null) {
+        // Use Intl.NumberFormat for locale-aware currency formatting
+        var formatter = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          // Replace with your desired currency code
+          minimumFractionDigits: 2 // Ensure at least two decimal places
+
+        });
+        var formattedAmount = formatter.format(result.loan_available);
+        $('#text-loan').html('Disponible: ' + formattedAmount);
+        $('#input_loan').val(result.loan_available);
+      }
+    })["catch"](function (e) {
+      console.error('Error fetching loan available:', e);
+    });
+  };
+
   $("#frm-template_control_desk_step3_1").validate({
     rules: {
       'client_person[sex]': {
