@@ -123,6 +123,13 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
         $optionInvestor = $is_investor === true ? $getInvestor->id : $users;
 
+        $format_withdraw_available = 'Disponible para el retiro:';
+        $withdraw_available = null;
+        if ($getInvestor != null) {
+            $format_withdraw_available .= ' '.format_price($getInvestor->withdraw_available);
+            $withdraw_available = $getInvestor->withdraw_available;
+        }
+        
         $elements = array(
             1 => [
                 'title_section' => null,
@@ -142,6 +149,22 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
             ],
 
             2 => [
+                'title_section' => $format_withdraw_available,
+                'col' => 'col-md-6 text-primary h5',
+                'class' => 'text-primary h5',
+                'title' => null,
+                'name_field' => null,
+                'id_field' => 'text-loan',
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => null,
+                'is_disabled' => null
+            ],
+            3 => [
                 'title_section' => null,
                 'title' => 'Tipo de operación',
                 'name_field' => 'transaction[transaction_type]',
@@ -186,6 +209,22 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null,
                 'value' => $urlRedirect,
+                'col' => 'col-12'
+            ],
+            6 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'withdraw_available',
+                'id_field' => 'withdraw_available',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => $withdraw_available,
                 'col' => 'col-12'
             ],
         );

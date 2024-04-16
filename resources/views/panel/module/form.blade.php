@@ -14,7 +14,7 @@
             @endphp
             @if ($element['title_section'] != '')
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}" id="{{ isset($element['id_field'])? $element['id_field'] : null  }}">
-                    <span class="preview-title-lg overline-title"> {!! $element['title_section'] !!} </span>
+                    <span class="preview-title-lg overline-title {{ isset($element['class'])? $element['class'] :null  }} "> {!! $element['title_section'] !!} </span>
                 </div>
             @endif
             @if ($element['type'] == 'text')

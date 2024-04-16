@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Panel\Module\KcWallet;
 
 use App\Http\Controllers\Controller;
 use App\Models\HistoryLog;
+use App\Models\Investor;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class KcDownWalletController extends Controller
 {
@@ -16,7 +18,12 @@ class KcDownWalletController extends Controller
      */
     public function index()
     {
-        return view('panel.module.wallet.listDown');
+        $investor = Investor::find(Auth::user()->id);
+        $withdraw_available = null;
+        if ($investor != null) {
+            $withdraw_available = $investor->withdraw_available;
+        }
+        return view('panel.module.wallet.listDown', compact('withdraw_available'));
     }
 
     public function list()

@@ -645,7 +645,16 @@ $().ready(function () {
         },
         submitHandler: function (form, event) {
             event.preventDefault();
-            saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
+            let withdraw_available = $('#withdraw_available').val();
+            let amount = $('#amount').val();
+            if (withdraw_available != '' && parseFloat(amount) > parseFloat(withdraw_available)) {
+                Swal.fire({
+                    text: 'El importe a retirar debe ser menor  al disponible para el retiro',
+                    icon: 'warning',
+                })
+            } else {
+                saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
+            }
         }
     });
 
