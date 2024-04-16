@@ -54,6 +54,7 @@ class CreditKaaxSidecc extends Model
             'valor_slider_avanzada' => $credit->applied_import,
             'plazo_calculadora_avanzada' => $credit->applied_term,
             'pago_calculadora_avanzada' => $credit->applied_payment,
+            'financial_product_id' => $credit->product_id
         );
         $creditKaax = CreditKaaxSidecc::create($data_credit);
         ClientsLogKaaxSidecc::addCrmLog($creditKaax->id, 'en-entrega', 'en-entrega');
