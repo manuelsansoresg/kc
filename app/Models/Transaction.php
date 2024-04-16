@@ -45,6 +45,7 @@ class Transaction extends Model
         if ($total != null) {
             $investor = Investor::selectRaw('LEAST(total_available, lendable) AS loan_available')
                         ->selectRaw('total_available')
+                        ->selectRaw('financial_products_id')
                         ->where('id', $investorId)->first();
                         
             Investor::where('id', $investorId)
@@ -54,7 +55,20 @@ class Transaction extends Model
                         'withdraw_available' => $investor->total_available - $investor->loan_available  ,
                     ]
             );
+            //*actualizar  loan_available  de financial_products
+            
+            $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
+                            ->where('financial_products_id', $investor->financial_products_id)
+                            ->first();
+
+            if ($investorLoan != null) {
+                FinancialProduct::where('id', $investor->financial_products_id)
+                                ->update([
+                                    'loan_available' => $investorLoan->loan_available
+                                ]);
+            }
         }
+
     }
 
     public static function saveEdit($request, $is_down = false)
