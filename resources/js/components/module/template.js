@@ -157,7 +157,7 @@ $().ready(function () {
         $('#text-loan').html('');
         $('#input_loan').val('');
         let productId = product.value;
-      
+        
         axios
           .get("/panel/financial-product/" + productId)
           .then(function (response) {
@@ -174,13 +174,35 @@ $().ready(function () {
               const formattedAmount = formatter.format(result.loan_available);
               $('#text-loan').html('Disponible: ' + formattedAmount);
               $('#input_loan').val(result.loan_available);
+              setBajoDemanda(productId, result.opening_commission_type);
             }
           })
           .catch(e => {
             console.error('Error fetching loan available:', e);
           });
+          
       };
       
+    window.setBajoDemanda = function (productId, opening_commission_type)
+    {
+        let comision = parseFloat(opening_commission_type);
+        $('#applied_term').val(1);
+        $('#applied_interest_rate').val(0);
+
+        if (productId == 34) {
+            const inputAppliedImport = document.getElementById('applied_import');
+        
+            inputAppliedImport.addEventListener('input', function() {
+                let importeSolicitado = parseFloat(inputAppliedImport.value);
+                $('#applied_loan_total_amount').val(importeSolicitado+comision);
+                $('#applied_payment').val(importeSolicitado+comision);
+            });
+          } else {
+            const inputAppliedImport = document.getElementById('applied_import');
+            inputAppliedImport.removeEventListener('input');
+          }
+
+    }
     
     $("#frm-template_control_desk_step3_1").validate({
         rules: {
