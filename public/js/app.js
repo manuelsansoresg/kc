@@ -3641,15 +3641,15 @@ $().ready(function () {
         var formattedAmount = formatter.format(result.loan_available);
         $('#text-loan').html('Disponible: ' + formattedAmount);
         $('#input_loan').val(result.loan_available);
-        setBajoDemanda(productId, result.opening_commission_type);
+        setBajoDemanda(productId, result.opening_commission_amount);
       }
     })["catch"](function (e) {
       console.error('Error fetching loan available:', e);
     });
   };
 
-  window.setBajoDemanda = function (productId, opening_commission_type) {
-    var comision = parseFloat(opening_commission_type);
+  window.setBajoDemanda = function (productId, opening_commission_amount) {
+    var comision = parseFloat(opening_commission_amount);
     $('#applied_term').val(1);
     $('#applied_interest_rate').val(0);
 
