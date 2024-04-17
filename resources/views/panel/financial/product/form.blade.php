@@ -1812,7 +1812,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="rate_kc">Comisión SOD</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input class="form-control" type="number" id="opening_commission_amount" name="opening_commission_amount" step="0.01" min="0.00"  value="{{ $financial_product != null ? $financial_product->opening_commission_amount : null }}">
+                                                                        <input class="form-control" type="number" id="sod_commission_amount" name="sod_commission_amount" step="0.01" min="0.00"  value="{{ $financial_product != null ? $financial_product->sod_commission_amount : null }}">
                                                                     </div>
                                                                 </div>
                                                             </div>

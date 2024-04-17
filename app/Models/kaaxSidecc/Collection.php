@@ -74,7 +74,7 @@ class Collection extends Model
         'investor_id',
         'financial_product_id',
         'opening_commission_type',
-        'opening_commission_amount',
+        'sod_commission_amount',
         'collection_commission_amount',
         'collection_commission_rate',
         'collection_commission',
