@@ -17,11 +17,11 @@ class AddFieldsComisionsToFinancialProducts extends Migration
             // Add new columns after fp_simulation_rate
             $table->after('fp_simulation_rate', function ($table) {
                 $table->integer('opening_commission_type')->nullable();
-                $table->decimal('opening_commission_rate', 4, 2)->nullable(); // 4 decimal places
+                $table->decimal('opening_commission_rate', 8, 2)->nullable(); // 4 decimal places
                 $table->decimal('opening_commission_amount', 8, 2)->nullable(); // 2 decimal places
-                $table->decimal('collection_commission_rate', 4, 2)->nullable();
-                $table->decimal('annual_interest_rate', 4, 2)->nullable();
-                $table->decimal('daily_interest_rate', 4, 2)->nullable();
+                $table->decimal('collection_commission_rate', 8, 2)->nullable();
+                $table->decimal('annual_interest_rate', 8, 2)->nullable();
+                $table->decimal('daily_interest_rate', 8, 2)->nullable();
             });
         });
     }

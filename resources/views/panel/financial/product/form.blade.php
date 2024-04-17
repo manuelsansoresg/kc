@@ -59,6 +59,9 @@
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $product_id != null ? '#tabTramite' : '#' }}">Trámite</a>
                                                 </li>
+                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                        href="{{ $product_id != null ? '#tabComisiones' : '#' }}">Comisiones KC</a>
+                                                </li>
                                             </ul>
 
                                             <div class="tab-content">
@@ -1781,7 +1784,7 @@
                                                                 <div class="form-group">
                                                                     <label class="form-label" for="rate_kc">Describe el proceso del trámite</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="text" class="form-control ckeditor" name="proceso_tramite" id="tramite-proceso_tramite" required>
+                                                                        <input type="text" class="form-control ckeditor" name="proceso_tramite" id="tramite-proceso_tramite"  required>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1801,6 +1804,51 @@
                                                         </div>
                                                     </form>
                                                 </div>
+                                                <div class="tab-pane" id="tabComisiones">
+                                                    <form method="post" id="frm-comisioneskc" action="">
+                                                        <div class="row gy-4">
+                                                            @csrf
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_kc">Comisión SOD</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" type="number" id="opening_commission_amount" name="opening_commission_amount" step="0.01" min="0.00"  value="{{ $financial_product != null ? $financial_product->opening_commission_amount : null }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_kc">Comisión por apertura</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" type="number" id="opening_commission_rate" name="opening_commission_rate" step="0.01" min="0.00"  value="{{ $financial_product != null ? $financial_product->opening_commission_rate : null }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="rate_kc">Comisión de cobranza</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <input class="form-control" type="number" id="collection_commission_rate" name="collection_commission_rate" step="0.01" min="0.00"  value="{{ $financial_product != null ? $financial_product->collection_commission_rate : null }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" 
+                                                            name="financial_id" value="{{ $financial_id }}">
+                                                            <input type="hidden"  name="product_id"
+                                                                value="{{ $product_id }}">
+                                                            <div class="col-12">
+                                                                <ul
+                                                                    class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                                                                    <li>
+                                                                        <button class="btn btn-primary">Guardar</button>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                
                                             </div>
                                         </div>
 

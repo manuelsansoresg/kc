@@ -1922,6 +1922,15 @@ $("#frm-financial-tramite").submit(function (event) {
     showToast('Producto', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
+$("#frm-comisioneskc").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-comisioneskc");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
 
 window.deleteFinancialProduct = function (id) {
   axios["delete"]("/panel/financial-product/" + id).then(function (response) {
