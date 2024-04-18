@@ -283,7 +283,7 @@ class User extends Authenticatable
                 $agreement = $user->agreement;
 
                 $users[] = array(
-                    'agreement' => $agreement->name,
+                    'agreement' => $agreement != null ? $agreement->name : null,
                     'name' => $user->name,
                     'last_name' => $user->last_name,
                     'second_last_name' => $user->second_last_name,

@@ -5045,6 +5045,10 @@ window.modalUser = function (type, user_id) {
     $('#frmfinanciera').trigger("reset");
   }
 
+  if (document.getElementById('frm-inversionista')) {
+    $('#frm-inversionista').trigger("reset");
+  }
+
   if (type === 1) {
     $('#user-admin-title').html('Crear usuario ' + title);
     $('#content-password').show();
