@@ -3648,7 +3648,7 @@ $().ready(function () {
         $('#comision').val(result.sod_commission_amount);
         $('#producto').val(result.type_product_id);
 
-        if (productId == 6) {
+        if (result.type_product_id == 6) {
           $('#applied_term').val(1);
           $('#applied_interest_rate').val(0);
         }
