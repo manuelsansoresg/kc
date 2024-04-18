@@ -157,13 +157,17 @@ $().ready(function () {
         $('#text-loan').html('');
         $('#input_loan').val('');
         let productId = product.value;
+        $('#producto').val(productId);
+
+        $('#applied_loan_total_amount').val('');
+        $('#applied_payment').val('');
         
         axios
           .get("/panel/financial-product/" + productId)
           .then(function (response) {
             let result = response.data;
       
-            if (result != null && result.loan_available != null) {
+            if (result != null) {
               // Use Intl.NumberFormat for locale-aware currency formatting
               const formatter = new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -174,7 +178,8 @@ $().ready(function () {
               const formattedAmount = formatter.format(result.loan_available);
               $('#text-loan').html('Disponible: ' + formattedAmount);
               $('#input_loan').val(result.loan_available);
-              setBajoDemanda(productId, result.sod_commission_amount);
+              $('#comision').val(result.sod_commission_amount);
+              setBajoDemanda();
             }
           })
           .catch(e => {
@@ -183,26 +188,26 @@ $().ready(function () {
           
       };
       
-    window.setBajoDemanda = function (productId, sod_commission_amount)
-    {
-        let comision = parseFloat(sod_commission_amount);
+      window.setBajoDemanda = function () {
+        let comision = parseFloat($('#comision').val());
+        
         $('#applied_term').val(1);
         $('#applied_interest_rate').val(0);
-
-        if (productId == 34) {
-            const inputAppliedImport = document.getElementById('applied_import');
         
-            inputAppliedImport.addEventListener('input', function() {
-                let importeSolicitado = parseFloat(inputAppliedImport.value);
-                $('#applied_loan_total_amount').val(importeSolicitado+comision);
-                $('#applied_payment').val(importeSolicitado+comision);
-            });
-          } else {
-            const inputAppliedImport = document.getElementById('applied_import');
-            inputAppliedImport.removeEventListener('input');
+        const inputAppliedImport = document.getElementById('applied_import');
+      
+        inputAppliedImport.addEventListener('input', function() {
+          let importeSolicitado = parseFloat(inputAppliedImport.value);
+          let productId = $('#producto').val();
+          console.log(productId);
+          if (productId == 34) {
+            
+            $('#applied_loan_total_amount').val(importeSolicitado + comision);
+            $('#applied_payment').val(importeSolicitado + comision);
           }
-
-    }
+        });
+      };
+      
     
     $("#frm-template_control_desk_step3_1").validate({
         rules: {
