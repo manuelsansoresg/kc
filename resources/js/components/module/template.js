@@ -157,7 +157,7 @@ $().ready(function () {
         $('#text-loan').html('');
         $('#input_loan').val('');
         let productId = product.value;
-        $('#producto').val(productId);
+        
 
         $('#applied_loan_total_amount').val('');
         $('#applied_payment').val('');
@@ -182,8 +182,8 @@ $().ready(function () {
               $('#text-loan').html('Disponible: ' + formattedAmount);
               $('#input_loan').val(result.loan_available);
               $('#comision').val(result.sod_commission_amount);
-
-              if (productId == 34) {
+              $('#producto').val(result.type_product_id);
+              if (productId == 6) {
                   $('#applied_term').val(1);
                   $('#applied_interest_rate').val(0);
               }
@@ -205,11 +205,7 @@ $().ready(function () {
         inputAppliedImport.addEventListener('input', function() {
           let importeSolicitado = parseFloat(inputAppliedImport.value);
           let productId = $('#producto').val();
-          console.log(productId);
-          if (productId == 34) {
-            
-            
-
+          if (productId == 6) {
             $('#applied_loan_total_amount').val(importeSolicitado + comision);
             $('#applied_payment').val(importeSolicitado + comision);
           }
