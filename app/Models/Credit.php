@@ -114,7 +114,7 @@ class Credit extends Model
     public static function setMontoEntregar($creditId)
     {
         $credit = Credit::find($creditId);
-        $financialProduct = FinancialProduct::find($credit->financial_product_id);
+        $financialProduct = FinancialProduct::find($credit->applied_financial_product);
         //actualizar
         if ($credit!= null && $financialProduct != null) {
             Credit::where('id', $credit->id)->update([

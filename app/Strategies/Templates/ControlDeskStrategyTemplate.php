@@ -3582,7 +3582,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($credit != null && $credit->applied_CAT >= 0) {
             $total_valid = $total_valid + 1;
         }
-        $percent = ($total_valid / 7) * 100;
+        $percent = ($total_valid / 8) * 100;
         return $percent;
     }
 
