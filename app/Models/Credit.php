@@ -117,10 +117,11 @@ class Credit extends Model
         $financialProduct = FinancialProduct::find($credit->applied_financial_product);
         //actualizar
         if ($credit!= null && $financialProduct != null) {
+            $net_amount = $credit->applied_import - $credit->opening_commission - $credit->refinance_adjustment - $credit->third_party_adjustment;
             Credit::where('id', $credit->id)->update([
                 'opening_commission' => $credit->applied_import * ($financialProduct->opening_commission_rate / 100),
                 'sod_commission' => $financialProduct->sod_commission_amount,
-                'net_amount' => $credit->applied_import - $credit->opening_commission - $credit->refinance_adjustment - $credit->third_party_adjustment
+                'net_amount' => $net_amount
             ]);
         }
     }
