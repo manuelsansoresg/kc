@@ -2250,6 +2250,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 $getVars = $request->credit;
                 if (isset($getVars['applied_financial_product'])) {
                     Credit::setTotalCapital($credit->id);
+                    Credit::setMontoEntregar($credit->id);
                 }
             }
 

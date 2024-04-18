@@ -101,9 +101,29 @@ class Credit extends Model
         'income',
         'investor_id',
         'start_period_id',
-        's2_credit_id'
+        's2_credit_id',
+        'opening_commission',
+        'sod_commission',
+        'refinance_adjustment',
+        'third_party_adjustment',
+        'net_amount',
         
     ];
+
+
+    public static function setMontoEntregar($creditId)
+    {
+        $credit = Credit::find($creditId);
+        $financialProduct = FinancialProduct::find($credit->financial_product_id);
+        //actualizar
+        if ($credit!= null && $financialProduct != null) {
+            Credit::where('id', $credit->id)->update([
+                'opening_commission' => $credit->applied_import * ($financialProduct->opening_commission_rate / 100),
+                'sod_commission' => $financialProduct->sod_commission_amount,
+                'net_amount' => $credit->applied_import - $credit->opening_commission - $credit->refinance_adjustment - $credit->third_party_adjustment
+            ]);
+        }
+    }
 
     public static function setTotalCapital($creditId)
     {
