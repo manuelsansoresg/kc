@@ -3629,6 +3629,8 @@ $().ready(function () {
     $('#producto').val(productId);
     $('#applied_loan_total_amount').val('');
     $('#applied_payment').val('');
+    $('#applied_term').val('');
+    $('#applied_interest_rate').val('');
     axios.get("/panel/financial-product/" + productId).then(function (response) {
       var result = response.data;
 
@@ -3645,6 +3647,12 @@ $().ready(function () {
         $('#text-loan').html('Disponible: ' + formattedAmount);
         $('#input_loan').val(result.loan_available);
         $('#comision').val(result.sod_commission_amount);
+
+        if (productId == 34) {
+          $('#applied_term').val(1);
+          $('#applied_interest_rate').val(0);
+        }
+
         setBajoDemanda();
       }
     })["catch"](function (e) {
@@ -3654,8 +3662,6 @@ $().ready(function () {
 
   window.setBajoDemanda = function () {
     var comision = parseFloat($('#comision').val());
-    $('#applied_term').val(1);
-    $('#applied_interest_rate').val(0);
     var inputAppliedImport = document.getElementById('applied_import');
     inputAppliedImport.addEventListener('input', function () {
       var importeSolicitado = parseFloat(inputAppliedImport.value);
