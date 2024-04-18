@@ -3519,12 +3519,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $total_valid = 0;
 
 
-       /*  if ($credit != null && $credit->applied_financial != null) {
-            $total_valid = $total_valid + 1;
-        }
-        if ($credit != null && $credit->applied_loan_type != null) {
+        /* if ($credit != null && $credit->applied_financial != null) {
             $total_valid = $total_valid + 1;
         } */
+        if ($credit != null && $credit->applied_loan_type != null) {
+            $total_valid = $total_valid + 1;
+        }
 
         if ($credit != null && $credit->applied_import != null) {
             $total_valid = $total_valid + 1;
@@ -3545,10 +3545,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($credit != null && $credit->applied_interest_rate != null) {
             $total_valid = $total_valid + 1;
         }
-        if ($credit != null && $credit->applied_CAT != null) {
+        if ($credit != null && $credit->applied_CAT > 0) {
             $total_valid = $total_valid + 1;
         }
-        $percent = ($total_valid / 7) * 100;
+        $percent = ($total_valid / 8) * 100;
         return $percent;
     }
 
