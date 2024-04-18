@@ -164,6 +164,7 @@ $().ready(function () {
 
         $('#applied_term').val('');
         $('#applied_interest_rate').val('');
+        $('#applied_CAT').val('');
         
         axios
           .get("/panel/financial-product/" + productId)
@@ -186,6 +187,7 @@ $().ready(function () {
               if (result.type_product_id == 6) {
                   $('#applied_term').val(1);
                   $('#applied_interest_rate').val(0);
+                  $('#applied_CAT').val(0);
               }
 
               setBajoDemanda();

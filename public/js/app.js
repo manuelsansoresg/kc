@@ -3630,6 +3630,7 @@ $().ready(function () {
     $('#applied_payment').val('');
     $('#applied_term').val('');
     $('#applied_interest_rate').val('');
+    $('#applied_CAT').val('');
     axios.get("/panel/financial-product/" + productId).then(function (response) {
       var result = response.data;
 
@@ -3651,6 +3652,7 @@ $().ready(function () {
         if (result.type_product_id == 6) {
           $('#applied_term').val(1);
           $('#applied_interest_rate').val(0);
+          $('#applied_CAT').val(0);
         }
 
         setBajoDemanda();
