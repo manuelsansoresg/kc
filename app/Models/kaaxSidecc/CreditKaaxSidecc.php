@@ -54,7 +54,9 @@ class CreditKaaxSidecc extends Model
             'valor_slider_avanzada' => $credit->applied_import,
             'plazo_calculadora_avanzada' => $credit->applied_term,
             'pago_calculadora_avanzada' => $credit->applied_payment,
-            'financial_product_id' => $credit->product_id
+            'financial_products_id' => $credit->applied_financial_product,
+            'ajuste_liquidacion_terceros' => $credit->third_party_adjustment,
+            'ajuste_refinanciamiento' => $credit->refinance_adjustment,
         );
         $creditKaax = CreditKaaxSidecc::create($data_credit);
         ClientsLogKaaxSidecc::addCrmLog($creditKaax->id, 'en-entrega', 'en-entrega');
@@ -67,6 +69,9 @@ class CreditKaaxSidecc extends Model
             'descuento'=>$credit->applied_payment,  
             'tasa'=>$credit->applied_interest_rate,  
             'monto_total'=>$credit->applied_loan_total_amount,  
+            'cat'=>$credit->applied_CAT,  
+            'comision_apertura'=>$credit->opening_commission,  
+            'capital_cobrar'=>$credit->net_amount,  
         );
         $client_credit_info_kaax = ClientsCreditInfoKaaxSidecc::create($data_client_credit_info);
 
