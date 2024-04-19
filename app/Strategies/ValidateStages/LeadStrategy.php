@@ -16,6 +16,7 @@ class LeadStrategy implements ValidateStagesInterface
         $error_rfc          = false;
         $error_product        = false;
         $error_tipo_credito   = false;
+        $error_viabilidad   = false;
 
         $errors = array();
 
@@ -50,6 +51,9 @@ class LeadStrategy implements ValidateStagesInterface
                 $error = true;
             }
             
+            if ($get_lead->is_viability != 1 && $get_lead->is_viability_credit != 1) {
+                $error_viabilidad = true;
+            }
 
             $errors = array(
                 'Servicio KC' => $error_product,
@@ -57,6 +61,7 @@ class LeadStrategy implements ValidateStagesInterface
                 'Organización' => $error_organization,
                 'Email' => $error_email,
                 'RFC' => $error_rfc,
+                'Viabilidad' => $error_viabilidad,
             );
         }
         $data_error = array(
