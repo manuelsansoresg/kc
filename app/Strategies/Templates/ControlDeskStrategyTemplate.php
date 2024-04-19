@@ -2562,7 +2562,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $view_percent_step2    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step2])->render();
         $view_percent_step3    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step3])->render();
         $view_percent_step4    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step4])->render();
-        $view_percent_step5    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step5_3])->render();
+        $view_percent_step5    = \View::make('panel.module.view_percent', ['percent' => $percent_form_step5])->render();
 
         $view_count_inf_credit      = \View::make('panel.module.view_count', ['number' => 'Uno'])->render();
         $view_count_step2          = \View::make('panel.module.view_count', ['number' => 'Dos'])->render();
