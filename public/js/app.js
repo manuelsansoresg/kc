@@ -2298,6 +2298,8 @@ function setData(is_change_origen, is_change_organization) {
     var financials = result.financials;
     var product_id = lead.product_id;
     var other = lead.other;
+    var is_viability = lead.is_viability;
+    var is_viability_credit = lead.is_viability_credit;
     console.log(product_id);
     productChange(product_id);
     organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
@@ -2337,7 +2339,13 @@ function setData(is_change_origen, is_change_organization) {
 
     checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
 
-    $('#applied_loan_type').val(lead.applied_loan_type).trigger("change");
+    $('#applied_loan_type').val(lead.applied_loan_type).trigger("change"); // Get the checkbox elements
+
+    var checkboxViability = document.getElementById('is_viability');
+    var checkboxViabilityCredit = document.getElementById('is_viability_credit'); // Set the checked property based on the variables
+
+    checkboxViability.checked = is_viability === 1;
+    checkboxViabilityCredit.checked = is_viability_credit === 1;
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
@@ -2354,7 +2362,17 @@ window.checkDataLeadExist = function (valInput, id) {
       var isExist = result.exist;
 
       if (isExist > 0) {
-        messageElement.textContent = "Ya está en uso";
+        if (id != 'rfc') {
+          messageElement.textContent = "Ya está en uso";
+        } else {
+          messageElement.textContent = "Recurrente";
+          $('#text-viabilidad').html('Recurrente');
+        }
+      } else {
+        if (id == 'rfc') {
+          messageElement.innerHTML = "<b>Nuevo</b>";
+          $('#text-viabilidad').html('Nuevo');
+        }
       }
     })["catch"](function (e) {});
   }

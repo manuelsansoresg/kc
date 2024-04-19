@@ -42,6 +42,8 @@ class Lead extends Model
         'rfc',
         'applied_financial_product',
         'applied_loan_type',
+        'is_viability',
+        'is_viability_credit',
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)

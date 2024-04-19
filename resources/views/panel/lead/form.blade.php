@@ -241,8 +241,24 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
-                                                        
+                                                        <hr class="preview-hr">
+                                                        <span class="preview-title-lg overline-title">Viabilidad</span>
+                                                        <div class="col-md-12">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" name="data[is_viability]" type="checkbox" value="1" id="is_viability">
+                                                                <label class="form-label" for="is_viability">Viabilidad como <span id="text-viabilidad"></span> </label>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" name="data[is_viability_credit]" type="checkbox" value="1" id="is_viability_credit">
+                                                                <label class="form-label" for="is_viability_credit">Viabilidad de crédito </label>
+                                                                
+                                                            </div>
+                                                        </div>
+
+
                                                         <div class="col-md-6" id="content-banco_nomina" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Banco nómina </label>

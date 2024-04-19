@@ -231,6 +231,8 @@ function setData(is_change_origen, is_change_organization) {
             let financials    = result.financials;
             let product_id    = lead.product_id;
             let other         = lead.other;
+            let is_viability  = lead.is_viability;
+            let is_viability_credit = lead.is_viability_credit;
 
             console.log(product_id);
             productChange(product_id);
@@ -283,9 +285,17 @@ function setData(is_change_origen, is_change_organization) {
             checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
             checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
             checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
-
             
             $('#applied_loan_type').val(lead.applied_loan_type).trigger("change");
+
+            // Get the checkbox elements
+            let checkboxViability = document.getElementById('is_viability');
+            let checkboxViabilityCredit = document.getElementById('is_viability_credit');
+
+            // Set the checked property based on the variables
+            checkboxViability.checked = is_viability === 1;
+            checkboxViabilityCredit.checked = is_viability_credit === 1;
+
 
         })
         .catch(e => {
@@ -305,8 +315,20 @@ window.checkDataLeadExist = function (valInput, id)
             let result = response.data;
             let isExist = result.exist;
             if (isExist > 0) {
-                messageElement.textContent = "Ya está en uso";
+                
+                if (id != 'rfc') {
+                    messageElement.textContent = "Ya está en uso";
+                } else { 
+                    messageElement.textContent = "Recurrente";
+                    $('#text-viabilidad').html('Recurrente');
+                }
+            } else {
+                if (id == 'rfc') {
+                    messageElement.innerHTML  = "<b>Nuevo</b>";
+                    $('#text-viabilidad').html('Nuevo');
+                }
             }
+
         })
         .catch(e => {
     
