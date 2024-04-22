@@ -131,7 +131,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     {
         $elements = array(
             6 => [
-                'name' => 'Solicitud de terminación anticipada de contrato (Firmada)',
+                'name' => 'Contrato firmado',
                 'comment' => null,
                 'is_required' => true,
                 'is_date' => false,
