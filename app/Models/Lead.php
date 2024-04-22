@@ -207,6 +207,12 @@ class Lead extends Model
             $data['aval_o_garantia'] = $data['aval_o_garantia'] === null ? 1 : $data['aval_o_garantia']; 
         }
 
+        
+        $data['is_viability'] = isset($data['is_viability']) ? $data['is_viability'] : 0 ; 
+        
+        
+        $data['is_viability_credit'] = isset($data['is_viability_credit']) ? $data['is_viability_credit'] : 0 ; 
+
         if (isset($data['agreement_id']) && $data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
             unset($data['agreement_id']);
             $new_agreement = Agreement::create([ 'name' => $request->new_agreement, 'description' => $request->new_agreement, 'status' => 1]);

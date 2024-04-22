@@ -51,9 +51,11 @@ class LeadStrategy implements ValidateStagesInterface
                 $error = true;
             }
             
-            if ($get_lead->is_viability != 1 && $get_lead->is_viability_credit != 1) {
+            if ($get_lead->is_viability !== 1 || $get_lead->is_viability_credit  !== 1) {
                 $error_viabilidad = true;
             }
+
+            //dd($get_lead->is_viability, $get_lead->is_viability_credit, $error_viabilidad);
 
             $errors = array(
                 'Servicio KC' => $error_product,
