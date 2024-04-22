@@ -2312,8 +2312,9 @@ function setData(is_change_origen, is_change_organization) {
 
     $('#lead-asesor-id').val(lead.asesor_id);
     $('#lead-asesor-id').trigger("change");
-    $('#lead-type_id').val(lead.type_id);
-    $('#lead-type_id').trigger("change");
+    /* $('#lead-type_id').val(lead.type_id);
+    $('#lead-type_id').trigger("change"); */
+
     $('#lead-name').val(lead.name);
     $('#lead-last_name').val(lead.last_name);
     $('#lead-second_last_name').val(lead.second_last_name);
@@ -2366,12 +2367,12 @@ window.checkDataLeadExist = function (valInput, id) {
           messageElement.textContent = "Ya está en uso";
         } else {
           messageElement.textContent = "Recurrente";
-          $('#text-viabilidad').html('Recurrente');
+          $('.text-viabilidad').html('Recurrente');
         }
       } else {
         if (id == 'rfc') {
           messageElement.innerHTML = "<b>Nuevo</b>";
-          $('#text-viabilidad').html('Nuevo');
+          $('.text-viabilidad').html('Nuevo');
         }
       }
     })["catch"](function (e) {});
