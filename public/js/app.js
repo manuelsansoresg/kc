@@ -3900,9 +3900,35 @@ $().ready(function () {
     },
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
-      saveForm('frm-template_control_desk_step5', 'controlDesk');
+      TotalCredits();
     }
   });
+
+  function TotalCredits() {
+    var creditId = $('#id_rel').val();
+    axios.get("/panel/client/" + creditId + "/credit/total").then(function (response) {
+      var result = response.data;
+      var total = result.total;
+
+      if (total == 0) {
+        Swal.fire({
+          title: 'Este es un cliente nuevo',
+          text: 'Confirmo que se incluyó el contrato de comisión mercantil para un cliente nuevo',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Continuar',
+          cancelButtonText: 'Cancelar'
+        }).then(function (result) {
+          if (result.value) {
+            saveForm('frm-template_control_desk_step5', 'controlDesk');
+          }
+        });
+      } else {
+        saveForm('frm-template_control_desk_step5', 'controlDesk');
+      }
+    })["catch"](function (e) {});
+  }
+
   $("#frm-template_control_desk_step5_2").validate({
     rules: {
       'credit[signed]': {

@@ -178,6 +178,8 @@ Route::get('{section}/{id}/move', ['\App\Http\Controllers\Panel\PanelController'
 
 //*Client
 Route::resource('client', '\App\Http\Controllers\Panel\Client\ClientPersonController')->middleware('auth');
+Route::get('client/{client}/credit/total',[App\Http\Controllers\Panel\Client\ClientPersonController::class, 'totalCredit'])->middleware('auth');
+
 //*modules
 Route::resource('kc-check-up', '\App\Http\Controllers\Panel\Module\KcCheckup\KcCheckupController')->middleware('auth');
 Route::group(['prefix' => 'kc-check-up'], function () {

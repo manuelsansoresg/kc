@@ -436,9 +436,42 @@ $().ready(function () {
         },
         submitHandler: function (form, event) {
             event.preventDefault();
-            saveForm('frm-template_control_desk_step5', 'controlDesk');
+            TotalCredits();
+            
         }
     });
+
+    function TotalCredits()
+    {
+        let creditId = $('#id_rel').val();
+        axios
+        .get("/panel/client/" + creditId+"/credit/total")
+        .then(function (response) {
+            let result = response.data;
+            let total = result.total;
+
+            if (total == 0) {
+                Swal.fire({
+                    title: 'Este es un cliente nuevo',
+                    text : 'Confirmo que se incluyó el contrato de comisión mercantil para un cliente nuevo',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Continuar',
+                    cancelButtonText: 'Cancelar'
+                  }).then(function (result) {
+                    if (result.value) {
+                        saveForm('frm-template_control_desk_step5', 'controlDesk');
+                    }
+                  });
+            } else {
+                saveForm('frm-template_control_desk_step5', 'controlDesk');
+            }
+        })
+        .catch(e => {
+        });
+
+        
+    }
 
     $("#frm-template_control_desk_step5_2").validate({
         rules: {
