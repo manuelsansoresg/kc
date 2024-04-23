@@ -18,6 +18,7 @@ use App\Models\Note;
 use App\Models\File;
 use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
+use App\Models\Investor;
 use App\Models\User;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
@@ -46,11 +47,13 @@ class LeadController extends Controller
         if ($is_financiera === true) {
             return redirect('panel/kc-delivery');
         } elseif ($is_investor  === true) {
-            return redirect('panel/inversionista/'.Auth::user()->id);
+            $investor = Investor::where('user_id', Auth::user()->id)->first();
+            return redirect('panel/inversionista/'.$investor->id);
         }
         $model        = $this->model;
         return view('panel.lead.list', compact('model'));
     }
+    
 
     public function list()
     {
