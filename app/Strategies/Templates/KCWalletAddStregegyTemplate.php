@@ -293,7 +293,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         
         //formulario etapa 1
         $transaction = Transaction::saveEdit($request);
-
+        $getTransaction = $transaction['transaction'];
         if ($request->history_id != 'null') {
             $history = HistoryLog::find($request->history_id);
             $percent = self::percentForm($history);
@@ -307,7 +307,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 HistoryLog::move($history->id_rel, HistoryLog::KC_WALLET_ADD_FORM_STEP_2, HistoryLog::KC_WALLET_ADD_FORM_STEP_2, null, false);
                 HistoryLog::move($history->id_rel, HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, null, false);
                 
-                $getTransaction = $transaction['transaction'];
+                
                 Transaction::setTotalCapital($getTransaction->investor_id);
                 
                 if ($percent2 < 100) {
@@ -320,7 +320,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM_STEP_2, $history->id_rel, 1);
             }
         }
-        return $transaction['getTransaction'];
+        return $getTransaction;
     }
 
     public function percentForm($history)

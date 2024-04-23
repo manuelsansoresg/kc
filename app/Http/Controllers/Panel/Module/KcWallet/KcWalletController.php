@@ -20,11 +20,12 @@ class KcWalletController extends Controller
      */
     public function index()
     {
-        $investor = Investor::find(Auth::user()->id);
+        $investor = Investor::where('user_id', Auth::user()->id)->first();
         $total_available = null;
         if ($investor != null) {
             $total_available = $investor->total_available;
         }
+        
         return view('panel.module.wallet.list', compact('total_available'));
     }
 
