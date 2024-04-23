@@ -1,6 +1,7 @@
 @inject('m_user', 'App\Models\User')
 @inject('m_history', 'App\Models\HistoryLog')
 @inject('m_notification', 'App\Models\Notification')
+@inject('Minvestor', 'App\Models\Investor')
 @php
     $notifications = $m_notification->getMyNotifications(6)['list'];
 @endphp
@@ -288,10 +289,20 @@
                                     <h6 class="overline-title text-primary-alt">KC - WALLET</h6>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
-                                    <a href="/panel/inversionista/{{ Auth::user()->id }}" class="nk-menu-link">
-                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text">Resumen</span>
-                                    </a>
+                                    @php
+                                        $investor = $Minvestor::where('user_id',  Auth::user()->id)->first();
+                                        $investorId = $investor!= null ? $investor->id : null;
+                                    @endphp
+                                    @if ($investorId != null)
+                                        <a href="/panel/inversionista/{{ $investorId }}" class="nk-menu-link">
+                                            <span class="nk-menu-text">Resumen</span>
+                                        </a>
+                                    @else
+                                        <a href="#" class="nk-menu-link">
+                                            <span class="nk-menu-text">Resumen</span>
+                                        </a>
+                                    @endif
+                                    
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-wallet/mis-prestamos/show" class="nk-menu-link">

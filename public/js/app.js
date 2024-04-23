@@ -3489,6 +3489,33 @@ $().ready(function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/module/resumen.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/module/resumen.js ***!
+  \***************************************************/
+/***/ (() => {
+
+if (document.getElementById('checkIslimit')) {
+  var checkbox = document.getElementById('checkIslimit');
+  var numberInput = document.getElementById('lendable'); // Set initial state based on checkbox checked status
+
+  numberInput.disabled = checkbox.checked;
+  checkbox.addEventListener('change', function () {
+    numberInput.disabled = this.checked;
+  });
+  $("#frm-inversionista-prestamo").submit(function (event) {
+    event.preventDefault();
+    var InvestorId = $('#investorId').val();
+    var new_form = document.getElementById("frm-inversionista-prestamo");
+    var data = new FormData(new_form);
+    axios.post("/panel/inversionista", data).then(function (response) {
+      window.location = '/panel/inversionista/' + InvestorId;
+    })["catch"](function (e) {});
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/js/components/module/template.js":
 /*!****************************************************!*\
   !*** ./resources/js/components/module/template.js ***!
@@ -5829,6 +5856,8 @@ __webpack_require__(/*! ./components/general */ "./resources/js/components/gener
 __webpack_require__(/*! ./components/module/datatable */ "./resources/js/components/module/datatable.js");
 
 __webpack_require__(/*! ./components/module/template */ "./resources/js/components/module/template.js");
+
+__webpack_require__(/*! ./components/module/resumen */ "./resources/js/components/module/resumen.js");
 
 __webpack_require__(/*! ./components/module/kc_check_up/datatable */ "./resources/js/components/module/kc_check_up/datatable.js");
 

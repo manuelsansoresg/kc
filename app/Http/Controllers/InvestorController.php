@@ -27,6 +27,7 @@ class InvestorController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +36,7 @@ class InvestorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Investor::setLendable($request);
     }
 
     /**
@@ -46,7 +47,10 @@ class InvestorController extends Controller
      */
     public function show($id)
     {
-        $investor = Investor::where('user_id', $id)->first();
+        $investor = Investor::find($id);
+        if($investor == null) {
+            abort(404);
+        }
         return view('panel.module.wallet.resumen', compact('investor'));
     }
 

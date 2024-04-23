@@ -24,4 +24,15 @@ class Investor extends Model
         'financial_products_id',
     ];
 
+    public static function setLendable($request)
+    {
+        $investorId   = $request->investorId;
+        $checkIslimit = isset($request->checkIslimit)? $request->checkIslimit : 0;
+        $data         = $request->data;
+        if ($checkIslimit == true) {
+            $data['lendable'] = 9999999;
+        }
+        Investor::where('id', $investorId)->update($data);
+        Transaction::setTotalCapital($investorId);
+    }
 }
