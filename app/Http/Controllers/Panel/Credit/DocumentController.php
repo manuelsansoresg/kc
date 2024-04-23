@@ -40,6 +40,8 @@ class DocumentController extends Controller
         $client = null;
         $product = null;
         $transaction = null;
+        $isTitleDescription = true;
+
         if ($model != 'wallet' && $model != 'kc-down-wallet') {
             $credit           = $history->historyCredit;
             $client           = $credit->creditClientPerson;
@@ -49,7 +51,11 @@ class DocumentController extends Controller
             
         }
         
-        return view('panel.credit.files', compact('title', 'files', 'credit_id', 'model', 'product', 'credit', 'client', 'history', 'url_redirect', 'transaction'));
+        if ($model == 'wallet') { //agregar fondo
+            $isTitleDescription = false;
+        }
+
+        return view('panel.credit.files', compact('title', 'isTitleDescription', 'files', 'credit_id', 'model', 'product', 'credit', 'client', 'history', 'url_redirect', 'transaction'));
     }
 
     /**

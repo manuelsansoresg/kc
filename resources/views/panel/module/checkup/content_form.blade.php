@@ -66,8 +66,8 @@
                                 Nota: El dinero se depositará a la cuenta registrada en máximo un día habil
                               </div>
                         </div>
-                        <p>* Campos obligatorios</p>
                         <div id="content-legend"></div>
+                        <p>* Campos obligatorios</p>
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
                                 <div class="preview-block">

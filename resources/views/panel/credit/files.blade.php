@@ -28,9 +28,11 @@
                                         </li>
                                     </ul>
                                 </nav>
-                                <p class="text-dark">
-                                    <small>Carga documentos del cliente persona para encontrar la mejor opción de crédito</small>
-                                </p>
+                                @if ($isTitleDescription == true)
+                                    <p class="text-dark">
+                                        <small>Carga documentos del cliente persona para encontrar la mejor opción de crédito</small>
+                                    </p>
+                                @endif
                             </div>
                             <div class=" d-block d-md-none">
                                 <div class="col-12">
