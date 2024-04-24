@@ -145,7 +145,7 @@
                                 @endif
                                 >
                             @if ($element['comment_admin'] != null)
-                                <small>{{ $element['comment_admin'] }}</small>
+                                <small>{!!  $element['comment_admin'] !!}</small>
                             @endif
                             @if ($element['comment_webApp'] != null)
                                 <small>{{ $element['comment_webApp'] }}</small>

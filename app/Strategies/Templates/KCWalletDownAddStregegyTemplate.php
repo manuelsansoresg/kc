@@ -126,10 +126,10 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $format_withdraw_available = 'Disponible para el retiro:';
         $withdraw_available = null;
         if ($getInvestor != null) {
-            $format_withdraw_available .= ' '.format_price($getInvestor->withdraw_available);
+            $format_withdraw_available .= format_price($getInvestor->withdraw_available);
             $withdraw_available = $getInvestor->withdraw_available;
         }
-        
+        $format_withdraw_available = '<span class="text-primary"> '.$format_withdraw_available.'<span>';
         $elements = array(
             1 => [
                 'title_section' => null,
@@ -148,7 +148,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'onchange' => null,
             ],
 
-            2 => [
+            /* 2 => [
                 'title_section' => $format_withdraw_available,
                 'col' => 'col-md-6 text-primary h5',
                 'class' => 'text-primary h5',
@@ -163,7 +163,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => null,
                 'is_disabled' => null
-            ],
+            ], */
             3 => [
                 'title_section' => null,
                 'title' => 'Tipo de operación',
@@ -185,7 +185,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'title' => 'Importe a retirar',
                 'name_field' => 'transaction[amount]',
                 'id_field' => 'amount',
-                'comment_admin' => null,
+                'comment_admin' => $format_withdraw_available,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
                 'type' => 'number',
