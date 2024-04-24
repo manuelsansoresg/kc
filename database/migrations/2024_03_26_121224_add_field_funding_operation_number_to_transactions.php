@@ -15,7 +15,7 @@ class AddFieldFundingOperationNumberToTransactions extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->integer('bank_transfer_type')->nullable()->after('iva');
-            $table->integer('operation_number')->nullable()->after('iva');
+            $table->bigInteger('operation_number')->nullable()->after('iva');
             $table->smallInteger('operation_status')->nullable()->after('iva');
         });
     }
