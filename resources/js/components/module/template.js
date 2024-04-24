@@ -178,10 +178,10 @@ $().ready(function () {
                 currency: 'USD', // Replace with your desired currency code
                 minimumFractionDigits: 2, // Ensure at least two decimal places
               });
-      
-              const formattedAmount = formatter.format(result.loan_available);
+              let loan_available = result.loan_available == null || undefined ? 0 : result.loan_available;
+              const formattedAmount = formatter.format(loan_available);
               $('#text-loan').html('Disponible: ' + formattedAmount);
-              $('#input_loan').val(result.loan_available);
+              $('#input_loan').val(loan_available);
               $('#comision').val(result.sod_commission_amount);
               $('#producto').val(result.type_product_id);
               if (result.type_product_id == 6) {

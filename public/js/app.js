@@ -3689,9 +3689,10 @@ $().ready(function () {
           minimumFractionDigits: 2 // Ensure at least two decimal places
 
         });
-        var formattedAmount = formatter.format(result.loan_available);
+        var loan_available = result.loan_available == null || undefined ? 0 : result.loan_available;
+        var formattedAmount = formatter.format(loan_available);
         $('#text-loan').html('Disponible: ' + formattedAmount);
-        $('#input_loan').val(result.loan_available);
+        $('#input_loan').val(loan_available);
         $('#comision').val(result.sod_commission_amount);
         $('#producto').val(result.type_product_id);
 
