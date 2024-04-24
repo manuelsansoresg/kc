@@ -125,10 +125,8 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
 
         $format_withdraw_available = 'Disponible para el retiro:';
         $withdraw_available = $getInvestor != null && $getInvestor->withdraw_available > 0 ?   $getInvestor->withdraw_available : 0;
-        if ($getInvestor != null) {
-            $format_withdraw_available .= format_price($withdraw_available);
-        }
-        $format_withdraw_available = '<span class="text-primary"> '.$format_withdraw_available.'<span>';
+        
+        $format_withdraw_available = '<span class="text-primary"> '.format_price($withdraw_available).'<span>';
         $elements = array(
             1 => [
                 'title_section' => null,
