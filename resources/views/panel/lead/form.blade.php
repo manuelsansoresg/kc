@@ -136,7 +136,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-6" id="content-tipo-credito" style="display: none">
+                                                        {{-- <div class="col-md-6" id="content-tipo-credito" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Tipo de crédito que desea el prospecto</label>
                                                                 <p class="small">Categoría de crédito</p>
@@ -152,7 +152,7 @@
                                                                 </div>
                                                             </div>
                                                             
-                                                        </div>
+                                                        </div> --}}
 
                                                        
 
@@ -184,9 +184,10 @@
                                                         <div class="col-md-6" id="content-producto-financiero" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Producto financiero</label>
-                                                                <p class="small">&nbsp;</p>
+                                                                <p class="small">Elige el producto financiero que desea el prospecto</p>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="form-control" name="data[applied_financial_product]" id="applied_financial_product">
+                                                                    <select class="form-select js-select2" name="data[applied_financial_product]" id="applied_financial_product">
+                                                                        
                                                                     </select>
                                                                 </div>
                                                             </div>
