@@ -256,4 +256,10 @@ ul.ul-primary li::before {
   .full-height {
     height: 0 !important;
   }
+  .nk-header-wrap > * {
+    padding: 0 0.1rem !important;
+  }
+  .logo-dark, .logo-light {
+    width: 70%;
+  }
 }

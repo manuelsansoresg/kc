@@ -466,10 +466,10 @@
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="/assets_admin/images/logo.png"
-                                        srcset="/assets_admin/images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="/assets_admin/images/logo-dark.png"
-                                        srcset="/assets_admin/images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="/images/logo-dark.png"
+                                        srcset="/images/logo-dark.png" alt="logo">
+                                    <img class="logo-dark logo-img" src="/images/logo-dark.png"
+                                        srcset="/images/logo-dark.png" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
 

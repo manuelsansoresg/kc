@@ -264,11 +264,21 @@ ul.ul-primary li::before {
     width: 50%;
   }
 
+
+
 }
 
 @media (max-width: 767px) {
     /* Estilos para versión móvil */
     .full-height {
       height: 0 !important;
+    }
+
+    .nk-header-wrap > * {
+      padding: 0 0.1rem !important;
+    }
+
+    .logo-dark, .logo-light{
+      width: 70%;
     }
   }
