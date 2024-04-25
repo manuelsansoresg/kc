@@ -5182,6 +5182,7 @@ function setDataUser(user_id) {
       $('#bank_card_number').val(result.bank_card_number);
       $('#bank_account_number').val(result.bank_account_number);
       $('#bank_clabe').val(result.bank_clabe);
+      $('#bank_account_holder').val(result.bank_account_holder);
       $('#investment_bank_name').val(result.investment_bank_name);
       $('#investment_bank_account_holder').val(result.investment_bank_account_holder);
       $('#investment_bank_account_number').val(result.investment_bank_account_number);

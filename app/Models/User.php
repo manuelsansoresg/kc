@@ -45,7 +45,8 @@ class User extends Authenticatable
         'investment_bank_account_holder',
         'investment_bank_account_number',
         'investment_bank_clabe',
-        'financial_products_id'
+        'financial_products_id',
+        'bank_account_holder'
 
     ];
 
@@ -103,7 +104,7 @@ class User extends Authenticatable
         $users =  User::select(
             'agreement_id',
             'investors.id',
-            'name',
+            DB::raw('CONCAT(IFNULL(name, ""), " ", IFNULL(last_name, ""), " " , IFNULL(second_last_name, "")) AS name'),
             'last_name',
             'second_last_name',
             'cellphone',

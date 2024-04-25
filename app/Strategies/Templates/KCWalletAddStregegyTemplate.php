@@ -120,7 +120,6 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
         $urlRedirect = $history_id == 'null' ? '/panel/kc-wallet' : '/panel/template/steps/wallet/'.$history_id.'/show';
         $buttonLinkExtraFinish = null;
-
        
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
         if ($history_id == 'null' && $is_investor === true) {

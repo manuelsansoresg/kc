@@ -133,7 +133,7 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <h6>Banco</h6>
+                                <h6>Cuenta concentradora</h6>
                                 <div class="col-md-6" id="content-password">
                                     <div class="form-group">
                                         <label class="form-label" for="frm-user-admin-pass">*Nombre del banco</label>
@@ -146,6 +146,13 @@
                                     <div class="form-group">
                                         <label class="form-label" for="frm-user-admin-pass">Nùmero de tarjeta</label>
                                         <input type="text" name="bank_card_number" class="form-control" id="bank_card_number"
+                                            value="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="content-password">
+                                    <div class="form-group">
+                                        <label class="form-label" for="frm-user-admin-pass">Cuentahabiente</label>
+                                        <input type="text" name="bank_account_holder" class="form-control" id="bank_account_holder"
                                             value="">
                                     </div>
                                 </div>
@@ -166,7 +173,7 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <h6>Banco inversionista</h6>
+                                <h6>Banco del inversionista</h6>
 
                                 <div class="col-md-6" id="content-password">
                                     <div class="form-group">

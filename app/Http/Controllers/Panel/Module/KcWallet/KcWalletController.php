@@ -40,7 +40,7 @@ class KcWalletController extends Controller
     public function getInvestor(Investor $investor)
     {
         $user = User::find($investor->user_id);
-        $legend = \View::make('panel.module.wallet.legendInvestor', ['user' => $user])->render();
+        $legend = \View::make('panel.module.wallet.legendInvestor', ['user' => $user, 'investor' => $investor])->render();
         
         return response()->json($legend);
     }
