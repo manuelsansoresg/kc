@@ -25,7 +25,7 @@ return [
         //2 => 'Crédito personal',
         //3 => 'Tarjeta de crédito',
         //4 => 'Crédito pensionados',
-        5 => 'Crédito Kaaxclub nómina',
+        5 => 'Crédito nómina',
         6 => 'Salario bajo demanda',
     ),
     
