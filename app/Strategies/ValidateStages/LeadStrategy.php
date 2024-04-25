@@ -15,7 +15,7 @@ class LeadStrategy implements ValidateStagesInterface
         $error_email          = false;
         $error_rfc          = false;
         $error_product        = false;
-        $error_tipo_credito   = false;
+        $error_tipo_producto   = false;
         $error_viabilidad   = false;
 
         $errors = array();
@@ -31,8 +31,8 @@ class LeadStrategy implements ValidateStagesInterface
                 $error_product = true;
             }
             
-            if ($get_lead->tipo_credito === null) {
-                $error_tipo_credito = true;
+            if ($get_lead->applied_financial_product === null) {
+                $error_tipo_producto = true;
             }
             if ($get_lead->email === null) {
                 $error_email = true;
@@ -43,11 +43,11 @@ class LeadStrategy implements ValidateStagesInterface
             }
             
     
-            /* if ($error_organization == true || $error_product == true || $error_tipo_credito == true || $error_email == true) {
+            /* if ($error_organization == true || $error_product == true || $error_tipo_producto == true || $error_email == true) {
                 $error = true;
             } */
             
-            if ($error_organization == true || $error_product == true || $error_tipo_credito == true) {
+            if ($error_organization == true || $error_product == true || $error_tipo_producto == true) {
                 $error = true;
             }
             
@@ -59,7 +59,7 @@ class LeadStrategy implements ValidateStagesInterface
 
             $errors = array(
                 'Servicio KC' => $error_product,
-                'Tipo de  crédito' => $error_tipo_credito,
+                'Producto financiero' => $error_tipo_producto,
                 'Organización' => $error_organization,
                 'Email' => $error_email,
                 'RFC' => $error_rfc,
