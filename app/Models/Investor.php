@@ -22,6 +22,8 @@ class Investor extends Model
         'withdraw_available',
         'agreements_id',
         'financial_products_id',
+        'loan_active_to_investors',
+        'loan_active'
     ];
 
     public static function setLendable($request)
