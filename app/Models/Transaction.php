@@ -66,8 +66,11 @@ class Transaction extends Model
                 FinancialProduct::where('id', $investor->financial_products_id)
                                 ->update([
                                     'loan_available' => $investorLoan->loan_available,
-                                    'loan_active'=> $loanActive
+                                    
                                 ]);
+                Investor::where('id', $investorId)->update([
+                    'loan_active'=> $loanActive
+                ]);
                
 
             }
