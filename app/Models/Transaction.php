@@ -117,7 +117,7 @@ class Transaction extends Model
         foreach ($get_list as $history) {
 
             $transaction =  Transaction::find($history->id_rel);
-            if (($is_investor === true && $transaction->investor_id === $userIdInvestor) || ($is_investor === false) ) {
+            if (($transaction != null && $is_investor === true && $transaction->investor_id === $userIdInvestor) || ($is_investor === false && $transaction != null) ) {
                 $investor = Investor::find($transaction->investor_id);
                 $getOrdenante = $investor != null ? User::find($investor->user_id) : null;
                 $ordenante =  $getOrdenante != null ?  $getOrdenante->name.' '. $getOrdenante->last_name.' '. $getOrdenante->second_last_name : null;
