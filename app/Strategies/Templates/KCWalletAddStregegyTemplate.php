@@ -18,15 +18,16 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
     const HOUR_STEP_2  = 8;
     const HOUR_STEP_2_2  = 1;
 
-    public function setURLDocument()
+    public function setURLDocument($id_rel = null)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
+
         if ($step == '1_2' && $is_investor === true) {
             return '/panel/kc-wallet';
         }
         if ($step == '2') {
-            return '/panel/kc-wallet';
+            return '/panel/template/steps/wallet/'.$id_rel.'/show';
         }
         return null;
     }
@@ -234,7 +235,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $name_form = 'frm-template_wallet_step1_2';
         $type_form    = HistoryLog::KC_WALLET_ADD_FORM_STEP_2;
         $operations = config('enums.operation_status');
-        $urlRedirect = $history_id == null ? '/panel/kc-wallet' : '/panel/template/steps/wallet/'.$history_id.'/show';
+        $urlRedirect = '/panel/kc-wallet';
         $elements = array(
             1 => [
                 'title_section' => 'Verificar transferencia',
@@ -302,21 +303,19 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM, $history->id_rel, 1);
 
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD, $history->id_rel, 1);
-                //*inicializar las acciones de la siguiente etapa en curso
-                HistoryLog::move($history->id_rel, HistoryLog::KC_WALLET_ADD_FORM_STEP_2, HistoryLog::KC_WALLET_ADD_FORM_STEP_2, null, false);
-                HistoryLog::move($history->id_rel, HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, null, false);
+                
                 
                 $getTransaction = $transaction['transaction'];
                 Transaction::setTotalCapital($getTransaction->investor_id);
                 
                 if ($percent2 < 100) {
-                    HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM_STEP_2, $history->id_rel, 0);
-                    HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $history->id_rel, 0);
+                    
                 }
             }
 
             if ($percent2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM_STEP_2, $history->id_rel, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET, $history->id_rel, 1);
             }
         }
         return $transaction['getTransaction'];
@@ -539,8 +538,6 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $percent_form =  self::percentFile($idRel, 2);
         
         if ($step == '2' && $percent_form == 100) {
-            
-            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET, $idRel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $idRel, 1);
         }
         
@@ -567,6 +564,16 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $subject2 = HistoryLog::$label_subject[64];
         $data = array();
         $data[] = array(
+            'name' => 'Carga',
+            'subject' => $subject2,
+            'status' => $viewStatus2,
+            'deadline' => $view_dead_line1_2,
+            'advisor' => null,
+            'options' => null,
+            'link' => '/panel/template/action-document/wallet/'.$history_id.'?step=2'
+        );
+
+        $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
             'status' => $viewStatus1,
@@ -576,15 +583,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             'link' => '/panel/action-form/wallet/'.$history->id.'/form?step=2'
         );
         
-        $data[] = array(
-            'name' => 'Carga',
-            'subject' => $subject2,
-            'status' => $viewStatus2,
-            'deadline' => $view_dead_line1_2,
-            'advisor' => null,
-            'options' => null,
-            'link' => '/panel/template/action-document/wallet/'.$history_id.'?step=2'
-        );
+        
         return $data;
     }
     public function listActionByStep($history_id, $step)

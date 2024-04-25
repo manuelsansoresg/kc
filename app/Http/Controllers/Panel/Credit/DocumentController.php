@@ -29,7 +29,7 @@ class DocumentController extends Controller
         }
 
         try {
-            $url_redirect = (new $actionStrategy)->setURLDocument();
+            $url_redirect = (new $actionStrategy)->setURLDocument($history->id_rel);
         } catch (\Throwable $th) {
             //throw $th;
         }
