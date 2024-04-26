@@ -58,7 +58,7 @@
                                                     <h6 class="title">Valor de la cuenta <em class="icon ni ni-info"></em></h6>
                                                 </div>
                                                 <div class="nk-iv-wg2-text">
-                                                    <div class="nk-iv-wg2-amount">{{ format_price($valorCuenta) }} {{-- <span class="change up">
+                                                    <div class="nk-iv-wg2-amount">{{ '$'.format_price($valorCuenta) }} {{-- <span class="change up">
                                                         <span
                                                                 class="sign"></span>2.8%</span> --}}
                                                             </div>
@@ -80,20 +80,40 @@
                                                                
 
                                                                 <div class="nk-iv-wg2-amount ui-v2">
-                                                                     </div>
+                                                                </div>
+                                                                <div style="display: none;">
 
+                                                                    <div id="tooltip-disponible">
+                                                                        <b>Dinero disponible</b>
+                                                                        <br> <br>
+                                                                        Corresponde al Dinero o  que no está prestado o comprometido para préstamos. Este es el dinero que puedes prestar o que puedes retirar a tu cuenta bancaria.
+                                                                    </div>
+                                                                    <div id="tooltip-capital-pendiente">
+                                                                        <b>Capital pendiente</b>
+                                                                        <br><br>
+                                                                        Este monto es la suma de todos los préstamos que has realizado y cuyo principal o capital está pendiente de pago. Por ejemplo, si has prestado $10,000 en total, pero ya se armotizaron o pagaron $2,000 del capital, este valor será de $8,000. Los intereses pagados no disminuyen este valor.
+                                                                    </div>
+                                                                    <div id="tooltip-apartado-prestamo">
+                                                                        <b>Apartado para préstamo</b>
+                                                                        <br><br>
+                                                                            Es el importe de tu dinero destinado para préstamos. El dinero reservado en este apartado no está disponible para retiro a menos que modifiques el “Límite máximo a prestar”
+                                                                    </div>
+                                                                </div>
+
+                                                               
                                                                 <ul class="nk-iv-wg2-list">
-                                                                    <li><span class="item-label">Dinero disponible</span><span
-                                                                            class="item-value">{{ format_price($disponible) }}</span>
+                                                                    <li>
+                                                                        <span class="item-label" > Dinero disponible <em class="icon ni ni-info active-tooltip" data-template="tooltip-disponible"></em> </span><span
+                                                                            class="item-value">{{ '$'.format_price($disponible) }}</span>
                                                                     </li>
-                                                                    <li><span class="item-label">Capital pendiente</span><span
-                                                                            class="item-value">{{ format_price($capitalPendiente) }}</span>
+                                                                    <li><span class="item-label">Capital pendiente <em class="icon ni ni-info active-tooltip" data-template="tooltip-capital-pendiente"></em> </span><span
+                                                                            class="item-value">{{ '$'.format_price($capitalPendiente) }}</span>
                                                                     </li>
                                                                     <li class="total">
                                                                         <span class="item-label">
-                                                                            Apartado para prestar
+                                                                            Apartado para prestar <em class="icon ni ni-info active-tooltip" data-template="tooltip-apartado-prestamo"></em>
                                                                         </span>
-                                                                        <span class="item-value">  {{ format_price($apartadoPrestamo) }} 
+                                                                        <span class="item-value">  {{ '$'.format_price($apartadoPrestamo) }} 
                                                                         
                                                                         </span></li>
 
@@ -135,7 +155,7 @@
                                                 </div>
                                                 <div class="nk-iv-wg2-text">
                                                     <div class="nk-iv-wg2-amount  text-white">
-                                                        {{ format_price($apartadoPrestamo) }} 
+                                                        {{ '$'.format_price($apartadoPrestamo) }} 
                                                         <span class="change up">
                                                             {{--  <span
                                                                 class="sign"></span>3.4%</span>

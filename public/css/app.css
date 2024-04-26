@@ -154,6 +154,7 @@ ul.ul-primary li::after {
 }
 
 .nk-iv-wg2-list .total {
+  border-top: none !important;
   margin-top: 0.3rem;
   padding-top: 0.55rem;
   font-weight: 700;

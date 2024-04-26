@@ -23,6 +23,11 @@
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/tippy.js@6/animations/scale.css"
+        />
     
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <!-- Google tag (gtag.js) -->
@@ -1077,6 +1082,12 @@
 
     <script src="https://cdn.ckeditor.com/4.16.1/full-all/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/4.16.1/full-all/lang/es.js"></script>
+
+    {{-- tooltio --}}
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
     <script type="text/javascript" src="/js/app.js"></script>
 
 

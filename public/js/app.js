@@ -5950,6 +5950,15 @@ $().ready(function () {
 
  */
 
+tippy(document.querySelectorAll('.active-tooltip'), {
+  content: function content(reference) {
+    var id = reference.getAttribute('data-template');
+    var template = document.getElementById(id);
+    return template.innerHTML;
+  },
+  allowHTML: true
+});
+
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
 })();
 
