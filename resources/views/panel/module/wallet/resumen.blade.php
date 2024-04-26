@@ -91,7 +91,7 @@
                                                                     </li>
                                                                     <li class="total">
                                                                         <span class="item-label">
-                                                                            <a href="#"  data-bs-toggle="modal" data-bs-target="#modalPrestable">Apartado préstamo</a>
+                                                                            Apartado para prestar
                                                                         </span>
                                                                         <span class="item-value">  {{ format_price($apartadoPrestamo) }} 
                                                                         
@@ -100,8 +100,12 @@
                                                                 </ul>
                                                             </div>
                                                             <div class="nk-iv-wg2-cta">
+                                                                <a href="#"
+                                                                data-bs-toggle="modal" data-bs-target="#modalPrestable"
+                                                                    class="btn btn-primary btn-lg btn-block">Prestar
+                                                                    </a>
                                                                 <a href="/panel/action-form/wallet/null/form?step=1"
-                                                                    class="btn btn-primary btn-lg btn-block">Agregar
+                                                                    class="btn btn-primary btn-lg btn-block mt-3">Agregar
                                                                     fondos</a>
                                                                 <a href="/panel/action-form/kc-down-wallet/null/form?step=1"
                                                                     class="btn btn-primary btn-lg btn-block mt-3">Retirar
@@ -123,13 +127,15 @@
                                         <div class="card-inner">
                                             <div class="nk-iv-wg2">
                                                 <div class="nk-iv-wg2-title">
-                                                    <h6 class="title text-white">Total disponible <em
-                                                            class="icon ni ni-info"></em>
+                                                    <h6 class="title text-white">Apartado para prestar 
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalPrestable"> <em
+                                                            class="icon ni ni-info"></em></a>
+                                                       
                                                     </h6>
                                                 </div>
                                                 <div class="nk-iv-wg2-text">
                                                     <div class="nk-iv-wg2-amount  text-white">
-                                                        0
+                                                        {{ format_price($apartadoPrestamo) }} 
                                                         <span class="change up">
                                                             {{--  <span
                                                                 class="sign"></span>3.4%</span>
@@ -156,7 +162,7 @@
           <div class="modal-content">
             <form id="frm-inversionista-prestamo">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="modalPrestableLabel">APARTADO PRÉSTAMO</h5>
+                  <h5 class="modal-title" id="modalPrestableLabel">APARTADO PARA PRESTAR</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
