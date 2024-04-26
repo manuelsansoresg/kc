@@ -489,6 +489,10 @@ class HistoryLog extends Model
             $notification_slack = new Slack('kaaxClub', 'KC Wallet - Solicitud de agregar fondos');
             $notification_slack->sendMessage();
         }
+        if ($status_id == HistoryLog::KC_DOWN_WALLET) {
+            $notification_slack = new Slack('kaaxClub', 'KC Wallet - Solicitud de retiro de fondos');
+            $notification_slack->sendMessage();
+        }
 
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
             $credit             = Credit::find($id_rel);
