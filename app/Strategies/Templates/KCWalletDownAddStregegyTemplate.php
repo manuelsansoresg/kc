@@ -235,7 +235,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $name_form = 'frm-template_wallet_down_step2';
         $type_form    = HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2;
         $operations = config('enums.operation_status');
-        $urlRedirect = $history_id == null ? '/panel/kc-down-wallet' : '/panel/template/steps/kc-down-wallet/'.$history_id.'/show';
+        $urlRedirect = '/panel/kc-down-wallet';
         $elements = array(
             1 => [
                 'title_section' => 'Verificar transferencia',
@@ -303,19 +303,19 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_FORM, $history->id_rel, 1);
 
                 //*inicializar las acciones de la siguiente etapa en curso
-                HistoryLog::move($history->id_rel, HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, null, false);
                 HistoryLog::move($history->id_rel, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, null, false);
+                HistoryLog::move($history->id_rel, HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, null, false);
                 $getTransaction = $transaction['transaction'];
                 Transaction::setTotalCapital($getTransaction->investor_id);
                 if ($percent2 < 100) {
-                   
-                    HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, $history->id_rel, 0);
                     HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, $history->id_rel, 0);
+                    HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, $history->id_rel, 0);
                 }
             }
 
             if ($percent2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, $history->id_rel, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET, $history->id_rel, 1);
             }
         }
         return $transaction['getTransaction'];
@@ -490,10 +490,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
     public function finish($idRel, $step)
     {
         $percent_form =  self::percentFile($idRel, 2);
-        
         if ($step == '2' && $percent_form == 100) {
-            
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET, $idRel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, $idRel, 1);
         }
         
@@ -520,6 +517,15 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $subject2 = HistoryLog::$label_subject[64];
         $data = array();
         $data[] = array(
+            'name' => 'Carga',
+            'subject' => $subject2,
+            'status' => $viewStatus2,
+            'deadline' => $view_dead_line1_2,
+            'advisor' => null,
+            'options' => null,
+            'link' => '/panel/template/action-document/kc-down-wallet/'.$history_id.'?step=2'
+        );
+        $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
             'status' => $viewStatus1,
@@ -529,15 +535,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
             'link' => '/panel/action-form/kc-down-wallet/'.$history->id.'/form?step=2'
         );
         
-        $data[] = array(
-            'name' => 'Carga',
-            'subject' => $subject2,
-            'status' => $viewStatus2,
-            'deadline' => $view_dead_line1_2,
-            'advisor' => null,
-            'options' => null,
-            'link' => '/panel/template/action-document/kc-down-wallet/'.$history_id.'?step=2'
-        );
+        
         return $data;
     }
     public function listActionByStep($history_id, $step)
@@ -607,8 +605,8 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $transaction     = Transaction::find($history->id_rel);
         $data_actions = array(
             HistoryLog::KC_DOWN_WALLET_ADD_FORM,
-            HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2,
             HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2,
+            HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2,
         );
         //dd($data_actions);
         $get_actions = HistoryLog::getByStatus($data_actions, $transaction->id);

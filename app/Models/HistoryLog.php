@@ -107,8 +107,8 @@ class HistoryLog extends Model
     const KC_DOWN_WALLET                     = 65;
     const KC_DOWN_WALLET_ADD_FORM            = 66;
 
-    const KC_DOWN_WALLET_ADD_FORM_STEP_2     = 67;
     const KC_DOWN_WALLET_ADD_UPLOAD_STEP_2   = 68;
+    const KC_DOWN_WALLET_ADD_FORM_STEP_2     = 67;
     
 
     protected $fillable = [

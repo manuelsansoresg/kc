@@ -191,6 +191,7 @@ class ActionController extends Controller
         }
         //terminar archivo retirar fondos etapa 1
         if ($request->model == 'kc-down-wallet' && $step == '2') {
+            HistoryLog::move($request->id_rel, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, null, false);
             $actionStrategy   = TemplateValues::STRATEGY[$request->model];
             $finish       = (new $actionStrategy)->finish($request->id_rel, $step);
         }
