@@ -72,6 +72,8 @@ class CreditKaaxSidecc extends Model
             'cat'=>$credit->applied_CAT,  
             'comision_apertura'=>$credit->opening_commission,  
             'capital_cobrar'=>$credit->net_amount,  
+            'producto' => $credit->product_id,
+            'comision_total' => $credit->opening_commission,
         );
         $client_credit_info_kaax = ClientsCreditInfoKaaxSidecc::create($data_client_credit_info);
 
