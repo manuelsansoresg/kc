@@ -28,7 +28,7 @@
                                     <div class="form-group"><label class="form-label">*Producto financiero</label>
                                         <div class="form-control-wrap">
 
-                                            <select class="form-control"  name="financial_products_id" id="financial_products_id">
+                                            <select class="form-control select2multiple"  name="financial_products_id[]" id="financial_products_id" multiple="multiple"  data-search="on">
                                             @foreach ($products as $product)
                                                 <option value="{{ $product->id }}"> {{ $product->commercial_name}} - {{ $product->name }} </option>
                                             @endforeach

@@ -5192,7 +5192,8 @@ function setDataUser(user_id) {
     $('#is_access_config option[value="' + result.is_access_config + '"]').attr("selected", "selected");
 
     if (document.getElementById('financial_products_id')) {
-      $('#financial_products_id option[value="' + result.financial_products_id + '"]').attr("selected", "selected");
+      var financial_products_id = result.financial_products_id.split(',');
+      $('#financial_products_id').val(financial_products_id).trigger('change');
     }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
@@ -5371,8 +5372,6 @@ $().ready(function () {
         if (errors.email) {
           $('#admin_email-error-exist').show();
         }
-
-        console.log(e.response);
       });
     }
   });

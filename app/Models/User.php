@@ -125,6 +125,14 @@ class User extends Authenticatable
     public static function saveEdit($request)
     {
         $is_save = false;
+        $financial_products_ids = $request->financial_products_id;
+        $financial_products_id = null;
+        foreach ($financial_products_ids as $financial_products_ids) {
+            $financial_products_id.= $financial_products_ids.',';
+        }
+        $financial_products_id = trim($financial_products_id, ',');
+        $request->merge(['financial_products_id' => $financial_products_id]);
+
         if ($request->user_id == null) {
             $user = new User($request->except(['_token', 'pass_confirm', 'password', 'user_id', 'type_user']));
             $user->password = bcrypt($request->password);
@@ -155,8 +163,15 @@ class User extends Authenticatable
         if ($request->type_user == 'cliente-inversionista') {
             $role = 'Cliente inversionista';
             $userId = $user->id;
-            if (Investor::where('user_id', $userId)->count() == 0) {
-                Investor::create(['user_id' => $userId, 'financial_products_id' => $user->financial_products_id ]);
+            // Buscar el inversor asociado al usuario
+            $investor = Investor::where('user_id', $userId)->first();
+
+            if ($investor) {
+                // Si el inversor existe, actualizar los datos
+                $investor->update(['financial_products_id' => $financial_products_id]);
+            } else {
+                // Si no existe, crear un nuevo inversor
+                Investor::create(['user_id' => $userId, 'financial_products_id' => $financial_products_id]);
             }
         }
         $user->assignRole(ucfirst($role));
