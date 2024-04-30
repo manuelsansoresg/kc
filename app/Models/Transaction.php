@@ -56,14 +56,15 @@ class Transaction extends Model
                     ]
             );
             //*actualizar  loan_available  de financial_products
-            
+            $financialProductIds = explode(',', $investor->financial_products_id);
+
             $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
-                            ->where('financial_products_id', $investor->financial_products_id)
+                            ->whereIn('financial_products_id', $financialProductIds)
                             ->first();
 
             if ($investorLoan != null) {
                 $loanActive = $investorLoan->loan_available < 100 ? 0 : 1;
-                FinancialProduct::where('id', $investor->financial_products_id)
+                FinancialProduct::whereIn('id', $financialProductIds)
                                 ->update([
                                     'loan_available' => $investorLoan->loan_available,
                                     
