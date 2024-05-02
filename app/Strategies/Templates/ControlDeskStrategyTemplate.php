@@ -10,6 +10,7 @@ use App\Models\Financial;
 use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\InvestorsCredit;
 use App\Models\Lead;
 use App\Models\Product;
 use App\Models\User;
@@ -2283,6 +2284,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, $credit->id, 0);
                 $getVars = $request->credit;
                 if (isset($getVars['applied_financial_product'])) {
+                    InvestorsCredit::saveEdit($credit->id);
                     Credit::setTotalCapital($credit->id);
                     Credit::setMontoEntregar($credit->id);
                 }
