@@ -48,6 +48,7 @@
                                 $capitalPendiente = $investor != null ? $investor->placed_capital : 0;
                                 $apartadoPrestamo = $investor != null ? $investor->loan_available : 0;
                                 $valorCuenta =  $disponible + $capitalPendiente + $apartadoPrestamo;
+                                $lendable = $investor != null && $investor->lendable > 0 ? $investor->lendable : 0;
                             @endphp
                                 {{-- first card --}}
                                 <div class="col-md-6 col-lg-4">
@@ -62,7 +63,9 @@
                                                         <span
                                                                 class="sign"></span>2.8%</span> --}}
                                                             </div>
+                                                            <p>&nbsp;</p>
                                                 </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -84,45 +87,57 @@
                                                                 <div style="display: none;">
 
                                                                     <div id="tooltip-disponible">
-                                                                        <b>Dinero disponible</b>
+                                                                        <b>Disponible para retiro</b>
                                                                         <br> <br>
-                                                                        Corresponde al Dinero o  que no está prestado o comprometido para préstamos. Este es el dinero que puedes prestar o que puedes retirar a tu cuenta bancaria.
+                                                                        Corresponde al Dinero o  que no está prestado o comprometido para préstamos. Este es el dinero que puedes retirar a tu cuenta bancaria.
                                                                     </div>
                                                                     <div id="tooltip-capital-pendiente">
                                                                         <b>Capital pendiente</b>
                                                                         <br><br>
-                                                                        Este monto es la suma de todos los préstamos que has realizado y cuyo principal o capital está pendiente de pago. Por ejemplo, si has prestado $10,000 en total, pero ya se armotizaron o pagaron $2,000 del capital, este valor será de $8,000. Los intereses pagados no disminuyen este valor.
+                                                                        Este monto es la suma de todos los préstamos que has realizado y cuyo principal o capital está pendiente de pago. Por ejemplo, si has prestado $10,000 en total, pero ya se armotizaron o pagaron $2,000 del capital, este valor será de $8,000. Los intereses pagados no disminuyen este valor. 
                                                                     </div>
                                                                     <div id="tooltip-apartado-prestamo">
-                                                                        <b>Apartado para préstamo</b>
+                                                                        <b>Disponible para prestar</b>
                                                                         <br><br>
-                                                                            Es el importe de tu dinero destinado para préstamos. El dinero reservado en este apartado no está disponible para retiro a menos que modifiques el “Límite máximo a prestar”
+                                                                        Es el importe de tu dinero destinado para préstamos. El dinero reservado en este apartado no está disponible para retiro a menos que modifiques el “Límite máximo a prestar”
+                                                                    </div>
+                                                                    
+                                                                    <div id="tooltip-limite-maximo-prestar">
+                                                                        <b>Límite máximo a prestar.</b>
+                                                                        <br><br>
+                                                                        Es la cantidad máxima de dinero que estará disponible para préstamos. Ese límite puede ser mayor que el dinero que actualmente tienes disponible en tu cuenta. Por ejemplo: si estableces una cantidad mayor a tu dinero disponible, una vez que alcances este límite con las ganancias de tus préstamos, cualquier dinero adicional quedará disponible para ser retirado; si estableces una cantidad menor, siempre tendrás una parte disponible para préstamos y otra para retiro, que se irá incrementando conforme cobras tus préstamos; al fijar el límite en 0, tu dinero en APARTADO PRÉSTAMO pasará a estar disponible para retirar, así como todo lo que cobres posteriormente, y no se volverá a prestar hasta que modifiques esta configuración. Puedes ajustar este límite cuando quieras.
                                                                     </div>
                                                                 </div>
 
                                                                
                                                                 <ul class="nk-iv-wg2-list">
-                                                                    <li>
-                                                                        <span class="item-label" > Dinero disponible <em class="icon ni ni-info active-tooltip" data-template="tooltip-disponible"></em> </span><span
+                                                                    <li  class="total">
+                                                                        <span class="item-label" > Disponible para retiro <em class="icon ni ni-info active-tooltip" data-template="tooltip-disponible"></em> </span><span
                                                                             class="item-value">{{ '$'.format_price($disponible) }}</span>
                                                                     </li>
-                                                                    <li><span class="item-label">Capital pendiente <em class="icon ni ni-info active-tooltip" data-template="tooltip-capital-pendiente"></em> </span><span
+                                                                    <li  class="total"><span class="item-label">Capital pendiente <em class="icon ni ni-info active-tooltip" data-template="tooltip-capital-pendiente"></em> </span><span
                                                                             class="item-value">{{ '$'.format_price($capitalPendiente) }}</span>
                                                                     </li>
                                                                     <li class="total">
                                                                         <span class="item-label">
-                                                                            Apartado para prestar <em class="icon ni ni-info active-tooltip" data-template="tooltip-apartado-prestamo"></em>
+                                                                            Disponible para prestar <em class="icon ni ni-info active-tooltip" data-template="tooltip-apartado-prestamo"></em>
                                                                         </span>
                                                                         <span class="item-value">  {{ '$'.format_price($apartadoPrestamo) }} 
                                                                         
-                                                                        </span></li>
+                                                                        </span>
+                                                                    </li>
 
                                                                 </ul>
                                                             </div>
                                                             <div class="nk-iv-wg2-cta">
                                                                 <a href="#"
                                                                 data-bs-toggle="modal" data-bs-target="#modalPrestable"
-                                                                    class="btn btn-primary btn-lg btn-block">Prestar
+                                                                    class="btn btn-primary btn-lg btn-block text-center">
+                                                                    <div class="text-center col-12">
+                                                                        Prestar <br>
+                                                                    <span class="text-xs">Configurar el límite máximo a prestar</span>
+                                                                    </div>
+                                                                    
                                                                     </a>
                                                                 <a href="/panel/action-form/wallet/null/form?step=1"
                                                                     class="btn btn-primary btn-lg btn-block mt-3">Agregar
@@ -147,9 +162,8 @@
                                         <div class="card-inner">
                                             <div class="nk-iv-wg2">
                                                 <div class="nk-iv-wg2-title">
-                                                    <h6 class="title text-white">Apartado para prestar 
-                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#modalPrestable"> <em
-                                                            class="icon ni ni-info"></em></a>
+                                                    <h6 class="title text-white">Disponible para prestar 
+                                                        <em class="icon ni ni-info active-tooltip" data-template="tooltip-apartado-prestamo"></em>
                                                        
                                                     </h6>
                                                 </div>
@@ -157,9 +171,16 @@
                                                     <div class="nk-iv-wg2-amount  text-white">
                                                         {{ '$'.format_price($apartadoPrestamo) }} 
                                                         <span class="change up">
-                                                            {{--  <span
-                                                                class="sign"></span>3.4%</span>
-                                                            </div> --}}
+                                                            <a href="#"  data-bs-toggle="modal" data-bs-target="#modalPrestable">
+                                                            
+                                                                <i class="fa-solid fa-gear text-white"></i>
+                                                            </a>
+                                                            
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-12 text-white">
+                                                            <p class="text-xs">Límite máximo a prestar: ${{ format_price($lendable) }} <em class="icon ni ni-info active-tooltip" data-template="tooltip-limite-maximo-prestar"></em> </p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -182,7 +203,7 @@
           <div class="modal-content">
             <form id="frm-inversionista-prestamo">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="modalPrestableLabel">APARTADO PARA PRESTAR</h5>
+                  <h5 class="modal-title" id="modalPrestableLabel">DISPONIBLE PARA PRESTAR</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -195,7 +216,7 @@
                   </p>
                   <div class="mb-3">
                     <label for="lendable" class="form-label">Límite máximo a prestar</label>
-                    <input type="number" class="form-control" id="lendable" name="data[lendable]">
+                    <input type="number" class="form-control" id="lendable" name="data[lendable]" value="{{ $lendable }}">
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="1" id="checkIslimit" name="checkIslimit">

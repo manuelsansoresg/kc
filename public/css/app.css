@@ -236,6 +236,10 @@ ul.ul-primary li::before {
   min-height: 82vh !important;
 }
 
+.text-xs {
+  font-size: 11px !important;
+}
+
 /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
   .text-elije {
