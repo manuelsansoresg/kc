@@ -25,7 +25,7 @@ class CreditKaaxSidecc extends Model
         'sueldo_calculadora_simple', 'valor_slider_simple', 'plazo_calculadora_simple', 'pago_calculadora_simple',
         'capacidad_pago', 'valor_slider_avanzada', 'plazo_calculadora_avanzada', 'pago_calculadora_avanzada',
         'ajuste_refinanciamiento', 'ajuste_liquidacion_terceros',
-        'operacion', 'razon', 'origin_type_credit', 'determinacion_credito', 'kc_credit_id'
+        'operacion', 'razon', 'origin_type_credit', 'determinacion_credito', 'kc_credit_id', 'financial_products_id'
     ];
 
     public static function sendCreditKaaxSidecc($id_rel)
