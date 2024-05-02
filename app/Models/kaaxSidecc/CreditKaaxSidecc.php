@@ -3,6 +3,7 @@
 namespace App\Models\kaaxSidecc;
 
 use App\Models\Credit;
+use App\Models\FinancialProduct;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use GuzzleHttp\Client;
@@ -25,13 +26,15 @@ class CreditKaaxSidecc extends Model
         'sueldo_calculadora_simple', 'valor_slider_simple', 'plazo_calculadora_simple', 'pago_calculadora_simple',
         'capacidad_pago', 'valor_slider_avanzada', 'plazo_calculadora_avanzada', 'pago_calculadora_avanzada',
         'ajuste_refinanciamiento', 'ajuste_liquidacion_terceros',
-        'operacion', 'razon', 'origin_type_credit', 'determinacion_credito', 'kc_credit_id', 'financial_products_id'
+        'operacion', 'razon', 'origin_type_credit', 'determinacion_credito', 'kc_credit_id', 'financial_products_id', 'collection_commission_rate'
     ];
 
     public static function sendCreditKaaxSidecc($id_rel)
     {
-        $credit = Credit::find($id_rel);
-        $client = $credit->creditClientPerson;
+        $credit                     = Credit::find($id_rel);
+        $client                     = $credit->creditClientPerson;
+        $financialProduct           = FinancialProduct::find($credit->applied_financial_product);
+        $collection_commission_rate = $financialProduct != null ? $financialProduct->collection_commission_rate : null;
 
         //*buscar si existe cliente en sidecc
         $data_client = array(
@@ -57,6 +60,7 @@ class CreditKaaxSidecc extends Model
             'financial_products_id' => $credit->applied_financial_product,
             'ajuste_liquidacion_terceros' => $credit->third_party_adjustment,
             'ajuste_refinanciamiento' => $credit->refinance_adjustment,
+            'collection_commission_rate' => $collection_commission_rate
         );
         $creditKaax = CreditKaaxSidecc::create($data_credit);
         ClientsLogKaaxSidecc::addCrmLog($creditKaax->id, 'en-entrega', 'en-entrega');
