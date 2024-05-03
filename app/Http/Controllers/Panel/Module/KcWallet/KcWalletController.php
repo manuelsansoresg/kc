@@ -51,6 +51,7 @@ class KcWalletController extends Controller
         //dd(Auth::user()->id);
         $getInvestor       = Investor::where('user_id', Auth::user()->id)->first();
         $collections = null;
+        $getInvestorCredits = null;
         if ($getInvestor != null) {
             $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->get();
             //dd($getInvestor->id);
