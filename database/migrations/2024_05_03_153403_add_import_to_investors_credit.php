@@ -13,7 +13,7 @@ class AddImportToInvestorsCredit extends Migration
      */
     public function up()
     {
-        Schema::table('investors_credit', function (Blueprint $table) {
+        Schema::table('investors_credits', function (Blueprint $table) {
             $table->decimal('import')->nullable()->after('percentage');
         });
     }
@@ -25,7 +25,7 @@ class AddImportToInvestorsCredit extends Migration
      */
     public function down()
     {
-        Schema::table('investors_credit', function (Blueprint $table) {
+        Schema::table('investors_credits', function (Blueprint $table) {
             $table->dropColumn('import');
         });
     }
