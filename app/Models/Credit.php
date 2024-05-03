@@ -159,8 +159,7 @@ class Credit extends Model
             ->get();
 
         foreach ($totalCapitalPerInvestor as $totalCapital) {
-            Investor::where('financial_products_id', $credit->applied_financial_product)
-                ->where('id', $totalCapital->investor_id)
+            Investor::where('id', $totalCapital->investor_id)
                 ->update([
                     'total_capital' => $totalCapital->total_capital
                 ]);
