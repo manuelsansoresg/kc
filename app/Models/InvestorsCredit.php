@@ -13,6 +13,7 @@ class InvestorsCredit extends Model
         'credit_id',
         'investor_id',
         'percentage',
+        'import'
     ];
 
     public static function saveEdit($creditId)
@@ -33,7 +34,7 @@ class InvestorsCredit extends Model
                 $existInvestorCredit              = InvestorsCredit::where($dataInvestorCredit);
                 $dataInvestorCredit['percentage'] = $percent;
                 $dataInvestorCredit['import']     = $percent * $applied_import;
-                
+
                 if ($percent > 0 ) {
                     if ($existInvestorCredit->count() == 0) {
                         InvestorsCredit::create($dataInvestorCredit);
