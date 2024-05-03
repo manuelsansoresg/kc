@@ -154,9 +154,19 @@ class Credit extends Model
     
         // Update the total_capital field for the current credit
         $credit = Credit::find($creditId);
-        Investor::where('financial_products_id', $credit->applied_financial_product)->update([
-            'total_capital' => $totalAppliedImport
-        ]);
+        $totalCapitalPerInvestor = InvestorsCredit::selectRaw('SUM(import) as total_capital, investor_id')
+            ->groupBy('investor_id')
+            ->get();
+
+        foreach ($totalCapitalPerInvestor as $totalCapital) {
+            Investor::where('financial_products_id', $credit->applied_financial_product)
+                ->where('id', $totalCapital->investor_id)
+                ->update([
+                    'total_capital' => $totalCapital->total_capital
+                ]);
+        }
+
+
         $getInvestors = Investor::where('financial_products_id', $credit->applied_financial_product)->get();
         foreach ($getInvestors as $getInvestor) {
             Transaction::setTotalCapital($getInvestor->id);
