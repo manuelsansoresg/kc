@@ -54,8 +54,6 @@ class KcWalletController extends Controller
         $getInvestorCredits = null;
         if ($getInvestor != null) {
             $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->get();
-            //dd($getInvestor->id);
-            //$collections = Collection::where('investor_id', $getInvestor->id)->get();
         }
         return view('panel.module.wallet.mis_prestamos', compact('getInvestorCredits'));
     }
