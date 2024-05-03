@@ -24,4 +24,9 @@ class CrmStatusListKaaxSidecc extends Model
     {
         return CrmStatusListKaaxSidecc::where('slug', $name)->first();
     }
+
+    public static function getStatus($status)
+    {
+        return CrmStatusListKaaxSidecc::find($status)->first();
+    }
 }

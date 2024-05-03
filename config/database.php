@@ -63,13 +63,29 @@ return [
             ]) : [],
         ],
 
-        'kaax_sidecc' => [
+        /* 'kaax_sidecc' => [
 			'driver' => 'mysql',
 			'host' =>'ls-b3c0a489394b99c30c0731cb5016005ea4b669e2.cvjjctjlogpe.us-east-1.rds.amazonaws.com',
 			'port' =>'3306',
 			'database' => 'kaaxclub-sidecc',
 			'username' => 'dbmasteruser',
 			'password' => 'cc?C;%9{?4)J8:mb~F653c3YUn|bH<[y',
+			'charset' => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix' => '',
+			'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+		], */
+        'kaax_sidecc' => [
+			'driver' => 'mysql',
+			'host' =>'localhost',
+			'port' =>'3306',
+			'database' => 'sidecc',
+			'username' => 'root',
+			'password' => 'Demor00txx!',
 			'charset' => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix' => '',

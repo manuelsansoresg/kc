@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel\Module\KcWallet;
 use App\Http\Controllers\Controller;
 use App\Models\HistoryLog;
 use App\Models\Investor;
+use App\Models\InvestorsCredit;
 use App\Models\kaaxSidecc\Collection;
 use App\Models\Transaction;
 use App\Models\User;
@@ -47,12 +48,15 @@ class KcWalletController extends Controller
 
     public function misPrestamos()
     {
-        $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
+        //dd(Auth::user()->id);
+        $getInvestor       = Investor::where('user_id', Auth::user()->id)->first();
         $collections = null;
         if ($getInvestor != null) {
-            $collections = Collection::where('investor_id', $getInvestor->id)->get();
+            $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->get();
+            //dd($getInvestor->id);
+            //$collections = Collection::where('investor_id', $getInvestor->id)->get();
         }
-        return view('panel.module.wallet.mis_prestamos', compact('collections'));
+        return view('panel.module.wallet.mis_prestamos', compact('getInvestorCredits'));
     }
 
     /**
