@@ -20,7 +20,9 @@ class InvestorsCredit extends Model
         $getCredit = Credit::find($creditId);
         if ($getCredit != null) {
             $applied_financial_product = $getCredit->applied_financial_product;
-            $getInvestors = Investor::where('financial_products_id', $applied_financial_product)->get();
+            $applied_import            = $getCredit->applied_import;
+            $getInvestors              = Investor::where('financial_products_id', $applied_financial_product)->get();
+
             foreach ($getInvestors as $getInvestor) {
                 $percent =  $getInvestor->loan_active == 1 ?  $getCredit->applied_import / $getInvestor->loan_available: 0;
                 $dataInvestorCredit = array(
@@ -28,8 +30,10 @@ class InvestorsCredit extends Model
                     'investor_id' => $getInvestor->id,
                     
                 );
-                $existInvestorCredit = InvestorsCredit::where($dataInvestorCredit);
+                $existInvestorCredit              = InvestorsCredit::where($dataInvestorCredit);
                 $dataInvestorCredit['percentage'] = $percent;
+                $dataInvestorCredit['import']     = $percent * $applied_import;
+                
                 if ($percent > 0 ) {
                     if ($existInvestorCredit->count() == 0) {
                         InvestorsCredit::create($dataInvestorCredit);
