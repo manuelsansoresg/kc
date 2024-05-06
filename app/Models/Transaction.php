@@ -59,6 +59,7 @@ class Transaction extends Model
             $financialProductIds = explode(',', $investor->financial_products_id);
 
             $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
+                            ->where('loan_active ', 1)
                             ->whereIn('financial_products_id', $financialProductIds)
                             ->first();
 
