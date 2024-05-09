@@ -26,8 +26,8 @@
                         <!-- button group -->
                         <div class="row mt-n2 mt-md-0">
                             <div class="col-12 col-md-12">
-                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">
-                                    Adelanto de nómina
+                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero Salario OnDemand"  class="btn col-12 btn-highlight btn-block">
+                                    <span class="text-decoration-underline">Salario On-Demand</span> 
                                     <br>
                                     <span class="text-small">Cobra tus días trabajados antes del día de pago</span>
                                 </a>
@@ -38,8 +38,8 @@
                                 </div> --}}
                             </div>
                             <div class="col-12 col-md-12 mt-3">
-                                <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero un crédito nuevo"  class="btn col-12 btn-dark btn-block">
-                                    Reduce tu deuda actual
+                                <a href=": https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero reducir mi deuda actual"  class="btn col-12 btn-dark btn-block">
+                                    <span class="text-decoration-underline">Reduce tu deuda actual</span>
                                     <br>
                                      <span class="text-small">Cámbiate a un mejor crédito </span>
                                 </a>
@@ -47,7 +47,7 @@
                          
                             <div class="col-12 col-md-12 mt-3">
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero un crédito nuevo"  class="btn col-12 btn-highlight-two btn-block">
-                                    Crédito personal
+                                    <span class="text-decoration-underline">Crédito personal</span>
                                     <br>
                                      <span class="text-small">Obtén un crédito con las mejores condiciones </span>
                                 </a>
