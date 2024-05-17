@@ -202,29 +202,35 @@ if (document.getElementById('action-model')) {
                 'date_file[]': {
                     required: true,
                 },
-
             },
             submitHandler: function (form, event) {
                 event.preventDefault();
-
+  
                 const new_form = document.getElementById("frm-action-files");
                 const data = new FormData(new_form);
-
+  
+                // Extract the step value from the URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const step = urlParams.get('step');
+  
+                // Add the step value to the FormData
+                data.append('step', step);
+  
                 axios
                     .post("/panel/files/template/date", data)
                     .then(function (response) {
                         let result = response.data;
-                        let url_redirect  = null;
-
+                        let url_redirect = null;
+  
                         url_redirect = $('#url_redirect').val();
                         window.location = url_redirect;
                     })
                     .catch(e => {
                     });
-
             }
         });
     });
+  
 }
 
 

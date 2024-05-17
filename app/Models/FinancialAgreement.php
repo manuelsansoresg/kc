@@ -40,9 +40,9 @@ class FinancialAgreement extends Model
                     ->first();
 
                 if (!$existingConfiguration) {
-                    $maxId = FinancialAgreement::max('id');
+                    $maxId = FinancialAgreement::max('id') + 1;
                     $data_financial = array(
-                        'id' => $maxId,
+                        //'id' => $maxId,
                         'agreement_id' => $agreement_id,
                         'product_id' => $product,
                     );

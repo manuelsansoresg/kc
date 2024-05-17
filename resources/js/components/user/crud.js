@@ -10,6 +10,11 @@ window.modalUser = function (type, user_id) {
     if (document.getElementById('frmfinanciera')) {
         $('#frmfinanciera').trigger("reset");
     }
+    
+    if (document.getElementById('frm-inversionista')) {
+        $('#frm-inversionista').trigger("reset");
+    }
+
     if (type === 1) {
         $('#user-admin-title').html('Crear usuario '+ title);
         $('#content-password').show();
@@ -62,7 +67,25 @@ function setDataUser(user_id) {
         $('#cellphone').val(result.cellphone);
         $('#email').val(result.email);
         $('#status option[value="'+result.status+'"]').attr("selected", "selected");
+        if (result.agreement_id != '') {
+            $('#agreement_id option[value="'+result.agreement_id+'"]').attr("selected", "selected");
+            $('#bank_name').val(result.bank_name);
+            $('#bank_card_number').val(result.bank_card_number);
+            $('#bank_account_number').val(result.bank_account_number);
+            $('#bank_clabe').val(result.bank_clabe);
+            
+            $('#bank_account_holder').val(result.bank_account_holder);
+            $('#investment_bank_name').val(result.investment_bank_name);
+            $('#investment_bank_account_holder').val(result.investment_bank_account_holder);
+            $('#investment_bank_account_number').val(result.investment_bank_account_number);
+            $('#investment_bank_clabe').val(result.investment_bank_clabe);
+
+        }
         $('#is_access_config option[value="'+result.is_access_config+'"]').attr("selected", "selected");
+        if (document.getElementById('financial_products_id')) {
+            const financial_products_id = result.financial_products_id.split(',');
+            $('#financial_products_id').val(financial_products_id).trigger('change');
+        }
         
 
     })
@@ -208,6 +231,72 @@ $().ready(function () {
                     $('#admin_email-error-exist').show();
                 }
                 console.log(e.response);
+             });
+            
+            }
+    });
+    
+    $("#frm-inversionista").validate({
+        rules: {
+            financial_products_id: {
+                required: true,
+            },
+            type_person: {
+                required: true,
+            },
+            rol_id: {
+                required: true,
+            },
+           
+            name: {
+                required: true,
+            },
+            last_name: {
+                required: true,
+            },
+            
+            cellphone: {
+                number: true,
+                minlength: 10
+            },
+            email: {
+                required: true,
+                email: true
+            },
+
+            password: {
+                required: true,
+                minlength: 8
+            },
+
+            pass_confirm: {
+                required: true,
+                minlength: 8,
+                equalTo: "#password"
+            },
+            status: {
+                required: true,
+            },
+        },
+        submitHandler: function(form, event){
+            event.preventDefault();
+            $('#admin_email-error-exist').hide();
+            const new_form = document.getElementById("frm-inversionista");
+            const data = new FormData(new_form);
+    
+            axios
+            .post("/panel/user/administrador", data)
+            .then(function (response) {
+                let result = response.data;
+                showInfo(2, 'dt-inversionista', 'Datos actualizados', 'Información actualizada correctamente');
+                $('#modal-user-admin').modal('hide');
+            })
+            .catch(e => {
+                let response = e.response;
+                let errors =  response.data.errors;
+                if (errors.email) {
+                    $('#admin_email-error-exist').show();
+                }
              });
             
             }

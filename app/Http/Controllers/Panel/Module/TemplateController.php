@@ -22,13 +22,19 @@ class TemplateController extends Controller
     public function viewStep($model, $history_id)
     {
         $history = HistoryLog::find($history_id);
-        $credit = $history->historyCredit;
-        $client = $credit->creditClientPerson;
-        $product = $credit->creditProduct;
+        $credit  = null;
+        $client  = null;
+        $product  = null;
+
+        if ($model != 'wallet' && $model != 'kc-down-wallet') {
+            $credit = $history->historyCredit;
+            $client = $credit->creditClientPerson;
+            $product = $credit->creditProduct;
+        }
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
         
-        if ($model == 'controlDesk' || $model == 'newCredit' || $model == 'debtCredit' || $model == 'swap' || $model == 'delivery'  || $model == 'afterMarket' || $model == 'payment' ) {
+        if ($model == 'controlDesk' || $model == 'newCredit' || $model == 'debtCredit' || $model == 'swap' || $model == 'delivery'  || $model == 'afterMarket' || $model == 'payment' || $model == 'wallet' || $model == 'kc-down-wallet' ) {
             $list_steps       = (new $actionStrategy)->listStep($history_id);
             return view('panel.module.view_steps', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb', 'list_steps', 'actionStrategy'));
         }

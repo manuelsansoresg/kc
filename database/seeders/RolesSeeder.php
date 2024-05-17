@@ -14,6 +14,6 @@ class RolesSeeder extends Seeder
      */
     public function run()
     {
-        $role = Role::create(['name' => 'Administrador']);
+        $role = Role::create(['name' => 'Cliente inversionista']);
     }
 }

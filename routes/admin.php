@@ -33,6 +33,11 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('cliente-financiera/list/show', ['\App\Http\Controllers\Panel\User\ClientFinancieraController', 'list'])->middleware('auth');
     Route::post('cliente-financiera/password/update', ['\App\Http\Controllers\Panel\User\ClientFinancieraController', 'updatePassword'])->middleware('auth');
     
+    //*cliente inversionista
+    Route::resource('cliente-inversionista', '\App\Http\Controllers\Panel\User\ClienteInversionistaController')->middleware('auth');
+    Route::get('cliente-inversionista/list/show', ['\App\Http\Controllers\Panel\User\ClienteInversionistaController', 'list'])->middleware('auth');
+    Route::post('cliente-inversionista/password/update', ['\App\Http\Controllers\Panel\User\ClienteInversionistaController', 'updatePassword'])->middleware('auth');
+
     //*esta ruta equivale tanto como administrador como asesor
     Route::get('administrador/{id}/delete', ['\App\Http\Controllers\Panel\User\AdminController', 'destroy'])->middleware('auth');
 
@@ -52,6 +57,7 @@ Route::get('product/{product_id}/delete', ['\App\Http\Controllers\Panel\ProductC
 Route::resource('agreement', '\App\Http\Controllers\Panel\AgreementController')->middleware('auth');
 Route::get('agreement/list/show', ['\App\Http\Controllers\Panel\AgreementController', 'list'])->middleware('auth');
 Route::get('agreement/{product_id}/delete', ['\App\Http\Controllers\Panel\AgreementController', 'destroy'])->middleware('auth');
+Route::get('agreement/{agreement}/financial-product/show', ['\App\Http\Controllers\Panel\AgreementController', 'getFinancialProducts'])->middleware('auth');
 
 //*leads
 Route::resource('lead', '\App\Http\Controllers\Panel\LeadController')->middleware('auth');
@@ -71,6 +77,8 @@ Route::group(['prefix' => 'lead'], function () {
     Route::post('{lead}/tag/update', ['\App\Http\Controllers\Panel\LeadController', 'updateTag'])->middleware('auth');
 
     Route::get('{lead}/preview/profile', ['\App\Http\Controllers\Panel\LeadController', 'previewProfile'])->middleware('auth');
+
+    Route::get('{value}/{id}/check', ['\App\Http\Controllers\Panel\LeadController', 'checkData'])->middleware('auth');
 
     //* mover del lugar
     
@@ -113,6 +121,8 @@ Route::group(['prefix' => 'action'], function () {
     Route::get('{history}/{status_id}/finish', ['\App\Http\Controllers\Panel\ActionController', 'moveDeliveryFinish'])->middleware('auth');
     //concluir atajo
     Route::get('{history}/complete', ['\App\Http\Controllers\Panel\ActionController', 'complete'])->middleware('auth');
+    
+    
 });
 
 //*dropzone file
@@ -168,6 +178,8 @@ Route::get('{section}/{id}/move', ['\App\Http\Controllers\Panel\PanelController'
 
 //*Client
 Route::resource('client', '\App\Http\Controllers\Panel\Client\ClientPersonController')->middleware('auth');
+Route::get('client/{client}/credit/total',[App\Http\Controllers\Panel\Client\ClientPersonController::class, 'totalCredit'])->middleware('auth');
+
 //*modules
 Route::resource('kc-check-up', '\App\Http\Controllers\Panel\Module\KcCheckup\KcCheckupController')->middleware('auth');
 Route::group(['prefix' => 'kc-check-up'], function () {
@@ -224,6 +236,26 @@ Route::group(['prefix' => 'kc-check-up-debt-reduction'], function () {
 
 Route::resource('kc-check-up-actions', '\App\Http\Controllers\Panel\Module\ActionController')->middleware('auth');
 
+Route::resource('kc-wallet', '\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController')->middleware('auth');
+
+Route::group(['prefix' => 'kc-wallet'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'list'])->middleware('auth');
+    Route::get('resumen/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'resumen'])->middleware('auth');
+    
+    Route::get('mis-prestamos/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'misPrestamos'])->middleware('auth');
+    Route::get('{investor}/investor/get', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'getInvestor'])->middleware('auth');
+});
+
+Route::resource('inversionista', '\App\Http\Controllers\InvestorController')->middleware('auth');
+//Route::get('inversionista/{investor}/storePrestamo', ['\App\Http\Controllers\InvestorController', 'storePrestamo'])->middleware('auth');
+
+Route::resource('kc-down-wallet', '\App\Http\Controllers\Panel\Module\KcWallet\KcDownWalletController')->middleware('auth');
+
+Route::group(['prefix' => 'kc-down-wallet'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcDownWalletController', 'list'])->middleware('auth');
+    
+    
+});
 
 //*credit
 Route::resource('credit', '\App\Http\Controllers\Panel\Credit\CreditController')->middleware('auth');
@@ -253,6 +285,7 @@ Route::resource('action-document', '\App\Http\Controllers\Panel\Credit\DocumentC
 
 Route::group(['prefix' => 'action-form'], function () {
     Route::get('{model}/{history_id}/form', ['\App\Http\Controllers\Panel\Module\FormController', 'index'])->middleware('auth');
+    Route::get('{id}/{type_form}/form/get', ['\App\Http\Controllers\Panel\Module\FormController', 'show'])->middleware('auth');
     
     
 
@@ -284,3 +317,7 @@ Route::group(['prefix' => 'template'], function () {
 Route::get('reason/{type}/list', ['\App\Http\Controllers\HomeController', 'reason'])->middleware('auth');
 Route::get('notification/show', ['\App\Http\Controllers\HomeController', 'showNotification'])->middleware('auth');
 Route::get('notification/read', ['\App\Http\Controllers\HomeController', 'readNotification'])->middleware('auth');
+
+Route::get('/ayuda', function () {
+    return view('panel.ayuda');
+});

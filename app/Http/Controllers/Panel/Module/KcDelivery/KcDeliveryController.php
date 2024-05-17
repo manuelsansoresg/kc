@@ -31,10 +31,7 @@ class KcDeliveryController extends Controller
     {
         $history    = HistoryLog::find($history_id);
         $credit     = $history->historyCredit;
-        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $credit->id, 1);
-        //*inicializar las acciones de la siguiente etapa en curso
-        HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2, null, false);
-        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit->id, 0);
+       
 
         //*send email
         try {

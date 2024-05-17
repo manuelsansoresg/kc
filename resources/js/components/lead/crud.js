@@ -10,7 +10,7 @@ $('.select2multiple').select2({
     placeholder: "Escribe para buscar..",
 });
 //onchangeOrganization
-window.organizationChange = function(lead_agreement_id, financial_id, other){
+window.organizationChange = function(lead_agreement_id, financial_id, other, applied_financial_product){
     
     if (other != null) {
         lead_agreement_id = 0;
@@ -31,13 +31,14 @@ window.organizationChange = function(lead_agreement_id, financial_id, other){
         $('#lead-content-agreement').hide();
     } else {
         getFinancial(lead_agreement, financial_id);
+        getFinancialByAgreement(lead_agreement, applied_financial_product);
     }
 }
 
 window.productChange = function(lead_product_id){
     $('#content-importe-solicitado').hide();
     $('#content-banco_nomina').hide();
-    $('#content-tipo-credito').hide();
+    //$('#content-tipo-credito').hide();
     $('#content-consulta-buro-credito').hide();
     $('#content-financial_product_id').hide();
     $('#content-aval-o-garantia').hide();
@@ -53,13 +54,15 @@ window.productChange = function(lead_product_id){
         $('#content-financial_product_id').show();
         $('#content-importe-solicitado').show();
         $('#content-banco_nomina').show();
-        $('#content-tipo-credito').show();
+        //$('#content-tipo-credito').show();
         $('#content-consulta-buro-credito').show();
         $('#content-aval-o-garantia').show();
     }
     
-    if (product_id == 1) { //credito nuevo
+    if (product_id == 1) { //credito nuevo ahora es crédito personal
         $('#content-importe-solicitado').show();
+        $('#content-producto-financiero').show();
+        $('#content-tipo_tramite').show();
         $('#content-banco_nomina').show();
         $('#content-tipo-credito').show();
         $('#content-consulta-buro-credito').show();
@@ -73,6 +76,29 @@ window.productChange = function(lead_product_id){
     }
 }
 
+function getFinancialByAgreement(agreementId, applied_financial_product)
+{
+    const selectElement = document.getElementById('applied_financial_product');
+    selectElement.options.length = 0; // Limpiar el select
+
+    axios
+        .get("/panel/agreement/" + agreementId + "/financial-product/show")
+        .then(function (response) {
+            let financialProducts = response.data;
+            Object.keys(financialProducts).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = financialProducts[key];
+                selectElement.appendChild(option);
+            });
+            
+            if (applied_financial_product != 'null') {
+                $('#applied_financial_product').val(applied_financial_product).trigger("change");
+            }
+        })
+        .catch(e => {
+        });
+}
 
 
 function getFinancial(lead_id, financial_id) {
@@ -205,10 +231,12 @@ function setData(is_change_origen, is_change_organization) {
             let financials    = result.financials;
             let product_id    = lead.product_id;
             let other         = lead.other;
+            let is_viability  = lead.is_viability;
+            let is_viability_credit = lead.is_viability_credit;
 
             console.log(product_id);
             productChange(product_id);
-            organizationChange(lead.agreement_id, lead.financial_id, other);
+            organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
             
             getFinancialProduct(lead.id, 1);
 
@@ -221,14 +249,22 @@ function setData(is_change_origen, is_change_organization) {
             $('#lead-asesor-id').trigger("change");
 
 
-            $('#lead-type_id').val(lead.type_id);
-            $('#lead-type_id').trigger("change");
+            /* $('#lead-type_id').val(lead.type_id);
+            $('#lead-type_id').trigger("change"); */
 
             $('#lead-name').val(lead.name);
             $('#lead-last_name').val(lead.last_name);
             $('#lead-second_last_name').val(lead.second_last_name);
+            
             $('#lead-cellphone').val(lead.cellphone);
+            
             $('#lead-email').val(lead.email);
+            
+
+            $('#lead-rfc').val(lead.rfc);
+            
+
+
             if (document.getElementById('lead-manychat_id')) {
                 $('#lead-manychat_id').val(lead.manychat_id);
             }
@@ -245,10 +281,59 @@ function setData(is_change_origen, is_change_organization) {
             $('#bank_id').val(lead.bank_id).trigger("change");
             $('#tipo_credito').val(lead.tipo_credito).trigger("change");
             $('#consulta_buro').val(lead.consulta_buro).trigger("change");
+
+            checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
+            checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+            checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+            
+            $('#applied_loan_type').val(lead.applied_loan_type).trigger("change");
+
+            // Get the checkbox elements
+            let checkboxViability = document.getElementById('is_viability');
+            let checkboxViabilityCredit = document.getElementById('is_viability_credit');
+
+            // Set the checked property based on the variables
+            checkboxViability.checked = is_viability === 1;
+            checkboxViabilityCredit.checked = is_viability_credit === 1;
+
+
         })
         .catch(e => {
             $('#admin_email-error-exist').show();
         });
+}
+
+window.checkDataLeadExist = function (valInput, id)
+{
+    let getValue = valInput.value;
+    let messageElement = document.getElementById(id+'-msg');
+    if (valInput != '') {
+        messageElement.textContent = "";
+        axios
+        .get("/panel/lead/"+getValue+"/"+id+"/check")
+        .then(function (response) {
+            let result = response.data;
+            let isExist = result.exist;
+            if (isExist > 0) {
+                
+                if (id != 'rfc') {
+                    messageElement.textContent = "Ya está en uso";
+                } else { 
+                    messageElement.textContent = "Recurrente";
+                    $('.text-viabilidad').html('Recurrente');
+                }
+            } else {
+                if (id == 'rfc') {
+                    messageElement.innerHTML  = "<b>Nuevo</b>";
+                    $('.text-viabilidad').html('Nuevo');
+                }
+            }
+
+        })
+        .catch(e => {
+    
+        });
+    }
 }
 
 window.deleteLead = function (lead_id) {

@@ -79,8 +79,8 @@ class Csendgrid
         $email->setTemplateId($this->idTemplate);
         $email->addDynamicTemplateDatas($this->params);
         try {
-            $response = $this->sendgrid->send($email);
-            return $response;
+           /*  $response = $this->sendgrid->send($email);
+            return $response; */
         } catch (\Exception $e) {
             return 500;
         }

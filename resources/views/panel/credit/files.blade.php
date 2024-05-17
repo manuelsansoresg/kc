@@ -7,12 +7,12 @@
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
-            <div class="nk-content-body">
+            <div class="nk-content-body min-vh-82">
                 <div class="components-preview wide-md mx-auto">
                     <div class="nk-block-head nk-block-head-lg wide-sm">
                         <div class="nk-block-head-content">
                             
-                            <h3 class="nk-block-title page-title">Acción carga</h3>
+                            <h3 class="nk-block-title page-title">{{ $title }}</h3>
                             <div class="nk-block-des text-soft">
                                 <nav>
                                     <ul class="breadcrumb">
@@ -28,9 +28,11 @@
                                         </li>
                                     </ul>
                                 </nav>
-                                <p class="text-dark">
-                                    <small>Carga documentos del cliente persona para encontrar la mejor opción de crédito</small>
-                                </p>
+                                @if ($isTitleDescription == true)
+                                    <p class="text-dark">
+                                        <small>Carga documentos del cliente persona para encontrar la mejor opción de crédito</small>
+                                    </p>
+                                @endif
                             </div>
                             <div class=" d-block d-md-none">
                                 <div class="col-12">
@@ -111,7 +113,12 @@
                                             @endforeach
                                             <input type="hidden" id="action-model" name="model" value="{{ $model }}">
                                             <input type="hidden" id="action-id_rel" name="id_rel" value="{{ $credit_id }}">
-                                            <input type="hidden" id="url_redirect"value="/panel/template/steps/{{ $model }}/{{ $history->id }}/show">
+                                          
+                                            @if ($url_redirect == null)
+                                                <input type="hidden" id="url_redirect"value="/panel/template/steps/{{ $model }}/{{ $history->id }}/show">
+                                                @else
+                                                <input type="hidden" id="url_redirect"value="{{ $url_redirect }}">
+                                            @endif
                                             <input type="hidden" id="step" value="{{ isset($_GET['step']) && $_GET['step']? $_GET['step'] : null }}">
             
                                                 <div class="form-group">

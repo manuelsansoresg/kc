@@ -7,8 +7,10 @@ use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\File;
 use App\Models\Financial;
+use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\InvestorsCredit;
 use App\Models\Lead;
 use App\Models\Product;
 use App\Models\User;
@@ -25,7 +27,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     const HOUR_STEP_2  = 3;
     const HOUR_STEP_3  = 6;
     const HOUR_STEP_4  = 2;
-    const HOUR_STEP_5  = 4;
+    const HOUR_STEP_5  = 2;
+    const HOUR_STEP_5_2 = 2;
+    const HOUR_STEP_5_3 = 2;
 
     public function move($id)
     {
@@ -42,7 +46,20 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($step == 3) {
             return self::uploadStep3();
         }
+        
+        if ($step == '5_3') {
+            return self::uploadStep5();
+        }
         return self::uploadStep1();
+    }
+
+    public function setURLDocument()
+    {
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+        if ($step == '5_3') {
+            return '/panel/kc-delivery';
+        }
+        return null;
     }
 
     public function uploadStep1()
@@ -51,7 +68,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             1 => [
                 'name' => 'Identificación oficial',
                 'comment' => 'INE vigente',
-                'is_required' => true,
+                'is_required' => false,
                 'is_date' => false,
                 'max_size' => 2, //* size in MB
                 'max_file' => 2,
@@ -62,7 +79,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             2 => [
                 'name' => 'Recibo de nómina',
                 'comment' => 'Más reciente',
-                'is_required' => true,
+                'is_required' => false,
                 'is_date' => true,
                 'max_size' => 2,
                 'max_file' => 2,
@@ -72,7 +89,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             3 => [
                 'name' => 'Comprobante de domicilio',
                 'comment' => 'Más reciente',
-                'is_required' => true,
+                'is_required' => false,
                 'is_date' => true,
                 'max_size' => 2,
                 'max_file' => 2,
@@ -111,6 +128,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $elements;
     }
 
+    public function uploadstep5()
+    {
+        $elements = array(
+            6 => [
+                'name' => 'Contrato firmado',
+                'comment' => null,
+                'is_required' => true,
+                'is_date' => false,
+                'max_size' => 2, //* size in MB
+                'max_file' => 2,
+                'type' => 'image/*, .pdf',
+                'comment_date' => null
+            ],
+
+        );
+        return $elements;
+    }
+
     public function configForm($id_rel, $history_id = null)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
@@ -126,6 +161,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             return self::configFormstep4($id_rel, $history_id);
         } elseif ($step == '5') {
             return self::configFormstep5($id_rel, $history_id);
+        } elseif ($step == '5_2') {
+            return self::configFormstep5_2($id_rel, $history_id);
+        }elseif ($step == '2') {
+            //return self::configFormstep5_3($id_rel, $history_id);
         }
     }
 
@@ -248,6 +287,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $type_form    = HistoryLog::KC_CONTROL_DESK_FORM_STEP_2;
         $financial    = Financial::select('id', 'commercial_name as name')->get();
         $product      = FinancialProduct::getProductByFinancial($credit->applied_financial);
+        $get_financials = FinancialAgreement::where('agreement_id', $credit->agreement_id)->get();
+        $financials = array();
+        if ($get_financials != null) {
+            foreach ($get_financials as $financial) {
+                $getProduct = FinancialProduct::getbyIdFirst($financial->product_id);
+                $financials[$getProduct->id]= $getProduct->commercial_name.' - '.$getProduct->name;
+            }
+        }
 
         $loan_type    = config('enums.loan_type');
         $sign_type    = config('enums.sign_type');
@@ -258,6 +305,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             1 => [
                 'title_section' => 'Crédito solicitado',
                 'title' => null,
+                'col' => 'col-md-6',
                 'name_field' => null,
                 'id_field' => null,
                 'comment_admin' => null,
@@ -270,6 +318,21 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null
             ],
             2 => [
+                'title_section' => '&nbsp;',
+                'col' => 'col-md-6 text-primary h5',
+                'title' => null,
+                'name_field' => null,
+                'id_field' => 'text-loan',
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => null,
+                'is_disabled' => null
+            ],
+           /*  2 => [
                 'title_section' => null,
                 'title' => 'Financiera',
                 'name_field' => 'credit[applied_financial]',
@@ -280,22 +343,34 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'select2',
                 'is_option_array' => false,
                 'options' => $financial,
-                'is_required' => true,
-                'is_disabled' => 'disabled'
-            ],
+                'is_required' => false,
+                'is_disabled' => null
+            ], */
             3 => [
                 'title_section' => null,
                 'title' => 'Producto financiero',
                 'name_field' => 'credit[applied_financial_product]',
                 'id_field' => 'applied_financial_product',
+                'onchange' => 'getLoanAvailableByProduct(this)',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
                 'type' => 'select2',
-                'is_option_array' => false,
-                'options' => $product,
-                'is_required' => true,
-                'is_disabled' => 'disabled'
+                'is_option_array' => true,
+                'options' => $financials,
+                'is_required' => false,
+                'is_disabled' => null,
+                /* 'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'type' => 'div',
+                        'name_field' => null,
+                        'col' => 'col-md-6 text-primary h6',
+                        'id_field' => 'text-loan',
+                        'onclick' => 'kycCreditHistory(' . $history_id . ', 1)'
+                    ),
+                    
+                ) */
             ],
             4 => [
                 'title_section' => null,
@@ -344,6 +419,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'title_section' => null,
                 'title' => 'Importe solicitado',
                 'name_field' => 'credit[applied_import]',
+                //'onchange' => 'setBajoDemanda(this)',
                 'id_field' => 'applied_import',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
@@ -454,6 +530,55 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
+            15 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'input_loan',
+                'id_field' => 'input_loan',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '',
+                'col' => 'col-12'
+            ],
+            
+            16 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'comision',
+                'id_field' => 'comision',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '',
+                'col' => 'col-12'
+            ],
+            17 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'producto',
+                'id_field' => 'producto',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '',
+                'col' => 'col-12'
+            ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -534,7 +659,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             6 => [
@@ -548,7 +673,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             7 => [
@@ -562,7 +687,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             8 => [
@@ -590,7 +715,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             10 => [
@@ -604,7 +729,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             11 => [
@@ -618,7 +743,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             12 => [
@@ -646,7 +771,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             14 => [
@@ -660,7 +785,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             15 => [
@@ -674,7 +799,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             16 => [
@@ -688,7 +813,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             17 => [
@@ -717,7 +842,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => false,
+                'is_required' => true,
                 'is_disabled' => null
             ],
             19 => [
@@ -759,7 +884,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => false,
+                'is_required' => true,
                 'is_disabled' => null
             ],
             22 => [
@@ -801,7 +926,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             25 => [
@@ -815,7 +940,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'number',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             26 => [
@@ -829,7 +954,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             27 => [
@@ -843,7 +968,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             28 => [
@@ -871,7 +996,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             30 => [
@@ -885,7 +1010,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             31 => [
@@ -899,7 +1024,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             32 => [
@@ -913,7 +1038,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => true,
+                'is_required' => false,
                 'is_disabled' => null
             ],
             33 => [
@@ -2014,81 +2139,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     {
         $name_form        = 'frm-template_control_desk_step5';
         $type_form        = HistoryLog::KC_CONTROL_DESK_FORM_STEP_5;
-        $credit = Credit::find($id_rel);
-        $user_financials = User::getUserRole('Cliente financiera');
-        $option_user_financial = array();
-        $step_origin    = isset($_GET['step_origin']) ? $_GET['step_origin'] : null;
-        $step = isset($_GET['step']) ? $_GET['step'] : '4';
-        foreach ($user_financials as $user) {
-            $name = $user->name . ' ' . $user->last_name . ' ' . $user->second_last_name;
-            $option_user_financial[$user->id] = $name;
-        }
-
         $elements = array(
             1 => [
-                'title_section' => 'Asignar usuario financiera',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
+                'title_section' => null,
+                'title' => 'URL firma',
+                'name_field' => 'credit[url_sign]',
+                'id_field' => 'url_sign',
                 'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'text',
                 'is_option_array' => false,
                 'options' => null,
-                'is_required' => null,
+                'is_required' => true,
                 'is_disabled' => null
             ],
-            //*TODO: Verificar la accion al guardar para los nombres de campos
             2 => [
-                'title_section' => null,
-                'title' => 'Usuario financiera',
-                'name_field' => 'credit[financial_user_assigned]',
-                'id_field' => 'financial_user_assigned',
-                'comment_admin' => 'Selecciona un usuario financiera',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'select2',
-                'is_option_array' => true,
-                'options' => $option_user_financial,
-                'is_required' => true,
-                'is_disabled' => null,
-                'value' => null
-            ],
-            3 => [
-                'title_section' => null,
-                'title' => 'Comisión',
-                'name_field' => 'credit[commission]',
-                'id_field' => 'commission',
-                'comment_admin' => ' Indica el importe de la comisión',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'number',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => true,
-                'is_disabled' => null,
-                'value' => null
-            ],
-
-            4 => [
-                'title_section' => null,
-                'title' => 'Comentario',
-                'name_field' => 'credit[commission_note]',
-                'id_field' => 'commission_note',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'textarea',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => null,
-                'col' => 'col-12'
-            ],
-
-            5 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
@@ -2101,15 +2167,56 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/kc-control-desk',
+                'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
+        );
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        return $list;
+    }
 
-            6 => [
+    public function configFormstep5_2($id_rel, $history_id)
+    {
+        $credit = Credit::find($id_rel);
+        $name_form = 'frm-template_control_desk_step5_2';
+        $type_form = HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_2;
+        $option_payment    = array(1 => 'Sí', 2 => 'No');
+
+        $elements = array(
+            1 => [
+                'title_section' => null,
+                'title' => 'Confirmación de firma',
+                'name_field' => 'credit[signed]',
+                'id_field' => 'signed',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'select2',
+                'is_option_array' => true,
+                'options' => $option_payment,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            2 => [
                 'title_section' => null,
                 'title' => null,
-                'name_field' => 'step_origin',
-                'id_field' => null,
+                'name_field' => 'sectionstep',
+                'id_field' => 'sectionstep',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => true,
+                'options' => null,
+                'is_required' => false,
+                'is_disabled' => true,
+                'value' => 1,
+            ],
+            3 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
                 'comment_admin' => '',
                 'comment_webApp' =>  null,
                 'placeholder' => '',
@@ -2118,10 +2225,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => $step_origin,
+                'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
-
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -2153,12 +2259,17 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $percent_form_step3_2   = self::percentFormStep3_2($history);
             //* percent 4 is in kccontroldeskcontroller function validateKyc
             $percent_form_step4   = self::percentFormStep4($history);
+            
             $percent_form_step5   = self::percentFormStep5($history);
+            $percent_form_step5_2   = self::percentFormStep5_2($history);
+            $percent_form_step5_3   = self::percentFormStep5_3($credit->id);
+
             if ($percent_form_step1 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $credit->id, 1);
 
                 HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, null, false);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_2, $credit->id, 0);
+                
             }
 
             if ($percent_form_step2 == 100) {
@@ -2171,6 +2282,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1, $credit->id, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1, $credit->id, 0);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2, $credit->id, 0);
+                $getVars = $request->credit;
+                if (isset($getVars['applied_financial_product'])) {
+                    InvestorsCredit::saveEdit($credit->id);
+                    Credit::setTotalCapital($credit->id);
+                    Credit::setMontoEntregar($credit->id);
+                }
             }
 
             if ($percent_form_step3 == 100) {
@@ -2195,9 +2312,27 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_4, $credit->id, 1);
                 HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, null, false);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 0);
+                //*inicializar las etapas nuevas de control desk
+                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, null, false);
+                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_2, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_2, null, false);
+                HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3, HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3, null, false);
+
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 0);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_2, $credit->id, 0);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3, $credit->id, 0);
             }
 
             if ($percent_form_step5 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
+            }
+            
+            if ($percent_form_step5_2 == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_2, $credit->id, 1);
+            }
+            
+            
+
+            /* if ($percent_form_step5 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
                 HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, $history->old_status_id);
 
@@ -2206,7 +2341,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 if ($step_origin == 1) { //* comes from swap, create the next stages
 
                 }
-            }
+            } */
         }
     }
 
@@ -2352,12 +2487,23 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $percent_form_step4           = reduceDecimal(self::percentFormStep4($history)); //etapa 4
 
-        $percent_form_step5           = reduceDecimal(self::percentFormStep5($history)); //etapa 5
+        $percent_form_step5_1           = reduceDecimal(self::percentFormStep5($history)); //etapa 5
+        $percent_form_step5_2           = reduceDecimal(self::percentFormStep5_2($history)); //etapa 5
+        $percent_form_step5_3           = reduceDecimal(self::percentFormStep5_3($credit->id, '5_3')); //etapa 5
+
 
         $new_step3_1 = $percent_form_step3_1 == 100 ? 1 : 0;
         $new_step3_2 = $percent_form_step3_2 == 100 ? 1 : 0;
 
         $percent_form_step3 = ($new_step3_1 + $new_step3_2) / 2 * 100;
+
+
+        $new_step5 = $percent_form_step5_1 == 100 ? 1 : 0;
+        $new_step5_2 = $percent_form_step5_2 == 100 ? 1 : 0;
+        $new_step5_3 = $percent_form_step5_3 == 100 ? 1 : 0;
+
+        $percent_form_step5 = reduceDecimal(($new_step5 + $new_step5_2 + $new_step5_3) / 3 * 100);
+
 
         $color_inf_credit     = 'success';
         $color_report         = 'success';
@@ -2465,7 +2611,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data[] = array(
             'name' => $view_count_step5,
-            'step' => 'Asignar usuario financiera',
+            'step' => 'Firma',
             'status' => $status_step5,
             'progress' => $view_percent_step5,
             'deadline' => '',
@@ -2964,20 +3110,96 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $data;
     }
 
-    public function deadLineStep5($history)
+    public function deadLineFormStep5($history)
     {
-        $credit                       = $history->historyCredit;
-        $color_inf_credit             = 'success';
-        $percent_form1                = self::percentFormStep5($history);
-        $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM_STEP_5], $credit->id)[0];
-        $max_hour                     = self::HOUR_STEP_5;
-        $hour                         = $in_progress->date_status_progress;
-        $data_deadline                = deadline($hour, $max_hour, $percent_form1, $color_inf_credit);
-        $color_inf_credit             = $data_deadline['color'];
-        $hour                         = $data_deadline['lbl_hour'];
-        $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep5($history);
+            if ($percent_form == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
+            }
+            $max_hour                     = self::HOUR_STEP_5;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM_STEP_5], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            
+            $hour                         = $history->created_at;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+            } catch (\Exception $th) {
+            
+            }
+            return null;
+        }
 
-        return $view_dead_line_inf_credit;
+    public function deadLineFormStep5_2($history)
+    {
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep5_2($history);
+            $max_hour                     = self::HOUR_STEP_5_2;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_2], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $hour                         = $history->created_at;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        return null;
+    }
+    
+    public function deadLineUploadStep5_3($history)
+    {
+        try {
+            $credit         = $history->historyCredit;
+            $color_inf_credit             = 'success';
+            $percent_form                 = self::percentFormStep5_3($credit->id, '5_3');
+            if ($percent_form == 100) {
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3, $credit->id, 1);
+            }
+            $max_hour                     = self::HOUR_STEP_5_3;
+            $in_progress                  = HistoryLog::getByStatus([HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3], $credit->id)[0];
+            $hour                         = $in_progress->date_status_progress;
+            $data_deadline                = deadline($hour, $max_hour, $percent_form, $color_inf_credit);
+            $color_inf_credit             = $data_deadline['color'];
+            $hour                         = $data_deadline['lbl_hour'];
+            $view_dead_line_inf_credit    = \View::make('panel.module.view_dead_line', ['hour' => $hour, 'color_inf_credit' => $color_inf_credit])->render();
+            return $view_dead_line_inf_credit;
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        return null;
+    }
+
+    public function finish($creditId, $step)
+    {
+        $credit = Credit::find($creditId);
+        $percent_form =  self::percentFormStep5_3($creditId, $step);
+        
+        if ($step == '5_3' && $percent_form == 100) {
+            
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5, $credit->id, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_2, $credit->id, 1);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM_STEP_5_3, $credit->id, 1);
+            
+            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_DELIVERY);
+            HistoryLog::where(['id_rel' => $credit->id, 'status_id' => HistoryLog::KC_CONTROL_DESK, 'status' => 1])
+                        ->update(['status' => 0]);
+
+            $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
+            (new $notification_add)->send($credit->id);
+
+        }
+        
     }
 
     public function actionStep5($history_id, $step_origin = null)
@@ -3001,29 +3223,62 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $menu_options         = self::menuOptionsStep5($history, $step_origin);
 
-        $percent_form_step5   = self::percentFormStep5($history); //etapa 3
-        $status_step5         = 'En espera';
-        $status_step5         = ($percent_form_step5 >= 100) ? 'Concluido' : 'En curso';
+        $percent_form_2         = self::percentFormStep5($history);
+        $percent_form_2_2       = self::percentFormStep5_2($history);
+        $percent_form_2_3       = self::percentFormStep5_3($credit->id, '5_3');
 
-        $view_dead_line1      = self::deadLineStep5($history);
+        $status_step5           = ($percent_form_2 >= 100) ? 'Concluido' : 'En curso';
+        $status_step5_2         = ($percent_form_2_2 >= 100) ? 'Concluido' : 'En curso';
+        $status_step5_3         = ($percent_form_2_3 >= 100) ? 'Concluido' : 'En curso';
 
-        $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $view_dead_line_step5   = self::deadLineFormStep5($history);
+        $view_dead_line_step5_2   = self::deadLineFormStep5_2($history);
+        $view_dead_line_step5_3   = self::deadLineUploadStep5_3($history);
 
-       
+        $option1  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
+        $option2  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
+        $option3  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['file']])->render();
+
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_step5])->render();
+        $viewStatus2= \View::make('panel.module.status', ['status' => $status_step5_2])->render();
+        $viewStatus3= \View::make('panel.module.status', ['status' => $status_step5_3])->render();
 
         $data = array();
 
-        $subject1 = HistoryLog::$label_subject[29];
-        $viewStatus1 = \View::make('panel.module.status', ['status' => $status_step5])->render();
+        $subject1 = HistoryLog::$label_subject[57];
+        $subject2 = HistoryLog::$label_subject[58];
+        $subject3 = HistoryLog::$label_subject[59];
+
+        
         $data[] = array(
-            'name' => 'Formulario',
+            'name' => 'Firma',
             'subject' => $subject1,
-            'status' =>  $viewStatus1,
-            'deadline' => $view_dead_line1,
+            'description' => 'Preparar documento',
+            'status' => $viewStatus1,
+            'deadline' => $view_dead_line_step5,
             'advisor' => $name_advisor,
-            'options' => $form_option,
-            'link' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=5&step_origin=',
-            
+            'options' => $option1,
+            'link' =>  '/panel/action-form/controlDesk/'.$history_id.'/form?step=5',
+        );
+        $data[] = array(
+            'name' => 'Firma',
+            'subject' => $subject2,
+            'description' => 'Confirmar',
+            'status' => $viewStatus2,
+            'deadline' => $view_dead_line_step5_2,
+            'advisor' => $name_advisor,
+            'options' => $option2,
+            'link' =>  '/panel/action-form/controlDesk/'.$history_id.'/form?step=5_2',
+        );
+        $data[] = array(
+            'name' => 'Carga',
+            'subject' => $subject3,
+            'description' => 'Documento firmado',
+            'status' => $viewStatus3,
+            'deadline' => $view_dead_line_step5_3,
+            'advisor' => $name_advisor,
+            'options' => $option3,
+            'link' =>  '/panel/template/action-document/controlDesk/'.$history_id.'?step=5_3',
         );
 
         return $data;
@@ -3156,14 +3411,33 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function menuOptionsStep5($history, $step_origin = null)
     {
         $menu = array(
+            'file' => array(
+                [
+                    'link' => '/panel/template/action-document/controlDesk/' . $history->id . '?step=' . $step_origin,
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+
+                ),
             'form' => array(
                 [
-                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=5' . '&step_origin=' . $step_origin,
+                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=' . $step_origin,
                     'onclick' => '',
                     'name' => 'Ver acción',
                     'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
+            'form2' => array(
+                [
+                    'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step='.$step_origin,
+                    'onclick' => '',
+                    'name' => 'Ver acción',
+                    'icon' => 'icon ni ni-check-circle-cut'
+                ]
+
+                ),
+           
         );
 
         return $menu;
@@ -3281,9 +3555,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $total_valid = 0;
 
 
-        if ($credit != null && $credit->applied_financial != null) {
+        /* if ($credit != null && $credit->applied_financial != null) {
             $total_valid = $total_valid + 1;
-        }
+        } */
         if ($credit != null && $credit->applied_loan_type != null) {
             $total_valid = $total_valid + 1;
         }
@@ -3304,13 +3578,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($credit != null && $credit->applied_loan_total_amount != null) {
             $total_valid = $total_valid + 1;
         }
-        if ($credit != null && $credit->applied_interest_rate != null) {
+        if ($credit != null && $credit->applied_interest_rate>= 0) {
             $total_valid = $total_valid + 1;
         }
-        if ($credit != null && $credit->applied_CAT != null) {
+        if ($credit != null && $credit->applied_CAT >= 0) {
             $total_valid = $total_valid + 1;
         }
-        $percent = ($total_valid / 9) * 100;
+        $percent = ($total_valid / 8) * 100;
         return $percent;
     }
 
@@ -3328,71 +3602,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $total_valid = $total_valid + 1;
         }
 
-        if ($client != null && $client->nationality != null) {
+        
+        if ($client != null && $client->bank_name != null) {
             $total_valid = $total_valid + 1;
         }
 
-        if ($client != null && $client->curp != null) {
-            $total_valid = $total_valid + 1;
-        }
-        if ($client != null && $client->client_postal_code != null) {
-            $total_valid = $total_valid + 1;
-        }
 
-        if ($client != null && $client->client_street != null) {
+        if ($client != null && $client->bank_clabe != null) {
             $total_valid = $total_valid + 1;
         }
-        if ($client != null && $client->client_home_external_number != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->client_colony != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->client_city != null) {
-            $total_valid = $total_valid + 1;
-        }
-        if ($client != null && $client->client_state != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->client_country != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->monthly_income != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_postal_code != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_street != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_home_external_number != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_colony != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_city != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_state != null) {
-            $total_valid = $total_valid + 1;
-        }
-
-        if ($client != null && $client->workplace_country != null) {
-            $total_valid = $total_valid + 1;
-        }
-        $percent =  ($total_valid / 19)  * 100;
+        $percent =  ($total_valid / 4)  * 100;
         return reduceDecimal($percent);
     }
 
@@ -3431,11 +3650,57 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit     = $history->historyCredit;
 
         $total_valid = 0;
-        if ($credit != null && $credit->financial_user_assigned != '' && $credit->commission != '') {
+        
+        if ($credit != null && $credit->url_sign != null) {
             $total_valid = 100;
         }
+
+        
         $percent =  (100 / 100) * $total_valid;
         return $percent;
+    }
+
+    public function percentFormStep5_2($history)
+    {
+        $percent = 0;
+        $credit     = $history->historyCredit;
+
+        $total_valid = 0;
+        
+        if ($credit != null && $credit->signed != null) {
+            $total_valid = 100;
+        }
+
+        
+        $percent =  (100 / 100) * $total_valid;
+        return $percent;
+    }
+   
+    public function percentFormStep5_3($id_rel, $step = null)
+    {
+        $model        = File::MODEL['controlDesk'];
+        $count_file   = 0;
+        $percent_file = 0;
+        $config_files = self::configUpload($step);
+        $total        = 0;
+        //dd($config_files);
+        foreach ($config_files as $key => $config_file) {
+            $file = File::where([
+                'model' => $model,
+                'id_rel' => $id_rel,
+                'template_config_id' => $key,
+            ])
+                ->first();
+            //dd($model, $id_rel, $key, $file);
+            if ($config_file['is_required'] == true) {
+                $total = $total + 1;
+            }
+            if ($file != null && $config_file['is_required'] == true) {
+                $count_file = $count_file + 1;
+                $percent_file = $percent_file + 100;
+            }
+        }
+        return ($count_file  )/ $total * 100;
     }
 
     //* get all percentages of the shares
@@ -3486,9 +3751,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function getFile($template_config_id)
     {
         try {
-            $config = self::configUpload()[$template_config_id];
-        } catch (\Exception $th) {
             $config = self::uploadStep3()[$template_config_id];
+        } catch (\Exception $th) {
+            try {
+                $config = self::uploadStep5()[$template_config_id];
+            } catch (\Exception $th) {
+                $config = self::uploadStep1()[$template_config_id];
+            }
         }
 
         return $config;
@@ -3500,7 +3769,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $model = File::MODEL['controlDesk'];
         $percent = 0;
 
-        $total_valid = $step == null ? 4 : 1;
+        $total_valid = $step == null ? 1 : 1;
 
         $count_file = 0;
         $percent_file = 0;
@@ -3546,17 +3815,34 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $breadcumbs;
     }
 
-    public function optionBreadcumblistAction($history, $step)
+    private function getTitles()
     {
-        $section = \Request::segment(2);
         $titles = array(
             '1' => 'Determinar crédito max',
             '2' => 'Crédito deseado',
-            '3_1' => 'Llenado de solicitud',
+            '3_1' => 'Solicitud',
             '3_2' => 'Entrevista',
             '4' => 'Análisis KYC',
-            '5' => 'Contactar financiera',
+            '5' => 'Preparar documento',
+            '5_2' => 'Confirmar',
+            '5_3' => 'Documento firmado',
         );
+        return $titles;
+    }
+   
+    private function getTitlesFiles()
+    {
+        $titles = array(
+            '1' => 'Docs Solicitante',
+            '3' => 'Edo Cta',
+        );
+        return $titles;
+    }
+
+    public function optionBreadcumblistAction($history, $step)
+    {
+        $section = \Request::segment(2);
+        $titles = $this->getTitles();
         $breadcumbs = array(
             0 => array(
                 'title' => 'Inicio',
@@ -3605,7 +3891,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function setTitle()
     {
-        return 'Acción formulario';
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+        $titles = $this->getTitles();
+        return isset($titles[$step]) ? 'Formulario - '.$titles[$step] : 'Acción formulario';
+    }
+    
+    public function setTitleDocument()
+    {
+        $step = isset($_GET['step']) ? $_GET['step'] : null;
+        $titles = $this->getTitlesFiles();
+        return isset($titles[$step]) ? 'Carga - '.$titles[$step] : 'Acción carga';
     }
     
 }

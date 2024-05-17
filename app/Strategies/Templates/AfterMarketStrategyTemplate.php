@@ -49,6 +49,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $type_form    = HistoryLog::KC_AFTER_FORM;
         $credit       = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
+        
 
         $elements = array(
             1 => [
@@ -63,7 +64,8 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => null,
-                'is_disabled' => null
+                'is_disabled' => null,
+                
             ],
             2 => [
                 'title_section' => null,
@@ -140,7 +142,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
             ],
             
         );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id,  'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
 

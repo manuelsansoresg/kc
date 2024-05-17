@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\CreditReference;
 use App\Models\HistoryLog;
+use App\Models\Transaction;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
@@ -20,13 +21,19 @@ class FormController extends Controller
     {
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $history          = HistoryLog::find($history_id);
-        $credit           = $history->historyCredit;
-        $form             = (new $actionStrategy)->configForm($credit->id, $history_id);
+        $credit           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $history->historyCredit : null;
+        $credit_id = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->id : null;
+        $form             = (new $actionStrategy)->configForm($credit_id, $history_id);
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
         $title            = (new $actionStrategy)->setTitle($history);
-        $client           = $credit->creditClientPerson;
-        $product          = $credit->creditProduct;
-        $id_rel           = $credit->id;
+        $client           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditClientPerson : null;
+        $product          = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditProduct : null;
+        $id_rel           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->id : null;
+        
+
+        if (($model == 'wallet' || $model == 'kc-down-wallet') && $history_id != 'null') {
+            $id_rel = $history->id_rel;
+        }
         return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
     }
 
@@ -60,11 +67,20 @@ class FormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $type_form = null)
     {
-        $credit   = Credit::find($id);
-        $client   = $credit->creditClientPerson;
-        return response()->json(['credit' => $credit, 'client' => $client]);
+        $credit = null;
+        $client = null;
+        $transaction = null;
+
+        if ($type_form != HistoryLog::KC_WALLET_ADD_FORM && $type_form != HistoryLog::KC_WALLET_ADD_FORM_STEP_2 && $type_form != HistoryLog::KC_DOWN_WALLET_ADD_FORM && $type_form != HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2) {
+            $credit   = Credit::find($id);
+            $client   = $credit->creditClientPerson;
+        } else {
+            $transaction = Transaction::find($id);
+        }
+        return response()->json(['credit' => $credit, 'client' => $client, 'transaction' => $transaction]);
+       
     }
 
     /**

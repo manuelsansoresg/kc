@@ -44,19 +44,21 @@ class LeadStrategyTemplate implements TemplateInterface
                 'cellphone' => $lead->cellphone,
                 'email' => $lead->email,
                 'agreement_id' => $lead->agreement_id,
+                'rfc' => $lead->rfc,
             );
             // know if exist client person
-            /* if (ClientPerson::where('email', $lead->email)->count() == 0) {
+
+            if (ClientPerson::where('rfc', $lead->rfc)->count() == 0) {
                 $client_person = ClientPerson::create($data_client_person);
             } else {
-                ClientPerson::where('email', $lead->email)
+                ClientPerson::where('rfc', $lead->rfc)
                             ->update($data_client_person);
-                $client_person = ClientPerson::where('email', $lead->email)->first();
-            } */
+                $client_person = ClientPerson::where('rfc', $lead->rfc)->first();
+            }
             
             
 
-            $client_person = ClientPerson::create($data_client_person);
+            //$client_person = ClientPerson::create($data_client_person);
             
             //* create credit
             $data_lead = array(
@@ -80,6 +82,8 @@ class LeadStrategyTemplate implements TemplateInterface
                 'manychat_id' => $lead->manychat_id,
                 'lead_id' => $lead->id,
                 'income' => $lead->income,
+                'applied_financial_product' => $lead->applied_financial_product,
+                'applied_loan_type' => $lead->applied_loan_type,
             );
 
             //validar que el credito no exista con los mismos datos
@@ -104,19 +108,24 @@ class LeadStrategyTemplate implements TemplateInterface
             //*in progress
             HistoryLog::move($credit->id, HistoryLog::CREDIT_IN_PROGRESS, HistoryLog::CREDIT_IN_PROGRESS);
             
+
+            //* con el nuevo cambio todo pasara primero a control desk
+
+            $history = HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CONTROL_DESK);
+            $notification   = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
+            (new $notification)->send($credit->id);
             
             //* enter module kc-checkup and list actions
-            if ($product->c_product_id = 1 && $product->c_service_id == 1) {
+            
+            /* if ($product->c_product_id = 1 && $product->c_service_id == 1) {
                 $history = HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
-                //* Execute notification in new credit
                 $notification   = SendNotificationsValues::STRATEGY['pushNewCreditKcCheckUp'];
                 (new $notification)->send($credit->id);
             } elseif ($product->c_product_id = 1 && $product->c_service_id == 2) {
                 $history = HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
-                //* Execute notification in new credit
                 $notification   = SendNotificationsValues::STRATEGY['pushNewCreditKcCheckUp'];
                 (new $notification)->send($credit->id);
-            }
+            } */
 
             //*create account automatically
             Lead::createClientPerson($lead->id, $is_report, $history->id);

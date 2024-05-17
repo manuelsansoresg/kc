@@ -9,6 +9,8 @@
 @inject('m_survey', 'App\Models\Survey')
 @inject('m_kyc', 'App\Models\Kyc')
 @inject('m_financial_product', 'App\Models\FinancialProduct')
+@inject('m_financial', 'App\Models\Financial')
+
 
 @php
     
@@ -54,7 +56,11 @@
         $m_history_log::KC_AFTER_MARKET_ARCHIVE,
     );
     $current_archive = $m_history_log->getByStatusFirst($status_credit_archive, $credit->id, 1);
+    $credit_product = $m_financial_product::getById($credit->applied_financial_product);
+$financial = $m_financial::find($credit_product->financial_id);
 @endphp
+
+
 {{-- 
     $m_history_log::$label_status[$current_module->status_id]
     --}}
@@ -246,9 +252,7 @@
                                                             <div class="profile-ud-list">
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
-                                                                        @php
-                                                                            $credit_product = $m_financial_product::getById($credit->financial_product_id);
-                                                                        @endphp
+                                                                       
                                                                         <span class="profile-ud-label">Producto financiero</span>
                                                                         <span class="profile-ud-value"> {{ $credit_product!= null ? $credit_product->name : null}}
                                                                         </span>
@@ -379,11 +383,12 @@
                                                                 </span>
                                                             </div>
                                                         </div>
+                                                       
                                                         <div class="profile-ud-item">
                                                             <div class="profile-ud wider">
                                                                 <span class="profile-ud-label">Financiera</span>
                                                                 <span class="profile-ud-value">
-                                                                    {{ $financial_applied !== null ? $financial_applied->commercial_name : null }}
+                                                                    {{ $financial !== null ? $financial->commercial_name : null }}
                                                                 </span>
                                                             </div>
                                                         </div>

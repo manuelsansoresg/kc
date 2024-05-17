@@ -35,7 +35,18 @@ class User extends Authenticatable
         'rol_id',
         'is_rss',
         'is_access_config',
-        'tyc_accept'
+        'tyc_accept',
+        'agreement_id',
+        'bank_name',
+        'bank_card_number',
+        'bank_account_number',
+        'bank_clabe',
+        'investment_bank_name',
+        'investment_bank_account_holder',
+        'investment_bank_account_number',
+        'investment_bank_clabe',
+        'financial_products_id',
+        'bank_account_holder'
 
     ];
 
@@ -69,6 +80,7 @@ class User extends Authenticatable
     public static function getUserRole($role)
     {
         $users =  User::select(
+            'agreement_id',
             'id',
             'name',
             'last_name',
@@ -87,9 +99,40 @@ class User extends Authenticatable
         return $users;
     }
 
+    public static function getUserRoleInvestor($role)
+    {
+        $users =  User::select(
+            'agreement_id',
+            'investors.id',
+            DB::raw('CONCAT(IFNULL(name, ""), " ", IFNULL(last_name, ""), " " , IFNULL(second_last_name, "")) AS name'),
+            'last_name',
+            'second_last_name',
+            'cellphone',
+            'email',
+            DB::raw('(CASE 
+            WHEN status = "1" THEN "Sí" 
+            WHEN status = "0" THEN "No" 
+            END) AS status'),
+            'financial_id',
+            'type_person'
+        )
+        ->join('investors', 'investors.user_id', 'users.id')
+            ->role($role)
+            ->get();
+        return $users;
+    }
+
     public static function saveEdit($request)
     {
         $is_save = false;
+        $financial_products_ids = $request->financial_products_id;
+        $financial_products_id = null;
+        foreach ($financial_products_ids as $financial_products_ids) {
+            $financial_products_id.= $financial_products_ids.',';
+        }
+        $financial_products_id = trim($financial_products_id, ',');
+        $request->merge(['financial_products_id' => $financial_products_id]);
+
         if ($request->user_id == null) {
             $user = new User($request->except(['_token', 'pass_confirm', 'password', 'user_id', 'type_user']));
             $user->password = bcrypt($request->password);
@@ -115,6 +158,21 @@ class User extends Authenticatable
 
         if ($request->type_user == 'cliente-financiera') {
             $role = 'Cliente financiera';
+        }
+
+        if ($request->type_user == 'cliente-inversionista') {
+            $role = 'Cliente inversionista';
+            $userId = $user->id;
+            // Buscar el inversor asociado al usuario
+            $investor = Investor::where('user_id', $userId)->first();
+
+            if ($investor) {
+                // Si el inversor existe, actualizar los datos
+                $investor->update(['financial_products_id' => $financial_products_id]);
+            } else {
+                // Si no existe, crear un nuevo inversor
+                Investor::create(['user_id' => $userId, 'financial_products_id' => $financial_products_id]);
+            }
         }
         $user->assignRole(ucfirst($role));
     }
@@ -170,10 +228,12 @@ class User extends Authenticatable
                 $domain = 'https://kaaxclub.com/reporte/' . $history_id;
                 //* 235b3d5c43c14184b365def8c1d1e160 link cuando se tenga la webapp
                 $body = 'Usuario: ' . $user->mail . '<br> Contraseña: ' . $password;
-                $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
+                
+                //*TODO: desactivar correo el reporte con las mejores opciones esta listo
+                /* $send_grid = new Csendgrid($data['email'], 'creacion cuenta');
                 $send_grid->setTemplate('d-b22ee2c485414371995b7ed109e95fb7');
                 $send_grid->setParams(['first_name' => $data['name'], 'link_account' => $domain, 'body' => $body]);
-                $send_grid->send();
+                $send_grid->send(); */
             }
             return $user;
         }
@@ -219,13 +279,14 @@ class User extends Authenticatable
             $get_users    = self::getUserRole('Cliente persona');
         } elseif ($type == 4) {
             $get_users    = self::getUserRole('Cliente financiera');
+        } elseif ($type == 5) {
+            $get_users    = self::getUserRole('Cliente inversionista');
         } else {
             $get_users    = self::getUserRole('Asesor');
         }
 
 
         $users        = array();
-
         foreach ($get_users as $user) {
             $client_person = ClientPerson::where('email', $user->email)->first();
             $id = isset($client_person->id) ?  $client_person->id : null;
@@ -234,8 +295,11 @@ class User extends Authenticatable
             if ($user->status == 'No') {
                 $lbl_status = '<span class="text-danger">No</span>';
             }
-            if ($type != 4) {
+            if ($type == 5) {
+                $agreement = $user->agreement;
+
                 $users[] = array(
+                    'agreement' => $agreement != null ? $agreement->name : null,
                     'name' => $user->name,
                     'last_name' => $user->last_name,
                     'second_last_name' => $user->second_last_name,
@@ -245,18 +309,30 @@ class User extends Authenticatable
                     'options' => $option
                 );
             } else {
-                $financial = $user->financial;
-                $type_person = config('enums.type_person');
-
-                $users[] = array(
-                    'financial' => ($financial != null) ? $financial->commercial_name : '',
-                    'type_person' => $type_person[$user->type_person],
-                    'name' => $user->last_name . ' ' . $user->name,
-                    'email' => $user->email,
-                    'cellphone' => $user->cellphone,
-                    'status' => $lbl_status,
-                    'options' => $option
-                );
+                if ($type != 4) {
+                    $users[] = array(
+                        'name' => $user->name,
+                        'last_name' => $user->last_name,
+                        'second_last_name' => $user->second_last_name,
+                        'cellphone' => $user->cellphone,
+                        'email' => $user->email,
+                        'status' => $lbl_status,
+                        'options' => $option
+                    );
+                } else {
+                    $financial = $user->financial;
+                    $type_person = config('enums.type_person');
+    
+                    $users[] = array(
+                        'financial' => ($financial != null) ? $financial->commercial_name : '',
+                        'type_person' => $type_person[$user->type_person],
+                        'name' => $user->last_name . ' ' . $user->name,
+                        'email' => $user->email,
+                        'cellphone' => $user->cellphone,
+                        'status' => $lbl_status,
+                        'options' => $option
+                    );
+                }
             }
         }
         return $users;
@@ -366,6 +442,11 @@ class User extends Authenticatable
     public function financial()
     {
         return $this->belongsTo(Financial::class, 'financial_id');
+    }
+    
+    public function agreement()
+    {
+        return $this->belongsTo(Agreement::class, 'agreement_id');
     }
 
     public function lead()

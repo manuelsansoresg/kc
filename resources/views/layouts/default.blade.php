@@ -158,6 +158,7 @@
                                             <ul class="list-item list-item-s1">
                                                 <li><a href="/nosotros">Nosotros</a></li>
                                                 <li><a href="/aviso-de-privacidad">Aviso de privacidad</a></li>
+                                                <li><a href="/terminos-y-condiciones">Términos y condiciones</a></li>
                                             </ul>
                                         </div><!-- end footer-item -->
                                     </div><!-- end col-lg-3 -->

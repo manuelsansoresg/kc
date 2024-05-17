@@ -1,6 +1,7 @@
 @inject('m_user', 'App\Models\User')
 @inject('m_history', 'App\Models\HistoryLog')
 @inject('m_notification', 'App\Models\Notification')
+@inject('Minvestor', 'App\Models\Investor')
 @php
     $notifications = $m_notification->getMyNotifications(6)['list'];
 @endphp
@@ -22,6 +23,11 @@
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/tippy.js@6/animations/scale.css"
+        />
     
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
     <!-- Google tag (gtag.js) -->
@@ -187,6 +193,11 @@
                                                                 class="nk-menu-link"><span class="nk-menu-text">Cliente
                                                                     financiera</span></a>
                                                         </li>
+                                                        <li class="nk-menu-item">
+                                                            <a href="/panel/user/cliente-inversionista"
+                                                                class="nk-menu-link"><span class="nk-menu-text">Cliente
+                                                                    inversionista</span></a>
+                                                        </li>
 
                                                     </ul>
                                                 </li>
@@ -274,6 +285,58 @@
                                     <a href="/panel/kc-payments" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
                                         <span class="nk-menu-text">KC - Payments</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                {{-- modulo KC - WALLET --}}
+                                @hasrole('Administrador|Asesor|Cliente financiera|Cliente inversionista')
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">KC - WALLET</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    @php
+                                        $investor = $Minvestor::where('user_id',  Auth::user()->id)->first();
+                                        $investorId = $investor!= null ? $investor->id : null;
+                                    @endphp
+                                    @if ($investorId != null)
+                                        <a href="/panel/inversionista/{{ $investorId }}" class="nk-menu-link">
+                                            <span class="nk-menu-text">Resumen</span>
+                                        </a>
+                                    @else
+                                        <a href="#" class="nk-menu-link">
+                                            <span class="nk-menu-text">Resumen</span>
+                                        </a>
+                                    @endif
+                                    
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-wallet/mis-prestamos/show" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Mis préstamos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-wallet" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Agregar fondos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-down-wallet" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Retirar fondos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="#" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Historial de movimientos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/ayuda" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text">Ayuda</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
@@ -408,21 +471,22 @@
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="/assets_admin/images/logo.png"
-                                        srcset="/assets_admin/images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="/assets_admin/images/logo-dark.png"
-                                        srcset="/assets_admin/images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="/images/logo-dark.png"
+                                        srcset="/images/logo-dark.png" alt="logo">
+                                    <img class="logo-dark logo-img" src="/images/logo-dark.png"
+                                        srcset="/images/logo-dark.png" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
 
-                            
-
+                            @if ( Request::segment(2) != 'inversionista' &&  Request::segment(2) != 'kc-wallet' && Request::segment(2) != 'kc-down-wallet' && Request::segment(2) != 'ayuda' )
                             <div class="nk-header-search ms-3 ms-xl-0">
                                 <em class="icon ni ni-search" id="icon-search"></em>
                                 <form action="/panel/user/search/view" method="GET">
                                     <input type="text"  name="query" id="query" value="{{ old('query') }}"  class="form-control border-transparent form-focus-none" placeholder="Buscar ..">
                                 </form>
                             </div><!-- .nk-header-news -->
+                            @endif
+
 
                             <div class="nk-header-tools">
                                 <ul class="nk-quick-nav">
@@ -1018,6 +1082,12 @@
 
     <script src="https://cdn.ckeditor.com/4.16.1/full-all/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/4.16.1/full-all/lang/es.js"></script>
+
+    {{-- tooltio --}}
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
     <script type="text/javascript" src="/js/app.js"></script>
 
 

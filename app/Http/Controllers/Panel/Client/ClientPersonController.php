@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClientPerson;
+use App\Models\Credit;
 use Illuminate\Http\Request;
 
 class ClientPersonController extends Controller
@@ -16,6 +17,21 @@ class ClientPersonController extends Controller
     public function index()
     {
         //
+    }
+
+    public function totalCredit($creditId)
+    {
+        $total = 0;
+        try {
+            $credit = Credit::find($creditId);
+            $client_person_id =  $credit->client_person_id;
+            $getClient = ClientPerson::find($client_person_id);
+            $client = $getClient->credit;
+            $total = count($client);
+        } catch (\Throwable $th) {
+        
+        }
+        return response()->json(['total' => $total]);
     }
 
     /**

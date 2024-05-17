@@ -99,8 +99,80 @@ class Credit extends Model
         'lead_id',
         'date_open_report',
         'income',
+        'investor_id',
+        'start_period_id',
+        's2_credit_id',
+        'opening_commission',
+        'sod_commission',
+        'refinance_adjustment',
+        'third_party_adjustment',
+        'net_amount',
         
     ];
+
+
+    public static function setMontoEntregar($creditId)
+    {
+        $credit = Credit::find($creditId);
+        $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+        //actualizar
+        if ($credit!= null && $financialProduct != null) {
+            $openin_commission = $credit->applied_import * ($financialProduct->opening_commission_rate / 100);
+            $net_amount = $credit->applied_import - $openin_commission - $credit->refinance_adjustment - $credit->third_party_adjustment;
+            $sod_commission = $financialProduct->sod_commission_amount;
+            Credit::where('id', $credit->id)->update([
+                'opening_commission' => $openin_commission,
+                'sod_commission' => $sod_commission,
+                'net_amount' => $net_amount
+            ]);
+        }
+    }
+
+    public static function setTotalCapital($creditId)
+    {
+        $totalAppliedImport = 0;
+        $getCredit = Credit::find($creditId);
+        // Filter distinct credits from history_logs excluding status_id = 16
+        
+        $distinctCredits = Credit::select('applied_import', 'id')
+        ->where('credits.applied_financial_product', $getCredit->applied_financial_product)
+        ->get(); // Use distinct to avoid duplicates
+        
+        // Calculate the sum of applied_import for distinct credits
+        foreach ($distinctCredits as $distinctCredit) {
+            
+            $isExistCancelled = HistoryLog::where([
+                                'status_id' => HistoryLog::CREDIT_CANCELED,
+                                'id_rel' => $distinctCredit->id,
+                                'is_credit' => 1
+                                ])->first();
+            
+            if ($isExistCancelled === null) {
+                $totalAppliedImport = $totalAppliedImport + $distinctCredit->applied_import;
+            }
+        }
+    
+        // Update the total_capital field for the current credit
+        $credit = Credit::find($creditId);
+        $totalCapitalPerInvestor = InvestorsCredit::selectRaw('SUM(import) as total_capital, investor_id')
+            ->groupBy('investor_id')
+            ->get();
+
+        foreach ($totalCapitalPerInvestor as $totalCapital) {
+            Investor::where('id', $totalCapital->investor_id)
+                ->update([
+                    'total_capital' => $totalCapital->total_capital
+                ]);
+        }
+
+
+        $getInvestors = Investor::where('financial_products_id', $credit->applied_financial_product)->get();
+        foreach ($getInvestors as $getInvestor) {
+            Transaction::setTotalCapital($getInvestor->id);
+        }
+        
+    }
+    
 
     public static function listDatatable($status)
     {

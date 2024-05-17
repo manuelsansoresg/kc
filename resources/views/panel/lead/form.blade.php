@@ -78,7 +78,8 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Celular</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="data[cellphone]"  id="lead-cellphone">
+                                                                    <input type="text" class="form-control" name="data[cellphone]"  id="lead-cellphone" onchange="checkDataLeadExist(this, 'cellphone')">
+                                                                    <label id="cellphone-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -86,7 +87,19 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Email</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email">
+                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email" onchange="checkDataLeadExist(this, 'email')">
+                                                                    <label id="email-msg" class="text-danger"></label>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">RFC</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="data[rfc]" minlength="10" id="lead-rfc" onchange="checkDataLeadExist(this, 'rfc')" required>
+                                                                    <label id="rfc-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
                                                             
@@ -123,7 +136,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-6" id="content-tipo-credito" style="display: none">
+                                                        {{-- <div class="col-md-6" id="content-tipo-credito" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Tipo de crédito que desea el prospecto</label>
                                                                 <p class="small">Categoría de crédito</p>
@@ -139,7 +152,7 @@
                                                                 </div>
                                                             </div>
                                                             
-                                                        </div>
+                                                        </div> --}}
 
                                                        
 
@@ -149,7 +162,7 @@
                                                                 <p class="small">Institución o empresa donde labora el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                    
-                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null)"  data-search="on">
+                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null, null, null)"  data-search="on">
                                                                         <option></option>
                                                                       
                 
@@ -167,11 +180,38 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <div class="col-md-6" id="content-producto-financiero" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Producto financiero</label>
+                                                                <p class="small">Elige el producto financiero que desea el prospecto</p>
+                                                                <div class="form-control-wrap">
+                                                                    <select class="form-select js-select2" name="data[applied_financial_product]" id="applied_financial_product">
+                                                                        
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6" id="content-tipo_tramite" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Tipo de trámite</label>
+                                                                <p class="small">Elige el tipo de trámite que desea el prospecto</p>
+                                                                <div class="form-control-wrap">
+                                                                   <select class="form-control" name="data[applied_loan_type]" id="applied_loan_type">
+                                                                    @foreach ($loan_type as $key=> $loan_type)
+                                                                        <option value="{{ $key }}"> {{ $loan_type }} </option>
+                                                                    @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
                                                         
                                                         <div class="col-md-6" id="content-financial_product_id" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Productos financieros</label>
-                                                                <p class="small">Selecciona los productos que tiene el prospecto</p>
+                                                                <p class="small">Elige el producto financiero que desea el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                     <select class="form-select select2multiple" name="products[]" id="lead-financial-product-id" multiple="multiple"  data-search="on">
                                                                         <option value="">Escribe para buscar</option>
@@ -203,8 +243,6 @@
                                                             </div>
                                                         </div>
 
-                                                        
-                                                       
                                                         <div class="col-md-6" id="content-banco_nomina" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Banco nómina </label>
@@ -250,6 +288,27 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <hr class="preview-hr">
+                                                        <span class="preview-title-lg overline-title">Viabilidad</span>
+                                                        <p class="text-primary">Este prospecto es <span class="text-viabilidad"></span>  </p>
+                                                        <div class="col-md-12">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" name="data[is_viability]" type="checkbox" value="1" id="is_viability">
+                                                                <label class="" for="is_viability">Viabilidad como <span class="text-viabilidad"></span> </label>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" name="data[is_viability_credit]" type="checkbox" value="1" id="is_viability_credit">
+                                                                <label class="" for="is_viability_credit">Viabilidad de crédito </label>
+                                                                
+                                                            </div>
+                                                        </div>
+
+
+                                                        
                                                         
                                                         <div class="col-md-6" id="content-comment" style="display: none">
                                                             <div class="form-group">
@@ -320,7 +379,7 @@
                                                         </div>
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Atención</span>
-                                                        <div class="col-md-6">
+                                                       {{--  <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-label">Atención</label>
                                                                 <p class="small"> Tipo de atención que desea el prospecto</p>
@@ -336,7 +395,7 @@
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                 
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Etiquetas</span>

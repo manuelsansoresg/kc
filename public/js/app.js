@@ -168,7 +168,12 @@ if (document.getElementById('action-model')) {
       submitHandler: function submitHandler(form, event) {
         event.preventDefault();
         var new_form = document.getElementById("frm-action-files");
-        var data = new FormData(new_form);
+        var data = new FormData(new_form); // Extract the step value from the URL
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var step = urlParams.get('step'); // Add the step value to the FormData
+
+        data.append('step', step);
         axios.post("/panel/files/template/date", data).then(function (response) {
           var result = response.data;
           var url_redirect = null;
@@ -1917,6 +1922,15 @@ $("#frm-financial-tramite").submit(function (event) {
     showToast('Producto', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
+$("#frm-comisioneskc").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-comisioneskc");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
 
 window.deleteFinancialProduct = function (id) {
   axios["delete"]("/panel/financial-product/" + id).then(function (response) {
@@ -2080,7 +2094,7 @@ $('.select2multiple').select2({
   placeholder: "Escribe para buscar.."
 }); //onchangeOrganization
 
-window.organizationChange = function (lead_agreement_id, financial_id, other) {
+window.organizationChange = function (lead_agreement_id, financial_id, other, applied_financial_product) {
   if (other != null) {
     lead_agreement_id = 0;
     $('#new_agreement').val(other);
@@ -2102,13 +2116,14 @@ window.organizationChange = function (lead_agreement_id, financial_id, other) {
     $('#lead-content-agreement').hide();
   } else {
     getFinancial(lead_agreement, financial_id);
+    getFinancialByAgreement(lead_agreement, applied_financial_product);
   }
 };
 
 window.productChange = function (lead_product_id) {
   $('#content-importe-solicitado').hide();
-  $('#content-banco_nomina').hide();
-  $('#content-tipo-credito').hide();
+  $('#content-banco_nomina').hide(); //$('#content-tipo-credito').hide();
+
   $('#content-consulta-buro-credito').hide();
   $('#content-financial_product_id').hide();
   $('#content-aval-o-garantia').hide();
@@ -2125,15 +2140,17 @@ window.productChange = function (lead_product_id) {
     //portabilidad
     $('#content-financial_product_id').show();
     $('#content-importe-solicitado').show();
-    $('#content-banco_nomina').show();
-    $('#content-tipo-credito').show();
+    $('#content-banco_nomina').show(); //$('#content-tipo-credito').show();
+
     $('#content-consulta-buro-credito').show();
     $('#content-aval-o-garantia').show();
   }
 
   if (product_id == 1) {
-    //credito nuevo
+    //credito nuevo ahora es crédito personal
     $('#content-importe-solicitado').show();
+    $('#content-producto-financiero').show();
+    $('#content-tipo_tramite').show();
     $('#content-banco_nomina').show();
     $('#content-tipo-credito').show();
     $('#content-consulta-buro-credito').show();
@@ -2146,6 +2163,25 @@ window.productChange = function (lead_product_id) {
     $('#content-aval-o-garantia').hide();
   }
 };
+
+function getFinancialByAgreement(agreementId, applied_financial_product) {
+  var selectElement = document.getElementById('applied_financial_product');
+  selectElement.options.length = 0; // Limpiar el select
+
+  axios.get("/panel/agreement/" + agreementId + "/financial-product/show").then(function (response) {
+    var financialProducts = response.data;
+    Object.keys(financialProducts).forEach(function (key) {
+      var option = document.createElement('option');
+      option.value = key;
+      option.textContent = financialProducts[key];
+      selectElement.appendChild(option);
+    });
+
+    if (applied_financial_product != 'null') {
+      $('#applied_financial_product').val(applied_financial_product).trigger("change");
+    }
+  })["catch"](function (e) {});
+}
 
 function getFinancial(lead_id, financial_id) {
   $('#lead-financial_id').empty();
@@ -2262,9 +2298,11 @@ function setData(is_change_origen, is_change_organization) {
     var financials = result.financials;
     var product_id = lead.product_id;
     var other = lead.other;
+    var is_viability = lead.is_viability;
+    var is_viability_credit = lead.is_viability_credit;
     console.log(product_id);
     productChange(product_id);
-    organizationChange(lead.agreement_id, lead.financial_id, other);
+    organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
     getFinancialProduct(lead.id, 1);
 
     if (is_change_origen == true) {
@@ -2274,13 +2312,15 @@ function setData(is_change_origen, is_change_organization) {
 
     $('#lead-asesor-id').val(lead.asesor_id);
     $('#lead-asesor-id').trigger("change");
-    $('#lead-type_id').val(lead.type_id);
-    $('#lead-type_id').trigger("change");
+    /* $('#lead-type_id').val(lead.type_id);
+    $('#lead-type_id').trigger("change"); */
+
     $('#lead-name').val(lead.name);
     $('#lead-last_name').val(lead.last_name);
     $('#lead-second_last_name').val(lead.second_last_name);
     $('#lead-cellphone').val(lead.cellphone);
     $('#lead-email').val(lead.email);
+    $('#lead-rfc').val(lead.rfc);
 
     if (document.getElementById('lead-manychat_id')) {
       $('#lead-manychat_id').val(lead.manychat_id);
@@ -2294,10 +2334,50 @@ function setData(is_change_origen, is_change_organization) {
     $('#bank_id').val(lead.bank_id).trigger("change");
     $('#tipo_credito').val(lead.tipo_credito).trigger("change");
     $('#consulta_buro').val(lead.consulta_buro).trigger("change");
+    checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
+
+    checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+
+    checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+
+    $('#applied_loan_type').val(lead.applied_loan_type).trigger("change"); // Get the checkbox elements
+
+    var checkboxViability = document.getElementById('is_viability');
+    var checkboxViabilityCredit = document.getElementById('is_viability_credit'); // Set the checked property based on the variables
+
+    checkboxViability.checked = is_viability === 1;
+    checkboxViabilityCredit.checked = is_viability_credit === 1;
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
 }
+
+window.checkDataLeadExist = function (valInput, id) {
+  var getValue = valInput.value;
+  var messageElement = document.getElementById(id + '-msg');
+
+  if (valInput != '') {
+    messageElement.textContent = "";
+    axios.get("/panel/lead/" + getValue + "/" + id + "/check").then(function (response) {
+      var result = response.data;
+      var isExist = result.exist;
+
+      if (isExist > 0) {
+        if (id != 'rfc') {
+          messageElement.textContent = "Ya está en uso";
+        } else {
+          messageElement.textContent = "Recurrente";
+          $('.text-viabilidad').html('Recurrente');
+        }
+      } else {
+        if (id == 'rfc') {
+          messageElement.innerHTML = "<b>Nuevo</b>";
+          $('.text-viabilidad').html('Nuevo');
+        }
+      }
+    })["catch"](function (e) {});
+  }
+};
 
 window.deleteLead = function (lead_id) {
   axios.get("panel/lead/" + lead_id + "/delete").then(function (response) {
@@ -3160,6 +3240,122 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+/* wallet */
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-wallet', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-wallet/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'date'
+    }, {
+      data: 'ordenante'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-wallet tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-down-wallet', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-down-wallet/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'date'
+    }, {
+      data: 'ordenante'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-down-wallet tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
 document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-kc-swap', {
     processing: true,
@@ -3293,6 +3489,33 @@ $().ready(function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/module/resumen.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/module/resumen.js ***!
+  \***************************************************/
+/***/ (() => {
+
+if (document.getElementById('checkIslimit')) {
+  var checkbox = document.getElementById('checkIslimit');
+  var numberInput = document.getElementById('lendable'); // Set initial state based on checkbox checked status
+
+  numberInput.disabled = checkbox.checked;
+  checkbox.addEventListener('change', function () {
+    numberInput.disabled = this.checked;
+  });
+  $("#frm-inversionista-prestamo").submit(function (event) {
+    event.preventDefault();
+    var InvestorId = $('#investorId').val();
+    var new_form = document.getElementById("frm-inversionista-prestamo");
+    var data = new FormData(new_form);
+    axios.post("/panel/inversionista", data).then(function (response) {
+      window.location = '/panel/inversionista/' + InvestorId;
+    })["catch"](function (e) {});
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/js/components/module/template.js":
 /*!****************************************************!*\
   !*** ./resources/js/components/module/template.js ***!
@@ -3401,12 +3624,12 @@ $().ready(function () {
   });
   $("#frm-template_control_desk_step2").validate({
     rules: {
-      'credit[applied_financial_product]': {
-        required: true
-      },
-      'credit[applied_loan_type]': {
-        required: true
-      },
+      /*  'credit[applied_financial_product]': {
+           required: true,
+       },
+       'credit[applied_loan_type]': {
+           required: true,
+       }, */
       'credit[applied_import]': {
         required: true
       },
@@ -3431,9 +3654,75 @@ $().ready(function () {
     },
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
-      saveForm('frm-template_control_desk_step2', 'controlDesk');
+      var input_loan = $('#input_loan').val();
+      var applied_import = $('#applied_import').val();
+
+      if (input_loan != '' && parseFloat(applied_import) > parseFloat(input_loan)) {
+        Swal.fire({
+          text: 'El importe solicitado no puede ser mayor al disponible',
+          icon: 'warning'
+        });
+      } else {
+        saveForm('frm-template_control_desk_step2', 'controlDesk');
+      }
     }
   });
+
+  window.getLoanAvailableByProduct = function (product) {
+    $('#text-loan').html('');
+    $('#input_loan').val('');
+    var productId = product.value;
+    $('#applied_loan_total_amount').val('');
+    $('#applied_payment').val('');
+    $('#applied_term').val('');
+    $('#applied_interest_rate').val('');
+    $('#applied_CAT').val('');
+    axios.get("/panel/financial-product/" + productId).then(function (response) {
+      var result = response.data;
+
+      if (result != null) {
+        // Use Intl.NumberFormat for locale-aware currency formatting
+        var formatter = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          // Replace with your desired currency code
+          minimumFractionDigits: 2 // Ensure at least two decimal places
+
+        });
+        var loan_available = result.loan_available == null || undefined ? 0 : result.loan_available;
+        var formattedAmount = formatter.format(loan_available);
+        $('#text-loan').html('Disponible: ' + formattedAmount);
+        $('#input_loan').val(loan_available);
+        $('#comision').val(result.sod_commission_amount);
+        $('#producto').val(result.type_product_id);
+
+        if (result.type_product_id == 6) {
+          $('#applied_term').val(1);
+          $('#applied_interest_rate').val(0);
+          $('#applied_CAT').val(0);
+        }
+
+        setBajoDemanda();
+      }
+    })["catch"](function (e) {
+      console.error('Error fetching loan available:', e);
+    });
+  };
+
+  window.setBajoDemanda = function () {
+    var comision = parseFloat($('#comision').val());
+    var inputAppliedImport = document.getElementById('applied_import');
+    inputAppliedImport.addEventListener('input', function () {
+      var importeSolicitado = parseFloat(inputAppliedImport.value);
+      var productId = $('#producto').val();
+
+      if (productId == 6) {
+        $('#applied_loan_total_amount').val(importeSolicitado + comision);
+        $('#applied_payment').val(importeSolicitado + comision);
+      }
+    });
+  };
+
   $("#frm-template_control_desk_step3_1").validate({
     rules: {
       'client_person[sex]': {
@@ -3444,39 +3733,18 @@ $().ready(function () {
         minlength: 13,
         maxlength: 13
       },
-      'client_person[nationality]': {
-        required: true
-      },
-      'client_person[birth_state]': {
-        required: true
-      },
       'client_person[curp]': {
-        required: true,
+        required: false,
         minlength: 18,
         maxlength: 18
       },
       'client_person[client_postal_code]': {
-        required: true,
+        required: false,
         number: true,
         minlength: 5,
         maxlength: 5
       },
-      'client_person[client_street]': {
-        required: true
-      },
-      'client_person[client_home_external_number]': {
-        required: true
-      },
-      'client_person[client_colony]': {
-        required: true
-      },
-      'client_person[client_city]': {
-        required: true
-      },
-      'client_person[client_state]': {
-        required: true
-      },
-      'client_person[client_country]': {
+      'client_person[bank_name]': {
         required: true
       },
       'client_person[bank_card_number]': {
@@ -3492,35 +3760,18 @@ $().ready(function () {
       'client_person[bank_clabe]': {
         number: true,
         minlength: 18,
-        maxlength: 18
+        maxlength: 18,
+        required: true
       },
       'client_person[monthly_income]': {
-        required: true,
+        required: false,
         number: true
       },
       'client_person[workplace_postal_code]': {
-        required: true,
+        required: false,
         number: true,
         minlength: 5,
         maxlength: 5
-      },
-      'client_person[workplace_street]': {
-        required: true
-      },
-      'client_person[workplace_home_external_number]': {
-        required: true
-      },
-      'client_person[workplace_colony]': {
-        required: true
-      },
-      'client_person[workplace_city]': {
-        required: true
-      },
-      'client_person[workplace_state]': {
-        required: true
-      },
-      'client_person[workplace_country]': {
-        required: true
       }
     },
     submitHandler: function submitHandler(form, event) {
@@ -3678,7 +3929,44 @@ $().ready(function () {
     },
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
-      saveForm('frm-template_control_desk_step5', 'controlDesk');
+      TotalCredits();
+    }
+  });
+
+  function TotalCredits() {
+    var creditId = $('#id_rel').val();
+    axios.get("/panel/client/" + creditId + "/credit/total").then(function (response) {
+      var result = response.data;
+      var total = result.total;
+
+      if (total == 0) {
+        Swal.fire({
+          title: 'Este es un cliente nuevo',
+          text: 'Confirmo que se incluyó el contrato de comisión mercantil para un cliente nuevo',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Continuar',
+          cancelButtonText: 'Cancelar'
+        }).then(function (result) {
+          if (result.value) {
+            saveForm('frm-template_control_desk_step5', 'controlDesk');
+          }
+        });
+      } else {
+        saveForm('frm-template_control_desk_step5', 'controlDesk');
+      }
+    })["catch"](function (e) {});
+  }
+
+  $("#frm-template_control_desk_step5_2").validate({
+    rules: {
+      'credit[signed]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step5_2', 'controlDesk');
     }
   });
   $("#frm-template_delivery_step2").validate({
@@ -3818,6 +4106,94 @@ $().ready(function () {
       event.preventDefault();
       saveForm('frm-template_swap_step3', 'swap');
     }
+  });
+  /* wallet */
+
+  $("#frm-template_wallet_step1").validate({
+    rules: {
+      'transaction[investor_id]': {
+        required: true
+      },
+      'transaction[bank_transfer_type]': {
+        required: true
+      },
+      'transaction[amount]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_step1', 'wallet');
+    }
+  }); //if exist implement onchange select
+
+  window.getValue = function (get) {
+    $('#content-legend').html('');
+    var ordenante = get.value;
+    axios.get("/panel/kc-wallet/" + ordenante + "/investor/get").then(function (response) {
+      var result = response.data;
+      $('#content-legend').html(result);
+    })["catch"](function (e) {});
+  };
+
+  if (document.getElementById('type_form') && $('#type_form').val() == '66') {
+    $('#content-legend-kc-down-bank').show();
+  }
+
+  if (document.getElementById('frm-template_wallet_step1')) {
+    var investorIdInput = document.getElementById('investor_id'); // Check if investor_id element exists and is a hidden input
+
+    if (investorIdInput && investorIdInput.type === 'hidden') {
+      getValue(investorIdInput);
+    }
+  }
+
+  $("#frm-template_wallet_step1_2").validate({
+    rules: {
+      'transaction[operation_status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_step1_2', 'wallet');
+    }
+  }); //* wallet-down
+
+  $("#frm-template_wallet_down_step1").validate({
+    rules: {
+      'transaction[investor_id]': {
+        required: true
+      },
+      'transaction[amount]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var withdraw_available = $('#withdraw_available').val();
+      var amount = $('#amount').val();
+
+      if (withdraw_available != '' && parseFloat(amount) > parseFloat(withdraw_available)) {
+        Swal.fire({
+          text: 'El importe a retirar debe ser menor  al disponible para el retiro',
+          icon: 'warning'
+        });
+      } else {
+        saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
+      }
+    }
+  });
+  $("#frm-template_wallet_down_step2").validate({
+    rules: {
+      'transaction[operation_status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_down_step2', 'kc-down-wallet');
+    }
   }); //*get data
 
   if (document.getElementById('id_rel')) {
@@ -3825,10 +4201,11 @@ $().ready(function () {
     var type_form = $('#type_form').val();
 
     if (id_rel != '') {
-      axios.get("/panel/action-form/" + id_rel).then(function (response) {
+      axios.get("/panel/action-form/" + id_rel + "/" + type_form + '/form/get').then(function (response) {
         var result = response.data;
         var credit = result.credit;
         var client = result.client;
+        var transaction = result.transaction;
 
         if (type_form == 8) {
           //checkup
@@ -3868,7 +4245,7 @@ $().ready(function () {
         if (type_form == 24) //form kc-desktop step2
           {
             $('#applied_financial').val(credit.applied_financial).trigger("change");
-            $('#applied_financial_product').val(credit.financial_product_id).trigger("change");
+            $('#applied_financial_product').val(credit.applied_financial_product).trigger("change");
             $('#applied_loan_type').val(credit.applied_loan_type).trigger("change");
             $('#applied_loan_discount').val(credit.applied_loan_discount);
             $('#applied_sign_type').val(credit.applied_sign_type).trigger("change");
@@ -4018,6 +4395,26 @@ $().ready(function () {
           {
             $('#signed').val(credit.signed).trigger("change");
           }
+
+        if (type_form == 61) //form kc-wallet step1
+          {
+            $('#investor_id').val(transaction.investor_id).trigger("change");
+            $('#bank_transfer_type').val(transaction.bank_transfer_type).trigger("change");
+            $('#operation_number').val(transaction.operation_number);
+            $('#amount').val(transaction.amount);
+          }
+
+        if (type_form == 63) //form kc-wallet step2
+          {
+            $('#operation_status').val(transaction.operation_status).trigger("change");
+          }
+
+        if (type_form == 66) //form kc-wallet step1
+          {
+            $('#investor_id').val(transaction.investor_id).trigger("change");
+            $('#transaction_type').val(transaction.transaction_type);
+            $('#amount').val(Math.abs(transaction.amount));
+          }
       })["catch"](function (e) {});
     }
   }
@@ -4072,6 +4469,22 @@ function saveForm(id_form, model) {
 
     if (url_redirect == null) {
       window.history.back();
+    }
+
+    if (document.getElementById('url_redirect_finish')) {
+      // Obtener el valor de "id"
+      var id = result.id; // Obtener el elemento "url_redirect_finish"
+
+      var urlRedirectFinishElement = document.getElementById('url_redirect_finish'); // Obtener el valor actual de data-redirect
+
+      var currentDataRedirect = urlRedirectFinishElement.getAttribute('data-redirect'); // Reemplazar {history_id} con el valor de "id"
+
+      var updatedDataRedirect = currentDataRedirect.replace('{history_id}', id); // Actualizar el valor de data-redirect
+
+      urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
+      /* window.location = updatedDataRedirect; */
+
+      url_redirect = updatedDataRedirect;
     }
 
     window.location = url_redirect;
@@ -4705,6 +5118,10 @@ window.modalUser = function (type, user_id) {
     $('#frmfinanciera').trigger("reset");
   }
 
+  if (document.getElementById('frm-inversionista')) {
+    $('#frm-inversionista').trigger("reset");
+  }
+
   if (type === 1) {
     $('#user-admin-title').html('Crear usuario ' + title);
     $('#content-password').show();
@@ -4758,7 +5175,26 @@ function setDataUser(user_id) {
     $('#cellphone').val(result.cellphone);
     $('#email').val(result.email);
     $('#status option[value="' + result.status + '"]').attr("selected", "selected");
+
+    if (result.agreement_id != '') {
+      $('#agreement_id option[value="' + result.agreement_id + '"]').attr("selected", "selected");
+      $('#bank_name').val(result.bank_name);
+      $('#bank_card_number').val(result.bank_card_number);
+      $('#bank_account_number').val(result.bank_account_number);
+      $('#bank_clabe').val(result.bank_clabe);
+      $('#bank_account_holder').val(result.bank_account_holder);
+      $('#investment_bank_name').val(result.investment_bank_name);
+      $('#investment_bank_account_holder').val(result.investment_bank_account_holder);
+      $('#investment_bank_account_number').val(result.investment_bank_account_number);
+      $('#investment_bank_clabe').val(result.investment_bank_clabe);
+    }
+
     $('#is_access_config option[value="' + result.is_access_config + '"]').attr("selected", "selected");
+
+    if (document.getElementById('financial_products_id')) {
+      var financial_products_id = result.financial_products_id.split(',');
+      $('#financial_products_id').val(financial_products_id).trigger('change');
+    }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
@@ -4882,6 +5318,63 @@ $().ready(function () {
       });
     }
   });
+  $("#frm-inversionista").validate({
+    rules: {
+      financial_products_id: {
+        required: true
+      },
+      type_person: {
+        required: true
+      },
+      rol_id: {
+        required: true
+      },
+      name: {
+        required: true
+      },
+      last_name: {
+        required: true
+      },
+      cellphone: {
+        number: true,
+        minlength: 10
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 8
+      },
+      pass_confirm: {
+        required: true,
+        minlength: 8,
+        equalTo: "#password"
+      },
+      status: {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#admin_email-error-exist').hide();
+      var new_form = document.getElementById("frm-inversionista");
+      var data = new FormData(new_form);
+      axios.post("/panel/user/administrador", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-inversionista', 'Datos actualizados', 'Información actualizada correctamente');
+        $('#modal-user-admin').modal('hide');
+      })["catch"](function (e) {
+        var response = e.response;
+        var errors = response.data.errors;
+
+        if (errors.email) {
+          $('#admin_email-error-exist').show();
+        }
+      });
+    }
+  });
   $("#frmpassword").validate({
     rules: {
       user_password: {
@@ -4999,6 +5492,55 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'type_person'
     }, {
+      data: 'name'
+    }, {
+      data: 'email'
+    }, {
+      data: 'cellphone'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/user/datatable_inversionista.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/user/datatable_inversionista.js ***!
+  \*****************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var table = NioApp.DataTable('#dt-inversionista', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/user/' + route + '/list/show',
+    columns: [{
       data: 'name'
     }, {
       data: 'email'
@@ -5274,6 +5816,8 @@ __webpack_require__(/*! ./components/user/datatable_admin */ "./resources/js/com
 
 __webpack_require__(/*! ./components/user/datatable_financiera */ "./resources/js/components/user/datatable_financiera.js");
 
+__webpack_require__(/*! ./components/user/datatable_inversionista */ "./resources/js/components/user/datatable_inversionista.js");
+
 __webpack_require__(/*! ./components/user/datatable_user */ "./resources/js/components/user/datatable_user.js");
 
 __webpack_require__(/*! ./components/product/datatable_product */ "./resources/js/components/product/datatable_product.js");
@@ -5313,6 +5857,8 @@ __webpack_require__(/*! ./components/general */ "./resources/js/components/gener
 __webpack_require__(/*! ./components/module/datatable */ "./resources/js/components/module/datatable.js");
 
 __webpack_require__(/*! ./components/module/template */ "./resources/js/components/module/template.js");
+
+__webpack_require__(/*! ./components/module/resumen */ "./resources/js/components/module/resumen.js");
 
 __webpack_require__(/*! ./components/module/kc_check_up/datatable */ "./resources/js/components/module/kc_check_up/datatable.js");
 
@@ -5402,6 +5948,15 @@ $().ready(function () {
 });
 
  */
+
+tippy(document.querySelectorAll('.active-tooltip'), {
+  content: function content(reference) {
+    var id = reference.getAttribute('data-template');
+    var template = document.getElementById(id);
+    return template.innerHTML;
+  },
+  allowHTML: true
+});
 
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
 })();

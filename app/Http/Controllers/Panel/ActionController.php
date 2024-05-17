@@ -168,7 +168,41 @@ class ActionController extends Controller
 
     public function storeFilesDateTemplate(Request $request)
     {
+        $models = File::MODEL;
         TemplateFile::saveTemplate($request);
+        $step = $request->step;
+        if ($request->model == 'controlDesk' && $step == '5_3') {
+            $actionStrategy   = TemplateValues::STRATEGY[$request->model];
+            $finish       = (new $actionStrategy)->finish($request->id_rel, $step);
+        }
+        //terminar archivo agregar fondos etapa 1
+        if ($request->model == 'wallet'  && $step == '1_2') {
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($request->id_rel, HistoryLog::KC_WALLET_ADD_FORM_STEP_2, HistoryLog::KC_WALLET_ADD_FORM_STEP_2, null, false);
+            HistoryLog::move($request->id_rel, HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, null, false);
+
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $request->id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM_STEP_2, $request->id_rel, 0);
+        
+        }
+
+        if ($request->model == 'wallet'  && $step == '2') {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $request->id_rel, 1);
+        }
+        //terminar archivo retirar fondos etapa 1
+        if ($request->model == 'kc-down-wallet' && $step == '2') {
+            HistoryLog::move($request->id_rel, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, null, false);
+            $actionStrategy   = TemplateValues::STRATEGY[$request->model];
+            $finish       = (new $actionStrategy)->finish($request->id_rel, $step);
+        }
+        
+        
+       /*  $data_where = array(
+            'model' => $models[$request->model],
+            'id_rel' => $request->id_rel
+        );
+        $files = File::where($data_where)->count(); */
+        
     }
 
     public function showFiles($model, Request $request)

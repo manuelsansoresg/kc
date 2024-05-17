@@ -1,0 +1,18 @@
+@if ($user != null)
+<div class="alert alert-primary" role="alert">
+
+<h6 class="text-primary">INSTRUCCIONES</h6>
+
+<p> <br> <b>1- Realiza un SPEI o transferencia a la siguiente cuenta:</b>
+    <br>Banco: {{ $user->bank_name}}
+    <br>Nombre: {{ $user->bank_account_holder }}
+    <br>CLABE:  {{ $user->bank_clabe }}
+    <br>Cuenta:  {{ $user->bank_account_number }}
+
+    <br><br> <b>2- Regresa a esta página después de haber hecho el pago y captura los datos.</b>
+    
+    <br><br> <b>IMPORTANTE:</b> No se acepta efectivo.
+</p>
+</div>
+<br>
+@endif

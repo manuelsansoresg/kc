@@ -8,6 +8,7 @@ use App\Lib\Csendgrid;
 use App\Lib\Manychat;
 use App\Models\Action;
 use App\Models\Bank;
+use App\Models\ClientPerson;
 use App\Models\CurrentFinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -17,6 +18,7 @@ use App\Models\Note;
 use App\Models\File;
 use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
+use App\Models\Investor;
 use App\Models\User;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
@@ -39,33 +41,19 @@ class LeadController extends Controller
      */
     public function index()
     {
-        /* $manychat = new Manychat();
-        $data_usuario = array(
-            "first_name" => 'Manuel',
-            "last_name" => 'Sansores',
-            "phone" => "+5219991575581",
-            "whatsapp_phone" => "5219991575581",
-            "email" => 'manuelsansoresg@gmail.com',
-            "has_opt_in_sms" => true,
-            "has_opt_in_email" => true,
-            "consent_phrase" => 'kc',
-        );
-        dd($manychat->altaUsuario($data_usuario)); */
-        /* //$manychat->setCustomFields($lead->manychat_id, config('enums.custom_fields_many_chat')['Asesor'], $advisor);
-        $data = array(
-            'Servicio KC' => 'Crédito nuevo',
-            'Aval o garantía' => true,
-
-        );
-        $set = $manychat->setCustomFields($data, 1995087542);
-        dd($set); */
+        
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
         if ($is_financiera === true) {
             return redirect('panel/kc-delivery');
+        } elseif ($is_investor  === true) {
+            $investor = Investor::where('user_id', Auth::user()->id)->first();
+            return redirect('panel/inversionista/'.$investor->id);
         }
         $model        = $this->model;
         return view('panel.lead.list', compact('model'));
     }
+    
 
     public function list()
     {
@@ -73,7 +61,11 @@ class LeadController extends Controller
         return response()->json(['data' => $users]);
     }
 
-    
+    public function checkData($valInput , $id)
+    {
+        $getLead = ClientPerson::checkDataModel($valInput,$id);
+        return response()->json(['exist' => $getLead]);
+    }
     
     public function listActions(Lead $lead)
     {
@@ -142,7 +134,8 @@ class LeadController extends Controller
         $lead = null;
         $banks = Bank::all();
         $financial_products = FinancialProduct::getAll();
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products'));
+        $loan_type    = config('enums.loan_type');
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type'));
     }
 
     /**
@@ -219,7 +212,8 @@ class LeadController extends Controller
         $lead = Lead::find($id);
         $banks = Bank::all();
         $financial_products = FinancialProduct::getAll();
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products'));
+        $loan_type    = config('enums.loan_type');
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type'));
     }
 
     /**

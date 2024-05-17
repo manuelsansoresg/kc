@@ -177,6 +177,7 @@ return [
     'interviewer' => array(
         1 => 'KaaxClub',
         2 => 'Financiera',
+        3 => 'No necesario',
     ),
     'marital_status' => array(
         1 => 'Soltero',
@@ -224,6 +225,25 @@ return [
         'Tipo de crédito' =>  10202818,
         'URL Reporte' =>  10298820,
         'URL Encuesta' =>  10357823,
-    )
+    ),
+
+    "funding_operation" => array(
+        1 => 'Mismo banco',
+        2 => 'SPEI'
+    ),
+    
+    "operation_status" => array(
+        0 => 'En revisión',
+        1 => 'Exitosa',
+        2 => 'Fallida'
+    ),
+    
+    "status_credit" => array(
+        230 => 'Activo',
+        231 => 'Baja',
+        232 => 'Defunción',
+        233 => 'Condonado',
+        234 => 'Liquidado',
+    ),
     
 ];

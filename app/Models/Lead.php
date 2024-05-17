@@ -39,6 +39,11 @@ class Lead extends Model
         'comment',
         'manychat_id',
         'income',
+        'rfc',
+        'applied_financial_product',
+        'applied_loan_type',
+        'is_viability',
+        'is_viability_credit',
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)
@@ -78,8 +83,6 @@ class Lead extends Model
     {
        
         $is_asesor = Auth::user()->hasRole('Asesor');
-        
-        
 
         $get_list = HistoryLog::getByStatus([HistoryLog::CREATE_PROSPECT]);
         //dd($get_list);
@@ -203,6 +206,12 @@ class Lead extends Model
         if (isset($data['aval_o_garantia'])) {
             $data['aval_o_garantia'] = $data['aval_o_garantia'] === null ? 1 : $data['aval_o_garantia']; 
         }
+
+        
+        $data['is_viability'] = isset($data['is_viability']) ? $data['is_viability'] : 0 ; 
+        
+        
+        $data['is_viability_credit'] = isset($data['is_viability_credit']) ? $data['is_viability_credit'] : 0 ; 
 
         if (isset($data['agreement_id']) && $data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
             unset($data['agreement_id']);

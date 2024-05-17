@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel\Credit;
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\HistoryLog;
+use App\Models\Transaction;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
@@ -19,14 +20,42 @@ class DocumentController extends Controller
     {
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $files            = (new $actionStrategy)->configUpload();
-        $history          = HistoryLog::find($history_id);
-        $credit           = $history->historyCredit;
-        $credit_id        = $credit->id;
-        $client           = $credit->creditClientPerson;
-        $product          = $credit->creditProduct;
-        //dd($history_id);
+        $title = 'Acción carga';
+        $url_redirect = null;
+        try {
+            $title = (new $actionStrategy)->setTitleDocument();
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
-        return view('panel.credit.files', compact('files', 'credit_id', 'model', 'product', 'credit', 'client', 'history'));
+        try {
+            $url_redirect = (new $actionStrategy)->setURLDocument($history->id_rel);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+        $history          = HistoryLog::find($history_id);
+        $credit = null;
+        $credit_id = $history->id_rel;
+        $client = null;
+        $product = null;
+        $transaction = null;
+        $isTitleDescription = true;
+
+        if ($model != 'wallet' && $model != 'kc-down-wallet') {
+            $credit           = $history->historyCredit;
+            $client           = $credit->creditClientPerson;
+            $product          = $credit->creditProduct;
+        } else {
+            $transaction = Transaction::find($history->id_rel);
+            
+        }
+        
+        if ($model == 'wallet') { //agregar fondo
+            $isTitleDescription = false;
+        }
+
+        return view('panel.credit.files', compact('title', 'isTitleDescription', 'files', 'credit_id', 'model', 'product', 'credit', 'client', 'history', 'url_redirect', 'transaction'));
     }
 
     /**

@@ -107,12 +107,12 @@ $().ready(function () {
 
     $("#frm-template_control_desk_step2").validate({
         rules: {
-            'credit[applied_financial_product]': {
+           /*  'credit[applied_financial_product]': {
                 required: true,
             },
             'credit[applied_loan_type]': {
                 required: true,
-            },
+            }, */
 
             'credit[applied_import]': {
                 required: true,
@@ -140,9 +140,80 @@ $().ready(function () {
         },
         submitHandler: function (form, event) {
             event.preventDefault();
-            saveForm('frm-template_control_desk_step2', 'controlDesk');
+            let input_loan = $('#input_loan').val();
+            let applied_import = $('#applied_import').val();
+            if (input_loan != '' && parseFloat(applied_import) > parseFloat(input_loan)) {
+                Swal.fire({
+                    text: 'El importe solicitado no puede ser mayor al disponible',
+                    icon: 'warning',
+                })
+            } else {
+                saveForm('frm-template_control_desk_step2', 'controlDesk');
+            }
         }
     });
+
+    window.getLoanAvailableByProduct = function(product) {
+        $('#text-loan').html('');
+        $('#input_loan').val('');
+        let productId = product.value;
+        
+
+        $('#applied_loan_total_amount').val('');
+        $('#applied_payment').val('');
+
+        $('#applied_term').val('');
+        $('#applied_interest_rate').val('');
+        $('#applied_CAT').val('');
+        
+        axios
+          .get("/panel/financial-product/" + productId)
+          .then(function (response) {
+            let result = response.data;
+      
+            if (result != null) {
+              // Use Intl.NumberFormat for locale-aware currency formatting
+              const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD', // Replace with your desired currency code
+                minimumFractionDigits: 2, // Ensure at least two decimal places
+              });
+              let loan_available = result.loan_available == null || undefined ? 0 : result.loan_available;
+              const formattedAmount = formatter.format(loan_available);
+              $('#text-loan').html('Disponible: ' + formattedAmount);
+              $('#input_loan').val(loan_available);
+              $('#comision').val(result.sod_commission_amount);
+              $('#producto').val(result.type_product_id);
+              if (result.type_product_id == 6) {
+                  $('#applied_term').val(1);
+                  $('#applied_interest_rate').val(0);
+                  $('#applied_CAT').val(0);
+              }
+
+              setBajoDemanda();
+            }
+          })
+          .catch(e => {
+            console.error('Error fetching loan available:', e);
+          });
+          
+      };
+      
+      window.setBajoDemanda = function () {
+        let comision = parseFloat($('#comision').val());
+        
+        const inputAppliedImport = document.getElementById('applied_import');
+      
+        inputAppliedImport.addEventListener('input', function() {
+          let importeSolicitado = parseFloat(inputAppliedImport.value);
+          let productId = $('#producto').val();
+          if (productId == 6) {
+            $('#applied_loan_total_amount').val(importeSolicitado + comision);
+            $('#applied_payment').val(importeSolicitado + comision);
+          }
+        });
+      };
+      
     
     $("#frm-template_control_desk_step3_1").validate({
         rules: {
@@ -154,43 +225,22 @@ $().ready(function () {
                 minlength: 13,
                 maxlength:13
             },
-            'client_person[nationality]': {
-                required: true,
-            },
-
-            'client_person[birth_state]': {
-                required: true,
-            },
+            
             'client_person[curp]': {
-                required: true,
+                required: false,
                 minlength: 18,
                 maxlength:18
             },
             'client_person[client_postal_code]': {
-                required: true,
+                required: false,
                 number: true,
                 minlength: 5,
                 maxlength:5
             },
-            'client_person[client_street]': {
+            'client_person[bank_name]': {
                 required: true,
             },
-            'client_person[client_home_external_number]': {
-                required: true,
-            },
-            'client_person[client_colony]': {
-                required: true,
-            },
-            'client_person[client_city]': {
-                required: true,
-            },
-            'client_person[client_state]': {
-                required: true,
-            },
-            'client_person[client_country]': {
-                required: true,
-            },
-            
+           
             'client_person[bank_card_number]': {
                 number: true,
                 minlength: 16,
@@ -204,36 +254,20 @@ $().ready(function () {
             'client_person[bank_clabe]': {
                 number: true,
                 minlength: 18,
-                maxlength:18
+                maxlength:18,
+                required: true,
             },
             'client_person[monthly_income]': {
-                required: true,
+                required: false,
                 number: true,
             },
             'client_person[workplace_postal_code]': {
-                required: true,
+                required: false,
                 number: true,
                 minlength: 5,
                 maxlength:5
             },
-            'client_person[workplace_street]': {
-                required: true,
-            },
-            'client_person[workplace_home_external_number]': {
-                required: true,
-            },
-            'client_person[workplace_colony]': {
-                required: true,
-            },
-            'client_person[workplace_city]': {
-                required: true,
-            },
-            'client_person[workplace_state]': {
-                required: true,
-            },
-            'client_person[workplace_country]': {
-                required: true,
-            },
+            
 
 
         },
@@ -402,7 +436,52 @@ $().ready(function () {
         },
         submitHandler: function (form, event) {
             event.preventDefault();
-            saveForm('frm-template_control_desk_step5', 'controlDesk');
+            TotalCredits();
+            
+        }
+    });
+
+    function TotalCredits()
+    {
+        let creditId = $('#id_rel').val();
+        axios
+        .get("/panel/client/" + creditId+"/credit/total")
+        .then(function (response) {
+            let result = response.data;
+            let total = result.total;
+
+            if (total == 0) {
+                Swal.fire({
+                    title: 'Este es un cliente nuevo',
+                    text : 'Confirmo que se incluyó el contrato de comisión mercantil para un cliente nuevo',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Continuar',
+                    cancelButtonText: 'Cancelar'
+                  }).then(function (result) {
+                    if (result.value) {
+                        saveForm('frm-template_control_desk_step5', 'controlDesk');
+                    }
+                  });
+            } else {
+                saveForm('frm-template_control_desk_step5', 'controlDesk');
+            }
+        })
+        .catch(e => {
+        });
+
+        
+    }
+
+    $("#frm-template_control_desk_step5_2").validate({
+        rules: {
+            'credit[signed]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step5_2', 'controlDesk');
         }
     });
 
@@ -554,18 +633,124 @@ $().ready(function () {
         }
     });
 
+
+    /* wallet */
+
+    $("#frm-template_wallet_step1").validate({
+        rules: {
+            'transaction[investor_id]': {
+                required: true,
+            },
+            'transaction[bank_transfer_type]': {
+                required: true,
+            },
+            'transaction[amount]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_wallet_step1', 'wallet');
+        }
+    });
+
+    //if exist implement onchange select
+    window.getValue = function(get)
+    {
+        $('#content-legend').html('');
+        let ordenante = get.value;
+        axios
+            .get("/panel/kc-wallet/" + ordenante+"/investor/get")
+            .then(function (response) {
+                let result = response.data;
+                $('#content-legend').html(result);
+            })
+            .catch(e => {
+            });
+    }
+
+    if (document.getElementById('type_form') && $('#type_form').val() == '66') {
+        $('#content-legend-kc-down-bank').show();
+    }
+
+    if(document.getElementById('frm-template_wallet_step1'))
+    {
+        const investorIdInput = document.getElementById('investor_id');
+        // Check if investor_id element exists and is a hidden input
+        if (investorIdInput && investorIdInput.type === 'hidden') {
+            getValue(investorIdInput);
+        
+        }
+    }
+    
+    $("#frm-template_wallet_step1_2").validate({
+        rules: {
+            'transaction[operation_status]': {
+                required: true,
+            },
+           
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_wallet_step1_2', 'wallet');
+        }
+    });
+
+
+
+    //* wallet-down
+    $("#frm-template_wallet_down_step1").validate({
+        rules: {
+            'transaction[investor_id]': {
+                required: true,
+            },
+            'transaction[amount]': {
+                required: true,
+            },
+            
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            let withdraw_available = $('#withdraw_available').val();
+            let amount = $('#amount').val();
+            if (withdraw_available != '' && parseFloat(amount) > parseFloat(withdraw_available)) {
+                Swal.fire({
+                    text: 'El importe a retirar debe ser menor  al disponible para el retiro',
+                    icon: 'warning',
+                })
+            } else {
+                saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
+            }
+        }
+    });
+
+    $("#frm-template_wallet_down_step2").validate({
+        rules: {
+            'transaction[operation_status]': {
+                required: true,
+            },
+           
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_wallet_down_step2', 'kc-down-wallet');
+        }
+    });
+    
+
     //*get data
     if (document.getElementById('id_rel')) {
         let id_rel = $('#id_rel').val();
         let type_form = $('#type_form').val();
-
+        
         if (id_rel != '') {
             axios
-                .get("/panel/action-form/" + id_rel)
+                .get("/panel/action-form/" + id_rel+"/"+type_form+'/form/get')
                 .then(function (response) {
                     let result = response.data;
                     let credit = result.credit;
                     let client = result.client;
+                    let transaction = result.transaction;
                     
 
                     if (type_form == 8) { //checkup
@@ -607,7 +792,7 @@ $().ready(function () {
                     if (type_form == 24) //form kc-desktop step2
                     {
                         $('#applied_financial').val(credit.applied_financial).trigger("change");
-                        $('#applied_financial_product').val(credit.financial_product_id).trigger("change");
+                        $('#applied_financial_product').val(credit.applied_financial_product).trigger("change");
                         $('#applied_loan_type').val(credit.applied_loan_type).trigger("change");
                         $('#applied_loan_discount').val(credit.applied_loan_discount);
                         $('#applied_sign_type').val(credit.applied_sign_type).trigger("change");
@@ -761,11 +946,34 @@ $().ready(function () {
                         $('#signed').val(credit.signed).trigger("change");
                     }
 
+                    if (type_form == 61) //form kc-wallet step1
+                    {
+                         
+                        $('#investor_id').val(transaction.investor_id).trigger("change");
+                        $('#bank_transfer_type').val(transaction.bank_transfer_type).trigger("change");
+                        $('#operation_number').val(transaction.operation_number);
+                        $('#amount').val(transaction.amount);
+                    }
+                    
+                    if (type_form == 63) //form kc-wallet step2
+                    {
+                        $('#operation_status').val(transaction.operation_status).trigger("change");
+                    }
+                    if (type_form == 66) //form kc-wallet step1
+                    {
+                        $('#investor_id').val(transaction.investor_id).trigger("change");
+                        $('#transaction_type').val(transaction.transaction_type);
+                        $('#amount').val(Math.abs(transaction.amount));
+                    }
+
                 })
                 .catch(e => {
                 });
         }
     }
+
+ 
+
     
 });
 
@@ -824,9 +1032,30 @@ function saveForm(id_form, model) {
         .post("/panel/action-form", data)
         .then(function (response) {
             let result = response.data;
+            
             if (url_redirect == null) {
                 window.history.back();
             }
+            if (document.getElementById('url_redirect_finish')) {
+                // Obtener el valor de "id"
+                const id = result.id;
+              
+                // Obtener el elemento "url_redirect_finish"
+                const urlRedirectFinishElement = document.getElementById('url_redirect_finish');
+              
+                // Obtener el valor actual de data-redirect
+                const currentDataRedirect = urlRedirectFinishElement.getAttribute('data-redirect');
+              
+                // Reemplazar {history_id} con el valor de "id"
+                const updatedDataRedirect = currentDataRedirect.replace('{history_id}', id);
+              
+                // Actualizar el valor de data-redirect
+                urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
+                
+                /* window.location = updatedDataRedirect; */
+                url_redirect = updatedDataRedirect;
+              }
+              
             window.location = url_redirect;
         })
         .catch(e => {
@@ -951,3 +1180,4 @@ window.swapCreditContinue = function(history_id) {
         .catch(e => {
         });
 }
+
