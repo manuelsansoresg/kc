@@ -3298,6 +3298,23 @@ document.addEventListener('DOMContentLoaded', function () {
       row.child.show();
     }
   });
+
+  if (document.getElementById('dt-wallet')) {
+    var urlParams = new URLSearchParams(window.location.search);
+    var alertParam = urlParams.get('alert');
+
+    if (alertParam === 'true' || document.getElementById('dt-wallet')) {
+      Swal.fire({
+        title: 'Solicitud de agregar fondos',
+        html: 'Hemos recibido tu Solicitud. <br> Le avisaremos y notificaremos a la brevedad',
+        icon: 'info',
+        showCancelButton: false,
+        confirmButtonText: 'ok'
+      }).then(function (result) {
+        if (result.value) {}
+      });
+    }
+  }
 });
 document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-down-wallet', {

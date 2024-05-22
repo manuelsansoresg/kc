@@ -24,7 +24,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
 
         if ($step == '1_2' && $is_investor === true) {
-            return '/panel/kc-wallet';
+            if ($is_investor === true) {
+                return '/panel/kc-wallet?alert=true';
+            }
+            return null;
         }
         if ($step == '2') {
             return '/panel/template/steps/wallet/'.$id_rel.'/show';
