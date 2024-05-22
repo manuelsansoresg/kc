@@ -456,9 +456,7 @@ $().ready(function () {
             'data[origin_id]': {
                 required: true,
             },
-            'data[channel_id]': {
-                required: true,
-            },
+            
             'new_agreement': {
                 required: function (element) {
                     let lead_agreement = $("#lead-agreement").val();
@@ -476,22 +474,57 @@ $().ready(function () {
 
             const new_form = document.getElementById("frm-lead");
             const data = new FormData(new_form);
+            let isExport = $('#isExport').val();
 
             axios
                 .post("/panel/lead", data)
                 .then(function (response) {
-                    let result = response.data;
-                    window.location = '/panel/lead';
+                    let getResult = response.data;
+                    let result = getResult.lead;
+                    if (isExport == 'true') {
+                        $('#lead_id').val(result.id);
+                        
+                        //exportar
+                        exportLead(result.id);
+                        
+                    } else {
+                        window.location = '/panel/lead';
+
+                    }
                 })
                 .catch(e => {
                 });
 
         }
     });
-
-
+    
+    async function exportLead(leadId) {
+        const fileName = 'KC - Datos exportados'+leadId+'.csv'; // Replace with your logic
+        const formData = new FormData();
+        formData.append('lead_id', leadId);
+      
+        const response = await axios.post("/panel/lead/"+leadId+"/data/export", formData, { responseType: 'blob' });
+      
+        const blob = new Blob(["\ufeff", response.data], { type: 'text/csv;charset=utf-8' });
+      
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(blob, fileName);
+        } else {
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
+        $('#isExport').val(false);
+      }
 
 });
+
+window.saveAndExportLead = function ()
+{
+    $('#isExport').val(true);
+    document.getElementById('btnSave').click();
+}
 
 /* modal vista previa perfil */
 window.modalPreviewProfile =  function(lead_id)

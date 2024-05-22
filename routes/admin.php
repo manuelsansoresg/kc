@@ -79,6 +79,8 @@ Route::group(['prefix' => 'lead'], function () {
     Route::get('{lead}/preview/profile', ['\App\Http\Controllers\Panel\LeadController', 'previewProfile'])->middleware('auth');
 
     Route::get('{value}/{id}/check', ['\App\Http\Controllers\Panel\LeadController', 'checkData'])->middleware('auth');
+    
+    Route::post('{leadId}/data/export', ['\App\Http\Controllers\Panel\LeadController', 'exportLead'])->middleware('auth');
 
     //* mover del lugar
     

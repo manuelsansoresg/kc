@@ -285,6 +285,7 @@ class Lead extends Model
         }
         
         CurrentFinancialProduct::saveEdit($lead->id, $request);
+        
         return $lead;
     }
 
