@@ -27,7 +27,8 @@ class InvestorsCredit extends Model
             foreach ($getInvestors as $getInvestors) {
                 $getInvestor = Investor::find($getInvestors->investor_id);
                 try {
-                    $percent =  $getInvestor->loan_active == 1 ?  $getCredit->applied_import / $getInvestor->loan_available: 0;
+                    $getFinancialProduct = FinancialProduct::where('financial_id', $getInvestors->financial_products_id)->first();
+                    $percent =  $getInvestor->loan_active == 1 ? $getInvestor->loan_available / $getFinancialProduct->loan_available: 0;
                     $dataInvestorCredit = array(
                         'credit_id' => $creditId,
                         'investor_id' => $getInvestor->id,
