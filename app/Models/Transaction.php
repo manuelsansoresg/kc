@@ -78,8 +78,15 @@ class Transaction extends Model
 
                 
             } */
-            $getProductId = InvestorProduct::where('investor_id', $investorId)->first();
-            $getProducts = InvestorProduct::where('financial_products_id', $getProductId->financial_products_id)->get();
+            $getProductIds = InvestorProduct::where('investor_id', $investorId)->get();
+            $financialProductInvestorsIds = array();
+            foreach ($getProductIds as $getProductId) {
+                $financialProductId = $getProductId->financial_products_id;
+                if (!in_array($financialProductId, $financialProductInvestorsIds)) {
+                    $financialProductInvestorsIds[] = $financialProductId;
+                }
+            }
+            $getProducts = InvestorProduct::whereIn('financial_products_id', $financialProductInvestorsIds)->get();
             
             foreach ($getProducts as $getProduct) {
 
