@@ -76,35 +76,17 @@ class Transaction extends Model
                     $investorsIds[] = $investorId;
                 }
 
-                $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
-                            ->where('loan_active', 1)
-                            ->where('id', [$investorId])
-                            ->first();
-                if ($investorLoan != null) {
-                    $loanActive = $investorLoan->loan_available < 100 ? 0 : 1;
-                    FinancialProduct::where('id', $financialProductId)
-                                    ->update([
-                                        'loan_available' => $investorLoan->loan_available,
-                                        
-                                    ]);
-                    Investor::where('id', $investorId)->update([
-                        'loan_active'=> $loanActive
-                    ]);
-                    
-    
-                }
+                
             }
 
-            echo json_encode($investorId);
-            echo json_encode($financialProductIds);
+            
 
             //*actualizar  loan_available  de financial_products
-            
-            /* $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
+            $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
                             ->where('loan_active', 1)
-                            ->whereIn('id', [$investorsIds])
+                            ->whereIn('id', $investorsIds)
                             ->first();
-            
+
             if ($investorLoan != null) {
                 $loanActive = $investorLoan->loan_available < 100 ? 0 : 1;
                 FinancialProduct::whereIn('id', $financialProductIds)
@@ -117,8 +99,7 @@ class Transaction extends Model
                 ]);
                
 
-            } */
-            //dd('aqui');
+            }
             
         }
 
