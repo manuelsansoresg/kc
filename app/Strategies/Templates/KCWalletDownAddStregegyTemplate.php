@@ -313,6 +313,13 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 }
             }
 
+            //confirmar transferencia exitosa
+            if (isset($data['operation_status']) && $data['operation_status'] == 1) {
+                $modelTransaction = $transaction['transaction'];
+                $investor_id = $modelTransaction->investor_id;
+                Transaction::setTotalCapital($investor_id);
+            }
+
             if ($percent2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, $history->id_rel, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET, $history->id_rel, 1);

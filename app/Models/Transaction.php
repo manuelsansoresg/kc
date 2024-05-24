@@ -58,26 +58,7 @@ class Transaction extends Model
                         'withdraw_available' => $investor->total_available - $investor->loan_available  ,
                     ]
             );
-           /*  foreach ($getInvestorProducts as $getInvestorProducts) {
-
-                $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
-                            ->where('loan_active', 1)
-                            ->where('id', $getInvestorProducts->investor_id)
-                            ->first();
-                
-                $financialProductId = $getInvestorProducts->financial_products_id;
-                $investorId         = $getInvestorProducts->investor_id;
-
-                if (!in_array($financialProductId, $financialProductIds)) {
-                    $financialProductIds[] = $financialProductId;
-                }
-            
-                if (!in_array($investorId, $investorsIds)) {
-                    $investorsIds[] = $investorId;
-                }
-
-                
-            } */
+           
             $getProductIds = InvestorProduct::where('investor_id', $investorId)->get();
             $financialProductInvestorsIds = array();
             foreach ($getProductIds as $getProductId) {

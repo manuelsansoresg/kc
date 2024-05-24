@@ -3370,7 +3370,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var urlParams = new URLSearchParams(window.location.search);
     var alertParam = urlParams.get('alert');
 
-    if (alertParam === 'true' || document.getElementById('dt-wallet')) {
+    if (alertParam === 'true') {
       Swal.fire({
         title: 'Solicitud de agregar fondos',
         html: 'Hemos recibido tu Solicitud. <br> Le avisaremos y notificaremos a la brevedad',

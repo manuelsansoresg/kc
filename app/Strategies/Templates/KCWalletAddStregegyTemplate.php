@@ -311,9 +311,13 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 $getTransaction = $transaction['transaction'];
                 Transaction::setTotalCapital($getTransaction->investor_id);
                 
-                if ($percent2 < 100) {
-                    
-                }
+                
+            }
+            //confirmar transferencia exitosa
+            if (isset($data['operation_status']) && $data['operation_status'] == 1) {
+                $modelTransaction = $transaction['transaction'];
+                $investor_id = $modelTransaction->investor_id;
+                Transaction::setTotalCapital($investor_id);
             }
 
             if ($percent2 == 100) {
