@@ -29,9 +29,9 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             }
             return null;
         }
-        if ($step == '2') {
+        /* if ($step == '2') {
             return '/panel/template/steps/wallet/'.$id_rel.'/show';
-        }
+        } */
         return null;
     }
 
