@@ -50,12 +50,13 @@ class Transaction extends Model
             $getInvestorProducts = InvestorProduct::where('investor_id', $investorId)->get();
             $financialProductIds         = array();
             $investorsIds         = array();
-                        
+            $loan_active = $investor->loan_available < 100 ? 0 : 1;
             Investor::where('id', $investorId)
                     ->update(
                     [
                         'loan_available' => $investor->loan_available,
                         'withdraw_available' => $investor->total_available - $investor->loan_available  ,
+                        'loan_active' =>  $loan_active,      
                     ]
             );
            
