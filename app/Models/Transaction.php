@@ -63,44 +63,39 @@ class Transaction extends Model
             $getProductIds = InvestorProduct::where('investor_id', $investorId)->get();
             
             $financialProductInvestorsIds = array();
+            $financialProductgroup = array();
             foreach ($getProductIds as $getProductId) {
                 $financialProductId = $getProductId->financial_products_id;
                 if (!in_array($financialProductId, $financialProductInvestorsIds)) {
                     $financialProductInvestorsIds[] = $financialProductId;
                 }
             }
-            $getProducts = InvestorProduct::whereIn('financial_products_id', $financialProductInvestorsIds)->get();
-            
-            foreach ($getProducts as $getProduct) {
-
-                $financialProductId = $getProduct->financial_products_id;
-                $investorId         = $getProduct->investor_id;
-
-                if (!in_array($financialProductId, $financialProductIds)) {
-                    $financialProductIds[] = $financialProductId;
+            //dd($financialProductInvestorsIds);
+            foreach ($financialProductInvestorsIds as $financialProductInvestorsId) {
+                $getInvestors = InvestorProduct::where('financial_products_id', $financialProductInvestorsId)->get();
+                $investorsIds = array();
+                foreach ($getInvestors as $getInvestor) {
+                    $investorsIds[] = $getInvestor->investor_id;
                 }
-                if (!in_array($investorId, $investorsIds)) {
-                    $investorsIds[] = $investorId;
-                }
-            }
-            //*actualizar  loan_available  de financial_products
-            $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
+                //$financialProductgroup[$financialProductInvestorsId] = $investorsIds;
+                $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
                             ->where('loan_active', 1)
                             ->whereIn('id', $investorsIds)
                             ->first();
 
-            if ($investorLoan != null) {
-                $loanActive = $investorLoan->loan_available < 100 ? 0 : 1;
-                FinancialProduct::whereIn('id', $financialProductIds)
-                                ->update([
-                                    'loan_available' => $investorLoan->loan_available,
-                                    
-                                ]);
-                Investor::where('id', $investorId)->update([
-                    'loan_active'=> $loanActive
-                ]);
-               
+                if ($investorLoan != null) {
+                    $loanActive = $investorLoan->loan_available < 100 ? 0 : 1;
+                    FinancialProduct::whereIn('id', $financialProductInvestorsId)
+                                    ->update([
+                                        'loan_available' => $investorLoan->loan_available,
+                                        
+                                    ]);
+                    Investor::where('id', $investorId)->update([
+                        'loan_active'=> $loanActive
+                    ]);
+                
 
+                }
             }
             
         }
