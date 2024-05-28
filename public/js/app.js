@@ -2148,21 +2148,29 @@ window.productChange = function (lead_product_id) {
     //portabilidad
     $('#content-financial_product_id').show();
     $('#content-importe-solicitado').show();
-    $('#content-banco_nomina').show(); //$('#content-tipo-credito').show();
-
-    $('#content-consulta-buro-credito').show();
-    $('#content-aval-o-garantia').show();
+    $('#content-banco_nomina').hide();
+    $('#content-producto-financiero').show();
+    $('#content-consulta-buro-credito').hide();
+    $('#content-aval-o-garantia').hide();
+    $('#content-ingreso-mensual').show();
   }
 
   if (product_id == 1) {
-    //credito nuevo ahora es crédito personal
+    // credito nomina
+    $('#content-banco_nomina').hide();
     $('#content-importe-solicitado').show();
     $('#content-producto-financiero').show();
     $('#content-tipo_tramite').show();
-    $('#content-banco_nomina').show();
     $('#content-tipo-credito').show();
-    $('#content-consulta-buro-credito').show();
-    $('#content-aval-o-garantia').show();
+    $('#content-consulta-buro-credito').hide();
+    $('#content-aval-o-garantia').hide();
+    $('#content-ingreso-mensual').show();
+  }
+
+  if (product_id == 4) {
+    // on-demand
+    $('#content-producto-financiero').show();
+    $('#content-ingreso-mensual').hide();
   }
 
   if (product_id == 3) {

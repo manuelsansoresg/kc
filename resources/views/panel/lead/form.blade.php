@@ -233,7 +233,7 @@
                                                             </div>
                                                         </div>
                                                         
-                                                        <div class="col-md-6" id="content-importe-solicitado" >
+                                                        <div class="col-md-6" id="content-ingreso-mensual" >
                                                             <div class="form-group">
                                                                 <label class="form-label">Ingreso mensual</label>
                                                                 <p class="small">Neto aproximado</p>
