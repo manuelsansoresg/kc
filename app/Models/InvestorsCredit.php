@@ -23,12 +23,14 @@ class InvestorsCredit extends Model
             $applied_financial_product = $getCredit->applied_financial_product;
             $applied_import            = $getCredit->applied_import;
             $getInvestors              = InvestorProduct::where('financial_products_id', $applied_financial_product)->get();
-
+            //dd($getInvestors);
+            //dd($applied_financial_product);
             foreach ($getInvestors as $getInvestors) {
                 try {
                     $getInvestor = Investor::find($getInvestors->investor_id);
-                    $getFinancialProduct = FinancialProduct::find($applied_financial_product)->first();
+                    $getFinancialProduct = FinancialProduct::find($applied_financial_product);
                     $percent =  $getInvestor->loan_active == 1 ? $getInvestor->loan_available / $getFinancialProduct->loan_available: 0;
+                    
                     $dataInvestorCredit = array(
                         'credit_id' => $creditId,
                         'investor_id' => $getInvestor->id,
