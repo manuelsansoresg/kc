@@ -70,32 +70,41 @@ class Transaction extends Model
                     $financialProductInvestorsIds[] = $financialProductId;
                 }
             }
-            //dd($financialProductInvestorsIds);
+            
             foreach ($financialProductInvestorsIds as $financialProductInvestorsId) {
                 $getInvestors = InvestorProduct::where('financial_products_id', $financialProductInvestorsId)->get();
                 $investorsIds = array();
                 foreach ($getInvestors as $getInvestor) {
                     $investorsIds[] = $getInvestor->investor_id;
                 }
-                //$financialProductgroup[$financialProductInvestorsId] = $investorsIds;
+                $financialProductgroup[$financialProductInvestorsId] = $investorsIds;
+
                 $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
+                            ->selectRaw('id')
                             ->where('loan_active', 1)
                             ->whereIn('id', $investorsIds)
+                            ->groupBy('id')
                             ->first();
 
                 if ($investorLoan != null) {
                     $loanActive = $investorLoan->loan_available < 100 ? 0 : 1;
-                    FinancialProduct::whereIn('id', $financialProductInvestorsId)
+                    FinancialProduct::where('id', $financialProductInvestorsId)
                                     ->update([
                                         'loan_available' => $investorLoan->loan_available,
                                         
                                     ]);
-                    Investor::where('id', $investorId)->update([
+                    /* Investor::where('id', $investorId)->update([
                         'loan_active'=> $loanActive
-                    ]);
+                    ]); */
                 
 
                 }
+                
+            }
+            //dd($financialProductgroup);
+            foreach ($financialProductgroup as $key => $getInvestorId) {
+                
+                
             }
             
         }
