@@ -2,6 +2,7 @@
 
 namespace App\Strategies\Templates;
 
+use App\Lib\Csendgrid;
 use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\Investor;
@@ -318,6 +319,18 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 $modelTransaction = $transaction['transaction'];
                 $investor_id = $modelTransaction->investor_id;
                 Transaction::setTotalCapital($investor_id);
+                $getInvestor = Investor::find($investor_id);
+                if ($getInvestor != null) {
+                    $getUserInvestor = User::find($getInvestor->user_id);
+                    $data_sendgrid = array(
+                        'name' => $getInvestor->name. ' '.$getInvestor->last_name. ' '.$getInvestor->second_last_name,
+                        'link_account' =>  env('APP_URL') .'/panel/inversionista/'.$investor_id,
+                    );
+                    $send_grid = new Csendgrid($getUserInvestor->email, 'Inversionista - Fondos agregados con éxito');
+                    $send_grid->setTemplate('d-38330ff956fc48dc89b4efad477b3985');
+                    $send_grid->setParams($data_sendgrid);
+                    $send_grid->send();
+                }
             }
 
             if ($percent2 == 100) {
