@@ -68,7 +68,8 @@ class Transaction extends Model
                     $financialProductInvestorsIds[] = $financialProductId;
                 }
             }
-            $getProducts = InvestorProduct::whereIn('financial_products_id', $financialProductInvestorsIds)->get();
+            $getProducts = InvestorProduct::where('investor_id', $investorId)
+                                        ->whereIn('financial_products_id', $financialProductInvestorsIds)->get();
             
             foreach ($getProducts as $getProduct) {
 
