@@ -84,10 +84,8 @@ class Transaction extends Model
             foreach ($financialProductgroup as $key => $getInvestorId) {
                 
                 $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
-                            ->selectRaw('id')
                             ->where('loan_active', 1)
                             ->whereIn('id', $getInvestorId)
-                            ->groupBy('id')
                             ->first();
 
                 if ($investorLoan != null) {
