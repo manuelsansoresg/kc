@@ -78,17 +78,21 @@ class Transaction extends Model
                     $investorsIds[] = $getInvestor->investor_id;
                 }
                 $financialProductgroup[$financialProductInvestorsId] = $investorsIds;
-
+                
+            }
+            //dd($financialProductgroup);
+            foreach ($financialProductgroup as $key => $getInvestorId) {
+                
                 $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
                             ->selectRaw('id')
                             ->where('loan_active', 1)
-                            ->whereIn('id', $investorsIds)
+                            ->whereIn('id', $getInvestorId)
                             ->groupBy('id')
                             ->first();
 
                 if ($investorLoan != null) {
                     $loanActive = $investorLoan->loan_available < 100 ? 0 : 1;
-                    FinancialProduct::where('id', $financialProductInvestorsId)
+                    FinancialProduct::where('id', $key)
                                     ->update([
                                         'loan_available' => $investorLoan->loan_available,
                                         
@@ -99,12 +103,6 @@ class Transaction extends Model
                 
 
                 }
-                
-            }
-            //dd($financialProductgroup);
-            foreach ($financialProductgroup as $key => $getInvestorId) {
-                
-                
             }
             
         }
