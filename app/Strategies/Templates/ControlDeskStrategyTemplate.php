@@ -2152,7 +2152,17 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
-                'is_disabled' => null
+                'is_disabled' => null,
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'type' => 'div',
+                        'name_field' => null,
+                        'col' => 'col-md-6 text-primary h6',
+                        'id_field' => 'text-firma',
+                        'onclick' => null
+                    ),
+                )
             ],
             2 => [
                 'title_section' => null,

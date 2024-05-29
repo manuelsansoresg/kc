@@ -450,7 +450,9 @@ $().ready(function () {
             let result = response.data;
             let total = result.total;
 
-            if (total == 0) {
+            if (total > 1) {
+                saveForm('frm-template_control_desk_step5', 'controlDesk');
+            } else {
                 Swal.fire({
                     title: 'Este es un cliente nuevo',
                     text : 'Confirmo que se incluyó el contrato de comisión mercantil para un cliente nuevo',
@@ -463,8 +465,6 @@ $().ready(function () {
                         saveForm('frm-template_control_desk_step5', 'controlDesk');
                     }
                   });
-            } else {
-                saveForm('frm-template_control_desk_step5', 'controlDesk');
             }
         })
         .catch(e => {
