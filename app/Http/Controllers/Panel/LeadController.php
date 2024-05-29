@@ -21,6 +21,7 @@ use App\Models\File;
 use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
 use App\Models\Investor;
+use App\Models\InvestorsCredit;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
@@ -46,7 +47,8 @@ class LeadController extends Controller
     public function index()
     {
         //Transaction::setTotalCapital(9);
-        
+        InvestorsCredit::saveEdit(355);
+
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
         if ($is_financiera === true) {
