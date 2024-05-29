@@ -15,6 +15,7 @@ class InvestorsCredit extends Model
         'percentage',
         'import',
         'total_collected',
+        'placed_capital',
     ];
 
     public static function saveEdit($creditId)
