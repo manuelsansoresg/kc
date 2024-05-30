@@ -35,8 +35,16 @@ class KcWalletController extends Controller
         $users = Transaction::listDatatable([HistoryLog::KC_WALLET_ADD_FORM]);
         return response()->json(['data' => $users]);
     }
+   public function listHistory()
+   {
+    return view('panel.module.wallet.history');
+   }
 
-   
+   public function listHistoryShow()
+    {
+        $data = InvestorsCredit::listStatements(9);
+        return response()->json(['data' => $data]);
+    }
 
     public function getInvestor(Investor $investor)
     {

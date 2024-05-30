@@ -245,5 +245,11 @@ return [
         233 => 'Condonado',
         234 => 'Liquidado',
     ),
+    'pago' => array(
+        1 => 'Personal',
+        2 => 'Liquidación',
+        3 => 'Reembolso',
+        4 => 'Convenio',
+    ),
     
 ];

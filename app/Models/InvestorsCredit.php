@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\kaaxSidecc\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class InvestorsCredit extends Model
 {
@@ -56,5 +58,37 @@ class InvestorsCredit extends Model
             }
         }
 
+    }
+
+    public static function listStatements($investorId)
+    {
+        $investorCredits = InvestorsCredit::where('investor_id', $investorId)->get();
+        $credits = array();
+        //dd($investorCredits);
+        foreach ($investorCredits as $investorCredit) {
+            DB::connection('kaax_sidecc');
+            $percentage = $investorCredit->percentage;
+            $collections = Collection::select(
+                    'collections.kc_credit_id as id', 'statements.fecha_pago', 'statements.tipo_de_pago',
+                    'statements.pagado',
+                    DB::raw("$percentage * statements.pagado AS importe")
+                    )
+                    ->join('statements', 'statements.credit_id', 'collections.credit_id')
+                    ->where('statements.estatus_pago', 1)
+                    ->where('collections.kc_credit_id', $investorCredit->credit_id)->get();
+            
+            foreach ($collections as $collection) {
+                $credits[] = array(
+                    'id' => $collection->id,
+                    'fecha' => $collection->fecha_pago,
+                    'tipo' => isset(config('enums.pago')[$collection->tipo_de_pago])? config('enums.pago')[$collection->tipo_de_pago] : null,
+                    'importe' => $collection->importe,
+                    'comision' => null,
+                    'options' => null,
+                );
+            }        
+           
+        }
+        return $credits;
     }
 }
