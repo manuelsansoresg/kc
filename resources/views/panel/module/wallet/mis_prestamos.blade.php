@@ -45,13 +45,14 @@
                                     @foreach ($getInvestorCredits as $getInvestorCredit)
                                         @php
                                             $getCollection = $MCollection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
+                                            $percentage    = $getInvestorCredit->percentage / 100;
                                             $getStatus     = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
                                             $getInvestor   = $MInvestor::find($getInvestorCredit->investor_id);
                                             $getCredit     = $MCredit::find($getInvestorCredit->credit_id);
-                                            $importe       = $getCredit != null && $getInvestorCredit != null ?  $getCredit->applied_import * $getInvestorCredit->percentage: 0 ;
-                                            $pagado        = $getCollection->pago_acumulado_real * $getInvestorCredit->percentage;
-                                            $porPagar      = $getCollection->saldo_total_real * $getInvestorCredit->percentage;
-                                            $comisiones    = $getCollection->collection_commission_amount * $getInvestorCredit->percentage
+                                            $importe       = $getCredit != null && $getInvestorCredit != null ?  $getCredit->applied_import * $percentage: 0 ;
+                                            $pagado        = $getCollection->pago_acumulado_real * $percentage;
+                                            $porPagar      = $getCollection->saldo_total_real * $percentage;
+                                            $comisiones    = $getCollection->collection_commission_amount * $percentage
                                         @endphp
                                     <tr class="tb-tnx-item">
                                         <td class="tb-tnx-id"><a href="#"><span> {{ $getInvestorCredit->credit_id }} </span></a></td>

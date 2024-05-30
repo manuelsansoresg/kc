@@ -33,7 +33,7 @@ class InvestorsCredit extends Model
                 try {
                     $getInvestor = Investor::find($getInvestors->investor_id);
                     $getFinancialProduct = FinancialProduct::find($applied_financial_product);
-                    $percent =  $getInvestor->loan_active == 1 ? $getInvestor->loan_available / $getFinancialProduct->loan_available: 0;
+                    $percent =  $getInvestor->loan_active == 1 ? ($getInvestor->loan_available / $getFinancialProduct->loan_available) * 100: 0;
                     
                     $dataInvestorCredit = array(
                         'credit_id' => $creditId,
@@ -42,7 +42,7 @@ class InvestorsCredit extends Model
                     );
                     $existInvestorCredit              = InvestorsCredit::where($dataInvestorCredit);
                     $dataInvestorCredit['percentage'] = $percent;
-                    $dataInvestorCredit['import']     = $percent * $applied_import;
+                    $dataInvestorCredit['import']     = ($percent * $applied_import)/ 100;
 
                     if ($percent > 0 ) {
                         if ($existInvestorCredit->count() == 0) {
@@ -67,7 +67,7 @@ class InvestorsCredit extends Model
         //dd($investorCredits);
         foreach ($investorCredits as $investorCredit) {
             DB::connection('kaax_sidecc');
-            $percentage = $investorCredit->percentage;
+            $percentage = $investorCredit->percentage / 100;
             $collections = Collection::select(
                     'collections.kc_credit_id as id', 'statements.fecha_pago', 'statements.tipo_de_pago',
                     'statements.pagado',
