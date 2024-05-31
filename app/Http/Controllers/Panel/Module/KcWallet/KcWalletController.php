@@ -42,7 +42,7 @@ class KcWalletController extends Controller
 
    public function listHistoryShow()
     {
-        $data = InvestorsCredit::listStatements(9);
+        $data = InvestorsCredit::listStatements(Auth::user()->id);
         return response()->json(['data' => $data]);
     }
 
