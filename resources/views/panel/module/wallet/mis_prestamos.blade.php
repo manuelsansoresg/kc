@@ -35,8 +35,8 @@
                                     <th class="tb-tnx-info"><span class="tb-tnx-desc d-none d-sm-inline-block"><span>Estatus</span></span>
                                         <span class="tb-tnx-date d-md-inline-block d-none"><span
                                                 class="d-md-none"></span>
-                                                <span class="d-none d-md-block"><span>Importe</span><span>Pagado</span></span></span></th>
-                                    <th class="tb-tnx-amount"><span class="tb-tnx-total">Por pagar</span><span
+                                                <span class="d-none d-md-block"><span>Importe prestado</span><span>Pagado</span></span></span></th>
+                                    <th class="tb-tnx-amount"><span class="tb-tnx-total">Capital pendiente</span><span
                                             class="tb-tnx-status d-none d-md-inline-block">Comisiones</span></th>
                                 </tr>
                             </thead>
@@ -49,15 +49,17 @@
                                             $getStatus     = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
                                             $getInvestor   = $MInvestor::find($getInvestorCredit->investor_id);
                                             $getCredit     = $MCredit::find($getInvestorCredit->credit_id);
-                                            $importe       = $getCredit != null && $getInvestorCredit != null ?  $getCredit->applied_import * $percentage: 0 ;
-                                            $pagado        = $getCollection->pago_acumulado_real * $percentage;
-                                            $porPagar      = $getCollection->saldo_total_real * $percentage;
-                                            $comisiones    = $getCollection->collection_commission_amount * $percentage
+                                            $importe       = $getInvestorCredit->import ;
+                                            $pagado        = $getInvestorCredit->total_collected;
+                                            $porPagar      = $getInvestorCredit->placed_capital;
+                                            $comisiones    = $getInvestorCredit->commission_amount 
                                         @endphp
                                     <tr class="tb-tnx-item">
-                                        <td class="tb-tnx-id"><a href="#"><span> {{ $getInvestorCredit->credit_id }} </span></a></td>
+                                        <td class="tb-tnx-id"><a href="#"><span> {{ $getInvestorCredit->id }} </span></a></td>
                                         <td class="tb-tnx-info">
-                                            <div class="tb-tnx-desc"><span class="amount">{{ $getStatus != null ? $getStatus->name : null }}</span>
+                                            <div class="tb-tnx-desc">
+                                                {{-- <span class="amount">{{ $getStatus != null ? $getStatus->name : null }} --}}
+                                                </span>
                                             </div>
                                             <div class="tb-tnx-desc"><span class="amount"> {{ format_price($importe) }}  </span><span
                                                     class="amount">{{ format_price($pagado) }} </span></div>
