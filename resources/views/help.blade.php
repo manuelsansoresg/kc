@@ -24,9 +24,9 @@
                 <section class="cta-section section-space-b bg-pattern mt-5">
                     <div class="container">
                         <div class="cta-box text-center">
-                            <h1 class="cta-title mb-3">Conoce nuestro centro de ayuda</h1>
+                            <h1 class="cta-title color-purple mb-3">Contáctanos y con gusto te ayudaremos</h1>
                             <p class="cta-text mb-4">Haz aclaraciones, preguntas, sugerencias o quejas</p>
-                            <a href="https://yalku.atlassian.net/servicedesk/customer/portal/3" target="_blank" class="btn btn-lg btn-dark">Ir al centro de ayuda</a>
+                            <a href="https://yalku.atlassian.net/servicedesk/customer/portal/3" target="_blank" class="btn btn-lg btn-dark">Solicitar ayuda</a>
                         </div><!-- end cta-box -->
                     </div><!-- .container -->
                 </section><!-- end cta-section -->
@@ -46,7 +46,7 @@
                                     
                                     WhatsApp:
                                 </strong>
-                                <span><a class="text-decoration-none" target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=hola">9999 20 80 20</a></span>
+                                <span><a class="text-decoration-none" target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, necesito ayuda">9999 20 80 20</a></span>
                             </div>
                         </li>
                         <li class="d-flex align-items-center mb-3">
