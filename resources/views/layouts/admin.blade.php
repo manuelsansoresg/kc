@@ -14,11 +14,11 @@
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description"
-        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+        content="Tú mejor decisión. Fácil y rápido.">
     <!-- Fav Icon  -->
     <link href="{{ asset('images/favicon.ico') }}" rel="icon">
     <!-- Page Title  -->
-    <title>@yield('title')</title>
+    <title>KaaxClub</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
