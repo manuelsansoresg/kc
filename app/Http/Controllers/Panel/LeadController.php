@@ -47,7 +47,7 @@ class LeadController extends Controller
     public function index()
     {
         //Transaction::setTotalCapital(9);
-        InvestorsCredit::saveEdit(355);
+       
 
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
         $is_investor = Auth::user()->hasRole('Cliente inversionista');

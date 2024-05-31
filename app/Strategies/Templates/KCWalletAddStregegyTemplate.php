@@ -323,8 +323,8 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 if ($getInvestor != null) {
                     $getUserInvestor = User::find($getInvestor->user_id);
                     $data_sendgrid = array(
-                        'name' => $getInvestor->name. ' '.$getInvestor->last_name. ' '.$getInvestor->second_last_name,
-                        'link_account' =>  env('APP_URL') .'/panel/inversionista/'.$investor_id,
+                        'name' => $getUserInvestor->name. ' '.$getUserInvestor->last_name. ' '.$getUserInvestor->second_last_name,
+                        'link_account' =>  env('APP_URL') .'panel/inversionista/'.$investor_id,
                     );
                     $send_grid = new Csendgrid($getUserInvestor->email, 'Inversionista - Fondos agregados con éxito');
                     $send_grid->setTemplate('d-38330ff956fc48dc89b4efad477b3985');
