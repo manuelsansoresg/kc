@@ -18,6 +18,8 @@ class InvestorsCredit extends Model
         'import',
         'total_collected',
         'placed_capital',
+        'commission_rate',
+        'commission_amount',
     ];
 
     public static function saveEdit($creditId)
@@ -27,12 +29,15 @@ class InvestorsCredit extends Model
             $applied_financial_product = $getCredit->applied_financial_product;
             $applied_import            = $getCredit->applied_import;
             $getInvestors              = InvestorProduct::where('financial_products_id', $applied_financial_product)->get();
+            
+            
             //dd($getInvestors);
             //dd($applied_financial_product);
             foreach ($getInvestors as $getInvestors) {
                 try {
                     $getInvestor = Investor::find($getInvestors->investor_id);
                     $getFinancialProduct = FinancialProduct::find($applied_financial_product);
+                    $commissionRate = $getFinancialProduct->collection_commission_rate;
                     $percent =  $getInvestor->loan_active == 1 ? ($getInvestor->loan_available / $getFinancialProduct->loan_available) * 100: 0;
                     
                     $dataInvestorCredit = array(
@@ -40,9 +45,10 @@ class InvestorsCredit extends Model
                         'investor_id' => $getInvestor->id,
                         
                     );
-                    $existInvestorCredit              = InvestorsCredit::where($dataInvestorCredit);
-                    $dataInvestorCredit['percentage'] = $percent;
-                    $dataInvestorCredit['import']     = ($percent * $applied_import)/ 100;
+                    $existInvestorCredit                   = InvestorsCredit::where($dataInvestorCredit);
+                    $dataInvestorCredit['percentage']      = $percent;
+                    $dataInvestorCredit['import']          = ($percent * $applied_import)/ 100;
+                    $dataInvestorCredit['commission_rate'] = $commissionRate;
 
                     if ($percent > 0 ) {
                         if ($existInvestorCredit->count() == 0) {
@@ -91,4 +97,23 @@ class InvestorsCredit extends Model
         }
         return $credits;
     }
+
+    public static function setComissionRateAndAmount($creditId)
+    {
+        $credit         = Credit::find($creditId);
+        $financial      = FinancialProduct::where('id', $credit->applied_financial_product);
+        $commissionRate = $financial->collection_commission_rate;
+
+        $getInvestors = InvestorsCredit::where('credit_id', $creditId)->get();
+
+        foreach ($getInvestors  as $getInvestor) {
+            $totalCollected = $getInvestor->total_collected;
+            $commission_amount = ($commissionRate * $totalCollected) / 100;
+            InvestorsCredit::where('id', $getInvestor->id)->update([
+                'commission_amount' => $commission_amount,
+            ]);
+           
+        }
+    }
+
 }

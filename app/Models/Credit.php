@@ -154,9 +154,6 @@ class Credit extends Model
     
         // Update the total_capital field for the current credit
         $credit = Credit::find($creditId);
-        /* $totalCapitalPerInvestor = InvestorsCredit::selectRaw('SUM(import) as total_capital, investor_id')
-            ->groupBy('investor_id')
-            ->get(); */
         $totalCapitalPerInvestor = InvestorsCredit::selectRaw('SUM(import) as total_capital, investor_id')
                                     ->join('investors', 'investors_credits.investor_id', '=', 'investors.id')
                                     ->groupBy('investors_credits.investor_id')
@@ -171,7 +168,6 @@ class Credit extends Model
         }
 
 
-        //$getInvestors = Investor::where('financial_products_id', $credit->applied_financial_product)->get();
         $getInvestors = InvestorProduct::where('financial_products_id', $credit->applied_financial_product)->get();
 
         foreach ($getInvestors as $getInvestor) {
@@ -180,7 +176,6 @@ class Credit extends Model
         
     }
     
-
     public static function listDatatable($status)
     {
        
