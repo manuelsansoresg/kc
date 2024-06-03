@@ -3442,6 +3442,23 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   }
+
+  if (document.getElementById('dt-down-wallet')) {
+    var _urlParams = new URLSearchParams(window.location.search);
+
+    var _alertParam = _urlParams.get('alertdown');
+
+    if (_alertParam === 'true') {
+      Swal.fire({
+        title: 'Solicitud de retirar fondos',
+        html: 'Te avisaremos y notificaremos a la brevedad',
+        showCancelButton: false,
+        confirmButtonText: 'ok'
+      }).then(function (result) {
+        if (result.value) {}
+      });
+    }
+  }
 });
 document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-down-wallet', {

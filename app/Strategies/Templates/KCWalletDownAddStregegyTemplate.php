@@ -112,13 +112,12 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $name_form = 'frm-template_wallet_down_step1';
         $type_form    = HistoryLog::KC_DOWN_WALLET_ADD_FORM;
         $users = User::getUserRoleInvestor('Cliente inversionista');
-        //dd($users);
         $funding_operation_type = config('enums.funding_operation');
-
-        $urlRedirect = $history_id == 'null' ? '/panel/kc-down-wallet' : '/panel/template/steps/kc-down-wallet/'.$history_id.'/show';
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        $alert = $is_investor === true ? '?alertdown=true': null;
+        $urlRedirect = $history_id == 'null' ? '/panel/kc-down-wallet' .$alert: '/panel/template/steps/kc-down-wallet/'.$history_id.'/show';
         $buttonLinkExtraFinish = null;
 
-        $is_investor = Auth::user()->hasRole('Cliente inversionista');
         $typeInvestor = $is_investor ===true ? 'hidden' : 'select2';
         $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
         $optionInvestor = $is_investor === true ? $getInvestor->id : $users;

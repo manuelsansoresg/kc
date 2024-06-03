@@ -411,6 +411,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         }
     }
+    
+    if (document.getElementById('dt-down-wallet')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const alertParam = urlParams.get('alertdown');
+        if (alertParam === 'true') {
+        Swal.fire({
+            title: 'Solicitud de retirar fondos',
+            html: 'Te avisaremos y notificaremos a la brevedad',
+            showCancelButton: false,
+            confirmButtonText: 'ok',
+            
+        }).then(function (result) {
+            if (result.value) {
+            
+            }
+        });
+        }
+    }
 
 } );
 
