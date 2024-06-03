@@ -401,7 +401,6 @@ document.addEventListener('DOMContentLoaded', function () {
         Swal.fire({
             title: 'Solicitud de agregar fondos',
             html: 'Hemos recibido tu Solicitud. <br> Le avisaremos y notificaremos a la brevedad',
-            icon: 'info',
             showCancelButton: false,
             confirmButtonText: 'ok',
             
