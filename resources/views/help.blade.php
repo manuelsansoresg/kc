@@ -26,7 +26,7 @@
                         <div class="cta-box text-center">
                             <h1 class="cta-title color-purple mb-3">Contáctanos y con gusto te ayudaremos</h1>
                             <p class="cta-text mb-4">Haz aclaraciones, preguntas, sugerencias o quejas</p>
-                            <a href="https://yalku.atlassian.net/servicedesk/customer/portal/3" target="_blank" class="btn btn-lg btn-dark">Solicitar ayuda</a>
+                            <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, necesito ayuda" target="_blank" class="btn btn-lg btn-dark">Solicitar ayuda</a>
                         </div><!-- end cta-box -->
                     </div><!-- .container -->
                 </section><!-- end cta-section -->
