@@ -9,6 +9,10 @@ Route::get('home', function () {
     return redirect('/panel/lead');
 });
 
+Route::get('config', function () {
+    return view('construction');
+});
+
 
 //*client profile
 Route::resource('user-profile', '\App\Http\Controllers\Panel\User\ClientProfileController')->middleware('auth');
