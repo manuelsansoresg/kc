@@ -7,6 +7,14 @@
   \**************************************************/
 /***/ (() => {
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 window.modalCreditTag = function (credit_id) {
   $('#modal-credit-tag-tag').val(null).trigger('change');
   $('#lead-financial_id').val('').trigger('change');
@@ -61,67 +69,12 @@ window.deleteTag = function (tag_id) {
   })["catch"](function (e) {});
 };
 
-if (document.getElementById('action-model')) {
-  //* get data saved 
-  var getData = function getData() {
-    clearPreviewFiles();
-    var step = $('#step').val();
-    axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
-      var result = response.data;
-      var files = result.files;
-      var file_dates = result.file_date;
-
-      for (var key in file_dates) {
-        if (file_dates.hasOwnProperty.call(file_dates, key)) {
-          var element_date_file = file_dates[key];
-          $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
-        }
-      }
-
-      for (var key_file in files) {
-        if (files.hasOwnProperty.call(files, key_file)) {
-          var element_file = files[key_file];
-          $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
-        }
-      }
-    })["catch"](function (e) {});
-  };
-
-  var clearPreviewFiles = function clearPreviewFiles() {
-    var step = $('#step').val();
-    axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
-      var result = response.data;
-      var config_files = result.config_files;
-
-      for (var key in config_files) {
-        if (config_files.hasOwnProperty.call(config_files, key)) {
-          var element = config_files[key]; //create dinamic dropzone element
-
-          $('#' + key + '-files-action-preview').html('');
-        }
-      }
-    })["catch"](function (e) {});
-  };
-
-  var model = $('#action-model').val();
-  var id_rel = $('#action-id_rel').val();
-  var step = $('#step').val();
-
-  if (model == '') {
-    model = null;
-  } //*get configuration in template
-
-
-  axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
-    var result = response.data;
-    var config_files = result.config_files;
-
-    var _loop = function _loop(key) {
-      if (config_files.hasOwnProperty.call(config_files, key)) {
-        var element = config_files[key]; //create dinamic dropzone element
-
+$(document).ready(function () {
+  if (document.getElementById('action-model')) {
+    var configureDropzone = function configureDropzone(key, url) {
+      return new Promise(function (resolve, reject) {
         NioApp.Dropzone('#' + key + '-dropzone-action', {
-          url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+          url: url,
           init: function init() {
             this.on("sending", function (file, xhr, formData) {
               var date_file = null;
@@ -137,53 +90,153 @@ if (document.getElementById('action-model')) {
             });
             this.on("complete", function (file) {
               this.removeAllFiles(true);
+            }); // Resolve the promise when the Dropzone is initialized
+
+            this.on("initialized", function () {
+              resolve();
             });
           }
         });
-      }
+      });
     };
 
-    for (var key in config_files) {
-      _loop(key);
-    } //
+    var initDropzones = /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(config_files, model, id_rel) {
+        var key, element, url;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.t0 = _regeneratorRuntime().keys(config_files);
 
-  })["catch"](function (e) {});
+              case 1:
+                if ((_context.t1 = _context.t0()).done) {
+                  _context.next = 10;
+                  break;
+                }
 
-  window.deleteFileTemplate = function (model, id) {
-    $('#frm-register-action-preview').html('');
-    axios.get("/panel/temp/images/" + id + "/delete").then(function (response) {
-      getData();
-      showToast('Archivos', 'Archivo borrado', 'success');
-    })["catch"](function (e) {});
-  };
+                key = _context.t1.value;
 
-  $().ready(function () {
-    getData();
-    $("#frm-action-files").validate({
-      rules: {
-        'date_file[]': {
-          required: true
+                if (!config_files.hasOwnProperty.call(config_files, key)) {
+                  _context.next = 8;
+                  break;
+                }
+
+                element = config_files[key];
+                url = "/panel/files/images/" + model + '/' + id_rel + '/' + key;
+                _context.next = 8;
+                return configureDropzone(key, url);
+
+              case 8:
+                _context.next = 1;
+                break;
+
+              case 10:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function initDropzones(_x, _x2, _x3) {
+        return _ref.apply(this, arguments);
+      };
+    }();
+
+    //* get data saved 
+    var getData = function getData() {
+      clearPreviewFiles();
+      var step = $('#step').val();
+      axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
+        var result = response.data;
+        var files = result.files;
+        var file_dates = result.file_date;
+
+        for (var key in file_dates) {
+          if (file_dates.hasOwnProperty.call(file_dates, key)) {
+            var element_date_file = file_dates[key];
+            $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
+          }
         }
-      },
-      submitHandler: function submitHandler(form, event) {
-        event.preventDefault();
-        var new_form = document.getElementById("frm-action-files");
-        var data = new FormData(new_form); // Extract the step value from the URL
 
-        var urlParams = new URLSearchParams(window.location.search);
-        var step = urlParams.get('step'); // Add the step value to the FormData
+        for (var key_file in files) {
+          if (files.hasOwnProperty.call(files, key_file)) {
+            var element_file = files[key_file];
+            $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
+          }
+        }
+      })["catch"](function (e) {});
+    };
 
-        data.append('step', step);
-        axios.post("/panel/files/template/date", data).then(function (response) {
-          var result = response.data;
-          var url_redirect = null;
-          url_redirect = $('#url_redirect').val();
-          window.location = url_redirect;
-        })["catch"](function (e) {});
-      }
+    var clearPreviewFiles = function clearPreviewFiles() {
+      var step = $('#step').val();
+      axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
+        var result = response.data;
+        var config_files = result.config_files;
+
+        for (var key in config_files) {
+          if (config_files.hasOwnProperty.call(config_files, key)) {
+            var element = config_files[key]; //create dinamic dropzone element
+
+            $('#' + key + '-files-action-preview').html('');
+          }
+        }
+      })["catch"](function (e) {});
+    };
+
+    var model = $('#action-model').val();
+    var id_rel = $('#action-id_rel').val();
+    var step = $('#step').val();
+
+    if (model == '') {
+      model = null;
+    }
+
+    axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
+      var result = response.data;
+      var config_files = result.config_files;
+      initDropzones(config_files, model, id_rel);
+    })["catch"](function (e) {
+      console.error(e);
     });
-  });
-}
+
+    window.deleteFileTemplate = function (model, id) {
+      $('#frm-register-action-preview').html('');
+      axios.get("/panel/temp/images/" + id + "/delete").then(function (response) {
+        getData();
+        showToast('Archivos', 'Archivo borrado', 'success');
+      })["catch"](function (e) {});
+    };
+
+    $().ready(function () {
+      getData();
+      $("#frm-action-files").validate({
+        rules: {
+          'date_file[]': {
+            required: true
+          }
+        },
+        submitHandler: function submitHandler(form, event) {
+          event.preventDefault();
+          var new_form = document.getElementById("frm-action-files");
+          var data = new FormData(new_form); // Extract the step value from the URL
+
+          var urlParams = new URLSearchParams(window.location.search);
+          var step = urlParams.get('step'); // Add the step value to the FormData
+
+          data.append('step', step);
+          axios.post("/panel/files/template/date", data).then(function (response) {
+            var result = response.data;
+            var url_redirect = null;
+            url_redirect = $('#url_redirect').val();
+            window.location = url_redirect;
+          })["catch"](function (e) {});
+        }
+      });
+    });
+  }
+});
 
 /***/ }),
 
