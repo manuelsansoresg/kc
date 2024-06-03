@@ -160,7 +160,10 @@ class Transaction extends Model
                 $in_progress      = (new $templateStrategy)->getPercent($history, true);
                 $dead_line        = (new $templateStrategy)->moduleDeadline($history);
                 $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
-                $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+                $option = null;
+                if (!$is_investor) {
+                    $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+                }
     
                 $transactions[] = array(
                     'id' => $transaction->id,

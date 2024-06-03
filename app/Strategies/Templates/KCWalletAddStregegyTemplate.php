@@ -689,6 +689,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             $status_progress += $status != null ? $status : 0;
             //$current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
         }
+        $percent =  $status_progress > 0 ? (($status_progress) / 4) * 100 : 0;
         if ($status_progress <= 2) {
             $current_show = 'Información transferencia';
         } elseif ($status_progress > 2) {
@@ -698,7 +699,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $percent =  $status_progress > 0 ? (($status_progress) / 4) * 100 : 0;
 
         if ($show_current_show == true) {
-            return $current_show;
+            return $current_show == 100 ? $current_show : null;
         }
         
         return reduceDecimal($percent);
