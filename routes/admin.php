@@ -329,4 +329,4 @@ Route::get('notification/read', ['\App\Http\Controllers\HomeController', 'readNo
 
 Route::get('/ayuda', function () {
     return view('panel.ayuda');
-});
+})->middleware('auth');
