@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Lib\Csendgrid;
 use App\Lib\Manychat;
 use App\Lib\Slack;
 use App\Models\kaaxSidecc\CreditKaaxSidecc;
@@ -521,6 +522,11 @@ class HistoryLog extends Model
 
         if ($status_id == HistoryLog::CREDIT_CANCELED) {
             Credit::setTotalCapital($id_rel);
+        }
+        //credito entregado
+        if ($status_id == HistoryLog::CREDITS_DELIVERED) {
+            $credit             = Credit::find($id_rel);
+            Credit::sendEmailDelivered($credit->id);
         }
 
         

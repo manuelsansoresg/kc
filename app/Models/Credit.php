@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Lib\Csendgrid;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -270,10 +271,35 @@ class Credit extends Model
         return $desition;
     }
 
+    public static function sendEmailDelivered($creditId)
+    {
+        $investorCredits = InvestorsCredit::where('credit_id', $creditId)->get();
+        $credit          = Credit::find($creditId);
+        $client          = ClientPerson::find($credit->client_person_id);
+        foreach ($investorCredits as $investorCredit) {
+            $investor           = Investor::find($investorCredit->investor_id);
+            $userInvestor       = User::find($investor->user_id);
+            $nombreBeneficiario = $client->name.' '.$client->last_name.''.$client->second_last_name;
+            $percentage         = $investorCredit->percentage * 100;
+            $importePrestado    = $investorCredit->import;
+
+            $dataParams = array(
+                'creditId' => $creditId,
+                'nombreBeneficiario' => $nombreBeneficiario,
+                'porcentajeParticipacion' => $percentage,
+                'importePrestado' => $importePrestado,
+            );
+            $send_grid = new Csendgrid($userInvestor->email, 'Inversionista - Aviso de nuevo crédito colocado');
+            $send_grid->setTemplate('d-210b5898a0fe41f9ad746ffa3c42a3f1');
+            $send_grid->setParams($dataParams);
+            $send_grid->send();
+            sleep(0.25);
+        }
+    }
+
     public static function listDatatableProduct($status)
     {
         $get_list    = HistoryLog::getByStatus([$status]);
-        
         $users        = array();
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);
