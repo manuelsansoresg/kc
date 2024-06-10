@@ -82,63 +82,52 @@ window.deleteTag = function (tag_id) {
 $(document).ready(function () {
 if (document.getElementById('action-model')) {
 
-    let model = $('#action-model').val();
-    let id_rel = $('#action-id_rel').val();
-    let step = $('#step').val();
+    let model   = $('#action-model').val();
+    let id_rel  = $('#action-id_rel').val();
+    let step    = $('#step').val();
 
     if (model == '') {
         model = null;
     }
-
-    axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step)
+    //*get configuration in template
+    axios
+        .get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step='+step)
         .then(function (response) {
             let result = response.data;
             let config_files = result.config_files;
 
-            initDropzones(config_files, model, id_rel);
+            for (const key in config_files) {
+                if (config_files.hasOwnProperty.call(config_files, key)) {
+                    const element = config_files[key];
+                    //create dinamic dropzone element
+                    NioApp.Dropzone('#' + key + '-dropzone-action', {
+                        url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+                        init: function () {
+                            this.on("sending", function (file, xhr, formData) {
+                                let date_file = null;
+                                if (document.getElementById(key + '-date_file')) {
+                                    date_file = $('#' + key + '-date_file').val();
+                                }
+                                formData.append("date_file", date_file);
+                            });
+
+                            this.on("success", function (file, message) {
+                                getData();
+                            });
+                            this.on("complete", function (file) {
+                                this.removeAllFiles(true);
+                            })
+                        }
+                    }
+                    );
+
+                }
+            }
+            //
         })
         .catch(e => {
-            console.error(e);
+
         });
-
-    function configureDropzone(key, url) {
-        return new Promise((resolve, reject) => {
-            NioApp.Dropzone('#' + key + '-dropzone-action', {
-                url: url,
-                init: function () {
-                    this.on("sending", function (file, xhr, formData) {
-                        let date_file = null;
-                        if (document.getElementById(key + '-date_file')) {
-                            date_file = $('#' + key + '-date_file').val();
-                        }
-                        formData.append("date_file", date_file);
-                    });
-
-                    this.on("success", function (file, message) {
-                        getData();
-                    });
-                    this.on("complete", function (file) {
-                        this.removeAllFiles(true);
-                    });
-
-                    // Resolve the promise when the Dropzone is initialized
-                    this.on("initialized", function () {
-                        resolve();
-                    });
-                }
-            });
-        });
-    }
-
-    async function initDropzones(config_files, model, id_rel) {
-        for (const key in config_files) {
-            if (config_files.hasOwnProperty.call(config_files, key)) {
-                const element = config_files[key];
-                const url = "/panel/files/images/" + model + '/' + id_rel + '/' + key;
-                await configureDropzone(key, url);
-            }
-        }
-    }
 
     
 
