@@ -1022,9 +1022,14 @@ function saveForm(id_form, model) {
     const data        = new FormData(new_form);
     let id_rel        = $('#id_rel').val();
     let url_redirect  = null;
+    let is_redirect_document  = null;
 
     if (document.getElementById('url_redirect')) {
         url_redirect = $('#url_redirect').val();
+    }
+    
+    if (document.getElementById('is_redirect_document')) {
+        is_redirect_document = '';
     }
     data.append('model', model);
     data.append('id_rel', id_rel);

@@ -4620,9 +4620,14 @@ function saveForm(id_form, model) {
   var data = new FormData(new_form);
   var id_rel = $('#id_rel').val();
   var url_redirect = null;
+  var is_redirect_document = null;
 
   if (document.getElementById('url_redirect')) {
     url_redirect = $('#url_redirect').val();
+  }
+
+  if (document.getElementById('is_redirect_document')) {
+    is_redirect_document = '';
   }
 
   data.append('model', model);
