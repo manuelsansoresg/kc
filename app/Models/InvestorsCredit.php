@@ -70,7 +70,6 @@ class InvestorsCredit extends Model
     {
         $investorCredits = InvestorsCredit::where('investor_id', $investorId)->get();
         $credits = array();
-        //dd($investorCredits);
         foreach ($investorCredits as $investorCredit) {
             DB::connection('kaax_sidecc');
             $percentage = $investorCredit->percentage / 100;

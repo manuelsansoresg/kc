@@ -42,8 +42,13 @@ class KcWalletController extends Controller
 
    public function listHistoryShow()
     {
-        $data = InvestorsCredit::listStatements(Auth::user()->id);
-        return response()->json(['data' => $data]);
+        $investor = Investor::where('user_id', Auth::user()->id)->first();
+        
+        if ($investor != null) {
+            $data = InvestorsCredit::listStatements($investor->id);
+            return response()->json(['data' => $data]);
+        }
+        return response()->json(['data' => null]);
     }
 
     public function getInvestor(Investor $investor)
