@@ -35,8 +35,14 @@
                                     <th class="tb-tnx-info"><span class="tb-tnx-desc d-none d-sm-inline-block"><span>Estatus</span></span>
                                         <span class="tb-tnx-date d-md-inline-block d-none"><span
                                                 class="d-md-none"></span>
-                                                <span class="d-none d-md-block"><span>Importe prestado</span><span>Pagado</span></span></span></th>
-                                    <th class="tb-tnx-amount"><span class="tb-tnx-total">Capital pendiente</span><span
+                                                <span class="d-none d-md-block"><span>Importe prestado</span></span></span></th>
+                                    <th>
+                                        <span>Pagado</span>
+                                    </th>
+                                    <th>
+                                        <span class="tb-tnx-total">Capital pendiente</span>
+                                    </th>
+                                                <th class="tb-tnx-amount"><span
                                             class="tb-tnx-status d-none d-md-inline-block">Comisiones</span></th>
                                 </tr>
                             </thead>
@@ -72,11 +78,18 @@
                                                     {{ $valorStatus }}
                                                     </span>
                                                 </div>
-                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorImporte }}  </span><span
-                                                        class="amount">{{ $valorPagado }} </span></div>
+                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorImporte }}  </span>
+                                                   </div>
+                                            </td>
+                                            <td>
+                                                <span
+                                                class="amount">{{ $valorPagado }} </span>
                                             </td>
                                             <td class="tb-tnx-info">
                                                 <div class="tb-tnx-desc"><span class="amount"> {{ $valorPorPagar  }}  </span></div>
+                                               
+                                            </td>
+                                            <td>
                                                 <div class="tb-tnx-status">
                                                 
                                                     <span class="amount"> {{ $valorComisiones }}  </span>
