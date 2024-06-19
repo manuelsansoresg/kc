@@ -56,6 +56,7 @@
                                                 $comisiones    = $getInvestorCredit->commission_amount;
                                             }
                                         @endphp
+                                        
                                         @if ($getCollection != null)
                                             <tr class="tb-tnx-item">
                                                 <td class="tb-tnx-id"><a href="#"><span> {{ $getInvestorCredit->id }} </span></a></td>
