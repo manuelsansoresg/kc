@@ -100,7 +100,7 @@ class InvestorsCredit extends Model
     public static function setComissionRateAndAmount($creditId)
     {
         $credit         = Credit::find($creditId);
-        $financial      = FinancialProduct::where('id', $credit->applied_financial_product);
+        $financial      = FinancialProduct::where('id', $credit->applied_financial_product)->first();
         $commissionRate = $financial->collection_commission_rate;
 
         $getInvestors = InvestorsCredit::where('credit_id', $creditId)->get();
