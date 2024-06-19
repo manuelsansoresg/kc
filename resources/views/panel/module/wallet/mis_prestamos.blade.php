@@ -45,34 +45,38 @@
                                     @foreach ($getInvestorCredits as $getInvestorCredit)
                                         @php
                                             $getCollection = $MCollection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
-                                            $percentage    = $getInvestorCredit->percentage / 100;
-                                            $getStatus     = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
-                                            $getInvestor   = $MInvestor::find($getInvestorCredit->investor_id);
-                                            $getCredit     = $MCredit::find($getInvestorCredit->credit_id);
-                                            $importe       = $getInvestorCredit->import ;
-                                            $pagado        = $getInvestorCredit->total_collected;
-                                            $porPagar      = $getInvestorCredit->placed_capital;
-                                            $comisiones    = $getInvestorCredit->commission_amount 
+                                            if ($getCollection != null) {
+                                                $percentage    = $getInvestorCredit->percentage / 100;
+                                                $getStatus     = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
+                                                $getInvestor   = $MInvestor::find($getInvestorCredit->investor_id);
+                                                $getCredit     = $MCredit::find($getInvestorCredit->credit_id);
+                                                $importe       = $getInvestorCredit->import ;
+                                                $pagado        = $getInvestorCredit->total_collected;
+                                                $porPagar      = $getInvestorCredit->placed_capital;
+                                                $comisiones    = $getInvestorCredit->commission_amount;
+                                            }
                                         @endphp
-                                    <tr class="tb-tnx-item">
-                                        <td class="tb-tnx-id"><a href="#"><span> {{ $getInvestorCredit->id }} </span></a></td>
-                                        <td class="tb-tnx-info">
-                                            <div class="tb-tnx-desc">
-                                                {{-- <span class="amount">{{ $getStatus != null ? $getStatus->name : null }} --}}
-                                                </span>
-                                            </div>
-                                            <div class="tb-tnx-desc"><span class="amount"> {{ format_price($importe) }}  </span><span
-                                                    class="amount">{{ format_price($pagado) }} </span></div>
-                                        </td>
-                                        <td class="tb-tnx-info">
-                                            <div class="tb-tnx-desc"><span class="amount"> {{ format_price($porPagar) }}  </span></div>
-                                            <div class="tb-tnx-status">
-                                            
-                                                <span class="amount"> {{ format_price($comisiones) }}  </span>
-                                                
-                                            </div>
-                                        </td>
-                                    </tr>
+                                        @if ($getCollection != null)
+                                            <tr class="tb-tnx-item">
+                                                <td class="tb-tnx-id"><a href="#"><span> {{ $getInvestorCredit->id }} </span></a></td>
+                                                <td class="tb-tnx-info">
+                                                    <div class="tb-tnx-desc">
+                                                        
+                                                        </span>
+                                                    </div>
+                                                    <div class="tb-tnx-desc"><span class="amount"> {{ format_price($importe) }}  </span><span
+                                                            class="amount">{{ format_price($pagado) }} </span></div>
+                                                </td>
+                                                <td class="tb-tnx-info">
+                                                    <div class="tb-tnx-desc"><span class="amount"> {{ format_price($porPagar) }}  </span></div>
+                                                    <div class="tb-tnx-status">
+                                                    
+                                                        <span class="amount"> {{ format_price($comisiones) }}  </span>
+                                                        
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 @endif
                                 
