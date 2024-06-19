@@ -44,40 +44,50 @@
                                 @if ($getInvestorCredits != null)
                                     @foreach ($getInvestorCredits as $getInvestorCredit)
                                         @php
-                                            $getCollection = $MCollection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
+                                            $getCollection   = $MCollection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
+                                            $creditId        = $getInvestorCredit->id;
+                                            $valorImporte    = null;
+                                            $valorPagado     = null;
+                                            $valorPorPagar   = null;
+                                            $valorComisiones = null;
+                                            $valorStatus     = 'Pendiente';
                                             if ($getCollection != null) {
-                                                $percentage    = $getInvestorCredit->percentage / 100;
-                                                $getStatus     = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
-                                                $getInvestor   = $MInvestor::find($getInvestorCredit->investor_id);
-                                                $getCredit     = $MCredit::find($getInvestorCredit->credit_id);
-                                                $importe       = $getInvestorCredit->import ;
-                                                $pagado        = $getInvestorCredit->total_collected;
-                                                $porPagar      = $getInvestorCredit->placed_capital;
-                                                $comisiones    = $getInvestorCredit->commission_amount;
+                                                $percentage      = $getInvestorCredit->percentage / 100;
+                                                $getStatus       = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
+                                                $getInvestor     = $MInvestor::find($getInvestorCredit->investor_id);
+                                                $getCredit       = $MCredit::find($getInvestorCredit->credit_id);
+                                                $importe         = $getInvestorCredit->import ;
+                                                $pagado          = $getInvestorCredit->total_collected;
+                                                $porPagar        = $getInvestorCredit->placed_capital;
+                                                $comisiones      = $getInvestorCredit->commission_amount;
+                                                
+                                                $valorImporte    = format_price($importe);
+                                                $valorPagado     = format_price($pagado);
+                                                $valorPorPagar   = format_price($porPagar);
+                                                $valorComisiones = format_price($comisiones);
+                                                $valorStatus     = null;
                                             }
                                         @endphp
                                         
-                                        @if ($getCollection != null)
-                                            <tr class="tb-tnx-item">
-                                                <td class="tb-tnx-id"><a href="#"><span> {{ $getInvestorCredit->id }} </span></a></td>
-                                                <td class="tb-tnx-info">
-                                                    <div class="tb-tnx-desc">
-                                                        
-                                                        </span>
-                                                    </div>
-                                                    <div class="tb-tnx-desc"><span class="amount"> {{ format_price($importe) }}  </span><span
-                                                            class="amount">{{ format_price($pagado) }} </span></div>
-                                                </td>
-                                                <td class="tb-tnx-info">
-                                                    <div class="tb-tnx-desc"><span class="amount"> {{ format_price($porPagar) }}  </span></div>
-                                                    <div class="tb-tnx-status">
+                                        <tr class="tb-tnx-item">
+                                            <td class="tb-tnx-id"><a href="#"><span> {{ $creditId }} </span></a></td>
+                                            <td class="tb-tnx-info">
+                                                <div class="tb-tnx-desc">
+                                                    {{ $valorStatus }}
+                                                    </span>
+                                                </div>
+                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorImporte }}  </span><span
+                                                        class="amount">{{ $valorPagado }} </span></div>
+                                            </td>
+                                            <td class="tb-tnx-info">
+                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorPorPagar  }}  </span></div>
+                                                <div class="tb-tnx-status">
+                                                
+                                                    <span class="amount"> {{ $valorComisiones }}  </span>
                                                     
-                                                        <span class="amount"> {{ format_price($comisiones) }}  </span>
-                                                        
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endif
+                                                </div>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 @endif
                                 
