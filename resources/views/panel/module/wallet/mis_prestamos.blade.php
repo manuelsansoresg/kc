@@ -46,26 +46,22 @@
                                         @php
                                             $getCollection   = $MCollection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
                                             $creditId        = $getInvestorCredit->id;
-                                            $valorImporte    = null;
-                                            $valorPagado     = null;
-                                            $valorPorPagar   = null;
-                                            $valorComisiones = null;
                                             $valorStatus     = 'Pendiente';
+                                            $importe         = $getInvestorCredit->import ;
+                                            $pagado          = $getInvestorCredit->total_collected;
+                                            $porPagar        = $getInvestorCredit->placed_capital;
+                                            $comisiones      = $getInvestorCredit->commission_amount;
+                                            
+                                            $valorImporte    = format_price($importe);
+                                            $valorPagado     = format_price($pagado);
+                                            $valorPorPagar   = format_price($porPagar);
+                                            $valorComisiones = format_price($comisiones);
                                             if ($getCollection != null) {
                                                 $percentage      = $getInvestorCredit->percentage / 100;
                                                 $getStatus       = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
                                                 $getInvestor     = $MInvestor::find($getInvestorCredit->investor_id);
                                                 $getCredit       = $MCredit::find($getInvestorCredit->credit_id);
-                                                $importe         = $getInvestorCredit->import ;
-                                                $pagado          = $getInvestorCredit->total_collected;
-                                                $porPagar        = $getInvestorCredit->placed_capital;
-                                                $comisiones      = $getInvestorCredit->commission_amount;
-                                                
-                                                $valorImporte    = format_price($importe);
-                                                $valorPagado     = format_price($pagado);
-                                                $valorPorPagar   = format_price($porPagar);
-                                                $valorComisiones = format_price($comisiones);
-                                                $valorStatus     = null;
+                                                $valorStatus     = $getStatus->name;
                                             }
                                         @endphp
                                         
