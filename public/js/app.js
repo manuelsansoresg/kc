@@ -4626,10 +4626,6 @@ function saveForm(id_form, model) {
     url_redirect = $('#url_redirect').val();
   }
 
-  if (document.getElementById('is_redirect_document')) {
-    is_redirect_document = '';
-  }
-
   data.append('model', model);
   data.append('id_rel', id_rel);
   axios.post("/panel/action-form", data).then(function (response) {
@@ -4653,6 +4649,10 @@ function saveForm(id_form, model) {
       /* window.location = updatedDataRedirect; */
 
       url_redirect = updatedDataRedirect;
+
+      if (url_redirect.includes('{id}')) {
+        url_redirect = url_redirect.replace('{id}', result.id);
+      }
     }
 
     window.location = url_redirect;

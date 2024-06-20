@@ -125,16 +125,19 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
         $urlRedirect = $history_id == 'null' ? '/panel/kc-wallet' : '/panel/template/steps/wallet/'.$history_id.'/show';
         $buttonLinkExtraFinish = null;
+        $is_redirect_document = false;
        
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
         if ($history_id == 'null' && $is_investor === true) {
+            
             $buttonLinkExtraFinish = array(
                 'name' => 'Continuar',
                 'id' => 'url_redirect_finish',
                 'class' => 'btn btn-primary',
                 'link' => '#',
-                'data-redirect' => '/panel/template/action-document/wallet/{history_id}?step=1_2'
+                'data-redirect' => '/panel/template/action-document/wallet/{id}?step=1_2'
             );
+            //$urlRedirect = '/panel/template/action-document/wallet/{id}?step=1_2';
         }
         $typeInvestor = $is_investor ===true ? 'hidden' : 'select2';
         $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
@@ -220,6 +223,8 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'value' => $urlRedirect,
                 'col' => 'col-12'
             ],
+            
+            
         );
 
 
