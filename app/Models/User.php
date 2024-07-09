@@ -172,14 +172,15 @@ class User extends Authenticatable
             $investor = Investor::where('user_id', $userId)->first();
             if ($investor != null) {
                 InvestorProduct::where('investor_id', $investor->id)->delete();
+                foreach ($arrayFinancialProductsId as $arrayFinancialProductId) {
+                    InvestorProduct::create([
+                        'investor_id' => $investor->id,
+                        'financial_products_id' => $arrayFinancialProductId
+                    ]);
+                }
             }
 
-            foreach ($arrayFinancialProductsId as $arrayFinancialProductId) {
-                InvestorProduct::create([
-                    'investor_id' => $investor->id,
-                    'financial_products_id' => $arrayFinancialProductId
-                ]);
-            }
+            
             
         }
         $user->assignRole(ucfirst($role));
