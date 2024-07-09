@@ -129,12 +129,14 @@ class User extends Authenticatable
         $financial_products_id    = null;
         $arrayFinancialProductsId = array();
 
-        foreach ($financial_products_ids as $financial_products_ids) {
-            $financial_products_id.= $financial_products_ids.',';
-            $arrayFinancialProductsId[] = $financial_products_ids;
+        if (isset($request->financial_products_id)) {
+            foreach ($financial_products_ids as $financial_products_ids) {
+                $financial_products_id.= $financial_products_ids.',';
+                $arrayFinancialProductsId[] = $financial_products_ids;
+            }
+            $financial_products_id = trim($financial_products_id, ',');
+            $request->merge(['financial_products_id' => $financial_products_id]);
         }
-        $financial_products_id = trim($financial_products_id, ',');
-        $request->merge(['financial_products_id' => $financial_products_id]);
 
         if ($request->user_id == null) {
             $user = new User($request->except(['_token', 'pass_confirm', 'password', 'user_id', 'type_user']));
