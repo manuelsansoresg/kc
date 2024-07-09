@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Lib\Csendgrid;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -155,8 +156,10 @@ class Credit extends Model
         // Update the total_capital field for the current credit
         $credit = Credit::find($creditId);
         $totalCapitalPerInvestor = InvestorsCredit::selectRaw('SUM(import) as total_capital, investor_id')
-            ->groupBy('investor_id')
-            ->get();
+                                    ->join('investors', 'investors_credits.investor_id', '=', 'investors.id')
+                                    ->groupBy('investors_credits.investor_id')
+                                    ->get();
+        
 
         foreach ($totalCapitalPerInvestor as $totalCapital) {
             Investor::where('id', $totalCapital->investor_id)
@@ -166,14 +169,14 @@ class Credit extends Model
         }
 
 
-        $getInvestors = Investor::where('financial_products_id', $credit->applied_financial_product)->get();
+        $getInvestors = InvestorProduct::where('financial_products_id', $credit->applied_financial_product)->get();
+
         foreach ($getInvestors as $getInvestor) {
-            Transaction::setTotalCapital($getInvestor->id);
+            Transaction::setTotalCapital($getInvestor->investor_id);
         }
         
     }
     
-
     public static function listDatatable($status)
     {
        
@@ -268,10 +271,35 @@ class Credit extends Model
         return $desition;
     }
 
+    public static function sendEmailDelivered($creditId)
+    {
+        $investorCredits = InvestorsCredit::where('credit_id', $creditId)->get();
+        $credit          = Credit::find($creditId);
+        $client          = ClientPerson::find($credit->client_person_id);
+        foreach ($investorCredits as $investorCredit) {
+            $investor           = Investor::find($investorCredit->investor_id);
+            $userInvestor       = User::find($investor->user_id);
+            $nombreBeneficiario = $client->name.' '.$client->last_name.''.$client->second_last_name;
+            $percentage         = $investorCredit->percentage * 100;
+            $importePrestado    = $investorCredit->import;
+
+            $dataParams = array(
+                'creditId' => $creditId,
+                'nombreBeneficiario' => $nombreBeneficiario,
+                'porcentajeParticipacion' => $percentage,
+                'importePrestado' => $importePrestado,
+            );
+            $send_grid = new Csendgrid($userInvestor->email, 'Inversionista - Aviso de nuevo crédito colocado');
+            $send_grid->setTemplate('d-210b5898a0fe41f9ad746ffa3c42a3f1');
+            $send_grid->setParams($dataParams);
+            $send_grid->send();
+            sleep(0.25);
+        }
+    }
+
     public static function listDatatableProduct($status)
     {
         $get_list    = HistoryLog::getByStatus([$status]);
-        
         $users        = array();
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);

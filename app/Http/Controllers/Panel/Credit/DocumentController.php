@@ -21,6 +21,7 @@ class DocumentController extends Controller
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $files            = (new $actionStrategy)->configUpload();
         $title = 'Acción carga';
+        $history          = HistoryLog::find($history_id);
         $url_redirect = null;
         try {
             $title = (new $actionStrategy)->setTitleDocument();
@@ -33,8 +34,6 @@ class DocumentController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
-
-        $history          = HistoryLog::find($history_id);
         $credit = null;
         $credit_id = $history->id_rel;
         $client = null;

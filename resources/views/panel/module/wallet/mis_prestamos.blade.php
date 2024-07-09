@@ -35,8 +35,14 @@
                                     <th class="tb-tnx-info"><span class="tb-tnx-desc d-none d-sm-inline-block"><span>Estatus</span></span>
                                         <span class="tb-tnx-date d-md-inline-block d-none"><span
                                                 class="d-md-none"></span>
-                                                <span class="d-none d-md-block"><span>Importe</span><span>Pagado</span></span></span></th>
-                                    <th class="tb-tnx-amount"><span class="tb-tnx-total">Por pagar</span><span
+                                                <span class="d-none d-md-block"><span>Importe prestado</span></span></span></th>
+                                    <th>
+                                        <span>Pagado</span>
+                                    </th>
+                                    <th>
+                                        <span class="tb-tnx-total">Capital pendiente</span>
+                                    </th>
+                                                <th class="tb-tnx-amount"><span
                                             class="tb-tnx-status d-none d-md-inline-block">Comisiones</span></th>
                                 </tr>
                             </thead>
@@ -44,32 +50,53 @@
                                 @if ($getInvestorCredits != null)
                                     @foreach ($getInvestorCredits as $getInvestorCredit)
                                         @php
-                                            $getCollection = $MCollection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
-                                            $getStatus     = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
-                                            $getInvestor   = $MInvestor::find($getInvestorCredit->investor_id);
-                                            $getCredit     = $MCredit::find($getInvestorCredit->credit_id);
-                                            $importe       = $getCredit != null && $getInvestorCredit != null ?  $getCredit->applied_import * $getInvestorCredit->percentage: 0 ;
-                                            $pagado        = $getCollection->pago_acumulado_real * $getInvestorCredit->percentage;
-                                            $porPagar      = $getCollection->saldo_total_real * $getInvestorCredit->percentage;
-                                            $comisiones    = $getCollection->collection_commission_amount * $getInvestorCredit->percentage
-                                        @endphp
-                                    <tr class="tb-tnx-item">
-                                        <td class="tb-tnx-id"><a href="#"><span> {{ $getInvestorCredit->credit_id }} </span></a></td>
-                                        <td class="tb-tnx-info">
-                                            <div class="tb-tnx-desc"><span class="amount">{{ $getStatus != null ? $getStatus->name : null }}</span>
-                                            </div>
-                                            <div class="tb-tnx-desc"><span class="amount"> {{ format_price($importe) }}  </span><span
-                                                    class="amount">{{ format_price($pagado) }} </span></div>
-                                        </td>
-                                        <td class="tb-tnx-info">
-                                            <div class="tb-tnx-desc"><span class="amount"> {{ format_price($porPagar) }}  </span></div>
-                                            <div class="tb-tnx-status">
+                                            $getCollection   = $MCollection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
+                                            $creditId        = $getInvestorCredit->id;
+                                            $valorStatus     = 'Pendiente';
+                                            $importe         = $getInvestorCredit->import ;
+                                            $pagado          = $getInvestorCredit->total_collected;
+                                            $porPagar        = $getInvestorCredit->placed_capital;
+                                            $comisiones      = $getInvestorCredit->commission_amount;
                                             
-                                                <span class="amount"> {{ format_price($comisiones) }}  </span>
+                                            $valorImporte    = format_price($importe);
+                                            $valorPagado     = format_price($pagado);
+                                            $valorPorPagar   = format_price($porPagar);
+                                            $valorComisiones = format_price($comisiones);
+                                            if ($getCollection != null) {
+                                                $percentage      = $getInvestorCredit->percentage / 100;
+                                                $getStatus       = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
+                                                $getInvestor     = $MInvestor::find($getInvestorCredit->investor_id);
+                                                $getCredit       = $MCredit::find($getInvestorCredit->credit_id);
+                                                $valorStatus     = $getStatus->name;
+                                            }
+                                        @endphp
+                                        
+                                        <tr class="tb-tnx-item">
+                                            <td class="tb-tnx-id"><a href="#"><span> {{ $creditId }} </span></a></td>
+                                            <td class="tb-tnx-info">
+                                                <div class="tb-tnx-desc">
+                                                    {{ $valorStatus }}
+                                                    </span>
+                                                </div>
+                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorImporte }}  </span>
+                                                   </div>
+                                            </td>
+                                            <td>
+                                                <span
+                                                class="amount">{{ $valorPagado }} </span>
+                                            </td>
+                                            <td class="tb-tnx-info">
+                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorPorPagar  }}  </span></div>
+                                               
+                                            </td>
+                                            <td>
+                                                <div class="tb-tnx-status">
                                                 
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                    <span class="amount"> {{ $valorComisiones }}  </span>
+                                                    
+                                                </div>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 @endif
                                 

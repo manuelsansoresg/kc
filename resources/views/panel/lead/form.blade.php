@@ -54,7 +54,7 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">*Nombres</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="data[name]" id="lead-name">
+                                                                    <input type="text" class="form-control" name="data[name]" id="lead-name" required>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -96,7 +96,7 @@
                                                         
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">RFC</label>
+                                                                <label class="form-label">*RFC</label>
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" name="data[rfc]" minlength="10" id="lead-rfc" onchange="checkDataLeadExist(this, 'rfc')" required>
                                                                     <label id="rfc-msg" class="text-danger"></label>
@@ -210,7 +210,7 @@
                                                         
                                                         <div class="col-md-6" id="content-financial_product_id" style="display: none">
                                                             <div class="form-group">
-                                                                <label class="form-label">Productos financieros</label>
+                                                                <label class="form-label">Productos financieros actuales</label>
                                                                 <p class="small">Elige el producto financiero que desea el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                     <select class="form-select select2multiple" name="products[]" id="lead-financial-product-id" multiple="multiple"  data-search="on">
@@ -233,7 +233,7 @@
                                                             </div>
                                                         </div>
                                                         
-                                                        <div class="col-md-6" id="content-importe-solicitado" >
+                                                        <div class="col-md-6" id="content-ingreso-mensual" >
                                                             <div class="form-group">
                                                                 <label class="form-label">Ingreso mensual</label>
                                                                 <p class="small">Neto aproximado</p>
@@ -306,8 +306,10 @@
                                                                 
                                                             </div>
                                                         </div>
-
-
+                                                        <input type="hidden" id="isExport" name="isExport" value="false">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-primary" onclick="saveAndExportLead()">Guardar y exportar datos</button>
+                                                        </div>
                                                         
                                                         
                                                         <div class="col-md-6" id="content-comment" style="display: none">
@@ -419,7 +421,7 @@
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>
                                                                     {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
-                                                                    <button class="btn btn-primary">Guardar</button>
+                                                                    <button class="btn btn-primary" id="btnSave">Guardar</button>
                                                                 </li>
                                                             </ul>
                                                         </div>

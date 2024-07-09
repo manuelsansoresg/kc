@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Exports\LeadExport;
 use App\Http\Controllers\Controller;
 use App\Lib\CNubarium;
 use App\Lib\Csendgrid;
 use App\Lib\Manychat;
 use App\Models\Action;
+use App\Models\Agreement;
 use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\CurrentFinancialProduct;
@@ -19,12 +21,15 @@ use App\Models\File;
 use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
 use App\Models\Investor;
+use App\Models\InvestorsCredit;
+use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class LeadController extends Controller
 {
@@ -41,7 +46,9 @@ class LeadController extends Controller
      */
     public function index()
     {
-        
+        //Transaction::setTotalCapital(9);
+       
+
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
         if ($is_financiera === true) {
@@ -66,6 +73,7 @@ class LeadController extends Controller
         $getLead = ClientPerson::checkDataModel($valInput,$id);
         return response()->json(['exist' => $getLead]);
     }
+
     
     public function listActions(Lead $lead)
     {
@@ -146,8 +154,56 @@ class LeadController extends Controller
      */
     public function store(Request $request)
     {
-        Lead::saveEdit($request);
-        return response()->json(200);
+        $lead = Lead::saveEdit($request);
+        return response()->json(['lead' => $lead]);
+    }
+
+    public function exportLead(Request $request)
+    {
+        $lead                = Lead::find($request->lead_id);
+        $getServicio         = Product::find($lead->product_id);
+        $servicio            = $getServicio  != null ? $getServicio->alias : null;
+        $getAgreement        = Agreement::find($lead->agreement_id);
+        $agreement           = $getAgreement != null ? $getAgreement->name : null;
+        $getBank             = Bank::find($lead->id);
+        $bank                = $getBank      != null ? $getBank->name : null;
+        $getFinancialProduct = FinancialProduct::
+                                join('financials', 'financials.id', 'financial_products.financial_id')
+                                ->where('financial_products.id',$lead->applied_financial_product)->first();
+        $financialProcuct = $getFinancialProduct!= null ? $getFinancialProduct->commercial_name .'-'. $getFinancialProduct->alias  : null;
+        $financials = '';
+
+        $financialProducts = CurrentFinancialProduct::where(['id_rel' => $lead->id, 'type' => 1])->get();
+        foreach ($financialProducts as $financialProduct) {
+            $getFinancialProducts = FinancialProduct::
+            join('financials', 'financials.id', 'financial_products.financial_id')
+            ->where('financial_products.id',$financialProduct->product_id)->first();
+
+            $financials .= $getFinancialProducts->commercial_name.' - '.$getFinancialProducts->alias.',';
+        }
+        $financials = trim($financials, ','); 
+        $consulta_buro = $lead->consulta_buro == 1? 'Sí' : 'No';
+        $status_si_no = config('enums.status_si_no');
+        $aval = isset($status_si_no[$lead->aval_o_garantia])? $status_si_no[$lead->aval_o_garantia] : null;
+
+        $data_collection[] = array(
+            'name' => $lead->name,
+            'last_name' => $lead->last_name,
+            'second_last_name' => $lead->second_last_name,
+            'cellphone' => $lead->cellphone,
+            'email' => $lead->email,
+            'rfc' => $lead->rfc,
+            'servicio' => $servicio,
+            'organizacion' => $agreement,
+            'producto_financiero' => $financialProcuct,
+            'productos_financieros' => $financials,
+            'importe_solicitado' => $lead->importe_solicitado,
+            'income' => $lead->income,
+            'banco' => $bank,
+            'consulta_buro' => $consulta_buro,
+            'aval_garantia' => $aval,
+        );
+        return Excel::download(new LeadExport($data_collection), 'KC - Datos exportados'.$lead->id.'.csv');
     }
 
     public function storeClientPerson($lead_id)

@@ -79,7 +79,7 @@ window.deleteTag = function (tag_id) {
         });
 }
 
-
+$(document).ready(function () {
 if (document.getElementById('action-model')) {
 
     let model   = $('#action-model').val();
@@ -128,6 +128,8 @@ if (document.getElementById('action-model')) {
         .catch(e => {
 
         });
+
+    
 
     window.deleteFileTemplate = function (model, id) {
         $('#frm-register-action-preview').html('');
@@ -233,4 +235,4 @@ if (document.getElementById('action-model')) {
   
 }
 
-
+});

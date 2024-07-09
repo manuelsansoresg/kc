@@ -450,7 +450,9 @@ $().ready(function () {
             let result = response.data;
             let total = result.total;
 
-            if (total == 0) {
+            if (total > 1) {
+                saveForm('frm-template_control_desk_step5', 'controlDesk');
+            } else {
                 Swal.fire({
                     title: 'Este es un cliente nuevo',
                     text : 'Confirmo que se incluyó el contrato de comisión mercantil para un cliente nuevo',
@@ -463,8 +465,6 @@ $().ready(function () {
                         saveForm('frm-template_control_desk_step5', 'controlDesk');
                     }
                   });
-            } else {
-                saveForm('frm-template_control_desk_step5', 'controlDesk');
             }
         })
         .catch(e => {
@@ -1022,10 +1022,13 @@ function saveForm(id_form, model) {
     const data        = new FormData(new_form);
     let id_rel        = $('#id_rel').val();
     let url_redirect  = null;
+    let is_redirect_document  = null;
 
     if (document.getElementById('url_redirect')) {
         url_redirect = $('#url_redirect').val();
     }
+    
+   
     data.append('model', model);
     data.append('id_rel', id_rel);
     axios
@@ -1054,7 +1057,10 @@ function saveForm(id_form, model) {
                 
                 /* window.location = updatedDataRedirect; */
                 url_redirect = updatedDataRedirect;
-              }
+                if (url_redirect.includes('{id}')) {
+                    url_redirect = url_redirect.replace('{id}', result.id);
+                }
+            }
               
             window.location = url_redirect;
         })

@@ -9,6 +9,10 @@ Route::get('home', function () {
     return redirect('/panel/lead');
 });
 
+Route::get('config', function () {
+    return view('construction');
+});
+
 
 //*client profile
 Route::resource('user-profile', '\App\Http\Controllers\Panel\User\ClientProfileController')->middleware('auth');
@@ -79,6 +83,8 @@ Route::group(['prefix' => 'lead'], function () {
     Route::get('{lead}/preview/profile', ['\App\Http\Controllers\Panel\LeadController', 'previewProfile'])->middleware('auth');
 
     Route::get('{value}/{id}/check', ['\App\Http\Controllers\Panel\LeadController', 'checkData'])->middleware('auth');
+    
+    Route::post('{leadId}/data/export', ['\App\Http\Controllers\Panel\LeadController', 'exportLead'])->middleware('auth');
 
     //* mover del lugar
     
@@ -240,6 +246,9 @@ Route::resource('kc-wallet', '\App\Http\Controllers\Panel\Module\KcWallet\KcWall
 
 Route::group(['prefix' => 'kc-wallet'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'list'])->middleware('auth');
+    Route::get('list/history', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'listHistory'])->middleware('auth');
+    Route::get('list/history/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'listHistoryShow'])->middleware('auth');
+
     Route::get('resumen/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'resumen'])->middleware('auth');
     
     Route::get('mis-prestamos/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'misPrestamos'])->middleware('auth');
@@ -320,4 +329,4 @@ Route::get('notification/read', ['\App\Http\Controllers\HomeController', 'readNo
 
 Route::get('/ayuda', function () {
     return view('panel.ayuda');
-});
+})->middleware('auth');

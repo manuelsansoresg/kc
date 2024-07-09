@@ -112,13 +112,12 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $name_form = 'frm-template_wallet_down_step1';
         $type_form    = HistoryLog::KC_DOWN_WALLET_ADD_FORM;
         $users = User::getUserRoleInvestor('Cliente inversionista');
-        //dd($users);
         $funding_operation_type = config('enums.funding_operation');
-
-        $urlRedirect = $history_id == 'null' ? '/panel/kc-down-wallet' : '/panel/template/steps/kc-down-wallet/'.$history_id.'/show';
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        $alert = $is_investor === true ? '?alertdown=true': null;
+        $urlRedirect = $history_id == 'null' ? '/panel/kc-down-wallet' .$alert: '/panel/template/steps/kc-down-wallet/'.$history_id.'/show';
         $buttonLinkExtraFinish = null;
 
-        $is_investor = Auth::user()->hasRole('Cliente inversionista');
         $typeInvestor = $is_investor ===true ? 'hidden' : 'select2';
         $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
         $optionInvestor = $is_investor === true ? $getInvestor->id : $users;
@@ -311,6 +310,13 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                     HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, $history->id_rel, 0);
                     HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, $history->id_rel, 0);
                 }
+            }
+
+            //confirmar transferencia exitosa
+            if (isset($data['operation_status']) && $data['operation_status'] == 1) {
+                $modelTransaction = $transaction['transaction'];
+                $investor_id = $modelTransaction->investor_id;
+                Transaction::setTotalCapital($investor_id);
             }
 
             if ($percent2 == 100) {

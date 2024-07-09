@@ -45,37 +45,64 @@ class Transaction extends Model
         if ($total != null) {
             $investor = Investor::selectRaw('LEAST(total_available, lendable) AS loan_available')
                         ->selectRaw('total_available')
-                        ->selectRaw('financial_products_id')
                         ->where('id', $investorId)->first();
-                        
+            
+            $getInvestorProducts = InvestorProduct::where('investor_id', $investorId)->get();
+            $financialProductIds         = array();
+            $investorsIds         = array();
+            $loan_active = $investor->loan_available < 100 ? 0 : 1;
             Investor::where('id', $investorId)
                     ->update(
                     [
                         'loan_available' => $investor->loan_available,
                         'withdraw_available' => $investor->total_available - $investor->loan_available  ,
+                        'loan_active' =>  $loan_active,      
                     ]
             );
-            //*actualizar  loan_available  de financial_products
-            $financialProductIds = explode(',', $investor->financial_products_id);
-
-            $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
-                            ->where('loan_active ', 1)
-                            ->whereIn('financial_products_id', $financialProductIds)
+           
+            $getProductIds = InvestorProduct::where('investor_id', $investorId)->get();
+            
+            $financialProductInvestorsIds = array();
+            $financialProductgroup = array();
+            foreach ($getProductIds as $getProductId) {
+                $financialProductId = $getProductId->financial_products_id;
+                if (!in_array($financialProductId, $financialProductInvestorsIds)) {
+                    $financialProductInvestorsIds[] = $financialProductId;
+                }
+            }
+            
+            foreach ($financialProductInvestorsIds as $financialProductInvestorsId) {
+                $getInvestors = InvestorProduct::where('financial_products_id', $financialProductInvestorsId)->get();
+                $investorsIds = array();
+                foreach ($getInvestors as $getInvestor) {
+                    $investorsIds[] = $getInvestor->investor_id;
+                }
+                $financialProductgroup[$financialProductInvestorsId] = $investorsIds;
+                
+            }
+            //dd($financialProductgroup);
+            foreach ($financialProductgroup as $key => $getInvestorId) {
+                
+                $investorLoan = Investor::selectRaw('SUM(loan_available) as loan_available')
+                            ->where('loan_active', 1)
+                            ->whereIn('id', $getInvestorId)
                             ->first();
 
-            if ($investorLoan != null) {
-                $loanActive = $investorLoan->loan_available < 100 ? 0 : 1;
-                FinancialProduct::whereIn('id', $financialProductIds)
-                                ->update([
-                                    'loan_available' => $investorLoan->loan_available,
-                                    
-                                ]);
-                Investor::where('id', $investorId)->update([
-                    'loan_active'=> $loanActive
-                ]);
-               
+                if ($investorLoan != null) {
+                    $loanActive = $investorLoan->loan_available < 100 ? 0 : 1;
+                    FinancialProduct::where('id', $key)
+                                    ->update([
+                                        'loan_available' => $investorLoan->loan_available,
+                                        
+                                    ]);
+                    /* Investor::where('id', $investorId)->update([
+                        'loan_active'=> $loanActive
+                    ]); */
+                
 
+                }
             }
+            
         }
 
     }
@@ -133,7 +160,10 @@ class Transaction extends Model
                 $in_progress      = (new $templateStrategy)->getPercent($history, true);
                 $dead_line        = (new $templateStrategy)->moduleDeadline($history);
                 $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
-                $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+                $option = null;
+                if (!$is_investor) {
+                    $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+                }
     
                 $transactions[] = array(
                     'id' => $transaction->id,

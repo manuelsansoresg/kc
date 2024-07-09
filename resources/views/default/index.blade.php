@@ -6,7 +6,7 @@
             <div class="row align-items-center flex-md-row-reverse justify-content-between">
                 <div class="col-lg-5 col-12 col-md-6">
                     <div class="row justify-content-center">
-                        <div class="hero-image col-8 col-md-12">
+                        <div class="hero-image col-8 col-md-12 d-none d-md-block">
                             <img src="images/tuyyo.png" alt="" class="">
                             
                         </div>
@@ -51,6 +51,10 @@
                                     <br>
                                      <span class="text-small">Obtén un crédito con las mejores condiciones </span>
                                 </a>
+                            </div>
+                            <div class="hero-image col-12 d-block d-md-none">
+                                <img src="images/tuyyo.png" alt="" class="">
+                                
                             </div>
                            {{--  <div class="col-12 col-md-12">
                                 <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, quiero reducir mi deuda"  class="btn col-12 btn-highlight btn-block">Crédito personal</a>

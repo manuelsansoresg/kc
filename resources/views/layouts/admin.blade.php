@@ -14,11 +14,11 @@
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description"
-        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+        content="Tú mejor decisión. Fácil y rápido.">
     <!-- Fav Icon  -->
     <link href="{{ asset('images/favicon.ico') }}" rel="icon">
     <!-- Page Title  -->
-    <title>@yield('title')</title>
+    <title>KaaxClub</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
@@ -300,11 +300,11 @@
                                     @endphp
                                     @if ($investorId != null)
                                         <a href="/panel/inversionista/{{ $investorId }}" class="nk-menu-link">
-                                            <span class="nk-menu-text">Resumen</span>
+                                            <span class="nk-menu-text"><em class="icon ni ni-invest"></em> Resumen</span>
                                         </a>
                                     @else
                                         <a href="#" class="nk-menu-link">
-                                            <span class="nk-menu-text">Resumen</span>
+                                            <span class="nk-menu-text"><em class="icon ni ni-invest"></em> Resumen</span>
                                         </a>
                                     @endif
                                     
@@ -312,31 +312,31 @@
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-wallet/mis-prestamos/show" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text">Mis préstamos</span>
+                                        <span class="nk-menu-text"><em class="icon ni ni-coin-alt"></em> Mis préstamos</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-wallet" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text">Agregar fondos</span>
+                                        <span class="nk-menu-text"> <em class="icon ni ni-download"></em> Agregar fondos</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-down-wallet" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text">Retirar fondos</span>
+                                        <span class="nk-menu-text"><em class="icon ni ni-upload"></em> Retirar fondos</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
-                                    <a href="#" class="nk-menu-link">
+                                    <a href="/panel/kc-wallet/list/history" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text">Historial de movimientos</span>
+                                        <span class="nk-menu-text"><em class="icon ni ni-history"></em> Historial de movimientos</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
                                     <a href="/panel/ayuda" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text">Ayuda</span>
+                                        <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Ayuda</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
@@ -556,7 +556,7 @@
                                                     <li><a href="/panel/user-profile/{{ Auth::user()->id }}"><em
                                                                 class="icon ni ni-user-alt"></em><span>Ver
                                                                 perfíl</span></a></li>
-                                                    <li><a href="html/user-profile-setting.html"><em
+                                                    <li><a href="/panel/config"><em
                                                                 class="icon ni ni-setting-alt"></em><span>Configuración
                                                             </span></a></li>
                                                     <li><a class="dark-switch" href="#"><em
@@ -630,44 +630,7 @@
                         <div class="nk-footer-wrap">
                             <div class="nk-footer-copyright"> &copy; KaaxClub
                             </div>
-                            <div class="nk-footer-links">
-                                <ul class="nav nav-sm">
-                                    <li class="nav-item dropup">
-                                        <a href="#"
-                                            class="dropdown-toggle dropdown-indicator has-indicator nav-link text-base"
-                                            data-bs-toggle="dropdown" data-offset="0,10"><span>English</span></a>
-                                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-end">
-                                            <ul class="language-list">
-                                                <li>
-                                                    <a href="#" class="language-item">
-                                                        <span class="language-name">English</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="language-item">
-                                                        <span class="language-name">Español</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="language-item">
-                                                        <span class="language-name">Français</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="language-item">
-                                                        <span class="language-name">Türkçe</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a data-bs-toggle="modal" href="#region" class="nav-link"><em
-                                                class="icon ni ni-globe"></em><span class="ms-1">Select
-                                                Region</span></a>
-                                    </li>
-                                </ul>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

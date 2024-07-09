@@ -124,11 +124,14 @@ class User extends Authenticatable
 
     public static function saveEdit($request)
     {
-        $is_save = false;
-        $financial_products_ids = $request->financial_products_id;
-        $financial_products_id = null;
+        $is_save                  = false;
+        $financial_products_ids   = $request->financial_products_id;
+        $financial_products_id    = null;
+        $arrayFinancialProductsId = array();
+
         foreach ($financial_products_ids as $financial_products_ids) {
             $financial_products_id.= $financial_products_ids.',';
+            $arrayFinancialProductsId[] = $financial_products_ids;
         }
         $financial_products_id = trim($financial_products_id, ',');
         $request->merge(['financial_products_id' => $financial_products_id]);
@@ -165,14 +168,14 @@ class User extends Authenticatable
             $userId = $user->id;
             // Buscar el inversor asociado al usuario
             $investor = Investor::where('user_id', $userId)->first();
-
-            if ($investor) {
-                // Si el inversor existe, actualizar los datos
-                $investor->update(['financial_products_id' => $financial_products_id]);
-            } else {
-                // Si no existe, crear un nuevo inversor
-                Investor::create(['user_id' => $userId, 'financial_products_id' => $financial_products_id]);
+            InvestorProduct::where('investor_id', $investor->id)->delete();
+            foreach ($arrayFinancialProductsId as $arrayFinancialProductId) {
+                InvestorProduct::create([
+                    'investor_id' => $investor->id,
+                    'financial_products_id' => $arrayFinancialProductId
+                ]);
             }
+            
         }
         $user->assignRole(ucfirst($role));
     }
