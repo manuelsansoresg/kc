@@ -170,14 +170,16 @@ class User extends Authenticatable
             $userId = $user->id;
             // Buscar el inversor asociado al usuario
             $investor = Investor::where('user_id', $userId)->first();
-            if ($investor != null) {
-                InvestorProduct::where('investor_id', $investor->id)->delete();
-                foreach ($arrayFinancialProductsId as $arrayFinancialProductId) {
-                    InvestorProduct::create([
-                        'investor_id' => $investor->id,
-                        'financial_products_id' => $arrayFinancialProductId
-                    ]);
-                }
+            
+            if ($investor == null) {
+                $investor = Investor::create(['user_id' => $userId]);
+            } 
+            InvestorProduct::where('investor_id', $investor->id)->delete();
+            foreach ($arrayFinancialProductsId as $arrayFinancialProductId) {
+                InvestorProduct::create([
+                    'investor_id' => $investor->id,
+                    'financial_products_id' => $arrayFinancialProductId
+                ]);
             }
 
             
