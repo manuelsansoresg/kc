@@ -4572,6 +4572,11 @@ $().ready(function () {
             $('#operation_status').val(transaction.operation_status).trigger("change");
           }
 
+        if (type_form == 67) //form kc-wallet step2
+          {
+            $('#operation_status').val(transaction.operation_status).trigger("change");
+          }
+
         if (type_form == 66) //form kc-wallet step1
           {
             $('#investor_id').val(transaction.investor_id).trigger("change");
