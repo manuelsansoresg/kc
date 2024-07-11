@@ -2803,8 +2803,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percent_form   = self::percentForm($history);
         $status_file    = 'En espera';
         $status_form    = 'En espera';
-
-        $status_file    = $percent_file == 100 ? 'Concluido' : 'En curso';
+        
+        $status_file    = $percent_file > 100 ? 'Concluido' : 'En curso';
         $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
         $name_advisor   = null;
 
@@ -3736,6 +3736,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $status = $get_action->status_progress;
             $status_progress += $status > 0 ? 1 : 0;
         }
+        
         if ($status_progress < 2) {
             $current_show = 'Viabilidad';
         } elseif ($status_progress < 3) {
@@ -3801,6 +3802,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         //$percent =  (100 / 100) * $percent_file;
         $percent = ($count_file / $total_valid) * 100;
+        $percent = $percent > 100 ? 100 : $percent;
         return $percent;
     }
 
