@@ -37,7 +37,7 @@ window.organizationChange = function(lead_agreement_id, financial_id, other, app
 
 window.productChange = function(lead_product_id){
     $('#content-importe-solicitado').hide();
-    $('#content-banco_nomina').hide();
+    /* $('#content-banco_nomina').hide(); */
     //$('#content-tipo-credito').hide();
     $('#content-consulta-buro-credito').hide();
     $('#content-financial_product_id').hide();
@@ -53,7 +53,7 @@ window.productChange = function(lead_product_id){
     if (product_id == 2) { //portabilidad
         $('#content-financial_product_id').show();
         $('#content-importe-solicitado').show();
-        $('#content-banco_nomina').hide();
+        /* $('#content-banco_nomina').hide(); */
         $('#content-producto-financiero').show();
         $('#content-consulta-buro-credito').hide();
         $('#content-aval-o-garantia').hide();
@@ -61,7 +61,7 @@ window.productChange = function(lead_product_id){
     }
     
     if (product_id == 1) { // credito nomina
-        $('#content-banco_nomina').hide();
+        /* $('#content-banco_nomina').hide(); */
         $('#content-importe-solicitado').show();
         $('#content-producto-financiero').show();
         $('#content-tipo_tramite').show();

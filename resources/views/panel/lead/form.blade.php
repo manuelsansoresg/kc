@@ -243,7 +243,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-6" id="content-banco_nomina" style="display: none">
+                                                        <div class="col-md-6" id="content-banco_nomina" >
                                                             <div class="form-group">
                                                                 <label class="form-label">Banco nómina </label>
                                                                 <p class="small">Banco en el que recibe su nómina</p>
