@@ -9,7 +9,7 @@
                         <div class="nk-block-head-content">
                             <div class="container">
                                 <div class="row justify-content-center">
-                                    <div class="col-12 col-md-10">
+                                    <div class="col-12 col-md-11">
                                         <h3 class="nk-block-title page-title">Etapas</h3>
                                         <div class="nk-block-des text-soft">
                                             <nav>
