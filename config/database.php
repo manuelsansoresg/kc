@@ -69,7 +69,7 @@ return [
 			'port' =>'3306',
 			'database' => 'kaaxclub-sidecc',
 			'username' => 'dbmasteruser',
-			'password' => ')f:`Q11_HPLnOiYMO8Y~0:52!+Ny1lBd',
+			'password' => env('DB_PASSWORD_KC_SIDECC'),
 			'charset' => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix' => '',
