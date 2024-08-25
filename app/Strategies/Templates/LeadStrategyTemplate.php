@@ -48,7 +48,7 @@ class LeadStrategyTemplate implements TemplateInterface
             );
             // know if exist client person
 
-            if (ClientPerson::where('rfc', $lead->rfc)->count() == 0) {
+            if (ClientPerson::where('cellphone', $lead->cellphone)->count() == 0 && ClientPerson::where('rfc', $lead->rfc)->count() == 0) {
                 $client_person = ClientPerson::create($data_client_person);
             } else {
                 ClientPerson::where('rfc', $lead->rfc)
