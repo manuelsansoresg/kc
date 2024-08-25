@@ -522,14 +522,17 @@ class HistoryLog extends Model
         
         if ($status_id == HistoryLog::CREDIT_ARCHIVE) {
             Credit::setAppliedImport($id_rel);
+            InvestorsCredit::setPlacedCapital($credit->id);
         }
 
         if ($status_id == HistoryLog::CREDIT_CANCELED) {
             Credit::setTotalCapital($id_rel);
             Credit::setAppliedImport($id_rel);
+            InvestorsCredit::setPlacedCapital($credit->id);
         }
         if ($status_id == HistoryLog::CREDIT_REJECTED) {
             Credit::setAppliedImport($id_rel);
+            InvestorsCredit::setPlacedCapital($credit->id);
         }
         //credito entregado
         if ($status_id == HistoryLog::CREDITS_DELIVERED) {

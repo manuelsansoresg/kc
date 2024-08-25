@@ -66,6 +66,17 @@ class InvestorsCredit extends Model
 
     }
 
+    public static function setPlacedCapital($creditId)
+    {
+        $investors = InvestorsCredit::where('credit_id', $creditId)->get();
+        foreach ($investors as $investor) {
+            $placedCapital = $investor->total_capital  - $investor->recoverd_capital;
+            Investor::where('id', $investor->id)->update([
+                'placed_capital' => $placedCapital
+            ]);
+        }
+    }
+
     public static function listStatements($investorId)
     {
         $investorCredits = InvestorsCredit::where('investor_id', $investorId)->get();
@@ -114,5 +125,7 @@ class InvestorsCredit extends Model
            
         }
     }
+
+   
 
 }

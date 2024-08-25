@@ -2382,6 +2382,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     Credit::setTotalCapital($credit->id);
                     Credit::setMontoEntregar($credit->id);
                     InvestorsCredit::setComissionRateAndAmount($credit->id);
+                    InvestorsCredit::setPlacedCapital($credit->id);
+
                 }
             }
 
