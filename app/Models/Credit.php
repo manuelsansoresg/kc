@@ -142,6 +142,13 @@ class Credit extends Model
         ]);
     }
 
+    public static function setTotalCapitalAndMore($creditId)
+    {
+        Credit::setTotalCapital($creditId);
+        InvestorsCredit::setPlacedCapital($creditId);
+        Credit::setComissionRateAndAmount($creditId);
+    }
+
     public static function setTotalCapital($creditId)
     {
         $totalAppliedImport = 0;
