@@ -20,6 +20,9 @@ class InvestorsCredit extends Model
         'placed_capital',
         'commission_rate',
         'commission_amount',
+        'recovered_capital',
+        'total_collected',
+        'profit_collected'
     ];
 
     public static function saveEdit($creditId)
