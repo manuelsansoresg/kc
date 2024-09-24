@@ -44,6 +44,7 @@ class Lead extends Model
         'applied_loan_type',
         'is_viability',
         'is_viability_credit',
+        'birth_date'
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)

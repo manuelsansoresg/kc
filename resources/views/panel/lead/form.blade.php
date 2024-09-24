@@ -52,6 +52,16 @@
                                                         <span class="preview-title-lg overline-title">General</span>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
+                                                                <label class="form-label">Celular</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="data[cellphone]"  id="lead-cellphone" onchange="checkDataLeadExist(this, 'cellphone')">
+                                                                    <label id="cellphone-msg" class="text-danger"></label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
                                                                 <label class="form-label">*Nombres</label>
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" name="data[name]" id="lead-name" required>
@@ -74,26 +84,18 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">Celular</label>
+                                                                <label class="form-label">Fecha de nacimiento</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="data[cellphone]"  id="lead-cellphone" onchange="checkDataLeadExist(this, 'cellphone')">
-                                                                    <label id="cellphone-msg" class="text-danger"></label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Email</label>
-                                                                <div class="form-control-wrap">
-                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email" onchange="checkDataLeadExist(this, 'email')">
-                                                                    <label id="email-msg" class="text-danger"></label>
+                                                                    <input type="date" class="form-control" name="data[birth_date]" id="lead-birth_date">
+                                                                    <label id="birth_date-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
                                                             
                                                         </div>
-                                                        
+
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-label">*RFC</label>
@@ -104,6 +106,44 @@
                                                             </div>
                                                             
                                                         </div>
+                                                     
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Email</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email" onchange="checkDataLeadExist(this, 'email')">
+                                                                    <label id="email-msg" class="text-danger"></label>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Organización</label>
+                                                                <p class="small">Institución o empresa donde labora el prospecto</p>
+                                                                <div class="form-control-wrap">
+                                                                   
+                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null, null, null)"  data-search="on" disabled>
+                                                                        <option></option>
+                                                                      
+                
+                                                                        @foreach ($agreements as $agreement)
+                                                                            <option value="{{ $agreement->id }}">{{ $agreement->name }}</option>
+                                                                        @endforeach
+                                                                        <option value="0">Otro</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group" id="lead-content-agreement" style="display: none">
+                                                                <label class="form-label">Otra organización</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="new_agreement" id="new_agreement">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                      
                                                         @if ($lead_id != null)
                                                         <div class="col-md-6">
                                                             <div class="form-group">
@@ -114,6 +154,16 @@
                                                             </div>
                                                         </div>
                                                         @endif
+
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Prospecto válido</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" disabled>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
                 
                                                         <hr class="preview-hr">
 
@@ -156,30 +206,7 @@
 
                                                        
 
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Organización</label>
-                                                                <p class="small">Institución o empresa donde labora el prospecto</p>
-                                                                <div class="form-control-wrap">
-                                                                   
-                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null, null, null)"  data-search="on">
-                                                                        <option></option>
-                                                                      
-                
-                                                                        @foreach ($agreements as $agreement)
-                                                                            <option value="{{ $agreement->id }}">{{ $agreement->name }}</option>
-                                                                        @endforeach
-                                                                        <option value="0">Otro</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group" id="lead-content-agreement" style="display: none">
-                                                                <label class="form-label">Otra organización</label>
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="new_agreement" id="new_agreement">
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                       
 
                                                         <div class="col-md-6" id="content-producto-financiero" style="display: none">
                                                             <div class="form-group">

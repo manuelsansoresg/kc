@@ -2472,6 +2472,7 @@ function setData(is_change_origen, is_change_organization) {
     $('#lead-type_id').trigger("change"); */
 
     $('#lead-name').val(lead.name);
+    $('#lead-birth_date').val(lead.birth_date);
     $('#lead-last_name').val(lead.last_name);
     $('#lead-second_last_name').val(lead.second_last_name);
     $('#lead-cellphone').val(lead.cellphone);
