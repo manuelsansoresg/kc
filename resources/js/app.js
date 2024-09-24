@@ -14,6 +14,10 @@ require('./components/agreement/datatable');
 require('./components/agreement/crud');
 require('./components/lead/datatable');
 require('./components/lead/crud');
+
+require('./components/clients/datatable');
+require('./components/clients/crud');
+
 require('./components/tag/datatable');
 require('./components/tag/crud');
 require('./components/financial/datatable');

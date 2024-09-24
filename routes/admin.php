@@ -93,6 +93,11 @@ Route::group(['prefix' => 'lead'], function () {
 });
 
 
+Route::resource('clients', '\App\Http\Controllers\Panel\Client\ClientController')->middleware('auth');
+Route::group(['prefix' => 'clients'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Client\ClientController', 'list'])->middleware('auth');
+});
+
 Route::get('{id}/{model}/validate/show', ['\App\Http\Controllers\Panel\PanelController', 'showValidate'])->middleware('auth');
 Route::post('{model}/note', ['\App\Http\Controllers\Panel\PanelController', 'noteStore'])->middleware('auth');
 Route::get('{model}/{id_rel}/notes/list', ['\App\Http\Controllers\Panel\PanelController', 'listNotes'])->middleware('auth');

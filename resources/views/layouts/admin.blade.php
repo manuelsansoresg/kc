@@ -224,6 +224,14 @@
                                                     </a>
                                                 </li><!-- .nk-menu-item -->
                                                 <li class="nk-menu-item">
+                                                    <a href="/panel/clients" class="nk-menu-link">
+                                                        <span class="nk-menu-icon">
+                                                            <em class="icon ni ni-users-fill"></em>
+                                                        </span>
+                                                        <span class="nk-menu-text">Clientes</span>
+                                                    </a>
+                                                </li><!-- .nk-menu-item -->
+                                                <li class="nk-menu-item">
                                                     <a href="/panel/tag" class="nk-menu-link">
                                                         <span class="nk-menu-icon"><em class="icon ni ni-tag"></em></span>
                                                         <span class="nk-menu-text">Etiquetas</span>
