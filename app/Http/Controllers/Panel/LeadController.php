@@ -72,11 +72,24 @@ class LeadController extends Controller
     {
         $getLead = ClientPerson::checkDataModel($valInput,$id);
         $getClientPerson = ClientPerson::where('cellphone', $valInput)->first();
-        $contentValidaciones = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
+        $agreement = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
+        $validateAgreement = $agreement!= null && $agreement->status == 1 ? true : false; 
+        $contentValidacionesCelular = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
+        $contentValidacionesActivo = '<p>Validación Prospecto (activo) /  <span class="text-danger"> FAIL</span> </p>';
+        $contentValidacionesOrganizacion = '<p>Validación Prospecto (organización) /  <span class="text-danger"> FAIL</span> </p>';
         if ($getClientPerson != null && $valInput == $getClientPerson->cellphone) {
-            $contentValidaciones = '<p >Validación Prospecto (celular) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
+            $contentValidacionesCelular = '<p >Validación Prospecto (celular) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
         }
 
+        if ($getClientPerson != null && $getClientPerson->active == 1) {
+            $contentValidacionesActivo = '<p>Validación Prospecto (activo) /  <span class="text-primary"> OK</span> </p>';
+        }
+        
+        if ($getClientPerson != null && $validateAgreement == true) {
+            $contentValidacionesOrganizacion = '<p>Validación Prospecto (organización) /  <span class="text-primary"> OK</span> </p>';
+        }
+
+        $contentValidaciones = $contentValidacionesCelular.$contentValidacionesActivo.$contentValidacionesOrganizacion;
         return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones]);
     }
 

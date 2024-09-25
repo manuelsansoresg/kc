@@ -355,13 +355,14 @@ window.checkDataLeadExist = function (valInput, id)
             let clientPerson = result.clientPerson;
             $('#content-validaciones').html(result.contentValidaciones);
             if (isExist > 0) {
+                messageElement.classList.remove("text-danger");
+                messageElement.classList.add("text-primary");
                 messageElement.textContent = "Validación exitosa";
-                $('#lead_id').val(clientPerson.id);
                 
+                $('#lead_id').val(clientPerson.id);
                     setData(true, false);
                 /* if (id == 'cellphone') {
                     //clientPerson
-                    
                 }
                 if (id != 'rfc') {
                     messageElement.textContent = "Ya está en uso";
@@ -370,6 +371,9 @@ window.checkDataLeadExist = function (valInput, id)
                     $('.text-viabilidad').html('Recurrente');
                 } */
             } else {
+                messageElement.classList.remove("text-primary");
+                messageElement.classList.add("text-danger");
+                messageElement.textContent = "Validación fallida";
                /*  if (id == 'rfc') {
                     messageElement.innerHTML  = "<b>Nuevo</b>";
                     $('.text-viabilidad').html('Nuevo');
