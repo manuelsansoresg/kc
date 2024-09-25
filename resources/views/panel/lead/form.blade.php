@@ -89,7 +89,7 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Fecha de nacimiento</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="date" class="form-control" name="data[birth_date]" id="lead-birth_date">
+                                                                    <input type="date" class="form-control" name="data[birth_date]" id="lead-birth_date" onkeydown="createRfc()">
                                                                     <label id="birth_date-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
@@ -100,7 +100,7 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">*RFC</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="data[rfc]" minlength="10" id="lead-rfc" onchange="checkDataLeadExist(this, 'rfc')" required>
+                                                                    <input type="text" class="form-control" name="data[rfc]" minlength="10" id="lead-rfc"  required>
                                                                     <label id="rfc-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
@@ -111,7 +111,7 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Email</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email" onchange="checkDataLeadExist(this, 'email')">
+                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email" >
                                                                     <label id="email-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
@@ -442,6 +442,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+                                                        <hr class="preview-hr">
+                                                        <span class="preview-title-lg overline-title">Validaciónes</span>
+                                                        <div id="content-validaciones"></div>
                 
                                                         <input type="hidden" id="lead_id" name="lead_id" value="{{ $lead_id }}">
                                                         <div class="col-12">

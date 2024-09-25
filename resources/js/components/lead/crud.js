@@ -1,6 +1,35 @@
 import { showInfo } from '../utilities';
+import RfcFacil from 'rfc-facil'
 
+window.setRfc = function () {
+    const nacimiento = $('#lead-birth_date').val()
+    const my_lastname = $('#lead-last_name').val()
+    const my_secondlastname = $('#lead-second_last_name').val()
+    const my_name = $('#lead-name').val()
+  
+    const [my_year, my_month, my_day] = nacimiento.split('-');
 
+    console.log(nacimiento);
+    console.log(my_day);
+    console.log(my_month);
+    console.log(my_year);
+  
+    const rfc = RfcFacil.forNaturalPerson({
+      name: my_name,
+      firstLastName: my_lastname,
+      secondLastName: my_secondlastname,
+      day: my_day,
+      month: my_month,
+      year: my_year
+    })
+    return rfc
+  }
+
+  window.createRfc = function()
+  {
+    var rfc = setRfc();
+    $('#lead-rfc').val(rfc);
+  }
 
 $('.js-select2').select2({
     placeholder: "Escribe para buscar..",
@@ -224,7 +253,7 @@ window.changeOrigen = function (change_channel) {
   
 }); */
 
-function setData(is_change_origen, is_change_organization) {
+function setData(is_change_origen, isChange) {
     let lead_id = $('#lead_id').val();
 
     axios
@@ -288,10 +317,12 @@ function setData(is_change_origen, is_change_organization) {
             $('#tipo_credito').val(lead.tipo_credito).trigger("change");
             $('#consulta_buro').val(lead.consulta_buro).trigger("change");
 
-            checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
-            checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
-            checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
-            
+            if (isChange == true) {
+                checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
+                checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+                checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+                
+            }
             $('#applied_loan_type').val(lead.applied_loan_type).trigger("change");
 
             // Get the checkbox elements
@@ -313,6 +344,7 @@ window.checkDataLeadExist = function (valInput, id)
 {
     let getValue = valInput.value;
     let messageElement = document.getElementById(id+'-msg');
+    $('#content-validaciones').html('');
     if (valInput != '') {
         messageElement.textContent = "";
         axios
@@ -320,19 +352,28 @@ window.checkDataLeadExist = function (valInput, id)
         .then(function (response) {
             let result = response.data;
             let isExist = result.exist;
+            let clientPerson = result.clientPerson;
+            $('#content-validaciones').html(result.contentValidaciones);
             if (isExist > 0) {
+                messageElement.textContent = "Validación exitosa";
+                $('#lead_id').val(clientPerson.id);
                 
+                    setData(true, false);
+                /* if (id == 'cellphone') {
+                    //clientPerson
+                    
+                }
                 if (id != 'rfc') {
                     messageElement.textContent = "Ya está en uso";
                 } else { 
                     messageElement.textContent = "Recurrente";
                     $('.text-viabilidad').html('Recurrente');
-                }
+                } */
             } else {
-                if (id == 'rfc') {
+               /*  if (id == 'rfc') {
                     messageElement.innerHTML  = "<b>Nuevo</b>";
                     $('.text-viabilidad').html('Nuevo');
-                }
+                } */
             }
 
         })

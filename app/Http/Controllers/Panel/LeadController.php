@@ -71,7 +71,13 @@ class LeadController extends Controller
     public function checkData($valInput , $id)
     {
         $getLead = ClientPerson::checkDataModel($valInput,$id);
-        return response()->json(['exist' => $getLead]);
+        $getClientPerson = ClientPerson::where('cellphone', $valInput)->first();
+        $contentValidaciones = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
+        if ($getClientPerson != null && $valInput == $getClientPerson->cellphone) {
+            $contentValidaciones = '<p >Validación Prospecto (celular) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
+        }
+
+        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones]);
     }
 
     
