@@ -319,13 +319,14 @@
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Viabilidad</span>
                                                         <p class="text-primary">Este prospecto es <span class="text-viabilidad"></span>  </p>
-                                                        <div class="col-md-12">
+                                                       {{--  <div class="col-md-12">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" name="data[is_viability]" type="checkbox" value="1" id="is_viability">
                                                                 <label class="" for="is_viability">Viabilidad como <span class="text-viabilidad"></span> </label>
                                                                 
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
+                                                        <input type="hidden" name="data[is_viability]" id="is_viability">
                                                         <div class="col-md-12">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" name="data[is_viability_credit]" type="checkbox" value="1" id="is_viability_credit">

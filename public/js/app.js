@@ -2582,6 +2582,7 @@ window.checkDataLeadExist = function (valInput, id) {
         messageElement.classList.remove("text-danger");
         messageElement.classList.add("text-primary");
         messageElement.textContent = "Validación exitosa";
+        $('#is_viability').val(1);
         $('#lead_id').val(clientPerson.id);
         $('#prospecto-valido').val('Prospecto válido');
 
@@ -2606,6 +2607,7 @@ window.checkDataLeadExist = function (valInput, id) {
         messageElement.classList.add("text-danger");
         messageElement.textContent = "Validación fallida";
         $('#prospecto-valido').val('');
+        $('#is_viability').val(0);
       }
     })["catch"](function (e) {});
   }
