@@ -112,7 +112,8 @@ class FinancialProduct extends Model
         'collection_commission_rate',
         'annual_interest_rate',
         'daily_interest_rate',
-        'loan_available'
+        'loan_available',
+        'product_id'
     ];
 
     public static function getbyIdFirst($product_id)
@@ -436,6 +437,8 @@ class FinancialProduct extends Model
         {
             $filteredRequest['bank_ids'] =  self::formatInfoCredit($request->bank_ids);
         }
+
+        $filteredRequest['product_id'] = $request->financial_product_product_id;
 
         if ($request->product_id == null) {
             $financial_product = FinancialProduct::create($filteredRequest);

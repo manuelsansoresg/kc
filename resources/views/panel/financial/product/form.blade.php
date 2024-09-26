@@ -73,6 +73,7 @@
                                                         $name = $financial_product != null ? $financial_product->name : '';
                                                         $alias = $financial_product != null ? $financial_product->alias : '';
                                                         $type_product_id = $financial_product != null ? $financial_product->type_product_id : '';
+                                                        $productId = $financial_product != null ? $financial_product->product_id : '';
                                                         $status = $financial_product != null ? $financial_product->status : '';
                                                         $bank_id = $financial_product != null ? $financial_product->bank_id : '';
                                                         $consulta_buro = $financial_product != null ? $financial_product->consulta_buro : null;
@@ -110,15 +111,14 @@
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Tipo de
-                                                                        producto</label>
+                                                                    <label class="form-label" for="frm-product-name">Servicio KC</label>
                                                                     <div class="form-control-wrap">
-                                                                        <select name="type_product_id" id=""
+                                                                        <select name="financial_product_product_id" id=""
                                                                             class="form-select">
-                                                                            @foreach ($type_products as $key => $type_products)
-                                                                                <option value="{{ $key }}"
-                                                                                    {{ $type_product_id == $key ? ' selected' : '' }}>
-                                                                                    {{ $type_products }}
+                                                                            @foreach ($products as $product)
+                                                                                <option value="{{ $product->id }}"
+                                                                                    {{ $productId == $product->id ? ' selected' : '' }}>
+                                                                                    {{ $product->alias }}
                                                                                 </option>
                                                                             @endforeach
                                                                         </select>
