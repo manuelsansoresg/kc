@@ -70,27 +70,40 @@ class LeadController extends Controller
 
     public function checkData($valInput , $id)
     {
-        $getLead = ClientPerson::checkDataModel($valInput,$id);
-        $getClientPerson = ClientPerson::where('cellphone', $valInput)->first();
-        $agreement = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
-        $validateAgreement = $agreement!= null && $agreement->status == 1 ? true : false; 
-        $contentValidacionesCelular = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
-        $contentValidacionesActivo = '<p>Validación Prospecto (activo) /  <span class="text-danger"> FAIL</span> </p>';
-        $contentValidacionesOrganizacion = '<p>Validación Prospecto (organización) /  <span class="text-danger"> FAIL</span> </p>';
-        if ($getClientPerson != null && $valInput == $getClientPerson->cellphone) {
-            $contentValidacionesCelular = '<p >Validación Prospecto (celular) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
-        }
+        $getLead           = ClientPerson::checkDataModel($valInput,$id);
+        $field             = $id == 'cellphone' ? 'cellphone' : 'rfc';
+        $getClientPerson   = ClientPerson::where($field, $valInput)->first();
+        $agreement         = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
+        $validateAgreement = $agreement       != null && $agreement->status == 1 ? true : false;
 
-        if ($getClientPerson != null && $getClientPerson->active == 1) {
-            $contentValidacionesActivo = '<p>Validación Prospecto (activo) /  <span class="text-primary"> OK</span> </p>';
+        
+        
+        if ($id == 'cellphone') {
+            $contentValidaciones      = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
+            $isValidate               = false;
+            if ($getClientPerson != null && $valInput == $getClientPerson->cellphone && 
+                $getClientPerson->active == 1 && $validateAgreement == true) {
+                $isValidate = true;
+                $contentValidaciones = '<p >Validación Prospecto (celular) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
+            }
+        }
+       
+        
+        if ($id == 'rfc') {
+            $contentValidaciones      = '<p>Validación Prospecto (rfc) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
+            $isValidate               = false;
+            
+            if ($getClientPerson != null && $valInput == $getClientPerson->rfc && 
+                $getClientPerson->active == 1 && $validateAgreement == true) {
+                $isValidate = true;
+                $contentValidaciones = '<p >Validación Prospecto (rfc) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
+            }
+
         }
         
-        if ($getClientPerson != null && $validateAgreement == true) {
-            $contentValidacionesOrganizacion = '<p>Validación Prospecto (organización) /  <span class="text-primary"> OK</span> </p>';
-        }
 
-        $contentValidaciones = $contentValidacionesCelular.$contentValidacionesActivo.$contentValidacionesOrganizacion;
-        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones]);
+
+        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate]);
     }
 
     

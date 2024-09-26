@@ -29,6 +29,7 @@ window.setRfc = function () {
   {
     var rfc = setRfc();
     $('#lead-rfc').val(rfc);
+    checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
   }
 
 $('.js-select2').select2({
@@ -253,7 +254,7 @@ window.changeOrigen = function (change_channel) {
   
 }); */
 
-function setData(is_change_origen, isChange) {
+function setData(is_change_origen, isChange, isChangeBirthDay) {
     let lead_id = $('#lead_id').val();
 
     axios
@@ -287,7 +288,9 @@ function setData(is_change_origen, isChange) {
             $('#lead-type_id').trigger("change"); */
 
             $('#lead-name').val(lead.name);
-            $('#lead-birth_date').val(lead.birth_date);
+            if (isChangeBirthDay == true) {
+                $('#lead-birth_date').val(lead.birth_date);
+            }
             $('#lead-last_name').val(lead.last_name);
             $('#lead-second_last_name').val(lead.second_last_name);
             
@@ -353,17 +356,25 @@ window.checkDataLeadExist = function (valInput, id)
             let result = response.data;
             let isExist = result.exist;
             let clientPerson = result.clientPerson;
+            let isValidate = result.isValidate;
             $('#content-validaciones').html(result.contentValidaciones);
-            if (isExist > 0) {
+            if (isExist > 0 && isValidate == true) {
+                
+
                 messageElement.classList.remove("text-danger");
                 messageElement.classList.add("text-primary");
                 messageElement.textContent = "Validación exitosa";
                 
                 $('#lead_id').val(clientPerson.id);
-                    setData(true, false);
-                /* if (id == 'cellphone') {
-                    //clientPerson
+                $('#prospecto-valido').val('Prospecto válido');
+                if (id == 'cellphone') {
+                    $('#isValidateCellphone').val(result.isValidate);
+                    setData(true, false, true);
                 }
+                if (id != 'rfc') {
+                    setData(true, false, false);
+                }
+                /*
                 if (id != 'rfc') {
                     messageElement.textContent = "Ya está en uso";
                 } else { 
@@ -374,11 +385,11 @@ window.checkDataLeadExist = function (valInput, id)
                 messageElement.classList.remove("text-primary");
                 messageElement.classList.add("text-danger");
                 messageElement.textContent = "Validación fallida";
-               /*  if (id == 'rfc') {
-                    messageElement.innerHTML  = "<b>Nuevo</b>";
-                    $('.text-viabilidad').html('Nuevo');
-                } */
+                $('#prospecto-valido').val('');
+              
             }
+
+
 
         })
         .catch(e => {
@@ -604,7 +615,7 @@ window.modalRegisterAction = function (id_rel) {
 
 $(document).ready(function () {
     if (document.getElementById('lead-channel')) {
-        setData(true, true);
+        setData(true, false, true);
     }
 
 })

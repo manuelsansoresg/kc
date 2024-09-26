@@ -89,7 +89,7 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Fecha de nacimiento</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="date" class="form-control" name="data[birth_date]" id="lead-birth_date" onkeydown="createRfc()">
+                                                                    <input type="date" class="form-control" name="data[birth_date]" id="lead-birth_date" onchange="createRfc()">
                                                                     <label id="birth_date-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
@@ -159,7 +159,7 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Prospecto válido</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" disabled>
+                                                                    <input type="text" class="form-control" id="prospecto-valido" disabled>
                                                                 </div>
                                                             </div>
                                                             
@@ -448,6 +448,7 @@
                                                         <div id="content-validaciones"></div>
                 
                                                         <input type="hidden" id="lead_id" name="lead_id" value="{{ $lead_id }}">
+                                                        <input type="hidden" id="isValidateCellphone"  value="false">
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>
