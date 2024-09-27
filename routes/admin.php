@@ -84,6 +84,10 @@ Route::group(['prefix' => 'lead'], function () {
 
     Route::get('{value}/{id}/check', ['\App\Http\Controllers\Panel\LeadController', 'checkData'])->middleware('auth');
     
+    Route::get('{cellphone}/{rfc}/get/validate', ['\App\Http\Controllers\Panel\LeadController', 'validateCellphoneAndRfc'])->middleware('auth');
+    
+    Route::get('{agreementId}/getProducts', ['\App\Http\Controllers\Panel\LeadController', 'getProducts'])->middleware('auth');
+    
     Route::post('{leadId}/data/export', ['\App\Http\Controllers\Panel\LeadController', 'exportLead'])->middleware('auth');
 
     //* mover del lugar

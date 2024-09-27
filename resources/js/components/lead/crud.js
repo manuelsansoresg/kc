@@ -9,10 +9,7 @@ window.setRfc = function () {
   
     const [my_year, my_month, my_day] = nacimiento.split('-');
 
-    console.log(nacimiento);
-    console.log(my_day);
-    console.log(my_month);
-    console.log(my_year);
+   
   
     const rfc = RfcFacil.forNaturalPerson({
       name: my_name,
@@ -173,7 +170,7 @@ window.getFinancialProduct = function(id, type) {
         .then(function (response) {
             let result    = response.data;
             let financials   = result.financials;
-            console.log(financials);
+            
             let financialValues = financials.map(item => item.product_id);
              // Limpia las selecciones actuales en el select múltiple
              $('#lead-financial-product-id').val(null).trigger('change');
@@ -254,93 +251,123 @@ window.changeOrigen = function (change_channel) {
   
 }); */
 
-function setData(is_change_origen, isChange, isChangeBirthDay) {
-    let lead_id = $('#lead_id').val();
-
+window.validateLeadEdit = function()
+{
+    let cellphone = $('#lead-cellphone').val();
+    let rfc = $('#lead-rfc').val();
+    console.log('manuel');
     axios
-        .get("/panel/lead/" + lead_id)
+        .get("/panel/lead/"+cellphone+"/"+rfc+"/get/validate")
         .then(function (response) {
-            let result        = response.data;
-            let lead          = result.lead;
-            let channel       = result.channel;
-            let financials    = result.financials;
-            let product_id    = lead.product_id;
-            let other         = lead.other;
-            let is_viability  = lead.is_viability;
-            let is_viability_credit = lead.is_viability_credit;
-
-            console.log(product_id);
-            productChange(product_id);
-            organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
-            
-            getFinancialProduct(lead.id, 1);
-
-            if (is_change_origen == true) {
-                $('#lead-origin').val(lead.origin_id);
-                $('#lead-origin').trigger("change");
+            let result = response.data;
+            if (result == true) {
+                $('#is_viability').val(1);
+                $('#prospecto-valido').val('Prospecto válido');
+            } else {
+                $('#is_viability').val(0);
+                $('#prospecto-valido').val('');
             }
-
-            $('#lead-asesor-id').val(lead.asesor_id);
-            $('#lead-asesor-id').trigger("change");
-
-
-            /* $('#lead-type_id').val(lead.type_id);
-            $('#lead-type_id').trigger("change"); */
-
-            $('#lead-name').val(lead.name);
-            if (isChangeBirthDay == true) {
-                $('#lead-birth_date').val(lead.birth_date);
-            }
-            $('#lead-last_name').val(lead.last_name);
-            $('#lead-second_last_name').val(lead.second_last_name);
             
-            $('#lead-cellphone').val(lead.cellphone);
-            
-            $('#lead-email').val(lead.email);
-            
+        })
+    .catch(e => {
 
-            $('#lead-rfc').val(lead.rfc);
-            
+    });
+}
+
+function setData(is_change_origen, isChange, isChangeBirthDay) {
+
+            let lead_id = $('#lead_id').val();
+
+            axios
+                .get("/panel/lead/" + lead_id)
+                .then(function (response) {
+                    let result        = response.data;
+                    let lead          = result.lead;
+                    let channel       = result.channel;
+                    let financials    = result.financials;
+                    let product_id    = lead.product_id;
+                    let other         = lead.other;
+                    let is_viability  = lead.is_viability;
+                    let is_viability_credit = lead.is_viability_credit;
+
+                    //productChange(product_id);
+                    //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
+                    $('#lead-origin-agreement').val(lead.agreement_id);
+
+                    getProductsByAgreementId(lead.agreement_id, lead.financial_product_id);
+
+                    //getFinancialProduct(lead.id, 1);
+
+                    if (is_change_origen == true) {
+                        $('#lead-origin').val(lead.origin_id);
+                        $('#lead-origin').trigger("change");
+                    }
+
+                    $('#lead-asesor-id').val(lead.asesor_id);
+                    $('#lead-asesor-id').trigger("change");
 
 
-            if (document.getElementById('lead-manychat_id')) {
-                $('#lead-manychat_id').val(lead.manychat_id);
-            }
-            $('#lead-comment').val(lead.comment);
-            
-            
-           
-            changeOrigen(lead.channel_id);
-            
-            $('#lead-temperature-id').val(lead.financial_id).trigger("change");
-            
-            $('#importe_solicitado').val(lead.importe_solicitado);
-            $('#income').val(lead.income);
-            $('#bank_id').val(lead.bank_id).trigger("change");
-            $('#tipo_credito').val(lead.tipo_credito).trigger("change");
-            $('#consulta_buro').val(lead.consulta_buro).trigger("change");
+                    /* $('#lead-type_id').val(lead.type_id);
+                    $('#lead-type_id').trigger("change"); */
 
-            if (isChange == true) {
-                checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
-                checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
-                checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+                    $('#lead-name').val(lead.name);
+                    if (isChangeBirthDay == true) {
+                        $('#lead-birth_date').val(lead.birth_date);
+                    }
+                    $('#lead-last_name').val(lead.last_name);
+                    $('#lead-second_last_name').val(lead.second_last_name);
+                    
+                    $('#lead-cellphone').val(lead.cellphone);
+                    
+                    $('#lead-email').val(lead.email);
+                    
+
+                    $('#lead-rfc').val(lead.rfc);
+                    
+
+
+                    if (document.getElementById('lead-manychat_id')) {
+                        $('#lead-manychat_id').val(lead.manychat_id);
+                    }
+                    $('#lead-comment').val(lead.comment);
+                    
+                    validateLeadEdit(); // Luego ejecuta validateLeadEdit
                 
-            }
-            $('#applied_loan_type').val(lead.applied_loan_type).trigger("change");
+                    //changeOrigen(lead.channel_id);
+                    
+                    $('#lead-temperature-id').val(lead.financial_id).trigger("change");
+                    
+                    $('#importe_solicitado').val(lead.importe_solicitado);
+                    $('#income').val(lead.income);
+                    $('#bank_id').val(lead.bank_id).trigger("change");
+                    $('#tipo_credito').val(lead.tipo_credito).trigger("change");
+                    $('#consulta_buro').val(lead.consulta_buro).trigger("change");
+                    $('#lead-agreement').val(lead.agreement_id).trigger("change");
+                    
 
-            // Get the checkbox elements
-            let checkboxViability = document.getElementById('is_viability');
-            let checkboxViabilityCredit = document.getElementById('is_viability_credit');
+                    if (isChange == true) {
+                        checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
+                        checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+                        checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+                        
+                    }
+                    $('#applied_loan_type').val(lead.applied_loan_type).trigger("change");
 
-            // Set the checked property based on the variables
-            checkboxViability.checked = is_viability === 1;
-            checkboxViabilityCredit.checked = is_viability_credit === 1;
+                    // Get the checkbox elements
+                    let checkboxViability = document.getElementById('is_viability');
+                    let checkboxViabilityCredit = document.getElementById('is_viability_credit');
+
+                    // Set the checked property based on the variables
+                    checkboxViability.checked = is_viability === 1;
+                    checkboxViabilityCredit.checked = is_viability_credit === 1;
+                    
 
 
         })
         .catch(e => {
             $('#admin_email-error-exist').show();
         });
+    
 }
 
 window.checkDataLeadExist = function (valInput, id)
@@ -359,7 +386,8 @@ window.checkDataLeadExist = function (valInput, id)
             let isValidate = result.isValidate;
             $('#content-validaciones').html(result.contentValidaciones);
             if (isExist > 0 && isValidate == true) {
-                
+                getProductsByAgreementId(clientPerson.agreement_id, null)
+
 
                 messageElement.classList.remove("text-danger");
                 messageElement.classList.add("text-primary");
@@ -367,20 +395,23 @@ window.checkDataLeadExist = function (valInput, id)
                 $('#is_viability').val(1);
                 $('#lead_id').val(clientPerson.id);
                 $('#prospecto-valido').val('Prospecto válido');
+                
+                $('#lead-origin-agreement').val(clientPerson.agreement_id);
                 if (id == 'cellphone') {
                     $('#isValidateCellphone').val(result.isValidate);
-                    setData(true, false, true);
                 }
-                if (id != 'rfc') {
-                    setData(true, false, false);
-                }
-                /*
-                if (id != 'rfc') {
-                    messageElement.textContent = "Ya está en uso";
-                } else { 
-                    messageElement.textContent = "Recurrente";
-                    $('.text-viabilidad').html('Recurrente');
-                } */
+                
+                $('#lead-name').val(clientPerson.name);
+                $('#lead-last_name').val(clientPerson.last_name);
+                $('#lead-second_last_name').val(clientPerson.second_last_name);
+                $('#lead-birth_date').val(clientPerson.birth_date);
+                $('#lead-rfc').val(clientPerson.rfc);
+                $('#lead-email').val(clientPerson.email);
+                $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
+                
+                $('#client_person_id').val(clientPerson.id);
+                
+                
             } else {
                 messageElement.classList.remove("text-primary");
                 messageElement.classList.add("text-danger");
@@ -397,6 +428,30 @@ window.checkDataLeadExist = function (valInput, id)
     
         });
     }
+}
+
+window.getProductsByAgreementId = function(leadId, productId)
+{
+    const selectElement = document.getElementById('financial_product_id');
+    selectElement.options.length = 0; // Limpiar el select
+    axios
+    .get("/panel/lead/" + leadId + "/getProducts")
+    .then(function (response) {
+        let products = response.data;
+            Object.keys(products).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = products[key];
+                selectElement.appendChild(option);
+            });
+
+        if (productId != 'null') {
+            $('#financial_product_id').val(productId).trigger("change");
+        }
+    })
+    .catch(e => {
+
+    });
 }
 
 window.deleteLead = function (lead_id) {
@@ -614,12 +669,16 @@ window.modalRegisterAction = function (id_rel) {
     $('#modal-register-action').modal('show');
 }
 
-$(document).ready(function () {
-    if (document.getElementById('lead-channel')) {
-        setData(true, false, true);
-    }
 
-})
+
+$(document).ready(async function () {
+    if (document.getElementById('lead-channel')) {
+        setData(true, false, true); // Espera que setData termine
+        
+    }
+});
+
+
 
 $(document).on("select2:open", () => {
     document.querySelector(".select2-container--open .select2-search__field").focus()

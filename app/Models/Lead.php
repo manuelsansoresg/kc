@@ -44,7 +44,8 @@ class Lead extends Model
         'applied_loan_type',
         'is_viability',
         'is_viability_credit',
-        'birth_date'
+        'birth_date',
+        'client_person_id'
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)
@@ -86,11 +87,9 @@ class Lead extends Model
         $is_asesor = Auth::user()->hasRole('Asesor');
 
         $get_list = HistoryLog::getByStatus([HistoryLog::CREATE_PROSPECT]);
-        //dd($get_list);
         $data        = array();
         foreach ($get_list as $row) {
             $query = $row->historyLead;
-            
             if ($query != null) {
                 $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
                 $validate       = (new $leadStrategy)->getValidate($query->id);
@@ -214,12 +213,12 @@ class Lead extends Model
         
         $data['is_viability_credit'] = isset($data['is_viability_credit']) ? $data['is_viability_credit'] : 0 ; 
 
-        if (isset($data['agreement_id']) && $data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
+       /*  if (isset($data['agreement_id']) && $data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
             unset($data['agreement_id']);
             $new_agreement = Agreement::create([ 'name' => $request->new_agreement, 'description' => $request->new_agreement, 'status' => 1]);
             $data['agreement_id'] = $new_agreement->id;
-        }
-        if ($request->lead_id == null) {
+        } */
+        if ($request->isNew == true) {
             if ($is_asesor === true) {
                 $data['asesor_id'] =  Auth::user()->id;
             }

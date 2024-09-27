@@ -106,6 +106,52 @@ class LeadController extends Controller
         return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate]);
     }
 
+    public function validateCellphoneAndRfc($cellphone , $rfc)
+    {
+        $getClientPersonCellphone   = ClientPerson::where('cellphone', $cellphone)->first();
+        $getClientPersonRFC   = ClientPerson::where('rfc', $rfc)->first();
+        
+        if ($getClientPersonCellphone != null) {
+            $agreement         = $getClientPersonCellphone != null ? Agreement::find($getClientPersonCellphone->agreement_id): null;
+        }
+
+        if ($getClientPersonRFC != null) {
+            $agreement         = $getClientPersonRFC != null ? Agreement::find($getClientPersonRFC->agreement_id): null;
+        }
+
+        $validateAgreement = $agreement       != null && $agreement->status == 1 ? true : false;
+        $isValidateCellphone = false;
+        $isValidateRFC = false;
+        
+
+        if ($getClientPersonCellphone != null && $cellphone == $getClientPersonCellphone->cellphone && 
+            $getClientPersonCellphone->active == 1 && $validateAgreement == true) {
+            $isValidateCellphone = true;
+        }
+
+        if ($getClientPersonRFC != null && $rfc == $getClientPersonRFC->rfc && 
+                $getClientPersonRFC->active == 1 && $validateAgreement == true) {
+                $isValidateRFC = true;
+        }
+        //dd($getClientPersonRFC, $validateAgreement, $rfc);
+        return response()->json($isValidateCellphone == true && $isValidateRFC == true ? true : false);
+
+    }
+
+    public function getProducts($agreementId)
+    {
+        $getProducts = FinancialAgreement::select('financial_products.id', 'financial_products.alias')
+                        ->join('financial_products', 'financial_products.financial_id', 'financial_agreements.id')
+                        ->where(['agreement_id' => $agreementId])->get();
+        $products = array();
+        if ($getProducts != null) {
+            foreach ($getProducts as $getProduct) {
+                $products[$getProduct->id]= $getProduct->alias;
+            }
+        }
+        return response()->json($products);
+    }
+
     
     public function listActions(Lead $lead)
     {
@@ -170,12 +216,15 @@ class LeadController extends Controller
      */
     public function create()
     {
-        $lead_id = null;
-        $lead = null;
-        $banks = Bank::all();
+        $lead_id            = null;
+        $lead               = null;
+        $banks              = Bank::all();
         $financial_products = FinancialProduct::getAll();
-        $loan_type    = config('enums.loan_type');
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type'));
+        $loan_type          = config('enums.loan_type');
+        $isNew              = true ;
+        $clientPersonId              = null ;
+
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type', 'isNew', 'clientPersonId'));
     }
 
     /**
@@ -296,12 +345,14 @@ class LeadController extends Controller
      */
     public function edit($id)
     {
-        $lead_id = $id;
-        $lead = Lead::find($id);
-        $banks = Bank::all();
+        $lead_id            = $id;
+        $lead               = Lead::find($id);
+        $banks              = Bank::all();
         $financial_products = FinancialProduct::getAll();
-        $loan_type    = config('enums.loan_type');
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type'));
+        $loan_type          = config('enums.loan_type');
+        $isNew              = false ;
+        $clientPersonId              = $lead->client_person_id ;
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type', 'isNew', 'clientPersonId'));
     }
 
     /**

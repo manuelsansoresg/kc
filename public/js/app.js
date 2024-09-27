@@ -2258,10 +2258,6 @@ window.setRfc = function () {
       my_month = _nacimiento$split2[1],
       my_day = _nacimiento$split2[2];
 
-  console.log(nacimiento);
-  console.log(my_day);
-  console.log(my_month);
-  console.log(my_year);
   var rfc = rfc_facil__WEBPACK_IMPORTED_MODULE_1__["default"].forNaturalPerson({
     name: my_name,
     firstLastName: my_lastname,
@@ -2421,7 +2417,6 @@ window.getFinancialProduct = function (id, type) {
   axios.get("/panel/action/financial/product/" + id + "/" + type + '/show').then(function (response) {
     var result = response.data;
     var financials = result.financials;
-    console.log(financials);
     var financialValues = financials.map(function (item) {
       return item.product_id;
     }); // Limpia las selecciones actuales en el select múltiple
@@ -2493,6 +2488,23 @@ window.changeOrigen = function (change_channel) {
 }); */
 
 
+window.validateLeadEdit = function () {
+  var cellphone = $('#lead-cellphone').val();
+  var rfc = $('#lead-rfc').val();
+  console.log('manuel');
+  axios.get("/panel/lead/" + cellphone + "/" + rfc + "/get/validate").then(function (response) {
+    var result = response.data;
+
+    if (result == true) {
+      $('#is_viability').val(1);
+      $('#prospecto-valido').val('Prospecto válido');
+    } else {
+      $('#is_viability').val(0);
+      $('#prospecto-valido').val('');
+    }
+  })["catch"](function (e) {});
+};
+
 function setData(is_change_origen, isChange, isChangeBirthDay) {
   var lead_id = $('#lead_id').val();
   axios.get("/panel/lead/" + lead_id).then(function (response) {
@@ -2503,11 +2515,11 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
     var product_id = lead.product_id;
     var other = lead.other;
     var is_viability = lead.is_viability;
-    var is_viability_credit = lead.is_viability_credit;
-    console.log(product_id);
-    productChange(product_id);
-    organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
-    getFinancialProduct(lead.id, 1);
+    var is_viability_credit = lead.is_viability_credit; //productChange(product_id);
+    //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
+
+    $('#lead-origin-agreement').val(lead.agreement_id);
+    getProductsByAgreementId(lead.agreement_id, lead.financial_product_id); //getFinancialProduct(lead.id, 1);
 
     if (is_change_origen == true) {
       $('#lead-origin').val(lead.origin_id);
@@ -2536,13 +2548,16 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
     }
 
     $('#lead-comment').val(lead.comment);
-    changeOrigen(lead.channel_id);
+    validateLeadEdit(); // Luego ejecuta validateLeadEdit
+    //changeOrigen(lead.channel_id);
+
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
     $('#importe_solicitado').val(lead.importe_solicitado);
     $('#income').val(lead.income);
     $('#bank_id').val(lead.bank_id).trigger("change");
     $('#tipo_credito').val(lead.tipo_credito).trigger("change");
     $('#consulta_buro').val(lead.consulta_buro).trigger("change");
+    $('#lead-agreement').val(lead.agreement_id).trigger("change");
 
     if (isChange == true) {
       checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
@@ -2579,29 +2594,27 @@ window.checkDataLeadExist = function (valInput, id) {
       $('#content-validaciones').html(result.contentValidaciones);
 
       if (isExist > 0 && isValidate == true) {
+        getProductsByAgreementId(clientPerson.agreement_id, null);
         messageElement.classList.remove("text-danger");
         messageElement.classList.add("text-primary");
         messageElement.textContent = "Validación exitosa";
         $('#is_viability').val(1);
         $('#lead_id').val(clientPerson.id);
         $('#prospecto-valido').val('Prospecto válido');
+        $('#lead-origin-agreement').val(clientPerson.agreement_id);
 
         if (id == 'cellphone') {
           $('#isValidateCellphone').val(result.isValidate);
-          setData(true, false, true);
         }
 
-        if (id != 'rfc') {
-          setData(true, false, false);
-        }
-        /*
-        if (id != 'rfc') {
-            messageElement.textContent = "Ya está en uso";
-        } else { 
-            messageElement.textContent = "Recurrente";
-            $('.text-viabilidad').html('Recurrente');
-        } */
-
+        $('#lead-name').val(clientPerson.name);
+        $('#lead-last_name').val(clientPerson.last_name);
+        $('#lead-second_last_name').val(clientPerson.second_last_name);
+        $('#lead-birth_date').val(clientPerson.birth_date);
+        $('#lead-rfc').val(clientPerson.rfc);
+        $('#lead-email').val(clientPerson.email);
+        $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
+        $('#client_person_id').val(clientPerson.id);
       } else {
         messageElement.classList.remove("text-primary");
         messageElement.classList.add("text-danger");
@@ -2611,6 +2624,25 @@ window.checkDataLeadExist = function (valInput, id) {
       }
     })["catch"](function (e) {});
   }
+};
+
+window.getProductsByAgreementId = function (leadId, productId) {
+  var selectElement = document.getElementById('financial_product_id');
+  selectElement.options.length = 0; // Limpiar el select
+
+  axios.get("/panel/lead/" + leadId + "/getProducts").then(function (response) {
+    var products = response.data;
+    Object.keys(products).forEach(function (key) {
+      var option = document.createElement('option');
+      option.value = key;
+      option.textContent = products[key];
+      selectElement.appendChild(option);
+    });
+
+    if (productId != 'null') {
+      $('#financial_product_id').val(productId).trigger("change");
+    }
+  })["catch"](function (e) {});
 };
 
 window.deleteLead = function (lead_id) {
@@ -2820,11 +2852,22 @@ window.modalRegisterAction = function (id_rel) {
   $('#modal-register-action').modal('show');
 };
 
-$(document).ready(function () {
-  if (document.getElementById('lead-channel')) {
-    setData(true, false, true);
-  }
-});
+$(document).ready( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          if (document.getElementById('lead-channel')) {
+            setData(true, false, true); // Espera que setData termine
+          }
+
+        case 1:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, _callee2);
+})));
 $(document).on("select2:open", function () {
   document.querySelector(".select2-container--open .select2-search__field").focus();
 });
