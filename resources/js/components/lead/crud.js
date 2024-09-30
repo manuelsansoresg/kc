@@ -251,6 +251,8 @@ window.changeOrigen = function (change_channel) {
   
 }); */
 
+
+
 window.validateLeadEdit = function()
 {
     let cellphone = $('#lead-cellphone').val();
@@ -260,18 +262,36 @@ window.validateLeadEdit = function()
         .get("/panel/lead/"+cellphone+"/"+rfc+"/get/validate")
         .then(function (response) {
             let result = response.data;
+            let client_person_id = $('#client_person_id').val();
+            
             if (result == true) {
                 $('#is_viability').val(1);
+                $('#content-servicio-kc').show();
                 $('#prospecto-valido').val('Prospecto válido');
             } else {
                 $('#is_viability').val(0);
+                $('#content-servicio-kc').hie()
                 $('#prospecto-valido').val('');
             }
-            
+            showContentIsValidate();
         })
     .catch(e => {
 
     });
+}
+
+window.showContentIsValidate = function()
+{
+    let is_viability   = $('#is_viability').val();
+    let clientPersonId = $('#client_person_id').val();
+    //perfil-cliente
+    
+    console.log('is_viability' + is_viability);
+    if (is_viability == 1) {
+        $('.perfil-cliente').each(function() {
+            $(this).attr('href', '/panel/client/' + clientPersonId);
+        });
+    }
 }
 
 function setData(is_change_origen, isChange, isChangeBirthDay) {
@@ -283,10 +303,6 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                 .then(function (response) {
                     let result        = response.data;
                     let lead          = result.lead;
-                    let channel       = result.channel;
-                    let financials    = result.financials;
-                    let product_id    = lead.product_id;
-                    let other         = lead.other;
                     let is_viability  = lead.is_viability;
                     let is_viability_credit = lead.is_viability_credit;
 
@@ -330,8 +346,10 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                         $('#lead-manychat_id').val(lead.manychat_id);
                     }
                     $('#lead-comment').val(lead.comment);
+                    $('#client_person_id').val(lead.client_person_id);
                     
                     validateLeadEdit(); // Luego ejecuta validateLeadEdit
+                    
                 
                     //changeOrigen(lead.channel_id);
                     
@@ -386,6 +404,8 @@ window.checkDataLeadExist = function (valInput, id)
             let isValidate = result.isValidate;
             $('#content-validaciones').html(result.contentValidaciones);
             if (isExist > 0 && isValidate == true) {
+                $('#client_person_id').val(clientPerson.id);
+                $('#content-servicio-kc').show();
                 getProductsByAgreementId(clientPerson.agreement_id, null)
 
 
@@ -393,7 +413,7 @@ window.checkDataLeadExist = function (valInput, id)
                 messageElement.classList.add("text-primary");
                 messageElement.textContent = "Validación exitosa";
                 $('#is_viability').val(1);
-                $('#lead_id').val(clientPerson.id);
+                //$('#lead_id').val(clientPerson.id);
                 $('#prospecto-valido').val('Prospecto válido');
                 
                 $('#lead-origin-agreement').val(clientPerson.agreement_id);
@@ -408,14 +428,14 @@ window.checkDataLeadExist = function (valInput, id)
                 $('#lead-rfc').val(clientPerson.rfc);
                 $('#lead-email').val(clientPerson.email);
                 $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
-                
-                $('#client_person_id').val(clientPerson.id);
+               
                 
                 
             } else {
                 messageElement.classList.remove("text-primary");
                 messageElement.classList.add("text-danger");
                 messageElement.textContent = "Validación fallida";
+                $('#content-servicio-kc').hide();
                 $('#prospecto-valido').val('');
                 $('#is_viability').val(0);
               
@@ -673,7 +693,7 @@ window.modalRegisterAction = function (id_rel) {
 
 $(document).ready(async function () {
     if (document.getElementById('lead-channel')) {
-        setData(true, false, true); // Espera que setData termine
+        setData(true, false, true);
         
     }
 });

@@ -2494,15 +2494,33 @@ window.validateLeadEdit = function () {
   console.log('manuel');
   axios.get("/panel/lead/" + cellphone + "/" + rfc + "/get/validate").then(function (response) {
     var result = response.data;
+    var client_person_id = $('#client_person_id').val();
 
     if (result == true) {
       $('#is_viability').val(1);
+      $('#content-servicio-kc').show();
       $('#prospecto-valido').val('Prospecto válido');
     } else {
       $('#is_viability').val(0);
+      $('#content-servicio-kc').hie();
       $('#prospecto-valido').val('');
     }
+
+    showContentIsValidate();
   })["catch"](function (e) {});
+};
+
+window.showContentIsValidate = function () {
+  var is_viability = $('#is_viability').val();
+  var clientPersonId = $('#client_person_id').val(); //perfil-cliente
+
+  console.log('is_viability' + is_viability);
+
+  if (is_viability == 1) {
+    $('.perfil-cliente').each(function () {
+      $(this).attr('href', '/panel/client/' + clientPersonId);
+    });
+  }
 };
 
 function setData(is_change_origen, isChange, isChangeBirthDay) {
@@ -2510,10 +2528,6 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
   axios.get("/panel/lead/" + lead_id).then(function (response) {
     var result = response.data;
     var lead = result.lead;
-    var channel = result.channel;
-    var financials = result.financials;
-    var product_id = lead.product_id;
-    var other = lead.other;
     var is_viability = lead.is_viability;
     var is_viability_credit = lead.is_viability_credit; //productChange(product_id);
     //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
@@ -2548,6 +2562,7 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
     }
 
     $('#lead-comment').val(lead.comment);
+    $('#client_person_id').val(lead.client_person_id);
     validateLeadEdit(); // Luego ejecuta validateLeadEdit
     //changeOrigen(lead.channel_id);
 
@@ -2594,12 +2609,14 @@ window.checkDataLeadExist = function (valInput, id) {
       $('#content-validaciones').html(result.contentValidaciones);
 
       if (isExist > 0 && isValidate == true) {
+        $('#client_person_id').val(clientPerson.id);
+        $('#content-servicio-kc').show();
         getProductsByAgreementId(clientPerson.agreement_id, null);
         messageElement.classList.remove("text-danger");
         messageElement.classList.add("text-primary");
         messageElement.textContent = "Validación exitosa";
-        $('#is_viability').val(1);
-        $('#lead_id').val(clientPerson.id);
+        $('#is_viability').val(1); //$('#lead_id').val(clientPerson.id);
+
         $('#prospecto-valido').val('Prospecto válido');
         $('#lead-origin-agreement').val(clientPerson.agreement_id);
 
@@ -2614,11 +2631,11 @@ window.checkDataLeadExist = function (valInput, id) {
         $('#lead-rfc').val(clientPerson.rfc);
         $('#lead-email').val(clientPerson.email);
         $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
-        $('#client_person_id').val(clientPerson.id);
       } else {
         messageElement.classList.remove("text-primary");
         messageElement.classList.add("text-danger");
         messageElement.textContent = "Validación fallida";
+        $('#content-servicio-kc').hide();
         $('#prospecto-valido').val('');
         $('#is_viability').val(0);
       }
@@ -2858,7 +2875,7 @@ $(document).ready( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRunt
       switch (_context2.prev = _context2.next) {
         case 0:
           if (document.getElementById('lead-channel')) {
-            setData(true, false, true); // Espera que setData termine
+            setData(true, false, true);
           }
 
         case 1:

@@ -166,32 +166,34 @@
                                                             
                                                         </div>
                 
-                                                        <hr class="preview-hr">
+                                                        
 
-                                                        <span class="preview-title-lg overline-title">Servicio KC</span>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Producto financiero</label>
-                                                                <p class="small">Servicio KC</p>
-                                                                <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[financial_product_id]" id="financial_product_id"  data-search="on">
-                                                                       
-                                                                    </select>
+                                                       <div id="content-servicio-kc" style="display: none" class="mt-5">
+                                                            <span class="preview-title-lg overline-title">Servicio KC <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
+                                                            <div class="col-12 mt-n4">
+                                                                <hr class="preview-hr">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Producto financiero</label>
+                                                                    <p class="small">Servicio KC</p>
+                                                                    <div class="form-control-wrap">
+                                                                        <select class="form-select js-select2" name="data[financial_product_id]" id="financial_product_id"  data-search="on">
+                                                                        
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                            <span class="preview-title-lg overline-title mt-5">Producto Preautorizado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
+                                                            <div class="col-12 mt-n4">
+                                                                <hr class="preview-hr">
+                                                            </div>
+                                                            
+                                                       </div>
 
                                                         
-
-                                                       
-
-                                                       
-
-                                                       
-                                                        
                                                         
 
-                                                        <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Viabilidad</span>
                                                         <p class="text-primary">Este prospecto es <span class="text-viabilidad"></span>  </p>
                                                        {{--  <div class="col-md-12">
@@ -326,7 +328,7 @@
                                                         <input type="hidden" id="lead_id" name="lead_id" value="{{ $lead_id }}">
                                                         <input type="hidden" id="isValidateCellphone"  value="false">
                                                         <input type="hidden" name="isNew" value="{{ $isNew }}">
-                                                        <input type="hidden" name="client_person_id" id="client_person_id" value="{{ $clientPersonId }}">
+                                                        <input type="hidden" name="data[client_person_id]" id="client_person_id" value="{{ $clientPersonId }}">
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>
