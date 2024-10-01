@@ -178,7 +178,7 @@
                                                                     <label class="form-label">Producto financiero</label>
                                                                     <p class="small">Servicio KC</p>
                                                                     <div class="form-control-wrap">
-                                                                        <select class="form-select js-select2" name="data[financial_product_id]" id="financial_product_id"  data-search="on">
+                                                                        <select class="form-select js-select2" name="data[financial_product_id]" id="financial_product_id"  data-search="on" onchange="validateSoad()">
                                                                         
                                                                         </select>
                                                                     </div>
@@ -324,11 +324,13 @@
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Validaciónes</span>
                                                         <div id="content-validaciones"></div>
+                                                        <div id="content-validaciones-soad"></div>
                 
                                                         <input type="hidden" id="lead_id" name="lead_id" value="{{ $lead_id }}">
                                                         <input type="hidden" id="isValidateCellphone"  value="false">
                                                         <input type="hidden" name="isNew" value="{{ $isNew }}">
                                                         <input type="hidden" name="data[client_person_id]" id="client_person_id" value="{{ $clientPersonId }}">
+                                                        <input type="hidden" name="data[is_free_of_active_sod]" id="is_free_of_active_sod" value="{{ $lead != null ? $lead->client_person_id : null}}">
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>

@@ -75,6 +75,7 @@ Route::group(['prefix' => 'lead'], function () {
     Route::get('{lead_id}/origin', ['\App\Http\Controllers\Panel\LeadController', 'listOrigin'])->middleware('auth');
     
     Route::get('{lead_id}/profile', ['\App\Http\Controllers\Panel\LeadController', 'profile'])->middleware('auth');
+    Route::get('{clientPerson}/soad/get', ['\App\Http\Controllers\Panel\LeadController', 'getSoad'])->middleware('auth');
     
     Route::post('{lead_id}/advisor/store', ['\App\Http\Controllers\Panel\LeadController', 'advisorStore'])->middleware('auth');
     Route::post('{lead_id}/client-person/store', ['\App\Http\Controllers\Panel\LeadController', 'storeClientPerson'])->middleware('auth');

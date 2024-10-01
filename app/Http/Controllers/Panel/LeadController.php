@@ -337,6 +337,15 @@ class LeadController extends Controller
         return view('panel.lead.profile', compact('lead', 'model', 'model_action'));
     }
 
+    public function getSoad(ClientPerson $clientPerson)
+    {
+        $textSoad = '<p class="text-danger"> Prospecto tiene un Salario On-Demand activo </p>';
+        if ($clientPerson->sod_active == 1) {
+            $textSoad = '<p class="text-primary"> Prospecto No tiene un Salario On-Demand activo </p>';
+        }
+        return response()->json(['TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active]);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

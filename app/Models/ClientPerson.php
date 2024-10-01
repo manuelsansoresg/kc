@@ -76,7 +76,8 @@ class ClientPerson extends Model
         'workplace_cel_phone',
         'workplace_code',
         'workplace_local_phone_extension',
-        'active'
+        'active',
+        'sod_active',
     ];
 
     public static function listDatatable()

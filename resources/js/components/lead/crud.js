@@ -690,6 +690,25 @@ window.modalRegisterAction = function (id_rel) {
 }
 
 
+window.validateSoad = function()
+{
+    let clientPersonId = $('#client_person_id').val();
+    $('#content-validaciones-soad').html('');
+    axios
+    .get("/panel/lead/"+clientPersonId+"/soad/get")
+    .then(function (response) {
+        let result = response.data;
+        let TextSoad = result.TextSoad;
+        let soadActive = result.soadActive;
+
+        if (soadActive != 1) {
+            $('#content-validaciones-soad').html(TextSoad);
+        }
+    })
+    .catch(e => {
+    });
+}
+
 
 $(document).ready(async function () {
     if (document.getElementById('lead-channel')) {

@@ -2869,6 +2869,20 @@ window.modalRegisterAction = function (id_rel) {
   $('#modal-register-action').modal('show');
 };
 
+window.validateSoad = function () {
+  var clientPersonId = $('#client_person_id').val();
+  $('#content-validaciones-soad').html('');
+  axios.get("/panel/lead/" + clientPersonId + "/soad/get").then(function (response) {
+    var result = response.data;
+    var TextSoad = result.TextSoad;
+    var soadActive = result.soadActive;
+
+    if (soadActive != 1) {
+      $('#content-validaciones-soad').html(TextSoad);
+    }
+  })["catch"](function (e) {});
+};
+
 $(document).ready( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
   return _regeneratorRuntime().wrap(function _callee2$(_context2) {
     while (1) {
