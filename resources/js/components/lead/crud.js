@@ -703,14 +703,18 @@ window.validateSoad = function()
         let TextSoad = result.TextSoad;
         let soadActive = result.soadActive;
         let isSoadDate = result.isSoadDate;
+        let isSodOnDate = result.isSodOnDate;
         $('#is_free_of_active_sod').val(0);
+        $('#is_sod_on_date_allowed').val(0);
         if (soadActive != 0) {
             $('#content-validaciones-soad').html(TextSoad);
             $('#is_free_of_active_sod').val(1);
             
         }
-        
-        $('#content-validaciones-soad-date').html(isSoadDate);
+        if (isSodOnDate) {
+            $('#is_sod_on_date_allowed').val(1);
+            $('#content-validaciones-soad-date').html(isSoadDate);
+        }
     })
     .catch(e => {
     });

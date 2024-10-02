@@ -332,6 +332,7 @@
                                                         <input type="hidden" name="isNew" value="{{ $isNew }}">
                                                         <input type="hidden" name="data[client_person_id]" id="client_person_id" value="{{ $clientPersonId }}">
                                                         <input type="hidden" name="data[is_free_of_active_sod]" id="is_free_of_active_sod" value="{{ $lead != null ? $lead->client_person_id : null}}">
+                                                        <input type="hidden" name="data[is_sod_on_date_allowed]" id="is_sod_on_date_allowed" value="{{ $lead != null ? $lead->is_sod_on_date_allowed : null}}">
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>

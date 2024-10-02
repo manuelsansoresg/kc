@@ -349,13 +349,15 @@ class LeadController extends Controller
         //validar soad en fecha
         $getSodName = SodScheduleName::find($agreement->id);
         $isSoadDate = '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-danger"> FAIL: <br> Solicitud fuera del rango de fechas </span> <p>';
-        //dd($getSodName);
+        $is_sod_on_date_allowed = false;
         if ($getSodName != null) {
             $alias = "schedule_$getSodName->id as schedule";
             $getDate = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
-            $isSoadDate = $getDate->schedule == 0 ? $isSoadDate = '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> OK: <br> Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate; 
+            $isSoadDate = $getDate->schedule == 0 ?  '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> OK: <br> Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate; 
+            $is_sod_on_date_allowed  = $getDate->schedule == 0 ? false : true; 
+        
         }
-        return response()->json(['TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate]);
+        return response()->json(['TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed]);
     }
 
     /**
