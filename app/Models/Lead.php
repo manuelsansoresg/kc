@@ -45,7 +45,8 @@ class Lead extends Model
         'is_viability',
         'is_viability_credit',
         'birth_date',
-        'client_person_id'
+        'client_person_id',
+        'is_free_of_active_sod'
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)

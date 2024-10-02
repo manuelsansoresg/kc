@@ -700,9 +700,11 @@ window.validateSoad = function()
         let result = response.data;
         let TextSoad = result.TextSoad;
         let soadActive = result.soadActive;
-
+        $('#is_free_of_active_sod').val(0);
         if (soadActive != 1) {
             $('#content-validaciones-soad').html(TextSoad);
+            $('#is_free_of_active_sod').val(1);
+            
         }
     })
     .catch(e => {

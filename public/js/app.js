@@ -2876,9 +2876,11 @@ window.validateSoad = function () {
     var result = response.data;
     var TextSoad = result.TextSoad;
     var soadActive = result.soadActive;
+    $('#is_free_of_active_sod').val(0);
 
     if (soadActive != 1) {
       $('#content-validaciones-soad').html(TextSoad);
+      $('#is_free_of_active_sod').val(1);
     }
   })["catch"](function (e) {});
 };
