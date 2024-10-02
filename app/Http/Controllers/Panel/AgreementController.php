@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Agreement;
 use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
+use App\Models\SodScheduleName;
 use Illuminate\Http\Request;
 
 class AgreementController extends Controller
@@ -48,8 +49,9 @@ class AgreementController extends Controller
     public function create()
     {
         $agreement_id = null;
-        $agreement = null;
-        return view('panel.agreement.form', compact('agreement_id', 'agreement'));
+        $agreement    = null;
+        $sodNames     = SodScheduleName::get();
+        return view('panel.agreement.form', compact('agreement_id', 'agreement', 'sodNames'));
     }
 
     /**
@@ -99,7 +101,8 @@ class AgreementController extends Controller
     {
         $agreement_id = $id;
         $agreement = Agreement::find($id);
-        return view('panel.agreement.form', compact('agreement_id', 'agreement'));
+        $sodNames     = SodScheduleName::get();
+        return view('panel.agreement.form', compact('agreement_id', 'agreement', 'sodNames'));
     }
 
     /**
