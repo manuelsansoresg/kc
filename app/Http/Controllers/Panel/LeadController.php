@@ -23,6 +23,8 @@ use App\Models\FinancialProduct;
 use App\Models\Investor;
 use App\Models\InvestorsCredit;
 use App\Models\Product;
+use App\Models\SodScheduleDate;
+use App\Models\SodScheduleName;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\Values\ActionValues;
@@ -75,15 +77,16 @@ class LeadController extends Controller
         $getClientPerson   = ClientPerson::where($field, $valInput)->first();
         $agreement         = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
         $validateAgreement = $agreement       != null && $agreement->status == 1 ? true : false;
-
+        $isValidateCellphone = false;
+        $isValidateRFC = false;
+        $isValidate = false;
         
         
         if ($id == 'cellphone') {
             $contentValidaciones      = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
-            $isValidate               = false;
             if ($getClientPerson != null && $valInput == $getClientPerson->cellphone && 
                 $getClientPerson->active == 1 && $validateAgreement == true) {
-                $isValidate = true;
+                $isValidateCellphone = true;
                 $contentValidaciones = '<p >Validación Prospecto (celular) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
             }
         }
@@ -91,17 +94,16 @@ class LeadController extends Controller
         
         if ($id == 'rfc') {
             $contentValidaciones      = '<p>Validación Prospecto (rfc) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
-            $isValidate               = false;
             
             if ($getClientPerson != null && $valInput == $getClientPerson->rfc && 
                 $getClientPerson->active == 1 && $validateAgreement == true) {
-                $isValidate = true;
+                $isValidateRFC = true;
                 $contentValidaciones = '<p >Validación Prospecto (rfc) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
             }
 
         }
         
-
+        $isValidate = $isValidateCellphone == true || $isValidateRFC == true ?  true : false;
 
         return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate]);
     }
@@ -337,13 +339,23 @@ class LeadController extends Controller
         return view('panel.lead.profile', compact('lead', 'model', 'model_action'));
     }
 
-    public function getSoad(ClientPerson $clientPerson)
+    public function getSoad(ClientPerson $clientPerson, Agreement $agreement)
     {
-        $textSoad = '<p class="text-danger"> Prospecto tiene un Salario On-Demand activo </p>';
+        $textSoad = '<p> Validación Crédito Preautorizado / SOD Activo /<span  class="text-primary"> OK: <br>  Prospecto No tiene un Salario On-Demand activo
+ </span> </p>';
         if ($clientPerson->sod_active == 1) {
-            $textSoad = '<p class="text-primary"> Prospecto No tiene un Salario On-Demand activo </p>';
+            $textSoad = '<p>Validación Crédito Preautorizado / SOD Activo / <span class="text-danger"> FAIL: <br> Prospecto No tiene un Salario On-Demand activo</p>';
         }
-        return response()->json(['TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active]);
+        //validar soad en fecha
+        $getSodName = SodScheduleName::find($agreement->id);
+        $isSoadDate = '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-danger"> FAIL: <br> Solicitud fuera del rango de fechas </span> <p>';
+        //dd($getSodName);
+        if ($getSodName != null) {
+            $alias = "schedule_$getSodName->id as schedule";
+            $getDate = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
+            $isSoadDate = $getDate->schedule == 0 ? $isSoadDate = '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> OK: <br> Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate; 
+        }
+        return response()->json(['TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate]);
     }
 
     /**

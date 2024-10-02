@@ -689,23 +689,28 @@ window.modalRegisterAction = function (id_rel) {
     $('#modal-register-action').modal('show');
 }
 
-
+//validar soad activo y si existe la fecha en bd
 window.validateSoad = function()
 {
     let clientPersonId = $('#client_person_id').val();
+    let agreement = $('#lead-origin-agreement').val();
     $('#content-validaciones-soad').html('');
+    $('#content-validaciones-soad-date').html('');
     axios
-    .get("/panel/lead/"+clientPersonId+"/soad/get")
+    .get("/panel/lead/"+clientPersonId+"/"+agreement+"/soad/get")
     .then(function (response) {
         let result = response.data;
         let TextSoad = result.TextSoad;
         let soadActive = result.soadActive;
+        let isSoadDate = result.isSoadDate;
         $('#is_free_of_active_sod').val(0);
-        if (soadActive != 1) {
+        if (soadActive != 0) {
             $('#content-validaciones-soad').html(TextSoad);
             $('#is_free_of_active_sod').val(1);
             
         }
+        
+        $('#content-validaciones-soad-date').html(isSoadDate);
     })
     .catch(e => {
     });

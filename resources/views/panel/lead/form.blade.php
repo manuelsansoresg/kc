@@ -325,6 +325,7 @@
                                                         <span class="preview-title-lg overline-title">Validaciónes</span>
                                                         <div id="content-validaciones"></div>
                                                         <div id="content-validaciones-soad"></div>
+                                                        <div id="content-validaciones-soad-date"></div>
                 
                                                         <input type="hidden" id="lead_id" name="lead_id" value="{{ $lead_id }}">
                                                         <input type="hidden" id="isValidateCellphone"  value="false">

@@ -2867,21 +2867,27 @@ window.modalPasswod = function (user_id) {
 window.modalRegisterAction = function (id_rel) {
   $('#register-action-id-rel').val(id_rel);
   $('#modal-register-action').modal('show');
-};
+}; //validar soad activo y si existe la fecha en bd
+
 
 window.validateSoad = function () {
   var clientPersonId = $('#client_person_id').val();
+  var agreement = $('#lead-origin-agreement').val();
   $('#content-validaciones-soad').html('');
-  axios.get("/panel/lead/" + clientPersonId + "/soad/get").then(function (response) {
+  $('#content-validaciones-soad-date').html('');
+  axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/soad/get").then(function (response) {
     var result = response.data;
     var TextSoad = result.TextSoad;
     var soadActive = result.soadActive;
+    var isSoadDate = result.isSoadDate;
     $('#is_free_of_active_sod').val(0);
 
-    if (soadActive != 1) {
+    if (soadActive != 0) {
       $('#content-validaciones-soad').html(TextSoad);
       $('#is_free_of_active_sod').val(1);
     }
+
+    $('#content-validaciones-soad-date').html(isSoadDate);
   })["catch"](function (e) {});
 };
 
