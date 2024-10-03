@@ -42,6 +42,7 @@ $().ready(function () {
                     $('#client-email').val(client.email);
                     $('#client-rfc').val(client.rfc);
                     $('#lead-email').val(client.email);
+                    $('#client-daily_income').val(client.daily_income);
                     
                     $('#client-agreement').val(client.agreement_id).trigger("change");
                     $('#client-status').val(client.active).trigger("change");

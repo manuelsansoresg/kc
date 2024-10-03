@@ -78,6 +78,8 @@ class ClientPerson extends Model
         'workplace_local_phone_extension',
         'active',
         'sod_active',
+        'daily_income',
+        'daily_income_adjusted',
     ];
 
     public static function listDatatable()
