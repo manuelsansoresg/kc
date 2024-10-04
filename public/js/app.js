@@ -2872,29 +2872,41 @@ window.modalRegisterAction = function (id_rel) {
 
 
 window.validateSoad = function () {
-  var clientPersonId = $('#client_person_id').val();
-  var agreement = $('#lead-origin-agreement').val();
   $('#content-validaciones-soad').html('');
   $('#content-validaciones-soad-date').html('');
-  axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/soad/get").then(function (response) {
-    var result = response.data;
-    var TextSoad = result.TextSoad;
-    var soadActive = result.soadActive;
-    var isSoadDate = result.isSoadDate;
-    var isSodOnDate = result.isSodOnDate;
-    $('#is_free_of_active_sod').val(0);
-    $('#is_sod_on_date_allowed').val(0);
+  $('#content-product').html('');
 
-    if (soadActive != 0) {
-      $('#content-validaciones-soad').html(TextSoad);
-      $('#is_free_of_active_sod').val(1);
-    }
+  if ($('#financial_product_id').val() != null) {
+    var clientPersonId = $('#client_person_id').val();
+    var agreement = $('#lead-origin-agreement').val();
+    var productId = $('#financial_product_id').val();
+    axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + "/soad/get").then(function (response) {
+      var result = response.data;
 
-    if (isSodOnDate) {
-      $('#is_sod_on_date_allowed').val(1);
-      $('#content-validaciones-soad-date').html(isSoadDate);
-    }
-  })["catch"](function (e) {});
+      if (result.financialProduct == 'Salario On-Demand') {
+        var TextSoad = result.TextSoad;
+        var soadActive = result.soadActive;
+        var isSoadDate = result.isSoadDate;
+        var isSodOnDate = result.isSodOnDate;
+        $('#is_free_of_active_sod').val(0);
+        $('#is_sod_on_date_allowed').val(0);
+
+        if (soadActive != 0) {
+          $('#content-validaciones-soad').html(TextSoad);
+          $('#is_free_of_active_sod').val(1);
+        }
+
+        $('#is_sod_on_date_allowed').val(1);
+        $('#sod_max').val(result.maximoRedondeado);
+        $('#sod_min').val(result.minimoRedondeado);
+        $('#content-validaciones-soad-date').html(isSoadDate);
+
+        if (isSodOnDate == 1) {
+          $('#content-product').html(result.contentProductSod);
+        }
+      }
+    })["catch"](function (e) {});
+  }
 };
 
 $(document).ready( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {

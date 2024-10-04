@@ -29,6 +29,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -339,7 +340,7 @@ class LeadController extends Controller
         return view('panel.lead.profile', compact('lead', 'model', 'model_action'));
     }
 
-    public function getSoad(ClientPerson $clientPerson, Agreement $agreement)
+    public function getSoad(ClientPerson $clientPerson, Agreement $agreement, FinancialProduct $financialProduct)
     {
         $textSoad = '<p> Validación Crédito Preautorizado / SOD Activo /<span  class="text-primary"> OK: <br>  Prospecto No tiene un Salario On-Demand activo
  </span> </p>';
@@ -351,13 +352,42 @@ class LeadController extends Controller
         $isSoadDate = '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-danger"> FAIL: <br> Solicitud fuera del rango de fechas </span> <p>';
         $is_sod_on_date_allowed = false;
         if ($getSodName != null) {
-            $alias = "schedule_$getSodName->id as schedule";
-            $getDate = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
-            $isSoadDate = $getDate->schedule == 0 ?  '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> OK: <br> Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate; 
-            $is_sod_on_date_allowed  = $getDate->schedule == 0 ? false : true; 
-        
+            $nameField              = "schedule_$getSodName->id";
+            $alias                  = "schedule_$getSodName->id as schedule";
+            $getDate                = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
+            $isSoadDate             = $getDate->schedule == 1 ?  '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> OK: <br> Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate;
+            //dd($agreement->id, $getDate);
+
+            $is_sod_on_date_allowed = $getDate->schedule == 1 ? true : false;
+            //obtener los productos si tiene sod
+            $dailyIncomeAdjusted  = $clientPerson->daily_income_adjusted;
+            
+            $currentDate = Carbon::now()->toDateString();
+            $schedule = SodScheduleDate::selectRaw("
+                    CASE
+                        WHEN schedule_1 = 2 AND fecha = ? THEN 1
+                        ELSE DATEDIFF(fecha, (SELECT MAX(fecha) 
+                                            FROM sod_schedule_dates 
+                                            WHERE schedule_1 = 2 
+                                            AND fecha < ?))
+                    END as dias
+                ", [$currentDate, $currentDate])
+                ->where('fecha', $currentDate)
+                ->first();
+            //dd($dailyIncomeAdjusted);
+            $maximo = $dailyIncomeAdjusted * $schedule->dias;
+            // Redondear hacia abajo al múltiplo de 100
+            $maximoRedondeado = floor($maximo / 100) * 100;
+            //calcular minimo
+            $minimo = $clientPerson->daily_income_adjusted * 1;
+            $minimoRedondeado = floor($minimo / 100) * 100;
+            $contentProductSod = '<p class="text-danger"> El prospecto no puede tramitar un salario On-Demand. <br> Revisa las validaciones </p>';
+            if ( $getDate->schedule == 1) {
+                $contentProductSod =  \View::make('panel.lead.product_sod ', ['minimo' => $minimoRedondeado, 'maximo' => $minimoRedondeado])->render();
+            }
+
         }
-        return response()->json(['TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed]);
+        return response()->json(['TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed, 'maximoRedondeado' => $maximoRedondeado, 'minimoRedondeado' => $minimoRedondeado, 'contentProductSod' => $contentProductSod, 'financialProduct' => $financialProduct->name]);
     }
 
     /**

@@ -47,7 +47,9 @@ class Lead extends Model
         'birth_date',
         'client_person_id',
         'is_free_of_active_sod',
-        'is_sod_on_date_allowed'
+        'is_sod_on_date_allowed',
+        'sod_max',
+        'sod_min',
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)

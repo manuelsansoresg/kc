@@ -187,6 +187,7 @@
                                                             <span class="preview-title-lg overline-title mt-5">Producto Preautorizado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
                                                             <div class="col-12 mt-n4">
                                                                 <hr class="preview-hr">
+                                                                <div id="content-product"></div>
                                                             </div>
                                                             
                                                        </div>
@@ -333,6 +334,8 @@
                                                         <input type="hidden" name="data[client_person_id]" id="client_person_id" value="{{ $clientPersonId }}">
                                                         <input type="hidden" name="data[is_free_of_active_sod]" id="is_free_of_active_sod" value="{{ $lead != null ? $lead->client_person_id : null}}">
                                                         <input type="hidden" name="data[is_sod_on_date_allowed]" id="is_sod_on_date_allowed" value="{{ $lead != null ? $lead->is_sod_on_date_allowed : null}}">
+                                                        <input type="hidden" name="data[sod_max]" id="sod_max" value="{{ $lead != null ? $lead->sod_max : null}}">
+                                                        <input type="hidden" name="data[sod_min]" id="sod_min" value="{{ $lead != null ? $lead->sod_min : null}}">
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>

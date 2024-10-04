@@ -692,32 +692,45 @@ window.modalRegisterAction = function (id_rel) {
 //validar soad activo y si existe la fecha en bd
 window.validateSoad = function()
 {
-    let clientPersonId = $('#client_person_id').val();
-    let agreement = $('#lead-origin-agreement').val();
     $('#content-validaciones-soad').html('');
     $('#content-validaciones-soad-date').html('');
-    axios
-    .get("/panel/lead/"+clientPersonId+"/"+agreement+"/soad/get")
-    .then(function (response) {
-        let result = response.data;
-        let TextSoad = result.TextSoad;
-        let soadActive = result.soadActive;
-        let isSoadDate = result.isSoadDate;
-        let isSodOnDate = result.isSodOnDate;
-        $('#is_free_of_active_sod').val(0);
-        $('#is_sod_on_date_allowed').val(0);
-        if (soadActive != 0) {
-            $('#content-validaciones-soad').html(TextSoad);
-            $('#is_free_of_active_sod').val(1);
+    $('#content-product').html('');
+    if ($('#financial_product_id').val() != null) {
+        
+        let clientPersonId = $('#client_person_id').val();
+        let agreement = $('#lead-origin-agreement').val();
+        let productId = $('#financial_product_id').val();
+      
+        axios
+        .get("/panel/lead/"+clientPersonId+"/"+agreement+"/"+productId+"/soad/get")
+        .then(function (response) {
             
-        }
-        if (isSodOnDate) {
-            $('#is_sod_on_date_allowed').val(1);
-            $('#content-validaciones-soad-date').html(isSoadDate);
-        }
-    })
-    .catch(e => {
-    });
+            let result = response.data;
+            if (result.financialProduct == 'Salario On-Demand' ) {
+                let TextSoad = result.TextSoad;
+                let soadActive = result.soadActive;
+                let isSoadDate = result.isSoadDate;
+                let isSodOnDate = result.isSodOnDate;
+                $('#is_free_of_active_sod').val(0);
+                $('#is_sod_on_date_allowed').val(0);
+                if (soadActive != 0) {
+                    $('#content-validaciones-soad').html(TextSoad);
+                    $('#is_free_of_active_sod').val(1);
+                    
+                }
+                $('#is_sod_on_date_allowed').val(1);
+                $('#sod_max').val(result.maximoRedondeado);
+                $('#sod_min').val(result.minimoRedondeado);
+        
+                $('#content-validaciones-soad-date').html(isSoadDate);
+                if (isSodOnDate == 1) {
+                    $('#content-product').html(result.contentProductSod);
+                }
+            }
+        })
+        .catch(e => {
+        });
+    }
 }
 
 
