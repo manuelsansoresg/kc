@@ -80,6 +80,8 @@ class ClientPerson extends Model
         'sod_active',
         'daily_income',
         'daily_income_adjusted',
+        'credit_active',
+        'active_discount',
     ];
 
     public static function listDatatable()
