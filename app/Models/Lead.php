@@ -50,6 +50,9 @@ class Lead extends Model
         'is_sod_on_date_allowed',
         'sod_max',
         'sod_min',
+        'sod_withdraw_amount',
+        'sod_commision_amount',
+        'sod_total_payment',
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)

@@ -347,11 +347,12 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     }
                     $('#lead-comment').val(lead.comment);
                     $('#client_person_id').val(lead.client_person_id);
-                    
+                    showContentIsValidate();
                     validateLeadEdit(); // Luego ejecuta validateLeadEdit
                     
                 
                     //changeOrigen(lead.channel_id);
+                    
                     
                     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
                     
@@ -403,8 +404,14 @@ window.checkDataLeadExist = function (valInput, id)
             let clientPerson = result.clientPerson;
             let isValidate = result.isValidate;
             $('#content-validaciones').html(result.contentValidaciones);
+            $('.perfil-cliente').each(function() {
+                $(this).attr('href', '/panel/client/' + clientPerson.id);
+            });
             if (isExist > 0 && isValidate == true) {
                 $('#client_person_id').val(clientPerson.id);
+                
+                
+
                 $('#content-servicio-kc').show();
                 getProductsByAgreementId(clientPerson.agreement_id, null)
 
@@ -428,7 +435,7 @@ window.checkDataLeadExist = function (valInput, id)
                 $('#lead-rfc').val(clientPerson.rfc);
                 $('#lead-email').val(clientPerson.email);
                 $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
-               
+                
                 
                 
             } else {
@@ -721,16 +728,58 @@ window.validateSoad = function()
                 $('#is_sod_on_date_allowed').val(1);
                 $('#sod_max').val(result.maximoRedondeado);
                 $('#sod_min').val(result.minimoRedondeado);
+              
         
                 $('#content-validaciones-soad-date').html(isSoadDate);
-                if (isSodOnDate == 1) {
+                console.log(isSodOnDate);
+                if (isSodOnDate == true) {
+                    console.log(isSodOnDate+'aqui');
                     $('#content-product').html(result.contentProductSod);
+                    //valores slider
+                    var slider = document.getElementById('slider');
+                    slider.min = result.minimoRedondeado;
+                    slider.max = result.maximoRedondeado;
+                    $('#valor-minimo').html(result.minimoRedondeado);
+                    $('#valor-maximo').html(result.maximoRedondeado);
+                    $('#valor-comision').html('$'+result.comision);
+                    $('#sod_commision_amount').val(result.comision);
+                    $('#valor-banco').html(result.bank_name);
+                    $('#valor-cuenta').html(result.cuenta);
+                    
+                    $('#content-product-select').show();
+                    
+
                 }
             }
         })
         .catch(e => {
         });
     }
+}
+
+if (document.getElementById('valor-slider')) {
+    function updateSliderValue() {
+        var slider = document.getElementById('slider');
+        var displayValue = document.getElementById('valor-slider');
+        
+        // Obtenemos el valor actual del slider
+        var sliderValue = parseFloat(slider.value);
+
+        // Actualizamos el contenido del span con el valor actual del slider
+        displayValue.innerHTML = '$' + sliderValue;
+        $('#sod_withdraw_amount').val(sliderValue);
+        
+        let comision = parseFloat($('#sod_commision_amount').val());
+        let total = sliderValue + comision;
+        $('#sod_total_payment').val(total);
+        $('#valor-total').html('$'+sliderValue);
+    }
+
+    // Agregar el listener al slider para detectar cambios
+    document.getElementById('slider').addEventListener('input', updateSliderValue);
+
+    // Opcional: actualizar el valor del span al cargar la página
+    window.addEventListener('DOMContentLoaded', updateSliderValue);
 }
 
 

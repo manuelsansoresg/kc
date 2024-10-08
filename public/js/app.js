@@ -2564,6 +2564,7 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
 
     $('#lead-comment').val(lead.comment);
     $('#client_person_id').val(lead.client_person_id);
+    showContentIsValidate();
     validateLeadEdit(); // Luego ejecuta validateLeadEdit
     //changeOrigen(lead.channel_id);
 
@@ -2608,6 +2609,9 @@ window.checkDataLeadExist = function (valInput, id) {
       var clientPerson = result.clientPerson;
       var isValidate = result.isValidate;
       $('#content-validaciones').html(result.contentValidaciones);
+      $('.perfil-cliente').each(function () {
+        $(this).attr('href', '/panel/client/' + clientPerson.id);
+      });
 
       if (isExist > 0 && isValidate == true) {
         $('#client_person_id').val(clientPerson.id);
@@ -2900,14 +2904,48 @@ window.validateSoad = function () {
         $('#sod_max').val(result.maximoRedondeado);
         $('#sod_min').val(result.minimoRedondeado);
         $('#content-validaciones-soad-date').html(isSoadDate);
+        console.log(isSodOnDate);
 
-        if (isSodOnDate == 1) {
-          $('#content-product').html(result.contentProductSod);
+        if (isSodOnDate == true) {
+          console.log(isSodOnDate + 'aqui');
+          $('#content-product').html(result.contentProductSod); //valores slider
+
+          var slider = document.getElementById('slider');
+          slider.min = result.minimoRedondeado;
+          slider.max = result.maximoRedondeado;
+          $('#valor-minimo').html(result.minimoRedondeado);
+          $('#valor-maximo').html(result.maximoRedondeado);
+          $('#valor-comision').html('$' + result.comision);
+          $('#sod_commision_amount').val(result.comision);
+          $('#valor-banco').html(result.bank_name);
+          $('#valor-cuenta').html(result.cuenta);
+          $('#content-product-select').show();
         }
       }
     })["catch"](function (e) {});
   }
 };
+
+if (document.getElementById('valor-slider')) {
+  var updateSliderValue = function updateSliderValue() {
+    var slider = document.getElementById('slider');
+    var displayValue = document.getElementById('valor-slider'); // Obtenemos el valor actual del slider
+
+    var sliderValue = parseFloat(slider.value); // Actualizamos el contenido del span con el valor actual del slider
+
+    displayValue.innerHTML = '$' + sliderValue;
+    $('#sod_withdraw_amount').val(sliderValue);
+    var comision = parseFloat($('#sod_commision_amount').val());
+    var total = sliderValue + comision;
+    $('#sod_total_payment').val(total);
+    $('#valor-total').html('$' + sliderValue);
+  }; // Agregar el listener al slider para detectar cambios
+
+
+  document.getElementById('slider').addEventListener('input', updateSliderValue); // Opcional: actualizar el valor del span al cargar la página
+
+  window.addEventListener('DOMContentLoaded', updateSliderValue);
+}
 
 $(document).ready( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
   return _regeneratorRuntime().wrap(function _callee2$(_context2) {

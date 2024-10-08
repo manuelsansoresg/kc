@@ -387,7 +387,26 @@ class LeadController extends Controller
             }
 
         }
-        return response()->json(['TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed, 'maximoRedondeado' => $maximoRedondeado, 'minimoRedondeado' => $minimoRedondeado, 'contentProductSod' => $contentProductSod, 'financialProduct' => $financialProduct->name]);
+        
+        // Obtenemos el valor de la CLABE
+        $clabe = $clientPerson->Bank_clabe;
+
+        // Verificamos que la longitud de la CLABE sea mayor a 4
+        if (strlen($clabe) > 4) {
+            // Reemplazamos todos los caracteres excepto los últimos 4 por asteriscos
+            $maskedClabe = str_repeat('*', strlen($clabe) - 4) . substr($clabe, -4);
+        } else {
+            // Si la CLABE tiene 4 caracteres o menos, la mostramos tal cual
+            $maskedClabe = $clabe;
+        }
+
+        $dataReturn = array(
+                    'TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed, 
+                    'maximoRedondeado' => $maximoRedondeado, 'minimoRedondeado' => $minimoRedondeado, 'contentProductSod' => $contentProductSod,
+                    'financialProduct' => $financialProduct->name, 'comision' => $financialProduct->sod_commission_amount, 'bank_name' => $clientPerson->bank_name,
+                    'cuenta' => $maskedClabe
+        );
+        return response()->json($dataReturn);
     }
 
     /**

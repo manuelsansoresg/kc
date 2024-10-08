@@ -184,16 +184,41 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <span class="preview-title-lg overline-title mt-5">Producto Preautorizado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
-                                                            <div class="col-12 mt-n4">
-                                                                <hr class="preview-hr">
-                                                                <div id="content-product"></div>
-                                                            </div>
-                                                            
-                                                       </div>
+                                                            <div id="content-product-select" style="display: none">
 
+                                                                <span class="preview-title-lg overline-title mt-5">Producto Preautorizado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
+                                                                <div class="col-12 mt-n4">
+                                                                    <hr class="preview-hr">
+                                                                    <div id="content-product"></div>
+                                                                    <div class="row">
+                                                                        <div class="col-12 mt-5">
+                                                                            <span class="preview-title-lg overline-title">Producto deseado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
+                                                                            <div class="col-12 mt-1">
+                                                                                <label for="customRange3" class="form-label">¿Cuanto deseas retirar?</label>
+                                                                                <input type="range" class="form-range" min="0" max="5" step="100" id="slider">
+                                                                            </div>
+                                                                            <div class="row">
+                                                                                <div class="col-12 col-md-6">$<span id="valor-minimo"></span> </div>
+                                                                                <div class="col-12 col-md-6 text-start text-md-end">$<span id="valor-maximo"></span></div>
+                                                                            </div>
+                                                                            <div class="row mt-4">
+                                                                                <div class="col-12">
+                                                                                    <p class="h6">RESUMEN:</p>
+                                                                                    <p>Monto a retirar : <span id="valor-slider" class="fw-bold">$15,000</span> <br>
+                                                                                    Comisión : <span id="valor-comision" class="fw-bold">$46.40</span> <br>
+                                                                                    Total a pagar : <span id="valor-total" class="fw-bold">$1,546</span> <br>
+                                                                                    Banco : <span id="valor-banco" class="fw-bold"></span> <br>
+                                                                                    Cuenta : <span id="valor-cuenta" class="fw-bold">*********12</span> <br>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                   </div>
+                                                                </div>
+                                                            </div>
+                                                          
+                                                        </div>
                                                         
-                                                        
+                                                       
 
                                                         <span class="preview-title-lg overline-title">Viabilidad</span>
                                                         <p class="text-primary">Este prospecto es <span class="text-viabilidad"></span>  </p>
@@ -336,6 +361,9 @@
                                                         <input type="hidden" name="data[is_sod_on_date_allowed]" id="is_sod_on_date_allowed" value="{{ $lead != null ? $lead->is_sod_on_date_allowed : null}}">
                                                         <input type="hidden" name="data[sod_max]" id="sod_max" value="{{ $lead != null ? $lead->sod_max : null}}">
                                                         <input type="hidden" name="data[sod_min]" id="sod_min" value="{{ $lead != null ? $lead->sod_min : null}}">
+                                                        <input type="hidden" name="data[sod_withdraw_amount]" id="sod_withdraw_amount" value="{{ $lead != null ? $lead->sod_withdraw_amount : null}}">
+                                                        <input type="hidden" name="data[sod_commision_amount]" id="sod_commision_amount" value="{{ $lead != null ? $lead->sod_commision_amount : null}}">
+                                                        <input type="hidden" name="data[sod_total_payment]" id="sod_total_payment" value="{{ $lead != null ? $lead->sod_total_payment : null}}">
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>
