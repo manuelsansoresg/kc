@@ -13,7 +13,9 @@ class Agreement extends Model
         'description',
         'status',
         'loan_available',
-        'sod_schedule_id'
+        'sod_schedule_id',
+        'agreement_term',
+        'agreement_term'
     ];
 
 

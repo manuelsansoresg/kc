@@ -64,6 +64,15 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="frm-product-name">*Vigencia</label>
+                                            <div class="form-control-wrap">
+                                               <input type="date" class="form-control" name="data[agreement_term]" id="agreement_term" required>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group"><label class="form-label">Status</label>
                                             <div class="form-control-select">
                                                 @php

@@ -720,7 +720,8 @@ $().ready(function () {
       var agreement = result.agreement;
       var financials = result.financials;
       $('#agreement-name').val(agreement.name);
-      $('#agreement-description').val(agreement.description); // Limpia las selecciones actuales en el select múltiple
+      $('#agreement-description').val(agreement.description);
+      $('#agreement_term').val(agreement.agreement_term); // Limpia las selecciones actuales en el select múltiple
 
       $('#agreement-financials').val(null).trigger('change');
       $('#agreement-status').val(agreement.status).trigger("change"); // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
