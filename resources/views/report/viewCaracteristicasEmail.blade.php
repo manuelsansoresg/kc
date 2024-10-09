@@ -144,7 +144,7 @@
                             <div class="col-12 col-md-6 mt-2">
                                 <span class="profile-ud-label fw-bold">Monto máximo de crédito:</span>
                                 <span class="profile-ud-value">
-                                    {{ $caracteristicas['max_credit_amount'] }}
+                                    {{ $caracteristicas['max_loan_ammount'] }}
                                 </span>
                             </div>
                             <div class="col-12 col-md-6 mt-2">

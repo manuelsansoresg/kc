@@ -22,7 +22,7 @@ class FinancialProduct extends Model
 
         'collateral_id',
         'periodicity_id',
-        'max_credit_amount',
+        'max_loan_ammount',
         'min_deadline_month',
         'max_deadline_month',
         'type_interest',
@@ -190,7 +190,7 @@ class FinancialProduct extends Model
         $caracteristicas = array(
             'colateral' => $colateral,
             'periodicidad' => $periodicity,
-            'max_credit_amount' => format_price($product->max_credit_amount),
+            'max_loan_ammount' => format_price($product->max_loan_ammount),
             'min_loan_amount' => format_price($product->min_loan_amount),
             'min_deadline_month' => $product->min_deadline_month,
             'max_deadline_month' => $product->max_deadline_month,

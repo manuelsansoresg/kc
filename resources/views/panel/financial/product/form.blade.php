@@ -459,7 +459,7 @@
 
                                                         $collateral_id = $financial_product != null ? $financial_product->collateral_id : '';
                                                         $periodicity_id = $financial_product != null ? $financial_product->periodicity_id : '';
-                                                        $max_credit_amount = $financial_product != null ? $financial_product->max_credit_amount : '';
+                                                        $max_loan_ammount = $financial_product != null ? $financial_product->max_loan_ammount : '';
 
                                                         $min_deadline_month = $financial_product != null ? $financial_product->min_deadline_month : '';
                                                         $max_deadline_month = $financial_product != null ? $financial_product->max_deadline_month : '';
@@ -508,7 +508,7 @@
                                                                         <select name="periodicity_id[]"
                                                                             id="product_periodicity_id"
                                                                             class="form-select select2multiple"
-                                                                            multiple="multiple" data-search="on">
+                                                                             data-search="on">
                                                                             @foreach ($periodicity_products as $key => $periodicity_product)
                                                                                 <option value="{{ $key }}">
                                                                                     {{ $periodicity_product }}
@@ -523,9 +523,9 @@
                                                                     <label class="form-label" for="frm-product-name">Monto
                                                                         máximo de crédito</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="number" name="max_credit_amount"
+                                                                        <input type="number" name="max_loan_ammount"
                                                                             class="form-control"
-                                                                            value="{{ $max_credit_amount }}">
+                                                                            value="{{ $max_loan_ammount }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
