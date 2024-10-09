@@ -113,7 +113,9 @@ class FinancialProduct extends Model
         'annual_interest_rate',
         'daily_interest_rate',
         'loan_available',
-        'product_id'
+        'product_id',
+        'refinancing_allowed',
+        'additional_allowed',
     ];
 
     public static function getbyIdFirst($product_id)

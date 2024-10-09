@@ -171,6 +171,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            
 
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
@@ -201,6 +202,80 @@
                                                                                         for="is_tramitar_pending">No</label>
                                                                                 </div>
                                                                             </li>
+
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Permite refinanciamiento</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <ul
+                                                                            class="custom-control-group g-3 align-center flex-wrap">
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio"
+                                                                                        class="custom-control-input"
+                                                                                        id="refinancing_allowed_active"
+                                                                                        name="refinancing_allowed" value="1"
+                                                                                        {{ $financial_product != null && $financial_product->refinancing_allowed == 1 ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label"
+                                                                                        for="refinancing_allowed_active">Sí
+                                                                                    </label>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio"
+                                                                                        class="custom-control-input"
+                                                                                        id="refinancing_allowed_pending"
+                                                                                        name="refinancing_allowed" value="0"
+                                                                                        {{ $financial_product != null && $financial_product->refinancing_allowed === 0 ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label"
+                                                                                        for="refinancing_allowed_pending">No</label>
+                                                                                </div>
+                                                                            </li>
+
+                                                                           
+
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">&nbsp;</div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Permite crédito adicional</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <ul
+                                                                            class="custom-control-group g-3 align-center flex-wrap">
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio"
+                                                                                        class="custom-control-input"
+                                                                                        id="additional_allowed_active"
+                                                                                        name="additional_allowed" value="1"
+                                                                                        {{ $financial_product != null && $financial_product->additional_allowed == 1 ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label"
+                                                                                        for="additional_allowed_active">Sí
+                                                                                    </label>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio"
+                                                                                        class="custom-control-input"
+                                                                                        id="additional_allowed_pending"
+                                                                                        name="additional_allowed" value="0"
+                                                                                        {{ $financial_product != null && $financial_product->additional_allowed === 0 ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label"
+                                                                                        for="additional_allowed_pending">No</label>
+                                                                                </div>
+                                                                            </li>
+
+                                                                           
 
                                                                         </ul>
                                                                     </div>
