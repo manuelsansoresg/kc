@@ -412,7 +412,7 @@ class FinancialProduct extends Model
     public static function saveEdit($request)
     {
         // Elementos a excluir del arreglo $request
-        $excludeKeys = ['_token', 'product_id', 'is_required', 'principal_pay', 'periodicity_id'];
+        $excludeKeys = ['_token', 'product_id', 'is_required', 'principal_pay', 'periodicity_id', 'fp_terms'];
 
         // Crea un nuevo arreglo que excluye los elementos especificados
         $filteredRequest = $request->except($excludeKeys);
@@ -451,11 +451,14 @@ class FinancialProduct extends Model
         }
         //*guardar las opciones multiples
         if (isset($request->periodicity_id)) {
-            $perodicities = $request->periodicity_id;
-            $principal_pays = $request->principal_pay;
+            $perodicities   = $request->periodicity_id;
+            $principal_pays = isset($request->principal_pay)? $request->principal_pay : null;
+            $fp_terms       = isset($request->fp_terms)? $request->fp_terms : null;
             
             $get_periodicities = ProductPeriodicity::where('product_id', $financial_product->id)->get();
-            $get_payments = ProductPaymentMethod::where('product_id', $financial_product->id)->get();
+            $get_payments      = ProductPaymentMethod::where('product_id', $financial_product->id)->get();
+            $getFPTerms        = FpTerm::where('financial_product_id', $financial_product->id)->get();
+
             foreach ($get_periodicities as $get_periodicity) {
                 ProductPeriodicity::where([
                                         'product_id'=> $get_periodicity->product_id,
@@ -467,6 +470,10 @@ class FinancialProduct extends Model
                                         'product_id'=> $get_payment->product_id,
                                         ])->delete();
             }
+            
+            FpTerm::where([
+                    'financial_product_id'=> $financial_product->id,
+                    ])->delete();
            
            
     
@@ -479,13 +486,26 @@ class FinancialProduct extends Model
                 );
             }
            
-            foreach ($principal_pays as $principal_pay) {
-                ProductPaymentMethod::create(
-                    [
-                        'payment_method_id' => $principal_pay,
-                        'product_id' => $financial_product->id,
-                    ]
-                );
+            if ($principal_pays != null) {
+                foreach ($principal_pays as $principal_pay) {
+                    ProductPaymentMethod::create(
+                        [
+                            'payment_method_id' => $principal_pay,
+                            'product_id' => $financial_product->id,
+                        ]
+                    );
+                }
+            }
+            
+            if ($fp_terms != null) {
+                foreach ($fp_terms as $fp_term) {
+                    FpTerm::create(
+                        [
+                            'financial_product_id' => $financial_product->id,
+                            'term_id' => $fp_term,
+                        ]
+                    );
+                }
             }
         }
 

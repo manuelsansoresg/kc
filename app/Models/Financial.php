@@ -52,6 +52,7 @@ class Financial extends Model
 
     public static function saveEdit($request)
     {
+        
         if ($request->financial_id == null) {
             $financial = Financial::create($request->except(['_token', 'financial_id', 'logo', 'is_required']));
         } else {

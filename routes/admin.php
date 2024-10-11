@@ -187,6 +187,8 @@ Route::group(['prefix' => 'financial-product'], function () {
     Route::get('{financial_id}/create', ['\App\Http\Controllers\Panel\Financial\FinancialProductController', 'create'])->middleware('auth');
     Route::get('{product_id}/getPeriodicityAndPaymentMethod', ['\App\Http\Controllers\Panel\Financial\FinancialProductController', 'getPeriodicityAndPaymentMethod'])->middleware('auth');
     Route::get('{product}/getTramite', ['\App\Http\Controllers\Panel\Financial\FinancialProductController', 'getTramite'])->middleware('auth');
+    
+    Route::get('{periodicityId}/{productId}/terms/get', ['\App\Http\Controllers\Panel\Financial\FinancialProductController', 'getTerms'])->middleware('auth');
 });
 
 Route::get('{section}/{id}/move', ['\App\Http\Controllers\Panel\PanelController', 'move'])->middleware('auth');

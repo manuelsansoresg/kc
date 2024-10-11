@@ -57,6 +57,8 @@ $( "#frm-financial-data-pricacy" ).submit(function( event ) {
         });
   });
 
+
+
   $( "#frm-financial-buro" ).submit(function( event ) {
     event.preventDefault();
     const new_form = document.getElementById("frm-financial-buro");

@@ -508,6 +508,7 @@
                                                                         <select name="periodicity_id[]"
                                                                             id="product_periodicity_id"
                                                                             class="form-select select2multiple"
+                                                                            onchange="setFPTerms()"
                                                                              data-search="on">
                                                                             @foreach ($periodicity_products as $key => $periodicity_product)
                                                                                 <option value="{{ $key }}">
@@ -538,6 +539,22 @@
                                                                         <input type="number" name="min_loan_amount"
                                                                             class="form-control"
                                                                             value="{{ $min_loan_amount }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="frm-product-name">Plazos</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <select name="fp_terms[]"
+                                                                        id="fp_terms"
+                                                                        class="form-select select2multiple"
+                                                                        multiple="multiple"
+                                                                         data-search="on">
+                                                                        
+                                                                    </select>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
