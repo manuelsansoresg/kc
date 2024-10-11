@@ -82,7 +82,8 @@ class ClientPerson extends Model
         'daily_income_adjusted',
         'credit_active',
         'active_discount',
-        'periodicity_id'
+        'periodicity_id',
+        'pc_percentage'
     ];
 
     public static function listDatatable()
