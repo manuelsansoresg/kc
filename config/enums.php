@@ -258,5 +258,12 @@ return [
         3 => 15,
         4 => 30
     ),
+    'tipo_tramite' => array(
+        1 => 'Crédito nuevo',
+        2 => 'Crédito adicional',
+        3 => 'Refinanciamiento',
+        4 => 'Soluciona tu deuda',
+        5 => 'Salario On-Demand',
+    ),
     
 ];
