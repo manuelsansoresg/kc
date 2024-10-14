@@ -83,7 +83,8 @@ class ClientPerson extends Model
         'credit_active',
         'active_discount',
         'periodicity_id',
-        'pc_percentage'
+        'pc_percentage',
+        'payment_capacity'
     ];
 
     public static function listDatatable()
