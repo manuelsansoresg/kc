@@ -116,6 +116,9 @@ class FinancialProduct extends Model
         'product_id',
         'refinancing_allowed',
         'additional_allowed',
+        'min_payment',
+        'max_term',
+
     ];
 
     public static function getbyIdFirst($product_id)
