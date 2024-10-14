@@ -253,9 +253,9 @@ return [
     ),
     
     'periodicidad_valores' => array(
-        1 => 15,
+        1 => 7,
         2 => 14,
-        3 => 7,
+        3 => 15,
         4 => 30
     ),
     
