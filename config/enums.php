@@ -252,4 +252,11 @@ return [
         4 => 'Convenio',
     ),
     
+    'periodicidad_valores' => array(
+        1 => 15,
+        2 => 14,
+        3 => 7,
+        4 => 30
+    ),
+    
 ];

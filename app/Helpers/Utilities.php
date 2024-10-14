@@ -192,3 +192,10 @@ if (!function_exists('timeRest')) {
     }
 }
 
+function removeDecimalToPrice($price)
+{
+    $newPrice = str_replace('$', '', $price);
+    $newPrice = str_replace(',', '', $newPrice);
+
+    return $newPrice;
+}
