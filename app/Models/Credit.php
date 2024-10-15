@@ -108,6 +108,7 @@ class Credit extends Model
         'refinance_adjustment',
         'third_party_adjustment',
         'net_amount',
+        'tramit_type'
         
     ];
 

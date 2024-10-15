@@ -2946,6 +2946,7 @@ window.validateSoad = function () {
   $('#content-validaciones-soad').html('');
   $('#content-validaciones-soad-date').html('');
   $('#content-product').html('');
+  $('#content_tramit_type').hide();
 
   if ($('#financial_product_id').val() != null) {
     var clientPersonId = $('#client_person_id').val();
@@ -2953,6 +2954,11 @@ window.validateSoad = function () {
     var productId = $('#financial_product_id').val();
     axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + "/soad/get").then(function (response) {
       var result = response.data;
+      var typeProductId = result.type_product_id;
+
+      if (typeProductId == 1) {
+        $('#content_tramit_type').show();
+      }
 
       if (result.financialProduct == 'Salario On-Demand') {
         var TextSoad = result.TextSoad;

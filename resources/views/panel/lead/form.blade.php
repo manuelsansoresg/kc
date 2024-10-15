@@ -173,14 +173,27 @@
                                                             <div class="col-12 mt-n4">
                                                                 <hr class="preview-hr">
                                                             </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label">Producto financiero</label>
-                                                                    <p class="small">Servicio KC</p>
-                                                                    <div class="form-control-wrap">
-                                                                        <select class="form-select js-select2" name="data[financial_product_id]" id="financial_product_id"  data-search="on" onchange="validateSoad()">
-                                                                        
-                                                                        </select>
+                                                            <div class="row">
+
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Producto financiero</label>
+                                                                        <p class="small">Servicio KC</p>
+                                                                        <div class="form-control-wrap">
+                                                                            <select class="form-select js-select2" name="data[financial_product_id]" id="financial_product_id"  data-search="on" onchange="validateSoad()">
+                                                                            
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="col-md-6" id="content_tramit_type" style="display: none">
+                                                                    <div class="form-group">
+                                                                        <label class="form-label">Tipo de trámite</label>
+                                                                        <p class="small">&nbsp;</p>
+                                                                        <div class="form-control-wrap">
+                                                                            <select name="" id="" class="form-control"></select>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>

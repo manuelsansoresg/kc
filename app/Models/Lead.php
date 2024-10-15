@@ -53,6 +53,7 @@ class Lead extends Model
         'sod_withdraw_amount',
         'sod_commision_amount',
         'sod_total_payment',
+        'tramit_type'
     ];
 
     public static function tagLead ($lead_id, $label, $is_array = false)

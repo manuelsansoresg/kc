@@ -702,6 +702,7 @@ window.validateSoad = function()
     $('#content-validaciones-soad').html('');
     $('#content-validaciones-soad-date').html('');
     $('#content-product').html('');
+    $('#content_tramit_type').hide();
     if ($('#financial_product_id').val() != null) {
         
         let clientPersonId = $('#client_person_id').val();
@@ -713,11 +714,19 @@ window.validateSoad = function()
         .then(function (response) {
             
             let result = response.data;
+            let typeProductId = result.type_product_id;
+
+            if (typeProductId == 1) {
+                $('#content_tramit_type').show();
+            }
+
             if (result.financialProduct == 'Salario On-Demand' ) {
                 let TextSoad = result.TextSoad;
                 let soadActive = result.soadActive;
                 let isSoadDate = result.isSoadDate;
                 let isSodOnDate = result.isSodOnDate;
+                
+
                 $('#is_free_of_active_sod').val(0);
                 $('#is_sod_on_date_allowed').val(0);
                 if (soadActive != 0) {
@@ -748,8 +757,10 @@ window.validateSoad = function()
                     
                     $('#content-product-select').show();
                     
-
+                    
                 }
+                
+                
             }
         })
         .catch(e => {

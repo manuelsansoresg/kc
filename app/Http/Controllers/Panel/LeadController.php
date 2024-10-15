@@ -400,11 +400,13 @@ class LeadController extends Controller
             $maskedClabe = $clabe;
         }
 
+        //validacion $type_product_id
+
         $dataReturn = array(
                     'TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed, 
                     'maximoRedondeado' => $maximoRedondeado, 'minimoRedondeado' => $minimoRedondeado, 'contentProductSod' => $contentProductSod,
                     'financialProduct' => $financialProduct->name, 'comision' => $financialProduct->sod_commission_amount, 'bank_name' => $clientPerson->bank_name,
-                    'cuenta' => $maskedClabe
+                    'cuenta' => $maskedClabe, 'type_product_id' => $financialProduct->type_product_id
         );
         return response()->json($dataReturn);
     }
