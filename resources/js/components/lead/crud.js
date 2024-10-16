@@ -696,6 +696,52 @@ window.modalRegisterAction = function (id_rel) {
     $('#modal-register-action').modal('show');
 }
 
+//llenar tipo de tramite
+function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
+{
+    const selectElement = document.getElementById('tramit_type');
+    selectElement.options.length = 0; // Limpiar el select
+    $('#content-validaciones-soad-tramite').html('');
+    $('#content-error-producto-preautorizado').hide();
+    $('#producto-deseado').hide();
+    axios
+    .get("/panel/lead/" + clientPersonId +"/"+financialProductId+"/tramite/get")
+    .then(function (response) {
+        let result = response.data;
+        //let sodIsTramite = result.sodIsTramite;
+        let sodMessage = result.sodMessage;
+        let sodTramites = result.sodTramites;
+        let sodIsTramite = false;
+        console.log(sodTramites);
+        if (sodIsTramite == true) {
+            
+            $('#content-product-select').hide();
+            Object.keys(sodTramites).forEach(key => {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = sodTramites[key];
+                            selectElement.appendChild(option);
+                        });
+        } else {
+            $('#content-product-select').show();
+            $('#content-error-producto-preautorizado').show();
+        }
+    
+        if (tipoTramiteId != 'null') {
+            $('#tramit_type').val(tipoTramiteId).trigger("change");
+        }
+        if (sodIsTramite != true) {
+            $('#content-validaciones-soad-tramite').html(sodMessage);
+        }
+    })
+    .catch(e => {
+
+    });
+
+
+    
+}
+
 //validar soad activo y si existe la fecha en bd
 window.validateSoad = function()
 {
@@ -703,21 +749,28 @@ window.validateSoad = function()
     $('#content-validaciones-soad-date').html('');
     $('#content-product').html('');
     $('#content_tramit_type').hide();
+    $('#content-validaciones-soad-tramite').html('');
+
     if ($('#financial_product_id').val() != null) {
         
         let clientPersonId = $('#client_person_id').val();
         let agreement = $('#lead-origin-agreement').val();
         let productId = $('#financial_product_id').val();
-      
+        $('#content-error-producto-preautorizado').hide();
         axios
         .get("/panel/lead/"+clientPersonId+"/"+agreement+"/"+productId+"/soad/get")
         .then(function (response) {
             
             let result = response.data;
             let typeProductId = result.type_product_id;
+            
+
 
             if (typeProductId == 1) {
                 $('#content_tramit_type').show();
+                //llenar el arreglo de tipo de trámite
+                setSelectTramite(clientPersonId, productId, null);
+                
             }
 
             if (result.financialProduct == 'Salario On-Demand' ) {
@@ -744,6 +797,7 @@ window.validateSoad = function()
                 if (isSodOnDate == true) {
                     console.log(isSodOnDate+'aqui');
                     $('#content-product').html(result.contentProductSod);
+                    $('#producto-deseado').show();
                     //valores slider
                     var slider = document.getElementById('slider');
                     slider.min = result.minimoRedondeado;
@@ -758,6 +812,8 @@ window.validateSoad = function()
                     $('#content-product-select').show();
                     
                     
+                } else {
+                    $('#producto-deseado').hide();
                 }
                 
                 
@@ -782,7 +838,12 @@ if (document.getElementById('valor-slider')) {
         
         let comision = parseFloat($('#sod_commision_amount').val());
         let total = sliderValue + comision;
-        $('#sod_total_payment').val(total);
+        //console.log(total);
+        if (!isNaN(total)) {
+            $('#sod_total_payment').val(total);
+        } else {
+            $('#sod_total_payment').val(0); // O puedes asignar un valor por defecto si es NaN
+        }
         $('#valor-total').html('$'+sliderValue);
     }
 

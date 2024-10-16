@@ -192,7 +192,7 @@
                                                                         <label class="form-label">Tipo de trámite</label>
                                                                         <p class="small">&nbsp;</p>
                                                                         <div class="form-control-wrap">
-                                                                            <select name="" id="" class="form-control"></select>
+                                                                            <select name="data[tramit_type]" id="tramit_type" class="form-control js-select2" data-search="on"></select>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -202,8 +202,50 @@
                                                                 <span class="preview-title-lg overline-title mt-5">Producto Preautorizado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
                                                                 <div class="col-12 mt-n4">
                                                                     <hr class="preview-hr">
+                                                                    <div id="content-error-producto-preautorizado" style="display: none">
+                                                                        <span class="text-danger">No se puede realizar ningún trámite, revisa las validaciones.</span>
+                                                                    </div>
+                                                                    <div class="row" style="display: none">
+                                                                        <div class="col-md-6 mt-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Monto máximo</label>
+                                                                                
+                                                                                <div class="form-control-wrap">
+                                                                                    <input type="text" class="form-control"  disabled>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6 mt-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Plazo máximo</label>
+                                                                                
+                                                                                <div class="form-control-wrap">
+                                                                                    <input type="text" class="form-control"  disabled>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6 mt-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Periodicidad</label>
+                                                                                
+                                                                                <div class="form-control-wrap">
+                                                                                    <input type="text" class="form-control"  disabled>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6 mt-3">
+                                                                            <div class="form-group">
+                                                                                <label class="form-label">Pago periodico</label>
+                                                                                
+                                                                                <div class="form-control-wrap">
+                                                                                    <input type="text" class="form-control"  disabled>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    
                                                                     <div id="content-product"></div>
-                                                                    <div class="row">
+                                                                    <div class="row" id="producto-deseado" style="display: none">
                                                                         <div class="col-12 mt-5">
                                                                             <span class="preview-title-lg overline-title">Producto deseado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
                                                                             <div class="col-12 mt-1">
@@ -365,6 +407,7 @@
                                                         <div id="content-validaciones"></div>
                                                         <div id="content-validaciones-soad"></div>
                                                         <div id="content-validaciones-soad-date"></div>
+                                                        <div id="content-validaciones-soad-tramite"></div>
                 
                                                         <input type="hidden" id="lead_id" name="lead_id" value="{{ $lead_id }}">
                                                         <input type="hidden" id="isValidateCellphone"  value="false">

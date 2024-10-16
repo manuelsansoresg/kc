@@ -2939,7 +2939,46 @@ window.modalPasswod = function (user_id) {
 window.modalRegisterAction = function (id_rel) {
   $('#register-action-id-rel').val(id_rel);
   $('#modal-register-action').modal('show');
-}; //validar soad activo y si existe la fecha en bd
+}; //llenar tipo de tramite
+
+
+function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
+  var selectElement = document.getElementById('tramit_type');
+  selectElement.options.length = 0; // Limpiar el select
+
+  $('#content-validaciones-soad-tramite').html('');
+  $('#content-error-producto-preautorizado').hide();
+  $('#producto-deseado').hide();
+  axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/tramite/get").then(function (response) {
+    var result = response.data; //let sodIsTramite = result.sodIsTramite;
+
+    var sodMessage = result.sodMessage;
+    var sodTramites = result.sodTramites;
+    var sodIsTramite = false;
+    console.log(sodTramites);
+
+    if (sodIsTramite == true) {
+      $('#content-product-select').hide();
+      Object.keys(sodTramites).forEach(function (key) {
+        var option = document.createElement('option');
+        option.value = key;
+        option.textContent = sodTramites[key];
+        selectElement.appendChild(option);
+      });
+    } else {
+      $('#content-product-select').show();
+      $('#content-error-producto-preautorizado').show();
+    }
+
+    if (tipoTramiteId != 'null') {
+      $('#tramit_type').val(tipoTramiteId).trigger("change");
+    }
+
+    if (sodIsTramite != true) {
+      $('#content-validaciones-soad-tramite').html(sodMessage);
+    }
+  })["catch"](function (e) {});
+} //validar soad activo y si existe la fecha en bd
 
 
 window.validateSoad = function () {
@@ -2947,17 +2986,21 @@ window.validateSoad = function () {
   $('#content-validaciones-soad-date').html('');
   $('#content-product').html('');
   $('#content_tramit_type').hide();
+  $('#content-validaciones-soad-tramite').html('');
 
   if ($('#financial_product_id').val() != null) {
     var clientPersonId = $('#client_person_id').val();
     var agreement = $('#lead-origin-agreement').val();
     var productId = $('#financial_product_id').val();
+    $('#content-error-producto-preautorizado').hide();
     axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + "/soad/get").then(function (response) {
       var result = response.data;
       var typeProductId = result.type_product_id;
 
       if (typeProductId == 1) {
-        $('#content_tramit_type').show();
+        $('#content_tramit_type').show(); //llenar el arreglo de tipo de trámite
+
+        setSelectTramite(clientPersonId, productId, null);
       }
 
       if (result.financialProduct == 'Salario On-Demand') {
@@ -2981,7 +3024,8 @@ window.validateSoad = function () {
 
         if (isSodOnDate == true) {
           console.log(isSodOnDate + 'aqui');
-          $('#content-product').html(result.contentProductSod); //valores slider
+          $('#content-product').html(result.contentProductSod);
+          $('#producto-deseado').show(); //valores slider
 
           var slider = document.getElementById('slider');
           slider.min = result.minimoRedondeado;
@@ -2993,6 +3037,8 @@ window.validateSoad = function () {
           $('#valor-banco').html(result.bank_name);
           $('#valor-cuenta').html(result.cuenta);
           $('#content-product-select').show();
+        } else {
+          $('#producto-deseado').hide();
         }
       }
     })["catch"](function (e) {});
@@ -3009,8 +3055,14 @@ if (document.getElementById('valor-slider')) {
     displayValue.innerHTML = '$' + sliderValue;
     $('#sod_withdraw_amount').val(sliderValue);
     var comision = parseFloat($('#sod_commision_amount').val());
-    var total = sliderValue + comision;
-    $('#sod_total_payment').val(total);
+    var total = sliderValue + comision; //console.log(total);
+
+    if (!isNaN(total)) {
+      $('#sod_total_payment').val(total);
+    } else {
+      $('#sod_total_payment').val(0); // O puedes asignar un valor por defecto si es NaN
+    }
+
     $('#valor-total').html('$' + sliderValue);
   }; // Agregar el listener al slider para detectar cambios
 

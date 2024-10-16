@@ -50,8 +50,6 @@ class LeadController extends Controller
     public function index()
     {
         //Transaction::setTotalCapital(9);
-       
-
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
         if ($is_financiera === true) {
@@ -342,20 +340,20 @@ class LeadController extends Controller
 
     public function getSoad(ClientPerson $clientPerson, Agreement $agreement, FinancialProduct $financialProduct)
     {
-        $textSoad = '<p> Validación Crédito Preautorizado / SOD Activo /<span  class="text-primary"> OK: <br>  Prospecto No tiene un Salario On-Demand activo
+        $textSoad = '<p> Validación Crédito Preautorizado / SOD Activo /<span  class="text-primary"> <br> OK:   Prospecto No tiene un Salario On-Demand activo
  </span> </p>';
         if ($clientPerson->sod_active == 1) {
-            $textSoad = '<p>Validación Crédito Preautorizado / SOD Activo / <span class="text-danger"> FAIL: <br> Prospecto No tiene un Salario On-Demand activo</p>';
+            $textSoad = '<p>Validación Crédito Preautorizado / SOD Activo / <span class="text-danger"> <br>FAIL: Prospecto No tiene un Salario On-Demand activo</p>';
         }
         //validar soad en fecha
         $getSodName = SodScheduleName::find($agreement->id);
-        $isSoadDate = '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-danger"> FAIL: <br> Solicitud fuera del rango de fechas </span> <p>';
+        $isSoadDate = '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-danger"> <br>FAIL: Solicitud fuera del rango de fechas </span> <p>';
         $is_sod_on_date_allowed = false;
         if ($getSodName != null) {
             $nameField              = "schedule_$getSodName->id";
             $alias                  = "schedule_$getSodName->id as schedule";
             $getDate                = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
-            $isSoadDate             = $getDate->schedule == 1 ?  '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> OK: <br> Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate;
+            $isSoadDate             = $getDate->schedule == 1 ?  '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> <br>OK: Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate;
             //dd($agreement->id, $getDate);
 
             $is_sod_on_date_allowed = $getDate->schedule == 1 ? true : false;
@@ -382,6 +380,9 @@ class LeadController extends Controller
             $minimo = $clientPerson->daily_income_adjusted * 1;
             $minimoRedondeado = floor($minimo / 100) * 100;
             $contentProductSod = '<p class="text-danger"> El prospecto no puede tramitar un salario On-Demand. <br> Revisa las validaciones </p>';
+
+            
+
             if ( $getDate->schedule == 1) {
                 $contentProductSod =  \View::make('panel.lead.product_sod ', ['minimo' => $minimoRedondeado, 'maximo' => $minimoRedondeado])->render();
             }
@@ -399,14 +400,30 @@ class LeadController extends Controller
             // Si la CLABE tiene 4 caracteres o menos, la mostramos tal cual
             $maskedClabe = $clabe;
         }
-
-        //validacion $type_product_id
-
+        $validateSod = Lead::validateSod($clientPerson, $financialProduct);
+        
         $dataReturn = array(
                     'TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed, 
                     'maximoRedondeado' => $maximoRedondeado, 'minimoRedondeado' => $minimoRedondeado, 'contentProductSod' => $contentProductSod,
                     'financialProduct' => $financialProduct->name, 'comision' => $financialProduct->sod_commission_amount, 'bank_name' => $clientPerson->bank_name,
-                    'cuenta' => $maskedClabe, 'type_product_id' => $financialProduct->type_product_id
+                    'cuenta' => $maskedClabe, 'type_product_id' => $financialProduct->type_product_id, 
+        );
+        return response()->json($dataReturn);
+    }
+
+    public function getTramite(ClientPerson $clientPerson, FinancialProduct $financialProduct)
+    {
+        //validaciones sod
+        $validateSod = Lead::validateSod($clientPerson, $financialProduct);
+        $tramites = array();
+        if ($validateSod['isTramite'] == true) {
+           
+            foreach ($validateSod['tramite'] as $getTramite) {
+                $tramites[$getTramite] = config('enums.tipo_tramite')[$getTramite];
+            }
+        }
+        $dataReturn = array(
+            'sodIsTramite' => $validateSod['isTramite'], 'sodMessage' => $validateSod['message'],'sodTramites' => $tramites
         );
         return response()->json($dataReturn);
     }
