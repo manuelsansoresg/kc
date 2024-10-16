@@ -708,11 +708,9 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
     .get("/panel/lead/" + clientPersonId +"/"+financialProductId+"/tramite/get")
     .then(function (response) {
         let result = response.data;
-        //let sodIsTramite = result.sodIsTramite;
+        let sodIsTramite = result.sodIsTramite;
         let sodMessage = result.sodMessage;
         let sodTramites = result.sodTramites;
-        let sodIsTramite = false;
-        console.log(sodTramites);
         if (sodIsTramite == true) {
             
             $('#content-product-select').hide();

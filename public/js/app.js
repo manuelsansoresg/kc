@@ -2950,12 +2950,10 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
   $('#content-error-producto-preautorizado').hide();
   $('#producto-deseado').hide();
   axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/tramite/get").then(function (response) {
-    var result = response.data; //let sodIsTramite = result.sodIsTramite;
-
+    var result = response.data;
+    var sodIsTramite = result.sodIsTramite;
     var sodMessage = result.sodMessage;
     var sodTramites = result.sodTramites;
-    var sodIsTramite = false;
-    console.log(sodTramites);
 
     if (sodIsTramite == true) {
       $('#content-product-select').hide();
