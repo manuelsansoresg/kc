@@ -192,7 +192,7 @@
                                                                         <label class="form-label">Tipo de trámite</label>
                                                                         <p class="small">&nbsp;</p>
                                                                         <div class="form-control-wrap">
-                                                                            <select name="data[tramit_type]" id="tramit_type" class="form-control js-select2" data-search="on"></select>
+                                                                            <select name="data[tramit_type]" id="tramit_type" class="form-control js-select2" data-search="on" onchange="changeTramite()"></select>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -205,13 +205,13 @@
                                                                     <div id="content-error-producto-preautorizado" style="display: none">
                                                                         <span class="text-danger">No se puede realizar ningún trámite, revisa las validaciones.</span>
                                                                     </div>
-                                                                    <div class="row" style="display: none">
+                                                                    <div class="row" style="display: none" id="content-refinanciado">
                                                                         <div class="col-md-6 mt-3">
                                                                             <div class="form-group">
                                                                                 <label class="form-label">Monto máximo</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control"  disabled>
+                                                                                    <input type="text" class="form-control" id="monto-maximo"  disabled>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -220,7 +220,7 @@
                                                                                 <label class="form-label">Plazo máximo</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control"  disabled>
+                                                                                    <input type="text" class="form-control" id="plazo-maximo"  disabled>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -229,7 +229,7 @@
                                                                                 <label class="form-label">Periodicidad</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control"  disabled>
+                                                                                    <input type="text" class="form-control" id="periodicidad"  disabled>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -238,7 +238,7 @@
                                                                                 <label class="form-label">Pago periodico</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control"  disabled>
+                                                                                    <input type="text" class="form-control" id="pago-periodico"  disabled>
                                                                                 </div>
                                                                             </div>
                                                                         </div>

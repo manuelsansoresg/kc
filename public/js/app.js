@@ -2972,11 +2972,34 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
       $('#tramit_type').val(tipoTramiteId).trigger("change");
     }
 
-    if (sodIsTramite != true) {
-      $('#content-validaciones-soad-tramite').html(sodMessage);
-    }
+    $('#content-validaciones-soad-tramite').html(sodMessage);
   })["catch"](function (e) {});
-} //validar soad activo y si existe la fecha en bd
+} //contenido tramite al cambiar el select si selecciona refinanciamiento
+
+
+window.changeTramite = function () {
+  var tramit_type = $('#tramit_type').val();
+  var clientPersonId = $('#client_person_id').val();
+  var productId = $('#financial_product_id').val();
+  $('#content-product-select').hide();
+  $('#content-refinanciado').hide();
+
+  if (tramit_type == 3) {
+    axios.get("/panel/lead/" + clientPersonId + "/" + productId + "/refinanciamiento/get").then(function (response) {
+      var result = response.data;
+      var montoMaximo = result.montoMaximo;
+      var plazoMaximo = result.plazoMaximo;
+      var periodicidad = result.periodicidad;
+      var payment = result.payment;
+      $('#monto-maximo').val(montoMaximo);
+      $('#plazo-maximo').val(plazoMaximo);
+      $('#periodicidad').val(periodicidad);
+      $('#pago-periodico').val(payment);
+      $('#content-refinanciado').show();
+      $('#content-product-select').show();
+    })["catch"](function (e) {});
+  }
+}; //validar soad activo y si existe la fecha en bd
 
 
 window.validateSoad = function () {

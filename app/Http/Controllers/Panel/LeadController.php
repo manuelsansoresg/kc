@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Exports\LeadExport;
 use App\Http\Controllers\Controller;
+use App\Lib\CalculadoraCredito;
 use App\Lib\CNubarium;
 use App\Lib\Csendgrid;
 use App\Lib\Manychat;
@@ -426,6 +427,24 @@ class LeadController extends Controller
             'sodIsTramite' => $validateSod['isTramite'], 'sodMessage' => $validateSod['message'],'sodTramites' => $tramites
         );
         return response()->json($dataReturn);
+    }
+
+    public function getRefinanciamiento(ClientPerson $clientPerson, FinancialProduct $financialProduct)
+    {
+        $getRefinanciamiento = new CalculadoraCredito();
+        $montoMaximo = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct);
+        $plazoMaximo = $financialProduct->max_term;
+        $periodicidad = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
+        $payment = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
+
+        $data = array(
+            'montoMaximo' => $montoMaximo,
+            'plazoMaximo' => $plazoMaximo,
+            'periodicidad' => $periodicidad,
+            'payment' => $payment,
+
+        );
+        return response()->json($data);
     }
 
     /**
