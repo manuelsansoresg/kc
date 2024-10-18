@@ -21,8 +21,10 @@ use App\Models\Note;
 use App\Models\File;
 use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
+use App\Models\FpTerm;
 use App\Models\Investor;
 use App\Models\InvestorsCredit;
+use App\Models\kaaxSidecc\Collection;
 use App\Models\Product;
 use App\Models\SodScheduleDate;
 use App\Models\SodScheduleName;
@@ -432,17 +434,102 @@ class LeadController extends Controller
     public function getRefinanciamiento(ClientPerson $clientPerson, FinancialProduct $financialProduct)
     {
         $getRefinanciamiento = new CalculadoraCredito();
-        $montoMaximo = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct);
-        $plazoMaximo = $financialProduct->max_term;
-        $periodicidad = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
-        $payment = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
+        $montoMaximo         = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct);
+        $plazoMaximo         = $financialProduct->max_term;
+        $periodicidad        = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
+        $payment             = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
 
+        $getCollection = Collection::select('collections.kc_credit_id', 'collections.id', 'collections.fecha_cobro', 'collections.descuento', 'crm_status_list.alias', 'collections.saldo_insoluto_real')
+                                    ->join('clients_credit_info', 'clients_credit_info.credit_id', 'collections.credit_id')
+                                    ->join('crm_status_list', 'crm_status_list.id', 'collections.status')
+                                    ->where('collections.refinanciable', 1)
+                                    ->where('collections.client_id', $clientPerson->id)
+                                    ->where('clients_credit_info.producto', '<>', 3)->get();
+        $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection])->render();
+
+        $terms = FpTerm::select('terms.id', 'terms.term')
+        ->join('terms', 'terms.id',  'f_p_terms.term_id')
+        ->where('financial_product_id', $financialProduct->id)
+        ->where('terms.term', '>', $financialProduct->max_term)
+        ->pluck('terms.term', 'terms.term');
+        
+
+       /*  foreach ($getTerms as $getTerm) {
+            $terms[$getTerm->id] = $getTerm->term;
+        } */
+        
         $data = array(
             'montoMaximo' => $montoMaximo,
             'plazoMaximo' => $plazoMaximo,
             'periodicidad' => $periodicidad,
             'payment' => $payment,
+            'productoDeseado' => $productoDeseado,
+            'terms' => $terms,
+        );
+        return response()->json($data);
+    }
 
+    public function getMontoMaximo(FinancialProduct $financialProduct, Request $request)
+    {
+        $min         = floatval($financialProduct->min_loan_amount);
+        $max         = $financialProduct->max_loan_ammount;
+        $calculadora = new CalculadoraCredito();
+        $credits     = $request->credits;
+        $plazo       = $request->plazo;
+        $descuento = 0;
+        $total = 0;
+        foreach ($credits as $credit) {
+            $getCollection = Collection::find($credit);
+            if ($getCollection != null) {
+                $descuento += $getCollection->descuento;
+                $total += $getCollection->saldo_insoluto_real;
+            }
+        }
+
+        $present = $calculadora->presentValue($financialProduct, $plazo, $descuento);
+
+        $montoArray = [];
+
+        for ($i = $min; $i <= $max; $i += 1000) {
+            if ( ($present > 0 && $present != -0) && $i > $present ) {
+                break;
+            }
+            $montoArray[$i] = $i;
+        }
+        $data = array(
+            'min' => $min,
+            'max' => $max,
+            'present' => $present,
+            'maximo' => $montoArray,
+            'descuento' => $descuento,
+            'total' => $total,
+            'total_price' => format_price($total),
+        );
+        return response()->json($data);
+    }
+
+    public function getResumen( FinancialProduct $financialProduct, $plazo, $monto, $total)
+    {
+        $comision = $monto * $financialProduct->openning_commission_rate;
+        $montoEntregar = $monto - $comision - $total;
+        $periodicidad = config('financial_enums.periodicity_products')[$financialProduct->periodicity_id];
+        $getCalc = new CalculadoraCredito();
+        $pagoPeriodico = $getCalc->presentValue($financialProduct, $plazo, $monto);
+        $pagoTotal = $plazo * $pagoPeriodico;
+        $tasaAnual = $financialProduct->annual_interest_rate;
+        $cat = $financialProduct->rate_cat;
+
+        $data = array(
+            'montoSolicitado' => format_price($monto),
+            'montoRefinanciar' => format_price($total),
+            'comision' => format_price($comision),
+            'monto_entregar' => format_price($montoEntregar),
+            'periodicidad' => $periodicidad,
+            'plazo' => $plazo,
+            'pagoPeriodico' => format_price($pagoPeriodico),
+            'pagoTotal' => format_price($pagoTotal),
+            'tasaAnual' => $tasaAnual,
+            'cat' => $cat,
         );
         return response()->json($data);
     }

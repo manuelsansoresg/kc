@@ -273,6 +273,11 @@
                                                           
                                                         </div>
                                                         
+                                                        <div id="product-deseado-refinanciamiento" style="display: none">
+
+                                                            <span class="preview-title-lg overline-title mt-5">Producto deseado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
+                                                            <div id="content-product-deseado-refinanciamiento"></div>
+                                                        </div>
                                                        
 
                                                         <span class="preview-title-lg overline-title">Viabilidad</span>

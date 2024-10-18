@@ -747,6 +747,10 @@ window.changeTramite = function()
     
     $('#content-product-select').hide();
     $('#content-refinanciado').hide();
+    $('#product-deseado-refinanciamiento').hide();
+    $('#content-product-deseado-refinanciamiento').html('');
+
+    
 
     if (tramit_type == 3) {
         axios
@@ -757,6 +761,10 @@ window.changeTramite = function()
             let plazoMaximo = result.plazoMaximo;
             let periodicidad = result.periodicidad;
             let payment = result.payment;
+            let productoDeseado = result.productoDeseado;
+            let terms = result.terms;
+
+            
 
             $('#monto-maximo').val(montoMaximo);
             $('#plazo-maximo').val(plazoMaximo);
@@ -765,11 +773,119 @@ window.changeTramite = function()
             
             $('#content-refinanciado').show();
             $('#content-product-select').show();
+            
+            $('#product-deseado-refinanciamiento').show();
+            $('#content-product-deseado-refinanciamiento').html(productoDeseado);
+
+            const selectTramite = document.getElementById('ref-plazo');
+            selectTramite.options.length = 0; // Limpiar el select
+
+            const defaultOption = document.createElement('option');
+            defaultOption.value = ''; // Value vacío
+            defaultOption.textContent = 'Seleccione una opción'; // Texto de la opción
+            selectTramite.appendChild(defaultOption);
+
+            Object.keys(terms).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = terms[key];
+                selectTramite.appendChild(option);
+            });
         }).catch(e => {
         
         });
     }
    
+}
+
+window.getMontoSolicitado = function() {
+    let clientPersonId = $('#client_person_id').val();
+    let productId = $('#financial_product_id').val();
+    let plazo = $('#ref-plazo').val();
+    // Obtiene todos los checkboxes con nombre 'credits[]'
+    var checkboxes = document.querySelectorAll('input[name="credits[]"]:checked');
+    
+    // Inicializa un array para guardar los valores seleccionados
+    var credits = [];
+
+    // Itera sobre los checkboxes seleccionados y almacena sus valores
+    checkboxes.forEach(function(checkbox) {
+        credits.push(checkbox.value);
+    });
+    const selectMontoMaximo = document.getElementById('ref-monto');
+    selectMontoMaximo.options.length = 0; // Limpiar el select
+
+    $('#total-refinanciable').val(0);
+
+    axios
+    .post("/panel/lead"+'/'+productId+"/montoMaximo/get", { credits:credits, plazo:plazo })
+    .then(function (response) {
+        let result = response.data;
+        let maximo = result.maximo;
+        let total = result.total;
+        let total_price = result.total_price;
+        
+        
+        const defaultOption = document.createElement('option');
+        defaultOption.value = ''; // Value vacío
+        defaultOption.textContent = 'Seleccione una opción'; // Texto de la opción
+        selectMontoMaximo.appendChild(defaultOption);
+        
+        Object.keys(maximo).forEach(key => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = maximo[key];
+            selectMontoMaximo.appendChild(option);
+        });
+
+        $('#table-refinanciamiento-total').html(total_price);
+        $('#total-refinanciable').val(total);
+        getResumen();
+
+    }).catch(e => {
+    
+    });
+
+}
+
+window.getResumen = function()
+{
+    let clientPersonId = $('#client_person_id').val();
+    let productId = $('#financial_product_id').val();
+    let plazo = $('#ref-plazo').val();
+    let monto = $('#ref-monto').val();
+    let totalRefinanciable = $('#total-refinanciable').val();
+
+    axios
+    .get("/panel/lead/"+productId+"/"+plazo+'/'+monto+'/'+totalRefinanciable+'/getResumen')
+    .then(function (response) {
+        let result = response.data;
+        let montoSolicitado =  result.montoSolicitado;
+        let montoRefinanciar =  result.montoRefinanciar;
+        let comision =  result.comision;
+        let monto_entregar =  result.monto_entregar;
+        let periodicidad =  result.periodicidad;
+        let plazo =  result.plazo;
+        let pagoPeriodico =  result.pagoPeriodico;
+        let pagoTotal = result.pagoTotal;
+        let tasaAnual = result.tasaAnual;
+        let cat = result.cat;
+
+
+        $('#content-monto-solicitado').html(montoSolicitado);
+        $('#content-monto-refinanciar').html(montoRefinanciar);
+        $('#content-comision-apertura').html(comision);
+        $('#content-monto-entregar').html(monto_entregar);
+        $('#content-plazo').html(periodicidad);
+        $('#content-monto').html(plazo);
+        $('#content-pago-periodico').html(pagoPeriodico);
+        $('#content-pago-total').html(pagoTotal);
+        $('#content-tasa-anual').html(tasaAnual);
+        $('#content-cat').html(cat);
+
+    }).catch(e => {
+    
+    });
 }
 //validar soad activo y si existe la fecha en bd
 window.validateSoad = function()
