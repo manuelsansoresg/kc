@@ -1,5 +1,5 @@
 <div class="row">
-    @if ($tramitType == 3)
+    @if ($tramitType == 3) {{-- refinanciable --}}
         <div class="col-12">
             <table class="table">
                 <tr>
@@ -69,10 +69,12 @@
                 <td>Monto solicitado:</td>
                 <td>$<span id="content-monto-solicitado"></span></td>
             </tr>
-            <tr>
-                <td>Monto a refinanciar:</td>
-                <td>$<span id="content-monto-refinanciar"></span></td>
-            </tr>
+            @if ($tramitType == 3)
+                <tr>
+                    <td>Monto a refinanciar:</td>
+                    <td>$<span id="content-monto-refinanciar"></span></td>
+                </tr>
+            @endif
             <tr>
                 <td>Comisión por apertura:</td>
                 <td>$<span id="content-comision-apertura"></span></td>

@@ -3071,7 +3071,8 @@ window.getResumen = function () {
   var plazo = $('#ref-plazo').val();
   var monto = $('#ref-monto').val();
   var totalRefinanciable = $('#total-refinanciable').val();
-  axios.get("/panel/lead/" + productId + "/" + plazo + '/' + monto + '/' + totalRefinanciable + '/getResumen').then(function (response) {
+  var tramit_type = $('#tramit_type').val();
+  axios.get("/panel/lead/" + productId + "/" + plazo + '/' + monto + '/' + totalRefinanciable + '/' + tramit_type + '/getResumen').then(function (response) {
     var result = response.data;
     var montoSolicitado = result.montoSolicitado;
     var montoRefinanciar = result.montoRefinanciar;

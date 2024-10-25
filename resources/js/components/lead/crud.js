@@ -856,9 +856,10 @@ window.getResumen = function()
     let plazo = $('#ref-plazo').val();
     let monto = $('#ref-monto').val();
     let totalRefinanciable = $('#total-refinanciable').val();
+    let tramit_type = $('#tramit_type').val();
 
     axios
-    .get("/panel/lead/"+productId+"/"+plazo+'/'+monto+'/'+totalRefinanciable+'/getResumen')
+    .get("/panel/lead/"+productId+"/"+plazo+'/'+monto+'/'+totalRefinanciable+'/'+tramit_type+'/getResumen')
     .then(function (response) {
         let result = response.data;
         let montoSolicitado =  result.montoSolicitado;

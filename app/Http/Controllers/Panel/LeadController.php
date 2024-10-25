@@ -516,10 +516,14 @@ class LeadController extends Controller
         return response()->json($data);
     }
 
-    public function getResumen( FinancialProduct $financialProduct, $plazo, $monto, $total)
+    public function getResumen( FinancialProduct $financialProduct, $plazo, $monto, $total, $tramitType)
     {
         $comision = $monto * $financialProduct->openning_commission_rate;
-        $montoEntregar = $monto - $comision - $total;
+        if ($tramitType == 3) {
+            $montoEntregar = $monto - $comision - $total;
+        } else {
+            $montoEntregar = $monto - $comision;
+        }
         $periodicidad = config('financial_enums.periodicity_products')[$financialProduct->periodicity_id];
         $getCalc = new CalculadoraCredito();
         $pagoPeriodico = $getCalc->presentValue($financialProduct, $plazo, $monto);
