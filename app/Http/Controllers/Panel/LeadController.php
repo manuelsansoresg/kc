@@ -431,13 +431,14 @@ class LeadController extends Controller
         return response()->json($dataReturn);
     }
 
-    public function getRefinanciamiento(ClientPerson $clientPerson, FinancialProduct $financialProduct)
+    public function getRefinanciamiento(ClientPerson $clientPerson, FinancialProduct $financialProduct, $tramitType)
     {
         $getRefinanciamiento = new CalculadoraCredito();
-        $montoMaximo         = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct);
+        $montoMaximo         = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct, $tramitType);
         $plazoMaximo         = $financialProduct->max_term;
         $periodicidad        = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
         $payment             = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
+        $productoDeseado     = null;
 
         $getCollection = Collection::select('collections.kc_credit_id', 'collections.id', 'collections.fecha_cobro', 'collections.descuento', 'crm_status_list.alias', 'collections.saldo_insoluto_real')
                                     ->join('clients_credit_info', 'clients_credit_info.credit_id', 'collections.credit_id')
@@ -445,7 +446,8 @@ class LeadController extends Controller
                                     ->where('collections.refinanciable', 1)
                                     ->where('collections.client_id', $clientPerson->id)
                                     ->where('clients_credit_info.producto', '<>', 3)->get();
-        $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection])->render();
+        
+        $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection, 'tramitType' => $tramitType])->render();
 
         $terms = FpTerm::select('terms.id', 'terms.term')
         ->join('terms', 'terms.id',  'f_p_terms.term_id')
@@ -469,7 +471,8 @@ class LeadController extends Controller
         return response()->json($data);
     }
 
-    public function getMontoMaximo(FinancialProduct $financialProduct, Request $request)
+    public function getMontoMaximo(ClientPerson $clientPerson,FinancialProduct $financialProduct, Request $request, $tramitType)
+
     {
         $min         = floatval($financialProduct->min_loan_amount);
         $max         = $financialProduct->max_loan_ammount;
@@ -485,8 +488,13 @@ class LeadController extends Controller
                 $total += $getCollection->saldo_insoluto_real;
             }
         }
+        if ($tramitType == 3) { //refinanciamiento
+            $pmt = $clientPerson->payment_capacity + $descuento;
+        } else {
+            $pmt = $clientPerson->payment_capacity;
+        }
 
-        $present = $calculadora->presentValue($financialProduct, $plazo, $descuento);
+        $present = $calculadora->presentValue($financialProduct, $plazo, $pmt, $tramitType);
 
         $montoArray = [];
 

@@ -1,38 +1,41 @@
 <div class="row">
-    <div class="col-12">
-        <table class="table">
-            <tr>
-                <th></th>
-                <th>ID</th>
-                <th>Fecha</th>
-                <th>Descuento</th>
-                <th>Estatus</th>
-                <th>Saldo</th>
-            </tr>
-            @php
-                $total = 0;
-            @endphp
-            @foreach ($credits as $credit)
-                @php
-                    $total += $credit->saldo_insoluto_real;
-                @endphp
+    @if ($tramitType == 3)
+        <div class="col-12">
+            <table class="table">
                 <tr>
-                    <td> <input type="checkbox" name="credits[]" id="{{ $credit->id }}" value="{{ $credit->id }}" checked onchange="getMontoSolicitado()">  </td>
-                    <td> {{ $credit->kc_credit_id }} </td>
-                    <td> {{ date('d-m-Y', strtotime($credit->fecha_cobro)) }} </td>
-                    <td> 
-                        {{ $credit->descuento }} 
-                    </td>
-                    <td> {{ $credit->alias }} </td>
-                    <td> {{ $credit->saldo_insoluto_real }}  </td>
+                    <th></th>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Descuento</th>
+                    <th>Estatus</th>
+                    <th>Saldo</th>
                 </tr>
-            @endforeach
-            <tr>
-                <td colspan="5" class="text-end"> Total: </td>
-                <td><span id="table-refinanciamiento-total"> {{ $total }} </span></td>
-            </tr>
-        </table>
-    </div>
+                @php
+                    $total = 0;
+                @endphp
+                @foreach ($credits as $credit)
+                    @php
+                        $total += $credit->saldo_insoluto_real;
+                    @endphp
+                    <tr>
+                        <td> <input type="checkbox" name="credits[]" id="{{ $credit->id }}" value="{{ $credit->id }}" checked onchange="getMontoSolicitado()">  </td>
+                        <td> {{ $credit->kc_credit_id }} </td>
+                        <td> {{ date('d-m-Y', strtotime($credit->fecha_cobro)) }} </td>
+                        <td> 
+                            {{ $credit->descuento }} 
+                        </td>
+                        <td> {{ $credit->alias }} </td>
+                        <td> {{ $credit->saldo_insoluto_real }}  </td>
+                    </tr>
+                @endforeach
+                <tr>
+                    <td colspan="5" class="text-end"> Total: </td>
+                    <td><span id="table-refinanciamiento-total"> {{ $total }} </span></td>
+                </tr>
+            </table>
+        </div>
+    @endif
+
    <div class="col-12">
     <p>¿Cuanto quieres solicitar ? </p>
    </div>

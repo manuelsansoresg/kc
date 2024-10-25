@@ -7,12 +7,16 @@ use App\Models\kaaxSidecc\Collection;
 
 class CalculadoraCredito
 {
-    public function getMontoMaximo($clientPerson, $financialProduct)
+    public function getMontoMaximo($clientPerson, $financialProduct, $tramitType)
     {
         $dias             = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
         $rate             = $financialProduct->daily_interest_rate/ 10000  * ($dias);
         $per              = $financialProduct->max_term;
-        $pmt              = $clientPerson->payment_capacity + $clientPerson->active_discount;
+        if ($tramitType == 3) { //refinanciamiento
+            $pmt              = $clientPerson->payment_capacity + $clientPerson->active_discount;
+        } else {
+            $pmt              = $clientPerson->payment_capacity;
+        }
         $max_loan_ammount = $financialProduct->max_loan_ammount;
         $finance = new Finance;
         $pagoPeriodico = $finance->presentValue($rate, $per, $pmt);

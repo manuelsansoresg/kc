@@ -752,9 +752,9 @@ window.changeTramite = function()
 
     
 
-    if (tramit_type == 3) {
+    if (tramit_type == 3 || tramit_type == 2) {
         axios
-        .get("/panel/lead/"+clientPersonId+"/"+productId+"/refinanciamiento/get")
+        .get("/panel/lead/"+clientPersonId+"/"+productId+"/"+tramit_type+"/refinanciamiento/get")
         .then(function (response) {
             let result = response.data;
             let montoMaximo = result.montoMaximo;
@@ -802,6 +802,7 @@ window.getMontoSolicitado = function() {
     let clientPersonId = $('#client_person_id').val();
     let productId = $('#financial_product_id').val();
     let plazo = $('#ref-plazo').val();
+    let tramit_type = $('#tramit_type').val();
     // Obtiene todos los checkboxes con nombre 'credits[]'
     var checkboxes = document.querySelectorAll('input[name="credits[]"]:checked');
     
@@ -818,7 +819,7 @@ window.getMontoSolicitado = function() {
     $('#total-refinanciable').val(0);
 
     axios
-    .post("/panel/lead"+'/'+productId+"/montoMaximo/get", { credits:credits, plazo:plazo })
+    .post("/panel/lead"+'/'+clientPersonId+"/"+productId+"/"+tramit_type+"/montoMaximo/get", { credits:credits, plazo:plazo })
     .then(function (response) {
         let result = response.data;
         let maximo = result.maximo;
