@@ -64,7 +64,6 @@ class Lead extends Model
         //validacion 1
         $tramite = null;
         $isTramite = false;
-
         if ($active == 1) {
             $messageVal1 =  '<p> Validación Crédito Preautorizado / Crédito Personal activo /<span  class="text-primary">  <br> OK: Prospecto tiene uno o más créditos activos
             </span> </p>';
@@ -101,6 +100,7 @@ class Lead extends Model
         $additional_allowed = $financialProduct->additional_allowed;
         $tramite = array();
         $isTramite = false;
+        
         if ($additional_allowed == 1) {
             $message =  '<p> Validación Crédito Preautorizado / Producto permite Crédito adicional /<span  class="text-primary">  <br> OK: Producto permite Crédito Adicional
             </span> </p>';

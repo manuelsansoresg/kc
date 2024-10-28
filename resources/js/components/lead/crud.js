@@ -913,7 +913,7 @@ window.validateSoad = function()
             
 
 
-            if (typeProductId == 1) {
+            if (typeProductId == 1 || typeProductId == 2) {
                 $('#content_tramit_type').show();
                 //llenar el arreglo de tipo de trámite
                 setSelectTramite(clientPersonId, productId, null);
