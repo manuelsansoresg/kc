@@ -752,7 +752,7 @@ window.changeTramite = function()
 
     
 
-    if (tramit_type == 3 || tramit_type == 2) {
+    if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
         axios
         .get("/panel/lead/"+clientPersonId+"/"+productId+"/"+tramit_type+"/refinanciamiento/get")
         .then(function (response) {

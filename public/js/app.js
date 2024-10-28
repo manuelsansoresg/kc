@@ -2986,7 +2986,7 @@ window.changeTramite = function () {
   $('#product-deseado-refinanciamiento').hide();
   $('#content-product-deseado-refinanciamiento').html('');
 
-  if (tramit_type == 3 || tramit_type == 2) {
+  if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
     axios.get("/panel/lead/" + clientPersonId + "/" + productId + "/" + tramit_type + "/refinanciamiento/get").then(function (response) {
       var result = response.data;
       var montoMaximo = result.montoMaximo;

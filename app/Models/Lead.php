@@ -85,7 +85,7 @@ class Lead extends Model
             $getTramite = $getValidacion5['tramite'];
             $isTramite = $getValidacion5['isTramite'];
             if ($getTramite != null) {
-                $tramite = $getTramite;
+                $tramite[] = $getTramite;
             }
         }
 
