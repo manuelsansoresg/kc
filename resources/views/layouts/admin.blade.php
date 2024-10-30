@@ -279,8 +279,8 @@
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
-                                <hr>
                                 @hasrole('Administrador|Asesor')
+                                <hr>
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-aftermarket" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span>
@@ -297,10 +297,12 @@
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
                                 {{-- modulo KC - WALLET --}}
-                                @hasrole('Administrador|Asesor|Cliente financiera|Cliente inversionista')
+                                @hasrole('Administrador|Asesor|Cliente financiera')
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">KC - WALLET</h6>
                                 </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                @hasrole('Administrador|Asesor|Cliente financiera|Cliente inversionista')
                                 <li class="nk-menu-item">
                                     @php
                                         $investor = $Minvestor::where('user_id',  Auth::user()->id)->first();
