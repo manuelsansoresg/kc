@@ -337,12 +337,12 @@
                                         <span class="nk-menu-text"><em class="icon ni ni-upload"></em> Retirar fondos</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
+                                
+                                {{-- <li class="nk-menu-item">
                                     <a href="/panel/kc-wallet/list/history" class="nk-menu-link">
-                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
                                         <span class="nk-menu-text"><em class="icon ni ni-history"></em> Historial de movimientos</span>
                                     </a>
-                                </li><!-- .nk-menu-item -->
+                                </li> --}}
                                 <li class="nk-menu-item">
                                     <a href="/panel/ayuda" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
