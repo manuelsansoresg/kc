@@ -101,6 +101,9 @@ Route::group(['prefix' => 'lead'], function () {
     
     Route::get('financial/{lead_id}/show', ['\App\Http\Controllers\Panel\LeadController', 'listFinancial'])->middleware('auth');
     
+    Route::resource('credit-pay-off', '\App\Http\Controllers\CreditPayOffController')->middleware('auth');
+    Route::get('credit-pay-off/{creditPayOffId}/data/get', ['\App\Http\Controllers\CreditPayOffController', 'getDataModal'])->middleware('auth');
+    
 });
 
 

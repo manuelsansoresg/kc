@@ -82,7 +82,7 @@ class LeadController extends Controller
         $isValidateCellphone = false;
         $isValidateRFC = false;
         $isValidate = false;
-        
+        $lead = null;
         
         if ($id == 'cellphone') {
             $contentValidaciones      = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
@@ -107,20 +107,37 @@ class LeadController extends Controller
         
         $isValidate = $isValidateCellphone == true || $isValidateRFC == true ?  true : false;
 
-        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate]);
+        if ($isValidate === true) { //prospecto valido guardar
+            $dataLead = array(
+                'agreement_id' => $agreement->id,
+                'name'  => $getClientPerson->name,
+                'last_name'  => $getClientPerson->last_name,
+                'second_last_name'  => $getClientPerson->second_last_name,
+                'birth_date'  => $getClientPerson->birth_date,
+                'rfc'  => $getClientPerson->rfc,
+                'email'  => $getClientPerson->email,
+            );
+            $lead = Lead::create($dataLead);
+            
+        }
+
+        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate, 'lead' => $lead]);
     }
 
     public function validateCellphoneAndRfc($cellphone , $rfc)
     {
         $getClientPersonCellphone   = ClientPerson::where('cellphone', $cellphone)->first();
         $getClientPersonRFC   = ClientPerson::where('rfc', $rfc)->first();
+       
         
         if ($getClientPersonCellphone != null) {
             $agreement         = $getClientPersonCellphone != null ? Agreement::find($getClientPersonCellphone->agreement_id): null;
+            
         }
 
         if ($getClientPersonRFC != null) {
             $agreement         = $getClientPersonRFC != null ? Agreement::find($getClientPersonRFC->agreement_id): null;
+            
         }
 
         $validateAgreement = $agreement       != null && $agreement->status == 1 ? true : false;
@@ -137,8 +154,12 @@ class LeadController extends Controller
                 $getClientPersonRFC->active == 1 && $validateAgreement == true) {
                 $isValidateRFC = true;
         }
-        //dd($getClientPersonRFC, $validateAgreement, $rfc);
-        return response()->json($isValidateCellphone == true && $isValidateRFC == true ? true : false);
+        
+        $isValidate = $isValidateCellphone == true && $isValidateRFC == true ? true : false;
+
+       
+
+        return response()->json($isValidate);
 
     }
 
@@ -435,11 +456,11 @@ class LeadController extends Controller
     {
         $getRefinanciamiento = new CalculadoraCredito();
         $montoMaximo         = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct, $tramitType);
+        
         $plazoMaximo         = $financialProduct->max_term;
         $periodicidad        = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
         $payment             = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
         $productoDeseado     = null;
-
         $getCollection = Collection::select('collections.kc_credit_id', 'collections.id', 'collections.fecha_cobro', 'collections.descuento', 'crm_status_list.alias', 'collections.saldo_insoluto_real')
                                     ->join('clients_credit_info', 'clients_credit_info.credit_id', 'collections.credit_id')
                                     ->join('crm_status_list', 'crm_status_list.id', 'collections.status')
@@ -447,8 +468,7 @@ class LeadController extends Controller
                                     ->where('collections.client_id', $clientPerson->id)
                                     ->where('clients_credit_info.producto', '<>', 3)->get();
         
-        $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection, 'tramitType' => $tramitType])->render();
-
+        $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
         $terms = FpTerm::select('terms.id', 'terms.term')
         ->join('terms', 'terms.id',  'f_p_terms.term_id')
         ->where('financial_product_id', $financialProduct->id)
@@ -536,6 +556,7 @@ class LeadController extends Controller
             'montoRefinanciar' => format_price($total),
             'comision' => format_price($comision),
             'monto_entregar' => format_price($montoEntregar),
+            'monto_entregar_decimal' => $montoEntregar,
             'periodicidad' => $periodicidad,
             'plazo' => $plazo,
             'pagoPeriodico' => format_price($pagoPeriodico),

@@ -257,11 +257,11 @@ window.validateLeadEdit = function()
 {
     let cellphone = $('#lead-cellphone').val();
     let rfc = $('#lead-rfc').val();
-    console.log('manuel');
     axios
         .get("/panel/lead/"+cellphone+"/"+rfc+"/get/validate")
         .then(function (response) {
             let result = response.data;
+            
             let client_person_id = $('#client_person_id').val();
             
             if (result == true) {
@@ -409,8 +409,6 @@ window.checkDataLeadExist = function (valInput, id)
             });
             if (isExist > 0 && isValidate == true) {
                 $('#client_person_id').val(clientPerson.id);
-                
-                
 
                 $('#content-servicio-kc').show();
                 getProductsByAgreementId(clientPerson.agreement_id, null)
@@ -422,6 +420,9 @@ window.checkDataLeadExist = function (valInput, id)
                 $('#is_viability').val(1);
                 //$('#lead_id').val(clientPerson.id);
                 $('#prospecto-valido').val('Prospecto válido');
+                if (result.lead  != null) {
+                    $('#lead_id').val(result.lead.id);
+                }
                 
                 $('#lead-origin-agreement').val(clientPerson.agreement_id);
                 if (id == 'cellphone') {
@@ -457,6 +458,93 @@ window.checkDataLeadExist = function (valInput, id)
     }
 }
 
+window.showModalCompraCartera = function() {
+    $('#modal-compra-cartera').modal('show');
+    $('#creditPayOffId').val('');
+}
+
+$("#frm-modal-compra-cartera").submit(function (event) {
+    event.preventDefault();
+    let leadId =  document.getElementById("lead_id").value;
+    const new_form = document.getElementById("frm-modal-compra-cartera");
+    const data = new FormData(new_form);
+    data.append("data[lead_id]", leadId);
+    data.append("data[client_person_id]", document.getElementById("client_person_id").value);
+
+    
+    axios
+        .post("/panel/lead/credit-pay-off", data)
+        .then(function (response) {
+            $('#modal-compra-cartera').modal('hide');
+           let result = response.data;
+           showTableCompraCartera(leadId);
+           
+        })
+        .catch(e => {
+
+        });
+});
+
+window.deleteCompraCartera = function(creditPayOffId)
+{
+    Swal.fire({
+        title: '¿Estás seguro?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, elimina',
+        cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+        if (result.value) {
+            axios
+            .delete("/panel/lead/credit-pay-off/"+creditPayOffId)
+            .then(function (response) {
+                let leadId =  document.getElementById("lead_id").value;
+                showTableCompraCartera(leadId);
+            }).catch(e => {
+                
+            });
+        }
+    });
+
+       
+}
+
+window.editCompraCartera = function(creditPayOffId)
+{
+    axios
+    .get("/panel/lead/credit-pay-off/"+creditPayOffId+'/data/get')
+    .then(function (response) {
+        let result = response.data;
+        $('#compra-cartera-financial_product_id').val(result.financial_product_id).trigger("change");
+        $('#compra-cartera-ammount').val(result.ammount);
+        $('#creditPayOffId').val(creditPayOffId);
+        $('#modal-compra-cartera').modal('show');
+    }).catch(e => {
+        
+    });
+}
+
+function showTableCompraCartera(leadId)
+{
+    $('#content-table-compra-cartera').html('');
+    axios
+    .get("/panel/lead/credit-pay-off/"+leadId)
+    .then(function (response) {
+        let result = response.data;
+        let table = result.table;
+        let total = result.total;
+        let montoEntregar = $('#hmonto-entregar').val();
+
+        $('#content-monto-compra-cartera').html(total);
+        $('#content-monto-entregar').html(total - montoEntregar );
+        $('#content-table-compra-cartera').html(table);
+    })
+    .catch(e => {
+
+    });
+}
+
+
 window.getProductsByAgreementId = function(leadId, productId)
 {
     const selectElement = document.getElementById('financial_product_id');
@@ -491,6 +579,7 @@ window.deleteLead = function (lead_id) {
 
         });
 }
+
 
 
 window.modalAdvisor = function (lead_id) {
@@ -744,13 +833,15 @@ window.changeTramite = function()
     let tramit_type = $('#tramit_type').val();
     let clientPersonId = $('#client_person_id').val();
     let productId = $('#financial_product_id').val();
+    let typeProductId = $('#typeProductId').val();
+    let leadId =  document.getElementById("lead_id").value;
     
     $('#content-product-select').hide();
     $('#content-refinanciado').hide();
     $('#product-deseado-refinanciamiento').hide();
     $('#content-product-deseado-refinanciamiento').html('');
 
-    
+    console.log(tramit_type);
 
     if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
         axios
@@ -791,12 +882,18 @@ window.changeTramite = function()
                 option.textContent = terms[key];
                 selectTramite.appendChild(option);
             });
+
+            if (typeProductId == 2) {
+                showTableCompraCartera(leadId);
+            }
         }).catch(e => {
         
         });
     }
    
 }
+
+
 
 window.getMontoSolicitado = function() {
     let clientPersonId = $('#client_person_id').val();
@@ -866,6 +963,7 @@ window.getResumen = function()
         let montoRefinanciar =  result.montoRefinanciar;
         let comision =  result.comision;
         let monto_entregar =  result.monto_entregar;
+        let montoEntregarDecimal =  result.monto_entregar_decimal;
         let periodicidad =  result.periodicidad;
         let plazo =  result.plazo;
         let pagoPeriodico =  result.pagoPeriodico;
@@ -878,12 +976,14 @@ window.getResumen = function()
         $('#content-monto-refinanciar').html(montoRefinanciar);
         $('#content-comision-apertura').html(comision);
         $('#content-monto-entregar').html(monto_entregar);
+        $('#content-monto-entregar').html(monto_entregar);
         $('#content-plazo').html(periodicidad);
         $('#content-monto').html(plazo);
         $('#content-pago-periodico').html(pagoPeriodico);
         $('#content-pago-total').html(pagoTotal);
         $('#content-tasa-anual').html(tasaAnual);
         $('#content-cat').html(cat);
+        $('#hmonto-entregar').val(montoEntregarDecimal);
 
     }).catch(e => {
     
@@ -903,6 +1003,7 @@ window.validateSoad = function()
         let clientPersonId = $('#client_person_id').val();
         let agreement = $('#lead-origin-agreement').val();
         let productId = $('#financial_product_id').val();
+
         $('#content-error-producto-preautorizado').hide();
         axios
         .get("/panel/lead/"+clientPersonId+"/"+agreement+"/"+productId+"/soad/get")
@@ -910,8 +1011,8 @@ window.validateSoad = function()
             
             let result = response.data;
             let typeProductId = result.type_product_id;
+            $('#typeProductId').val(typeProductId);
             
-
 
             if (typeProductId == 1 || typeProductId == 2) {
                 $('#content_tramit_type').show();

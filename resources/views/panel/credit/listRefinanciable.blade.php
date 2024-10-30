@@ -35,6 +35,22 @@
             </table>
         </div>
     @endif
+    @if ($type_product_id == 2) {{-- compra de cartera --}}
+        <div class="col-12">
+            <div class="row mt-2 py-3">
+                <div class="col-8">
+                    <span class="preview-title-lg overline-title">Compra de cartera</span>
+                </div>
+                <div class="col-4">
+                    <a class="pointer" onclick="showModalCompraCartera()">Agregar</a>
+                </div>
+                <div class="col-12">
+                   
+                    <div id="content-table-compra-cartera"></div>
+                </div>
+            </div>
+        </div>
+    @endif
 
    <div class="col-12">
     <p>¿Cuanto quieres solicitar ? </p>
@@ -75,6 +91,12 @@
                     <td>$<span id="content-monto-refinanciar"></span></td>
                 </tr>
             @endif
+            @if ($type_product_id == 2)
+            <tr>
+                <td>Monto compra cartera:</td>
+                <td>$<span id="content-monto-compra-cartera"></span></td>
+            </tr>
+            @endif
             <tr>
                 <td>Comisión por apertura:</td>
                 <td>$<span id="content-comision-apertura"></span></td>
@@ -111,4 +133,5 @@
         
     </div>
    </div>
+   <input type="hidden" id="hmonto-entregar" value="">
 </div>

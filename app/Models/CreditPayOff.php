@@ -19,4 +19,18 @@ class CreditPayOff extends Model
         'bank_clabe_valid',
         'ammount',
     ];
+
+    public static function saveEdit($request)
+    {
+        $data = $request->data;
+        $creditPayOffId = $request->creditPayOffId;
+
+        if ($creditPayOffId == null) {
+            $creditPay = CreditPayOff::create($data);
+        } else {
+            $creditPay = CreditPayOff::where('id', $creditPayOffId)->update($data);
+
+        }
+        return $creditPay;
+    }
 }
