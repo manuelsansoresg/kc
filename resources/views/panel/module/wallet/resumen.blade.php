@@ -7,232 +7,292 @@
         <div class="container-fluid">
             <div class="nk-content-inner">
                 <div class="nk-content-body">
-                    <div class="nk-block-head nk-block-head-sm">
-                        <div class="nk-block-between">
-                            <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Resumen</h3>
-                                <div class="nk-block-des text-soft">
-                                    <nav>
-                                        <ul class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
-                                            <li class="breadcrumb-item ">KC - Wallet</li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="nk-block nk-block-lg">
                         <div class="container">
-                            <div class="row justify-content-center">
-                                
-                                @php
-                                $totalDisponible =
-                                    $investor != null
-                                        ? $investor->total_available
-                                        : 0;
-                                $totalPendiente =
-                                    $investor != null
-                                        ? $investor->placed_capital
-                                        : 0;
-                                $totalPrestable = $investor != null
-                                        ? $investor->loan_available
-                                        : 0;
-                                $total = $totalDisponible + $totalPendiente;
-                                $capital = $investor != null
-                                        ? $investor->placed_capital
-                                        : 0;
-                                $gananciaTotalGenerada = $investor != null ? $investor->profit_collected : 0;
-
-                                $disponible = $investor != null ? $investor->withdraw_available : 0;
-                                $capitalPendiente = $investor != null ? $investor->placed_capital : 0;
-                                $apartadoPrestamo = $investor != null ? $investor->loan_available : 0;
-                                $valorCuenta =  $disponible + $capitalPendiente + $apartadoPrestamo;
-                                $lendable = $investor != null && $investor->lendable > 0 ? $investor->lendable : 0;
-                            @endphp
-                                {{-- first card --}}
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="nk-wg-card is-s1 card card-bordered">
-                                        <div class="card-inner">
-                                            <div class="nk-iv-wg2">
-                                                <div class="nk-iv-wg2-title">
-                                                    <h6 class="title">Valor de la cuenta <em class="icon ni ni-info"></em></h6>
-                                                </div>
-                                                <div class="nk-iv-wg2-text">
-                                                    <div class="nk-iv-wg2-amount">{{ '$'.format_price($valorCuenta) }} {{-- <span class="change up">
-                                                        <span
-                                                                class="sign"></span>2.8%</span> --}}
-                                                            </div>
-                                                            <p>&nbsp;</p>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="nk-block">
-                                        <div class="row gy-gs mt-3">
-                                            <div class="col-12">
-                                                <div class="nk-wg-card card card-bordered h-100">
-                                                    <div class="card-inner h-100">
-                                                        <div class="nk-iv-wg2">
-                                                            <div class="nk-iv-wg2-title">
-                                                                <h6 class="title">Resumen</h6>
-                                                            </div>
-                                                            <div class="nk-iv-wg2-text">
-                                                               
-
-                                                                <div class="nk-iv-wg2-amount ui-v2">
-                                                                </div>
-                                                                <div style="display: none;">
-
-                                                                    <div id="tooltip-disponible">
-                                                                        <b>Disponible para retiro</b>
-                                                                        <br> <br>
-                                                                        Corresponde al Dinero o  que no está prestado o comprometido para préstamos. Este es el dinero que puedes retirar a tu cuenta bancaria.
-                                                                    </div>
-                                                                    <div id="tooltip-capital-pendiente">
-                                                                        <b>Capital pendiente</b>
-                                                                        <br><br>
-                                                                        Este monto es la suma de todos los préstamos que has realizado y cuyo principal o capital está pendiente de pago. Por ejemplo, si has prestado $10,000 en total, pero ya se armotizaron o pagaron $2,000 del capital, este valor será de $8,000. Los intereses pagados no disminuyen este valor. 
-                                                                    </div>
-                                                                    <div id="tooltip-apartado-prestamo">
-                                                                        <b>Disponible para prestar</b>
-                                                                        <br><br>
-                                                                        Es el importe de tu dinero destinado para préstamos. El dinero reservado en este apartado no está disponible para retiro a menos que modifiques el “Límite máximo a prestar”
-                                                                    </div>
-                                                                    
-                                                                    <div id="tooltip-limite-maximo-prestar">
-                                                                        <b>Límite máximo a prestar.</b>
-                                                                        <br><br>
-                                                                        Es la cantidad máxima de dinero que estará disponible para préstamos. Ese límite puede ser mayor que el dinero que actualmente tienes disponible en tu cuenta. Por ejemplo: si estableces una cantidad mayor a tu dinero disponible, una vez que alcances este límite con las ganancias de tus préstamos, cualquier dinero adicional quedará disponible para ser retirado; si estableces una cantidad menor, siempre tendrás una parte disponible para préstamos y otra para retiro, que se irá incrementando conforme cobras tus préstamos; al fijar el límite en 0, tu dinero en APARTADO PRÉSTAMO pasará a estar disponible para retirar, así como todo lo que cobres posteriormente, y no se volverá a prestar hasta que modifiques esta configuración. Puedes ajustar este límite cuando quieras.
-                                                                    </div>
-                                                                </div>
-
-                                                               
-                                                                <ul class="nk-iv-wg2-list">
-                                                                    <li  class="total">
-                                                                        <span class="item-label" > Disponible para retiro <em class="icon ni ni-info active-tooltip" data-template="tooltip-disponible"></em> </span><span
-                                                                            class="item-value">{{ '$'.format_price($disponible) }}</span>
-                                                                    </li>
-                                                                    <li  class="total"><span class="item-label">Capital pendiente <em class="icon ni ni-info active-tooltip" data-template="tooltip-capital-pendiente"></em> </span><span
-                                                                            class="item-value">{{ '$'.format_price($capitalPendiente) }}</span>
-                                                                    </li>
-                                                                    <li class="total">
-                                                                        <span class="item-label">
-                                                                            Disponible para prestar <em class="icon ni ni-info active-tooltip" data-template="tooltip-apartado-prestamo"></em>
-                                                                        </span>
-                                                                        <span class="item-value">  {{ '$'.format_price($apartadoPrestamo) }} 
-                                                                        
-                                                                        </span>
-                                                                    </li>
-
-                                                                </ul>
-                                                            </div>
-                                                            <div class="nk-iv-wg2-cta">
-                                                                <a href="#"
-                                                                data-bs-toggle="modal" data-bs-target="#modalPrestable"
-                                                                    class="btn btn-primary btn-lg btn-block text-center">
-                                                                    <div class="text-center col-12">
-                                                                        Prestar <br>
-                                                                    <span class="text-xs">Configurar el límite máximo a prestar</span>
-                                                                    </div>
-                                                                    
-                                                                    </a>
-                                                                <a href="/panel/action-form/wallet/null/form?step=1"
-                                                                    class="btn btn-primary btn-lg btn-block mt-3">Agregar
-                                                                    fondos</a>
-                                                                <a href="/panel/action-form/kc-down-wallet/null/form?step=1"
-                                                                    class="btn btn-primary btn-lg btn-block mt-3">Retirar
-                                                                    fondos</a>
-                                                                {{--  <a href="#"
-                                                                    class="btn btn-trans btn-block">Deposit Funds</a> --}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                {{-- second card --}}
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="nk-wg-card is-dark card card-bordered">
-                                        <div class="card-inner">
-                                            <div class="nk-iv-wg2">
-                                                <div class="nk-iv-wg2-title">
-                                                    <h6 class="title text-white">Disponible para prestar 
-                                                        <em class="icon ni ni-info active-tooltip" data-template="tooltip-apartado-prestamo"></em>
-                                                       
-                                                    </h6>
-                                                </div>
-                                                <div class="nk-iv-wg2-text">
-                                                    <div class="nk-iv-wg2-amount  text-white">
-                                                        {{ '$'.format_price($apartadoPrestamo) }} 
-                                                        <span class="change up">
-                                                            <a href="#"  data-bs-toggle="modal" data-bs-target="#modalPrestable">
-                                                            
-                                                                <i class="fa-solid fa-gear text-white"></i>
-                                                            </a>
-                                                            
-                                                            </span>
-                                                        </div>
-                                                        <div class="col-12 text-white">
-                                                            <p class="text-xs">Límite máximo a prestar: ${{ format_price($lendable) }} <em class="icon ni ni-info active-tooltip" data-template="tooltip-limite-maximo-prestar"></em> </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                 
-                                </div>
+                          <div class="row">
+                            <div class="col-12 text-end">
+                                <a href="#" class="btn btn-xl btn-primary"  data-bs-toggle="modal"
+                                data-bs-target="#modalPrestar">Prestar</a>
                             </div>
+                            <div class="col-12 mt-5">
+                                <div class="card card-bordered  vh-50">
+                                    <div class="card-inner">
+
+                                        <div class="analytic-ov">
+                                            <div class="analytic-data-group analytic-ov-group g-3">
+                                                <div class="analytic-data analytic-ov-data">
+                                                    <div class="title">Valor de cuenta</div>
+                                                    <div class="amount">$10,000</div>
+                                                    <div class="change up">
+                                                        <a href="#"  data-bs-toggle="modal"
+                                                        data-bs-target="#modalDetalle">Ver detalle</a>
+                                                    </div>
+                                                </div>
+                                                <div class="analytic-data analytic-ov-data">
+                                                    <div class="title">Disponible para prestar o retirar </div>
+                                                    <div class="amount">$1,000 <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-disponible"></em></div>
+                                                    <div class="change up">
+                                                    </div>
+                                                </div>
+                                                <div class="analytic-data analytic-ov-data">
+                                                    <div class="title">En proceso de ser prestado &nbsp; </div>
+                                                    <div class="amount">$1,000 <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></div>
+                                                    <div class="change down"><a href="#"  data-bs-toggle="modal"
+                                                        data-bs-target="#modalPrestar">Editar</a></div>
+                                                </div>
+                                                <div class="analytic-data analytic-ov-data">
+                                                    <div class="title">Préstamos en créditos activos</div>
+                                                    <div class="amount">$2,000 <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
+                                                    <div class="change down"></div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div style="display: none;">
+                                           
+                                            <div id="tooltip-disponible">
+                                                <b>Disponible para prestar o retirar</b>
+                                                <br><br>
+                                                Dinero que no está prestado o no está disponible para ser prestado. Este dinero lo puedes retirar a tu cuenta bancaria o asignarlo para ser prestado.
+
+
+                                            </div>
+                                            <div id="tooltip-proceso">
+                                                <b>En proceso de ser prestado</b>
+                                                <br><br>
+                                                Dinero destinado para préstamos. Este dinero no está disponible para retirar a tu cuenta a menos que modifiques la cantidad de dinero asignada para ser prestada.
+
+                                            </div>
+                                            
+                                            <div id="tooltip-prestamo">
+                                                <b>Préstamos en créditos activos.
+                                                </b>
+                                                <br><br>
+                                                Es la suma de todos los préstamos que has realizado y cuyo principal o capital está pendiente de pago. Ej. Si has prestado $10,000 en total, pero ya se amortizaron o pagaron $2,000 de capital, este valor será de $8,000. Los intereses pagados no disminuyen este valor.	
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                          </div>
+
+                           <div class="row mt-5">
+                                <div class="col-12 col-md-6 ">
+                                    <div class="card card vh-50">
+                                        <div class="card-body">
+                                            <h6 class="title">Resultados obtenidos </h6>
+                                            <hr>
+                                            <table class="table table-borderless">
+                                                <tr>
+                                                    <td>Intereses cobrados</td>
+                                                    <td>$123,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>IVA de intereses cobrados</td>
+                                                    <td>$123,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Recuperación de cartera vencida</td>
+                                                    <td>$123,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <hr>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Comisiones pagadas a KaaxClub</td>
+                                                    <td>$123,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Pérdidas por cartera vencida</td>
+                                                    <td>$123,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>IVA de comisiones</td>
+                                                    <td>$123,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <hr>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><span class="h5 text-primary">Resultados netos totales</span></td>
+                                                    <td><span class="h5 text-primary">$123,000</span></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 vh-50">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="title">Valor de cuenta </h6>
+                                            <hr>
+                                            <div class="traffic-channel mt-3">
+                                                <div class="traffic-channel-doughnut-ck">
+                                                    <canvas class="analytics-doughnut" id="TrafficChannelDoughnutData"></canvas>
+                                                </div>
+                                                <div class="traffic-channel-group g-2 mt-4">
+                                                    <div class="traffic-channel-data">
+                                                        <div class="title"><span class="dot dot-lg sq" data-bg="#9cabff"></span><span>Prestado</span></div>
+                                                        <div class="amount">$4,305 </div>
+                                                    </div>
+                                                    <div class="traffic-channel-data">
+                                                        <div class="title"><span class="dot dot-lg sq" data-bg="#b8acff"></span><span>Capital</span></div>
+                                                        <div class="amount">$859 </div>
+                                                    </div>
+                                                    <div class="traffic-channel-data">
+                                                        <div class="title"><span class="dot dot-lg sq" data-bg="#ffa9ce"></span><span>Intereses</span></div>
+                                                        <div class="amount">$482 </div>
+                                                    </div>
+                                                  
+                                                </div><!-- .traffic-channel-group -->
+                                                <div class="col-12">
+                                                    <br><br>
+                                                </div>
+                                            </div><!-- .traffic-channel -->
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                            
+                           <div class="row mt-5">
+                            <div class="col-12">
+                                
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="nk-block-head nk-block-head-sm">
+                                            <div class="nk-block-between">
+                                                <div class="nk-block-head-content">
+                                                    <h6 class="title">Ingresos proyectados </h6>
+                                                    <p>Ingresos en los próximos meses</p>
+                                                </div><!-- .nk-block-head-content -->
+                                                
+                                            </div><!-- .nk-block-between -->
+                                        </div><!-- .nk-block-head -->
+                                        <div class="col-12 ">
+                                            <div class="nk-sales-ck large pt-4">
+                                                <canvas class="sales-overview-chart" id="salesOverview"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                           </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 
 
-    <div class="modal fade" id="modalPrestable" tabindex="-1" aria-labelledby="modalPrestableLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <form id="frm-inversionista-prestamo">
+    
+
+
+    <div class="modal fade" tabindex="-1" id="modalPrestar">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"> <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em> </a>
                 <div class="modal-header">
-                  <h5 class="modal-title" id="modalPrestableLabel">DISPONIBLE PARA PRESTAR</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">Asignar dinero para ser prestado</h5>
                 </div>
                 <div class="modal-body">
-                  <p>
-                    Es el importe de tu dinero destinado para préstamos. El dinero reservado en este apartado no está disponible para retiro a menos que modifiques el <span class="text-decoration-underline">LÍMITE MÁXIMO A PRESTAR.</span> 
-                    
-                    <br><br> <span class="text-decoration-underline"> El LÍMITE MÁXIMO A PRESTAR </span> determina la cantidad máxima de tu cuenta que estará disponible para préstamos. Puedes establecer el límite que tú quieras, por ejemplo: si estableces una cantidad mayor a tu dinero disponible, una vez que alcances este límite con las ganancias de tus préstamos, cualquier dinero adicional quedará disponible para ser retirado; si estableces una cantidad menor, siempre tendrás una parte disponible para préstamos y otra para retiro, que se irá incrementando conforme cobras tus préstamos; al fijar el límite en 0, tu dinero en APARTADO PRÉSTAMO pasará a estar disponible para retirar, así como todo lo que cobres posteriormente, y no se volverá a prestar hasta que modifiques esta configuración.
-
-                    Puedes ajustar este límite cuando quieras.
-                  </p>
-                  <div class="mb-3">
-                    <label for="lendable" class="form-label">Límite máximo a prestar</label>
-                    <input type="number" class="form-control" id="lendable" name="data[lendable]" value="{{ $lendable }}">
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="1" id="checkIslimit" name="checkIslimit">
-                    <label class="form-check-label" for="checkIslimit">
-                      Sin límite
-                    </label>
-                  </div>
-                  <input type="hidden" id="investorId" name="investorId" value="{{ $investor->id }}">
+                   <form action="">
+                        <p>
+                            Es la cantidad de dinero que está disponible para ser prestada. Esta cantidad irá disminuyendo conforme se vayan entregando créditos.
+                            El total de esta cantidad podrá verse en "En proceso de ser prestado"
+                        </p>
+                        <input type="text" class="form-control">
+                        <div class="col-12 mt-3 text-end">
+                            <a href="#" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                   </form>
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                  <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-            </form>
-          </div>
+            </div>
         </div>
-      </div>
+    </div>
+    
+    <div class="modal fade" tabindex="-1" id="modalDetalle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"> <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em> </a>
+                <div class="modal-header">
+                    <h5 class="modal-title">Valor de la cuenta</h5>
+                </div>
+                <div class="modal-body">
+                   <form action="">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td>Recursos fondeados</td>
+                                <td>$123,000</td>
+                            </tr>
+                            <tr>
+                                <td>Pagos recibidos</td>
+                                <td>$123,000</td>
+                            </tr>
+                            <tr>
+                                <td> <span class="h5 text-success">Total Ingresos</span> </td>
+                                <td> <span class="h5 text-success">$123,000</span> </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <hr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Préstamos realizados</td>
+                                <td>$123,000</td>
+                            </tr>
+                            <tr>
+                                <td>Comisiones pagadas</td>
+                                <td>$123,000</td>
+                            </tr>
+                            <tr>
+                                <td>Recursos retirados de tu cuenta</td>
+                                <td>$123,000</td>
+                            </tr>
+                            <tr>
+                                <td>Pérdidas por cartera vencida</td>
+                                <td>$123,000</td>
+                            </tr>
+                            <tr>
+                                <td> <span class="h5 text-danger">Total Egresos</span> </td>
+                                <td> <span class="h5 text-danger">$123,000</span> </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <hr>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ingresos -  Egreso</td>
+                                <td>$123,000</td>
+                            </tr>
+                            <tr>
+                                <td>Capital prestado pendiente de pago</td>
+                                <td>$123,000</td>
+                            </tr>
+                            <tr>
+                                <td> <span class="h5 text-primary">Valor de tu cuenta</span> </td>
+                                <td> <span class="h5 text-primary">$123,000</span> </td>
+                            </tr>
+                        </table>
+                      
+                    <hr>
+                  
+                   </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    @endsection
+@endsection
