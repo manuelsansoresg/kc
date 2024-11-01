@@ -331,6 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     let table = NioApp.DataTable('#dt-wallet', {
         processing: true,
+        isShowing: false,
         responsive: {
             details: {
                 type: 'column',
@@ -435,6 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     let table = NioApp.DataTable('#dt-down-wallet', {
         processing: true,
+        isShowing: false,
         responsive: {
             details: {
                 type: 'column',
