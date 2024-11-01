@@ -280,28 +280,10 @@
                                                         </div>
                                                        
 
-                                                        <span class="preview-title-lg overline-title">Viabilidad</span>
-                                                        <p class="text-primary">Este prospecto es <span class="text-viabilidad"></span>  </p>
-                                                       {{--  <div class="col-md-12">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" name="data[is_viability]" type="checkbox" value="1" id="is_viability">
-                                                                <label class="" for="is_viability">Viabilidad como <span class="text-viabilidad"></span> </label>
-                                                                
-                                                            </div>
-                                                        </div> --}}
-                                                        <input type="hidden" name="data[is_viability]" id="is_viability">
-                                                        <div class="col-md-12">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" name="data[is_viability_credit]" type="checkbox" value="1" id="is_viability_credit">
-                                                                <label class="" for="is_viability_credit">Viabilidad de crédito </label>
-                                                                
-                                                            </div>
-                                                        </div>
-                                                        <input type="hidden" id="isExport" name="isExport" value="false">
-                                                        <div class="col-12">
-                                                            <button type="button" class="btn btn-primary" onclick="saveAndExportLead()">Guardar y exportar datos</button>
-                                                        </div>
                                                         
+                                                        <input type="hidden" name="data[is_viability]" id="is_viability">
+                                                       
+                                                        <input type="hidden" id="isExport" name="isExport" value="false">
                                                         
                                                         <div class="col-md-6" id="content-comment" style="display: none">
                                                             <div class="form-group">
@@ -371,24 +353,7 @@
                                                             </div>
                                                         </div>
                                                         <hr class="preview-hr">
-                                                        <span class="preview-title-lg overline-title">Atención</span>
-                                                       {{--  <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Atención</label>
-                                                                <p class="small"> Tipo de atención que desea el prospecto</p>
-                                                                <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[type_id]" id="lead-type_id"  data-search="on">
-                                                                        @if ($lead == null)
-                                                                            <option value="">Escribe para buscar</option>
-                                                                        @endif
-                                                                        @foreach ($types as $key=>$type)
-                                                                            <option value="{{ $key }}">{{ $type }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div> --}}
+                                                       
                 
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Etiquetas</span>
