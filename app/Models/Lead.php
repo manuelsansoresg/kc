@@ -356,7 +356,7 @@ class Lead extends Model
             $new_agreement = Agreement::create([ 'name' => $request->new_agreement, 'description' => $request->new_agreement, 'status' => 1]);
             $data['agreement_id'] = $new_agreement->id;
         } */
-        if ($request->isNew == true) {
+        if ($request->isNew === '1') {
             if ($is_asesor === true) {
                 $data['asesor_id'] =  Auth::user()->id;
             }

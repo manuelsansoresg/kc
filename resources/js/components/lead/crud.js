@@ -420,9 +420,7 @@ window.checkDataLeadExist = function (valInput, id)
                 $('#is_viability').val(1);
                 //$('#lead_id').val(clientPerson.id);
                 $('#prospecto-valido').val('Prospecto válido');
-                if (result.lead  != null) {
-                    $('#lead_id').val(result.lead.id);
-                }
+                
                 
                 $('#lead-origin-agreement').val(clientPerson.agreement_id);
                 if (id == 'cellphone') {
@@ -669,6 +667,23 @@ $("#frm-tags").submit(function (event) {
 
         });
 });
+
+function saveLead()
+{
+    const new_form = document.getElementById("frm-lead");
+    const data = new FormData(new_form);
+    
+    axios
+        .post("/panel/lead", data)
+        .then(function (response) {
+            let getResult = response.data;
+            let result = getResult.lead;
+            $('#lead_id').val(result.id);
+            $('#isNew').val(0);
+        })
+        .catch(e => {
+        });
+}
 
 $().ready(function () {
     $("#frm-lead").validate({
@@ -1013,6 +1028,10 @@ window.validateSoad = function()
             let typeProductId = result.type_product_id;
             $('#typeProductId').val(typeProductId);
             
+            if ($('#is_viability').val() == 1 ) {
+                
+                saveLead();
+            }
 
             if (typeProductId == 1 || typeProductId == 2) {
                 $('#content_tramit_type').show();
@@ -1041,9 +1060,9 @@ window.validateSoad = function()
               
         
                 $('#content-validaciones-soad-date').html(isSoadDate);
-                console.log(isSodOnDate);
+                
                 if (isSodOnDate == true) {
-                    console.log(isSodOnDate+'aqui');
+                    
                     $('#content-product').html(result.contentProductSod);
                     $('#producto-deseado').show();
                     //valores slider

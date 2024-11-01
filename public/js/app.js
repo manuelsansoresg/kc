@@ -2689,11 +2689,6 @@ window.checkDataLeadExist = function (valInput, id) {
         $('#is_viability').val(1); //$('#lead_id').val(clientPerson.id);
 
         $('#prospecto-valido').val('Prospecto válido');
-
-        if (result.lead != null) {
-          $('#lead_id').val(result.lead.id);
-        }
-
         $('#lead-origin-agreement').val(clientPerson.agreement_id);
 
         if (id == 'cellphone') {
@@ -2877,6 +2872,18 @@ $("#frm-tags").submit(function (event) {
     $('#modal-tags').modal('hide');
   })["catch"](function (e) {});
 });
+
+function saveLead() {
+  var new_form = document.getElementById("frm-lead");
+  var data = new FormData(new_form);
+  axios.post("/panel/lead", data).then(function (response) {
+    var getResult = response.data;
+    var result = getResult.lead;
+    $('#lead_id').val(result.id);
+    $('#isNew').val(0);
+  })["catch"](function (e) {});
+}
+
 $().ready(function () {
   $("#frm-lead").validate({
     rules: {
@@ -3188,6 +3195,10 @@ window.validateSoad = function () {
       var typeProductId = result.type_product_id;
       $('#typeProductId').val(typeProductId);
 
+      if ($('#is_viability').val() == 1) {
+        saveLead();
+      }
+
       if (typeProductId == 1 || typeProductId == 2) {
         $('#content_tramit_type').show(); //llenar el arreglo de tipo de trámite
 
@@ -3211,10 +3222,8 @@ window.validateSoad = function () {
         $('#sod_max').val(result.maximoRedondeado);
         $('#sod_min').val(result.minimoRedondeado);
         $('#content-validaciones-soad-date').html(isSoadDate);
-        console.log(isSodOnDate);
 
         if (isSodOnDate == true) {
-          console.log(isSodOnDate + 'aqui');
           $('#content-product').html(result.contentProductSod);
           $('#producto-deseado').show(); //valores slider
 

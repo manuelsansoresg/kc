@@ -107,21 +107,7 @@ class LeadController extends Controller
         
         $isValidate = $isValidateCellphone == true || $isValidateRFC == true ?  true : false;
 
-        if ($isValidate === true) { //prospecto valido guardar
-            $dataLead = array(
-                'agreement_id' => $agreement->id,
-                'name'  => $getClientPerson->name,
-                'last_name'  => $getClientPerson->last_name,
-                'second_last_name'  => $getClientPerson->second_last_name,
-                'birth_date'  => $getClientPerson->birth_date,
-                'rfc'  => $getClientPerson->rfc,
-                'email'  => $getClientPerson->email,
-            );
-            $lead = Lead::create($dataLead);
-            
-        }
-
-        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate, 'lead' => $lead]);
+        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate]);
     }
 
     public function validateCellphoneAndRfc($cellphone , $rfc)
