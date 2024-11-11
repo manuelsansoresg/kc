@@ -8955,6 +8955,28 @@ NioApp.coms.docReady.push(function () {
 });
 
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
+/* graficas */
+
+/* function createBar(id, totalAmount, interestAmount, labels) {
+  const bar = document.getElementById(id);
+  const interestPercentage = (interestAmount / totalAmount) * 100;
+
+  // Seleccionar y ajustar la altura de la parte del interés
+  const interestFill = bar.querySelector('.interest-fill');
+  interestFill.style.height = `${interestPercentage}%`; // Solo la altura del interés cambia
+
+  // Crear y posicionar las etiquetas
+  const interestLabel = bar.querySelector('.interest-label');
+  interestLabel.innerText = `${labels.interest}\n~${Math.round(interestPercentage)}%`;
+
+  const capitalLabel = bar.querySelector('.capital-label');
+  capitalLabel.innerText = `${labels.capital}`;
+}
+
+// Crear las barras con los datos específicos
+createBar('bar1', 16000, 6000, { interest: 'Interés', capital: 'Deuda total de tus créditos' });
+createBar('bar2', 16000, 3000, { interest: 'Interés', capital: 'KaaxClub' });
+ */
 })();
 
 /******/ })()

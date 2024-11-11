@@ -23,8 +23,26 @@ class Investor extends Model
         'agreements_id',
         'financial_products_id',
         'loan_active_to_investors',
-        'loan_active'
+        'loan_active',
+        'funded_capital',
     ];
+
+    public static function setFundedCapital($investorId)
+    {
+        $getTransaction = Transaction::selectRaw('SUM(amount) as amount')
+        ->where([
+            'operation_status' => 1, 
+            'transaction_type' => 1, 
+            'investor_id ' => $investorId, 
+        ])->first();
+        if ($getTransaction != null) {
+            Investor::where('id', $investorId)->update([
+                'funded_capital' => $getTransaction->amount
+            ]);
+        }
+        
+    }
+
 
     public static function setLendable($request)
     {

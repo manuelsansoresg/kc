@@ -27,6 +27,28 @@
                     <div class="nk-block nk-block-lg">
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
+                                {{-- <div class="bar-container">
+                                    <!-- Primera barra -->
+                                    <div class="bar">
+                                        <div class="capital">
+                                            <div class="label capital-label">Deuda total de tus créditos</div>
+                                        </div>
+                                        <div class="interest-bar1">
+                                            <div class="label interest-label">Interés ~60%</div>
+                                        </div>
+                                    </div>
+                            
+                                    <!-- Segunda barra -->
+                                    <div class="bar">
+                                        <div class="capital">
+                                            <div class="label capital-label">KaaxClub</div>
+                                        </div>
+                                        <div class="interest-bar2">
+                                            <div class="label interest-label">Interés ~30%</div>
+                                        </div>
+                                    </div>
+                                </div> --}}
+                                  
                                 <table id="dt-lead" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
