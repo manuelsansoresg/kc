@@ -25,6 +25,7 @@ class Investor extends Model
         'loan_active_to_investors',
         'loan_active',
         'funded_capital',
+        'withdrawn_money',
     ];
 
     public static function setFundedCapital($investorId)
@@ -40,7 +41,18 @@ class Investor extends Model
                 'funded_capital' => $getTransaction->amount
             ]);
         }
-        
+
+        $getTransactionWithDrawn = Transaction::selectRaw('SUM(amount) as amount')
+        ->where([
+            'operation_status' => 1, 
+            'transaction_type' => 2, 
+            'investor_id ' => $investorId, 
+        ])->first();
+        if ($getTransactionWithDrawn != null) {
+            Investor::where('id', $investorId)->update([
+                'withdrawn_money' => $getTransactionWithDrawn->amount
+            ]);
+        }
     }
 
 
