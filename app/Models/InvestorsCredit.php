@@ -22,7 +22,8 @@ class InvestorsCredit extends Model
         'commission_amount',
         'recovered_capital',
         'total_collected',
-        'profit_collected'
+        'profit_collected',
+        'total_credit',
     ];
 
     public static function saveEdit($creditId)
@@ -31,6 +32,7 @@ class InvestorsCredit extends Model
         if ($getCredit != null) {
             $applied_financial_product = $getCredit->applied_financial_product;
             $applied_import            = $getCredit->applied_import;
+            $applied_loan_total_amount = $getCredit->applied_loan_total_amount;
             $getInvestors              = InvestorProduct::where('financial_products_id', $applied_financial_product)->get();
             
             
@@ -52,7 +54,7 @@ class InvestorsCredit extends Model
                     $dataInvestorCredit['percentage']      = $percent;
                     $dataInvestorCredit['import']          = ($percent * $applied_import)/ 100;
                     $dataInvestorCredit['commission_rate'] = $commissionRate;
-
+                    $dataInvestorCredit['total_credit'] = ($percent * $applied_loan_total_amount)/ 100;
                     if ($percent > 0 ) {
                         if ($existInvestorCredit->count() == 0) {
                             InvestorsCredit::create($dataInvestorCredit);
