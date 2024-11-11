@@ -14,7 +14,7 @@ class AddWithdrawnMoneyCapitalToInvestors extends Migration
     public function up()
     {
         Schema::table('investors', function (Blueprint $table) {
-            $table->decimal('withdrawn_money')->nullable()->after();
+            $table->decimal('withdrawn_money')->nullable()->after('funded_capital');
         });
     }
 
