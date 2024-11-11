@@ -18,12 +18,15 @@
                             <div class="col-12 mt-5">
                                 <div class="card card-bordered  vh-50">
                                     <div class="card-inner">
-
+                                        @php
+                                            $valorCuenta = $investor->placed_capial +  $investor->total_available;
+                                            $disponiblePrestar = $investor->total_available  +  $investor->loan_available;
+                                        @endphp
                                         <div class="analytic-ov">
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Valor de cuenta</div>
-                                                    <div class="amount">$10,000</div>
+                                                    <div class="amount">{{ format_price($valorCuenta) }}</div>
                                                     <div class="change up">
                                                         <a href="#"  data-bs-toggle="modal"
                                                         data-bs-target="#modalDetalle">Ver detalle</a>
@@ -31,19 +34,19 @@
                                                 </div>
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Disponible para prestar o retirar </div>
-                                                    <div class="amount">$1,000 <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-disponible"></em></div>
+                                                    <div class="amount">${{ format_price($disponiblePrestar) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-disponible"></em></div>
                                                     <div class="change up">
                                                     </div>
                                                 </div>
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">En proceso de ser prestado &nbsp; </div>
-                                                    <div class="amount">$1,000 <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></div>
+                                                    <div class="amount">${{ format_price($investor->loan_available) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></div>
                                                     <div class="change down"><a href="#"  data-bs-toggle="modal"
                                                         data-bs-target="#modalPrestar">Editar</a></div>
                                                 </div>
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Préstamos en créditos activos</div>
-                                                    <div class="amount">$2,000 <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
+                                                    <div class="amount">${{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
                                                     <div class="change down"></div>
                                                 </div>
                                             </div>
