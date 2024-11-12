@@ -88,18 +88,29 @@
                                         <div class="card-body">
                                             <h6 class="title">Resultados obtenidos </h6>
                                             <hr>
+                                            @php
+                                                $interesesCobrados          = $investor != null  ? $investor->profit_collected / 1.16 : 0;
+                                                $IvainteresesCobrados       = $investor != null  ? $interesesCobrados * 0.16 : 0;
+                                                $recuperacionCarteraVencida = 0;
+                                                
+                                                $comisionesPagadasKaax  = $investor != null  ? $investor->collection_commission  / 1.16 : 0;
+                                                $perdidasCarteraVencida = 0;
+                                                $ivaComisiones          = $investor != null  ? $comisionesPagadasKaax * 0.16 : 0;
+
+                                                $resultadosNetosTotales = $interesesCobrados + $IvainteresesCobrados + $recuperacionCarteraVencida + $comisionesPagadasKaax + $perdidasCarteraVencida + $recuperacionCarteraVencida;
+                                            @endphp
                                             <table class="table table-borderless">
                                                 <tr>
                                                     <td>Intereses cobrados</td>
-                                                    <td>$123,000</td>
+                                                    <td>${{ format_price($interesesCobrados) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>IVA de intereses cobrados</td>
-                                                    <td>$123,000</td>
+                                                    <td>${{ format_price($IvainteresesCobrados) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Recuperación de cartera vencida</td>
-                                                    <td>$123,000</td>
+                                                    <td>${{ format_price($recuperacionCarteraVencida) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
@@ -108,15 +119,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Comisiones pagadas a KaaxClub</td>
-                                                    <td>$123,000</td>
+                                                    <td>${{ format_price($comisionesPagadasKaax) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Pérdidas por cartera vencida</td>
-                                                    <td>$123,000</td>
+                                                    <td>${{ format_price($perdidasCarteraVencida) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>IVA de comisiones</td>
-                                                    <td>$123,000</td>
+                                                    <td>${{ format_price($ivaComisiones) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
@@ -125,7 +136,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td><span class="h5 text-primary">Resultados netos totales</span></td>
-                                                    <td><span class="h5 text-primary">$123,000</span></td>
+                                                    <td><span class="h5 text-primary">${{ format_price($resultadosNetosTotales) }}</span></td>
                                                 </tr>
                                             </table>
                                         </div>
