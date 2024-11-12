@@ -254,6 +254,9 @@ ul.ul-primary li::before {
   font-size: 11px !important;
 }
 
+.traffic-channel-doughnut-ck {
+  height: 326px;
+}
 
 /* grafica de barras */
  /* Estilos generales para el contenedor */
@@ -328,6 +331,11 @@ ul.ul-primary li::before {
 
  /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
+
+  .traffic-channel-doughnut-ck {
+    height: 250px;
+  }
+  
   .text-elije {
     font-size: 12px;
   }

@@ -22,7 +22,7 @@
                                             $valorCuenta = $investor->placed_capial +  $investor->total_available;
                                             $disponiblePrestar = $investor->total_available  +  $investor->loan_available;
                                         @endphp
-                                        <div class="analytic-ov">
+                                        <div class="analytic-ov d-none d-md-block">
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Valor de cuenta</div>
@@ -52,6 +52,38 @@
                                             </div>
 
 
+                                        </div>
+                                        <div class="d-block d-md-none">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="title">Valor de cuenta</div>
+                                                    <div class="amount">
+                                                        <br> {{ format_price($valorCuenta) }}</div>
+                                                    <div class="change up">
+                                                        <a href="#"  data-bs-toggle="modal"
+                                                        data-bs-target="#modalDetalle">Ver detalle</a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="title">Disponible para prestar o retirar </div>
+                                                    <div class="amount">${{ format_price($disponiblePrestar) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-disponible"></em></div>
+                                                    <div class="change up">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12"> &nbsp; </div>
+                                                <div class="col-6">
+                                                    <div class="title">En proceso de ser prestado &nbsp; </div>
+                                                    <div class="amount"><br>${{ format_price($investor->loan_available) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></div>
+                                                    <div class="change down"><a href="#"  data-bs-toggle="modal"
+                                                        data-bs-target="#modalPrestar">Editar</a></div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="title">Préstamos en créditos activos</div>
+                                                    <div class="amount">${{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
+                                                    <div class="change down"></div>
+                                                </div>
+                                            </div>
+                                            
                                         </div>
                                         <div style="display: none;">
                                            
@@ -146,12 +178,20 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h6 class="title">Valor de cuenta </h6>
+                                            @php
+                                                $disponiblePrestaroRetirar = $investor != null ? $investor->total_available  + $investor->loan_available : 0;
+                                                $procesoPrestado = $investor != null ? $investor->loan_available : 0;
+                                                $prestamoCreditosActivos = $investor != null ? $investor->placed_capital : 0;
+                                            @endphp
+                                            <input type="hidden" id="disponiblePrestaroRetirar" value="{{ $disponiblePrestaroRetirar }}">
+                                            <input type="hidden" id="procesoPrestado" value="{{ $procesoPrestado }}">
+                                            <input type="hidden" id="prestamoCreditosActivos" value="{{ $prestamoCreditosActivos }}">
                                             <hr>
                                             <div class="traffic-channel mt-3">
                                                 <div class="traffic-channel-doughnut-ck">
                                                     <canvas class="analytics-doughnut" id="TrafficChannelDoughnutData"></canvas>
                                                 </div>
-                                                <div class="traffic-channel-group g-2 mt-4">
+                                                <div class="traffic-channel-group g-2 mt-4 d-none">
                                                     <div class="traffic-channel-data">
                                                         <div class="title"><span class="dot dot-lg sq" data-bg="#9cabff"></span><span>Prestado</span></div>
                                                         <div class="amount">$4,305 </div>
