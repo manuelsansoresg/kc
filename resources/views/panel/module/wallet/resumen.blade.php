@@ -234,17 +234,32 @@
                 <div class="modal-body">
                    <form action="">
                         <table class="table table-borderless">
+                            @php
+                                $recursosFondeados = $investor != null ? $investor->funded_capital : 0;
+                                $totalCollected    = $investor != null ? $investor->total_collected : 0;
+                                $totalIngresos     = $recursosFondeados + $totalCollected;
+                                
+                                $prestamosRealizados       = $investor != null ? $investor->total_capital : 0;
+                                $comisionesPagadas         = $investor != null ? $investor->collection_commmission : 0;
+                                $recursosRetirados         = $investor != null ? $investor->withdrawn_money : 0;
+                                $perdidasporCarteraVencida = 0;
+                                $totalEgresos              = $prestamosRealizados + $comisionesPagadas + $recursosRetirados + $perdidasporCarteraVencida;
+
+                                $ingresoEgreso                = $totalIngresos - $totalEgresos;
+                                $capitalPrestadoPendientePago = $investor != null ? $investor->placed_capital : 0;
+                                $valorCuenta                  = $ingresoEgreso + $capitalPrestadoPendientePago;
+                            @endphp
                             <tr>
                                 <td>Recursos fondeados</td>
-                                <td>$123,000</td>
+                                <td>{{  '$'.format_price($recursosFondeados) }}</td>
                             </tr>
                             <tr>
                                 <td>Pagos recibidos</td>
-                                <td>$123,000</td>
+                                <td>{{ '$'.format_price($totalCollected)  }}</td>
                             </tr>
                             <tr>
                                 <td> <span class="h5 text-success">Total Ingresos</span> </td>
-                                <td> <span class="h5 text-success">$123,000</span> </td>
+                                <td> <span class="h5 text-success"> {{ '$'.format_price($totalIngresos) }} </span> </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
@@ -253,23 +268,23 @@
                             </tr>
                             <tr>
                                 <td>Préstamos realizados</td>
-                                <td>$123,000</td>
+                                <td>{{ '$'.format_price($prestamosRealizados) }}</td>
                             </tr>
                             <tr>
                                 <td>Comisiones pagadas</td>
-                                <td>$123,000</td>
+                                <td>{{ '$'.format_price($comisionesPagadas) }}</td>
                             </tr>
                             <tr>
                                 <td>Recursos retirados de tu cuenta</td>
-                                <td>$123,000</td>
+                                <td>{{ '$'.format_price($recursosRetirados) }}</td>
                             </tr>
                             <tr>
                                 <td>Pérdidas por cartera vencida</td>
-                                <td>$123,000</td>
+                                <td>{{ '$'.format_price($perdidasporCarteraVencida) }}</td>
                             </tr>
                             <tr>
                                 <td> <span class="h5 text-danger">Total Egresos</span> </td>
-                                <td> <span class="h5 text-danger">$123,000</span> </td>
+                                <td> <span class="h5 text-danger">{{ '$'.format_price($totalEgresos) }}</span> </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
@@ -278,15 +293,15 @@
                             </tr>
                             <tr>
                                 <td>Ingresos -  Egreso</td>
-                                <td>$123,000</td>
+                                <td>{{ '$'.format_price($ingresoEgreso) }}</td>
                             </tr>
                             <tr>
                                 <td>Capital prestado pendiente de pago</td>
-                                <td>$123,000</td>
+                                <td>{{ '$'.format_price($capitalPrestadoPendientePago) }}</td>
                             </tr>
                             <tr>
                                 <td> <span class="h5 text-primary">Valor de tu cuenta</span> </td>
-                                <td> <span class="h5 text-primary">$123,000</span> </td>
+                                <td> <span class="h5 text-primary">{{ '$'.format_price($valorCuenta) }}</span> </td>
                             </tr>
                         </table>
                       
