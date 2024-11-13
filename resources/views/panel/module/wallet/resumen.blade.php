@@ -266,7 +266,6 @@
                             El total de esta cantidad podrá verse en "En proceso de ser prestado"
                         </p>
                         <input type="number" min="201" max="{{ $totalAvailable }}" class="form-control">
-                        {{ $totalAvailable }}
                         <div class="col-12 mt-3 text-end">
                             <a href="#" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</a>
                             <button type="submit" class="btn btn-primary">Guardar</button>
