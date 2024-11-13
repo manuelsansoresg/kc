@@ -182,6 +182,7 @@
                                                 $disponiblePrestaroRetirar = $investor != null ? $investor->total_available  + $investor->loan_available : 0;
                                                 $procesoPrestado = $investor != null ? $investor->loan_available : 0;
                                                 $prestamoCreditosActivos = $investor != null ? $investor->placed_capital : 0;
+                                                $totalAvailable = $investor != null ? $investor->total_available : 0;
                                             @endphp
                                             <input type="hidden" id="disponiblePrestaroRetirar" value="{{ $disponiblePrestaroRetirar }}">
                                             <input type="hidden" id="procesoPrestado" value="{{ $procesoPrestado }}">
@@ -264,7 +265,8 @@
                             Es la cantidad de dinero que está disponible para ser prestada. Esta cantidad irá disminuyendo conforme se vayan entregando créditos.
                             El total de esta cantidad podrá verse en "En proceso de ser prestado"
                         </p>
-                        <input type="text" class="form-control">
+                        <input type="number" min="201" max="{{ $totalAvailable }}" class="form-control">
+                        {{ $totalAvailable }}
                         <div class="col-12 mt-3 text-end">
                             <a href="#" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</a>
                             <button type="submit" class="btn btn-primary">Guardar</button>
