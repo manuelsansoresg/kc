@@ -70,7 +70,6 @@ class File extends Model
         $new_file = array();
         foreach ($files as $file) {
             $fileStrategy   = TemplateValues::STRATEGY[HistoryLog::$name_model[$file->model]];
-            echo 'documentos'.$file->template_config_id.'<br>';
             $get_file       = (new $fileStrategy)->getFile($file->template_config_id);
             if (isset( $get_file['name'])) {
                 $new_file[] = array('name_template' => $get_file['name'], 'name' => $file->name);

@@ -83,7 +83,7 @@
                                         @endphp
                                         
                                         <tr class="tb-tnx-item">
-                                            <td class="tb-tnx-id"><a href="/credit/{{ $creditId }}"><span> {{ $creditId }} </span></a></td>
+                                            <td class="tb-tnx-id"><a target="_blank" href="/panel/credit/{{ $creditId }}"><span> {{ $creditId }} </span></a></td>
                                             <td class="tb-tnx-info">
                                                 <div class="tb-tnx-desc">
                                                     {{ $valorStatus }}

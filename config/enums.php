@@ -265,5 +265,11 @@ return [
         4 => 'Soluciona tu deuda',
         5 => 'Salario On-Demand',
     ),
+
+    'estatus_statement' => [
+        '' => '-',
+        0 => 'Pendiente',
+        1 => 'Pagado',
+    ],
     
 ];

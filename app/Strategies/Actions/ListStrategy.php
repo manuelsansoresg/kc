@@ -227,7 +227,7 @@ class ListStrategy implements ActionInterface
                     );
                 }
             } else {
-                if (Auth::user()->id == $advisor->id) {
+                if ($advisor != null && Auth::user()->id == $advisor->id) {
                     if ($name_status == 'completed' && ($percent_form == 100)) {
                         $data[] = array(
                             'action' => HistoryLog::$label_status[$history_log->status_id],

@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\CreditReference;
 use App\Models\HistoryLog;
+use App\Models\kaaxSidecc\CreditKaaxSidecc;
+use App\Models\kaaxSidecc\Pago;
+use App\Models\kaaxSidecc\Statement;
 use App\Strategies\Values\ActionValues;
 use Illuminate\Http\Request;
 
@@ -209,8 +212,12 @@ class CreditController extends Controller
      */
     public function show($id)
     {
-        $credit = Credit::find($id);
-        return view('panel.credit.profile', compact('credit'));
+        $credit   = Credit::find($id);
+        $creditKaax = CreditKaaxSidecc::where('kc_credit_id', $credit->id)->first();
+        $payments = Statement::where('credit_id', $creditKaax->id)
+                ->where('numero_de_pago', '!=', 0)
+                ->get();
+        return view('panel.credit.profile', compact('credit', 'payments'));
     }
 
     /**
