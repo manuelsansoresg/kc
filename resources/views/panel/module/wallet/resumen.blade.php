@@ -22,6 +22,8 @@
                                             $valorCuenta = $investor->placed_capial +  $investor->total_available;
                                             $disponiblePrestar = $investor->total_available  +  $investor->loan_available;
                                         @endphp
+                                        <input type="hidden" id="iValorCuenta" value="{{ $valorCuenta}}">
+                                        <input type="hidden" id="iTotalCredit" value="{{ $totalCredit}}">
                                         <div class="analytic-ov d-none d-md-block">
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
