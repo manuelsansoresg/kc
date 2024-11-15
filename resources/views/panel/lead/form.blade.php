@@ -457,4 +457,54 @@
             </div>
           </div>
         {{-- modal --}}
+        {{-- modal chart --}}
+        <div class="modal fade" id="modal-chart" tabindex="-1" aria-labelledby="modal-chartLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form id="frm-modal-chart">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="modal-chart-title"></h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="colorChartRight h6">
+                            Ahorra <span id="ahorro-interes-dinero"></span> (<span id="ahorro-interes-porcentaje"></span>) en intereses al transferir  la deuda de tus otros créditos a KaaxClub.
+                                Usa el dinero ahorrado para lo que tú desees.
+                                
+                        </p>
+                        <div class="charts-container-wrapper">
+                            <div class="extra-content colorChartLeft" id="extra-content-before">
+                                <p class="">Pago total <br> $<span id="lbl-kc-pago-total"></span>
+                                    <br>
+                                    <span class="small"> (<span id="lbl-kc-porcentaje-interes"> </span>% de interes)</span>
+                                </p>
+                            </div>
+                        
+                            <div id="charts-container" class="charts-container"></div>
+                        
+                            <div class="extra-content colorChartRight" id="extra-content-after">
+                                <p class="">Pago total <br> $<span id="lbl-deuda-pago-total"></span>
+                                    <br>
+                                    <span class="small"> (<span id="lbl-deuda-porcentaje-interes"> </span>% de interes)</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-12 colorChartRight mt-5">
+                                Si tu crédito KaaxClub es mayor a tu deuda actual de tus crésitos; recibirás la 
+                                diferencia en tu cuenta para que lo uses en lo que tú decidas.
+                                <br><br>
+                                El ahorro real puede variar dependiendo del monto  exacto de tu deuda 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="creditPayOffId" id="creditPayOffId" value="">
+                        <input type="hidden" name="lead_id_prueba" id="lead_id_prueba" value="8">
+                        
+                      <button type="submit" class="btn btn-secondary">Guardar</button>
+                    </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        {{-- /modal chart --}}
 @endsection

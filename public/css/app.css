@@ -253,75 +253,78 @@ ul.ul-primary li::before {
   height: 326px;
 }
 
-/* grafica de barras */
-/* Estilos generales para el contenedor */
-.bar-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  margin-top: 50px;
-  gap: 50px;
+.colorChartLeft {
+  color: #a34444;
 }
 
-/* Estilo para cada barra */
+.colorChartRight {
+  color: #57409b;
+}
+
+/* grafica de barras */
+.charts-container {
+  display: flex;
+  align-items: flex-end; /* Alinea las gráficas desde la base */
+  gap: 40px;
+}
+
+.charts-container-wrapper {
+  display: flex;
+  align-items: center; /* Centra el contenido verticalmente */
+  gap: 20px;
+}
+
+.charts-container {
+  display: flex;
+  align-items: flex-end; /* Alinea las gráficas desde la base */
+  gap: 40px;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .bar {
-  width: 100px;
-  height: 300px;
-  border-radius: 8px;
-  position: relative;
-  font-family: Arial, sans-serif;
+  width: 120px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  text-align: center;
-  color: white;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Colores para la sección de capital (parte inferior de la barra) */
-.capital {
-  width: 100%;
-  background-color: #777;
-  height: 70%; /* Ajustado para que ocupe el mismo alto en ambas barras */
   position: relative;
 }
 
-/* Colores para la sección de interés (parte superior de la barra) */
-.interest-bar1 {
+.segment {
   width: 100%;
-  background-color: #d9534f;
-  height: 30%; /* Ajustado según el porcentaje de interés para la primera barra */
-  position: absolute;
-  bottom: 70%;
-}
-
-.interest-bar2 {
-  width: 100%;
-  background-color: #5bc0de;
-  height: 15%; /* Ajustado según el porcentaje de interés para la segunda barra */
-  position: absolute;
-  bottom: 70%;
-}
-
-/* Etiquetas de interés y capital */
-.label {
-  position: absolute;
-  width: 100%;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px black;
-  padding: 5px;
   text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column; /* Alinea el contenido en columna */
+  justify-content: center; /* Centra el contenido verticalmente */
+  align-items: center; /* Centra el contenido horizontalmente */
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 1s ease, opacity 1s ease;
+  line-height: 1.5; /* Espaciado entre líneas */
 }
 
-/* Etiqueta de interés, ubicada en la parte superior */
-.interest-label {
-  top: 10%;
+.segment1 {
+  background-color: #a34444; /* Color para el interés */
 }
 
-/* Etiqueta de capital, ubicada en la parte inferior */
-.capital-label {
-  bottom: 10%;
+.segment2 {
+  background-color: #666a6f; /* Color para la deuda */
+}
+
+/* Estilos para los divs de contenido antes y después */
+.extra-content {
+  font-size: 15px;
+  font-weight: bold;
+  /* color: #333; */
+  text-align: center;
 }
 
 /* Estilos para pantallas móviles */

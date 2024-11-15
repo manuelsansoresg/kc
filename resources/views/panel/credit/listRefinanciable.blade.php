@@ -95,6 +95,7 @@
             <tr>
                 <td>Monto compra cartera:</td>
                 <td>$<span id="content-monto-compra-cartera"></span></td>
+                
             </tr>
             @endif
             <tr>
@@ -134,4 +135,8 @@
     </div>
    </div>
    <input type="hidden" id="hmonto-entregar" value="">
+
+   <input type="hidden" id="resumen-deuda-capital" value="">
+   <input type="hidden" id="resumen-kcInteres" value="">
+   <input type="hidden" id="resumen-kcPagoTotal" value="">
 </div>

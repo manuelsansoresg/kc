@@ -3,6 +3,7 @@
 namespace App\Lib;
 
 use App\Lib\pear\Finance;
+use App\Models\CreditPayOff;
 use App\Models\kaaxSidecc\Collection;
 
 class CalculadoraCredito
@@ -53,5 +54,22 @@ class CalculadoraCredito
         $finance = new Finance;
         $present = $finance->presentValue($rate, $nper, $pmt);
         return $present * -1;
+    }
+
+    public function deudaPagoTotal($lead , $financialProduct, $plazo, $monto)
+    {
+        //dd($lead->id);
+        $getCreditPayOff = CreditPayOff::selectRaw('MAX(financial_products.daily_interest_rate) as daily_interest_rate')
+    ->join('financial_products', 'financial_products.id', '=', 'credit_pay_off.financial_product_id')
+    ->where('lead_id', $lead->id)
+    ->first();
+
+        $rate = $getCreditPayOff->daily_interest_rate * $plazo;
+        $nper = $plazo;
+        $pmt  = $monto;
+
+        $finance = new Finance;
+        $present = $finance->presentValue($rate, $nper, $pmt);
+        return $present;
     }
 }

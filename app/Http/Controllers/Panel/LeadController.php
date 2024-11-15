@@ -12,6 +12,7 @@ use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\Bank;
 use App\Models\ClientPerson;
+use App\Models\CreditPayOff;
 use App\Models\CurrentFinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -70,6 +71,11 @@ class LeadController extends Controller
     {
         $users = Lead::listDatatable();
         return response()->json(['data' => $users]);
+    }
+
+    public function chartShow(Lead $lead)
+    {
+
     }
 
     public function checkData($valInput , $id)
@@ -536,6 +542,9 @@ class LeadController extends Controller
         $pagoTotal = $plazo * $pagoPeriodico;
         $tasaAnual = $financialProduct->annual_interest_rate;
         $cat = $financialProduct->rate_cat;
+        
+        $kcInteres = $pagoTotal - $monto;
+        $kcPagoTotal = $pagoTotal;
 
         $data = array(
             'montoSolicitado' => format_price($monto),
@@ -549,8 +558,63 @@ class LeadController extends Controller
             'pagoTotal' => format_price($pagoTotal),
             'tasaAnual' => $tasaAnual,
             'cat' => $cat,
+
+            'kcInteres' => $kcInteres,
+            'kcPagoTotal' => $kcPagoTotal,
         );
         return response()->json($data);
+    }
+
+    public function getChart(FinancialProduct $financialProduct, Lead $lead, $plazo, $monto)
+    {
+        $getCalc = new CalculadoraCredito();
+        $pagoPeriodico = $getCalc->presentValue($financialProduct, $plazo, $monto);
+        $pagoTotal = $plazo * $pagoPeriodico;
+        $kcInteres = $pagoTotal - $monto;
+        $kcPagoTotal = $pagoTotal;
+
+        $creditPays = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount')
+        ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
+        ->where('credit_pay_off.lead_id', $lead->id)
+        ->get();
+        
+        $montoCompraCartera = $creditPays->sum('ammount');
+        $kcInteres = $kcInteres = $pagoTotal - $monto;
+        $kcPagoTotal = $pagoTotal;
+
+        $deudaPagoTotal = $getCalc->deudaPagoTotal($lead, $financialProduct, $plazo, $monto);
+        
+        $ahorroInteresDinero = $deudaPagoTotal - $kcPagoTotal;
+        $deudaInteres = $deudaPagoTotal - $montoCompraCartera;
+        $ahorroInteresPorcentaje = ($deudaInteres - $kcInteres) / $deudaInteres;
+        $deudaPorcentajeInteres = $deudaInteres / $montoCompraCartera;
+        $kcCapital =$montoCompraCartera;
+        $kcPorcentajeInteres = $kcInteres/$kcCapital;
+
+        $data  = array(
+            'deudaCapital' => $montoCompraCartera,
+            'kcInteres' => $kcInteres,
+            'kcPagoTotal' => $kcPagoTotal,
+
+            'ahorroInteresDinero' => $ahorroInteresDinero,
+            'ahorroInteresDinerom' => format_price($ahorroInteresDinero),
+
+            'deudaInteres' => $deudaInteres,
+            
+            'ahorroInteresPorcentaje' => $ahorroInteresPorcentaje,
+            'ahorroInteresPorcentajem' => format_price($ahorroInteresPorcentaje),
+
+            'deudaPorcentajeInteres' => $deudaPorcentajeInteres,
+            'deudaPorcentajeInteresm' => format_price($deudaPorcentajeInteres),
+            'kcCapital' => $kcCapital,
+            'kcPorcentajeInteres' => $kcPorcentajeInteres,
+            
+            'deudaPagoTotal' => $deudaPagoTotal,
+            'deudaPagoTotalm' => format_price($deudaPagoTotal),
+
+        );
+        return response()->json($data);
+
     }
 
     /**

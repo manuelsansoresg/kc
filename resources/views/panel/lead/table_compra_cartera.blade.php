@@ -25,9 +25,12 @@
             </td>
         </tr>
     @endforeach
-    <tr>
-        <td  class="text-end">Total: </td>
-        <td colspan="2">{{ format_price($total)}}</td>
-    </tr>
+        <tr>
+            <td  class="text-end">Total: </td>
+            <td colspan="2">{{ format_price($total)}}</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="text-end"> <a onclick="graficaProspecto()">Ver gráfica <i class="fas fa-external-link-alt"></i> </a> </td>
+        </tr>
     </tbody>
 </table>

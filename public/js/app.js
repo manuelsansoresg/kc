@@ -2762,15 +2762,19 @@ window.editCompraCartera = function (creditPayOffId) {
 
 function showTableCompraCartera(leadId) {
   $('#content-table-compra-cartera').html('');
+  $('#resumen-deuda-capital').val(total);
   axios.get("/panel/lead/credit-pay-off/" + leadId).then(function (response) {
     var result = response.data;
     var table = result.table;
     var total = result.total;
     var montoEntregar = $('#hmonto-entregar').val();
     $('#content-monto-compra-cartera').html(total);
+    $('#resumen-deuda-capital').val(total);
     $('#content-monto-entregar').html(total - montoEntregar);
     $('#content-table-compra-cartera').html(table);
-  })["catch"](function (e) {});
+  })["catch"](function (e) {
+    console.log('error elementos compra de cartera');
+  });
 }
 
 window.getProductsByAgreementId = function (leadId, productId) {
@@ -3099,6 +3103,10 @@ window.changeTramite = function () {
   }
 };
 
+window.graficaProspecto = function () {
+  var leadId = $('#lead_id').val();
+};
+
 window.getMontoSolicitado = function () {
   var clientPersonId = $('#client_person_id').val();
   var productId = $('#financial_product_id').val();
@@ -3162,6 +3170,8 @@ window.getResumen = function () {
     var pagoTotal = result.pagoTotal;
     var tasaAnual = result.tasaAnual;
     var cat = result.cat;
+    var kcInteres = result.kcInteres;
+    var kcPagoTotal = result.kcPagoTotal;
     $('#content-monto-solicitado').html(montoSolicitado);
     $('#content-monto-refinanciar').html(montoRefinanciar);
     $('#content-comision-apertura').html(comision);
@@ -3174,8 +3184,28 @@ window.getResumen = function () {
     $('#content-tasa-anual').html(tasaAnual);
     $('#content-cat').html(cat);
     $('#hmonto-entregar').val(montoEntregarDecimal);
+    getChart();
   })["catch"](function (e) {});
-}; //validar soad activo y si existe la fecha en bd
+};
+
+function getChart() {
+  var productId = $('#financial_product_id').val();
+  var leadId = $('#lead_id').val();
+  var plazo = $('#ref-plazo').val();
+  var monto = $('#ref-monto').val();
+  axios.get("/panel/lead/" + productId + "/" + leadId + "/" + plazo + "/" + monto + '/getChart').then(function (response) {
+    var result = response.data;
+    $('#ahorro-interes-dinero').html(result.ahorroInteresDinerom);
+    $('#ahorro-interes-porcentaje').html(result.ahorroInteresPorcentaje);
+    $('#lbl-kc-pago-total').html(result.deudaPagoTotalm);
+    $('#lbl-kc-porcentaje-interes').html(result.deudaPorcentajeInteresm);
+    $('#lbl-deuda-pago-total').html(result.kcPagoTotal);
+    $('#lbl-deuda-porcentaje-interes').html(result.kcPorcentajeInteres); // Crear múltiples gráficas de ejemplo con alturas dinámicas
+
+    crearGraficaApilada(chartsContainer, result.deudaInteres, result.deudaCapital, '#a34444', '#757575', "Interés", "Deuda total <br> de tus créditos");
+    crearGraficaApilada(chartsContainer, result.kcInteres, result.kcCapital, '#7eb1a2', '#57409b', "Interés", "Kaax Club");
+  })["catch"](function (e) {});
+} //validar soad activo y si existe la fecha en bd
 
 
 window.validateSoad = function () {
@@ -3291,6 +3321,54 @@ $(document).ready( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRunt
 $(document).on("select2:open", function () {
   document.querySelector(".select2-container--open .select2-search__field").focus();
 });
+/* graficas */
+
+function crearGraficaApilada(contenedor, valorInteres, valorDeuda) {
+  var colorInteres = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '#e57373';
+  var colorDeuda = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '#757575';
+  var etiquetaInteres = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : "Interés";
+  var etiquetaDeuda = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : "Deuda";
+  var chartContainer = document.createElement('div');
+  chartContainer.classList.add('chart-container'); // Cálculo del total y altura dinámica para cada gráfica
+
+  var total = valorInteres + valorDeuda;
+  var alturaMaxima = 400; // Altura máxima en píxeles para la gráfica con mayor valor
+
+  var alturaGrafica = total / 16000 * alturaMaxima; // Escalado en base a un total de 16000 como máximo
+  // Crear la barra de la gráfica
+
+  var bar = document.createElement('div');
+  bar.classList.add('bar');
+  bar.style.height = "".concat(alturaGrafica, "px"); // Crear segmento de deuda
+
+  var segmentoDeuda = document.createElement('div');
+  segmentoDeuda.classList.add('segment', 'segment2');
+  segmentoDeuda.style.backgroundColor = colorDeuda;
+  segmentoDeuda.style.height = "".concat(valorDeuda / total * 100, "%");
+  segmentoDeuda.innerHTML = "\n    <span style=\"font-size: 1.2em; \">$".concat(valorDeuda.toLocaleString(), "</span>\n    <span style=\"font-size: 1.2em;\">").concat(etiquetaDeuda, "</span>\n  "); // Crear segmento de interés
+
+  var segmentoInteres = document.createElement('div');
+  segmentoInteres.classList.add('segment', 'segment1');
+  segmentoInteres.style.backgroundColor = colorInteres;
+  segmentoInteres.style.height = "".concat(valorInteres / total * 100, "%");
+  segmentoInteres.innerHTML = "\n     <span style=\"font-size: 1.2em;\">".concat(etiquetaInteres, "</span>\n    <span style=\"font-size: 1.2em;\">$").concat(valorInteres.toLocaleString(), "</span>\n   \n  "); // Añadir los segmentos a la barra (interés arriba)
+
+  bar.appendChild(segmentoInteres);
+  bar.appendChild(segmentoDeuda); // Añadir la barra al contenedor de la gráfica
+
+  chartContainer.appendChild(bar);
+  contenedor.appendChild(chartContainer); // Animación de llenado
+
+  setTimeout(function () {
+    segmentoInteres.style.opacity = 1;
+    segmentoInteres.style.transform = 'scaleY(1)';
+    segmentoDeuda.style.opacity = 1;
+    segmentoDeuda.style.transform = 'scaleY(1)';
+  }, 100); // Retraso para activar la animación
+} // Selecciona el contenedor principal donde se añadirán las gráficas
+
+
+var chartsContainer = document.getElementById('charts-container');
 
 /***/ }),
 
@@ -8959,28 +9037,6 @@ if (document.getElementById('TrafficChannelDoughnutData')) {
 }
 
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
-/* graficas */
-
-/* function createBar(id, totalAmount, interestAmount, labels) {
-  const bar = document.getElementById(id);
-  const interestPercentage = (interestAmount / totalAmount) * 100;
-
-  // Seleccionar y ajustar la altura de la parte del interés
-  const interestFill = bar.querySelector('.interest-fill');
-  interestFill.style.height = `${interestPercentage}%`; // Solo la altura del interés cambia
-
-  // Crear y posicionar las etiquetas
-  const interestLabel = bar.querySelector('.interest-label');
-  interestLabel.innerText = `${labels.interest}\n~${Math.round(interestPercentage)}%`;
-
-  const capitalLabel = bar.querySelector('.capital-label');
-  capitalLabel.innerText = `${labels.capital}`;
-}
-
-// Crear las barras con los datos específicos
-createBar('bar1', 16000, 6000, { interest: 'Interés', capital: 'Deuda total de tus créditos' });
-createBar('bar2', 16000, 3000, { interest: 'Interés', capital: 'KaaxClub' });
- */
 })();
 
 /******/ })()
