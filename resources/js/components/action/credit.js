@@ -238,6 +238,30 @@ if (document.getElementById('action-model')) {
             }
         });
     });
+
+    if (document.getElementById('pruebaDropZone')) {
+        let model = 'prueba';
+        let id_rel = 1;
+        let key = 1;
+        NioApp.Dropzone('#pruebaDropZone', {
+            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+            init: function () {
+                this.on("sending", function (file, xhr, formData) {
+                    
+                });
+
+                this.on("success", function (file, message) {
+                    
+                    
+                });
+                this.on("complete", function (file) {
+                    
+                })
+            }
+        }
+        );
+        
+    }
   
 }
 

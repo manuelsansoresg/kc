@@ -128,4 +128,11 @@ class ClientPerson extends Model
     {
         return $this->hasMany(Credit::class);
     }
+
+    public function agreement()
+    {
+        return $this->belongsTo(Agreement::class, 'agreement_id')->withDefault([
+            'name' => '',
+        ]);
+    }
 }

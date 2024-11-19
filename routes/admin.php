@@ -225,6 +225,7 @@ Route::group(['prefix' => 'kc-check-up'], function () {
 Route::resource('kc-control-desk', '\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController')->middleware('auth');
 Route::group(['prefix' => 'kc-control-desk'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'list'])->middleware('auth');
+    Route::get('{credit}/step/show', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'showStep'])->middleware('auth');
     Route::get('kc/{history_id}/{param}/{param2}/{type}/validate', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'validateKyc'])->middleware('auth');
 });
 

@@ -27,6 +27,11 @@ class KcControlDeskController extends Controller
         return response()->json(['data' => $users]);
     }
 
+    public function showStep(Credit $credit)
+    {
+        return view('Panel.module.control_desk.step', compact('credit'));
+    }
+
     public function validateKyc($history_id, $param, $param2, $type)
     {
         //*ejecutar api nubarium

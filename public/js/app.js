@@ -195,6 +195,20 @@ $(document).ready(function () {
         }
       });
     });
+
+    if (document.getElementById('pruebaDropZone')) {
+      var _model = 'prueba';
+      var _id_rel = 1;
+      var key = 1;
+      NioApp.Dropzone('#pruebaDropZone', {
+        url: "/panel/files/images/" + _model + '/' + _id_rel + '/' + key,
+        init: function init() {
+          this.on("sending", function (file, xhr, formData) {});
+          this.on("success", function (file, message) {});
+          this.on("complete", function (file) {});
+        }
+      });
+    }
   }
 });
 

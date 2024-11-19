@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Lib\Csendgrid;
 use App\Strategies\Values\TemplateValues;
+use Facade\FlareClient\Http\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -569,6 +570,11 @@ class Credit extends Model
     public function survey()
     {
         return $this->hasOne(Survey::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(ClientPerson::class, 'client_person_id');
     }
 
     public function creditNotes()
