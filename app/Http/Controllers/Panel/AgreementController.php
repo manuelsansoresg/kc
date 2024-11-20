@@ -63,7 +63,9 @@ class AgreementController extends Controller
     public function store(Request $request)
     {
         $agreement = Agreement::saveEdit($request);
-        FinancialAgreement::saveEdit($agreement->id, $request);
+        if (isset($request->products)) {
+            FinancialAgreement::saveEdit($agreement->id, $request);
+        }
         return response()->json(200);
     }
 

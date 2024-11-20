@@ -48,8 +48,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="content-razon" style="">
-                                    <div class="col-md-6">
+                                
+                                <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="form-label" for="frm-user-admin-name">*Persona tipo</label>
                                             <div class="form-control-select">
@@ -61,8 +61,22 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-12">&nbsp;</div>
-                                </div>
+                                   
+                                    <div class="col-md-6">
+                                        <div class="form-group"><label class="form-label">*Convenios</label>
+                                            <div class="form-control-wrap">
+    
+                                                <select class="form-control select2multiple"  name="agreements[]" id="agreements"  multiple="multiple"  data-search="on">
+                                                @foreach ($agreements as $agreement)
+                                                    <option value="{{ $agreement->id }}"> {{ $agreement->name}}</option>
+                                                @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                               
+                                
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-label" for="frm-user-admin-name">*Nombres</label>

@@ -47,7 +47,12 @@ function setDataUser(user_id) {
     axios
     .get("/panel/user/"+route_datatable+"/"+user_id)
     .then(function (response) {
-        let result = response.data;
+        let data = response.data;
+        let result = data.user;
+        let agreements = data.agreements;
+        
+        $('#agreements').val(null).trigger('change');
+
         if (document.getElementById('rol') != '') {
             //*limpiar los valores razon social
             let type_person = result.type_person;
@@ -85,6 +90,14 @@ function setDataUser(user_id) {
         if (document.getElementById('financial_products_id')) {
             const financial_products_id = result.financial_products_id.split(',');
             $('#financial_products_id').val(financial_products_id).trigger('change');
+        }
+        
+        if (document.getElementById('agreements')) {
+            // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+            let agreementValues = agreements.map(item => item.agreement_id);
+            // Seleccionar los valores correspondientes en los selects
+            $('#agreements').val(agreementValues).trigger('change');
+
         }
         
 

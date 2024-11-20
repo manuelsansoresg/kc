@@ -9,7 +9,7 @@
                         <div class="nk-block-head-content">
                             <div class="container">
                                 <div class="row justify-content-center">
-                                    <div class="col-12 col-md-11">
+                                    <div class="col-12">
                                         <h3 class="nk-block-title page-title">Etapas</h3>
                                         <div class="nk-block-des text-soft">
                                             <nav>
@@ -42,19 +42,23 @@
                                                 </span>
                                             </div>
                                         </div>
+                                     
                                         <div class="col-12">
                                             <span class="text-primary overline-title small">
+                                                @if ($credit != null)
+                                                    <a href="/panel/credit/{{ $credit->id }}">{{ $credit->id }} - {{ $client->name }} {{ $client->last_name }} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                                @endif
+                                            </span>
+                                        </div>
+                                        <div class="col-12">
+                                            <span class="text-primary small">
                                                 @if ($product != null)
                                                     {{ $product->alias }}
                                                 @endif
                                             </span>
                                         </div>
                                         <div class="col-12">
-                                            <span class="text-primary overline-title small">
-                                                @if ($credit != null)
-                                                    {{ $credit->id }} - {{ $client->name }} {{ $client->last_name }}
-                                                @endif
-                                            </span>
+                                            <hr>
                                         </div>
                                     </div>
                                 </div>
@@ -67,7 +71,114 @@
                     <div class="nk-block nk-block-lg">
                         <div class="container">
                             <div class="row justify-content-center">
-                                <div class="col-12 col-md-10">
+                                {{-- nuevo diseño --}}
+                                <div class="col-12">
+                                    <div id="accordion" class="accordion mt-2">
+                                        <div class="accordion-item">
+                                            <a href="#" class="accordion-head"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#accordion-item-documentos">
+                                                <div class="row text-secondary">
+
+                                                    <div class="col-12 col-md-1 text-primary bold fs-6 d-flex align-items-center"> Captura info 
+                                                        
+                                                    </div>
+                                                    <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps"> 
+                                                        <div class="project-list-progress">
+                                                            <div class="progress progress-pill progress-md bg-light">
+                                                                <div class="progress-bar" data-progress="40" style="width: 100%;"></div>
+                                                            </div>
+                                                            {{-- <div class="project-progress-percent">100%</div> --}}
+                                                        </div>    
+                                                    </div>
+                                                    <div class="col-12 col-md-1"></div>
+                                                </div>
+                                                <span class="accordion-icon"></span>
+                                            </a>
+                                            <div class="accordion-body collapse show"
+                                                id="accordion-item-documentos"
+                                                data-bs-parent="#accordion">
+                                                <div class="accordion-inner">
+                                                    <table class="table table-borderless" style="width: 40%">
+                                                        <tr>
+                                                            <td class=""> 1- Cotización BBVA</td>
+                                                            <td class=""><span class="badge bg-success">Concluido</span></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> 2- Cotización Coppel</td>
+                                                            <td><span class="badge bg-warning">En curso</span></td>
+                                                            <td>
+                                                                <a href="" class="btn btn-outline-primary btn-sm">Abrir</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> 3 - Nóminas personales </td>
+                                                            <td></td>
+                                                            <td>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <div id="accordion" class="accordion mt-2">
+                                        <div class="accordion-item">
+                                            <a href="#" class="accordion-head"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#accordion-item-kyc">
+                                                <div class="row text-secondary">
+
+                                                    <div class="col-12 col-md-1 text-primary bold fs-6 d-flex align-items-center"> Captura info 
+                                                        
+                                                    </div>
+                                                    <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps"> 
+                                                        <div class="project-list-progress">
+                                                            <div class="progress progress-pill progress-md bg-light">
+                                                                <div class="progress-bar" data-progress="0" style="width: 100%;"></div>
+                                                            </div>
+                                                            {{-- <div class="project-progress-percent">100%</div> --}}
+                                                        </div>    
+                                                    </div>
+                                                    <div class="col-12 col-md-1"></div>
+                                                </div>
+                                                <span class="accordion-icon"></span>
+                                            </a>
+                                            <div class="accordion-body collapse hide"
+                                                id="accordion-item-kyc"
+                                                data-bs-parent="#accordion">
+                                                <div class="accordion-inner">
+                                                    <table class="table table-borderless">
+                                                        <tr>
+                                                            <td> 1- Cotización BBVA</td>
+                                                            <td><span class="badge bg-success">Concluido</span></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> 2- Cotización Coppel</td>
+                                                            <td><span class="badge bg-warning">En curso</span></td>
+                                                            <td>
+                                                                <a href="" class="btn btn-outline-primary btn-sm">Abrir</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td> 3 - Nóminas personales </td>
+                                                            <td></td>
+                                                            <td>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{--/ nuevo diseño --}}
+                                <div class="col-12 col-md-10 mt-5 d-none">
                                     <div class="card card-bordered card-preview">
                                         <div class="card-inner">
                                             <div class="row text-secondary d-none d-md-flex">

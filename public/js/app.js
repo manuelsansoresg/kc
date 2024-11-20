@@ -6099,7 +6099,10 @@ window.modalUser = function (type, user_id) {
 function setDataUser(user_id) {
   var route_datatable = $('#route_datatable').val();
   axios.get("/panel/user/" + route_datatable + "/" + user_id).then(function (response) {
-    var result = response.data;
+    var data = response.data;
+    var result = data.user;
+    var agreements = data.agreements;
+    $('#agreements').val(null).trigger('change');
 
     if (document.getElementById('rol') != '') {
       //*limpiar los valores razon social
@@ -6140,6 +6143,15 @@ function setDataUser(user_id) {
     if (document.getElementById('financial_products_id')) {
       var financial_products_id = result.financial_products_id.split(',');
       $('#financial_products_id').val(financial_products_id).trigger('change');
+    }
+
+    if (document.getElementById('agreements')) {
+      // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+      var agreementValues = agreements.map(function (item) {
+        return item.agreement_id;
+      }); // Seleccionar los valores correspondientes en los selects
+
+      $('#agreements').val(agreementValues).trigger('change');
     }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
