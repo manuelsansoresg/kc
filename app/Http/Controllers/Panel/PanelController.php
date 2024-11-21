@@ -38,9 +38,14 @@ class PanelController extends Controller
     public function showValidate($id, $model)
     {
         $leadStrategy   = ValidateStagesValues::STRATEGY[$model];
-        $validate       = (new $leadStrategy)->getValidate($id);
         
-        $view_validate  = \View::make('panel.table_validate', ['errors' => $validate['table']])->render();
+        if ($model != 'lead') {
+            $validate       = (new $leadStrategy)->getValidate($id);
+            $view_validate  = \View::make('panel.table_validate', ['errors' => $validate['table']])->render();
+        } else {
+            $validate       = (new $leadStrategy)->listValidate($id);
+            $view_validate = $validate;
+        }
         return response()->json($view_validate);
     }
 

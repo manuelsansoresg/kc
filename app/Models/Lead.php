@@ -53,7 +53,10 @@ class Lead extends Model
         'sod_withdraw_amount',
         'sod_commision_amount',
         'sod_total_payment',
-        'tramit_type'
+        'tramit_type',
+        'cellphone_validated',
+        'rfc_validated',
+        'go_ahead'
     ];
 
     public static function validateSod($clientPerson, $financialProduct)

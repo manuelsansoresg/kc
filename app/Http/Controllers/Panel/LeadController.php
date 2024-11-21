@@ -116,7 +116,7 @@ class LeadController extends Controller
         return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate]);
     }
 
-    public function validateCellphoneAndRfc($cellphone , $rfc)
+    public function validateCellphoneAndRfc($cellphone , $rfc, Lead $lead)
     {
         $getClientPersonCellphone   = ClientPerson::where('cellphone', $cellphone)->first();
         $getClientPersonRFC   = ClientPerson::where('rfc', $rfc)->first();
@@ -149,9 +149,15 @@ class LeadController extends Controller
         
         $isValidate = $isValidateCellphone == true && $isValidateRFC == true ? true : false;
 
-       
+        if ($lead->cellphone_validated == 1) {
+            $contentValidaciones = '<p >Validación Prospecto (celular) / '.$cellphone.' /<span class="text-primary"> OK </span></p>';
+        }
+        
+        if ($lead->rfc_validated == true) {
+            $contentValidaciones = '<p >Validación Prospecto (rfc) / '.$rfc.' /<span class="text-primary"> OK </span></p>';
+        }
 
-        return response()->json($isValidate);
+        return response()->json(['isValidate' => $isValidate, 'msg' => $contentValidaciones]);
 
     }
 

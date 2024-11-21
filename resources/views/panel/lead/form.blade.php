@@ -391,6 +391,9 @@
                                                         <input type="hidden" name="data[sod_withdraw_amount]" id="sod_withdraw_amount" value="{{ $lead != null ? $lead->sod_withdraw_amount : null}}">
                                                         <input type="hidden" name="data[sod_commision_amount]" id="sod_commision_amount" value="{{ $lead != null ? $lead->sod_commision_amount : null}}">
                                                         <input type="hidden" name="data[sod_total_payment]" id="sod_total_payment" value="{{ $lead != null ? $lead->sod_total_payment : null}}">
+                                                        <input type="hidden" name="data[cellphone_validated]" id="cellphone_validated" value="{{ $lead != null ? $lead->cellphone_validated : null}}">
+                                                        <input type="hidden" name="data[rfc_validated]" id="rfc_validated" value="{{ $lead != null ? $lead->rfc_validated : null}}">
+                                                        <input type="hidden" name="data[go_ahead]" id="go_ahead" value="{{ $lead != null ? $lead->go_ahead : null}}">
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>

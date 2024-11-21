@@ -2642,20 +2642,25 @@ window.changeOrigen = function (change_channel) {
 }); */
 
 
-window.validateLeadEdit = function () {
+window.validateLeadEdit = function (lead_id) {
   var cellphone = $('#lead-cellphone').val();
   var rfc = $('#lead-rfc').val();
-  axios.get("/panel/lead/" + cellphone + "/" + rfc + "/get/validate").then(function (response) {
+  axios.get("/panel/lead/" + cellphone + "/" + rfc + "/" + lead_id + "/get/validate").then(function (response) {
     var result = response.data;
+    var isValidate = result.isValidate;
+    var contentValidaciones = result.msg;
     var client_person_id = $('#client_person_id').val();
 
-    if (result == true) {
+    if (isValidate == true) {
       $('#is_viability').val(1);
       $('#content-servicio-kc').show();
       $('#prospecto-valido').val('Prospecto válido');
+      $('#content-validaciones').show();
+      $('#content-validaciones').html(contentValidaciones);
     } else {
+      $('#content-validaciones').hide();
       $('#is_viability').val(0);
-      $('#content-servicio-kc').hie();
+      $('#content-servicio-kc').hide();
       $('#prospecto-valido').val('');
     }
 
@@ -2666,8 +2671,6 @@ window.validateLeadEdit = function () {
 window.showContentIsValidate = function () {
   var is_viability = $('#is_viability').val();
   var clientPersonId = $('#client_person_id').val(); //perfil-cliente
-
-  console.log('is_viability' + is_viability);
 
   if (is_viability == 1) {
     $('.perfil-cliente').each(function () {
@@ -2716,8 +2719,7 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
 
     $('#lead-comment').val(lead.comment);
     $('#client_person_id').val(lead.client_person_id);
-    showContentIsValidate();
-    validateLeadEdit(); // Luego ejecuta validateLeadEdit
+    validateLeadEdit(lead_id); // Luego ejecuta validateLeadEdit
     //changeOrigen(lead.channel_id);
 
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
@@ -2779,6 +2781,13 @@ window.checkDataLeadExist = function (valInput, id) {
 
         if (id == 'cellphone') {
           $('#isValidateCellphone').val(result.isValidate);
+          $('#cellphone_validated').val(1);
+          $('#rfc_validated').val(0);
+        }
+
+        if (id == 'rfc') {
+          $('#cellphone_validated').val(0);
+          $('#rfc_validated').val(1);
         }
 
         $('#lead-name').val(clientPerson.name);
@@ -3147,7 +3156,6 @@ window.changeTramite = function () {
   $('#content-refinanciado').hide();
   $('#product-deseado-refinanciamiento').hide();
   $('#content-product-deseado-refinanciamiento').html('');
-  console.log(tramit_type);
 
   if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
     axios.get("/panel/lead/" + clientPersonId + "/" + productId + "/" + tramit_type + "/refinanciamiento/get").then(function (response) {
@@ -3243,6 +3251,7 @@ window.getResumen = function () {
   var monto = $('#ref-monto').val();
   var totalRefinanciable = $('#total-refinanciable').val();
   var tramit_type = $('#tramit_type').val();
+  $('#go_ahead').val(0);
   axios.get("/panel/lead/" + productId + "/" + plazo + '/' + monto + '/' + totalRefinanciable + '/' + tramit_type + '/getResumen').then(function (response) {
     var result = response.data;
     var montoSolicitado = result.montoSolicitado;
@@ -3271,6 +3280,7 @@ window.getResumen = function () {
     $('#content-cat').html(cat);
     $('#hmonto-entregar').val(montoEntregarDecimal);
     getChart();
+    $('#go_ahead').val(1);
   })["catch"](function (e) {});
 };
 
@@ -3300,6 +3310,7 @@ window.validateSoad = function () {
   $('#content-product').html('');
   $('#content_tramit_type').hide();
   $('#content-validaciones-soad-tramite').html('');
+  $('#go_ahead').val(0);
 
   if ($('#financial_product_id').val() != null) {
     var clientPersonId = $('#client_person_id').val();
@@ -3341,7 +3352,8 @@ window.validateSoad = function () {
 
         if (isSodOnDate == true) {
           $('#content-product').html(result.contentProductSod);
-          $('#producto-deseado').show(); //valores slider
+          $('#producto-deseado').show();
+          $('#go_ahead').val(1); //valores slider
 
           var slider = document.getElementById('slider');
           slider.min = result.minimoRedondeado;
@@ -3371,7 +3383,7 @@ if (document.getElementById('valor-slider')) {
     displayValue.innerHTML = '$' + sliderValue;
     $('#sod_withdraw_amount').val(sliderValue);
     var comision = parseFloat($('#sod_commision_amount').val());
-    var total = sliderValue + comision; //console.log(total);
+    var total = sliderValue + comision;
 
     if (!isNaN(total)) {
       $('#sod_total_payment').val(total);
