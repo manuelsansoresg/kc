@@ -16,6 +16,7 @@ require('./components/lead/datatable');
 require('./components/lead/crud');
 
 require('./components/clients/datatable');
+require('./components/clients/datatable_colaboradores');
 require('./components/clients/crud');
 
 require('./components/tag/datatable');

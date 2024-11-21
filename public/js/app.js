@@ -942,7 +942,13 @@ $().ready(function () {
         $('#lead-email').val(client.email);
         $('#client-daily_income').val(client.daily_income);
         $('#client-agreement').val(client.agreement_id).trigger("change");
-        $('#client-status').val(client.active).trigger("change");
+        var clientStatusElement = document.getElementById("client-status");
+
+        if (client.active == 1 && clientStatusElement) {
+          clientStatusElement.click();
+        }
+
+        $('#client-status').val(client.active);
       })["catch"](function (e) {
         $('#admin_email-error-exist').show();
       });
@@ -1015,6 +1021,72 @@ document.addEventListener('DOMContentLoaded', function () {
   }); // Expand table rows on click
 
   $('#dt-clients tbody').on('click', 'td', function () {
+    var row = table_lead.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/clients/datatable_colaboradores.js":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/clients/datatable_colaboradores.js ***!
+  \********************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table_lead = NioApp.DataTable('#dt-colaboradores', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/clients/list/ListColaboradores',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'agreement'
+    }, {
+      data: 'cellphone'
+    },
+    /* { data: 'organizacion' }, */
+    {
+      data: 'rfc'
+    }, {
+      data: 'estatus'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-colaboradores tbody').on('click', 'td', function () {
     var row = table_lead.row($(this).closest('tr'));
 
     if (row.child.isShown()) {
@@ -8842,6 +8914,8 @@ __webpack_require__(/*! ./components/lead/datatable */ "./resources/js/component
 __webpack_require__(/*! ./components/lead/crud */ "./resources/js/components/lead/crud.js");
 
 __webpack_require__(/*! ./components/clients/datatable */ "./resources/js/components/clients/datatable.js");
+
+__webpack_require__(/*! ./components/clients/datatable_colaboradores */ "./resources/js/components/clients/datatable_colaboradores.js");
 
 __webpack_require__(/*! ./components/clients/crud */ "./resources/js/components/clients/crud.js");
 

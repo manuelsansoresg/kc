@@ -45,7 +45,12 @@ $().ready(function () {
                     $('#client-daily_income').val(client.daily_income);
                     
                     $('#client-agreement').val(client.agreement_id).trigger("change");
-                    $('#client-status').val(client.active).trigger("change");
+                    const clientStatusElement = document.getElementById("client-status");
+
+                    if (client.active == 1 && clientStatusElement) {
+                        clientStatusElement.click();
+                    }
+                    $('#client-status').val(client.active);
                 
     
     

@@ -349,6 +349,12 @@
                                         <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Ayuda</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                @hasrole('Cliente inversionista')
+                                <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
+                                    {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                    <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Mis colaboradores</span>
+                                </a>
+                                @endhasrole
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-heading">

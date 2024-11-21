@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ClientPerson extends Model
 {
@@ -87,22 +88,50 @@ class ClientPerson extends Model
         'payment_capacity'
     ];
 
-    public static function listDatatable()
+    public static function listDatatable($isAdmin = true)
     {
-        $clientPersons = ClientPerson::all();
-        $data        = array();
-        foreach ($clientPersons as $query) {
-            $agreement = Agreement::find($query->agreement_id);
-            $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id])->render();
-            $data[] = array(
-                'id' => $query->id,
-                'name' =>  $query->name.' '.$query->last_name.' '.$query->second_last_name,
-                'agreement' => $agreement != null ? $agreement->name : null,
-                'cellphone' => $query->cellphone,
-                'rfc' => $query->rfc,
-                'options' => $option
-            );
+        if ($isAdmin === true) {
+            $clientPersons = ClientPerson::all();
+            $data        = array();
+            foreach ($clientPersons as $query) {
+                $agreement = Agreement::find($query->agreement_id);
+                $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id])->render();
+                $data[] = array(
+                    'id' => $query->id,
+                    'name' =>  $query->name.' '.$query->last_name.' '.$query->second_last_name,
+                    'agreement' => $agreement != null ? $agreement->name : null,
+                    'cellphone' => $query->cellphone,
+                    'rfc' => $query->rfc,
+                    'options' => $option
+                );
         }
+        } else {
+            $userId = Auth::user()->id;
+            $investor = Investor::where('user_id', $userId)->first();
+            if ($investor != null) {
+                $agreementIds = InvestorsAgreement::where('investor_id', $investor->id)
+                ->pluck('agreement_id')
+                ->unique()
+                ->values() // Reindexa los índices del arreglo
+                ->toArray();
+                $getClientPersons = ClientPerson::whereIn('agreement_id', $agreementIds)->get();
+                foreach ($getClientPersons as $query) {
+                    $agreement = Agreement::find($query->agreement_id);
+                    $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id])->render();
+                    $data[] = array(
+                        'id' => $query->id,
+                        'name' =>  $query->name.' '.$query->last_name.' '.$query->second_last_name,
+                        'agreement' => $agreement != null ? $agreement->name : null,
+                        'cellphone' => $query->cellphone,
+                        'rfc' => $query->rfc,
+                        'estatus' => $query->active == 1 ? '<span class="text-success">Activo </span>' : '<span class="text-danger"> Inactivo </span>',
+                        'options' => $option
+                    );
+                }
+            }
+        }
+        
+        
         return $data;
     }
 
@@ -110,6 +139,7 @@ class ClientPerson extends Model
     {
         $clientId = $request->client_id;
         $data = $request->data;
+        $data['active'] = isset($data['active'])? 1 : 0;
         if ($clientId == null) {
             $client =  ClientPerson::create($data);
         } else {

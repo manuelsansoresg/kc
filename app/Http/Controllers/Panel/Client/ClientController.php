@@ -34,6 +34,17 @@ class ClientController extends Controller
         return response()->json(['data' => $users]);
     }
 
+    public function showColaboradores()
+    {
+        return view('panel.client.listColaboradores');
+    }
+
+    public function ListColaboradores()
+    {
+        $users = ClientPerson::listDatatable(false);
+        return response()->json(['data' => $users]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
