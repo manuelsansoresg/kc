@@ -70,9 +70,9 @@
                     </div>
                     <div class="nk-block nk-block-lg">
                         <div class="container">
-                            <div class="row justify-content-center">
+                            <div class="row ">
                                 {{-- nuevo diseño --}}
-                                <div class="col-12">
+                                <div class="col-12 col-md-8">
                                     <div id="accordion" class="accordion mt-2">
                                         <div class="accordion-item">
                                             <a href="#" class="accordion-head"
@@ -80,7 +80,7 @@
                                                 data-bs-target="#accordion-item-documentos">
                                                 <div class="row text-secondary">
 
-                                                    <div class="col-12 col-md-1 text-primary bold fs-6 d-flex align-items-center"> Captura info 
+                                                    <div class="col-12 col-md-2  text-primary fw-bold fs-6 d-flex align-items-center"> Captura info 
                                                         
                                                     </div>
                                                     <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps"> 
@@ -99,33 +99,33 @@
                                                 id="accordion-item-documentos"
                                                 data-bs-parent="#accordion">
                                                 <div class="accordion-inner">
-                                                    <table class="table table-borderless" style="width: 40%">
+                                                    <table class="table table-borderless" style="width: 60%;">
                                                         <tr>
-                                                            <td class=""> 1- Cotización BBVA</td>
-                                                            <td class=""><span class="badge bg-success">Concluido</span></td>
+                                                            <td>1- Cotización BBVA</td>
+                                                            <td class="align-bottom"><span class="badge bg-success">Concluido</span></td>
                                                             <td></td>
                                                         </tr>
                                                         <tr>
-                                                            <td> 2- Cotización Coppel</td>
-                                                            <td><span class="badge bg-warning">En curso</span></td>
+                                                            <td>2- Cotización Coppel</td>
+                                                            <td class="align-bottom"><span class="badge bg-warning">En curso</span></td>
                                                             <td>
                                                                 <a href="" class="btn btn-outline-primary btn-sm">Abrir</a>
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td> 3 - Nóminas personales </td>
+                                                            <td>3 - Nóminas personales</td>
                                                             <td></td>
-                                                            <td>
-                                                            </td>
+                                                            <td></td>
                                                         </tr>
                                                     </table>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <div class="col-12">
+                                <div class="col-12 col-md-8">
                                     <div id="accordion" class="accordion mt-2">
                                         <div class="accordion-item">
                                             <a href="#" class="accordion-head"
@@ -133,7 +133,7 @@
                                                 data-bs-target="#accordion-item-kyc">
                                                 <div class="row text-secondary">
 
-                                                    <div class="col-12 col-md-1 text-primary bold fs-6 d-flex align-items-center"> Captura info 
+                                                    <div class="col-12 col-md-2  text-primary fw-bold fs-6 d-flex align-items-center"> Captura info 
                                                         
                                                     </div>
                                                     <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps"> 
