@@ -31,12 +31,11 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Fecha</th>
                                             <th>Servicio KC</th>
                                             <th data-priority="1">Cliente</th>
                                             <th>Asesor</th>
                                             <th>Progreso</th>
-                                            <th>En curso</th>
-                                            <th>Deadline</th>
                                             <th></th>
                                         </tr>
                                     </thead>

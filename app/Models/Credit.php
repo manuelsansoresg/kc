@@ -249,6 +249,7 @@ class Credit extends Model
                 if ($is_advisor === true && Auth::user()->id === $advisor->id) {
                     $users[] = array(
                         'id' => $query->id_rel,
+                        'fecha' => formatDateNameMonthHour($history->created_at),
                         'product' => $content_product,
                         'client' => $content_client,
                         'advisor' => $name_advisor,
@@ -260,6 +261,7 @@ class Credit extends Model
                 } elseif ($is_user_financial === true && $query->financial_user_assigned === Auth::user()->id) {
                     $users[] = array(
                         'id' => $query->id_rel,
+                        'fecha' => formatDateNameMonthHour($history->created_at),
                         'product' => $content_product,
                         'client' => $content_client,
                         'advisor' => $name_advisor,
@@ -271,6 +273,7 @@ class Credit extends Model
                 } else {
                     $users[] = array(
                         'id' => $history->id_rel,
+                        'fecha' => formatDateNameMonthHour($history->created_at),
                         'product' => $content_product,
                         'client' => $content_client,
                         'advisor' => $name_advisor,

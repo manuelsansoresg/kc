@@ -3924,6 +3924,8 @@ document.addEventListener('DOMContentLoaded', function () {
     columns: [{
       data: 'id'
     }, {
+      data: 'fecha'
+    }, {
       data: 'product'
     }, {
       data: 'client'
@@ -3931,10 +3933,6 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'advisor'
     }, {
       data: 'progress'
-    }, {
-      data: 'in_progress'
-    }, {
-      data: 'deadline'
     }, {
       data: 'options'
     }],
