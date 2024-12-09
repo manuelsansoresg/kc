@@ -58,7 +58,7 @@
     );
     $current_archive = $m_history_log->getByStatusFirst($status_credit_archive, $credit->id, 1);
     $credit_product = $m_financial_product::getById($credit->applied_financial_product);
-$financial = $m_financial::find($credit_product->financial_id);
+    $financial = $credit_product != null ? $m_financial::find($credit_product->financial_id) : null;
 @endphp
 
 

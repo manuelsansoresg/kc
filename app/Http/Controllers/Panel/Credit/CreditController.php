@@ -214,9 +214,12 @@ class CreditController extends Controller
     {
         $credit   = Credit::find($id);
         $creditKaax = CreditKaaxSidecc::where('kc_credit_id', $credit->id)->first();
-        $payments = Statement::where('credit_id', $creditKaax->id)
-                ->where('numero_de_pago', '!=', 0)
-                ->get();
+        $payments = null;
+        if ($creditKaax != null) {
+            $payments = Statement::where('credit_id', $creditKaax->id)
+                    ->where('numero_de_pago', '!=', 0)
+                    ->get();
+        }
         return view('panel.credit.profile', compact('credit', 'payments'));
     }
 

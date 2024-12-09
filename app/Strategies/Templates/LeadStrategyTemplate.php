@@ -82,7 +82,6 @@ class LeadStrategyTemplate implements TemplateInterface
                 'manychat_id' => $lead->manychat_id,
                 'lead_id' => $lead->id,
                 'income' => $lead->income,
-                'applied_financial_product' => $lead->applied_financial_product,
                 'applied_loan_type' => $lead->applied_loan_type,
             );
 
