@@ -26,6 +26,7 @@ class FormController extends Controller
         $form             = (new $actionStrategy)->configForm($credit_id, $history_id);
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
         $title            = (new $actionStrategy)->setTitle($history);
+        
         $client           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditClientPerson : null;
         $product          = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditProduct : null;
         $id_rel           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->id : null;

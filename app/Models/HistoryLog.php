@@ -37,18 +37,18 @@ class HistoryLog extends Model
     const CREDIT_ARCHIVE                      = 16;
     const CREDIT_CANCELED                     = 17;
     const CREDIT_REJECTED                     = 18;
-    //* whenever a credit is in a module it must be in progress if it is archived, canceled or refuses to remove it
+    
     const CREDIT_IN_PROGRESS                  = 19;
     
     const NEW_CREDIT_KC_CHECK_UP              = 20;
 
     const KC_CONTROL_DESK                     = 21;
-    const KC_CONTROL_DESK_UPLOAD              = 22;
-    const KC_CONTROL_DESK_FORM                = 23;
+    const KC_CONTROL_DESK_TASK1_STEP1         = 22;
+    const KC_CONTROL_DESK_TASK2_STEP1         = 23;
+    const KC_CONTROL_DESK_TASK3_STEP1         = 24;
+    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP1  = 25;
     
-    const KC_CONTROL_DESK_FORM_STEP_2         = 24;
     
-    const KC_CONTROL_DESK_UPLOAD_3_1          = 25;
     const KC_CONTROL_DESK_FORM_STEP_3_1       = 26;
     const KC_CONTROL_DESK_FORM_STEP_3_2       = 27;
     
@@ -126,6 +126,7 @@ class HistoryLog extends Model
         'envio_identifacion', //* se usa en archivos
         'envio_documentacion_completa', //* se usa en archivos
         'is_credit', //* 0 lead 1= credits
+        'dynamic_status_id'// existen tareas dinamicas esta es la posicion del arreglo que seria el numero de la tarea que se pasa por la url
     ];
 
     public static $label_status = [
@@ -207,9 +208,9 @@ class HistoryLog extends Model
         18 => 'Rechazado',
         19 => 'En curso',
         20 => 'Nuevo crédito en KC - Check up',
-        22 => 'Docs Solicitante',
-        23 => 'Determinar crédito max',
-        24 => 'Crédito deseado',
+        22 => 'Cargar Anverso INE',
+        23 => 'Reverso INE',
+        24 => 'Última nómina',
         25 => 'Edo Cta',
         26 => 'Solicitud',
         27 => 'Entrevista',
@@ -421,11 +422,11 @@ class HistoryLog extends Model
         }
 
         if ($status_id == HistoryLog::KC_CONTROL_DESK) {
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD, HistoryLog::KC_CONTROL_DESK_UPLOAD);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK1_STEP1, HistoryLog::KC_CONTROL_DESK_TASK1_STEP1);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK2_STEP1, HistoryLog::KC_CONTROL_DESK_TASK2_STEP1);
 
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $id_rel, 0);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP1, $id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP1, $id_rel, 0);
             //*Cuando es crédito nuevo y viene de KC-Checkup
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
             

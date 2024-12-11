@@ -17,6 +17,27 @@
                     <span class="preview-title-lg overline-title {{ isset($element['class'])? $element['class'] :null  }} "> {!! $element['title_section'] !!} </span>
                 </div>
             @endif
+            @if ($element['type'] == 'dropzone')
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
+                    <div class="form-group">
+                        <label class="form-label" for="frm-user-admin-name">{{ isset($element['title'])? $element['title'] : null  }}</label>
+                        <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
+                        <div class="form-control-wrap">
+                            <div class="myDropzone" id="{{ isset($element['id_field'])? $element['id_field'] : null  }}"  data-max-file-size="5" data-max-files="3">
+                                <div class="dz-message" data-dz-message> 
+                                    <span class="dz-message-text">Arrastra y suelta el archivo</span>
+                                    <span class="dz-message-or">o</span> 
+                                    <span
+                                        class="dz-message-text">Haz click para elegir</span> 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row content-action-preview">
+                    <div  id="{{ isset($element['id_field'])? $element['id_field'] : null  }}-files-action-preview" class=""></div>
+                </div>
+            @endif
             @if ($element['type'] == 'text')
             @php
                 $class_form_group  = isset($element['class_form_group'])? $element['class_form_group'] : ''               
@@ -360,21 +381,19 @@
        
         @if ($type_form != 31)
         
-            <div class="col-12">
-                <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                    <li>
-                        {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
-                        @if (!isset($show_btn))
-                        <button class="btn btn-primary">{{ $name_button }}</button>
-                        @endif
-                        @if ($type_form == 43) {{-- swap --}}
-                            <a  onclick="saltarSwap()" class="btn btn-primary">Saltar</a>
-                        @endif
-                        @if (isset($buttonLinkExtraFinish) && $buttonLinkExtraFinish != null)
-                            <button class="{{ $buttonLinkExtraFinish['class'] }}" data-redirect="{{ $buttonLinkExtraFinish['data-redirect'] }}" id="{{ $buttonLinkExtraFinish['id'] }}"> {{ $buttonLinkExtraFinish['name'] }} </button>
-                        @endif
-                    </li>
-                </ul>
+            <div class="col-12 text-end">
+                <a onclick="cancelTask('{{ $name_form }}')" class="btn btn-outline-danger">Cancelar</a>
+                @if (!isset($show_btn))
+                        <button class="btn  btn-outline-primary">{{ $name_button }}</button>
+                @endif
+                @if ($type_form == 43) {{-- swap --}}
+                    <a  onclick="saltarSwap()" class="btn btn-primary">Saltar</a>
+                @endif
+                @if (isset($buttonLinkExtraFinish) && $buttonLinkExtraFinish != null)
+                    <button class="{{ $buttonLinkExtraFinish['class'] }}" data-redirect="{{ $buttonLinkExtraFinish['data-redirect'] }}" id="{{ $buttonLinkExtraFinish['id'] }}"> {{ $buttonLinkExtraFinish['name'] }} </button>
+                @endif
+                
+                <a onclick="saveAndContinueTask('{{ $name_form }}')" class="btn btn-outline-primary">Guardar y continuar</a>
             </div>
        
             

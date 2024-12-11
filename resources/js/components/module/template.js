@@ -80,22 +80,10 @@ $().ready(function () {
     //* save form  control desk step 1
     $("#frm-template_control_desk_step1").validate({
         rules: {
-            'credit[payment_capacity_period]': {
+            'url_redirect_next': {
                 required: true,
             },
-            'credit[payment_capacity]': {
-                required: true,
-            },
-
-            'client_person[birth_date]': {
-                required: true,
-            },
-            'client_person[labor_old]': {
-                required: true,
-            },
-            'client_person[employee_category]': {
-                required: true,
-            },
+           
 
 
         },
@@ -1071,6 +1059,20 @@ function saveForm(id_form, model) {
         })
         .catch(e => {
         });
+}
+
+window.saveAndContinueTask = function(id_form)
+{
+    let model = $('#action-model').val(); 
+    let newUrl = $('#url_redirect_next').val();
+    $('#url_redirect').val(newUrl); 
+    saveForm(id_form, model);
+}
+
+window.cancelTask = function()
+{
+    let url = $('#url_redirect').val(); 
+    window.location = url;
 }
 
 //*boton saltar en swap etapa 2_3   

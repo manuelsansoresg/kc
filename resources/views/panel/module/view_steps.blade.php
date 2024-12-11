@@ -72,111 +72,71 @@
                         <div class="container">
                             <div class="row ">
                                 {{-- nuevo diseño --}}
-                                <div class="col-12 col-md-8">
-                                    <div id="accordion" class="accordion mt-2">
-                                        <div class="accordion-item">
-                                            <a href="#" class="accordion-head"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#accordion-item-documentos">
-                                                <div class="row text-secondary">
-
-                                                    <div class="col-12 col-md-2  text-primary fw-bold fs-6 d-flex align-items-center"> Captura info 
+                                @if ($list_steps != null)
+                                    @foreach ($list_steps as $key => $list_steps)
+                                    <div class="col-12 col-md-8">
+                                        <div id="accordion" class="accordion mt-2">
+                                            <div class="accordion-item">
+                                                <a href="#" class="accordion-head"
+                                                    data-bs-toggle="collapse"
+                                                    data-bs-target="#accordion-item-documentos">
+                                                    <div class="row text-secondary">
+    
+                                                        <div class="col-12 col-md-2  text-primary fw-bold fs-6 d-flex align-items-center"> {{ $list_steps['nameStep'] }}
+                                                            
+                                                        </div>
+                                                        <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps"> 
+                                                            <div class="project-list-progress">
+                                                                <div class="progress progress-pill progress-md bg-light">
+                                                                    <div class="progress-bar" data-progress="40" style="width: 100%;"></div>
+                                                                </div>
+                                                                {{-- <div class="project-progress-percent">100%</div> --}}
+                                                            </div>    
+                                                        </div>
+                                                        <div class="col-12 col-md-1"></div>
+                                                    </div>
+                                                    <span class="accordion-icon"></span>
+                                                </a>
+                                                <div class="accordion-body collapse show"
+                                                    id="accordion-item-documentos"
+                                                    data-bs-parent="#accordion">
+                                                    <div class="accordion-inner">
+                                                        <table class="table table-borderless" style="width: 60%;">
+                                                            @php
+                                                                $indice = $key + 1;
+                                                                $list_actions = $indice > 0 ? (new $actionStrategy())->listActionByStep($history_id, $indice) : null;
+                                                                //dd($list_actions);
+                                                            @endphp
+                                                            @if ($list_actions != null)
+                                                                
+                                                                @foreach ($list_actions as $list_actions)
+                                                                    <tr>
+                                                                        <td>{!! $list_actions['name'] !!}</td>
+                                                                        <td class="align-bottom">{!! $list_actions['statusBadge'] !!}</td>
+                                                                        <td>
+                                                                            @if ($list_actions['status'] == 'En curso')
+                                                                                <a href="{{ $list_actions['link'] }}" class="btn btn-outline-primary btn-sm">Abrir</a>
+                                                                            @endif
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                            
+                                                            
+                                                            
+                                                        </table>
                                                         
                                                     </div>
-                                                    <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps"> 
-                                                        <div class="project-list-progress">
-                                                            <div class="progress progress-pill progress-md bg-light">
-                                                                <div class="progress-bar" data-progress="40" style="width: 100%;"></div>
-                                                            </div>
-                                                            {{-- <div class="project-progress-percent">100%</div> --}}
-                                                        </div>    
-                                                    </div>
-                                                    <div class="col-12 col-md-1"></div>
-                                                </div>
-                                                <span class="accordion-icon"></span>
-                                            </a>
-                                            <div class="accordion-body collapse show"
-                                                id="accordion-item-documentos"
-                                                data-bs-parent="#accordion">
-                                                <div class="accordion-inner">
-                                                    <table class="table table-borderless" style="width: 60%;">
-                                                        <tr>
-                                                            <td>1- Cotización BBVA</td>
-                                                            <td class="align-bottom"><span class="badge bg-success">Concluido</span></td>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>2- Cotización Coppel</td>
-                                                            <td class="align-bottom"><span class="badge bg-warning">En curso</span></td>
-                                                            <td>
-                                                                <a href="" class="btn btn-outline-primary btn-sm">Abrir</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>3 - Nóminas personales</td>
-                                                            <td></td>
-                                                            <td></td>
-                                                        </tr>
-                                                    </table>
-                                                    
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                    @endforeach
+                                @endif
+                               
                                 
-                                <div class="col-12 col-md-8">
-                                    <div id="accordion" class="accordion mt-2">
-                                        <div class="accordion-item">
-                                            <a href="#" class="accordion-head"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#accordion-item-kyc">
-                                                <div class="row text-secondary">
-
-                                                    <div class="col-12 col-md-2  text-primary fw-bold fs-6 d-flex align-items-center"> Captura info 
-                                                        
-                                                    </div>
-                                                    <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps"> 
-                                                        <div class="project-list-progress">
-                                                            <div class="progress progress-pill progress-md bg-light">
-                                                                <div class="progress-bar" data-progress="0" style="width: 100%;"></div>
-                                                            </div>
-                                                            {{-- <div class="project-progress-percent">100%</div> --}}
-                                                        </div>    
-                                                    </div>
-                                                    <div class="col-12 col-md-1"></div>
-                                                </div>
-                                                <span class="accordion-icon"></span>
-                                            </a>
-                                            <div class="accordion-body collapse hide"
-                                                id="accordion-item-kyc"
-                                                data-bs-parent="#accordion">
-                                                <div class="accordion-inner">
-                                                    <table class="table table-borderless">
-                                                        <tr>
-                                                            <td> 1- Cotización BBVA</td>
-                                                            <td><span class="badge bg-success">Concluido</span></td>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> 2- Cotización Coppel</td>
-                                                            <td><span class="badge bg-warning">En curso</span></td>
-                                                            <td>
-                                                                <a href="" class="btn btn-outline-primary btn-sm">Abrir</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td> 3 - Nóminas personales </td>
-                                                            <td></td>
-                                                            <td>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
+                               
                                 {{--/ nuevo diseño --}}
                                 <div class="col-12 col-md-10 mt-5 d-none">
                                     <div class="card card-bordered card-preview">
@@ -190,7 +150,7 @@
                                                     <div class="col-12 col-md-1 fw-bold"></div>
                                                 </div>
                                             </div>
-                                            @if ($list_steps != null)
+                                           {{--  @if ($list_steps != null)
 
                                                 @foreach ($list_steps as $key => $list_steps)
                                                     <div id="accordion" class="accordion mt-2">
@@ -266,7 +226,7 @@
                                                         </div>
                                                     </div>
                                                 @endforeach
-                                            @endif
+                                            @endif --}}
                                         </div>
                                     </div>
                                 </div>

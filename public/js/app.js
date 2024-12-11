@@ -63,38 +63,9 @@ window.deleteTag = function (tag_id) {
 
 $(document).ready(function () {
   if (document.getElementById('action-model')) {
-    //* get data saved 
-    var getData = function getData() {
-      clearPreviewFiles().then(function () {
-        var step = $('#step').val();
-        axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
-          var result = response.data;
-          var files = result.files;
-          var file_dates = result.file_date;
-
-          for (var key in file_dates) {
-            if (file_dates.hasOwnProperty.call(file_dates, key)) {
-              var element_date_file = file_dates[key];
-              console.log(element_date_file.template_config_id);
-              $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
-            }
-          }
-
-          for (var key_file in files) {
-            if (files.hasOwnProperty.call(files, key_file)) {
-              var element_file = files[key_file];
-              $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
-            }
-          }
-        })["catch"](function (e) {
-          console.error(e);
-        });
-      })["catch"](function (e) {
-        console.error(e);
-      });
-    };
-
     var clearPreviewFiles = function clearPreviewFiles() {
+      var model = $('#action-model').val();
+      var id_rel = $('#action-id_rel').val();
       return new Promise(function (resolve, reject) {
         var step = $('#step').val();
         axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
@@ -118,32 +89,25 @@ $(document).ready(function () {
     var model = $('#action-model').val();
     var id_rel = $('#action-id_rel').val();
     var step = $('#step').val();
+    console.log('model' + model);
 
     if (model == '') {
       model = null;
     } //*get configuration in template
 
 
-    axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
-      var result = response.data;
-      var config_files = result.config_files;
+    if (model == 'controlDesk') {
+      $('.myDropzone').each(function () {
+        // Obtener el ID del elemento actual
+        var key = $(this).attr('id');
+        console.log(key);
 
-      var _loop = function _loop(key) {
-        if (config_files.hasOwnProperty.call(config_files, key)) {
-          var element = config_files[key]; //create dinamic dropzone element
-
-          NioApp.Dropzone('#' + key + '-dropzone-action', {
+        if (key) {
+          // Crear dinámicamente una instancia de Dropzone
+          NioApp.Dropzone('#' + key, {
             url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
             init: function init() {
-              this.on("sending", function (file, xhr, formData) {
-                var date_file = null;
-
-                if (document.getElementById(key + '-date_file')) {
-                  date_file = $('#' + key + '-date_file').val();
-                }
-
-                formData.append("date_file", date_file);
-              });
+              this.on("sending", function (file, xhr, formData) {});
               this.on("success", function (file, message) {
                 getData();
               });
@@ -153,13 +117,47 @@ $(document).ready(function () {
             }
           });
         }
-      };
+      });
+    }
 
-      for (var key in config_files) {
-        _loop(key);
-      } //
+    if (model != 'controlDesk') {
+      axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
+        var result = response.data;
+        var config_files = result.config_files;
 
-    })["catch"](function (e) {});
+        var _loop = function _loop(key) {
+          if (config_files.hasOwnProperty.call(config_files, key)) {
+            var element = config_files[key]; //create dinamic dropzone element
+
+            NioApp.Dropzone('#' + key + '-dropzone-action', {
+              url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+              init: function init() {
+                this.on("sending", function (file, xhr, formData) {
+                  var date_file = null;
+
+                  if (document.getElementById(key + '-date_file')) {
+                    date_file = $('#' + key + '-date_file').val();
+                  }
+
+                  formData.append("date_file", date_file);
+                });
+                this.on("success", function (file, message) {
+                  getData();
+                });
+                this.on("complete", function (file) {
+                  this.removeAllFiles(true);
+                });
+              }
+            });
+          }
+        };
+
+        for (var key in config_files) {
+          _loop(key);
+        } //
+
+      })["catch"](function (e) {});
+    }
 
     window.deleteFileTemplate = function (model, id) {
       $('#frm-register-action-preview').html('');
@@ -167,48 +165,81 @@ $(document).ready(function () {
         getData();
         showToast('Archivos', 'Archivo borrado', 'success');
       })["catch"](function (e) {});
-    };
+    }; //* get data saved 
 
-    $().ready(function () {
-      getData();
-      $("#frm-action-files").validate({
-        rules: {
-          'date_file[]': {
-            required: true
+
+    window.getData = function () {
+      var model = $('#action-model').val();
+      var id_rel = $('#action-id_rel').val();
+      clearPreviewFiles().then(function () {
+        var step = $('#step').val();
+        axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
+          var result = response.data;
+          var files = result.files;
+          var file_dates = result.file_date;
+
+          for (var key in file_dates) {
+            if (file_dates.hasOwnProperty.call(file_dates, key)) {
+              var element_date_file = file_dates[key]; //console.log(element_date_file.template_config_id);
+
+              $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
+            }
           }
-        },
-        submitHandler: function submitHandler(form, event) {
-          event.preventDefault();
-          var new_form = document.getElementById("frm-action-files");
-          var data = new FormData(new_form); // Extract the step value from the URL
 
-          var urlParams = new URLSearchParams(window.location.search);
-          var step = urlParams.get('step'); // Add the step value to the FormData
-
-          data.append('step', step);
-          axios.post("/panel/files/template/date", data).then(function (response) {
-            var result = response.data;
-            var url_redirect = null;
-            url_redirect = $('#url_redirect').val();
-            window.location = url_redirect;
-          })["catch"](function (e) {});
-        }
+          for (var key_file in files) {
+            if (files.hasOwnProperty.call(files, key_file)) {
+              var element_file = files[key_file];
+              $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
+            }
+          }
+        })["catch"](function (e) {
+          console.error(e);
+        });
+      })["catch"](function (e) {
+        console.error(e);
       });
+    };
+  }
+
+  $().ready(function () {
+    getData();
+    $("#frm-action-files").validate({
+      rules: {
+        'date_file[]': {
+          required: true
+        }
+      },
+      submitHandler: function submitHandler(form, event) {
+        event.preventDefault();
+        var new_form = document.getElementById("frm-action-files");
+        var data = new FormData(new_form); // Extract the step value from the URL
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var step = urlParams.get('step'); // Add the step value to the FormData
+
+        data.append('step', step);
+        axios.post("/panel/files/template/date", data).then(function (response) {
+          var result = response.data;
+          var url_redirect = null;
+          url_redirect = $('#url_redirect').val();
+          window.location = url_redirect;
+        })["catch"](function (e) {});
+      }
     });
+  });
 
-    if (document.getElementById('pruebaDropZone')) {
-      var _model = 'prueba';
-      var _id_rel = 1;
-      var key = 1;
-      NioApp.Dropzone('#pruebaDropZone', {
-        url: "/panel/files/images/" + _model + '/' + _id_rel + '/' + key,
-        init: function init() {
-          this.on("sending", function (file, xhr, formData) {});
-          this.on("success", function (file, message) {});
-          this.on("complete", function (file) {});
-        }
-      });
-    }
+  if (document.getElementById('pruebaDropZone')) {
+    var _model = 'prueba';
+    var _id_rel = 1;
+    var key = 1;
+    NioApp.Dropzone('#pruebaDropZone', {
+      url: "/panel/files/images/" + _model + '/' + _id_rel + '/' + key,
+      init: function init() {
+        this.on("sending", function (file, xhr, formData) {});
+        this.on("success", function (file, message) {});
+        this.on("complete", function (file) {});
+      }
+    });
   }
 });
 
@@ -4619,19 +4650,7 @@ $().ready(function () {
 
   $("#frm-template_control_desk_step1").validate({
     rules: {
-      'credit[payment_capacity_period]': {
-        required: true
-      },
-      'credit[payment_capacity]': {
-        required: true
-      },
-      'client_person[birth_date]': {
-        required: true
-      },
-      'client_person[labor_old]': {
-        required: true
-      },
-      'client_person[employee_category]': {
+      'url_redirect_next': {
         required: true
       }
     },
@@ -5517,7 +5536,19 @@ function saveForm(id_form, model) {
 
     window.location = url_redirect;
   })["catch"](function (e) {});
-} //*boton saltar en swap etapa 2_3   
+}
+
+window.saveAndContinueTask = function (id_form) {
+  var model = $('#action-model').val();
+  var newUrl = $('#url_redirect_next').val();
+  $('#url_redirect').val(newUrl);
+  saveForm(id_form, model);
+};
+
+window.cancelTask = function () {
+  var url = $('#url_redirect').val();
+  window.location = url;
+}; //*boton saltar en swap etapa 2_3   
 
 
 window.saltarSwap = function () {

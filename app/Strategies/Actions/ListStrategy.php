@@ -33,12 +33,12 @@ class ListStrategy implements ActionInterface
                 HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
                 HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
 
-                HistoryLog::KC_CONTROL_DESK_UPLOAD,
-                HistoryLog::KC_CONTROL_DESK_FORM,
+                HistoryLog::KC_CONTROL_DESK_TASK1_STEP1,
+                HistoryLog::KC_CONTROL_DESK_TASK2_STEP1,
 
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_2,
+                HistoryLog::KC_CONTROL_DESK_TASK3_STEP1,
 
-                HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1,
+                HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP1,
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
                 HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
                 
@@ -146,10 +146,10 @@ class ListStrategy implements ActionInterface
                 $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
             }
 
-            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_UPLOAD
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_2
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1
+            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK1_STEP1
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK2_STEP1
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK3_STEP1
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP1
                 || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1
                 || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2
                 || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_4
