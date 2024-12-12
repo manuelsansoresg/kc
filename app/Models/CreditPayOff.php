@@ -18,6 +18,8 @@ class CreditPayOff extends Model
         'bank_clabe',
         'bank_clabe_valid',
         'ammount',
+        
+        'deadline_date',
     ];
 
     public static function saveEdit($request)

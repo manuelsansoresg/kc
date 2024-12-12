@@ -39,11 +39,12 @@ class ListStrategy implements ActionInterface
                 HistoryLog::KC_CONTROL_DESK_TASK3_STEP1,
 
                 HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP1,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
                 
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
+                HistoryLog::KC_CONTROL_DESK_TASK1_STEP2,
+                HistoryLog::KC_CONTROL_DESK_TASK2_STEP2,
+                HistoryLog::KC_CONTROL_DESK_TASK3_STEP2,
+                HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2,
+                
 
                 HistoryLog::KC_SWAP_UPLOAD,
                 HistoryLog::KC_SWAP_FORM,
@@ -150,10 +151,11 @@ class ListStrategy implements ActionInterface
                 || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK2_STEP1
                 || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK3_STEP1
                 || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP1
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_4
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_5
+                
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK1_STEP2
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK2_STEP2
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK3_STEP2
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2
                 ) {
                     $get_dinamic_percent =  (new $templateStrategy)->dinamicDeadline($history_log);
                     $view_dead_line_inf_credit = $get_dinamic_percent['deadline'];

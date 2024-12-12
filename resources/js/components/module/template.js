@@ -92,7 +92,7 @@ $().ready(function () {
             saveForm('frm-template_control_desk_step1', 'controlDesk');
         }
     });
-
+    
     $("#frm-template_control_desk_step2").validate({
         rules: {
            /*  'credit[applied_financial_product]': {
@@ -138,6 +138,103 @@ $().ready(function () {
             } else {
                 saveForm('frm-template_control_desk_step2', 'controlDesk');
             }
+        }
+    });
+    
+    $("#frm-template_control_desk_step2_task1").validate({
+        rules: {
+          
+
+            'client_person[ID_primer_apellido]': {
+                required: true,
+            },
+            'client_person[ID_segundo_apellido]': {
+                required: true,
+            },
+            'client_person[ID_nombres]': {
+                required: true,
+            },
+            'client_person[ID_vigencia]': {
+                required: true,
+            },
+            
+
+
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step2_task1', 'controlDesk');
+        }
+    });
+    
+    $("#frm-template_control_desk_step2_task2").validate({
+        rules: {
+          
+
+            'client_person[ID_CIC]': {
+                required: true,
+                number: true,
+            },
+            'client_person[ID_IDC]': {
+                required: true,
+                number: true,
+                minlength: 9,
+                maxlength:9
+            },
+            
+            
+
+
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step2_task2', 'controlDesk');
+        }
+    });
+    
+    $("#frm-template_control_desk_step2_task3").validate({
+        
+        rules: {
+          
+
+            'client_person[payroll_date]': {
+                required: true,
+            },
+            'client_person[payroll_total]': {
+                number: true,
+                required: true,
+            },
+            
+            
+
+
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step2_task3', 'controlDesk');
+        }
+    });
+    
+    $("#frm-template_control_desk_dynamic_step2").validate({
+        
+        rules: {
+            'pay_off[deadline_date]': {
+                required: true,
+            },
+            'pay_off[ammount]': {
+                number: true,
+                required: true,
+            },
+            'pay_off[bank_clabe]': {
+                required: true,
+                number: true,
+                minlength: 18,
+                maxlength:18
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_dynamic_step2', 'controlDesk');
         }
     });
 
@@ -1021,6 +1118,7 @@ function saveForm(id_form, model) {
         url_redirect = $('#url_redirect').val();
     }
     
+    console.log(model);
    
     data.append('model', model);
     data.append('id_rel', id_rel);

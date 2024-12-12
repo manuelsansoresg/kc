@@ -85,7 +85,18 @@ class ClientPerson extends Model
         'active_discount',
         'periodicity_id',
         'pc_percentage',
-        'payment_capacity'
+        'payment_capacity',
+
+        'ID_primer_apellido',
+        'ID_segundo_apellido',
+        'ID_nombres',
+        'ID_vigencia',
+        
+        'ID_CIC',
+        'ID_IDC',
+        
+        'payroll_date',
+        'payroll_total',
     ];
 
     public static function listDatatable($isAdmin = true)

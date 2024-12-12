@@ -49,12 +49,13 @@ class HistoryLog extends Model
     const KC_CONTROL_DESK_DYNAMIC_TASK_STEP1  = 25;
     
     
-    const KC_CONTROL_DESK_FORM_STEP_3_1       = 26;
-    const KC_CONTROL_DESK_FORM_STEP_3_2       = 27;
+    const KC_CONTROL_DESK_TASK1_STEP2         = 26;
+    const KC_CONTROL_DESK_TASK2_STEP2         = 27;
+    const KC_CONTROL_DESK_TASK3_STEP2         = 28;
+    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP2  = 57;
+
     
-    const KC_CONTROL_DESK_FORM_STEP_4         = 28;
-    
-    const KC_CONTROL_DESK_FORM_STEP_5         = 57;
+    const KC_CONTROL_DESK_TASK1_STEP3         = 58;
     const KC_CONTROL_DESK_FORM_STEP_5_2       = 58;
     const KC_CONTROL_DESK_FORM_STEP_5_3       = 59;
     
@@ -211,10 +212,10 @@ class HistoryLog extends Model
         22 => 'Cargar Anverso INE',
         23 => 'Reverso INE',
         24 => 'Última nómina',
-        25 => 'Edo Cta',
-        26 => 'Solicitud',
-        27 => 'Entrevista',
-        28 => 'Análisis KYC',
+        25 => '',
+        26 => 'Capturar Anverso INE',
+        27 => 'Capturar Reverso INE',
+        28 => 'Capturar Última nómina',
         29 => 'Contactar financiera',
         //30 => 'Entró a KC - Delivery',
         31 => 'Enviar info a S2',
@@ -243,7 +244,7 @@ class HistoryLog extends Model
         54 => 'Verificar pago',
         55 => '',
         56 => '',
-        57 => 'Preparar documento',
+        57 => '',
         58 => 'Confirmar',
         59 => 'Documento firmado',
         60 => '',

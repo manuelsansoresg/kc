@@ -144,11 +144,12 @@ class CreditController extends Controller
                 HistoryLog::KC_CONTROL_DESK_TASK3_STEP1,
 
                 HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP1,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
                 
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
+                HistoryLog::KC_CONTROL_DESK_TASK1_STEP2,
+                HistoryLog::KC_CONTROL_DESK_TASK2_STEP2,
+                HistoryLog::KC_CONTROL_DESK_TASK3_STEP2,
+                HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2,
+                
 
                 HistoryLog::KC_SWAP_UPLOAD,
                 HistoryLog::KC_SWAP_FORM,

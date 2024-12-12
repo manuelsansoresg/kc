@@ -164,6 +164,12 @@
                                 @if (isset($element['negativeNumber']) && $element['negativeNumber'] == true)
                                 data-negative-number
                                 @endif
+                                @if (isset($element['min']))
+                                min="{{ $element['min'] }}"
+                                @endif
+                                @if (isset($element['max']))
+                                max="{{ $element['max'] }}"
+                                @endif
                                 >
                             @if ($element['comment_admin'] != null)
                                 <small>{!!  $element['comment_admin'] !!}</small>
@@ -384,7 +390,7 @@
             <div class="col-12 text-end">
                 <a onclick="cancelTask('{{ $name_form }}')" class="btn btn-outline-danger">Cancelar</a>
                 @if (!isset($show_btn))
-                        <button class="btn  btn-outline-primary">{{ $name_button }}</button>
+                        <button class="btn  btn-outline-primary" id="saveButton">{{ $name_button }}</button>
                 @endif
                 @if ($type_form == 43) {{-- swap --}}
                     <a  onclick="saltarSwap()" class="btn btn-primary">Saltar</a>
