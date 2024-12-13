@@ -26,9 +26,10 @@ class CreditsControlDesk extends Model
         6 => 'dynamic',
     ];
 
-    public static function saveEdit($creditId, $request, $validate, $mandatory =1)
+    public static function saveEdit($creditId, $request, $validate, $task_id, $isOnlyCreate = false, $mandatory =1)
     {
-        $idvalue  = Str::slug($validate);
+        $idvalue  = Str::slug($validate).$task_id;
+        
         $value = $request->$idvalue;
         $getExist = CreditsControlDesk::where([
             'credit_id' => $creditId,
@@ -41,10 +42,14 @@ class CreditsControlDesk extends Model
             'status' => $value,
             'mandatory' => $mandatory,
         );
-        if ($getExist->count() == 0) {
-            CreditsControlDesk::create($dataCredit);
+        if ($isOnlyCreate == false) {
+            if ($getExist->count() == 0) {
+                CreditsControlDesk::create($dataCredit);
+            } else {
+                $getExist->update($dataCredit);
+            }
         } else {
-            $getExist->update($dataCredit);
+            CreditsControlDesk::create($dataCredit);
         }
     }
 }

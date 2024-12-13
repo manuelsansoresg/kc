@@ -1,3 +1,4 @@
+@if ($taskId == 1)
 <div class="row">
     <div class="col-6">
         <table class="table table-striped">
@@ -20,3 +21,22 @@
         </table>
     </div>
 </div>
+@endif
+
+@if ($taskId == 2)
+<div class="row">
+    <div class="col-6">
+        <table class="table table-striped">
+            <tr>
+                <td>Fecha nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_date : null }}</td>
+            </tr>
+            <tr>
+                <td>Total nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_total : null }}</td>
+            </tr>
+           
+        </table>
+    </div>
+</div>
+@endif

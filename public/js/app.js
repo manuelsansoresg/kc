@@ -4778,9 +4778,9 @@ $().ready(function () {
       saveForm('frm-template_control_desk_dynamic_step2', 'controlDesk');
     }
   });
-  $("#frm-template_control_desk_step3_task1").submit(function (event) {
+  $("#frm-template_control_desk_step3_task").submit(function (event) {
     event.preventDefault();
-    saveForm('frm-template_control_desk_step3_task1', 'controlDesk');
+    saveForm('frm-template_control_desk_step3_task', 'controlDesk');
   });
 
   window.getLoanAvailableByProduct = function (product) {
