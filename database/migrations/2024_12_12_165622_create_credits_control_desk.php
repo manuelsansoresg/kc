@@ -16,9 +16,9 @@ class CreateCreditsControlDesk extends Migration
         Schema::create('credits_control_desk', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('credit_id');
-            $table->string('id_validation');
+            $table->string('validation');
             $table->smallInteger('status')->nullable();
-            $table->smallInteger('mandatory')->nullable();
+            $table->smallInteger('mandatory')->nullable()->default(1);
             $table->timestamps();
         });
     }

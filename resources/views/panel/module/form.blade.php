@@ -133,7 +133,23 @@
             @if ($element['type'] == 'div')
                <div  class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}" id="{{ isset($element['id_field'])? $element['id_field'] : ''  }}">
                 {{ $element['title'] }}
+                {!! isset($element['content'])? $element['content'] : null   !!}
                </div>
+            @endif
+            
+            @if ($element['type'] == 'radio')
+            <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
+                <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
+                @foreach ($element['childs'] as $key => $child)
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="{{ $child['name_field'] }}" id="{{ $child['name_field'] }}{{ $key }}" value="{{$child['value']}}" {{ isset($child['is_required']) && $child['is_required'] == true ? 'required' :  null }}                >
+                        <label class="form-check-label" for="{{ $child['name_field'] }}{{$key}}">
+                        {{ $child['name'] }}
+                        </label>
+                    </div>
+                @endforeach
+            </div>
             @endif
             @if ($element['type'] == 'href')
                 @php

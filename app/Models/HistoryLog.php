@@ -56,8 +56,12 @@ class HistoryLog extends Model
 
     
     const KC_CONTROL_DESK_TASK1_STEP3         = 58;
-    const KC_CONTROL_DESK_FORM_STEP_5_2       = 58;
-    const KC_CONTROL_DESK_FORM_STEP_5_3       = 59;
+    const KC_CONTROL_DESK_TASK2_STEP3         = 59;
+    const KC_CONTROL_DESK_TASK3_STEP3         = 69;
+    const KC_CONTROL_DESK_TASK4_STEP3         = 70;
+    const KC_CONTROL_DESK_TASK5_STEP3         = 71;
+    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP3  = 72;
+
     
     const KC_DELIVERY                         = 30;
     const KC_DELIVERY_FORM                    = 31;
@@ -193,6 +197,9 @@ class HistoryLog extends Model
         58 => 'Formulario',
         59 => 'Carga',
         60 => 'KC - Wallet',
+        69 => 'Determinar CP real',
+        70 => 'Determinar crédito',
+        71 => 'Validar clabe cliente',
     ];
     
     public static $label_subject = [
@@ -245,8 +252,8 @@ class HistoryLog extends Model
         55 => '',
         56 => '',
         57 => '',
-        58 => 'Confirmar',
-        59 => 'Documento firmado',
+        58 => 'Validar INE',
+        59 => 'Validar última nómina',
         60 => '',
         61 => 'Datos transferencia',
         62 => 'Comprobante transferencia',
@@ -256,6 +263,9 @@ class HistoryLog extends Model
         66 => 'Retiro',
         67 => '',
         68 => '',
+        69 => 'Determinar CP real',
+        70 => 'Determinar crédito',
+        71 => 'Validar clabe cliente',
     ];
 
     public static $name_model = [
