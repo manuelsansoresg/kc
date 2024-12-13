@@ -238,6 +238,23 @@ $().ready(function () {
         }
     });
     
+
+    $("#frm-template_control_desk_step3_task3").validate({
+        
+        rules: {
+            'credit[payroll_payment_capacity]': {
+                required: true,
+                required: true,
+            },
+           
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step3_task3', 'controlDesk');
+        }
+    });
+
+
     $("#frm-template_control_desk_step3_task").submit(function (event) {
         event.preventDefault();
         saveForm('frm-template_control_desk_step3_task', 'controlDesk');

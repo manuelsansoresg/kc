@@ -179,7 +179,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             return self::configFormStep2Task3($id_rel, $history_id);
         }elseif($step === 2 && $task >  3){ //tareas dinamicas de la etapa 2
             return self::configDinamicFormStep2($id_rel, $history_id, $step);
-        }elseif($step === 3 && ($task ==1 || $task == 2)){ 
+        }elseif($step === 3 && ($task ==1 || $task == 2 || $task == 3 || $task == 4 || $task == 5)){ 
             return self::configDinamicFormStep3($id_rel, $history_id, $step);
         } 
     }
@@ -660,6 +660,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 $elements = self::configFormStep3Task2($id_rel, $history_id, $task, $taskId);
                 $name_form    = 'frm-template_control_desk_step3_task';
                 break;
+            case 3:
+                $elements = self::configFormStep3Task3($id_rel, $history_id, $task, $taskId);
+                $name_form    = 'frm-template_control_desk_step3_task3';
+                break;
             
             default:
                 $elements = self::configFormStep3Task1($id_rel, $history_id, $task, $taskId);
@@ -892,6 +896,88 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'col' => 'col-12'
             ],
             5 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect_next',
+                'id_field' => 'url_redirect_next',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=3_'.$stepRedirect.'&step_origin=',
+                'col' => 'col-12'
+            ],
+        );
+        return $elements;
+    }
+    
+    public function configFormStep3Task3($id_rel, $history_id, $task, $taskId)
+    {
+        $credit       = Credit::find($id_rel);
+        $client = $credit->creditClientPerson;
+        $stepRedirect = $taskId +1;
+        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit])->render();
+
+        $elements = array(
+            1 => [
+                'title_section' => '',
+                'title' => null,
+                'subtitle' => null,
+                
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'col' => 'col-12',
+                'type' => 'div',
+                'content' => $contentInfo,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+            ],
+            
+            2 => [
+                'title_section' => null,
+                'title' => 'Capacidad de pago real',
+                'subtitle' => 'indica la capacidad de pago del cliente',
+                'name_field' => 'credit[payroll_payment_capacity]',
+                'id_field' => 'payroll_payment_capacity',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'number',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => true,
+                'is_disabled' => null,
+                'value' => null,
+                'step' => 0.01,
+                'col' => 'col-6',
+            ],
+            
+            
+           
+            3 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                'col' => 'col-12'
+            ],
+            4 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect_next',
@@ -3175,6 +3261,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK3_STEP3, $credit->id, 0);
                         }
                     }
+
+                    if ($task == 3) {
+                        $percentTask2Step3  = self::DynamicPercentStep3($credit->id, $labelValidate);
+                        if ($percentTask2Step3 == 100) {
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK3_STEP3, $credit->id, 1); //terminar tarea
+
+                            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, null, false);
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, $credit->id, 0);
+                        }
+                    }
                 }
             }
             
@@ -3921,9 +4017,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $percentages    = [
             1 => self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[1]),
             2 => self::DynamicPercentStep3($credit->id,  CreditsControlDesk::$labelValidate[2]),
-            3 =>  CreditsControlDesk::$labelValidate[3],
-            4 =>  CreditsControlDesk::$labelValidate[4],
-            5 =>  CreditsControlDesk::$labelValidate[5],
+            3 =>  self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[3]),
+            4 =>  self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[4]),
+            5 =>  self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[5]),
         ];
         
        
@@ -4892,16 +4988,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
      */
     public function DynamicPercentStep3($creditId, $validation, $elements = 0)
     {
-        $credits = CreditsControlDesk::where([
-            'credit_id' => $creditId,
-            'validation' => $validation,
-        ]);
-        
-
-        $total = $credits->count();
-        $percent = $total > $elements ? 100 : 0;
+        $percent = 0;
+        if ($validation == CreditsControlDesk::$labelValidate[1] || $validation == CreditsControlDesk::$labelValidate[2]) {
+            $credits = CreditsControlDesk::where([
+                'credit_id' => $creditId,
+                'validation' => $validation,
+            ]);
+            
     
+            $total = $credits->count();
+            $percent = $total > $elements ? 100 : 0;
+        
+            return $percent;
+        } elseif ($validation == CreditsControlDesk::$labelValidate[3]) {
+            $credit = Credit::find($creditId);
+            $percent = $credit->payroll_payment_capacity != null ? 100 : 0 ;
+        }
         return $percent;
+        
     }
 
     public function optionBreadcumbStep($history)

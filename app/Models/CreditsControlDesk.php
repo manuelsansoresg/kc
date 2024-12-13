@@ -26,7 +26,7 @@ class CreditsControlDesk extends Model
         6 => 'dynamic',
     ];
 
-    public static function saveEdit($creditId, $request, $validate, $task_id, $isOnlyCreate = false, $mandatory =1)
+    public static function saveEdit($creditId, $request, $validate, $task_id = null, $isOnlyCreate = false, $mandatory =1)
     {
         $idvalue  = Str::slug($validate).$task_id;
         

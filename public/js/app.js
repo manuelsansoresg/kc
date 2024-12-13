@@ -4574,6 +4574,8 @@ if (document.getElementById('checkIslimit')) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 var refresh = {
   'newCredit': creditRefresh
@@ -4776,6 +4778,17 @@ $().ready(function () {
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
       saveForm('frm-template_control_desk_dynamic_step2', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step3_task3").validate({
+    rules: {
+      'credit[payroll_payment_capacity]': _defineProperty({
+        required: true
+      }, "required", true)
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step3_task3', 'controlDesk');
     }
   });
   $("#frm-template_control_desk_step3_task").submit(function (event) {

@@ -176,12 +176,15 @@
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
                             <input type="number" class="form-control" {{ $element['is_disabled'] }}
-                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}"
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}" {{ isset($element['is_required']) && $element['is_required'] == true ? 'required' :  null }}
                                 @if (isset($element['negativeNumber']) && $element['negativeNumber'] == true)
                                 data-negative-number
                                 @endif
                                 @if (isset($element['min']))
                                 min="{{ $element['min'] }}"
+                                @endif
+                                @if (isset($element['step']))
+                                step="{{ $element['step'] }}"
                                 @endif
                                 @if (isset($element['max']))
                                 max="{{ $element['max'] }}"
