@@ -984,6 +984,7 @@ window.getResumen = function()
     let monto = $('#ref-monto').val();
     let totalRefinanciable = $('#total-refinanciable').val();
     let tramit_type = $('#tramit_type').val();
+    let isControlDesk = $('#isControlDesk').val();
     $('#go_ahead').val(0);
     axios
     .get("/panel/lead/"+productId+"/"+plazo+'/'+monto+'/'+totalRefinanciable+'/'+tramit_type+'/getResumen')
@@ -1016,6 +1017,7 @@ window.getResumen = function()
         $('#content-tasa-anual').html(tasaAnual);
         $('#content-cat').html(cat);
         $('#hmonto-entregar').val(montoEntregarDecimal);
+        
         
         getChart();
 

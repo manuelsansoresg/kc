@@ -528,7 +528,39 @@ $().ready(function () {
         event.preventDefault(); // Evita que el formulario se envíe automáticamente
         saveForm('frm-template_control_desk_step4', 'controlDesk');
         
-        // Aquí puedes agregar el código para enviar los datos del formulario con Axios u otro método
+        });
+    }
+   
+    if (document.getElementById('frm-template_control_desk_step3_task4')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_control_desk_step3_task4');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_control_desk_step3_task4', 'controlDesk');
+        
+        });
+    }
+    
+    if (document.getElementById('frm-template_control_desk_step3_task5')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_control_desk_step3_task5');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_control_desk_step3_task5', 'controlDesk');
+        
+        });
+    }
+    
+    if (document.getElementById('frm-template_control_desk_dynamic_step3')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_control_desk_dynamic_step3');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_control_desk_dynamic_step3', 'controlDesk');
+        
         });
     }
 

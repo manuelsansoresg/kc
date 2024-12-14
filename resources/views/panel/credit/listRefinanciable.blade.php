@@ -135,6 +135,7 @@
     </div>
    </div>
    <input type="hidden" id="hmonto-entregar" value="">
+   <input type="hidden" id="isControlDesk" value="false">
 
    <input type="hidden" id="resumen-deuda-capital" value="">
    <input type="hidden" id="resumen-kcInteres" value="">

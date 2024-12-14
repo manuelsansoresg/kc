@@ -3282,6 +3282,7 @@ window.getResumen = function () {
   var monto = $('#ref-monto').val();
   var totalRefinanciable = $('#total-refinanciable').val();
   var tramit_type = $('#tramit_type').val();
+  var isControlDesk = $('#isControlDesk').val();
   $('#go_ahead').val(0);
   axios.get("/panel/lead/" + productId + "/" + plazo + '/' + monto + '/' + totalRefinanciable + '/' + tramit_type + '/getResumen').then(function (response) {
     var result = response.data;
@@ -5041,7 +5042,40 @@ $().ready(function () {
     form_control_desk_step4.addEventListener('submit', function (event) {
       event.preventDefault(); // Evita que el formulario se envíe automáticamente
 
-      saveForm('frm-template_control_desk_step4', 'controlDesk'); // Aquí puedes agregar el código para enviar los datos del formulario con Axios u otro método
+      saveForm('frm-template_control_desk_step4', 'controlDesk');
+    });
+  }
+
+  if (document.getElementById('frm-template_control_desk_step3_task4')) {
+    var _form_control_desk_step = document.getElementById('frm-template_control_desk_step3_task4'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_step3_task4', 'controlDesk');
+    });
+  }
+
+  if (document.getElementById('frm-template_control_desk_step3_task5')) {
+    var _form_control_desk_step2 = document.getElementById('frm-template_control_desk_step3_task5'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step2.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_step3_task5', 'controlDesk');
+    });
+  }
+
+  if (document.getElementById('frm-template_control_desk_dynamic_step3')) {
+    var _form_control_desk_step3 = document.getElementById('frm-template_control_desk_dynamic_step3'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step3.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_dynamic_step3', 'controlDesk');
     });
   }
 

@@ -26,9 +26,13 @@ class CreditsControlDesk extends Model
         6 => 'dynamic',
     ];
 
-    public static function saveEdit($creditId, $request, $validate, $task_id = null, $isOnlyCreate = false, $mandatory =1)
+    public static function saveEdit($creditId, $request, $validate, $task_id = null, $isOnlyCreate = false, $mandatory =1, $aliasProduct = null)
     {
         $idvalue  = Str::slug($validate).$task_id;
+
+        if ($validate == 'dynamic') {
+            $validate = $aliasProduct;
+        }
         
         $value = $request->$idvalue;
         $getExist = CreditsControlDesk::where([

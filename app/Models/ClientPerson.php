@@ -97,6 +97,9 @@ class ClientPerson extends Model
         
         'payroll_date',
         'payroll_total',
+        
+        'clabe_ownership',
+        'validated_clabe',
     ];
 
     public static function listDatatable($isAdmin = true)

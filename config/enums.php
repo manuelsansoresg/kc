@@ -272,4 +272,10 @@ return [
         1 => 'Pagado',
     ],
     
+    'pertenencia_clabe' => [
+        '' => 'no determinada',
+        0 => 'Inválida',
+        1 => 'Validada',
+    ],
+    
 ];
