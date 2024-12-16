@@ -61,6 +61,9 @@ class HistoryLog extends Model
     const KC_CONTROL_DESK_TASK4_STEP3         = 70;
     const KC_CONTROL_DESK_TASK5_STEP3         = 71;
     const KC_CONTROL_DESK_DYNAMIC_TASK_STEP3  = 72;
+    
+    const KC_CONTROL_DESK_TASK1_STEP4         = 73;
+    const KC_CONTROL_DESK_TASK2_STEP4         = 74;
 
     
     const KC_DELIVERY                         = 30;
@@ -266,6 +269,9 @@ class HistoryLog extends Model
         69 => 'Determinar CP real',
         70 => 'Determinar crédito',
         71 => 'Validar clabe cliente',
+        72 => null,
+        73 => 'Firma de contrato de CM',
+        74 => 'Firma de contrato/Descuento/Pagaré',
     ];
 
     public static $name_model = [

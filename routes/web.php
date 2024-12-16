@@ -70,6 +70,8 @@ Route::post('lead/form/store', ['\App\Http\Controllers\HomeController', 'leadFor
 
 Route::get('quiz/form', ['\App\Http\Controllers\HomeController', 'surveyForm']);
 
+Route::get('client/contratocm/{client}', ['\App\Http\Controllers\HomeController', 'contratoClient']);
+Route::get('client/contratocm/{client}/firmar', ['\App\Http\Controllers\HomeController', 'contratoClientFirma']);
 
 Route::get('/nosotros', function () {
     return view('about');

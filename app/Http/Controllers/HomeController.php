@@ -21,6 +21,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -74,6 +76,81 @@ class HomeController extends Controller
             return view('quiz.survey_form');
         }
         abort(404);
+    }
+
+    public function contratoClient(ClientPerson $client)
+    {
+        $credit  = Credit::where('client_person_id', $client->id )->first();
+        $isFirma = false;
+        $firma = null;
+        $token = null;
+        $ip = null;
+        $hostname = null;
+
+        $history = HistoryLog::where([
+            'id_rel' => $credit->id,
+            'is_credit' => 1,
+            'status_id' => HistoryLog::KC_CONTROL_DESK,
+            'status' => 1,
+        ])->first();
+        
+        $statusFirmaContratoCM = HistoryLog::where([
+            'id_rel' => $credit->id,
+            'is_credit' => 1,
+            'status_id' => HistoryLog::KC_CONTROL_DESK_TASK1_STEP4,
+            'status' => 1,
+        ])->first();
+        if ($statusFirmaContratoCM == null) {
+            abort(404);
+        } else {
+            $isFirma = $client->cm_agreement == null ? true : false;
+        }
+        return view('contrato_cliente', compact('client', 'history', 'isFirma', 'firma', 'token'));
+    }
+
+    public function contratoClientFirma(ClientPerson $client , Request $request)
+    {
+        $credit  = Credit::where('client_person_id', $client->id )->first();
+        $token = $client->id.'-'.\Str::random(10);
+        $firma =  $token;
+        // Obtener la IP real del usuario
+        $ip = $request->ip(); // Esto te dará la IP del cliente
+        $hostname = gethostbyaddr($ip);
+        $dateTime = Carbon::now()->format('d-m-Y h:i:s a');
+        $isFirma = $client->cm_agreement == null ? true : false;
+
+        
+
+        $data = array(
+            'client' => $client,
+            'isFirma' => $isFirma,
+            'token' => $token,
+            'firma' => $firma,
+            'ip' => $firma,
+            'hostname' => $hostname,
+            'dateTime' => $dateTime,
+        );
+        ClientPerson::where('id', $client->id)->update([
+            'cm_agreement' => 1
+        ]);
+        $history = HistoryLog::where([
+            'id_rel' => $credit->id,
+            'is_credit' => 1,
+            'status_id' => HistoryLog::KC_CONTROL_DESK,
+            'status' => 1,
+        ])->first();
+
+        
+        
+        if ($client->cm_agreement == null) {
+            $pdf = Pdf::loadView('contrato_cliente', $data);
+            $pdf->setPaper('A4');
+            $pdf->save('firma_contratos/invoice.pdf');
+        }
+       
+
+        
+        return redirect('/panel/template/steps/controlDesk/'.$history->id.'/show');
     }
 
     public function report($history_id, $credit_id = null)

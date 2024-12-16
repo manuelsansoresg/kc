@@ -100,6 +100,8 @@ class ClientPerson extends Model
         
         'clabe_ownership',
         'validated_clabe',
+        'cm_agreement',
+        'cm_agreement_sign',
     ];
 
     public static function listDatatable($isAdmin = true)
