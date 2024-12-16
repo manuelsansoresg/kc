@@ -153,8 +153,8 @@
     </div>
     @if ($isFirma === true && $token == null)
         <footer>
-            <a  href="/panel/template/steps/controlDesk/{{ $history->id}}/show" class="btn btn-outline-danger">Cancelar</a>
-            <a href="/client/contratocm/{{ $client->id }}/firmar" class="btn btn-outline-primary">Aceptar</a>
+            <a  href="/client/contratocm/{{ $client->id}}/1/exit" class="btn btn-outline-danger">Cancelar</a>
+            <a href="/client/contratocm/{{ $client->id}}/2/exit" class="btn btn-outline-primary">Aceptar</a>
         </footer>
     @endif
     

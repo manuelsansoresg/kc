@@ -145,12 +145,18 @@ class HomeController extends Controller
         if ($client->cm_agreement == null) {
             $pdf = Pdf::loadView('contrato_cliente', $data);
             $pdf->setPaper('A4');
-            $pdf->save('firma_contratos/invoice.pdf');
+            $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato CM.pdf';
+            $pdf->save('firma_contratos/'.$nombre);
         }
        
 
         
         return redirect('/panel/template/steps/controlDesk/'.$history->id.'/show');
+    }
+
+    public function contratoClientFirmaExit(ClientPerson $client , $type)
+    {
+        return view('exit_sign', compact('type'));
     }
 
     public function report($history_id, $credit_id = null)

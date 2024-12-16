@@ -72,6 +72,7 @@ Route::get('quiz/form', ['\App\Http\Controllers\HomeController', 'surveyForm']);
 
 Route::get('client/contratocm/{client}', ['\App\Http\Controllers\HomeController', 'contratoClient']);
 Route::get('client/contratocm/{client}/firmar', ['\App\Http\Controllers\HomeController', 'contratoClientFirma']);
+Route::get('client/contratocm/{client}/{type}/exit', ['\App\Http\Controllers\HomeController', 'contratoClientFirmaExit']);
 
 Route::get('/nosotros', function () {
     return view('about');
