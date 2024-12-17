@@ -574,6 +574,16 @@ $().ready(function () {
         
         });
     }
+    if (document.getElementById('frm-template_control_desk_step4_task2')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4_task2');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_control_desk_step4_task2', 'controlDesk');
+        
+        });
+    }
 
     $("#frm-template_control_desk_step5").validate({
         rules: {

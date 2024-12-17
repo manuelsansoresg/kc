@@ -278,6 +278,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=3&step_origin=',
                 'col' => 'col-12'
             ],
+            6=> [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'step',
+                'id_field' => 'step',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 1,
+                'col' => 'col-12'
+            ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -388,6 +404,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=2&step_origin=',
                 'col' => 'col-12'
             ],
+            6=> [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'step',
+                'id_field' => 'step',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 1,
+                'col' => 'col-12'
+            ],
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -494,6 +526,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null,
                 'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step='.$stepRedirect.'&step_origin=',
+                'col' => 'col-12'
+            ],
+            6=> [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'step',
+                'id_field' => 'step',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 1,
                 'col' => 'col-12'
             ],
         );
@@ -1483,8 +1531,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function configFormStep4Task2($id_rel, $history_id, $step)
     {
         $credit       = Credit::find($id_rel);
-        $name_form    = 'frm-template_control_desk_step4_task1';
-        $type_form    = HistoryLog::KC_CONTROL_DESK_TASK1_STEP4;
+        $name_form    = 'frm-template_control_desk_step4_task2';
+        $type_form    = HistoryLog::KC_CONTROL_DESK_TASK2_STEP4;
         $client = $credit->creditClientPerson;
         
         
@@ -1516,9 +1564,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $stepRedirect = $taskId +1;
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'payOff' => null, 'step' => $step])->render();
 
-        
-            
-
         $elements = array(
             1 => [
                 'title_section' => '',
@@ -1536,10 +1581,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null,
             ],
+
+           
             2 => [
                 'title_section' => null,
-                'title' => '*Contrato CM firmado',
-                'subtitle' => 'Indica si el cliente ya firmó el contrato de comisión mercantil',
+                'title' => '*Contrato de CM',
+                'subtitle' => 'Indica si el cliente ya firmó el contrato de crédito',
                 'name_field' => null,
                 'id_field' => 'ammount',
                 'comment_admin' => '',
@@ -1556,7 +1603,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     0 => array(
                         'link' => null,
                         'name' => 'Valida',
-                        'name_field' =>  'cm_agreement_sign',
+                        'name_field' =>  'credit_agreement_signed',
                         'class' => null,
                         'onclick' => null,
                         'value' => 1,
@@ -1565,7 +1612,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     1 => array(
                         'link' => null,
                         'name' => 'Invalida',
-                        'name_field' => 'cm_agreement_sign',
+                        'name_field' => 'credit_agreement_signed',
                         'class' => null,
                         'onclick' => null,
                         'value' => 0,
@@ -1575,8 +1622,96 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 )
             ],
             
-           
+            3 => [
+                'title_section' => null,
+                'title' => '*Firma de contrato válida',
+                'subtitle' => 'Indica si la firma del cliente es válida',
+                'name_field' => null,
+                'id_field' => 'ammount',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'radio',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => null,
+                'col' => 'col-6',
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'name' => 'Valida',
+                        'name_field' =>  'credit_agreement_sign_ok',
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 1,
+                        'is_required' => true,
+                    ),
+                    1 => array(
+                        'link' => null,
+                        'name' => 'Invalida',
+                        'name_field' => 'credit_agreement_sign_ok',
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 0,
+                        'is_required' => true,
+                        
+                    ),
+                )
+            ],
+
             4 => [
+                'title_section' => null,
+                'title' => '*Contrato firmado',
+                'subtitle' => 'Adjunta el contrato firmado',
+                'name_field' => 'anverso',
+                'id_field' => '4',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'dropzone',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            5 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'action-model',
+                'id_field' => 'action-model',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 'controlDesk',
+                'col' => 'col-12'
+            ],
+            
+            6 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'action-id_rel',
+                'id_field' => 'action-id_rel',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => $id_rel,
+                'col' => 'col-12'
+            ],
+            
+           
+            7 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
@@ -1592,7 +1727,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
                 'col' => 'col-12'
             ],
-            5 => [
+            8 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect_next',
@@ -1606,6 +1741,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => false,
                 'is_disabled' => null,
                 'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=4_'.$stepRedirect.'&step_origin=',
+                'col' => 'col-12'
+            ],
+            9=> [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'step',
+                'id_field' => 'step',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 4,
                 'col' => 'col-12'
             ],
         );
@@ -3995,16 +4146,34 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 }
 
                 if ($step == 4) {
-                    $cm_agreement_sign = isset($request->cm_agreement_sign)? $request->cm_agreement_sign : 0;
-                    ClientPerson::where('id', $client->id)->update([
-                        'cm_agreement_sign' => $cm_agreement_sign
-                    ]);
-                    $percentTask5Step3 = self::percentTask1Step4($history->id);
-                    if ($percentTask5Step3 == 100) {
-                        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 1); //terminar tarea
 
-                        HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
-                        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);
+                    if ($task == 1) {
+                        $cm_agreement_sign = isset($request->cm_agreement_sign)? $request->cm_agreement_sign : 0;
+                        ClientPerson::where('id', $client->id)->update([
+                            'cm_agreement_sign' => $cm_agreement_sign
+                        ]);
+                        $percentTask1Step4 = self::percentTask1Step4($history->id);
+                        if ($percentTask1Step4 == 100) {
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 1); //terminar tarea
+    
+                            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);
+                        }
+                    }
+
+                    if ($task == 2) {
+                        Credit::where('id', $credit->id)->update([
+                            'credit_agreement_signed' => $request->credit_agreement_signed,
+                            'credit_agreement_sign_ok' => $request->credit_agreement_sign_ok,
+                        ]);
+                        $percentTask2Step4 = self::percentTask2Step4($history->id);
+
+                        if ($percentTask2Step4 == 100) {
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 1); //terminar tarea
+    
+                            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);
+                        }
                     }
                 }
             }
@@ -4926,10 +5095,43 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
     
         // Contar los campos no nulos.
-        $elements = count(array_filter($fields, fn($field) => !empty($client->$field)));
+        
+
+        $elements = count(array_filter($fields, function($field) use ($client) {
+            return isset($client->$field) && ($client->$field === 1 || $client->$field === 0);
+        }));
     
         // Calcular el porcentaje completado.
         $total = count($fields);
+        $percent = ($elements / $total) * 100;
+    
+        return $percent;
+    }
+    
+    public function percentTask2Step4($history_id)
+    {
+        $history = HistoryLog::find($history_id);
+        $credit = $history->historyCredit;
+        $client = $credit->creditClientPerson;
+        $fields = ['credit_agreement_signed', 'credit_agreement_sign_ok'];
+        
+        if ($credit === null) {
+            return 0; // Si no hay cliente, el porcentaje es 0.
+        }
+        $getFile = File::where([
+            'model' => HistoryLog::KC_CONTROL_DESK,
+            'id_rel' => $credit->id,
+            'step' => 4,
+        ])->count();
+          
+        // Contar los campos no nulos.
+        $elements = count(array_filter($fields, function($field) use ($credit) {
+            return isset($credit->$field) && ($credit->$field === 1 || $credit->$field === 0);
+        }));
+        // Calcular el porcentaje completado.
+        $total = count($fields) + 1;
+        $elements = $getFile > 0 ? $elements + 1 : $elements;  
+        
         $percent = ($elements / $total) * 100;
     
         return $percent;

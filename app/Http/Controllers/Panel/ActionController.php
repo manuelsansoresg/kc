@@ -153,14 +153,17 @@ class ActionController extends Controller
         File::upload($models[$model], $id_rel, $request, $template_config_id);
     }
 
-    public function getDataTemplate($model, $id_rel)
+    public function getDataTemplate($model, $id_rel, Request $request)
     {
+        
         $models = File::MODEL;
         $data_where = array(
             'model' => $models[$model],
             'id_rel' => $id_rel
         );
-        $files = File::getAllTemplate($models[$model], $id_rel);
+        
+        $step = isset($request->step) && $request->step != 'undefined' ? $request->step : null;
+        $files = File::getAllTemplate($models[$model], $id_rel, $step);
         $file_date = TemplateFile::where($data_where)->get();
 
         return response()->json(['files' => $files, 'file_date' => $file_date]);

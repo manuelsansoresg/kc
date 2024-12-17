@@ -102,7 +102,7 @@ if (document.getElementById('action-model')) {
             if (key) {
                 // Crear dinámicamente una instancia de Dropzone
                 NioApp.Dropzone('#' + key, {
-                    url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+                    url: "/panel/files/images/" + model + '/' + id_rel + '/' + key+'?step='+step,
                     init: function () {
                         this.on("sending", function (file, xhr, formData) {
                             

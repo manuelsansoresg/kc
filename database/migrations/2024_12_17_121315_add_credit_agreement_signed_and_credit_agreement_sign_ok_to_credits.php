@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddCreditAgreementSignedAndCreditAgreementSignOkToCredits extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('credits', function (Blueprint $table) {
+            $table->smallInteger('credit_agreement_signed')->nullable()->after('payroll_payment_capacity');
+            $table->smallInteger('credit_agreement_sign_ok')->nullable()->after('payroll_payment_capacity');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('credits', function (Blueprint $table) {
+            $table->dropColumn('credit_agreement_signed');
+            $table->dropColumn('credit_agreement_sign_ok');
+        });
+    }
+}

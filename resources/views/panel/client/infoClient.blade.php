@@ -113,7 +113,7 @@
     @endif
 @endif
 
-@if (isset($step) && $taskId === 1)
+@if (isset($step) && $step == 4 && $taskId === 1)
 <div class="row">
     <div class="col-6">
         <table class="table table-striped">
@@ -127,6 +127,33 @@
                     {{ asset('/client/contratocm/'.$client->id) }}
                 </td>
             </tr>
+            
+        </table>
+    </div>
+</div>
+@endif
+
+@if (isset($step) && $step == 4 && $taskId === 2)
+<div class="row">
+    <div class="col-6">
+        <table class="table table-striped">
+            <tr>
+                <td>Contrato crédito</td>
+                <td>
+                  
+                    @if ($client!= null && $client->credit_agreement_signed === null)
+                        Sin firmar 
+                    @endif
+                    @if ($client!= null && $client->credit_agreement_signed === 1)
+                        Aceptado
+                    @endif
+                    @if ($client!= null && $client->credit_agreement_signed === 0)
+                        Declinado
+                    @endif
+                    
+                </td>
+            </tr>
+          
             
         </table>
     </div>

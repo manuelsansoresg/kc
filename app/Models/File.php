@@ -13,6 +13,7 @@ class File extends Model
         'name',
         'model',
         'id_rel',
+        'step',
         'template_config_id' //*id array config in templatestrategy
     ];
 
@@ -23,6 +24,7 @@ class File extends Model
         'lead' => 1,
         'newCredit' => 2,
         'controlDesk' => 21,
+        'controlDeskFirmaContrato' => 74,
         'debtCredit' => 10,
         'delivery' => 30,
         'swap' => 37,
@@ -38,12 +40,14 @@ class File extends Model
             $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
             $path       = File::PATH;
             $date_file = ($request->date_file != null)? $request->date_file : null;
+            $step = isset($request->step)? $request->step : null;
             if ($document->move($path, $name_full)) {
                 $data = array(
                     'name' => $name_full,
                     'model' => $model,
                     'id_rel' => $id_rel,
-                    'template_config_id' => $template_config_id
+                    'template_config_id' => $template_config_id,
+                    'step' => $step,
                 );
                 
                 File::create($data);
@@ -84,9 +88,14 @@ class File extends Model
         return $files;
     }
 
-    public static function getAllTemplate($model, $id_rel)
+    public static function getAllTemplate($model, $id_rel, $step = null)
     {
-        $files = File::where(['model' => $model, 'id_rel' => $id_rel])->get();
+        $files = File::where(['model' => $model, 'id_rel' => $id_rel]);
+        if ($step != null) {
+            $files->where('step', $step);
+        }
+        
+        $files = $files->get();
         $data_file = array();
         foreach ($files as $file) {
             if ($file->template_config_id != null) {

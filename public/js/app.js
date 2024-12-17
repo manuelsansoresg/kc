@@ -105,7 +105,7 @@ $(document).ready(function () {
         if (key) {
           // Crear dinámicamente una instancia de Dropzone
           NioApp.Dropzone('#' + key, {
-            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key + '?step=' + step,
             init: function init() {
               this.on("sending", function (file, xhr, formData) {});
               this.on("success", function (file, message) {
@@ -5087,6 +5087,17 @@ $().ready(function () {
       event.preventDefault(); // Evita que el formulario se envíe automáticamente
 
       saveForm('frm-template_control_desk_step4_task1', 'controlDesk');
+    });
+  }
+
+  if (document.getElementById('frm-template_control_desk_step4_task2')) {
+    var _form_control_desk_step5 = document.getElementById('frm-template_control_desk_step4_task2'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step5.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_step4_task2', 'controlDesk');
     });
   }
 
