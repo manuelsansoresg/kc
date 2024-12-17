@@ -123,7 +123,9 @@
             </tr>
             <tr>
                 <td>URL contrato</td>
-                <td><a href="/client/contratocm/{{ $client->id }}" target="_blank">Ver</a></td>
+                <td>
+                    {{ asset('/client/contratocm/'.$client->id) }}
+                </td>
             </tr>
             
         </table>

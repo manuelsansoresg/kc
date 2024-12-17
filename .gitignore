@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/files_upload
+/public/firma_contratos
 /storage/*.key
 /vendor
 .env

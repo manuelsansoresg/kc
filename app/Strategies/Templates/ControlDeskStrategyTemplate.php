@@ -184,6 +184,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             return self::configDinamicFormStep3($id_rel, $history_id, $step);
         }elseif($step === 4 && $task == 1){ 
             return self::configFormStep4Task1($id_rel, $history_id, $step);
+        }elseif($step === 4 && $task == 2){ 
+            return self::configFormStep4Task2($id_rel, $history_id, $step);
         } 
     }
 
@@ -1403,7 +1405,140 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             2 => [
                 'title_section' => null,
-                'title' => '*Contrato de CM',
+                'title' => '*Contrato CM firmado',
+                'subtitle' => 'Indica si el cliente ya firmó el contrato de comisión mercantil',
+                'name_field' => null,
+                'id_field' => 'ammount',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'radio',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => null,
+                'col' => 'col-6',
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'name' => 'Valida',
+                        'name_field' =>  'cm_agreement_sign',
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 1,
+                        'is_required' => true,
+                    ),
+                    1 => array(
+                        'link' => null,
+                        'name' => 'Invalida',
+                        'name_field' => 'cm_agreement_sign',
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 0,
+                        'is_required' => true,
+                        
+                    ),
+                )
+            ],
+            
+           
+            4 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                'col' => 'col-12'
+            ],
+            5 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect_next',
+                'id_field' => 'url_redirect_next',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=4_'.$stepRedirect.'&step_origin=',
+                'col' => 'col-12'
+            ],
+        );
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        return $list;
+    }
+    
+    public function configFormStep4Task2($id_rel, $history_id, $step)
+    {
+        $credit       = Credit::find($id_rel);
+        $name_form    = 'frm-template_control_desk_step4_task1';
+        $type_form    = HistoryLog::KC_CONTROL_DESK_TASK1_STEP4;
+        $client = $credit->creditClientPerson;
+        
+        
+
+        $loan_type    = config('enums.loan_type');
+        $sign_type    = config('enums.sign_type');
+        $periodicity  = config('enums.periodicity');
+        
+        $stepParam = isset($_GET['step']) ? $_GET['step'] : null;
+
+        $step = null;
+        $taskId = null;
+
+        if ($stepParam !== null) {
+            if (strpos($stepParam, '_') !== false) {
+                list($step, $taskId) = array_map('intval', explode('_', $stepParam));
+            } else {
+                $step = intval($stepParam);
+            }
+        }
+
+        $taks = self::ElementsTaskStep2($history_id, null);
+        $templateId = $taskId -1;
+        $task = $taks[$templateId];
+
+        $payOff = CreditPayOff::find($task['id']);
+        
+
+        $stepRedirect = $taskId +1;
+        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'payOff' => null, 'step' => $step])->render();
+
+        
+            
+
+        $elements = array(
+            1 => [
+                'title_section' => '',
+                'title' => null,
+                'subtitle' => null,
+                
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'col' => 'col-12',
+                'type' => 'div',
+                'content' => $contentInfo,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+            ],
+            2 => [
+                'title_section' => null,
+                'title' => '*Contrato CM firmado',
                 'subtitle' => 'Indica si el cliente ya firmó el contrato de comisión mercantil',
                 'name_field' => null,
                 'id_field' => 'ammount',
