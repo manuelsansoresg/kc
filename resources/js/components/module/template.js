@@ -585,6 +585,22 @@ $().ready(function () {
         });
     }
 
+    window.openModalValidateControlDesk = function(creditId)
+    {
+        axios
+            .get("/panel/template/validate/"+creditId+"/controlDesk")
+            .then(function (response) {
+                let result = response.data;
+                $('#content-validate-control-desk').html(result);
+                $('#modalValidateControlDesk').modal('show');
+    
+            })
+            .catch(e => {
+            });
+    }
+    
+
+
     $("#frm-template_control_desk_step5").validate({
         rules: {
             'credit[financial_user_assigned]': {

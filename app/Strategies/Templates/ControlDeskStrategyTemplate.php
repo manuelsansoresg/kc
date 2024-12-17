@@ -3991,6 +3991,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK3_STEP2, $credit->id, 1); //terminar tarea1
                         //iniciar tarea 2 etapa 1
                         HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2, HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2, null, false);
+                        //KC_CONTROL_DESK_TASK3_STEP2
                         HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2, $credit->id, 0);
                     }
                     
@@ -4015,7 +4016,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                                 HistoryLog::where([
                                     'is_credit' => 1,
                                     'id_rel' => $id_rel,
-                                    'status_id' => HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP1,
+                                    'status_id' => HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2,
                                     'status' => 1,
                                 ])->update([
                                     'dynamic_status_id' => $getTask['id']
@@ -4024,7 +4025,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         }   
                         if ($task  == count($elementsStep2)) {
                             
-                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP1, $credit->id, 1); //terminar tarea dinamica
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2, $credit->id, 1); //terminar tarea dinamica
 
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP3, HistoryLog::KC_CONTROL_DESK_TASK2_STEP3, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP3, $credit->id, 0);
@@ -4132,11 +4133,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                                 'dynamic_status_id' => $getTask3['id']
                             ]);
                         }
-
+                        
                         if ($task  == count($elementsStep3)) {
                             
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, $credit->id, 1); //terminar tarea dinamica
-    
+                            
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 0);
                         }
@@ -4604,6 +4605,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return $view_dead_line_inf_credit;
     }
 
+    public function getPercentStep1($history)
+    {
+
+    }
+
     public function listTasksStep1($history_id, $step_origin = null)
     {
         
@@ -5019,8 +5025,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         ;
         $percentages    = [
             1 => self::percentTask1Step4($history_id),
-            2 => 0,
-            //2 => self::DynamicPercentStep3($credit->id,  CreditsControlDesk::$labelValidate[2]),
+            2 => self::percentTask2Step4($history_id),
            
         ];
         
@@ -5826,49 +5831,46 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         return ($count_file  )/ $total * 100;
     }
 
+    public static function calculateStepAverage($historyId, $step)
+    {
+        // Construir el nombre de la función dinámicamente
+        $functionName = "ElementsTaskStep" . $step;
+
+        // Verificar que la función exista
+        if (!method_exists(self::class, $functionName)) {
+            return 0; // Evitar errores si la función no existe
+        }
+
+        // Llamar a la función dinámica y obtener los elementos
+        $elements = self::$functionName($historyId);
+
+        // Filtrar los elementos con status "Concluido"
+        $concluidos = array_filter($elements, function($element) {
+            return isset($element['status']) && $element['status'] === 'Concluido';
+        });
+
+        // Calcular el promedio de esta tarea
+        $totalElements = count($elements);
+        $totalConcluidos = count($concluidos);
+
+        return $totalElements > 0 ? ($totalConcluidos / $totalElements) * 100 : 0;
+    }
+
     //* get all percentages of the shares
     public function getPercent($history, $show_current_show = false)
     {
-        $credit     = $history->historyCredit;
-        $data_actions = array(
-            HistoryLog::KC_CONTROL_DESK_TASK1_STEP1,
-            HistoryLog::KC_CONTROL_DESK_TASK2_STEP1,
-            HistoryLog::KC_CONTROL_DESK_TASK3_STEP1,
-            HistoryLog::KC_CONTROL_DESK_TASK1_STEP2,
-            HistoryLog::KC_CONTROL_DESK_TASK2_STEP2,
-            HistoryLog::KC_CONTROL_DESK_TASK3_STEP2,
-            HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2,
-        );
+        $totalSteps = 4; // Número total de tareas
+        $totalAverage = 0;
 
-        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
-        $status_progress = 0;
-        $current_show = 'Viabilidad';
-
-        foreach ($get_actions as $key => $get_action) {
-            $status = $get_action->status_progress;
-            $status_progress += $status > 0 ? 1 : 0;
+        // Iterar sobre las tareas (1 a 4) y sumar los promedios
+        for ($step = 1; $step <= $totalSteps; $step++) {
+            $averageStep = self::calculateStepAverage($history->id, $step);
+            $totalAverage += $averageStep;
         }
+
+        // Calcular el promedio general
+        return $totalSteps > 0 ? $totalAverage / $totalSteps : 0;
         
-        if ($status_progress < 2) {
-            $current_show = 'Viabilidad';
-        } elseif ($status_progress < 3) {
-            $current_show = 'Características del crédito';
-        } elseif ($status_progress < 5) {
-            $current_show = 'Captura de información';
-        } elseif ($status_progress > 4 && $status_progress < 5) {
-            $current_show = 'KYC';
-        } elseif ($status_progress > 5) {
-            $current_show = ' Asignar usuario financiera';
-        }
-
-        $percent =  (($status_progress) / 8) * 100;
-
-
-        if ($show_current_show == true) {
-            return $current_show;
-        }
-
-        return $percent;
     }
     
 

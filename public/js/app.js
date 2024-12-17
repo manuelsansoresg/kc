@@ -1337,6 +1337,12 @@ function move(id, form, modal, datatable, title, msg) {
   })["catch"](function (e) {});
 }
 
+window.moveCrm = function (creditId, statusid, old_status_id, redirect) {
+  axios.post("/panel/action/" + creditId + "/" + statusid + "/" + old_status_id + "/move").then(function (response) {
+    window.location = redirect;
+  })["catch"](function (e) {});
+};
+
 window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
   if (is_modal == true) {
     Swal.fire({
@@ -5100,6 +5106,14 @@ $().ready(function () {
       saveForm('frm-template_control_desk_step4_task2', 'controlDesk');
     });
   }
+
+  window.openModalValidateControlDesk = function (creditId) {
+    axios.get("/panel/template/validate/" + creditId + "/controlDesk").then(function (response) {
+      var result = response.data;
+      $('#content-validate-control-desk').html(result);
+      $('#modalValidateControlDesk').modal('show');
+    })["catch"](function (e) {});
+  };
 
   $("#frm-template_control_desk_step5").validate({
     rules: {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
+use App\Models\CreditsControlDesk;
 use App\Models\HistoryLog;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
@@ -36,7 +37,7 @@ class TemplateController extends Controller
         
         if ($model == 'controlDesk' || $model == 'newCredit' || $model == 'debtCredit' || $model == 'swap' || $model == 'delivery'  || $model == 'afterMarket' || $model == 'payment' || $model == 'wallet' || $model == 'kc-down-wallet' ) {
             $list_steps       = (new $actionStrategy)->listStep($history_id);
-            return view('panel.module.view_steps', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb', 'list_steps', 'actionStrategy'));
+            return view('panel.module.view_steps', compact('history_id', 'history', 'product', 'credit', 'client', 'model', 'breadcrumb', 'list_steps', 'actionStrategy'));
         }
         //return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb'));
     }
@@ -46,6 +47,22 @@ class TemplateController extends Controller
     {
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $list       = (new $actionStrategy)->listStep($history_id);
+        return response()->json(['data' => $list]);
+    }
+
+    
+    public function validateControlDesk($creditId)
+    {
+        $creditControlDesk = CreditsControlDesk::where('credit_id', $creditId)->get();
+        $table           = \View::make('panel.module.control_desk.list_validate', ['creditControlDesk' => $creditControlDesk])->render();
+        return response()->json($table);
+    }
+
+    public function list($model, $history_id)
+    {
+        $actionStrategy   = TemplateValues::STRATEGY[$model];
+        $list       = (new $actionStrategy)->listAction($history_id);
+        
         return response()->json(['data' => $list]);
     }
 

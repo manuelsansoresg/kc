@@ -312,6 +312,8 @@ Route::group(['prefix' => 'credit'], function () {
     //*actualizar banco
     Route::post('storeBank', ['\App\Http\Controllers\Panel\Credit\CreditController', 'storeBank'])->middleware('auth');
 
+
+    
     
 });
 
@@ -348,6 +350,8 @@ Route::group(['prefix' => 'template'], function () {
     
     Route::get('action-document/{model}/{history_id}', ['\App\Http\Controllers\Panel\Credit\DocumentController', 'index'])->middleware('auth');
     Route::get('actions/list/{model}/{history_id}/show', ['\App\Http\Controllers\Panel\Module\ActionController', 'list'])->middleware('auth');
+
+    Route::get('validate/{creditId}/controlDesk', ['\App\Http\Controllers\Panel\Module\TemplateController', 'validateControlDesk'])->middleware('auth');
 });
 
 Route::get('reason/{type}/list', ['\App\Http\Controllers\HomeController', 'reason'])->middleware('auth');

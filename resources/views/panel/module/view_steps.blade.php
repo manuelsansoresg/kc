@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 @section('title', 'Etapas')
+@inject('m_history', 'App\Models\HistoryLog')
+@php
+    use App\Strategies\Values\TemplateValues;
+@endphp
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -72,6 +76,10 @@
                         <div class="container">
                             <div class="row ">
                                 {{-- nuevo diseño --}}
+                                @php
+                                    $templateStrategy = TemplateValues::STRATEGY['controlDesk'];
+                                    $totalPercent= (new $templateStrategy)->getPercent($history) 
+                                @endphp
                                 @if ($list_steps != null)
                                     @foreach ($list_steps as $key => $list_steps)
                                     <div class="col-12 col-md-8">
@@ -82,13 +90,14 @@
                                                     data-bs-target="#accordion-item-documentos">
                                                     <div class="row text-secondary">
     
-                                                        <div class="col-12 col-md-2  text-primary fw-bold fs-6 d-flex align-items-center"> {{ $list_steps['nameStep'] }}
+                                                        <div class="col-12 col-md-2  text-primary fw-bold fs-6 d-flex align-items-center"> {{ $list_steps['nameStep'] }} 
                                                             
                                                         </div>
                                                         <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps"> 
                                                             <div class="project-list-progress">
+                                                                
                                                                 <div class="progress progress-pill progress-md bg-light">
-                                                                    <div class="progress-bar" data-progress="40" style="width: 100%;"></div>
+                                                                    <div class="progress-bar" data-progress="{{$percent= (new $templateStrategy)->calculateStepAverage($history_id, $key +1) }}" style="width: 100%;"></div>
                                                                 </div>
                                                                 {{-- <div class="project-progress-percent">100%</div> --}}
                                                             </div>    
@@ -132,10 +141,16 @@
                                         </div>
                                     </div>
                                     @endforeach
+                                    @if ($totalPercent == 100)
+                                        <div class="col-8 mt-4 text-end">
+                                            <a onclick="moveCrm({{$credit->id}}, {{ $m_history::KC_DELIVERY }}, {{ $m_history::KC_CONTROL_DESK }}, '/panel/kc-control-desk')" class="btn btn-outline-success">Continuar</a>
+                                        </div>
+                                    @else
+                                    <div class="col-8 mt-4 text-end">
+                                        <a onclick="openModalValidateControlDesk({{ $credit->id }})" class="btn btn-outline-secondary">Continuar</a>
+                                    </div>
+                                    @endif
                                 @endif
-                               
-                                
-                                
                                
                                 {{--/ nuevo diseño --}}
                                 <div class="col-12 col-md-10 mt-5 d-none">
@@ -150,83 +165,7 @@
                                                     <div class="col-12 col-md-1 fw-bold"></div>
                                                 </div>
                                             </div>
-                                           {{--  @if ($list_steps != null)
-
-                                                @foreach ($list_steps as $key => $list_steps)
-                                                    <div id="accordion" class="accordion mt-2">
-                                                        <div class="accordion-item">
-                                                            <a href="#" class="accordion-head"
-                                                                data-bs-toggle="collapse"
-                                                                data-bs-target="#accordion-item-{{ $key }}">
-                                                                <div class="row text-secondary">
-
-                                                                    <div class="col-12 col-md-1 text-primary {{ $list_steps['status'] == 'En curso' ? 'fw-bold' : '' }}"> {!! $list_steps['name'] !!}</div>
-                                                                    <div class="col-12 col-md-3 text-primary {{ $list_steps['status'] == 'En curso' ? 'fw-bold' : '' }}">{{ $list_steps['step'] }}</div>
-                                                                    <div class="col-12 col-md-3 text-primary {{ $list_steps['status'] == 'En curso' ? 'fw-bold' : '' }}">{{ $list_steps['status'] }}</div>
-                                                                    <div class="col-12 col-md-3" id="content-progress-steps">{!! $list_steps['progress'] !!}</div>
-                                                                    <div class="col-12 col-md-1"></div>
-                                                                </div>
-                                                                @if ($list_steps['status'] != 'En espera')
-                                                                    <span class="accordion-icon"></span>
-                                                                @endif
-                                                            </a>
-                                                            <div class="accordion-body collapse {{ $list_steps['status'] == 'En curso' ? 'show' : '' }}"
-                                                                id="accordion-item-{{ $key }}"
-                                                                data-bs-parent="#accordion">
-                                                                <div class="accordion-inner">
-                                                                    @php
-                                                                        $indice = $key + 1;
-                                                                        $list_actions = $indice > 0 ? (new $actionStrategy())->listActionByStep($history_id, $indice) : null;
-                                                                    @endphp
-                                                                    @if ($list_steps['status'] == 'En espera')
-                                                                            <p>En espera de concluir las etapas en curso</p>
-                                                                    @else
-                                                                    <div class="table-responsive">
-                                                                        <table class="table">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th>Tarea</th>
-                                                                                    <th class="d-none d-md-table-cell">Asunto</th>
-                                                                                    <th>Estatus</th>
-                                                                                    <th class="d-none d-md-table-cell">Deadline</th>
-                                                                                    <th class="d-none d-md-table-cell">Responsable</th>
-                                                                                    <th></th>
-                                                                                </tr>
-                                                                            </thead>
-
-                                                                            @if ($list_actions != null)
-                                                                                @foreach ($list_actions as $list_actions)
-                                                                                    <tbody>
-                                                                                        <tr>
-                                                                                            <td>{!! $list_actions['name'] !!}</td>
-                                                                                            <td class="d-none d-md-table-cell">{{ $list_actions['subject'] }}
-                                                                                            </td>
-                                                                                            <td>{!! $list_actions['status'] !!}
-                                                                                            </td>
-                                                                                            <td class="d-none d-md-table-cell">{!! $list_actions['deadline'] !!}</td>
-                                                                                            <td class="d-none d-md-table-cell">{{ $list_actions['advisor'] }}
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                @hasrole('Administrador')
-                                                                                                    @if (isset($list_actions['link']))
-                                                                                                        <a href="{{ $list_actions['link'] }}"
-                                                                                                            class="">Abrir</a>
-                                                                                                    @endif
-                                                                                                @endhasrole
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </tbody>
-                                                                                @endforeach
-                                                                            @endif
-                                                                        </table>
-                                                                    </div>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            @endif --}}
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -240,4 +179,23 @@
     <input type="hidden" id="history_id" value="{{ $history_id }}">
     <input type="hidden" id="model" value="{{ $model }}">
     <input type="hidden" id="refresh-dt" value="dt-lead">
+
+    <div class="modal fade" id="modalValidateControlDesk" tabindex="-1" aria-labelledby="modalValidateControlDeskLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="modal-title" id="modalValidateControlDeskLabel">No puedes continuar</h5>
+              <p class="text-muted">Revisa las validaciónes</p>
+              <div id="content-validate-control-desk"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
 @endsection
