@@ -1453,8 +1453,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             2 => [
                 'title_section' => null,
-                'title' => '*Contrato CM firmado',
-                'subtitle' => 'Indica si el cliente ya firmó el contrato de comisión mercantil',
+                'title' => '*Firma de contrato válida',
+                'subtitle' => 'Indica si la firma del cliente es válida',
                 'name_field' => null,
                 'id_field' => 'ammount',
                 'comment_admin' => '',
@@ -1471,7 +1471,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     0 => array(
                         'link' => null,
                         'name' => 'Valida',
-                        'name_field' =>  'cm_agreement_sign',
+                        'name_field' =>  'firma-de-contrato-valida',
                         'class' => null,
                         'onclick' => null,
                         'value' => 1,
@@ -1480,7 +1480,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     1 => array(
                         'link' => null,
                         'name' => 'Invalida',
-                        'name_field' => 'cm_agreement_sign',
+                        'name_field' => 'firma-de-contrato-valida',
                         'class' => null,
                         'onclick' => null,
                         'value' => 0,
@@ -4258,13 +4258,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 if ($step == 4) {
 
                     if ($task == 1) {
-                        $cm_agreement_sign = isset($request->cm_agreement_sign)? $request->cm_agreement_sign : 0;
-                        ClientPerson::where('id', $client->id)->update([
-                            'cm_agreement_sign' => $cm_agreement_sign
-                        ]);
+                        $labelValidate = CreditsControlDesk::$labelValidate[9];
+                        CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
                         
                         
-
                         $percentTask1Step4 = self::percentTask1Step4($history->id);
                         if ($percentTask1Step4 == 100) {
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 1); //terminar tarea
@@ -5210,23 +5207,15 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit = $history->historyCredit;
         $client = $credit->creditClientPerson;
         $fields = ['cm_agreement_sign'];
-        
-        if ($client === null) {
-            return 0; // Si no hay cliente, el porcentaje es 0.
-        }
-    
-        // Contar los campos no nulos.
-        
 
-        $elements = count(array_filter($fields, function($field) use ($client) {
-            return isset($client->$field) && ($client->$field === 1 || $client->$field === 0);
-        }));
+        $creditsValidate = CreditsControlDesk::where([
+            'validation' => $labelValidate = CreditsControlDesk::$labelValidate[9],
+            'credit_id' => $credit->id,
+        ])->count();
+        
+        
     
-        // Calcular el porcentaje completado.
-        $total = count($fields);
-        $percent = ($elements / $total) * 100;
-    
-        return $percent;
+        return $creditsValidate > 0 ? 100 : 0;
     }
     
     public function percentTask2Step4($history_id)
