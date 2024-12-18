@@ -141,7 +141,7 @@
                                         </div>
                                     </div>
                                     @endforeach
-                                    @if ($totalPercent == 100)
+                                    @if ($totalPercent == 100 && $creditsControldesk == true)
                                         <div class="col-8 mt-4 text-end">
                                             <a onclick="moveCrm({{$credit->id}}, {{ $m_history::KC_DELIVERY }}, {{ $m_history::KC_CONTROL_DESK }}, '/panel/kc-control-desk')" class="btn btn-outline-success">Continuar</a>
                                         </div>

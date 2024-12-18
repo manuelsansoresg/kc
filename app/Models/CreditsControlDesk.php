@@ -59,4 +59,15 @@ class CreditsControlDesk extends Model
             CreditsControlDesk::create($dataCredit);
         }
     }
+
+    public static function isValidate($creditId)
+    {
+         // Verifica si existe algún registro con status distinto de 1
+        $hasInvalidStatus = CreditsControlDesk::where('credit_id', $creditId)
+        ->where('status', '!=', 1)
+        ->exists();
+
+        // Devuelve true si NO existen registros con status distinto de 1
+        return !$hasInvalidStatus;
+    }
 }
