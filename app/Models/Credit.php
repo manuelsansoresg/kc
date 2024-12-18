@@ -116,7 +116,7 @@ class Credit extends Model
         'payroll_payment_capacity',
         
         'credit_agreement_signed',
-        'credit_agreement_sign_ok',
+        'sod_agreement',
         
     ];
 

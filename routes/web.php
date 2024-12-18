@@ -74,6 +74,10 @@ Route::get('client/contratocm/{client}', ['\App\Http\Controllers\HomeController'
 Route::get('client/contratocm/{client}/firmar', ['\App\Http\Controllers\HomeController', 'contratoClientFirma']);
 Route::get('client/contratocm/{client}/{type}/exit', ['\App\Http\Controllers\HomeController', 'contratoClientFirmaExit']);
 
+Route::get('client/sod/{credit}', ['\App\Http\Controllers\HomeController', 'contratoCreditSod']);
+Route::get('client/sod/{credit}/firmar', ['\App\Http\Controllers\HomeController', 'contratoCreditFirmaSod']);
+Route::get('client/sod/{credit}/{type}/exit', ['\App\Http\Controllers\HomeController', 'sodCreditFirmaExit']);
+
 Route::get('/nosotros', function () {
     return view('about');
 });

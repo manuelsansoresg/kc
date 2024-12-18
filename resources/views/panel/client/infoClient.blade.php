@@ -135,27 +135,57 @@
 
 @if (isset($step) && $step == 4 && $taskId === 2)
 <div class="row">
+    @if (isset($product) && $product->alias == 'Salario On-Demand')
     <div class="col-6">
         <table class="table table-striped">
             <tr>
-                <td>Contrato crédito</td>
+                <td>Solicitud/Descuento SOD</td>
                 <td>
-                  
-                    @if ($client!= null && $client->credit_agreement_signed === null)
+                
+                    @if ($credit!= null && $credit->sod_agreement === null)
                         Sin firmar 
                     @endif
-                    @if ($client!= null && $client->credit_agreement_signed === 1)
+                    @if ($credit!= null && $credit->sod_agreement === 1)
                         Aceptado
                     @endif
-                    @if ($client!= null && $client->credit_agreement_signed === 0)
+                    @if ($credit!= null && $credit->sod_agreement === 0)
                         Declinado
                     @endif
                     
                 </td>
             </tr>
-          
+            <tr>
+                <td>URL Contrato</td>
+                <td>{{ asset('/client/sod/'.$credit->id) }}</td>
+            </tr>
+        
             
         </table>
     </div>
+    @else
+        <div class="col-6">
+            <table class="table table-striped">
+                <tr>
+                    <td>Contrato crédito</td>
+                    <td>
+                    
+                        @if ($client!= null && $client->credit_agreement_signed === null)
+                            Sin firmar 
+                        @endif
+                        @if ($client!= null && $client->credit_agreement_signed === 1)
+                            Aceptado
+                        @endif
+                        @if ($client!= null && $client->credit_agreement_signed === 0)
+                            Declinado
+                        @endif
+                        
+                    </td>
+                </tr>
+            
+                
+            </table>
+        </div>
+    @endif
 </div>
 @endif
+

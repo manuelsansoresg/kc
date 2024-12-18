@@ -151,12 +151,88 @@ class HomeController extends Controller
        
 
         
-        return redirect('/panel/template/steps/controlDesk/'.$history->id.'/show');
+        return redirect('/client/contratocm/'.$client->id.'/1/exit');
     }
 
     public function contratoClientFirmaExit(ClientPerson $client , $type)
     {
         return view('exit_sign', compact('type'));
+    }
+
+    public function contratoCreditSod(Credit $credit)
+    {
+        $client  = $credit->creditClientPerson;
+        $isFirma = false;
+        $firma = null;
+        $token = null;
+        $ip = null;
+        $hostname = null;
+
+        $history = HistoryLog::where([
+            'id_rel' => $credit->id,
+            'is_credit' => 1,
+            'status_id' => HistoryLog::KC_CONTROL_DESK,
+            'status' => 1,
+        ])->first();
+        
+        $statusFirmaContratoCM = HistoryLog::where([
+            'id_rel' => $credit->id,
+            'is_credit' => 1,
+            'status_id' => HistoryLog::KC_CONTROL_DESK_TASK2_STEP4,
+            'status' => 1,
+        ])->first();
+        if ($statusFirmaContratoCM == null) {
+            abort(404);
+        } else {
+            $isFirma = $credit->sod_agreement == null ? true : false;
+        }
+        return view('contrato_sod', compact('client', 'credit', 'history', 'isFirma', 'firma', 'token'));
+    }
+
+    public function contratoCreditFirmaSod(Credit $credit , Request $request)
+    {
+        $client  = $credit->creditClientPerson;
+        $token = $client->id.'-'.\Str::random(10);
+        $firma =  $token;
+        // Obtener la IP real del usuario
+        $ip = $request->ip(); // Esto te dará la IP del cliente
+        $hostname = gethostbyaddr($ip);
+        $dateTime = Carbon::now()->format('d-m-Y h:i:s a');
+        $isFirma = $credit->sod_agreement == null ? true : false;
+
+        
+
+        $data = array(
+            'client' => $client,
+            'isFirma' => $isFirma,
+            'token' => $token,
+            'firma' => $firma,
+            'ip' => $firma,
+            'hostname' => $hostname,
+            'dateTime' => $dateTime,
+        );
+        Credit::where('id', $credit->id)->update([
+            'sod_agreement' => 1
+        ]);
+       
+
+        
+        
+        if ($client->cm_agreement == null) {
+            $pdf = Pdf::loadView('contrato_sod', $data);
+            $pdf->setPaper('A4');
+            $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
+            $pdf->save('firma_contratos/'.$nombre);
+        }
+       
+
+        
+        return redirect('/client/sod/'.$credit->id.'/1/exit');
+    }
+
+    public function sodCreditFirmaExit(ClientPerson $client , $type)
+    {
+        return view('exitsod_sign', compact('type'));
     }
 
     public function report($history_id, $credit_id = null)

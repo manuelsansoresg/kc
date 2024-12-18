@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCreditAgreementSignedAndCreditAgreementSignOkToCredits extends Migration
+class AddSodAgreementToCredits extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddCreditAgreementSignedAndCreditAgreementSignOkToCredits extends Migratio
     public function up()
     {
         Schema::table('credits', function (Blueprint $table) {
-            $table->smallInteger('credit_agreement_signed')->nullable()->after('payroll_payment_capacity');
+            $table->smallInteger('sod_agreement')->nullable()->after('credit_agreement_signed');
         });
     }
 
@@ -26,7 +26,7 @@ class AddCreditAgreementSignedAndCreditAgreementSignOkToCredits extends Migratio
     public function down()
     {
         Schema::table('credits', function (Blueprint $table) {
-            $table->dropColumn('credit_agreement_signed');
+            $table->dropColumn('sod_agreement');
         });
     }
 }

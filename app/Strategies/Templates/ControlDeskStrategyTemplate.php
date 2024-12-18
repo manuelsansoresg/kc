@@ -306,7 +306,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form    = 'frm-template_control_desk_step2';
         $type_form    = HistoryLog::KC_CONTROL_DESK_TASK2_STEP1;
         $financial    = Financial::select('id', 'commercial_name as name')->get();
-        $product      = FinancialProduct::getProductByFinancial($credit->applied_financial);
+        $product      = FinancialProduct::getProductByFinancial($credit->applied_financial_product);
         /* $get_financials = FinancialAgreement::where('agreement_id', $credit->agreement_id)->get();
         $financials = array();
         if ($get_financials != null) {
@@ -432,7 +432,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form    = 'frm-template_control_desk_step2';
         $type_form    = HistoryLog::KC_CONTROL_DESK_TASK3_STEP1;
         $financial    = Financial::select('id', 'commercial_name as name')->get();
-        $product      = FinancialProduct::getProductByFinancial($credit->applied_financial);
+        $product      = FinancialProduct::getProductByFinancial($credit->applied_financial_product);
       
         $taks = self::ElementsTaskStep1($history_id, null);
         $templateId = $step -1;
@@ -1531,6 +1531,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function configFormStep4Task2($id_rel, $history_id, $step)
     {
         $credit       = Credit::find($id_rel);
+        $product = FinancialProduct::find($credit->applied_financial_product);
         $name_form    = 'frm-template_control_desk_step4_task2';
         $type_form    = HistoryLog::KC_CONTROL_DESK_TASK2_STEP4;
         $client = $credit->creditClientPerson;
@@ -1562,204 +1563,312 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
 
         $stepRedirect = $taskId +1;
-        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'payOff' => null, 'step' => $step])->render();
+        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'payOff' => null, 'step' => $step, 'product' => $product])->render();
 
-        $elements = array(
-            1 => [
-                'title_section' => '',
-                'title' => null,
-                'subtitle' => null,
+        if ($product->alias != 'Salario On-Demand') {
+            $elements = array(
+                1 => [
+                    'title_section' => '',
+                    'title' => null,
+                    'subtitle' => null,
+                    
+                    'id_field' => null,
+                    'comment_admin' => null,
+                    'comment_webApp' =>  null,
+                    'col' => 'col-12',
+                    'type' => 'div',
+                    'content' => $contentInfo,
+                    'is_option_array' => false,
+                    'options' => null,
+                    'is_required' => true,
+                    'is_disabled' => null,
+                ],
+    
+               
+                2 => [
+                    'title_section' => null,
+                    'title' => '*Contrato de CM',
+                    'subtitle' => 'Indica si el cliente ya firmó el contrato de crédito',
+                    'name_field' => null,
+                    'id_field' => 'ammount',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'radio',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => null,
+                    'col' => 'col-6',
+                    'childs' => array(
+                        0 => array(
+                            'link' => null,
+                            'name' => 'Valida',
+                            'name_field' =>  'credit_agreement_signed',
+                            'class' => null,
+                            'onclick' => null,
+                            'value' => 1,
+                            'is_required' => true,
+                        ),
+                        1 => array(
+                            'link' => null,
+                            'name' => 'Invalida',
+                            'name_field' => 'credit_agreement_signed',
+                            'class' => null,
+                            'onclick' => null,
+                            'value' => 0,
+                            'is_required' => true,
+                            
+                        ),
+                    )
+                ],
                 
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'col' => 'col-12',
-                'type' => 'div',
-                'content' => $contentInfo,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null,
-            ],
+                3 => [
+                    'title_section' => null,
+                    'title' => '*Firma de contrato válida',
+                    'subtitle' => 'Indica si la firma del cliente es válida',
+                    'name_field' => null,
+                    'id_field' => 'ammount',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'radio',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => null,
+                    'col' => 'col-6',
+                    'childs' => array(
+                        0 => array(
+                            'link' => null,
+                            'name' => 'Valida',
+                            'name_field' =>  'contrato-de-credito',
+                            'class' => null,
+                            'onclick' => null,
+                            'value' => 1,
+                            'is_required' => true,
+                        ),
+                        1 => array(
+                            'link' => null,
+                            'name' => 'Invalida',
+                            'name_field' => 'contrato-de-credito',
+                            'class' => null,
+                            'onclick' => null,
+                            'value' => 0,
+                            'is_required' => true,
+                            
+                        ),
+                    )
+                ],
+    
+                4 => [
+                    'title_section' => null,
+                    'title' => '*Contrato firmado',
+                    'subtitle' => 'Adjunta el contrato firmado',
+                    'name_field' => 'anverso',
+                    'id_field' => '4',
+                    'comment_admin' => null,
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'dropzone',
+                    'is_option_array' => false,
+                    'options' => null,
+                    'is_required' => true,
+                    'is_disabled' => null
+                ],
+                5 => [
+                    'title_section' => null,
+                    'title' => null,
+                    'name_field' => 'action-model',
+                    'id_field' => 'action-model',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'hidden',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => 'controlDesk',
+                    'col' => 'col-12'
+                ],
+                
+                6 => [
+                    'title_section' => null,
+                    'title' => null,
+                    'name_field' => 'action-id_rel',
+                    'id_field' => 'action-id_rel',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'hidden',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => $id_rel,
+                    'col' => 'col-12'
+                ],
+                
+               
+                7 => [
+                    'title_section' => null,
+                    'title' => null,
+                    'name_field' => 'url_redirect',
+                    'id_field' => 'url_redirect',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'hidden',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                    'col' => 'col-12'
+                ],
+                8 => [
+                    'title_section' => null,
+                    'title' => null,
+                    'name_field' => 'url_redirect_next',
+                    'id_field' => 'url_redirect_next',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'hidden',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=4_'.$stepRedirect.'&step_origin=',
+                    'col' => 'col-12'
+                ],
+                9=> [
+                    'title_section' => null,
+                    'title' => null,
+                    'name_field' => 'step',
+                    'id_field' => 'step',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'hidden',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => 4,
+                    'col' => 'col-12'
+                ],
+            );
+        } else {
+            $elements = array(
+                1 => [
+                    'title_section' => '',
+                    'title' => null,
+                    'subtitle' => null,
+                    
+                    'id_field' => null,
+                    'comment_admin' => null,
+                    'comment_webApp' =>  null,
+                    'col' => 'col-12',
+                    'type' => 'div',
+                    'content' => $contentInfo,
+                    'is_option_array' => false,
+                    'options' => null,
+                    'is_required' => true,
+                    'is_disabled' => null,
+                ],
+                2 => [
+                    'title_section' => null,
+                    'title' => '*Solicitud/Descuento SOD',
+                    'subtitle' => ' Indica si el cliente aceptó la Solicitud/Descuento SOD',
+                    'name_field' => null,
+                    'id_field' => 'ammount',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'radio',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => null,
+                    'col' => 'col-6',
+                    'childs' => array(
+                        0 => array(
+                            'link' => null,
+                            'name' => 'Valida',
+                            'name_field' =>  'solicituddescuento-sod',
+                            'class' => null,
+                            'onclick' => null,
+                            'value' => 1,
+                            'is_required' => true,
+                        ),
+                        1 => array(
+                            'link' => null,
+                            'name' => 'Invalida',
+                            'name_field' => 'solicituddescuento-sod',
+                            'class' => null,
+                            'onclick' => null,
+                            'value' => 0,
+                            'is_required' => true,
+                            
+                        ),
+                    )
+                ],
 
-           
-            2 => [
-                'title_section' => null,
-                'title' => '*Contrato de CM',
-                'subtitle' => 'Indica si el cliente ya firmó el contrato de crédito',
-                'name_field' => null,
-                'id_field' => 'ammount',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'radio',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => null,
-                'col' => 'col-6',
-                'childs' => array(
-                    0 => array(
-                        'link' => null,
-                        'name' => 'Valida',
-                        'name_field' =>  'credit_agreement_signed',
-                        'class' => null,
-                        'onclick' => null,
-                        'value' => 1,
-                        'is_required' => true,
-                    ),
-                    1 => array(
-                        'link' => null,
-                        'name' => 'Invalida',
-                        'name_field' => 'credit_agreement_signed',
-                        'class' => null,
-                        'onclick' => null,
-                        'value' => 0,
-                        'is_required' => true,
-                        
-                    ),
-                )
-            ],
-            
-            3 => [
-                'title_section' => null,
-                'title' => '*Firma de contrato válida',
-                'subtitle' => 'Indica si la firma del cliente es válida',
-                'name_field' => null,
-                'id_field' => 'ammount',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'radio',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => null,
-                'col' => 'col-6',
-                'childs' => array(
-                    0 => array(
-                        'link' => null,
-                        'name' => 'Valida',
-                        'name_field' =>  'credit_agreement_sign_ok',
-                        'class' => null,
-                        'onclick' => null,
-                        'value' => 1,
-                        'is_required' => true,
-                    ),
-                    1 => array(
-                        'link' => null,
-                        'name' => 'Invalida',
-                        'name_field' => 'credit_agreement_sign_ok',
-                        'class' => null,
-                        'onclick' => null,
-                        'value' => 0,
-                        'is_required' => true,
-                        
-                    ),
-                )
-            ],
-
-            4 => [
-                'title_section' => null,
-                'title' => '*Contrato firmado',
-                'subtitle' => 'Adjunta el contrato firmado',
-                'name_field' => 'anverso',
-                'id_field' => '4',
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'dropzone',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null
-            ],
-            5 => [
-                'title_section' => null,
-                'title' => null,
-                'name_field' => 'action-model',
-                'id_field' => 'action-model',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'hidden',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => 'controlDesk',
-                'col' => 'col-12'
-            ],
-            
-            6 => [
-                'title_section' => null,
-                'title' => null,
-                'name_field' => 'action-id_rel',
-                'id_field' => 'action-id_rel',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'hidden',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => $id_rel,
-                'col' => 'col-12'
-            ],
-            
-           
-            7 => [
-                'title_section' => null,
-                'title' => null,
-                'name_field' => 'url_redirect',
-                'id_field' => 'url_redirect',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'hidden',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
-                'col' => 'col-12'
-            ],
-            8 => [
-                'title_section' => null,
-                'title' => null,
-                'name_field' => 'url_redirect_next',
-                'id_field' => 'url_redirect_next',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'hidden',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=4_'.$stepRedirect.'&step_origin=',
-                'col' => 'col-12'
-            ],
-            9=> [
-                'title_section' => null,
-                'title' => null,
-                'name_field' => 'step',
-                'id_field' => 'step',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'hidden',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => 4,
-                'col' => 'col-12'
-            ],
-        );
+                3 => [
+                    'title_section' => null,
+                    'title' => null,
+                    'name_field' => 'url_redirect',
+                    'id_field' => 'url_redirect',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'hidden',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                    'col' => 'col-12'
+                ],
+                4 => [
+                    'title_section' => null,
+                    'title' => null,
+                    'name_field' => 'url_redirect_next',
+                    'id_field' => 'url_redirect_next',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'hidden',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=4_'.$stepRedirect.'&step_origin=',
+                    'col' => 'col-12'
+                ],
+                5=> [
+                    'title_section' => null,
+                    'title' => null,
+                    'name_field' => 'step',
+                    'id_field' => 'step',
+                    'comment_admin' => '',
+                    'comment_webApp' =>  null,
+                    'placeholder' => '',
+                    'type' => 'hidden',
+                    'is_option_array' => false,
+                    'options' => 'null',
+                    'is_required' => false,
+                    'is_disabled' => null,
+                    'value' => 4,
+                    'col' => 'col-12'
+                ],
+            );
+        }
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
@@ -4153,6 +4262,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         ClientPerson::where('id', $client->id)->update([
                             'cm_agreement_sign' => $cm_agreement_sign
                         ]);
+                        
+                        
+
                         $percentTask1Step4 = self::percentTask1Step4($history->id);
                         if ($percentTask1Step4 == 100) {
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 1); //terminar tarea
@@ -4163,9 +4275,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     }
 
                     if ($task == 2) {
+                        $labelValidate = $financialProduct->alias != 'Salario On-Demand' ? CreditsControlDesk::$labelValidate[7] : CreditsControlDesk::$labelValidate[8];
+                        
+                        CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
+                        
                         Credit::where('id', $credit->id)->update([
                             'credit_agreement_signed' => $request->credit_agreement_signed,
-                            'credit_agreement_sign_ok' => $request->credit_agreement_sign_ok,
+                            
                         ]);
                         $percentTask2Step4 = self::percentTask2Step4($history->id);
 
@@ -4306,45 +4422,19 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function listStep($history_id)
     {
 
-        $history                      = HistoryLog::find($history_id);
+        $history = HistoryLog::find($history_id);
 
-        $credit                       = $history->historyCredit;
-        $max_hour                     = 12;
-        $hour                         = $credit->created_at;
+        $credit   = $history->historyCredit;
+        $product  = FinancialProduct::find($credit->applied_financial_product);
+        $max_hour = 12;
+        $hour     = $credit->created_at;
 
-        $percentStep1                 = reduceDecimal(self::percentUpload($credit->id));
-        $percentStep2                 = null; // etapa 2
-
-       /*  $percent_form_step3_1         = reduceDecimal(self::percentFormStep3_1($history)); //etapa 3
-        $percent_form_step3_2         = reduceDecimal(self::percentFormStep3_2($history)); //etapa 3
-
-        $percent_form_step4           = reduceDecimal(self::percentFormStep4($history)); //etapa 4
-
-        $percent_form_step5_1           = reduceDecimal(self::percentFormStep5($history)); //etapa 5
-        $percent_form_step5_2           = reduceDecimal(self::percentFormStep5_2($history)); //etapa 5
-        $percent_form_step5_3           = reduceDecimal(self::percentFormStep5_3($credit->id, '5_3')); //etapa 5
+        $percentStep1 = reduceDecimal(self::percentUpload($credit->id));
+        $percentStep2 = null;                                             // etapa 2
 
 
-        $new_step3_1 = $percent_form_step3_1 == 100 ? 1 : 0;
-        $new_step3_2 = $percent_form_step3_2 == 100 ? 1 : 0;
-
-        $percent_form_step3 = ($new_step3_1 + $new_step3_2) / 2 * 100;
-
-
-        $new_step5 = $percent_form_step5_1 == 100 ? 1 : 0;
-        $new_step5_2 = $percent_form_step5_2 == 100 ? 1 : 0;
-        $new_step5_3 = $percent_form_step5_3 == 100 ? 1 : 0;
-
-        $percent_form_step5 = reduceDecimal(($new_step5 + $new_step5_2 + $new_step5_3) / 3 * 100); */
-
-
-        $color_inf_credit     = 'success';
-        $color_report         = 'success';
-
-        //$percent_form = $percent_form;
-        $menu_options         = self::menuOptionsStep($history);
-        $statusStep1         = 'En espera';
-        $statusStep2         = 'En espera';
+        $statusStep1 = 'En espera';
+        $statusStep2 = 'En espera';
         
 
         $statusStep1 = ($percentStep1 >= 100) ? 'Concluido' : 'En curso';
@@ -4356,23 +4446,35 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
 
         $data = array();
-        $data[] = array(
-            'nameStep' => 'Documentos',
-            'status' => $statusStep1,
-            'link' => ''
-        );
-        $data[] = array(
-            'nameStep' => 'Captura info',
-            'status' => $statusStep2,
-            'link' => ''
-        );
-      
-        $data[] = array(
-            
-            'nameStep' => 'KYC/MDC',
-            'status' => $statusStep2,
-            'link' => ''
-        );
+        
+
+        if ($product!= null && $product->alias != 'Salario On-Demand') {
+            $data[] = array(
+                'nameStep' => 'Documentos',
+                'status' => $statusStep1,
+                'link' => ''
+            );
+
+            $data[] = array(
+                'nameStep' => 'Captura info',
+                'status' => $statusStep2,
+                'link' => ''
+            );
+          
+            $data[] = array(
+                
+                'nameStep' => 'KYC/MDC',
+                'status' => $statusStep2,
+                'link' => ''
+            );
+        } elseif ($product!= null && $product->alias == 'Salario On-Demand') {
+            $data[] = array(
+                
+                'nameStep' => 'KYC/MDC',
+                'status' => $statusStep2,
+                'link' => ''
+            );
+        }
         $data[] = array(
             
             'nameStep' => 'Firmas',
@@ -4380,32 +4482,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'link' => ''
         );
 
-        /* $data[] = array(
-            'name' => $view_count_step3,
-            'step' => 'Captura de información',
-            'status' => $status_step3,
-            'progress' => $view_percent_step3,
-            'deadline' => '',
-            'options' => $option_step3,
-        );
-
-        $data[] = array(
-            'name' => $view_count_step4,
-            'step' => 'KYC',
-            'status' => $status_step4,
-            'progress' => $view_percent_step4,
-            'deadline' => null,
-            'options' => $option_step4,
-        );
-
-        $data[] = array(
-            'name' => $view_count_step5,
-            'step' => 'Firma',
-            'status' => $status_step5,
-            'progress' => $view_percent_step5,
-            'deadline' => '',
-            'options' => $option_step5,
-        ); */
+       
         return $data;
     }
 
@@ -4441,34 +4518,47 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     
     public function listActionByStep($history_id, $step)
     {
-        if ($step == 2) {
-            try {
-                return self::listTasksStep2($history_id);
-            } catch (\Exception $e) {
-                return null;
+        $history = HistoryLog::find($history_id);
+        $credit   = $history->historyCredit;
+        $product  = FinancialProduct::find($credit->applied_financial_product);
+        if ($product->alias != 'Salario On-Demand') {
+            
+            if ($step == 2) {
+                try {
+                    return self::listTasksStep2($history_id);
+                } catch (\Exception $e) {
+                    return null;
+                }
+            } elseif ($step == 3) {
+                try {
+                    return self::listTasksStep3($history_id);
+                   
+                } catch (\Exception $e) {
+                    return null;
+                }
+            } elseif ($step == 4) {
+                try {
+                    return self::listTasksStep4($history_id);
+                } catch (\Exception $e) {
+                    return null;
+                }
+            } elseif ($step == 5) {
+                try {
+                    return null;
+                    return self::actionStep5($history_id);
+                } catch (\Exception $e) {
+                    return null;
+                }
+            } elseif ($step == 1) {
+                return self::listTasksStep1($history_id);
             }
-        } elseif ($step == 3) {
-            try {
+        } else {
+            if ($step == 1) {
                 return self::listTasksStep3($history_id);
-               
-            } catch (\Exception $e) {
-                return null;
             }
-        } elseif ($step == 4) {
-            try {
-                return self::listTasksStep4($history_id);
-            } catch (\Exception $e) {
-                return null;
-            }
-        } elseif ($step == 5) {
-            try {
-                return null;
-                return self::actionStep5($history_id);
-            } catch (\Exception $e) {
-                return null;
-            }
+            return self::listTasksStep4($history_id);
         }
-        return self::listTasksStep1($history_id);
+
     }
 
     public function percentForm($history)
@@ -4842,18 +4932,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function ElementsTaskStep3($history_id, $step_origin = null)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
-        ;
-        $percentages    = [
-            1 => self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[1]),
-            2 => self::DynamicPercentStep3($credit->id,  CreditsControlDesk::$labelValidate[2]),
-            3 =>  self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[3]),
-            4 =>  self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[4]),
-            5 =>  self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[5]),
-        ];
-        
+        $history = HistoryLog::find($history_id);
+        $credit  = $history->historyCredit;
+        $product = FinancialProduct::find($credit->applied_financial_product);
+        $advisor = $credit->creditAdvisor;
        
 
         $name_advisor = null;
@@ -4870,20 +4952,48 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $view_dead_line_form    = self::deadLineStep1($history);
 
         $data = [];
-        $subjects = [
-            1 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK1_STEP3],
-            2 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK2_STEP3],
-            3 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK3_STEP3],
-            4 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK4_STEP3],
-            5 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK5_STEP3],
-        ];
-        $idForm = [
-            1 => HistoryLog::KC_CONTROL_DESK_TASK1_STEP3,
-            2 => HistoryLog::KC_CONTROL_DESK_TASK2_STEP3,
-            3 => HistoryLog::KC_CONTROL_DESK_TASK3_STEP3,
-            4 => HistoryLog::KC_CONTROL_DESK_TASK4_STEP3,
-            5 => HistoryLog::KC_CONTROL_DESK_TASK5_STEP3,
-        ];
+        if ($product->alias != 'Salario On-Demand') {
+            $percentages = [];
+            $subjects = [];
+            $idForm = [];
+            $total = 5; // Recorrerá desde 1 hasta 5
+            $contI = 1; // Índice inicial
+        
+            $percentages    = [
+                1 => self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[1]),
+                2 => self::DynamicPercentStep3($credit->id,  CreditsControlDesk::$labelValidate[2]),
+                3 =>  self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[3]),
+                4 =>  self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[4]),
+                5 =>  self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[5]),
+            ];
+            $subjects = [
+                1 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK1_STEP3],
+                2 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK2_STEP3],
+                3 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK3_STEP3],
+                4 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK4_STEP3],
+                5 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK5_STEP3],
+            ];
+            $idForm = [
+                1 => HistoryLog::KC_CONTROL_DESK_TASK1_STEP3,
+                2 => HistoryLog::KC_CONTROL_DESK_TASK2_STEP3,
+                3 => HistoryLog::KC_CONTROL_DESK_TASK3_STEP3,
+                4 => HistoryLog::KC_CONTROL_DESK_TASK4_STEP3,
+                5 => HistoryLog::KC_CONTROL_DESK_TASK5_STEP3,
+            ];
+        } else {
+            $percentages = [
+                5 => self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[5]),
+            ];
+            $subjects = [
+                5 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK5_STEP3],
+            ];
+            $idForm = [
+                5 => HistoryLog::KC_CONTROL_DESK_TASK5_STEP3,
+            ];
+            $total = 5; // Recorrerá solo el índice 5
+            $contI = 5; // Índice inicial y único
+        }
+        
 
         $statuses = [];
         $currentTaskInProgress = false;
@@ -4896,56 +5006,60 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             }
         }
 
-        for ($i = 1; $i <= 5; $i++) {
-            
+        //volver dinamico el barrido es o no ondemand
+        $data = [];
+        for ($i = $contI; $i <= $total; $i++) {
             $data[] = [
-                'name' => $i.'- '. $subjects[$i],
-                'subject' => ' '.$subjects[$i],
+                'name' => $i . '- ' . $subjects[$i],
+                'subject' => ' ' . $subjects[$i],
                 'alias' => null,
                 'helpText' => null,
-                'status' => $statuses[$i],
+                'status' => $statuses[$i] ?? null,
                 'idForm' => $idForm[$i],
                 'nameField' => Str::slug(CreditsControlDesk::$labelValidate[$i]),
-                'statusBadge' => $statuses[$i] === 'null' ? null : \View::make('panel.module.status', ['status' => $statuses[$i]])->render(),
+                'statusBadge' => ($statuses[$i] ?? null) === 'null' ? null : \View::make('panel.module.status', ['status' => $statuses[$i]])->render(),
                 'deadline' => $i === 1 ? $view_dead_line_upload : $view_dead_line_form,
                 'advisor' => $name_advisor,
                 'link' => "/panel/action-form/controlDesk/{$history_id}/form?step=3_{$i}&step_origin=null",
-                'id' => null
+                'id' => null,
             ];
         }
 
-        // Handle dynamic tasks
-        $CreditPayOff = CreditPayOff::select('credit_pay_off.id', 'financial_products.name', 'financial_products.alias')
-            ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
-            ->where(['new_kc_credit_id' => $credit->id])
-            ->get();
-        
-        $dynamicIndex = 6;
-        foreach ($CreditPayOff as $creditPayOff) {
-            $alias = 'Validar clabe '.$creditPayOff->alias;
-            $dynamicPercent = self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[6], 0, $alias);
+        //  dynamic tasks
+
+        if ($product->alias != 'Salario On-Demand') {
+            $CreditPayOff = CreditPayOff::select('credit_pay_off.id', 'financial_products.name', 'financial_products.alias')
+                ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
+                ->where(['new_kc_credit_id' => $credit->id])
+                ->get();
             
-            $dynamicStatus = $currentTaskInProgress ? 'null' : ($dynamicPercent >= 100 ? 'Concluido' : 'En curso');
-            if ($dynamicStatus === 'En curso') {
-                $currentTaskInProgress = true;
+            $dynamicIndex = 6;
+            foreach ($CreditPayOff as $creditPayOff) {
+                $alias = 'Validar clabe '.$creditPayOff->alias;
+                $dynamicPercent = self::DynamicPercentStep3($credit->id, CreditsControlDesk::$labelValidate[6], 0, $alias);
+                
+                $dynamicStatus = $currentTaskInProgress ? 'null' : ($dynamicPercent >= 100 ? 'Concluido' : 'En curso');
+                if ($dynamicStatus === 'En curso') {
+                    $currentTaskInProgress = true;
+                }
+    
+                $data[] = [
+                    'name' => "{$dynamicIndex}- Capturar {$creditPayOff->name}",
+                    'subject' => " ".$creditPayOff->name,
+                    'alias' => $creditPayOff->alias,
+                    'helpText' => null,
+                    'status' => $dynamicStatus,
+                    'idForm' => HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3,
+                    'nameField' => Str::slug(CreditsControlDesk::$labelValidate[6]),
+                    'statusBadge' => $dynamicStatus === 'null' ? null : \View::make('panel.module.status', ['status' => $dynamicStatus])->render(),
+                    'deadline' => $view_dead_line_form,
+                    'advisor' => $name_advisor,
+                    'link' => "/panel/action-form/controlDesk/{$history_id}/form?step=3_{$dynamicIndex}&step_origin=null",
+                    'id' => $creditPayOff->id
+                ];
+    
+                $dynamicIndex++;
             }
-
-            $data[] = [
-                'name' => "{$dynamicIndex}- Capturar {$creditPayOff->name}",
-                'subject' => " ".$creditPayOff->name,
-                'alias' => $creditPayOff->alias,
-                'helpText' => null,
-                'status' => $dynamicStatus,
-                'idForm' => HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3,
-                'nameField' => Str::slug(CreditsControlDesk::$labelValidate[6]),
-                'statusBadge' => $dynamicStatus === 'null' ? null : \View::make('panel.module.status', ['status' => $dynamicStatus])->render(),
-                'deadline' => $view_dead_line_form,
-                'advisor' => $name_advisor,
-                'link' => "/panel/action-form/controlDesk/{$history_id}/form?step=3_{$dynamicIndex}&step_origin=null",
-                'id' => $creditPayOff->id
-            ];
-
-            $dynamicIndex++;
         }
 
         return $data;
@@ -5019,10 +5133,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function ElementsTaskStep4($history_id, $step_origin = null)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
-        ;
+        $history = HistoryLog::find($history_id);
+        $credit  = $history->historyCredit;
+        $advisor = $credit->creditAdvisor;
+        $product = FinancialProduct::find($credit->applied_financial_product);
+
         $percentages    = [
             1 => self::percentTask1Step4($history_id),
             2 => self::percentTask2Step4($history_id),
@@ -5045,9 +5160,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $view_dead_line_form    = self::deadLineStep1($history);
 
         $data = [];
+        $subjectfirmaContrato = $product->alias != 'Salario On-Demand' ? HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK2_STEP4] : 'Firma Solicitud/Descuento SOD';
         $subjects = [
             1 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK1_STEP4],
-            2 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK2_STEP4],
+            2 => $subjectfirmaContrato,
         ];
         $idForm = [
             1 => HistoryLog::KC_CONTROL_DESK_TASK1_STEP4,
@@ -5118,7 +5234,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $history = HistoryLog::find($history_id);
         $credit = $history->historyCredit;
         $client = $credit->creditClientPerson;
-        $fields = ['credit_agreement_signed', 'credit_agreement_sign_ok'];
+        $product = FinancialProduct::find($credit->applied_financial_product);
+
+        if ($product->alias == 'Salario On-Demand') {
+            $fields = ['sod_agreement'];
+        } else {
+            $fields = ['credit_agreement_signed'];
+        }
         
         if ($credit === null) {
             return 0; // Si no hay cliente, el porcentaje es 0.
@@ -5835,7 +5957,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     {
         // Construir el nombre de la función dinámicamente
         $functionName = "ElementsTaskStep" . $step;
-
+        
         // Verificar que la función exista
         if (!method_exists(self::class, $functionName)) {
             return 0; // Evitar errores si la función no existe
@@ -5852,24 +5974,36 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         // Calcular el promedio de esta tarea
         $totalElements = count($elements);
         $totalConcluidos = count($concluidos);
-
+        
         return $totalElements > 0 ? ($totalConcluidos / $totalElements) * 100 : 0;
     }
 
     //* get all percentages of the shares
     public function getPercent($history, $show_current_show = false)
     {
-        $totalSteps = 4; // Número total de tareas
-        $totalAverage = 0;
+        $credit  = $history->historyCredit;
+        $product  = FinancialProduct::find($credit->applied_financial_product);
 
-        // Iterar sobre las tareas (1 a 4) y sumar los promedios
-        for ($step = 1; $step <= $totalSteps; $step++) {
-            $averageStep = self::calculateStepAverage($history->id, $step);
-            $totalAverage += $averageStep;
+        if ($product->alias != 'Salario On-Demand') {
+            
+            $totalSteps = 4; // Número total de tareas
+            $totalAverage = 0;
+    
+            // Iterar sobre las tareas (1 a 4) y sumar los promedios
+            for ($step = 1; $step <= $totalSteps; $step++) {
+                $averageStep = self::calculateStepAverage($history->id, $step);
+                $totalAverage += $averageStep;
+            }
+    
+            // Calcular el promedio general
+            return $totalSteps > 0 ? $totalAverage / $totalSteps : 0;
+        } else {
+            $averageStep1 = self::calculateStepAverage($history->id, 3);
+            $averageStep2 = self::calculateStepAverage($history->id, 4);
+            $totalAverage = $averageStep1 + $averageStep2;
+            return 2 > 0 ? $totalAverage / 2 : 0;
+        
         }
-
-        // Calcular el promedio general
-        return $totalSteps > 0 ? $totalAverage / $totalSteps : 0;
         
     }
     

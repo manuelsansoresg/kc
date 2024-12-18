@@ -24,6 +24,8 @@ class CreditsControlDesk extends Model
         4 => 'Determinar crédito',
         5 => 'Validar clabe cliente',
         6 => 'dynamic',
+        7 => 'Contrato de crédito',
+        8 => 'Solicitud/Descuento SOD',
     ];
 
     public static function saveEdit($creditId, $request, $validate, $task_id = null, $isOnlyCreate = false, $mandatory =1, $aliasProduct = null)
