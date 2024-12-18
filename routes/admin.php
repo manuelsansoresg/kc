@@ -311,7 +311,8 @@ Route::group(['prefix' => 'credit'], function () {
     
     //*actualizar banco
     Route::post('storeBank', ['\App\Http\Controllers\Panel\Credit\CreditController', 'storeBank'])->middleware('auth');
-
+    
+    Route::get('export/{credit}/contrato', ['\App\Http\Controllers\Panel\Credit\CreditController', 'contractExport'])->middleware('auth');
 
     
     

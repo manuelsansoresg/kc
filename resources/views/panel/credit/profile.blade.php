@@ -552,6 +552,15 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            @if ($credit->sod_agreement != null)
+                                                                @php
+                                                                    $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
+                                                                @endphp
+                                                            @endif
+                                                            <tr>
+                                                                <td><a href="{{ asset('firma_contratos/'.$nombre) }}" >{{ $nombre }}</a></td>
+                                                                <td><a href="{{ asset('firma_contratos/'.$nombre) }}" download>Descargar</a></td>
+                                                            </tr>
                                                             @foreach ($files as $file)
                                                             <tr class="tb-tnx-item">
                                                                 <td class="tb-tnx-id">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Panel\Credit;
 
+use App\Exports\ContratoExport;
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\CreditReference;
@@ -11,6 +12,7 @@ use App\Models\kaaxSidecc\Pago;
 use App\Models\kaaxSidecc\Statement;
 use App\Strategies\Values\ActionValues;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CreditController extends Controller
 {
@@ -203,6 +205,73 @@ class CreditController extends Controller
         
 
         return response()->json(['data' => $list]);
+    }
+
+    public function contractExport(Credit $credit)
+    {
+        $client = $credit->creditClientPerson;
+        $data_collection[] = array(
+            'id' => $credit->id,
+            'client_person' => $client->client_person,
+            'name' => $client->name,
+            'client_person' => $client->client_person,
+            'last_name' => $client->last_name,
+            'client_person' => $client->client_person,
+            'second_last_name' => $client->second_last_name,
+            'client_person' => $client->client_person,
+            'cellphone' => $client->cellphone,
+            'client_person' => $client->client_person,
+            'validated_clabe' => $client->validated_clabe,
+            'client_person' => $client->client_person,
+            'email' => $client->email,
+            'client_person' => $client->client_person,
+            'birth_date' => $client->birth_date,
+            'client_person' => $client->client_person,
+            'rfc' => $client->rfc,
+            'client_person' => $client->client_person,
+            'curp' => $client->curp,
+            'client_person' => $client->client_person,
+            'bank_name' => $client->bank_name,
+            'client_person' => $client->client_person,
+            'bank_acount_number' => $client->bank_acount_number,
+            'client_person' => $client->client_person,
+            'bank_clabe' => $client->bank_clabe,
+            'client_person' => $client->client_person,
+            'client_postal_code' => $client->client_postal_code,
+            'client_person' => $client->client_person,
+            'client_street' => $client->client_street,
+            'client_person' => $client->client_person,
+            'client_home_external_number' => $client->client_home_external_number,
+            'client_person' => $client->client_person,
+            'client_home_internal_number' => $client->client_home_internal_number,
+            'client_person' => $client->client_person,
+            'client_colony' => $client->client_colony,
+            'client_person' => $client->client_person,
+            'client_city' => $client->client_city,
+            'client_person' => $client->client_person,
+            'client_state' => $client->client_state,
+            'client_person' => $client->client_person,
+            'client_country' => $client->client_country,
+            'product_id' => $credit->product_id,
+            'agreement_id' => $credit->agreement_id,
+            'applied_financial_product' => $credit->applied_financial_product,
+            'applied_loan_type' => $credit->applied_loan_type,
+            'applied_import' => $credit->applied_import,
+            'applied_term' => $credit->applied_term,
+            'applied_periodicity' => $credit->applied_periodicity,
+            'applied_payment' => $credit->applied_payment,
+            'applied_total_amount' => $credit->applied_total_amount,
+            'applied_interest_rate' => $credit->applied_interest_rate,
+            'applied_cat' => $credit->applied_cat,
+            'opening_commission_percentage' => $credit->opening_commission_percentage,
+            'opening_commission' => $credit->opening_commission,
+            'applied_loan_discount' => $credit->applied_loan_discount,
+            
+            
+
+        );
+        
+        return Excel::download(new ContratoExport($data_collection), $credit->id.' - Datos contrato.csv');
     }
 
     /**

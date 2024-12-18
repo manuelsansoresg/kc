@@ -1583,9 +1583,26 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'is_required' => true,
                     'is_disabled' => null,
                 ],
+                
+                2 => [
+                    'title_section' => '',
+                    'title' => null,
+                    'subtitle' => null,
+                    
+                    'id_field' => null,
+                    'comment_admin' => null,
+                    'comment_webApp' =>  null,
+                    'col' => 'col-12',
+                    'type' => 'div',
+                    'content' => '<a class="btn btn-outline-primary" href="/panel/credit/export/'.$credit->id.'/contrato"> Exportar CSV </a> ',
+                    'is_option_array' => false,
+                    'options' => null,
+                    'is_required' => true,
+                    'is_disabled' => null,
+                ],
     
                
-                2 => [
+                3 => [
                     'title_section' => null,
                     'title' => '*Contrato de CM',
                     'subtitle' => 'Indica si el cliente ya firmó el contrato de crédito',
@@ -1624,7 +1641,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     )
                 ],
                 
-                3 => [
+                4 => [
                     'title_section' => null,
                     'title' => '*Firma de contrato válida',
                     'subtitle' => 'Indica si la firma del cliente es válida',
@@ -1663,7 +1680,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     )
                 ],
     
-                4 => [
+                5 => [
                     'title_section' => null,
                     'title' => '*Contrato firmado',
                     'subtitle' => 'Adjunta el contrato firmado',
@@ -1678,7 +1695,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'is_required' => true,
                     'is_disabled' => null
                 ],
-                5 => [
+                6 => [
                     'title_section' => null,
                     'title' => null,
                     'name_field' => 'action-model',
@@ -1695,7 +1712,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'col' => 'col-12'
                 ],
                 
-                6 => [
+                7 => [
                     'title_section' => null,
                     'title' => null,
                     'name_field' => 'action-id_rel',
@@ -1713,7 +1730,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 ],
                 
                
-                7 => [
+                8 => [
                     'title_section' => null,
                     'title' => null,
                     'name_field' => 'url_redirect',
@@ -1729,7 +1746,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
                     'col' => 'col-12'
                 ],
-                8 => [
+                9 => [
                     'title_section' => null,
                     'title' => null,
                     'name_field' => 'url_redirect_next',
@@ -1745,7 +1762,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=4_'.$stepRedirect.'&step_origin=',
                     'col' => 'col-12'
                 ],
-                9=> [
+                10 => [
                     'title_section' => null,
                     'title' => null,
                     'name_field' => 'step',
