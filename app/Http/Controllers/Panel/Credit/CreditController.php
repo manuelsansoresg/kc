@@ -166,8 +166,8 @@ class CreditController extends Controller
                 HistoryLog::KC_SWAP_FORM_STEP_3,
                 HistoryLog::KC_SWAP_FORM_STEP_3_2,
                 
-                HistoryLog::KC_DELIVERY_FORM,
-                HistoryLog::KC_DELIVERY_FORM_STEP_3,
+                HistoryLog::KC_DELIVERY_TASK1_STEP1,
+                //HistoryLog::KC_DELIVERY_FORM_STEP_3,
                 
                 HistoryLog::KC_AFTER_FORM,
         ];

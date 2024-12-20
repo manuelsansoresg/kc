@@ -93,7 +93,7 @@ if (document.getElementById('action-model')) {
         model = null;
     }
     //*get configuration in template
-    if (model ==  'controlDesk') {
+    if (model ==  'controlDesk' || model == 'delivery') {
     
         $('.myDropzone').each(function () {
             // Obtener el ID del elemento actual

@@ -14,7 +14,8 @@ class File extends Model
         'model',
         'id_rel',
         'step',
-        'template_config_id' //*id array config in templatestrategy
+        'template_config_id', //*id array config in templatestrategy
+        'dynamic_status_id',
     ];
 
     const PATH = 'files_upload';

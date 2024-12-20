@@ -158,12 +158,11 @@ document.addEventListener('DOMContentLoaded', function () {
         ajax: '/panel/kc-delivery/list/show',
         columns: [
             { data: 'id' },
+            { data: 'fecha' },
             { data: 'product' },
             { data: 'client' },
             { data: 'advisor' },
             { data: 'progress'},
-            { data: 'in_progress'},
-            { data: 'deadline'},
             { data: 'options'},
         ],
         columnDefs:[

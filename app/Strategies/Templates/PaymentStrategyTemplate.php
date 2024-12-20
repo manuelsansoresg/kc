@@ -92,7 +92,7 @@ class PaymentStrategyTemplate implements TemplateInterface
     public function configFormStep1($id_rel, $history_id)
     {
         $name_form    = 'frm-template_control_desk_step1';
-        $type_form    = HistoryLog::KC_DELIVERY_FORM;
+        $type_form    = HistoryLog::KC_DELIVERY_TASK1_STEP1;
         $credit       = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
 

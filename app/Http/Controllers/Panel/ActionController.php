@@ -139,6 +139,7 @@ class ActionController extends Controller
 
     public function configFilesTemplate($model, $id_rel)
     {
+        $step = isset($request->step) && $request->step != 'undefined' ? $request->step : null;
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $config_files       = (new $actionStrategy)->configUpload();
         $preview = File::getAll($model, $id_rel);

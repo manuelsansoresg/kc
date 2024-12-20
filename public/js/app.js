@@ -96,7 +96,7 @@ $(document).ready(function () {
     } //*get configuration in template
 
 
-    if (model == 'controlDesk') {
+    if (model == 'controlDesk' || model == 'delivery') {
       $('.myDropzone').each(function () {
         // Obtener el ID del elemento actual
         var key = $(this).attr('id');
@@ -4061,6 +4061,8 @@ document.addEventListener('DOMContentLoaded', function () {
     columns: [{
       data: 'id'
     }, {
+      data: 'fecha'
+    }, {
       data: 'product'
     }, {
       data: 'client'
@@ -4068,10 +4070,6 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'advisor'
     }, {
       data: 'progress'
-    }, {
-      data: 'in_progress'
-    }, {
-      data: 'deadline'
     }, {
       data: 'options'
     }],
@@ -5176,6 +5174,34 @@ $().ready(function () {
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
       saveForm('frm-template_delivery_step2', 'delivery');
+    }
+  });
+  $("#frm-template_delivery_task1_step1").validate({
+    rules: {
+      'credit[delivered]': {
+        required: true
+      },
+      'credit[delivered_date]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_delivery_task1_step1', 'delivery');
+    }
+  });
+  $("#frm-template_delivery_dynamic_task_step1").validate({
+    rules: {
+      'credit_pay_off[delivered]': {
+        required: true
+      },
+      'credit_pay_off[delivered_date]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_delivery_dynamic_task_step1', 'delivery');
     }
   });
   $("#frm-template_payment_step2").validate({

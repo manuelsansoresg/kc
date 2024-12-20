@@ -20,6 +20,9 @@ class CreditPayOff extends Model
         'ammount',
         
         'deadline_date',
+
+        'delivered',
+        'delivered_date',
     ];
 
     public static function saveEdit($request)

@@ -674,6 +674,36 @@ $().ready(function () {
         }
     });
     
+    $("#frm-template_delivery_task1_step1").validate({
+        rules: {
+            'credit[delivered]': {
+                required: true,
+            },
+            'credit[delivered_date]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_delivery_task1_step1', 'delivery');
+        }
+    });
+    
+    $("#frm-template_delivery_dynamic_task_step1").validate({
+        rules: {
+            'credit_pay_off[delivered]': {
+                required: true,
+            },
+            'credit_pay_off[delivered_date]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_delivery_dynamic_task_step1', 'delivery');
+        }
+    });
+    
     $("#frm-template_payment_step2").validate({
         rules: {
             'credit[changed_commission]': {

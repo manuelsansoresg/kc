@@ -89,6 +89,7 @@ class Credit extends Model
         'credit_signed',
         'approved',
         'delivered',
+        'delivered_date',
         'interviewer',
         'importe_solicitado',
         'bank_id',

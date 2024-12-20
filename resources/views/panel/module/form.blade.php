@@ -418,7 +418,7 @@
                     <button class="{{ $buttonLinkExtraFinish['class'] }}" data-redirect="{{ $buttonLinkExtraFinish['data-redirect'] }}" id="{{ $buttonLinkExtraFinish['id'] }}"> {{ $buttonLinkExtraFinish['name'] }} </button>
                 @endif
                 
-                <a onclick="saveAndContinueTask('{{ $name_form }}')" class="btn btn-outline-primary">Guardar y continuar</a>
+                {{-- <a onclick="saveAndContinueTask('{{ $name_form }}')" class="btn btn-outline-primary">Guardar y continuar</a> --}}
             </div>
        
             

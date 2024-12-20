@@ -31,7 +31,7 @@ class CreditController extends Controller
             's2_credit_id' => $s2_credit_id
         ]);
         //desactivar de delivery
-        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_4, $credit_id, 1);
+        //HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_4, $credit_id, 1);
         //desactivate delivery
         HistoryLog::where(['id_rel' => $credit_id, 'status_id' => HistoryLog::KC_DELIVERY, 'status' => 1])
         ->update([

@@ -67,13 +67,20 @@ class HistoryLog extends Model
 
     
     const KC_DELIVERY                         = 30;
-    const KC_DELIVERY_FORM                    = 31;
+    const KC_DELIVERY_TASK1_STEP1             = 75;
+    const KC_DELIVERY__DYNAMIC_TASK_STEP2     = 76;
+    
+    const KC_DELIVERY_TASK1_STEP2             = 77;
+    const KC_DELIVERY_TASK2_STEP2             = 78;
+    
+    
+   /*  const KC_DELIVERY_FORM                    = 31;
     
     const KC_DELIVERY_FORM_STEP_2             = 32;
     
     const KC_DELIVERY_FORM_STEP_3             = 33;
 
-    const KC_DELIVERY_FORM_STEP_4             = 34;
+    const KC_DELIVERY_FORM_STEP_4             = 34; */
     
     const CREDITS_PAID                        = 35;
     const CREDITS_DELIVERED                   = 55;
@@ -272,6 +279,8 @@ class HistoryLog extends Model
         72 => null,
         73 => 'Firma de contrato de CM',
         74 => 'Firma de contrato/Descuento/Pagaré',
+        75 => 'Entrega crédito cliente',
+        76 => null,
     ];
 
     public static $name_model = [
@@ -452,13 +461,8 @@ class HistoryLog extends Model
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
-            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
-            CreditKaaxSidecc::sendCreditKaaxSidecc($id_rel);
-
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $id_rel, 1);
-            //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $id_rel, 0);
+            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_TASK1_STEP1, HistoryLog::KC_DELIVERY_TASK1_STEP1);
+            //CreditKaaxSidecc::sendCreditKaaxSidecc($id_rel);
 
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Delivery');
             $notification_slack->sendMessage();
@@ -738,18 +742,17 @@ class HistoryLog extends Model
     public static function getCurrentAction($credit_id)
     {
         $lbl_module = array(
-            HistoryLog::KC_DELIVERY_FORM => 'Información del crédito',
-            HistoryLog::KC_DELIVERY_FORM_STEP_2 => 'Confirmar firma',
-            HistoryLog::KC_DELIVERY_FORM_STEP_3 => 'Resolución de análisis',
-            HistoryLog::KC_DELIVERY_FORM_STEP_4 => 'Confirmar entrega',
+            HistoryLog::KC_DELIVERY_TASK1_STEP1 => 'Información del crédito',
+            HistoryLog::KC_DELIVERY_TASK1_STEP1 => 'Confirmar firma',
+            
+            HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2 => 'Confirmar entrega',
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1 => 'Comprobante de pago',
             HistoryLog::KC_PAYMENT_FORM_STEP_2 => 'Verificar pago',
         );
         $data_actions = array(
-            HistoryLog::KC_DELIVERY_FORM,
-            HistoryLog::KC_DELIVERY_FORM_STEP_2,
-            HistoryLog::KC_DELIVERY_FORM_STEP_3,
-            HistoryLog::KC_DELIVERY_FORM_STEP_4,
+            HistoryLog::KC_DELIVERY_TASK1_STEP1,
+            HistoryLog::KC_DELIVERY_TASK1_STEP1,
+            HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2,
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1,
             HistoryLog::KC_PAYMENT_FORM_STEP_2,
         );
@@ -773,18 +776,12 @@ class HistoryLog extends Model
     public static function getCurrentStep($credit_id)
     {
         $lbl_module = array(
-            HistoryLog::KC_DELIVERY_FORM => 'Información del crédito',
-            HistoryLog::KC_DELIVERY_FORM_STEP_2 => 'Confirmar firma',
-            HistoryLog::KC_DELIVERY_FORM_STEP_3 => 'Resolución de análisis',
-            HistoryLog::KC_DELIVERY_FORM_STEP_4 => 'Confirmar entrega',
+            
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1 => 'Comprobante de pago',
             HistoryLog::KC_PAYMENT_FORM_STEP_2 => 'Verificar pago',
         );
         $data_actions = array(
-            HistoryLog::KC_DELIVERY_FORM,
-            HistoryLog::KC_DELIVERY_FORM_STEP_2,
-            HistoryLog::KC_DELIVERY_FORM_STEP_3,
-            HistoryLog::KC_DELIVERY_FORM_STEP_4,
+           
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1,
             HistoryLog::KC_PAYMENT_FORM_STEP_2,
         );
