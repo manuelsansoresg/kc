@@ -46,7 +46,7 @@ class ActionController extends Controller
         $credit_id = $credit->id;
         //*agregar que cuando viene de control desk haga lo mismo si viniera de delivery
         
-        if ($status_id == HistoryLog::KC_DELIVERY_FORM_STEP_3) {
+        /* if ($status_id == HistoryLog::KC_DELIVERY_FORM_STEP_3) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit_id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
             HistoryLog::move($credit_id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3, null, false);
@@ -83,7 +83,7 @@ class ActionController extends Controller
                         ->update(['status' => 0]);
 
         }
-        $credit->update();
+        $credit->update(); */
     }
 
     public function complete(HistoryLog $history)

@@ -32,27 +32,30 @@
                             <thead>
                                 <tr class="tb-tnx-head">
                                     <th class="tb-tnx-id"><span class="">Crédito</span></th>
-                                    <th class="tb-tnx-info"><span class="tb-tnx-desc d-none d-sm-inline-block"><span>Estatus</span></span>
-                                        <span class="tb-tnx-date d-md-inline-block d-none"><span
-                                                class="d-md-none"></span>
-                                                <span class="d-none d-md-block"><span>Importe Prestado</span></span></span></th>
+                                    <th class="tb-tnx-info"><span class=" d-none d-sm-inline-block"><span>Estatus</span></span>
+                                        </th>
+                                    <th class="tb-tnx-info">
+                                        <span class=" d-md-inline-block d-none"><span
+                                            class="d-md-none"></span>
+                                            <span class="d-none d-md-block"><span>Importe Prestado</span></span></span>
+                                    </th>
                                     <th>
                                         <span>Pagado</span>
                                     </th>
                                     <th>
-                                        <span class="tb-tnx-total">Capital pendiente</span>
+                                        <span class="">Capital pendiente</span>
                                     </th>
                                     <th>
-                                        <span class="tb-tnx-total">Capital recuperado</span>
+                                        <span class="">Capital recuperado</span>
                                     </th>
                                     <th>
-                                        <span class="tb-tnx-total">Interés proyectado</span>
+                                        <span class="">Interés proyectado</span>
                                     </th>
                                     <th>
-                                        <span class="tb-tnx-total">Interés cobrado</span>
+                                        <span class="">Interés cobrado</span>
                                     </th>
                                     <th>
-                                        <span class="tb-tnx-total">Comisión KC</span>
+                                        <span class="">Comisión KC</span>
                                     </th>
                                     
                                 </tr>
@@ -89,8 +92,11 @@
                                                     {{ $valorStatus }}
                                                     </span>
                                                 </div>
+                                                
+                                            </td>
+                                            <td>
                                                 <div class="tb-tnx-desc"><span class="amount"> {{ $valorImporte }}  </span>
-                                                   </div>
+                                                </div>
                                             </td>
                                             <td>
                                                 <span
