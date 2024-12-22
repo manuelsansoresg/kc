@@ -28,108 +28,26 @@
                     </div>
 
                     <div class="card card-bordered card-preview">
-                        <table class="table table-tranx">
+                        
+                        <table id="dt-mis-prestamos" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                             <thead>
-                                <tr class="tb-tnx-head">
-                                    <th class="tb-tnx-id"><span class="">Crédito</span></th>
-                                    <th class="tb-tnx-info"><span class=" d-none d-sm-inline-block"><span>Estatus</span></span>
-                                        </th>
-                                    <th class="tb-tnx-info">
-                                        <span class=" d-md-inline-block d-none"><span
-                                            class="d-md-none"></span>
-                                            <span class="d-none d-md-block"><span>Importe Prestado</span></span></span>
-                                    </th>
-                                    <th>
-                                        <span>Pagado</span>
-                                    </th>
-                                    <th>
-                                        <span class="">Capital pendiente</span>
-                                    </th>
-                                    <th>
-                                        <span class="">Capital recuperado</span>
-                                    </th>
-                                    <th>
-                                        <span class="">Interés proyectado</span>
-                                    </th>
-                                    <th>
-                                        <span class="">Interés cobrado</span>
-                                    </th>
-                                    <th>
-                                        <span class="">Comisión KC</span>
-                                    </th>
-                                    
+                                <tr>
+                                    <th>Crédito</th>
+                                    <th>Estatus</th>
+                                    <th>Importe Prestado</th>
+                                    <th>Pagado</th>
+                                    <th>Capital pendiente</th>
+                                    <th>Capital recuperado</th>
+                                    <th>Interés proyectado</th>
+                                    <th>Interés cobrado</th>
+                                    <th>Comisión KC</th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @if ($getInvestorCredits != null)
-                                    @foreach ($getInvestorCredits as $getInvestorCredit)
-                                        @php
-                                            $getCollection   = $MCollection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
-                                            $creditId        = $getInvestorCredit->id;
-                                            $valorStatus     = 'Pendiente';
-                                            $importe         = $getInvestorCredit->import ;
-                                            $pagado          = $getInvestorCredit->total_collected;
-                                            $porPagar        = $getInvestorCredit->placed_capital;
-                                            
-                                            $valorImporte    = format_price($importe);
-                                            $valorPagado     = format_price($pagado);
-                                            $valorPorPagar   = format_price($porPagar);
-
-                                            $interesProyectado = format_price($getInvestorCredit->total_credit  - $getInvestorCredit->import);
-                                            if ($getCollection != null) {
-                                                $percentage      = $getInvestorCredit->percentage / 100;
-                                                $getStatus       = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
-                                                $getInvestor     = $MInvestor::find($getInvestorCredit->investor_id);
-                                                $getCredit       = $MCredit::find($getInvestorCredit->credit_id);
-                                                $valorStatus     = $getStatus->name;
-                                            }
-                                        @endphp
-                                        
-                                        <tr class="tb-tnx-item">
-                                            <td class="tb-tnx-id"><a target="_blank" href="/panel/credit/{{ $creditId }}"><span> {{ $creditId }} </span></a></td>
-                                            <td class="tb-tnx-info">
-                                                <div class="tb-tnx-desc">
-                                                    {{ $valorStatus }}
-                                                    </span>
-                                                </div>
-                                                
-                                            </td>
-                                            <td>
-                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorImporte }}  </span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span
-                                                class="amount">{{ $valorPagado }} </span>
-                                            </td>
-                                            <td class="tb-tnx-info">
-                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorPorPagar  }}  </span></div>
-                                               
-                                            </td>
-                                            
-                                            <td class="tb-tnx-info">
-                                                <div class="tb-tnx-desc"><span class="amount"> {{ format_price($getInvestorCredit->recovered_capital)  }}  </span></div>
-                                               
-                                            </td>
-                                            <td class="tb-tnx-info">
-                                                
-                                                <div class="tb-tnx-desc"><span class="amount"> {{ $interesProyectado  }}  </span></div>
-                                               
-                                            </td>
-                                            <td class="tb-tnx-info">
-                                                <div class="tb-tnx-desc"><span class="amount"> {{ format_price($getInvestorCredit->profit_collected)  }}  </span></div>
-                                               
-                                            </td>
-                                            <td class="tb-tnx-info">
-                                                <div class="tb-tnx-desc"><span class="amount"> {{ format_price($getInvestorCredit->commission_amount)  }}  </span></div>
-                                            </td>    
-                                          
-                                        </tr>
-                                    @endforeach
-                                @endif
-                                
-                            </tbody>
+                           
                         </table>
+
+                        
                     </div>
                 </div>
             </div>

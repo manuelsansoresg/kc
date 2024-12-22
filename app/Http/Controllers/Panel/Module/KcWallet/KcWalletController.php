@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Panel\Module\KcWallet;
 
 use App\Http\Controllers\Controller;
+use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Models\Investor;
 use App\Models\InvestorsCredit;
 use App\Models\kaaxSidecc\Collection;
+use App\Models\kaaxSidecc\CrmStatusListKaaxSidecc;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,6 +37,53 @@ class KcWalletController extends Controller
         $users = Transaction::listDatatable([HistoryLog::KC_WALLET_ADD_FORM]);
         return response()->json(['data' => $users]);
     }
+    
+    public function listMisPrestamos()
+    {
+        $getInvestor       = Investor::where('user_id', Auth::user()->id)->first();
+        $collections = null;
+        $getInvestorCredits = null;
+        $data = array();
+        if ($getInvestor != null) {
+            $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->get();
+            
+
+            foreach ($getInvestorCredits as $getInvestorCredit) {
+                $getCollection   = Collection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
+                $creditId        = $getInvestorCredit->id;
+                $valorStatus     = 'Pendiente';
+                $importe         = $getInvestorCredit->import ;
+                $pagado          = $getInvestorCredit->total_collected;
+                $porPagar        = $getInvestorCredit->placed_capital;
+                
+                $valorImporte    = format_price($importe);
+                $valorPagado     = format_price($pagado);
+                $valorPorPagar   = format_price($porPagar);
+
+                $interesProyectado = format_price($getInvestorCredit->total_credit  - $getInvestorCredit->import);
+                if ($getCollection != null) {
+                    $percentage      = $getInvestorCredit->percentage / 100;
+                    $getStatus       = CrmStatusListKaaxSidecc::getStatus($getCollection->status);
+                    $getInvestor     = Investor::find($getInvestorCredit->investor_id);
+                    $getCredit       = Credit::find($getInvestorCredit->credit_id);
+                    $valorStatus     = $getStatus->name;
+                }
+
+                $data[] = array(
+                    'id' => $creditId,
+                    'status' => $valorStatus,
+                    'importe' => $valorImporte,
+                    'pagado' => $valorPagado,
+                    'capital_pendiente' => $valorPorPagar,
+                    'capital_recuperado' => format_price($getInvestorCredit->recovered_capital),
+                    'interes_proyectado' => $interesProyectado,
+                    'interes_cobrado' => format_price($getInvestorCredit->profit_collected),
+                    'comision_kc' => format_price($getInvestorCredit->commission_amount),
+                );
+            }
+        }
+        return response()->json(['data' => $data]);
+    }
    public function listHistory()
    {
     return view('panel.module.wallet.history');
@@ -62,12 +111,9 @@ class KcWalletController extends Controller
     public function misPrestamos()
     {
         //dd(Auth::user()->id);
-        $getInvestor       = Investor::where('user_id', Auth::user()->id)->first();
         $collections = null;
         $getInvestorCredits = null;
-        if ($getInvestor != null) {
-            $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->get();
-        }
+       
         return view('panel.module.wallet.mis_prestamos', compact('getInvestorCredits'));
     }
 
