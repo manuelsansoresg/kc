@@ -2682,7 +2682,7 @@ window.changeOrigen = function (change_channel) {
 window.validateLeadEdit = function (lead_id) {
   var cellphone = $('#lead-cellphone').val();
   var rfc = $('#lead-rfc').val();
-  axios.get("/panel/lead/" + cellphone + "/" + rfc + "/" + lead_id + "/get/validate").then(function (response) {
+  axios.get("/panel/lead/" + lead_id + "/validate/get").then(function (response) {
     var result = response.data;
     var isValidate = result.isValidate;
     var contentValidaciones = result.msg;
@@ -2792,17 +2792,26 @@ window.checkDataLeadExist = function (valInput, id) {
   var messageElement = document.getElementById(id + '-msg');
   $('#content-validaciones').html('');
 
-  if (valInput != '') {
+  if (getValue != '') {
     messageElement.textContent = "";
     axios.get("/panel/lead/" + getValue + "/" + id + "/check").then(function (response) {
       var result = response.data;
       var isExist = result.exist;
       var clientPerson = result.clientPerson;
       var isValidate = result.isValidate;
-      $('#content-validaciones').html(result.contentValidaciones);
-      $('.perfil-cliente').each(function () {
-        $(this).attr('href', '/panel/client/' + clientPerson.id);
-      });
+
+      if (id == 'cellphone') {
+        $('#content-validaciones-phone').html(result.contentValidaciones);
+      } else {
+        $('#content-validaciones-rfc').html(result.contentValidaciones);
+      } //$('#content-validaciones').html(result.contentValidaciones);
+
+
+      if (typeof clientPerson !== 'undefined' && clientPerson && clientPerson.id) {
+        $('.perfil-cliente').each(function () {
+          $(this).attr('href', '/panel/client/' + clientPerson.id);
+        });
+      }
 
       if (isExist > 0 && isValidate == true) {
         $('#client_person_id').val(clientPerson.id);
@@ -2834,6 +2843,12 @@ window.checkDataLeadExist = function (valInput, id) {
         $('#lead-rfc').val(clientPerson.rfc);
         $('#lead-email').val(clientPerson.email);
         $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
+
+        if (id == 'cellphone') {
+          $('#content-validaciones-phone').html('');
+        } else {
+          $('#content-validaciones-rfc').html('');
+        }
       } else {
         messageElement.classList.remove("text-primary");
         messageElement.classList.add("text-danger");
@@ -3008,6 +3023,14 @@ $("#frm-tags").submit(function (event) {
     $('#modal-tags').modal('hide');
   })["catch"](function (e) {});
 });
+
+function getAllValidate() {
+  var clientPersonId = $('#client_person_id').val();
+  var agreement = $('#lead-origin-agreement').val();
+  var productId = $('#financial_product_id').val();
+  var lead_id = $('#lead_id').val(result.id);
+  axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + '/' + lead_id + "/soad/get").then(function (response) {})["catch"](function (e) {});
+}
 
 function saveLead() {
   var new_form = document.getElementById("frm-lead");
@@ -3361,10 +3384,10 @@ window.validateSoad = function () {
       $('#typeProductId').val(typeProductId);
 
       if ($('#is_viability').val() == 1) {
-        saveLead();
+        saveLead(); //getAllValidate();
       }
 
-      if (typeProductId == 1 || typeProductId == 2) {
+      if (typeProductId == 2 || typeProductId == 3) {
         $('#content_tramit_type').show(); //llenar el arreglo de tipo de trámite
 
         setSelectTramite(clientPersonId, productId, null);

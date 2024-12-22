@@ -374,6 +374,8 @@
 
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Validaciónes</span>
+                                                        <div id="content-validaciones-phone"></div>
+                                                        <div id="content-validaciones-rfc"></div>
                                                         <div id="content-validaciones"></div>
                                                         <div id="content-validaciones-soad"></div>
                                                         <div id="content-validaciones-soad-date"></div>

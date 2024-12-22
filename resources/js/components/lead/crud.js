@@ -258,7 +258,7 @@ window.validateLeadEdit = function(lead_id)
     let cellphone = $('#lead-cellphone').val();
     let rfc = $('#lead-rfc').val();
     axios
-        .get("/panel/lead/"+cellphone+"/"+rfc+ "/"+lead_id +"/get/validate")
+        .get("/panel/lead/"+lead_id +"/validate/get")
         .then(function (response) {
             let result = response.data;
             let isValidate = result.isValidate;
@@ -396,19 +396,28 @@ window.checkDataLeadExist = function (valInput, id)
     let getValue = valInput.value;
     let messageElement = document.getElementById(id+'-msg');
     $('#content-validaciones').html('');
-    if (valInput != '') {
+    if (getValue != '') {
         messageElement.textContent = "";
         axios
         .get("/panel/lead/"+getValue+"/"+id+"/check")
         .then(function (response) {
+            
             let result = response.data;
             let isExist = result.exist;
             let clientPerson = result.clientPerson;
             let isValidate = result.isValidate;
-            $('#content-validaciones').html(result.contentValidaciones);
-            $('.perfil-cliente').each(function() {
-                $(this).attr('href', '/panel/client/' + clientPerson.id);
-            });
+            if (id == 'cellphone') {
+                $('#content-validaciones-phone').html(result.contentValidaciones);
+            } else{
+                $('#content-validaciones-rfc').html(result.contentValidaciones);
+            }
+            //$('#content-validaciones').html(result.contentValidaciones);
+            if (typeof clientPerson !== 'undefined' && clientPerson && clientPerson.id) {
+             
+                $('.perfil-cliente').each(function() {
+                    $(this).attr('href', '/panel/client/' + clientPerson.id);
+                });
+            }
             if (isExist > 0 && isValidate == true) {
                 $('#client_person_id').val(clientPerson.id);
 
@@ -444,16 +453,20 @@ window.checkDataLeadExist = function (valInput, id)
                 $('#lead-email').val(clientPerson.email);
                 $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
                 
-                
+                if (id == 'cellphone') {
+                    $('#content-validaciones-phone').html('');
+                } else{
+                    $('#content-validaciones-rfc').html('');
+                }
                 
             } else {
+                
                 messageElement.classList.remove("text-primary");
                 messageElement.classList.add("text-danger");
                 messageElement.textContent = "Validación fallida";
                 $('#content-servicio-kc').hide();
                 $('#prospecto-valido').val('');
                 $('#is_viability').val(0);
-              
             }
 
 
@@ -680,8 +693,25 @@ $("#frm-tags").submit(function (event) {
         });
 });
 
+function getAllValidate()
+{
+    let clientPersonId = $('#client_person_id').val();
+    let agreement = $('#lead-origin-agreement').val();
+    let productId = $('#financial_product_id').val();
+    let lead_id = $('#lead_id').val(result.id);
+    axios
+        .get("/panel/lead/"+clientPersonId+"/"+agreement+"/"+productId+'/'+lead_id+"/soad/get")
+        .then(function (response) {
+           
+        })
+        .catch(e => {
+        });
+}
+
+
 function saveLead()
 {
+
     const new_form = document.getElementById("frm-lead");
     const data = new FormData(new_form);
     
@@ -1088,9 +1118,10 @@ window.validateSoad = function()
             if ($('#is_viability').val() == 1 ) {
                 
                 saveLead();
+                //getAllValidate();
             }
 
-            if (typeProductId == 1 || typeProductId == 2) {
+            if (typeProductId == 2 || typeProductId == 3) {
                 $('#content_tramit_type').show();
                 //llenar el arreglo de tipo de trámite
                 setSelectTramite(clientPersonId, productId, null);

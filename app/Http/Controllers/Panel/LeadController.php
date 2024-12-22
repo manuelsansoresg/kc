@@ -26,6 +26,7 @@ use App\Models\FpTerm;
 use App\Models\Investor;
 use App\Models\InvestorsCredit;
 use App\Models\kaaxSidecc\Collection;
+use App\Models\LeadValidation;
 use App\Models\Product;
 use App\Models\SodScheduleDate;
 use App\Models\SodScheduleName;
@@ -34,6 +35,7 @@ use App\Models\User;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
 use Carbon\Carbon;
+use Facade\FlareClient\Http\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -92,6 +94,7 @@ class LeadController extends Controller
         
         if ($id == 'cellphone') {
             $contentValidaciones      = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
+            
             if ($getClientPerson != null && $valInput == $getClientPerson->cellphone && 
                 $getClientPerson->active == 1 && $validateAgreement == true) {
                 $isValidateCellphone = true;
@@ -360,8 +363,17 @@ class LeadController extends Controller
         return view('panel.lead.profile', compact('lead', 'model', 'model_action'));
     }
 
+    //TODO: POSIBLES VALIDACIONES COMPLETAS
+    public function getValidates(Lead $lead)
+    {
+        $clientPerson = ClientPerson::find($lead->client_person_id);
+
+        
+    }
+
     public function getSoad(ClientPerson $clientPerson, Agreement $agreement, FinancialProduct $financialProduct)
     {
+
         $textSoad = '<p> Validación Crédito Preautorizado / SOD Activo /<span  class="text-primary"> <br> OK:   Prospecto No tiene un Salario On-Demand activo
  </span> </p>';
         if ($clientPerson->sod_active == 1) {
