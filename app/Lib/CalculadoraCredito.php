@@ -68,7 +68,7 @@ class CalculadoraCredito
         $nper = $financialProduct->max_term;
         $finance = new Finance;
         $payment = $finance->payment($rate, $nper, $pv);
-        return $payment;
+        return $payment * -1;
     }
 
     public function presentValue($financialProduct, $plazo, $pmt)
