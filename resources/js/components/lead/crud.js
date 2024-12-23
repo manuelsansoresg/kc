@@ -478,19 +478,16 @@ window.checkDataLeadExist = function (valInput, id)
     }
 }
 
-window.showModalCompraCartera = function(leadId) {
-    $('#modal-compra-cartera').modal('show');
+window.showModalCompraCartera = function() {
     $('#creditPayOffId').val('');
-    $('#lead_id_compra_cartera').val(leadId);
+    $('#modal-compra-cartera').modal('show');
 }
 
 $("#frm-modal-compra-cartera").submit(function (event) {
     event.preventDefault();
-    let leadId =  document.getElementById("lead_id_compra_cartera").value;
+    let leadId =  document.getElementById("lead_id").value;
     const new_form = document.getElementById("frm-modal-compra-cartera");
     const data = new FormData(new_form);
-    data.append("data[lead_id]", leadId);
-    data.append("data[client_person_id]", document.getElementById("client_person_id").value);
 
     
     axios
@@ -498,7 +495,7 @@ $("#frm-modal-compra-cartera").submit(function (event) {
         .then(function (response) {
             $('#modal-compra-cartera').modal('hide');
            let result = response.data;
-           showTableCompraCartera(leadId);
+           //showTableCompraCartera(leadId);
            
         })
         .catch(e => {

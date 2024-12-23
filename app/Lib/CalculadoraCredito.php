@@ -31,7 +31,7 @@ class CalculadoraCredito
             $pagoPeriodico = $max_loan_ammount;
         }
 
-        return $pagoPeriodico * -1;
+        return $pagoPeriodico;
 
     }
 
@@ -56,7 +56,7 @@ class CalculadoraCredito
                 $pagoPeriodico = $max_loan_ammount;
             }
     
-            return $pagoPeriodico;
+            return $pagoPeriodico * -1;
         }
         return null;
     }

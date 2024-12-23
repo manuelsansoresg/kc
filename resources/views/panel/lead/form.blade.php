@@ -453,7 +453,8 @@
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" name="creditPayOffId" id="creditPayOffId" value="">
-                        <input type="hidden" name="lead_id" id="lead_id_compra_cartera" value="{{ $lead_id }}">
+                        <input type="hidden" name="data[lead_id]" id="lead_id_compra_cartera" value="{{ $lead_id }}">
+                        <input type="hidden" name="data[client_person_id]" id="client_person_id_compra_cartera" value="{{ $clientPersonId }}">
                         
                       <button type="submit" class="btn btn-secondary">Guardar</button>
                     </div>

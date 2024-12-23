@@ -2861,23 +2861,19 @@ window.checkDataLeadExist = function (valInput, id) {
   }
 };
 
-window.showModalCompraCartera = function (leadId) {
-  $('#modal-compra-cartera').modal('show');
+window.showModalCompraCartera = function () {
   $('#creditPayOffId').val('');
-  $('#lead_id_compra_cartera').val(leadId);
+  $('#modal-compra-cartera').modal('show');
 };
 
 $("#frm-modal-compra-cartera").submit(function (event) {
   event.preventDefault();
-  var leadId = document.getElementById("lead_id_compra_cartera").value;
+  var leadId = document.getElementById("lead_id").value;
   var new_form = document.getElementById("frm-modal-compra-cartera");
   var data = new FormData(new_form);
-  data.append("data[lead_id]", leadId);
-  data.append("data[client_person_id]", document.getElementById("client_person_id").value);
   axios.post("/panel/lead/credit-pay-off", data).then(function (response) {
     $('#modal-compra-cartera').modal('hide');
-    var result = response.data;
-    showTableCompraCartera(leadId);
+    var result = response.data; //showTableCompraCartera(leadId);
   })["catch"](function (e) {});
 });
 
