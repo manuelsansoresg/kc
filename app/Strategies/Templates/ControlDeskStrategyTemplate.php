@@ -201,7 +201,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'title' => '*Anverso INE',
                 'subtitle' => 'Adjunta la parte delantera de la INE',
                 'name_field' => 'anverso',
-                'id_field' => '2',
+                'id_field' => '1',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
@@ -6059,7 +6059,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'id_rel' => $id_rel,
             'template_config_id' => $templateId,
         ])->count();
-
+        
         //$percent =  (100 / 100) * $percent_file;
         
         $percent = $getFile > 0 ? 100 : 0;
