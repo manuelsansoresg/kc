@@ -483,20 +483,44 @@ window.showModalCompraCartera = function() {
     $('#modal-compra-cartera').modal('show');
 }
 
+
+window.showTableCompraCartera = function (leadId)
+{
+    $('#content-table-compra-cartera').html('');
+    $('#resumen-deuda-capital').val('');
+    console.log('inicio compracartera');
+    axios
+    .get("/panel/lead/credit-pay-off/"+leadId)
+    .then(function (response) {
+        let result = response.data;
+        let table = result.table;
+        let total = result.total;
+        let montoEntregar = $('#hmonto-entregar').val();
+        console.log('axios');
+        $('#content-monto-compra-cartera').html(total);
+        $('#resumen-deuda-capital').val(total);
+        $('#content-monto-entregar').html(total - montoEntregar );
+        $('#content-table-compra-cartera').html(table);
+    })
+    .catch(e => {
+        console.log('error elementos compra de cartera');
+    });
+}
+
 $("#frm-modal-compra-cartera").submit(function (event) {
     event.preventDefault();
-    let leadId =  document.getElementById("lead_id").value;
     const new_form = document.getElementById("frm-modal-compra-cartera");
     const data = new FormData(new_form);
-
-    
+    let leadId = $('#lead_id_compra_cartera').val();
+    console.log(leadId);
     axios
         .post("/panel/lead/credit-pay-off", data)
         .then(function (response) {
+            let result = response.data;
             $('#modal-compra-cartera').modal('hide');
-           let result = response.data;
-           //showTableCompraCartera(leadId);
-           
+            showTableCompraCartera(leadId);
+            
+
         })
         .catch(e => {
 
@@ -542,28 +566,6 @@ window.editCompraCartera = function(creditPayOffId)
     });
 }
 
-function showTableCompraCartera(leadId)
-{
-    $('#content-table-compra-cartera').html('');
-    $('#resumen-deuda-capital').val(total);
-    console.log(leadId);
-    axios
-    .get("/panel/lead/credit-pay-off/"+leadId)
-    .then(function (response) {
-        let result = response.data;
-        let table = result.table;
-        let total = result.total;
-        let montoEntregar = $('#hmonto-entregar').val();
-
-        $('#content-monto-compra-cartera').html(total);
-        $('#resumen-deuda-capital').val(total);
-        $('#content-monto-entregar').html(total - montoEntregar );
-        $('#content-table-compra-cartera').html(table);
-    })
-    .catch(e => {
-        console.log('error elementos compra de cartera');
-    });
-}
 
 
 window.getProductsByAgreementId = function(leadId, productId)

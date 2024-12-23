@@ -30,6 +30,7 @@ use App\Models\LeadValidation;
 use App\Models\Product;
 use App\Models\SodScheduleDate;
 use App\Models\SodScheduleName;
+use App\Models\Term;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\Values\ActionValues;
@@ -479,16 +480,12 @@ class LeadController extends Controller
                                     ->where('clients_credit_info.producto', '<>', 3)->get();
         
         $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
+        
         $terms = FpTerm::select('terms.id', 'terms.term')
-        ->join('terms', 'terms.id',  'f_p_terms.term_id')
+        ->join('terms', 'terms.term_id',  'f_p_terms.term_id')
         ->where('financial_product_id', $financialProduct->id)
         ->where('terms.term', '>', $financialProduct->max_term)
         ->pluck('terms.term', 'terms.term');
-        
-
-       /*  foreach ($getTerms as $getTerm) {
-            $terms[$getTerm->id] = $getTerm->term;
-        } */
         
         $data = array(
             'montoMaximo' => $montoMaximo,

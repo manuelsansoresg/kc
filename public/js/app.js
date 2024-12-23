@@ -2866,14 +2866,35 @@ window.showModalCompraCartera = function () {
   $('#modal-compra-cartera').modal('show');
 };
 
+window.showTableCompraCartera = function (leadId) {
+  $('#content-table-compra-cartera').html('');
+  $('#resumen-deuda-capital').val('');
+  console.log('inicio compracartera');
+  axios.get("/panel/lead/credit-pay-off/" + leadId).then(function (response) {
+    var result = response.data;
+    var table = result.table;
+    var total = result.total;
+    var montoEntregar = $('#hmonto-entregar').val();
+    console.log('axios');
+    $('#content-monto-compra-cartera').html(total);
+    $('#resumen-deuda-capital').val(total);
+    $('#content-monto-entregar').html(total - montoEntregar);
+    $('#content-table-compra-cartera').html(table);
+  })["catch"](function (e) {
+    console.log('error elementos compra de cartera');
+  });
+};
+
 $("#frm-modal-compra-cartera").submit(function (event) {
   event.preventDefault();
-  var leadId = document.getElementById("lead_id").value;
   var new_form = document.getElementById("frm-modal-compra-cartera");
   var data = new FormData(new_form);
+  var leadId = $('#lead_id_compra_cartera').val();
+  console.log(leadId);
   axios.post("/panel/lead/credit-pay-off", data).then(function (response) {
+    var result = response.data;
     $('#modal-compra-cartera').modal('hide');
-    var result = response.data; //showTableCompraCartera(leadId);
+    showTableCompraCartera(leadId);
   })["catch"](function (e) {});
 });
 
@@ -2903,24 +2924,6 @@ window.editCompraCartera = function (creditPayOffId) {
     $('#modal-compra-cartera').modal('show');
   })["catch"](function (e) {});
 };
-
-function showTableCompraCartera(leadId) {
-  $('#content-table-compra-cartera').html('');
-  $('#resumen-deuda-capital').val(total);
-  console.log(leadId);
-  axios.get("/panel/lead/credit-pay-off/" + leadId).then(function (response) {
-    var result = response.data;
-    var table = result.table;
-    var total = result.total;
-    var montoEntregar = $('#hmonto-entregar').val();
-    $('#content-monto-compra-cartera').html(total);
-    $('#resumen-deuda-capital').val(total);
-    $('#content-monto-entregar').html(total - montoEntregar);
-    $('#content-table-compra-cartera').html(table);
-  })["catch"](function (e) {
-    console.log('error elementos compra de cartera');
-  });
-}
 
 window.getProductsByAgreementId = function (leadId, productId) {
   var selectElement = document.getElementById('financial_product_id');

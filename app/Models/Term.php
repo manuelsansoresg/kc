@@ -10,6 +10,7 @@ class Term extends Model
     use HasFactory;
     protected $fillable = [
         'term',
+        'term_id',
         'periodicity',
     ];
 }
