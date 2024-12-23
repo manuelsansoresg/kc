@@ -258,6 +258,12 @@ return [
         3 => 15,
         4 => 30
     ),
+    'periodicidad_names' => array(
+        1 => 'Semanal',
+        2 => 'Catorcenal',
+        3 => 'Quincenal',
+        4 => 'Mensual'
+    ),
     'tipo_tramite' => array(
         1 => 'Crédito nuevo',
         2 => 'Crédito adicional',

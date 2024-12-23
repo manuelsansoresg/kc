@@ -468,7 +468,7 @@ class LeadController extends Controller
         $montoMaximo         = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct, $tramitType);
         
         $plazoMaximo         = $financialProduct->max_term;
-        $periodicidad        = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
+        $periodicidad        = config('enums.periodicidad_names')[$financialProduct->periodicity_id];
         $payment             = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
         $productoDeseado     = null;
         $getCollection = Collection::select('collections.kc_credit_id', 'collections.id', 'collections.fecha_cobro', 'collections.descuento', 'crm_status_list.alias', 'collections.saldo_insoluto_real')

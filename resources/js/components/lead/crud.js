@@ -258,7 +258,7 @@ window.validateLeadEdit = function(lead_id)
     let cellphone = $('#lead-cellphone').val();
     let rfc = $('#lead-rfc').val();
     axios
-        .get("/panel/lead/"+lead_id +"/validate/get")
+        .get("/panel/lead/"+cellphone+"/"+rfc+ "/"+lead_id +"/get/validate")
         .then(function (response) {
             let result = response.data;
             let isValidate = result.isValidate;
@@ -272,7 +272,7 @@ window.validateLeadEdit = function(lead_id)
                 $('#content-validaciones').show();
                 $('#content-validaciones').html(contentValidaciones);
             } else {
-                $('#content-validaciones').hide();
+                $('#content-validaciones').html(contentValidaciones);
                 $('#is_viability').val(0);
                 $('#content-servicio-kc').hide()
                 $('#prospecto-valido').val('');
@@ -478,14 +478,15 @@ window.checkDataLeadExist = function (valInput, id)
     }
 }
 
-window.showModalCompraCartera = function() {
+window.showModalCompraCartera = function(leadId) {
     $('#modal-compra-cartera').modal('show');
     $('#creditPayOffId').val('');
+    $('#lead_id_compra_cartera').val(leadId);
 }
 
 $("#frm-modal-compra-cartera").submit(function (event) {
     event.preventDefault();
-    let leadId =  document.getElementById("lead_id").value;
+    let leadId =  document.getElementById("lead_id_compra_cartera").value;
     const new_form = document.getElementById("frm-modal-compra-cartera");
     const data = new FormData(new_form);
     data.append("data[lead_id]", leadId);
@@ -548,7 +549,7 @@ function showTableCompraCartera(leadId)
 {
     $('#content-table-compra-cartera').html('');
     $('#resumen-deuda-capital').val(total);
-
+    console.log(leadId);
     axios
     .get("/panel/lead/credit-pay-off/"+leadId)
     .then(function (response) {

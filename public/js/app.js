@@ -2682,7 +2682,7 @@ window.changeOrigen = function (change_channel) {
 window.validateLeadEdit = function (lead_id) {
   var cellphone = $('#lead-cellphone').val();
   var rfc = $('#lead-rfc').val();
-  axios.get("/panel/lead/" + lead_id + "/validate/get").then(function (response) {
+  axios.get("/panel/lead/" + cellphone + "/" + rfc + "/" + lead_id + "/get/validate").then(function (response) {
     var result = response.data;
     var isValidate = result.isValidate;
     var contentValidaciones = result.msg;
@@ -2695,7 +2695,7 @@ window.validateLeadEdit = function (lead_id) {
       $('#content-validaciones').show();
       $('#content-validaciones').html(contentValidaciones);
     } else {
-      $('#content-validaciones').hide();
+      $('#content-validaciones').html(contentValidaciones);
       $('#is_viability').val(0);
       $('#content-servicio-kc').hide();
       $('#prospecto-valido').val('');
@@ -2861,14 +2861,15 @@ window.checkDataLeadExist = function (valInput, id) {
   }
 };
 
-window.showModalCompraCartera = function () {
+window.showModalCompraCartera = function (leadId) {
   $('#modal-compra-cartera').modal('show');
   $('#creditPayOffId').val('');
+  $('#lead_id_compra_cartera').val(leadId);
 };
 
 $("#frm-modal-compra-cartera").submit(function (event) {
   event.preventDefault();
-  var leadId = document.getElementById("lead_id").value;
+  var leadId = document.getElementById("lead_id_compra_cartera").value;
   var new_form = document.getElementById("frm-modal-compra-cartera");
   var data = new FormData(new_form);
   data.append("data[lead_id]", leadId);
@@ -2910,6 +2911,7 @@ window.editCompraCartera = function (creditPayOffId) {
 function showTableCompraCartera(leadId) {
   $('#content-table-compra-cartera').html('');
   $('#resumen-deuda-capital').val(total);
+  console.log(leadId);
   axios.get("/panel/lead/credit-pay-off/" + leadId).then(function (response) {
     var result = response.data;
     var table = result.table;
