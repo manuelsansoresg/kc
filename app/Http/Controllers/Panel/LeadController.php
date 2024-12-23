@@ -545,7 +545,7 @@ class LeadController extends Controller
 
     public function getResumen( FinancialProduct $financialProduct, $plazo, $monto, $total, $tramitType)
     {
-        $comision = $monto * $financialProduct->openning_commission_rate;
+        $comision = $monto * $financialProduct->opening_commission_rate;
         if ($tramitType == 3) {
             $montoEntregar = $monto - $comision - $total;
         } else {
@@ -571,7 +571,7 @@ class LeadController extends Controller
             'plazo' => $plazo,
             'pagoPeriodico' => format_price($pagoPeriodico),
             'pagoTotal' => format_price($pagoTotal),
-            'tasaAnual' => $tasaAnual,
+            'tasaAnual' => $tasaAnual / 1.16,
             'cat' => $cat,
 
             'kcInteres' => $kcInteres,
