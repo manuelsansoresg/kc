@@ -388,10 +388,10 @@ class LeadController extends Controller
             $nameField              = "schedule_$getSodName->id";
             $alias                  = "schedule_$getSodName->id as schedule";
             $getDate                = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
-            $isSoadDate             = $getDate->schedule == 1 ?  '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> <br>OK: Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate;
+            $isSoadDate             = $getDate!= null && $getDate->schedule == 1 ?  '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> <br>OK: Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate;
             //dd($agreement->id, $getDate);
 
-            $is_sod_on_date_allowed = $getDate->schedule == 1 ? true : false;
+            $is_sod_on_date_allowed = $getDate!= null && $getDate->schedule == 1 ? true : false;
             //obtener los productos si tiene sod
             $dailyIncomeAdjusted  = $clientPerson->daily_income_adjusted;
             

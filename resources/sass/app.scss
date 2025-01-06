@@ -337,8 +337,21 @@ ul.ul-primary li::before {
   text-align: center;
 }
 
+.format-number{
+  font-size: 1.9rem !important;
+  color: #7C4FE0 !important;
+}
+
+.footer-area.footer-fixed {
+  bottom: -10px !important;
+}
+
  /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
+
+  .logo-celular{
+    width: 50%;
+  }
 
   .traffic-channel-doughnut-ck {
     height: 250px;
@@ -358,6 +371,10 @@ ul.ul-primary li::before {
 
   #img-cell{
     width: 50%;
+  }
+
+  .footer-area.footer-fixed {
+    bottom: 0 !important;
   }
 
 }
