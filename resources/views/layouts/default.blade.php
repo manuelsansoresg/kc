@@ -560,7 +560,7 @@
                     <div class="footer-items">
                         <!-- Logo -->
                         <a class="navbar-brand" href="index.html">
-                            <img class="logo" src="/images/kclogoblanco.png" alt="">
+                            <img class="logo-footer" src="/images/logo_solo.png" alt="">
                         </a>
                         <p class="slug mt-3">Tu mejor desición. Fácil y rápido.</p>
 
