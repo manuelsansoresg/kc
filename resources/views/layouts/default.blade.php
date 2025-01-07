@@ -97,16 +97,16 @@
 					<!-- Navbar Nav -->
 					<ul class="navbar-nav items mx-auto">
 						<li class="nav-item">
-							<a class="nav-link smooth-anchor" href="#features">Inicio</a>
+							<a class="nav-link smooth-anchor" href="#header">Inicio</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link smooth-anchor" href="#contact">Contacto</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link smooth-anchor" href="#features">Ayuda</a>
+							<a class="nav-link smooth-anchor" href="#faq">Ayuda</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link smooth-anchor" href="#features">App</a>
+							<a class="nav-link smooth-anchor" href="https://app.kaaxclub.com/">App</a>
 						</li>
 						
 					</ul>
@@ -176,7 +176,7 @@
 		<!-- ***** Hero Section End ***** -->
 
         <!-- ***** Work Area Start ***** -->
-		<section class="work-section has-overlay overlay-gradient">
+		<section class="work-section has-overlay overlay-gradient" id="services">
 			<div class="container">
 				<div class="row justify-content-center">
 					<div class="col-12 col-md-10 col-lg-7">
@@ -322,7 +322,7 @@
 </section>
 
 <!-- ***** FAQ Area Start ***** -->
-<section class="faq">
+<section class="faq" id="faq">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-md-10 col-lg-7">
@@ -592,13 +592,13 @@
                         <!-- Navigation -->
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="index.html">Inicio </a>
+                                <a class="nav-link" href="#header">Inicio </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Servicios </a>
+                                <a class="nav-link" href="#services">Servicios </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Contacto </a>
+                                <a class="nav-link" href="#contact">Contacto </a>
                             </li>
                           
                         </ul>
@@ -612,13 +612,13 @@
                         <!-- Navigation -->
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="faq.html">Preguntas frecuentes</a>
+                                <a class="nav-link" href="#faq">Preguntas frecuentes</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Términos y condiciones</a>
+                                <a class="nav-link" href="/terminos-y-condiciones" target="_blank">Términos y condiciones</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="contact.html">Aviso de privacidad </a>
+                                <a class="nav-link" href="/aviso-de-privacidad" target="_blank">Aviso de privacidad </a>
                             </li>
                             
                         </ul>
