@@ -345,6 +345,19 @@ ul.ul-primary li::before {
   width: 20% !important;
 }
 
+.title-header {
+  font-size: 3rem !important;
+}
+
+.overlay-white h2, p, h4 {
+  color: #7C4FE0 !important;
+}
+
+.overlay-white i {
+  font-size: 35px;
+  color: #7C4FE0;
+}
+
 /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
   .logo-celular {

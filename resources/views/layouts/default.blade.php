@@ -89,7 +89,7 @@
 
 					<!-- Logo -->
 					<a class="navbar-brand" href="index.html">
-						<img src="/images/kclogoblanco.png" alt="Logo" style="width: 60px" />
+						<img src="/images/logokaax.png" alt="Logo" style="width: 120px" />
 					</a>
 
 					<div class="ms-auto"></div>
@@ -135,13 +135,15 @@
 					<div class="col-12 col-md-7 col-lg-6">
 						<!-- Hero Content -->
 						<div class="hero-content pb-5">
-							<h1 class="text-white">Tu mejor decisión. Fácil y rápido</h1>
+							<h1 class="text-white title-header">Tu mejor decisión. Fácil y rápido</h1>
 							<p class="sub-heading text-white my-4">Con KaaxClub puedes refinanciar tus deudas, adelantar tu salario trabajado y acceder a un crédito justo, de manera fácil, rápida y sin complicaciones.</p>
 							<a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%un%servicio%de%KaaxClub" class="btn btn-bordered-white swap-icon">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
 						</div>
 					</div>
-					<div class="col-12 col-md-5 col-lg-5 mt-4 mt-md-0">
-                        <img src="/images/kc - mano celular.png" class="logo-celular" alt="">
+					<div class="col-12 col-md-5 col-lg-5 mt-4 mt-md-0 text-center">
+                        <div class="col-12 text-center">
+                            <img src="/images/kc - mano celular.png" class="logo-celular" alt="">
+                        </div>
 						{{-- <div class="hero-form">
 							<h3 class="mt-0 mb-3">Get started for FREE!</h3>
 							<span>Fill all fields so we can get some info about you. We'll never send you spam</span>
@@ -176,14 +178,14 @@
 		<!-- ***** Hero Section End ***** -->
 
         <!-- ***** Work Area Start ***** -->
-		<section class="work-section has-overlay overlay-gradient" id="services">
+		<section class=" has-overlay overlay-white" id="services">
 			<div class="container">
 				<div class="row justify-content-center">
 					<div class="col-12 col-md-10 col-lg-7">
 						<!-- Intro -->
 						<div class="intro text-center">
-							<h2 class="title text-white layout-2 mt-0">Soluciones financiera reales para ti</h2>
-							<p class="text-white">KaaxClub te ofrece soluciones rápidas, justas y accesibles para mejorar tu bienestar financiero.
+							<h2 class="title  layout-2 mt-0">Soluciones financieras reales para ti</h2>
+							<p class="">KaaxClub te ofrece soluciones rápidas, justas y accesibles para mejorar tu bienestar financiero.
                             </p>
 						</div>
 					</div>
@@ -191,23 +193,23 @@
 				<div class="row items">
 					<div class="col-12 col-md-4 item">
 						<div class="icon-box text-center px-3">
-							<img class="avatar-md" src="/images/kc_soluciona.png" alt="">
-							<h4 class="text-white">Soluciona tu deuda</h4>
-							<p class="text-white">Refinancía tu deuda de otros bancos con ahorros de hasta el 60% de intereses.</p>
+							<i class="bi bi-percent"></i>
+							<h4 class="">Soluciona tu deuda</h4>
+							<p class="">Refinancía tu deuda de otros bancos con ahorros de hasta el 60% de intereses.</p>
 						</div>
 					</div>
 					<div class="col-12 col-md-4 item">
 						<div class="icon-box text-center px-3">
-							<img class="avatar-md" src="/images/kc_sod.png" alt="">
-							<h4 class="text-white">Salario On-Demand</h4>
-							<p class="text-white">Acceso al salario ya trabajado antes del día de pago.</p>
+							<i class="bi bi-calendar2-week"></i>
+							<h4 class="">Salario On-Demand</h4>
+							<p class="">Acceso al salario ya trabajado antes del día de pago.</p>
 						</div>
 					</div>
 					<div class="col-12 col-md-4 item">
 						<div class="icon-box text-center px-3">
-							<img class="avatar-md" src="/images/kc_credito.png" alt="">
-							<h4 class="text-white">Préstamo personal</h4>
-							<p class="text-white">Acceso al crédito más fácil y más rápido del mercado.</p>
+							<i class="bi bi-cash-coin"></i>
+							<h4 class="">Préstamo personal</h4>
+							<p class="">Acceso al crédito más fácil y más rápido del mercado.</p>
 						</div>
 					</div>
 				</div>
@@ -230,19 +232,19 @@
 
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex align-items-center gap-2 border-0 p-0 mt-3">
-                            <span class="text-primary format-number">1</span>
+                            <i class="bi bi-1-circle format-number"></i>
                             <span>Inicia la solicitud a través de Whatsapp o la App. <br></span>
                         </li>
                         <li class="list-group-item d-flex align-items-center gap-2 border-0 p-0 mt-3">
-                            <span class="format-number">2</span>
+                            <i class="bi bi-2-circle format-number"></i>
                             <span>Elige el servicio que más te convenga. <br></span>
                         </li>
                         <li class="list-group-item d-flex align-items-center gap-2 border-0 p-0 mt-3">
-                            <span class="format-number">3</span>
+                            <i class="bi bi-3-circle format-number"></i>
                             <span>Recibe el dinero en tu cuenta de nómina.</span>
                         </li>
                         <li class="list-group-item d-flex align-items-center gap-2 border-0 p-0 mt-3">
-                            <span class="format-number">4</span>
+                            <i class="bi bi-4-circle format-number"></i>
                             <span>Paga automáticamente vía descuento de nómina.</span>
                         </li>
                     </ul>
@@ -506,7 +508,7 @@
             <div class="col-12 col-md-5">
                 <div class="contact-info">
                     <h3 class="mt-0">Comunícate con nosotros:</h3>
-                    <p>Un asesor con gusto te atenderá.</p>
+                    <p>Un asesor te atenderá con gusto .</p>
 
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item d-flex align-items-center">
@@ -534,7 +536,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 mt-4 mt-md-0">
-                <img src="/images/kc - tu y yo.png" alt="">
+                <img src="/images/kc - tu y yo.png" alt="" style="width: 60%">
                 
             </div>
         </div>
