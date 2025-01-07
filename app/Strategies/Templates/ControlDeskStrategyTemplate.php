@@ -4457,7 +4457,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $statusStep2 = ($percentStep2 >= 100) ? 'Concluido' : 'En curso';
         }
 
-
+        
 
         $data = array();
         
@@ -4466,34 +4466,39 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $data[] = array(
                 'nameStep' => 'Documentos',
                 'status' => $statusStep1,
-                'link' => ''
+                'link' => '',
+                'percent' => self::calculateStepAverage($history_id, 1),
             );
 
             $data[] = array(
                 'nameStep' => 'Captura info',
                 'status' => $statusStep2,
-                'link' => ''
+                'link' => '',
+                'percent' => self::calculateStepAverage($history_id, 2),
             );
           
             $data[] = array(
                 
                 'nameStep' => 'KYC/MDC',
                 'status' => $statusStep2,
-                'link' => ''
+                'link' => '',
+                'percent' => self::calculateStepAverage($history_id, 3),
             );
         } elseif ($product!= null && $product->alias == 'Salario On-Demand') {
             $data[] = array(
                 
                 'nameStep' => 'KYC/MDC',
                 'status' => $statusStep2,
-                'link' => ''
+                'link' => '',
+                'percent' => self::calculateStepAverage($history_id, 4),
             );
         }
         $data[] = array(
             
             'nameStep' => 'Firmas',
             'status' => $statusStep2,
-            'link' => ''
+            'link' => '',
+            'percent' => self::calculateStepAverage($history_id, 5),
         );
 
        
