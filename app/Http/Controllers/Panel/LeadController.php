@@ -451,11 +451,14 @@ class LeadController extends Controller
         //validaciones sod
         $validateSod = Lead::validateSod($clientPerson, $financialProduct);
         $tramites = array();
-        if ($validateSod['isTramite'] == true) {
+        if ($validateSod['isTramite'] == true && $financialProduct->name != 'KC Salario On-Demand' ) {
            
             foreach ($validateSod['tramite'] as $getTramite) {
                 $tramites[$getTramite] = config('enums.tipo_tramite')[$getTramite];
             }
+        }
+        if ($financialProduct->name == 'KC Salario On-Demand') {
+            $tramites[1] =  config('enums.tipo_tramite')[1];
         }
         $dataReturn = array(
             'sodIsTramite' => $validateSod['isTramite'], 'sodMessage' => $validateSod['message'],'sodTramites' => $tramites

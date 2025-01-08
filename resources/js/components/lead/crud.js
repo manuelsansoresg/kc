@@ -1126,12 +1126,13 @@ window.validateSoad = function()
                 //getAllValidate();
             }
 
-            if (typeProductId == 2 || typeProductId == 3) {
+            if (typeProductId == 1 || typeProductId == 2 || typeProductId == 3) {
                 $('#content_tramit_type').show();
                 //llenar el arreglo de tipo de trámite
                 setSelectTramite(clientPersonId, productId, null);
                 
             }
+            
 
             if (result.financialProduct == 'Salario On-Demand' ) {
                 let TextSoad = result.TextSoad;
