@@ -479,6 +479,10 @@ window.checkDataLeadExist = function (valInput, id)
 }
 
 window.showModalCompraCartera = function() {
+    let lead_id = $('#lead_id').val();
+    let client_person_id = $('#client_person_id').val();
+    $('#lead_id_compra_cartera').val(lead_id);
+    $('#client_person_id_compra_cartera').val(client_person_id);
     $('#creditPayOffId').val('');
     $('#modal-compra-cartera').modal('show');
 }
@@ -951,7 +955,8 @@ window.changeTramite = function()
 
 window.graficaProspecto = function()
 {
-    let leadId = $('#lead_id').val();
+   
+    $('#modal-chart').modal('show');
 }
 
 

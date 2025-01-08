@@ -2862,6 +2862,10 @@ window.checkDataLeadExist = function (valInput, id) {
 };
 
 window.showModalCompraCartera = function () {
+  var lead_id = $('#lead_id').val();
+  var client_person_id = $('#client_person_id').val();
+  $('#lead_id_compra_cartera').val(lead_id);
+  $('#client_person_id_compra_cartera').val(client_person_id);
   $('#creditPayOffId').val('');
   $('#modal-compra-cartera').modal('show');
 };
@@ -3259,7 +3263,7 @@ window.changeTramite = function () {
 };
 
 window.graficaProspecto = function () {
-  var leadId = $('#lead_id').val();
+  $('#modal-chart').modal('show');
 };
 
 window.getMontoSolicitado = function () {
