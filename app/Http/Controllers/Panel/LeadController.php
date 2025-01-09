@@ -435,13 +435,20 @@ class LeadController extends Controller
             // Si la CLABE tiene 4 caracteres o menos, la mostramos tal cual
             $maskedClabe = $clabe;
         }
+
+        $tramites = array();
+
+        if ($financialProduct->type_product_id == 3) {
+            $tramites[1] =  config('enums.tipo_tramite')[1];
+        }
+
         $validateSod = Lead::validateSod($clientPerson, $financialProduct);
         
         $dataReturn = array(
                     'TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed, 
                     'maximoRedondeado' => $maximoRedondeado, 'minimoRedondeado' => $minimoRedondeado, 'contentProductSod' => $contentProductSod,
                     'financialProduct' => $financialProduct->name, 'comision' => $financialProduct->sod_commission_amount, 'bank_name' => $clientPerson->bank_name,
-                    'cuenta' => $maskedClabe, 'type_product_id' => $financialProduct->type_product_id, 
+                    'cuenta' => $maskedClabe, 'type_product_id' => $financialProduct->type_product_id, 'sodTramites' => $tramites
         );
         return response()->json($dataReturn);
     }
@@ -471,9 +478,15 @@ class LeadController extends Controller
         $getRefinanciamiento = new CalculadoraCredito();
         $montoMaximo         = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct, $tramitType);
         
-        $plazoMaximo         = $financialProduct->max_term;
-        $periodicidad        = config('enums.periodicidad_names')[$financialProduct->periodicity_id];
-        $payment             = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
+        $plazoMaximo  = $financialProduct->max_term;
+        $periodicidad = config('enums.periodicidad_names')[$financialProduct->periodicity_id];
+        $payment      = null;
+        $terms        = null;
+        
+        if ($financialProduct->type_product_id != 3) {
+            $payment             = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
+        }
+        
         $productoDeseado     = null;
         $getCollection = Collection::select('collections.kc_credit_id', 'collections.id', 'collections.fecha_cobro', 'collections.descuento', 'crm_status_list.alias', 'collections.saldo_insoluto_real')
                                     ->join('clients_credit_info', 'clients_credit_info.credit_id', 'collections.credit_id')
@@ -484,11 +497,13 @@ class LeadController extends Controller
         
         $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
         
-        $terms = FpTerm::select('terms.id', 'terms.term')
-        ->join('terms', 'terms.term_id',  'f_p_terms.term_id')
-        ->where('financial_product_id', $financialProduct->id)
-        ->where('terms.term', '>', $financialProduct->max_term)
-        ->pluck('terms.term', 'terms.term');
+        if ($financialProduct->max_term != null) {
+            $terms = FpTerm::select('terms.id', 'terms.term')
+            ->join('terms', 'terms.term_id',  'f_p_terms.term_id')
+            ->where('financial_product_id', $financialProduct->id)
+            ->where('terms.term', '>', $financialProduct->max_term)
+            ->pluck('terms.term', 'terms.term');
+        }
         
         $data = array(
             'montoMaximo' => $montoMaximo,

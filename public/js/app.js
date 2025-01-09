@@ -3183,6 +3183,7 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
   $('#content-validaciones-soad-tramite').html('');
   $('#content-error-producto-preautorizado').hide();
   $('#producto-deseado').hide();
+  var typeProductId = $('#typeProductId').val(typeProductId);
   axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/tramite/get").then(function (response) {
     var result = response.data;
     var sodIsTramite = result.sodIsTramite;
@@ -3206,7 +3207,9 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
       $('#tramit_type').val(tipoTramiteId).trigger("change");
     }
 
-    $('#content-validaciones-soad-tramite').html(sodMessage);
+    if (typeProductId != 3) {
+      $('#content-validaciones-soad-tramite').html(sodMessage);
+    }
   })["catch"](function (e) {});
 } //contenido tramite al cambiar el select si selecciona refinanciamiento
 
@@ -3392,13 +3395,13 @@ window.validateSoad = function () {
         saveLead(); //getAllValidate();
       }
 
-      if (typeProductId == 1 || typeProductId == 2 || typeProductId == 3) {
+      if (typeProductId == 1 || typeProductId == 2) {
         $('#content_tramit_type').show(); //llenar el arreglo de tipo de trámite
 
         setSelectTramite(clientPersonId, productId, null);
       }
 
-      if (result.financialProduct == 'Salario On-Demand') {
+      if (typeProductId == 3) {
         var TextSoad = result.TextSoad;
         var soadActive = result.soadActive;
         var isSoadDate = result.isSoadDate;
@@ -3431,6 +3434,17 @@ window.validateSoad = function () {
           $('#valor-banco').html(result.bank_name);
           $('#valor-cuenta').html(result.cuenta);
           $('#content-product-select').show();
+          var selectElement = document.getElementById('tramit_type');
+          selectElement.options.length = 0; // Limpiar el select
+
+          var sodTramites = result.sodTramites;
+          Object.keys(sodTramites).forEach(function (key) {
+            var option = document.createElement('option');
+            option.value = key;
+            option.textContent = sodTramites[key];
+            selectElement.appendChild(option);
+          });
+          $('#content_tramit_type').show();
         } else {
           $('#producto-deseado').hide();
         }

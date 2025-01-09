@@ -854,6 +854,8 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
     $('#content-validaciones-soad-tramite').html('');
     $('#content-error-producto-preautorizado').hide();
     $('#producto-deseado').hide();
+    let typeProductId = $('#typeProductId').val(typeProductId)
+
     axios
     .get("/panel/lead/" + clientPersonId +"/"+financialProductId+"/tramite/get")
     .then(function (response) {
@@ -878,7 +880,9 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
         if (tipoTramiteId != 'null') {
             $('#tramit_type').val(tipoTramiteId).trigger("change");
         }
-        $('#content-validaciones-soad-tramite').html(sodMessage);
+        if (typeProductId != 3) {
+            $('#content-validaciones-soad-tramite').html(sodMessage);
+        }
     })
     .catch(e => {
 
@@ -1126,7 +1130,7 @@ window.validateSoad = function()
                 //getAllValidate();
             }
 
-            if (typeProductId == 1 || typeProductId == 2 || typeProductId == 3) {
+            if (typeProductId == 1 || typeProductId == 2) {
                 $('#content_tramit_type').show();
                 //llenar el arreglo de tipo de trámite
                 setSelectTramite(clientPersonId, productId, null);
@@ -1134,7 +1138,7 @@ window.validateSoad = function()
             }
             
 
-            if (result.financialProduct == 'Salario On-Demand' ) {
+            if (typeProductId == 3 ) {
                 let TextSoad = result.TextSoad;
                 let soadActive = result.soadActive;
                 let isSoadDate = result.isSoadDate;
@@ -1173,6 +1177,16 @@ window.validateSoad = function()
                     
                     $('#content-product-select').show();
                     
+                    const selectElement = document.getElementById('tramit_type');
+                    selectElement.options.length = 0; // Limpiar el select
+                    let sodTramites = result.sodTramites;
+                    Object.keys(sodTramites).forEach(key => {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = sodTramites[key];
+                            selectElement.appendChild(option);
+                        });
+                    $('#content_tramit_type').show();
                     
                 } else {
                     $('#producto-deseado').hide();
