@@ -135,7 +135,7 @@
 
 @if (isset($step) && $step == 4 && $taskId === 2)
 <div class="row">
-    @if (isset($product) && $product->alias == 'Salario On-Demand')
+    @if (isset($product) && $product->type_product_id == 3)
     <div class="col-6">
         <table class="table table-striped">
             <tr>

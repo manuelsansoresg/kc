@@ -678,7 +678,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     {
         $credit       = Credit::find($id_rel);
         $client = $credit->creditClientPerson;
-        
+        $product = FinancialProduct::find($credit->applied_financial_product);
         
 
         $loan_type    = config('enums.loan_type');
@@ -700,7 +700,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
         
         $taks = self::ElementsTaskStep3($history_id, null);
-        $templateId = $taskId -1;
+        
+        if ($product->type_product_id != 3) {
+            $templateId = $taskId -1;
+        } else {
+            $templateId = 0;
+        }
+        
+        
         $task = $taks[$templateId];
         $type_form    = $task['idForm'];
         
@@ -1192,8 +1199,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit       = Credit::find($id_rel);
         $client = $credit->creditClientPerson;
         $stepRedirect = $taskId +1;
-
-
+        $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+        $urlRedirect = '/panel/template/steps/controlDesk/' . $history_id . '/show';
+        if ($financialProduct->type_product_id == 3) {
+            $urlRedirect == 'panel/kc-control-desk';
+        }
         
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit])->render();
 
@@ -1269,7 +1279,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                'value' => $urlRedirect,
                 'col' => 'col-12'
             ],
             4 => [
@@ -1563,9 +1573,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
 
         $stepRedirect = $taskId +1;
+        
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'payOff' => null, 'step' => $step, 'product' => $product])->render();
 
-        if ($product->alias != 'Salario On-Demand') {
+        if ($product->type_product_id != 3) {
             $elements = array(
                 1 => [
                     'title_section' => '',
@@ -4235,7 +4246,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, $credit->id, 0);
+
+                            if ($financialProduct->type_product_id == 3) {
+                                HistoryLog::where([
+                                    'id_rel' => $credit->id,
+                                    'status_id' => HistoryLog::KC_CONTROL_DESK,
+                                    'status' => 1,
+                                ])->update([
+                                    'status' => 0
+                                ]);
+                                HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_DELIVERY, null, false);
+                                HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY, $credit->id, 0);
+                            }
+
                         }
+
+                        
                         
                     }
 
@@ -4289,7 +4315,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     }
 
                     if ($task == 2) {
-                        $labelValidate = $financialProduct->alias != 'Salario On-Demand' ? CreditsControlDesk::$labelValidate[7] : CreditsControlDesk::$labelValidate[8];
+
+                        
+                        $labelValidate = $financialProduct->type_product_id != 3 ? CreditsControlDesk::$labelValidate[7] : CreditsControlDesk::$labelValidate[8];
+                       
+                       
                         
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
                         
@@ -4298,10 +4328,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             
                         ]);
                         $percentTask2Step4 = self::percentTask2Step4($history->id);
-
+                        
                         if ($percentTask2Step4 == 100) {
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 1); //terminar tarea
-    
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);
                         }
@@ -4461,8 +4490,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data = array();
         
-
-        if ($product!= null && $product->alias != 'Salario On-Demand') {
+        
+        if ($product!= null && $product->type_product_id != 3) {
             $data[] = array(
                 'nameStep' => 'Documentos',
                 'status' => $statusStep1,
@@ -4484,7 +4513,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'link' => '',
                 'percent' => self::calculateStepAverage($history_id, 3),
             );
-        } elseif ($product!= null && $product->alias == 'Salario On-Demand') {
+            $data[] = array(
+            
+                'nameStep' => 'Firmas',
+                'status' => $statusStep2,
+                'link' => '',
+                'percent' => self::calculateStepAverage($history_id, 5),
+            );
+            
+        } elseif ($product!= null && $product->type_product_id == 3) {
+            
+            $data[] = array(
+            
+                'nameStep' => 'Firmas',
+                'status' => $statusStep2,
+                'link' => '',
+                'percent' => self::calculateStepAverage($history_id, 5),
+            );
+
             $data[] = array(
                 
                 'nameStep' => 'KYC/MDC',
@@ -4493,13 +4539,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'percent' => self::calculateStepAverage($history_id, 4),
             );
         }
-        $data[] = array(
-            
-            'nameStep' => 'Firmas',
-            'status' => $statusStep2,
-            'link' => '',
-            'percent' => self::calculateStepAverage($history_id, 5),
-        );
+       
 
        
         return $data;
@@ -4540,7 +4580,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $history = HistoryLog::find($history_id);
         $credit   = $history->historyCredit;
         $product  = FinancialProduct::find($credit->applied_financial_product);
-        if ($product->alias != 'Salario On-Demand') {
+        if ($product->type_product_id != 3) {
             
             if ($step == 2) {
                 try {
@@ -4573,9 +4613,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             }
         } else {
             if ($step == 1) {
-                return self::listTasksStep3($history_id);
+                return self::listTasksStep4($history_id);
             }
-            return self::listTasksStep4($history_id);
+            return self::listTasksStep3($history_id);
         }
 
     }
@@ -4971,7 +5011,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $view_dead_line_form    = self::deadLineStep1($history);
 
         $data = [];
-        if ($product->alias != 'Salario On-Demand') {
+        if ($product->type_product_id != 3) {
             $percentages = [];
             $subjects = [];
             $idForm = [];
@@ -5046,7 +5086,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         //  dynamic tasks
 
-        if ($product->alias != 'Salario On-Demand') {
+        if ($product->type_product_id != 3) {
             $CreditPayOff = CreditPayOff::select('credit_pay_off.id', 'financial_products.name', 'financial_products.alias')
                 ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
                 ->where(['new_kc_credit_id' => $credit->id])
@@ -5157,13 +5197,18 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $advisor = $credit->creditAdvisor;
         $product = FinancialProduct::find($credit->applied_financial_product);
 
+        if ($product->type_product_id != 3) {
+            # code...
+        } else {
+            
+
+        }
+        
         $percentages    = [
             1 => self::percentTask1Step4($history_id),
             2 => self::percentTask2Step4($history_id),
            
         ];
-        
-       
 
         $name_advisor = null;
         try {
@@ -5179,7 +5224,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $view_dead_line_form    = self::deadLineStep1($history);
 
         $data = [];
-        $subjectfirmaContrato = $product->alias != 'Salario On-Demand' ? HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK2_STEP4] : 'Firma Solicitud/Descuento SOD';
+        $subjectfirmaContrato = $product->type_product_id != 3 ? HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK2_STEP4] : 'Firma Solicitud/Descuento SOD';
         $subjects = [
             1 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK1_STEP4],
             2 => $subjectfirmaContrato,
@@ -5231,7 +5276,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $fields = ['cm_agreement_sign'];
 
         $creditsValidate = CreditsControlDesk::where([
-            'validation' => $labelValidate = CreditsControlDesk::$labelValidate[9],
+            'validation' => CreditsControlDesk::$labelValidate[9],
             'credit_id' => $credit->id,
         ])->count();
         
@@ -5247,7 +5292,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $client = $credit->creditClientPerson;
         $product = FinancialProduct::find($credit->applied_financial_product);
 
-        if ($product->alias == 'Salario On-Demand') {
+        if ($product->type_product_id == 3) {
             $fields = ['sod_agreement'];
         } else {
             $fields = ['credit_agreement_signed'];
@@ -5256,12 +5301,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($credit === null) {
             return 0; // Si no hay cliente, el porcentaje es 0.
         }
-        $getFile = File::where([
-            'model' => HistoryLog::KC_CONTROL_DESK,
-            'id_rel' => $credit->id,
-            'step' => 4,
+        $getFile = CreditsControlDesk::where([
+            'validation' => 'Solicitud/Descuento SOD',
+            'credit_id' => $credit->id,
+            
         ])->count();
-          
+        
         // Contar los campos no nulos.
         $elements = count(array_filter($fields, function($field) use ($credit) {
             return isset($credit->$field) && ($credit->$field === 1 || $credit->$field === 0);
@@ -5995,7 +6040,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit  = $history->historyCredit;
         $product  = FinancialProduct::find($credit->applied_financial_product);
 
-        if ($product->alias != 'Salario On-Demand') {
+        if ($product->type_product_id != 3) {
             
             $totalSteps = 4; // Número total de tareas
             $totalAverage = 0;

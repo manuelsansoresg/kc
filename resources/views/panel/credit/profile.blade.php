@@ -552,6 +552,9 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            @php
+                                                                $nombre = null;
+                                                            @endphp
                                                             @if ($credit->sod_agreement != null)
                                                                 @php
                                                                     $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';

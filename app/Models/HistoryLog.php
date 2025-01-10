@@ -451,6 +451,10 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK1_STEP1, HistoryLog::KC_CONTROL_DESK_TASK1_STEP1);
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK2_STEP1, HistoryLog::KC_CONTROL_DESK_TASK2_STEP1);
 
+            $credit             = Credit::find($id_rel);
+            $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+            
+
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP1, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP1, $id_rel, 0);
             //*Cuando es crédito nuevo y viene de KC-Checkup
@@ -458,6 +462,12 @@ class HistoryLog extends Model
             
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Control desk');
             $notification_slack->sendMessage();
+
+            if ($financialProduct != null && $financialProduct->type_product_id == 3) {
+                HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4);
+                HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $id_rel, 0);
+            
+            }
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {

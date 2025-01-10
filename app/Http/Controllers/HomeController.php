@@ -80,7 +80,7 @@ class HomeController extends Controller
 
     public function contratoClient(ClientPerson $client)
     {
-        $credit  = Credit::where('client_person_id', $client->id )->first();
+        $credit  = Credit::where('client_person_id', $client->id )->orderBy('id', 'DESC')->first();
         $isFirma = false;
         $firma = null;
         $token = null;
@@ -99,7 +99,8 @@ class HomeController extends Controller
             'is_credit' => 1,
             'status_id' => HistoryLog::KC_CONTROL_DESK_TASK1_STEP4,
             'status' => 1,
-        ])->first();
+        ])->orderBy('history_logs.id', 'DESC')
+        ->first();
         if ($statusFirmaContratoCM == null) {
             abort(404);
         } else {
