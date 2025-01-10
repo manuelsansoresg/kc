@@ -127,7 +127,6 @@
 			</nav>
 		</header>
 		<!-- ***** Header End ***** -->
-
 		<!-- ***** Hero Section Start ***** -->
 		<section id="home" class="hero-section layout-3 has-overlay overlay-gradient">
 			<div class="container">
