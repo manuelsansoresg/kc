@@ -20,13 +20,8 @@ class ActionController extends Controller
         //
     }
 
-    public function list($model, $history_id)
-    {
-        $actionStrategy   = TemplateValues::STRATEGY[$model];
-        $list       = (new $actionStrategy)->listAction($history_id);
-        
-        return response()->json(['data' => $list]);
-    }
+
+
     
     
     /**

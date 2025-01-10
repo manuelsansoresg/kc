@@ -33,17 +33,18 @@ class ListStrategy implements ActionInterface
                 HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM,
                 HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION,
 
-                HistoryLog::KC_CONTROL_DESK_UPLOAD,
-                HistoryLog::KC_CONTROL_DESK_FORM,
+                HistoryLog::KC_CONTROL_DESK_TASK1_STEP1,
+                HistoryLog::KC_CONTROL_DESK_TASK2_STEP1,
 
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_2,
+                HistoryLog::KC_CONTROL_DESK_TASK3_STEP1,
 
-                HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2,
+                HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP1,
                 
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_4,
-                HistoryLog::KC_CONTROL_DESK_FORM_STEP_5,
+                HistoryLog::KC_CONTROL_DESK_TASK1_STEP2,
+                HistoryLog::KC_CONTROL_DESK_TASK2_STEP2,
+                HistoryLog::KC_CONTROL_DESK_TASK3_STEP2,
+                HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2,
+                
 
                 HistoryLog::KC_SWAP_UPLOAD,
                 HistoryLog::KC_SWAP_FORM,
@@ -58,8 +59,7 @@ class ListStrategy implements ActionInterface
                 HistoryLog::KC_SWAP_FORM_STEP_3,
                 HistoryLog::KC_SWAP_FORM_STEP_3_2,
                 
-                HistoryLog::KC_DELIVERY_FORM,
-                HistoryLog::KC_DELIVERY_FORM_STEP_3,
+                HistoryLog::KC_DELIVERY_TASK1_STEP1,
                 
                 //HistoryLog::KC_AFTER_FORM,
                 
@@ -146,14 +146,15 @@ class ListStrategy implements ActionInterface
                 $form_option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
             }
 
-            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_UPLOAD
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_2
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_UPLOAD_3_1
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_1
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_3_2
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_4
-                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_FORM_STEP_5
+            if ($history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK1_STEP1
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK2_STEP1
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK3_STEP1
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP1
+                
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK1_STEP2
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK2_STEP2
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_TASK3_STEP2
+                || $history_log->status_id === HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2
                 ) {
                     $get_dinamic_percent =  (new $templateStrategy)->dinamicDeadline($history_log);
                     $view_dead_line_inf_credit = $get_dinamic_percent['deadline'];
@@ -227,7 +228,7 @@ class ListStrategy implements ActionInterface
                     );
                 }
             } else {
-                if (Auth::user()->id == $advisor->id) {
+                if ($advisor != null && Auth::user()->id == $advisor->id) {
                     if ($name_status == 'completed' && ($percent_form == 100)) {
                         $data[] = array(
                             'action' => HistoryLog::$label_status[$history_log->status_id],

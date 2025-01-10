@@ -323,7 +323,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             if (isset($data['operation_status']) && $data['operation_status'] == 1) {
                 $modelTransaction = $transaction['transaction'];
                 $investor_id = $modelTransaction->investor_id;
+                
                 Transaction::setTotalCapital($investor_id);
+                Investor::setFundedCapital($investor_id);
+
                 $getInvestor = Investor::find($investor_id);
                 if ($getInvestor != null) {
                     $getUserInvestor = User::find($getInvestor->user_id);

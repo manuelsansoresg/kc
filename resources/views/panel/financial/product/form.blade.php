@@ -73,6 +73,7 @@
                                                         $name = $financial_product != null ? $financial_product->name : '';
                                                         $alias = $financial_product != null ? $financial_product->alias : '';
                                                         $type_product_id = $financial_product != null ? $financial_product->type_product_id : '';
+                                                        $productId = $financial_product != null ? $financial_product->product_id : '';
                                                         $status = $financial_product != null ? $financial_product->status : '';
                                                         $bank_id = $financial_product != null ? $financial_product->bank_id : '';
                                                         $consulta_buro = $financial_product != null ? $financial_product->consulta_buro : null;
@@ -110,15 +111,14 @@
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Tipo de
-                                                                        producto</label>
+                                                                    <label class="form-label" for="frm-product-name">Servicio KC</label>
                                                                     <div class="form-control-wrap">
-                                                                        <select name="type_product_id" id=""
+                                                                        <select name="financial_product_product_id" id=""
                                                                             class="form-select">
-                                                                            @foreach ($type_products as $key => $type_products)
-                                                                                <option value="{{ $key }}"
-                                                                                    {{ $type_product_id == $key ? ' selected' : '' }}>
-                                                                                    {{ $type_products }}
+                                                                            @foreach ($products as $product)
+                                                                                <option value="{{ $product->id }}"
+                                                                                    {{ $productId == $product->id ? ' selected' : '' }}>
+                                                                                    {{ $product->alias }}
                                                                                 </option>
                                                                             @endforeach
                                                                         </select>
@@ -171,6 +171,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            
 
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
@@ -201,6 +202,80 @@
                                                                                         for="is_tramitar_pending">No</label>
                                                                                 </div>
                                                                             </li>
+
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Permite refinanciamiento</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <ul
+                                                                            class="custom-control-group g-3 align-center flex-wrap">
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio"
+                                                                                        class="custom-control-input"
+                                                                                        id="refinancing_allowed_active"
+                                                                                        name="refinancing_allowed" value="1"
+                                                                                        {{ $financial_product != null && $financial_product->refinancing_allowed == 1 ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label"
+                                                                                        for="refinancing_allowed_active">Sí
+                                                                                    </label>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio"
+                                                                                        class="custom-control-input"
+                                                                                        id="refinancing_allowed_pending"
+                                                                                        name="refinancing_allowed" value="0"
+                                                                                        {{ $financial_product != null && $financial_product->refinancing_allowed === 0 ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label"
+                                                                                        for="refinancing_allowed_pending">No</label>
+                                                                                </div>
+                                                                            </li>
+
+                                                                           
+
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">&nbsp;</div>
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">Permite crédito adicional</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <ul
+                                                                            class="custom-control-group g-3 align-center flex-wrap">
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio"
+                                                                                        class="custom-control-input"
+                                                                                        id="additional_allowed_active"
+                                                                                        name="additional_allowed" value="1"
+                                                                                        {{ $financial_product != null && $financial_product->additional_allowed == 1 ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label"
+                                                                                        for="additional_allowed_active">Sí
+                                                                                    </label>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li>
+                                                                                <div class="custom-control custom-radio">
+                                                                                    <input type="radio"
+                                                                                        class="custom-control-input"
+                                                                                        id="additional_allowed_pending"
+                                                                                        name="additional_allowed" value="0"
+                                                                                        {{ $financial_product != null && $financial_product->additional_allowed === 0 ? 'checked' : null }}>
+                                                                                    <label class="custom-control-label"
+                                                                                        for="additional_allowed_pending">No</label>
+                                                                                </div>
+                                                                            </li>
+
+                                                                           
 
                                                                         </ul>
                                                                     </div>
@@ -384,7 +459,7 @@
 
                                                         $collateral_id = $financial_product != null ? $financial_product->collateral_id : '';
                                                         $periodicity_id = $financial_product != null ? $financial_product->periodicity_id : '';
-                                                        $max_credit_amount = $financial_product != null ? $financial_product->max_credit_amount : '';
+                                                        $max_loan_ammount = $financial_product != null ? $financial_product->max_loan_ammount : '';
 
                                                         $min_deadline_month = $financial_product != null ? $financial_product->min_deadline_month : '';
                                                         $max_deadline_month = $financial_product != null ? $financial_product->max_deadline_month : '';
@@ -433,7 +508,8 @@
                                                                         <select name="periodicity_id[]"
                                                                             id="product_periodicity_id"
                                                                             class="form-select select2multiple"
-                                                                            multiple="multiple" data-search="on">
+                                                                            onchange="setFPTerms()"
+                                                                             data-search="on">
                                                                             @foreach ($periodicity_products as $key => $periodicity_product)
                                                                                 <option value="{{ $key }}">
                                                                                     {{ $periodicity_product }}
@@ -448,9 +524,9 @@
                                                                     <label class="form-label" for="frm-product-name">Monto
                                                                         máximo de crédito</label>
                                                                     <div class="form-control-wrap">
-                                                                        <input type="number" name="max_credit_amount"
+                                                                        <input type="number" name="max_loan_ammount"
                                                                             class="form-control"
-                                                                            value="{{ $max_credit_amount }}">
+                                                                            value="{{ $max_loan_ammount }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -463,6 +539,22 @@
                                                                         <input type="number" name="min_loan_amount"
                                                                             class="form-control"
                                                                             value="{{ $min_loan_amount }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-6">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="frm-product-name">Plazos</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <select name="fp_terms[]"
+                                                                        id="fp_terms"
+                                                                        class="form-select select2multiple"
+                                                                        multiple="multiple"
+                                                                         data-search="on">
+                                                                        
+                                                                    </select>
+
                                                                     </div>
                                                                 </div>
                                                             </div>

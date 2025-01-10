@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Panel\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Agreement;
+use App\Models\Investor;
+use App\Models\InvestorsAgreement;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -58,7 +60,17 @@ class ClienteInversionistaController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        return response()->json($user);
+        $investor = Investor::where('user_id', $user->id)->first();
+        $getInvestors = null;
+        if ($investor != null) {
+            $getInvestors = InvestorsAgreement::where('investor_id', $investor->id)->get();
+        }
+        
+        $data = array(
+            'user' => $user,
+            'agreements' => $getInvestors
+        );
+        return response()->json($data);
     }
 
     /**

@@ -92,7 +92,7 @@ class PaymentStrategyTemplate implements TemplateInterface
     public function configFormStep1($id_rel, $history_id)
     {
         $name_form    = 'frm-template_control_desk_step1';
-        $type_form    = HistoryLog::KC_DELIVERY_FORM;
+        $type_form    = HistoryLog::KC_DELIVERY_TASK1_STEP1;
         $credit       = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
 
@@ -291,7 +291,7 @@ class PaymentStrategyTemplate implements TemplateInterface
     public function configFormstep4($id_rel, $history_id)
     {
         $name_form        = 'frm-template_control_desk_step4';
-        $type_form        = HistoryLog::KC_CONTROL_DESK_FORM_STEP_4;
+        $type_form        = HistoryLog::KC_CONTROL_DESK_TASK3_STEP2;
         $marital_status   = config('enums.marital_status');
         $education_level  = config('enums.education_level');
         $home_type        = config('enums.home_type');

@@ -37,35 +37,50 @@ class HistoryLog extends Model
     const CREDIT_ARCHIVE                      = 16;
     const CREDIT_CANCELED                     = 17;
     const CREDIT_REJECTED                     = 18;
-    //* whenever a credit is in a module it must be in progress if it is archived, canceled or refuses to remove it
+    
     const CREDIT_IN_PROGRESS                  = 19;
     
     const NEW_CREDIT_KC_CHECK_UP              = 20;
 
     const KC_CONTROL_DESK                     = 21;
-    const KC_CONTROL_DESK_UPLOAD              = 22;
-    const KC_CONTROL_DESK_FORM                = 23;
+    const KC_CONTROL_DESK_TASK1_STEP1         = 22;
+    const KC_CONTROL_DESK_TASK2_STEP1         = 23;
+    const KC_CONTROL_DESK_TASK3_STEP1         = 24;
+    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP1  = 25;
     
-    const KC_CONTROL_DESK_FORM_STEP_2         = 24;
     
-    const KC_CONTROL_DESK_UPLOAD_3_1          = 25;
-    const KC_CONTROL_DESK_FORM_STEP_3_1       = 26;
-    const KC_CONTROL_DESK_FORM_STEP_3_2       = 27;
+    const KC_CONTROL_DESK_TASK1_STEP2         = 26;
+    const KC_CONTROL_DESK_TASK2_STEP2         = 27;
+    const KC_CONTROL_DESK_TASK3_STEP2         = 28;
+    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP2  = 57;
+
     
-    const KC_CONTROL_DESK_FORM_STEP_4         = 28;
+    const KC_CONTROL_DESK_TASK1_STEP3         = 58;
+    const KC_CONTROL_DESK_TASK2_STEP3         = 59;
+    const KC_CONTROL_DESK_TASK3_STEP3         = 69;
+    const KC_CONTROL_DESK_TASK4_STEP3         = 70;
+    const KC_CONTROL_DESK_TASK5_STEP3         = 71;
+    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP3  = 72;
     
-    const KC_CONTROL_DESK_FORM_STEP_5         = 57;
-    const KC_CONTROL_DESK_FORM_STEP_5_2       = 58;
-    const KC_CONTROL_DESK_FORM_STEP_5_3       = 59;
+    const KC_CONTROL_DESK_TASK1_STEP4         = 73;
+    const KC_CONTROL_DESK_TASK2_STEP4         = 74;
+
     
     const KC_DELIVERY                         = 30;
-    const KC_DELIVERY_FORM                    = 31;
+    const KC_DELIVERY_TASK1_STEP1             = 75;
+    const KC_DELIVERY__DYNAMIC_TASK_STEP2     = 76;
+    
+    const KC_DELIVERY_TASK1_STEP2             = 77;
+    const KC_DELIVERY_TASK2_STEP2             = 78;
+    
+    
+   /*  const KC_DELIVERY_FORM                    = 31;
     
     const KC_DELIVERY_FORM_STEP_2             = 32;
     
     const KC_DELIVERY_FORM_STEP_3             = 33;
 
-    const KC_DELIVERY_FORM_STEP_4             = 34;
+    const KC_DELIVERY_FORM_STEP_4             = 34; */
     
     const CREDITS_PAID                        = 35;
     const CREDITS_DELIVERED                   = 55;
@@ -126,6 +141,7 @@ class HistoryLog extends Model
         'envio_identifacion', //* se usa en archivos
         'envio_documentacion_completa', //* se usa en archivos
         'is_credit', //* 0 lead 1= credits
+        'dynamic_status_id'// existen tareas dinamicas esta es la posicion del arreglo que seria el numero de la tarea que se pasa por la url
     ];
 
     public static $label_status = [
@@ -191,6 +207,9 @@ class HistoryLog extends Model
         58 => 'Formulario',
         59 => 'Carga',
         60 => 'KC - Wallet',
+        69 => 'Determinar CP real',
+        70 => 'Determinar crédito',
+        71 => 'Validar clabe cliente',
     ];
     
     public static $label_subject = [
@@ -207,13 +226,13 @@ class HistoryLog extends Model
         18 => 'Rechazado',
         19 => 'En curso',
         20 => 'Nuevo crédito en KC - Check up',
-        22 => 'Docs Solicitante',
-        23 => 'Determinar crédito max',
-        24 => 'Crédito deseado',
-        25 => 'Edo Cta',
-        26 => 'Solicitud',
-        27 => 'Entrevista',
-        28 => 'Análisis KYC',
+        22 => 'Cargar Anverso INE',
+        23 => 'Reverso INE',
+        24 => 'Última nómina',
+        25 => '',
+        26 => 'Capturar Anverso INE',
+        27 => 'Capturar Reverso INE',
+        28 => 'Capturar Última nómina',
         29 => 'Contactar financiera',
         //30 => 'Entró a KC - Delivery',
         31 => 'Enviar info a S2',
@@ -242,9 +261,9 @@ class HistoryLog extends Model
         54 => 'Verificar pago',
         55 => '',
         56 => '',
-        57 => 'Preparar documento',
-        58 => 'Confirmar',
-        59 => 'Documento firmado',
+        57 => '',
+        58 => 'Validar INE',
+        59 => 'Validar última nómina',
         60 => '',
         61 => 'Datos transferencia',
         62 => 'Comprobante transferencia',
@@ -254,6 +273,14 @@ class HistoryLog extends Model
         66 => 'Retiro',
         67 => '',
         68 => '',
+        69 => 'Determinar CP real',
+        70 => 'Determinar crédito',
+        71 => 'Validar clabe cliente',
+        72 => null,
+        73 => 'Firma de contrato de CM',
+        74 => 'Firma de contrato/Descuento/Pagaré',
+        75 => 'Entrega crédito cliente',
+        76 => null,
     ];
 
     public static $name_model = [
@@ -421,11 +448,11 @@ class HistoryLog extends Model
         }
 
         if ($status_id == HistoryLog::KC_CONTROL_DESK) {
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_UPLOAD, HistoryLog::KC_CONTROL_DESK_UPLOAD);
-            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_FORM, HistoryLog::KC_CONTROL_DESK_FORM);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK1_STEP1, HistoryLog::KC_CONTROL_DESK_TASK1_STEP1);
+            HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK2_STEP1, HistoryLog::KC_CONTROL_DESK_TASK2_STEP1);
 
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_UPLOAD, $id_rel, 0);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_FORM, $id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP1, $id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP1, $id_rel, 0);
             //*Cuando es crédito nuevo y viene de KC-Checkup
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
             
@@ -434,13 +461,8 @@ class HistoryLog extends Model
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
-            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM, HistoryLog::KC_DELIVERY_FORM);
-            CreditKaaxSidecc::sendCreditKaaxSidecc($id_rel);
-
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $id_rel, 1);
-            //*inicializar las acciones de la siguiente etapa en curso
-            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2, null, false);
-            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $id_rel, 0);
+            HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_TASK1_STEP1, HistoryLog::KC_DELIVERY_TASK1_STEP1);
+            //CreditKaaxSidecc::sendCreditKaaxSidecc($id_rel);
 
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Delivery');
             $notification_slack->sendMessage();
@@ -720,18 +742,17 @@ class HistoryLog extends Model
     public static function getCurrentAction($credit_id)
     {
         $lbl_module = array(
-            HistoryLog::KC_DELIVERY_FORM => 'Información del crédito',
-            HistoryLog::KC_DELIVERY_FORM_STEP_2 => 'Confirmar firma',
-            HistoryLog::KC_DELIVERY_FORM_STEP_3 => 'Resolución de análisis',
-            HistoryLog::KC_DELIVERY_FORM_STEP_4 => 'Confirmar entrega',
+            HistoryLog::KC_DELIVERY_TASK1_STEP1 => 'Información del crédito',
+            HistoryLog::KC_DELIVERY_TASK1_STEP1 => 'Confirmar firma',
+            
+            HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2 => 'Confirmar entrega',
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1 => 'Comprobante de pago',
             HistoryLog::KC_PAYMENT_FORM_STEP_2 => 'Verificar pago',
         );
         $data_actions = array(
-            HistoryLog::KC_DELIVERY_FORM,
-            HistoryLog::KC_DELIVERY_FORM_STEP_2,
-            HistoryLog::KC_DELIVERY_FORM_STEP_3,
-            HistoryLog::KC_DELIVERY_FORM_STEP_4,
+            HistoryLog::KC_DELIVERY_TASK1_STEP1,
+            HistoryLog::KC_DELIVERY_TASK1_STEP1,
+            HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2,
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1,
             HistoryLog::KC_PAYMENT_FORM_STEP_2,
         );
@@ -755,18 +776,12 @@ class HistoryLog extends Model
     public static function getCurrentStep($credit_id)
     {
         $lbl_module = array(
-            HistoryLog::KC_DELIVERY_FORM => 'Información del crédito',
-            HistoryLog::KC_DELIVERY_FORM_STEP_2 => 'Confirmar firma',
-            HistoryLog::KC_DELIVERY_FORM_STEP_3 => 'Resolución de análisis',
-            HistoryLog::KC_DELIVERY_FORM_STEP_4 => 'Confirmar entrega',
+            
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1 => 'Comprobante de pago',
             HistoryLog::KC_PAYMENT_FORM_STEP_2 => 'Verificar pago',
         );
         $data_actions = array(
-            HistoryLog::KC_DELIVERY_FORM,
-            HistoryLog::KC_DELIVERY_FORM_STEP_2,
-            HistoryLog::KC_DELIVERY_FORM_STEP_3,
-            HistoryLog::KC_DELIVERY_FORM_STEP_4,
+           
             HistoryLog::KC_PAYMENT_UPLOAD_STEP_1,
             HistoryLog::KC_PAYMENT_FORM_STEP_2,
         );

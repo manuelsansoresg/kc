@@ -5,6 +5,10 @@
 .dataTables_filter{
     text-align: left !important;
 }
+
+.only-search> .dataTables_filter{
+  text-align: right !important;
+}
 div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     justify-content: flex-start !important;
 }
@@ -45,7 +49,10 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
     opacity: 0.6;
 }
 
-
+/* Selecciona elementos con la clase nk-tb-list dentro de tablas con la clase dt-wallet */
+#dt-wallet.nk-tb-list th, #dt-down-wallet.nk-tb-list th{
+    color: #6576ff; /* Opcional: cambia el color del texto para mejor contraste */
+}
 
 
 @media (min-width: 576px) {
@@ -247,9 +254,126 @@ ul.ul-primary li::before {
   font-size: 11px !important;
 }
 
+.traffic-channel-doughnut-ck {
+  height: 326px;
+}
+
+.colorChartLeft{
+  color: #a34444;
+}
+
+.colorChartRight{
+  color: #57409b;
+}
+
+.align-bottom {
+  display: flex;
+  align-items: flex-end; /* Alinea el contenido al fondo */
+}
+
+
+/* grafica de barras */
+.charts-container {
+  display: flex;
+  align-items: flex-end; /* Alinea las gráficas desde la base */
+  gap: 40px;
+}
+.charts-container-wrapper {
+  display: flex;
+  align-items: center; /* Centra el contenido verticalmente */
+  gap: 20px;
+}
+
+.charts-container {
+  display: flex;
+  align-items: flex-end; /* Alinea las gráficas desde la base */
+  gap: 40px;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bar {
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.segment {
+  width: 100%;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column; /* Alinea el contenido en columna */
+  justify-content: center; /* Centra el contenido verticalmente */
+  align-items: center; /* Centra el contenido horizontalmente */
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 1s ease, opacity 1s ease;
+  line-height: 1.5; /* Espaciado entre líneas */
+}
+
+.segment1 {
+  background-color: #a34444; /* Color para el interés */
+}
+
+.segment2 {
+  background-color: #666a6f; /* Color para la deuda */
+}
+
+/* Estilos para los divs de contenido antes y después */
+.extra-content {
+  font-size: 15px;
+  font-weight: bold;
+  /* color: #333; */
+  text-align: center;
+}
+
+.format-number{
+  font-size: 1.9rem !important;
+  color: #7C4FE0 !important;
+}
+
+.footer-area.footer-fixed {
+  bottom: -10px !important;
+}
+
+.logo-footer{
+  width: 20% !important;
+}
+
+.title-header{
+  font-size: 3rem !important;
+}
+
+.overlay-white h2, p, h4{
+  color: #7C4FE0 !important;
+}
+
+.overlay-white i{
+  font-size: 35px;
+  color: #7C4FE0 ;
+}
 
  /* Estilos para pantallas móviles */
 @media (max-width: 767px) {
+
+  .logo-celular{
+    width: 50%;
+  }
+
+  .traffic-channel-doughnut-ck {
+    height: 250px;
+  }
+  
   .text-elije {
     font-size: 12px;
   }
@@ -264,6 +388,10 @@ ul.ul-primary li::before {
 
   #img-cell{
     width: 50%;
+  }
+
+  .footer-area.footer-fixed {
+    bottom: 0 !important;
   }
 
 }

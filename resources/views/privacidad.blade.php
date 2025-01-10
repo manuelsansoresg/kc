@@ -1,4 +1,4 @@
-@extends('layouts.default')
+@extends('layouts.defaultBootstrap')
 
 @section('content')
 <section class="about-section pt-5 mt-3">

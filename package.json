@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "pusher-js": "^4.4.0",
-        "sweetalert2": "^11.7.3"
+        "sweetalert2": "^11.7.3",
+        "rfc-facil": "^1.1.0"
     }
 }

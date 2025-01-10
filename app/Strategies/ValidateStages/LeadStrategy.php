@@ -1,8 +1,11 @@
 <?php
 namespace App\Strategies\ValidateStages;
 
+use App\Models\ClientPerson;
+use App\Models\FinancialProduct;
 use App\Models\Lead;
 use App\Models\LeadClient;
+use App\Models\SodScheduleName;
 use App\Strategies\ValidateStagesInterface;
 
 class LeadStrategy implements ValidateStagesInterface
@@ -71,5 +74,21 @@ class LeadStrategy implements ValidateStagesInterface
             'table' => $errors
         );
         return $data_error;
+    }
+
+    public function listValidate($lead_id)
+    {
+        $lead             = Lead::find($lead_id);
+        $client_person_id = $lead->client_person_id;
+        $financial_product_id = $lead->financial_product_id;
+        $agreement_id = $lead->agreement_id;
+        $clientPerson = ClientPerson::find($lead->client_person_id);
+        $getSodName = SodScheduleName::find($agreement_id);
+        $financialProduct = FinancialProduct::find($financial_product_id);
+        $validateSod = Lead::validateSod($clientPerson, $financialProduct);
+
+        $errors =  \View::make('panel.lead.list_validate', ['lead' => $lead, 'clientPerson' => $clientPerson, 'getSodName' => $getSodName, 'financialProduct' => $financialProduct, 'validateSod' => $validateSod])->render();
+        
+        return $errors;
     }
 }

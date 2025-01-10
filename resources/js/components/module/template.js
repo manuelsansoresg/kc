@@ -80,22 +80,10 @@ $().ready(function () {
     //* save form  control desk step 1
     $("#frm-template_control_desk_step1").validate({
         rules: {
-            'credit[payment_capacity_period]': {
+            'url_redirect_next': {
                 required: true,
             },
-            'credit[payment_capacity]': {
-                required: true,
-            },
-
-            'client_person[birth_date]': {
-                required: true,
-            },
-            'client_person[labor_old]': {
-                required: true,
-            },
-            'client_person[employee_category]': {
-                required: true,
-            },
+           
 
 
         },
@@ -104,7 +92,7 @@ $().ready(function () {
             saveForm('frm-template_control_desk_step1', 'controlDesk');
         }
     });
-
+    
     $("#frm-template_control_desk_step2").validate({
         rules: {
            /*  'credit[applied_financial_product]': {
@@ -152,6 +140,126 @@ $().ready(function () {
             }
         }
     });
+    
+    $("#frm-template_control_desk_step2_task1").validate({
+        rules: {
+          
+
+            'client_person[ID_primer_apellido]': {
+                required: true,
+            },
+            'client_person[ID_segundo_apellido]': {
+                required: true,
+            },
+            'client_person[ID_nombres]': {
+                required: true,
+            },
+            'client_person[ID_vigencia]': {
+                required: true,
+            },
+            
+
+
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step2_task1', 'controlDesk');
+        }
+    });
+    
+    $("#frm-template_control_desk_step2_task2").validate({
+        rules: {
+          
+
+            'client_person[ID_CIC]': {
+                required: true,
+                number: true,
+            },
+            'client_person[ID_IDC]': {
+                required: true,
+                number: true,
+                minlength: 9,
+                maxlength:9
+            },
+            
+            
+
+
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step2_task2', 'controlDesk');
+        }
+    });
+    
+    $("#frm-template_control_desk_step2_task3").validate({
+        
+        rules: {
+          
+
+            'client_person[payroll_date]': {
+                required: true,
+            },
+            'client_person[payroll_total]': {
+                number: true,
+                required: true,
+            },
+            
+            
+
+
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step2_task3', 'controlDesk');
+        }
+    });
+    
+    $("#frm-template_control_desk_dynamic_step2").validate({
+        
+        rules: {
+            'pay_off[deadline_date]': {
+                required: true,
+            },
+            'pay_off[ammount]': {
+                number: true,
+                required: true,
+            },
+            'pay_off[bank_clabe]': {
+                required: true,
+                number: true,
+                minlength: 18,
+                maxlength:18
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_dynamic_step2', 'controlDesk');
+        }
+    });
+    
+
+    $("#frm-template_control_desk_step3_task3").validate({
+        
+        rules: {
+            'credit[payroll_payment_capacity]': {
+                required: true,
+                required: true,
+            },
+           
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_control_desk_step3_task3', 'controlDesk');
+        }
+    });
+
+
+    $("#frm-template_control_desk_step3_task").submit(function (event) {
+        event.preventDefault();
+        saveForm('frm-template_control_desk_step3_task', 'controlDesk');
+    });
+
 
     window.getLoanAvailableByProduct = function(product) {
         $('#text-loan').html('');
@@ -420,9 +528,78 @@ $().ready(function () {
         event.preventDefault(); // Evita que el formulario se envíe automáticamente
         saveForm('frm-template_control_desk_step4', 'controlDesk');
         
-        // Aquí puedes agregar el código para enviar los datos del formulario con Axios u otro método
         });
     }
+   
+    if (document.getElementById('frm-template_control_desk_step3_task4')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_control_desk_step3_task4');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_control_desk_step3_task4', 'controlDesk');
+        
+        });
+    }
+    
+    if (document.getElementById('frm-template_control_desk_step3_task5')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_control_desk_step3_task5');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_control_desk_step3_task5', 'controlDesk');
+        
+        });
+    }
+    
+    if (document.getElementById('frm-template_control_desk_dynamic_step3')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_control_desk_dynamic_step3');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_control_desk_dynamic_step3', 'controlDesk');
+        
+        });
+    }
+    
+    if (document.getElementById('frm-template_control_desk_step4_task1')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4_task1');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_control_desk_step4_task1', 'controlDesk');
+        
+        });
+    }
+    if (document.getElementById('frm-template_control_desk_step4_task2')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4_task2');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_control_desk_step4_task2', 'controlDesk');
+        
+        });
+    }
+
+    window.openModalValidateControlDesk = function(creditId)
+    {
+        axios
+            .get("/panel/template/validate/"+creditId+"/controlDesk")
+            .then(function (response) {
+                let result = response.data;
+                $('#content-validate-control-desk').html(result);
+                $('#modalValidateControlDesk').modal('show');
+    
+            })
+            .catch(e => {
+            });
+    }
+    
+
 
     $("#frm-template_control_desk_step5").validate({
         rules: {
@@ -494,6 +671,36 @@ $().ready(function () {
         submitHandler: function (form, event) {
             event.preventDefault();
             saveForm('frm-template_delivery_step2', 'delivery');
+        }
+    });
+    
+    $("#frm-template_delivery_task1_step1").validate({
+        rules: {
+            'credit[delivered]': {
+                required: true,
+            },
+            'credit[delivered_date]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_delivery_task1_step1', 'delivery');
+        }
+    });
+    
+    $("#frm-template_delivery_dynamic_task_step1").validate({
+        rules: {
+            'credit_pay_off[delivered]': {
+                required: true,
+            },
+            'credit_pay_off[delivered_date]': {
+                required: true,
+            },
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+            saveForm('frm-template_delivery_dynamic_task_step1', 'delivery');
         }
     });
     
@@ -1033,6 +1240,7 @@ function saveForm(id_form, model) {
         url_redirect = $('#url_redirect').val();
     }
     
+    console.log(model);
    
     data.append('model', model);
     data.append('id_rel', id_rel);
@@ -1071,6 +1279,20 @@ function saveForm(id_form, model) {
         })
         .catch(e => {
         });
+}
+
+window.saveAndContinueTask = function(id_form)
+{
+    let model = $('#action-model').val(); 
+    let newUrl = $('#url_redirect_next').val();
+    $('#url_redirect').val(newUrl); 
+    saveForm(id_form, model);
+}
+
+window.cancelTask = function()
+{
+    let url = $('#url_redirect').val(); 
+    window.location = url;
 }
 
 //*boton saltar en swap etapa 2_3   

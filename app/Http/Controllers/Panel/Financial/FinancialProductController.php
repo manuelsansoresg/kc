@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Panel\Financial;
 use App\Http\Controllers\Controller;
 use App\Models\Bank;
 use App\Models\FinancialProduct;
+use App\Models\FpTerm;
+use App\Models\Product;
 use App\Models\ProductPaymentMethod;
 use App\Models\ProductPeriodicity;
+use App\Models\Term;
 use Illuminate\Http\Request;
 
 class FinancialProductController extends Controller
@@ -28,24 +31,33 @@ class FinancialProductController extends Controller
      */
     public function create($financial_id)
     {
-        $product_id           = null;
-        $financial_product    = null;
-        $banks                = Bank::all();
+        $product_id        = null;
+        $financial_product = null;
+        $banks             = Bank::all();
+        $products          = Product::where('status', 1)->get();
 
-        return view('panel.financial.product.form', compact('financial_id', 'product_id', 'financial_product', 'banks'));
+        return view('panel.financial.product.form', compact('financial_id', 'product_id', 'products', 'financial_product', 'banks'));
     }
 
     public function getPeriodicityAndPaymentMethod($product_id)
     {
         $periodicities = ProductPeriodicity::where('product_id', $product_id)->get();
-        $payments = ProductPaymentMethod::where('product_id', $product_id)->get();
+        $payments      = ProductPaymentMethod::where('product_id', $product_id)->get();
+        $terms      = FpTerm::select('terms.id as id')->join('terms', 'terms.id', 'f_p_terms.term_id')->where('financial_product_id', $product_id)->get();
 
-        return response()->json(['periodicities' => $periodicities, 'payments' => $payments]);
+        return response()->json(['periodicities' => $periodicities, 'payments' => $payments, 'terms' => $terms]);
     }
     
     public function getTramite(FinancialProduct $product)
     {
         return response()->json($product);
+    }
+
+    public function getTerms($periodicityId, $productId)
+    {
+        $terms = Term::where('periodicity', $periodicityId)->get();
+        $getTerms = FpTerm::select('term_id as id')->where('financial_product_id', $productId)->get();
+        return response()->json(['terms' => $terms, 'getTerms' => $getTerms]);
     }
 
     /**
@@ -101,12 +113,13 @@ class FinancialProductController extends Controller
      */
     public function edit($id)
     {
-        $banks                = Bank::all();
-        $financial_product    = FinancialProduct::find($id);
-        $product_id           = $id;
-        $financial_id         = $financial_product->financial_id;
+        $banks             = Bank::all();
+        $financial_product = FinancialProduct::find($id);
+        $product_id        = $id;
+        $financial_id      = $financial_product->financial_id;
+        $products          = Product::where('status', 1)->get();
 
-        return view('panel.financial.product.form', compact('financial_id', 'product_id', 'financial_product', 'banks'));
+        return view('panel.financial.product.form', compact('financial_id', 'product_id', 'products', 'financial_product', 'banks'));
     }
 
     /**

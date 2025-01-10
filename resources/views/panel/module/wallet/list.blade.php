@@ -28,13 +28,13 @@
                     <div class="nk-block nk-block-lg">
                         <div class="row">
                             <div class="col-12 py-3 text-end">
-                              <a href="/panel/action-form/wallet/null/form?step=1" class="btn btn-primary">Agregar fondos</a>
+                              <a href="/panel/action-form/wallet/null/form?step=1" class="btn btn-primary btn-lg">Agregar fondos</a>
                             </div>
                           </div>
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
                                 <div class="col-12 py-3">
-                                    <h5 class="text-primary">Total disponible: {{ format_price($total_available) }}</h5>
+                                    <h5 class="text-primary">Total disponible: ${{ format_price($total_available) }}</h5>
                                 </div>
                                 <table id="dt-wallet" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>

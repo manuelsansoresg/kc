@@ -46,7 +46,7 @@ class ActionController extends Controller
         $credit_id = $credit->id;
         //*agregar que cuando viene de control desk haga lo mismo si viniera de delivery
         
-        if ($status_id == HistoryLog::KC_DELIVERY_FORM_STEP_3) {
+        /* if ($status_id == HistoryLog::KC_DELIVERY_FORM_STEP_3) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit_id, 1);
             //*inicializar las acciones de la siguiente etapa en curso
             HistoryLog::move($credit_id, HistoryLog::KC_DELIVERY_FORM_STEP_3, HistoryLog::KC_DELIVERY_FORM_STEP_3, null, false);
@@ -83,7 +83,7 @@ class ActionController extends Controller
                         ->update(['status' => 0]);
 
         }
-        $credit->update();
+        $credit->update(); */
     }
 
     public function complete(HistoryLog $history)
@@ -139,6 +139,7 @@ class ActionController extends Controller
 
     public function configFilesTemplate($model, $id_rel)
     {
+        $step = isset($request->step) && $request->step != 'undefined' ? $request->step : null;
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $config_files       = (new $actionStrategy)->configUpload();
         $preview = File::getAll($model, $id_rel);
@@ -153,14 +154,17 @@ class ActionController extends Controller
         File::upload($models[$model], $id_rel, $request, $template_config_id);
     }
 
-    public function getDataTemplate($model, $id_rel)
+    public function getDataTemplate($model, $id_rel, Request $request)
     {
+        
         $models = File::MODEL;
         $data_where = array(
             'model' => $models[$model],
             'id_rel' => $id_rel
         );
-        $files = File::getAllTemplate($models[$model], $id_rel);
+        
+        $step = isset($request->step) && $request->step != 'undefined' ? $request->step : null;
+        $files = File::getAllTemplate($models[$model], $id_rel, $step);
         $file_date = TemplateFile::where($data_where)->get();
 
         return response()->json(['files' => $files, 'file_date' => $file_date]);

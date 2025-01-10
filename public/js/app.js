@@ -63,38 +63,9 @@ window.deleteTag = function (tag_id) {
 
 $(document).ready(function () {
   if (document.getElementById('action-model')) {
-    //* get data saved 
-    var getData = function getData() {
-      clearPreviewFiles().then(function () {
-        var step = $('#step').val();
-        axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
-          var result = response.data;
-          var files = result.files;
-          var file_dates = result.file_date;
-
-          for (var key in file_dates) {
-            if (file_dates.hasOwnProperty.call(file_dates, key)) {
-              var element_date_file = file_dates[key];
-              console.log(element_date_file.template_config_id);
-              $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
-            }
-          }
-
-          for (var key_file in files) {
-            if (files.hasOwnProperty.call(files, key_file)) {
-              var element_file = files[key_file];
-              $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
-            }
-          }
-        })["catch"](function (e) {
-          console.error(e);
-        });
-      })["catch"](function (e) {
-        console.error(e);
-      });
-    };
-
     var clearPreviewFiles = function clearPreviewFiles() {
+      var model = $('#action-model').val();
+      var id_rel = $('#action-id_rel').val();
       return new Promise(function (resolve, reject) {
         var step = $('#step').val();
         axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
@@ -118,32 +89,25 @@ $(document).ready(function () {
     var model = $('#action-model').val();
     var id_rel = $('#action-id_rel').val();
     var step = $('#step').val();
+    console.log('model' + model);
 
     if (model == '') {
       model = null;
     } //*get configuration in template
 
 
-    axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
-      var result = response.data;
-      var config_files = result.config_files;
+    if (model == 'controlDesk' || model == 'delivery') {
+      $('.myDropzone').each(function () {
+        // Obtener el ID del elemento actual
+        var key = $(this).attr('id');
+        console.log(key);
 
-      var _loop = function _loop(key) {
-        if (config_files.hasOwnProperty.call(config_files, key)) {
-          var element = config_files[key]; //create dinamic dropzone element
-
-          NioApp.Dropzone('#' + key + '-dropzone-action', {
-            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+        if (key) {
+          // Crear dinámicamente una instancia de Dropzone
+          NioApp.Dropzone('#' + key, {
+            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key + '?step=' + step,
             init: function init() {
-              this.on("sending", function (file, xhr, formData) {
-                var date_file = null;
-
-                if (document.getElementById(key + '-date_file')) {
-                  date_file = $('#' + key + '-date_file').val();
-                }
-
-                formData.append("date_file", date_file);
-              });
+              this.on("sending", function (file, xhr, formData) {});
               this.on("success", function (file, message) {
                 getData();
               });
@@ -153,13 +117,47 @@ $(document).ready(function () {
             }
           });
         }
-      };
+      });
+    }
 
-      for (var key in config_files) {
-        _loop(key);
-      } //
+    if (model != 'controlDesk') {
+      axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
+        var result = response.data;
+        var config_files = result.config_files;
 
-    })["catch"](function (e) {});
+        var _loop = function _loop(key) {
+          if (config_files.hasOwnProperty.call(config_files, key)) {
+            var element = config_files[key]; //create dinamic dropzone element
+
+            NioApp.Dropzone('#' + key + '-dropzone-action', {
+              url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+              init: function init() {
+                this.on("sending", function (file, xhr, formData) {
+                  var date_file = null;
+
+                  if (document.getElementById(key + '-date_file')) {
+                    date_file = $('#' + key + '-date_file').val();
+                  }
+
+                  formData.append("date_file", date_file);
+                });
+                this.on("success", function (file, message) {
+                  getData();
+                });
+                this.on("complete", function (file) {
+                  this.removeAllFiles(true);
+                });
+              }
+            });
+          }
+        };
+
+        for (var key in config_files) {
+          _loop(key);
+        } //
+
+      })["catch"](function (e) {});
+    }
 
     window.deleteFileTemplate = function (model, id) {
       $('#frm-register-action-preview').html('');
@@ -167,33 +165,80 @@ $(document).ready(function () {
         getData();
         showToast('Archivos', 'Archivo borrado', 'success');
       })["catch"](function (e) {});
-    };
+    }; //* get data saved 
 
-    $().ready(function () {
-      getData();
-      $("#frm-action-files").validate({
-        rules: {
-          'date_file[]': {
-            required: true
+
+    window.getData = function () {
+      var model = $('#action-model').val();
+      var id_rel = $('#action-id_rel').val();
+      clearPreviewFiles().then(function () {
+        var step = $('#step').val();
+        axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
+          var result = response.data;
+          var files = result.files;
+          var file_dates = result.file_date;
+
+          for (var key in file_dates) {
+            if (file_dates.hasOwnProperty.call(file_dates, key)) {
+              var element_date_file = file_dates[key]; //console.log(element_date_file.template_config_id);
+
+              $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
+            }
           }
-        },
-        submitHandler: function submitHandler(form, event) {
-          event.preventDefault();
-          var new_form = document.getElementById("frm-action-files");
-          var data = new FormData(new_form); // Extract the step value from the URL
 
-          var urlParams = new URLSearchParams(window.location.search);
-          var step = urlParams.get('step'); // Add the step value to the FormData
-
-          data.append('step', step);
-          axios.post("/panel/files/template/date", data).then(function (response) {
-            var result = response.data;
-            var url_redirect = null;
-            url_redirect = $('#url_redirect').val();
-            window.location = url_redirect;
-          })["catch"](function (e) {});
-        }
+          for (var key_file in files) {
+            if (files.hasOwnProperty.call(files, key_file)) {
+              var element_file = files[key_file];
+              $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
+            }
+          }
+        })["catch"](function (e) {
+          console.error(e);
+        });
+      })["catch"](function (e) {
+        console.error(e);
       });
+    };
+  }
+
+  $().ready(function () {
+    getData();
+    $("#frm-action-files").validate({
+      rules: {
+        'date_file[]': {
+          required: true
+        }
+      },
+      submitHandler: function submitHandler(form, event) {
+        event.preventDefault();
+        var new_form = document.getElementById("frm-action-files");
+        var data = new FormData(new_form); // Extract the step value from the URL
+
+        var urlParams = new URLSearchParams(window.location.search);
+        var step = urlParams.get('step'); // Add the step value to the FormData
+
+        data.append('step', step);
+        axios.post("/panel/files/template/date", data).then(function (response) {
+          var result = response.data;
+          var url_redirect = null;
+          url_redirect = $('#url_redirect').val();
+          window.location = url_redirect;
+        })["catch"](function (e) {});
+      }
+    });
+  });
+
+  if (document.getElementById('pruebaDropZone')) {
+    var _model = 'prueba';
+    var _id_rel = 1;
+    var key = 1;
+    NioApp.Dropzone('#pruebaDropZone', {
+      url: "/panel/files/images/" + _model + '/' + _id_rel + '/' + key,
+      init: function init() {
+        this.on("sending", function (file, xhr, formData) {});
+        this.on("success", function (file, message) {});
+        this.on("complete", function (file) {});
+      }
     });
   }
 });
@@ -720,7 +765,8 @@ $().ready(function () {
       var agreement = result.agreement;
       var financials = result.financials;
       $('#agreement-name').val(agreement.name);
-      $('#agreement-description').val(agreement.description); // Limpia las selecciones actuales en el select múltiple
+      $('#agreement-description').val(agreement.description);
+      $('#agreement_term').val(agreement.agreement_term); // Limpia las selecciones actuales en el select múltiple
 
       $('#agreement-financials').val(null).trigger('change');
       $('#agreement-status').val(agreement.status).trigger("change"); // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
@@ -881,6 +927,203 @@ document.addEventListener('DOMContentLoaded', function () {
     }],
     createdRow: function createdRow(row, data, dataIndex) {
       $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/clients/crud.js":
+/*!*************************************************!*\
+  !*** ./resources/js/components/clients/crud.js ***!
+  \*************************************************/
+/***/ (() => {
+
+$().ready(function () {
+  $("#frm-client").validate({
+    rules: {
+      'data[name]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frm-client");
+      var data = new FormData(new_form);
+      axios.post("/panel/clients", data).then(function (response) {
+        window.location = '/panel/clients';
+      })["catch"](function (e) {});
+    }
+  });
+
+  function setData() {
+    var client_id = $('#client_id').val();
+
+    if (client_id != '') {
+      console.log(client_id);
+      axios.get("/panel/clients/" + client_id).then(function (response) {
+        var result = response.data;
+        var client = result.client;
+        $('#client-name').val(client.name);
+        $('#client-last_name').val(client.last_name);
+        $('#client-second_last_name').val(client.second_last_name);
+        $('#client-cellphone').val(client.cellphone);
+        $('#client-email').val(client.email);
+        $('#client-rfc').val(client.rfc);
+        $('#lead-email').val(client.email);
+        $('#client-daily_income').val(client.daily_income);
+        $('#client-agreement').val(client.agreement_id).trigger("change");
+        var clientStatusElement = document.getElementById("client-status");
+
+        if (client.active == 1 && clientStatusElement) {
+          clientStatusElement.click();
+        }
+
+        $('#client-status').val(client.active);
+      })["catch"](function (e) {
+        $('#admin_email-error-exist').show();
+      });
+    }
+  }
+
+  if (document.getElementById('client_id')) {
+    setData();
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/clients/datatable.js":
+/*!******************************************************!*\
+  !*** ./resources/js/components/clients/datatable.js ***!
+  \******************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var module_id = null;
+
+  if (document.getElementById('module_id')) {
+    module_id = $('#module_id').val();
+  }
+
+  var table_lead = NioApp.DataTable('#dt-clients', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/clients/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'agreement'
+    }, {
+      data: 'cellphone'
+    },
+    /* { data: 'organizacion' }, */
+    {
+      data: 'rfc'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-clients tbody').on('click', 'td', function () {
+    var row = table_lead.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/clients/datatable_colaboradores.js":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/clients/datatable_colaboradores.js ***!
+  \********************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table_lead = NioApp.DataTable('#dt-colaboradores', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/clients/list/ListColaboradores',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'agreement'
+    }, {
+      data: 'cellphone'
+    },
+    /* { data: 'organizacion' }, */
+    {
+      data: 'rfc'
+    }, {
+      data: 'estatus'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-colaboradores tbody').on('click', 'td', function () {
+    var row = table_lead.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
     }
   });
 });
@@ -1093,6 +1336,12 @@ function move(id, form, modal, datatable, title, msg) {
     (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, datatable, title, msg);
   })["catch"](function (e) {});
 }
+
+window.moveCrm = function (creditId, statusid, old_status_id, redirect) {
+  axios.post("/panel/action/" + creditId + "/" + statusid + "/" + old_status_id + "/move").then(function (response) {
+    window.location = redirect;
+  })["catch"](function (e) {});
+};
 
 window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
   if (is_modal == true) {
@@ -1764,7 +2013,16 @@ document.addEventListener('DOMContentLoaded', function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utilities */ "./resources/js/components/utilities.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+var isLoaded = false;
 $().ready(function () {
   $("#frm-product-info").validate({
     rules: {
@@ -1792,27 +2050,84 @@ $().ready(function () {
   });
 
   if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null') {
-    var product_id = $('#product_id').val(); // Limpia las selecciones actuales en el select múltiple
+    var product_id = $('#product_id').val(); // Limpia las selecciones actuales en los selects
 
     $('#product_periodicity_id').val(null).trigger('change');
     $('#product-principal_pay').val(null).trigger('change');
-    axios.get("/panel/financial-product/" + product_id + '/getPeriodicityAndPaymentMethod').then(function (response) {
-      var result = response.data;
-      var periodicities = result.periodicities;
-      var payments = result.payments; // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+    axios.get("/panel/financial-product/" + product_id + '/getPeriodicityAndPaymentMethod').then( /*#__PURE__*/function () {
+      var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(response) {
+        var result, periodicities, payments, periodicityValues, paymentValues;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                // Usa async/await aquí
+                result = response.data;
+                periodicities = result.periodicities;
+                payments = result.payments; // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
 
-      var periodicityValues = periodicities.map(function (item) {
-        return item.periodicity_id;
-      });
-      var paymentValues = payments.map(function (item) {
-        return item.payment_method_id;
-      }); // Seleccionar los valores correspondientes en los selects
+                periodicityValues = periodicities.map(function (item) {
+                  return item.periodicity_id;
+                });
+                paymentValues = payments.map(function (item) {
+                  return item.payment_method_id;
+                }); // Seleccionar los valores correspondientes en los selects
 
-      $('#product_periodicity_id').val(periodicityValues).trigger('change');
-      $('#product-principal_pay').val(paymentValues).trigger('change');
-    })["catch"](function (e) {});
+                $('#product_periodicity_id').val(periodicityValues).trigger('change');
+                $('#product-principal_pay').val(paymentValues).trigger('change');
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }())["catch"](function (e) {
+      console.error(e);
+    });
   }
 });
+var previouslyLoadedTerms = []; // Almacena los términos previamente cargados
+
+window.setFPTerms = function () {
+  var product_id = $('#product_id').val();
+  $('#fp_terms').val(null).trigger('change'); // Realiza la solicitud AJAX para obtener los términos
+
+  var periodicityId = $('#product_periodicity_id').val();
+  var select = document.getElementById("fp_terms"); // Limpia el select antes de agregar opciones
+
+  select.innerHTML = ""; // Realiza la solicitud AJAX para obtener los términos
+
+  return axios.get("/panel/financial-product/" + periodicityId + '/' + product_id + '/terms/get').then(function (response) {
+    var result = response.data;
+    var terms = result.terms;
+    var getTerms = result.getTerms; // Llena el select con las opciones de terms
+
+    terms.forEach(function (term) {
+      var option = document.createElement("option");
+      option.value = term.id; // El valor será el id
+
+      option.text = term.term; // El texto será el term
+
+      select.appendChild(option);
+    }); // Si se pasaron términos seleccionados, se seleccionan aquí
+
+    if (getTerms != null) {
+      var termValues = getTerms.map(function (item) {
+        return item.id;
+      });
+      $('#fp_terms').val(termValues).trigger('change');
+    }
+  })["catch"](function (e) {
+    console.error(e);
+  });
+};
+
 $("#frm-financial-buro").submit(function (event) {
   event.preventDefault();
   var new_form = document.getElementById("frm-financial-buro");
@@ -2098,6 +2413,7 @@ window.copyToClipBoardReport = function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+/* harmony import */ var rfc_facil__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rfc-facil */ "./node_modules/rfc-facil/dist/rfc-facil.es5.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
@@ -2106,6 +2422,49 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+window.setRfc = function () {
+  var nacimiento = $('#lead-birth_date').val();
+  var my_lastname = $('#lead-last_name').val();
+  var my_secondlastname = $('#lead-second_last_name').val();
+  var my_name = $('#lead-name').val();
+
+  var _nacimiento$split = nacimiento.split('-'),
+      _nacimiento$split2 = _slicedToArray(_nacimiento$split, 3),
+      my_year = _nacimiento$split2[0],
+      my_month = _nacimiento$split2[1],
+      my_day = _nacimiento$split2[2];
+
+  var rfc = rfc_facil__WEBPACK_IMPORTED_MODULE_1__["default"].forNaturalPerson({
+    name: my_name,
+    firstLastName: my_lastname,
+    secondLastName: my_secondlastname,
+    day: my_day,
+    month: my_month,
+    year: my_year
+  });
+  return rfc;
+};
+
+window.createRfc = function () {
+  var rfc = setRfc();
+  $('#lead-rfc').val(rfc);
+  checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+};
 
 $('.js-select2').select2({
   placeholder: "Escribe para buscar..",
@@ -2249,7 +2608,6 @@ window.getFinancialProduct = function (id, type) {
   axios.get("/panel/action/financial/product/" + id + "/" + type + '/show').then(function (response) {
     var result = response.data;
     var financials = result.financials;
-    console.log(financials);
     var financialValues = financials.map(function (item) {
       return item.product_id;
     }); // Limpia las selecciones actuales en el select múltiple
@@ -2321,21 +2679,54 @@ window.changeOrigen = function (change_channel) {
 }); */
 
 
-function setData(is_change_origen, is_change_organization) {
+window.validateLeadEdit = function (lead_id) {
+  var cellphone = $('#lead-cellphone').val();
+  var rfc = $('#lead-rfc').val();
+  axios.get("/panel/lead/" + cellphone + "/" + rfc + "/" + lead_id + "/get/validate").then(function (response) {
+    var result = response.data;
+    var isValidate = result.isValidate;
+    var contentValidaciones = result.msg;
+    var client_person_id = $('#client_person_id').val();
+
+    if (isValidate == true) {
+      $('#is_viability').val(1);
+      $('#content-servicio-kc').show();
+      $('#prospecto-valido').val('Prospecto válido');
+      $('#content-validaciones').show();
+      $('#content-validaciones').html(contentValidaciones);
+    } else {
+      $('#content-validaciones').html(contentValidaciones);
+      $('#is_viability').val(0);
+      $('#content-servicio-kc').hide();
+      $('#prospecto-valido').val('');
+    }
+
+    showContentIsValidate();
+  })["catch"](function (e) {});
+};
+
+window.showContentIsValidate = function () {
+  var is_viability = $('#is_viability').val();
+  var clientPersonId = $('#client_person_id').val(); //perfil-cliente
+
+  if (is_viability == 1) {
+    $('.perfil-cliente').each(function () {
+      $(this).attr('href', '/panel/client/' + clientPersonId);
+    });
+  }
+};
+
+function setData(is_change_origen, isChange, isChangeBirthDay) {
   var lead_id = $('#lead_id').val();
   axios.get("/panel/lead/" + lead_id).then(function (response) {
     var result = response.data;
     var lead = result.lead;
-    var channel = result.channel;
-    var financials = result.financials;
-    var product_id = lead.product_id;
-    var other = lead.other;
     var is_viability = lead.is_viability;
-    var is_viability_credit = lead.is_viability_credit;
-    console.log(product_id);
-    productChange(product_id);
-    organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
-    getFinancialProduct(lead.id, 1);
+    var is_viability_credit = lead.is_viability_credit; //productChange(product_id);
+    //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
+
+    $('#lead-origin-agreement').val(lead.agreement_id);
+    getProductsByAgreementId(lead.agreement_id, lead.financial_product_id); //getFinancialProduct(lead.id, 1);
 
     if (is_change_origen == true) {
       $('#lead-origin').val(lead.origin_id);
@@ -2348,6 +2739,11 @@ function setData(is_change_origen, is_change_organization) {
     $('#lead-type_id').trigger("change"); */
 
     $('#lead-name').val(lead.name);
+
+    if (isChangeBirthDay == true) {
+      $('#lead-birth_date').val(lead.birth_date);
+    }
+
     $('#lead-last_name').val(lead.last_name);
     $('#lead-second_last_name').val(lead.second_last_name);
     $('#lead-cellphone').val(lead.cellphone);
@@ -2359,18 +2755,25 @@ function setData(is_change_origen, is_change_organization) {
     }
 
     $('#lead-comment').val(lead.comment);
-    changeOrigen(lead.channel_id);
+    $('#client_person_id').val(lead.client_person_id);
+    validateLeadEdit(lead_id); // Luego ejecuta validateLeadEdit
+    //changeOrigen(lead.channel_id);
+
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
     $('#importe_solicitado').val(lead.importe_solicitado);
     $('#income').val(lead.income);
     $('#bank_id').val(lead.bank_id).trigger("change");
     $('#tipo_credito').val(lead.tipo_credito).trigger("change");
     $('#consulta_buro').val(lead.consulta_buro).trigger("change");
-    checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
+    $('#lead-agreement').val(lead.agreement_id).trigger("change");
 
-    checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+    if (isChange == true) {
+      checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
 
-    checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+      checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+
+      checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+    }
 
     $('#applied_loan_type').val(lead.applied_loan_type).trigger("change"); // Get the checkbox elements
 
@@ -2387,28 +2790,162 @@ function setData(is_change_origen, is_change_organization) {
 window.checkDataLeadExist = function (valInput, id) {
   var getValue = valInput.value;
   var messageElement = document.getElementById(id + '-msg');
+  $('#content-validaciones').html('');
 
-  if (valInput != '') {
+  if (getValue != '') {
     messageElement.textContent = "";
     axios.get("/panel/lead/" + getValue + "/" + id + "/check").then(function (response) {
       var result = response.data;
       var isExist = result.exist;
+      var clientPerson = result.clientPerson;
+      var isValidate = result.isValidate;
 
-      if (isExist > 0) {
-        if (id != 'rfc') {
-          messageElement.textContent = "Ya está en uso";
+      if (id == 'cellphone') {
+        $('#content-validaciones-phone').html(result.contentValidaciones);
+      } else {
+        $('#content-validaciones-rfc').html(result.contentValidaciones);
+      } //$('#content-validaciones').html(result.contentValidaciones);
+
+
+      if (typeof clientPerson !== 'undefined' && clientPerson && clientPerson.id) {
+        $('.perfil-cliente').each(function () {
+          $(this).attr('href', '/panel/client/' + clientPerson.id);
+        });
+      }
+
+      if (isExist > 0 && isValidate == true) {
+        $('#client_person_id').val(clientPerson.id);
+        $('#content-servicio-kc').show();
+        getProductsByAgreementId(clientPerson.agreement_id, null);
+        messageElement.classList.remove("text-danger");
+        messageElement.classList.add("text-primary");
+        messageElement.textContent = "Validación exitosa";
+        $('#is_viability').val(1); //$('#lead_id').val(clientPerson.id);
+
+        $('#prospecto-valido').val('Prospecto válido');
+        $('#lead-origin-agreement').val(clientPerson.agreement_id);
+
+        if (id == 'cellphone') {
+          $('#isValidateCellphone').val(result.isValidate);
+          $('#cellphone_validated').val(1);
+          $('#rfc_validated').val(0);
+        }
+
+        if (id == 'rfc') {
+          $('#cellphone_validated').val(0);
+          $('#rfc_validated').val(1);
+        }
+
+        $('#lead-name').val(clientPerson.name);
+        $('#lead-last_name').val(clientPerson.last_name);
+        $('#lead-second_last_name').val(clientPerson.second_last_name);
+        $('#lead-birth_date').val(clientPerson.birth_date);
+        $('#lead-rfc').val(clientPerson.rfc);
+        $('#lead-email').val(clientPerson.email);
+        $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
+
+        if (id == 'cellphone') {
+          $('#content-validaciones-phone').html('');
         } else {
-          messageElement.textContent = "Recurrente";
-          $('.text-viabilidad').html('Recurrente');
+          $('#content-validaciones-rfc').html('');
         }
       } else {
-        if (id == 'rfc') {
-          messageElement.innerHTML = "<b>Nuevo</b>";
-          $('.text-viabilidad').html('Nuevo');
-        }
+        messageElement.classList.remove("text-primary");
+        messageElement.classList.add("text-danger");
+        messageElement.textContent = "Validación fallida";
+        $('#content-servicio-kc').hide();
+        $('#prospecto-valido').val('');
+        $('#is_viability').val(0);
       }
     })["catch"](function (e) {});
   }
+};
+
+window.showModalCompraCartera = function () {
+  var lead_id = $('#lead_id').val();
+  var client_person_id = $('#client_person_id').val();
+  $('#lead_id_compra_cartera').val(lead_id);
+  $('#client_person_id_compra_cartera').val(client_person_id);
+  $('#creditPayOffId').val('');
+  $('#modal-compra-cartera').modal('show');
+};
+
+window.showTableCompraCartera = function (leadId) {
+  $('#content-table-compra-cartera').html('');
+  $('#resumen-deuda-capital').val('');
+  console.log('inicio compracartera');
+  axios.get("/panel/lead/credit-pay-off/" + leadId).then(function (response) {
+    var result = response.data;
+    var table = result.table;
+    var total = result.total;
+    var montoEntregar = $('#hmonto-entregar').val();
+    console.log('axios');
+    $('#content-monto-compra-cartera').html(total);
+    $('#resumen-deuda-capital').val(total);
+    $('#content-monto-entregar').html(total - montoEntregar);
+    $('#content-table-compra-cartera').html(table);
+  })["catch"](function (e) {
+    console.log('error elementos compra de cartera');
+  });
+};
+
+$("#frm-modal-compra-cartera").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-modal-compra-cartera");
+  var data = new FormData(new_form);
+  var leadId = $('#lead_id_compra_cartera').val();
+  console.log(leadId);
+  axios.post("/panel/lead/credit-pay-off", data).then(function (response) {
+    var result = response.data;
+    $('#modal-compra-cartera').modal('hide');
+    showTableCompraCartera(leadId);
+  })["catch"](function (e) {});
+});
+
+window.deleteCompraCartera = function (creditPayOffId) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      axios["delete"]("/panel/lead/credit-pay-off/" + creditPayOffId).then(function (response) {
+        var leadId = document.getElementById("lead_id").value;
+        showTableCompraCartera(leadId);
+      })["catch"](function (e) {});
+    }
+  });
+};
+
+window.editCompraCartera = function (creditPayOffId) {
+  axios.get("/panel/lead/credit-pay-off/" + creditPayOffId + '/data/get').then(function (response) {
+    var result = response.data;
+    $('#compra-cartera-financial_product_id').val(result.financial_product_id).trigger("change");
+    $('#compra-cartera-ammount').val(result.ammount);
+    $('#creditPayOffId').val(creditPayOffId);
+    $('#modal-compra-cartera').modal('show');
+  })["catch"](function (e) {});
+};
+
+window.getProductsByAgreementId = function (leadId, productId) {
+  var selectElement = document.getElementById('financial_product_id');
+  selectElement.options.length = 0; // Limpiar el select
+
+  axios.get("/panel/lead/" + leadId + "/getProducts").then(function (response) {
+    var products = response.data;
+    Object.keys(products).forEach(function (key) {
+      var option = document.createElement('option');
+      option.value = key;
+      option.textContent = products[key];
+      selectElement.appendChild(option);
+    });
+
+    if (productId != 'null') {
+      $('#financial_product_id').val(productId).trigger("change");
+    }
+  })["catch"](function (e) {});
 };
 
 window.deleteLead = function (lead_id) {
@@ -2491,6 +3028,26 @@ $("#frm-tags").submit(function (event) {
     $('#modal-tags').modal('hide');
   })["catch"](function (e) {});
 });
+
+function getAllValidate() {
+  var clientPersonId = $('#client_person_id').val();
+  var agreement = $('#lead-origin-agreement').val();
+  var productId = $('#financial_product_id').val();
+  var lead_id = $('#lead_id').val(result.id);
+  axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + '/' + lead_id + "/soad/get").then(function (response) {})["catch"](function (e) {});
+}
+
+function saveLead() {
+  var new_form = document.getElementById("frm-lead");
+  var data = new FormData(new_form);
+  axios.post("/panel/lead", data).then(function (response) {
+    var getResult = response.data;
+    var result = getResult.lead;
+    $('#lead_id').val(result.id);
+    $('#isNew').val(0);
+  })["catch"](function (e) {});
+}
+
 $().ready(function () {
   $("#frm-lead").validate({
     rules: {
@@ -2616,16 +3173,380 @@ window.modalPasswod = function (user_id) {
 window.modalRegisterAction = function (id_rel) {
   $('#register-action-id-rel').val(id_rel);
   $('#modal-register-action').modal('show');
+}; //llenar tipo de tramite
+
+
+function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
+  var selectElement = document.getElementById('tramit_type');
+  selectElement.options.length = 0; // Limpiar el select
+
+  $('#content-validaciones-soad-tramite').html('');
+  $('#content-error-producto-preautorizado').hide();
+  $('#producto-deseado').hide();
+  var typeProductId = $('#typeProductId').val(typeProductId);
+  axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/tramite/get").then(function (response) {
+    var result = response.data;
+    var sodIsTramite = result.sodIsTramite;
+    var sodMessage = result.sodMessage;
+    var sodTramites = result.sodTramites;
+
+    if (sodIsTramite == true) {
+      $('#content-product-select').hide();
+      Object.keys(sodTramites).forEach(function (key) {
+        var option = document.createElement('option');
+        option.value = key;
+        option.textContent = sodTramites[key];
+        selectElement.appendChild(option);
+      });
+    } else {
+      $('#content-product-select').show();
+      $('#content-error-producto-preautorizado').show();
+    }
+
+    if (tipoTramiteId != 'null') {
+      $('#tramit_type').val(tipoTramiteId).trigger("change");
+    }
+
+    if (typeProductId != 3) {
+      $('#content-validaciones-soad-tramite').html(sodMessage);
+    }
+  })["catch"](function (e) {});
+} //contenido tramite al cambiar el select si selecciona refinanciamiento
+
+
+window.changeTramite = function () {
+  var tramit_type = $('#tramit_type').val();
+  var clientPersonId = $('#client_person_id').val();
+  var productId = $('#financial_product_id').val();
+  var typeProductId = $('#typeProductId').val();
+  var leadId = document.getElementById("lead_id").value;
+  $('#content-product-select').hide();
+  $('#content-refinanciado').hide();
+  $('#product-deseado-refinanciamiento').hide();
+  $('#content-product-deseado-refinanciamiento').html('');
+
+  if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
+    axios.get("/panel/lead/" + clientPersonId + "/" + productId + "/" + tramit_type + "/refinanciamiento/get").then(function (response) {
+      var result = response.data;
+      var montoMaximo = result.montoMaximo;
+      var plazoMaximo = result.plazoMaximo;
+      var periodicidad = result.periodicidad;
+      var payment = result.payment;
+      var productoDeseado = result.productoDeseado;
+      var terms = result.terms;
+      $('#monto-maximo').val(montoMaximo);
+      $('#plazo-maximo').val(plazoMaximo);
+      $('#periodicidad').val(periodicidad);
+      $('#pago-periodico').val(payment);
+      $('#content-refinanciado').show();
+      $('#content-product-select').show();
+      $('#product-deseado-refinanciamiento').show();
+      $('#content-product-deseado-refinanciamiento').html(productoDeseado);
+      var selectTramite = document.getElementById('ref-plazo');
+      selectTramite.options.length = 0; // Limpiar el select
+
+      var defaultOption = document.createElement('option');
+      defaultOption.value = ''; // Value vacío
+
+      defaultOption.textContent = 'Seleccione una opción'; // Texto de la opción
+
+      selectTramite.appendChild(defaultOption);
+      Object.keys(terms).forEach(function (key) {
+        var option = document.createElement('option');
+        option.value = key;
+        option.textContent = terms[key];
+        selectTramite.appendChild(option);
+      });
+
+      if (typeProductId == 2) {
+        showTableCompraCartera(leadId);
+      }
+    })["catch"](function (e) {});
+  }
 };
 
-$(document).ready(function () {
-  if (document.getElementById('lead-channel')) {
-    setData(true, true);
+window.graficaProspecto = function () {
+  $('#modal-chart').modal('show');
+};
+
+window.getMontoSolicitado = function () {
+  var clientPersonId = $('#client_person_id').val();
+  var productId = $('#financial_product_id').val();
+  var plazo = $('#ref-plazo').val();
+  var tramit_type = $('#tramit_type').val(); // Obtiene todos los checkboxes con nombre 'credits[]'
+
+  var checkboxes = document.querySelectorAll('input[name="credits[]"]:checked'); // Inicializa un array para guardar los valores seleccionados
+
+  var credits = []; // Itera sobre los checkboxes seleccionados y almacena sus valores
+
+  checkboxes.forEach(function (checkbox) {
+    credits.push(checkbox.value);
+  });
+  var selectMontoMaximo = document.getElementById('ref-monto');
+  selectMontoMaximo.options.length = 0; // Limpiar el select
+
+  $('#total-refinanciable').val(0);
+  axios.post("/panel/lead" + '/' + clientPersonId + "/" + productId + "/" + tramit_type + "/montoMaximo/get", {
+    credits: credits,
+    plazo: plazo
+  }).then(function (response) {
+    var result = response.data;
+    var maximo = result.maximo;
+    var total = result.total;
+    var total_price = result.total_price;
+    var defaultOption = document.createElement('option');
+    defaultOption.value = ''; // Value vacío
+
+    defaultOption.textContent = 'Seleccione una opción'; // Texto de la opción
+
+    selectMontoMaximo.appendChild(defaultOption);
+    Object.keys(maximo).forEach(function (key) {
+      var option = document.createElement('option');
+      option.value = key;
+      option.textContent = maximo[key];
+      selectMontoMaximo.appendChild(option);
+    });
+    $('#table-refinanciamiento-total').html(total_price);
+    $('#total-refinanciable').val(total);
+    getResumen();
+  })["catch"](function (e) {});
+};
+
+window.getResumen = function () {
+  var clientPersonId = $('#client_person_id').val();
+  var productId = $('#financial_product_id').val();
+  var plazo = $('#ref-plazo').val();
+  var monto = $('#ref-monto').val();
+  var totalRefinanciable = $('#total-refinanciable').val();
+  var tramit_type = $('#tramit_type').val();
+  var isControlDesk = $('#isControlDesk').val();
+  $('#go_ahead').val(0);
+  axios.get("/panel/lead/" + productId + "/" + plazo + '/' + monto + '/' + totalRefinanciable + '/' + tramit_type + '/getResumen').then(function (response) {
+    var result = response.data;
+    var montoSolicitado = result.montoSolicitado;
+    var montoRefinanciar = result.montoRefinanciar;
+    var comision = result.comision;
+    var monto_entregar = result.monto_entregar;
+    var montoEntregarDecimal = result.monto_entregar_decimal;
+    var periodicidad = result.periodicidad;
+    var plazo = result.plazo;
+    var pagoPeriodico = result.pagoPeriodico;
+    var pagoTotal = result.pagoTotal;
+    var tasaAnual = result.tasaAnual;
+    var cat = result.cat;
+    var kcInteres = result.kcInteres;
+    var kcPagoTotal = result.kcPagoTotal;
+    $('#content-monto-solicitado').html(montoSolicitado);
+    $('#content-monto-refinanciar').html(montoRefinanciar);
+    $('#content-comision-apertura').html(comision);
+    $('#content-monto-entregar').html(monto_entregar);
+    $('#content-monto-entregar').html(monto_entregar);
+    $('#content-plazo').html(periodicidad);
+    $('#content-monto').html(plazo);
+    $('#content-pago-periodico').html(pagoPeriodico);
+    $('#content-pago-total').html(pagoTotal);
+    $('#content-tasa-anual').html(tasaAnual);
+    $('#content-cat').html(cat);
+    $('#hmonto-entregar').val(montoEntregarDecimal);
+    getChart();
+    $('#go_ahead').val(1);
+  })["catch"](function (e) {});
+};
+
+function getChart() {
+  var productId = $('#financial_product_id').val();
+  var leadId = $('#lead_id').val();
+  var plazo = $('#ref-plazo').val();
+  var monto = $('#ref-monto').val();
+  axios.get("/panel/lead/" + productId + "/" + leadId + "/" + plazo + "/" + monto + '/getChart').then(function (response) {
+    var result = response.data;
+    $('#ahorro-interes-dinero').html(result.ahorroInteresDinerom);
+    $('#ahorro-interes-porcentaje').html(result.ahorroInteresPorcentaje);
+    $('#lbl-kc-pago-total').html(result.deudaPagoTotalm);
+    $('#lbl-kc-porcentaje-interes').html(result.deudaPorcentajeInteresm);
+    $('#lbl-deuda-pago-total').html(result.kcPagoTotal);
+    $('#lbl-deuda-porcentaje-interes').html(result.kcPorcentajeInteres); // Crear múltiples gráficas de ejemplo con alturas dinámicas
+
+    crearGraficaApilada(chartsContainer, result.deudaInteres, result.deudaCapital, '#a34444', '#757575', "Interés", "Deuda total <br> de tus créditos");
+    crearGraficaApilada(chartsContainer, result.kcInteres, result.kcCapital, '#7eb1a2', '#57409b', "Interés", "Kaax Club");
+  })["catch"](function (e) {});
+} //validar soad activo y si existe la fecha en bd
+
+
+window.validateSoad = function () {
+  $('#content-validaciones-soad').html('');
+  $('#content-validaciones-soad-date').html('');
+  $('#content-product').html('');
+  $('#content_tramit_type').hide();
+  $('#content-validaciones-soad-tramite').html('');
+  $('#go_ahead').val(0);
+
+  if ($('#financial_product_id').val() != null) {
+    var clientPersonId = $('#client_person_id').val();
+    var agreement = $('#lead-origin-agreement').val();
+    var productId = $('#financial_product_id').val();
+    $('#content-error-producto-preautorizado').hide();
+    axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + "/soad/get").then(function (response) {
+      var result = response.data;
+      var typeProductId = result.type_product_id;
+      $('#typeProductId').val(typeProductId);
+
+      if ($('#is_viability').val() == 1) {
+        saveLead(); //getAllValidate();
+      }
+
+      if (typeProductId == 1 || typeProductId == 2) {
+        $('#content_tramit_type').show(); //llenar el arreglo de tipo de trámite
+
+        setSelectTramite(clientPersonId, productId, null);
+      }
+
+      if (typeProductId == 3) {
+        var TextSoad = result.TextSoad;
+        var soadActive = result.soadActive;
+        var isSoadDate = result.isSoadDate;
+        var isSodOnDate = result.isSodOnDate;
+        $('#is_free_of_active_sod').val(0);
+        $('#is_sod_on_date_allowed').val(0);
+
+        if (soadActive != 0) {
+          $('#content-validaciones-soad').html(TextSoad);
+          $('#is_free_of_active_sod').val(1);
+        }
+
+        $('#is_sod_on_date_allowed').val(1);
+        $('#sod_max').val(result.maximoRedondeado);
+        $('#sod_min').val(result.minimoRedondeado);
+        $('#content-validaciones-soad-date').html(isSoadDate);
+
+        if (isSodOnDate == true) {
+          $('#content-product').html(result.contentProductSod);
+          $('#producto-deseado').show();
+          $('#go_ahead').val(1); //valores slider
+
+          var slider = document.getElementById('slider');
+          slider.min = result.minimoRedondeado;
+          slider.max = result.maximoRedondeado;
+          $('#valor-minimo').html(result.minimoRedondeado);
+          $('#valor-maximo').html(result.maximoRedondeado);
+          $('#valor-comision').html('$' + result.comision);
+          $('#sod_commision_amount').val(result.comision);
+          $('#valor-banco').html(result.bank_name);
+          $('#valor-cuenta').html(result.cuenta);
+          $('#content-product-select').show();
+          var selectElement = document.getElementById('tramit_type');
+          selectElement.options.length = 0; // Limpiar el select
+
+          var sodTramites = result.sodTramites;
+          Object.keys(sodTramites).forEach(function (key) {
+            var option = document.createElement('option');
+            option.value = key;
+            option.textContent = sodTramites[key];
+            selectElement.appendChild(option);
+          });
+          $('#content_tramit_type').show();
+        } else {
+          $('#producto-deseado').hide();
+        }
+      }
+    })["catch"](function (e) {});
   }
-});
+};
+
+if (document.getElementById('valor-slider')) {
+  var updateSliderValue = function updateSliderValue() {
+    var slider = document.getElementById('slider');
+    var displayValue = document.getElementById('valor-slider'); // Obtenemos el valor actual del slider
+
+    var sliderValue = parseFloat(slider.value); // Actualizamos el contenido del span con el valor actual del slider
+
+    displayValue.innerHTML = '$' + sliderValue;
+    $('#sod_withdraw_amount').val(sliderValue);
+    var comision = parseFloat($('#sod_commision_amount').val());
+    var total = sliderValue + comision;
+
+    if (!isNaN(total)) {
+      $('#sod_total_payment').val(total);
+    } else {
+      $('#sod_total_payment').val(0); // O puedes asignar un valor por defecto si es NaN
+    }
+
+    $('#valor-total').html('$' + sliderValue);
+  }; // Agregar el listener al slider para detectar cambios
+
+
+  document.getElementById('slider').addEventListener('input', updateSliderValue); // Opcional: actualizar el valor del span al cargar la página
+
+  window.addEventListener('DOMContentLoaded', updateSliderValue);
+}
+
+$(document).ready( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          if (document.getElementById('lead-channel')) {
+            setData(true, false, true);
+          }
+
+        case 1:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, _callee2);
+})));
 $(document).on("select2:open", function () {
   document.querySelector(".select2-container--open .select2-search__field").focus();
 });
+/* graficas */
+
+function crearGraficaApilada(contenedor, valorInteres, valorDeuda) {
+  var colorInteres = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '#e57373';
+  var colorDeuda = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '#757575';
+  var etiquetaInteres = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : "Interés";
+  var etiquetaDeuda = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : "Deuda";
+  var chartContainer = document.createElement('div');
+  chartContainer.classList.add('chart-container'); // Cálculo del total y altura dinámica para cada gráfica
+
+  var total = valorInteres + valorDeuda;
+  var alturaMaxima = 400; // Altura máxima en píxeles para la gráfica con mayor valor
+
+  var alturaGrafica = total / 16000 * alturaMaxima; // Escalado en base a un total de 16000 como máximo
+  // Crear la barra de la gráfica
+
+  var bar = document.createElement('div');
+  bar.classList.add('bar');
+  bar.style.height = "".concat(alturaGrafica, "px"); // Crear segmento de deuda
+
+  var segmentoDeuda = document.createElement('div');
+  segmentoDeuda.classList.add('segment', 'segment2');
+  segmentoDeuda.style.backgroundColor = colorDeuda;
+  segmentoDeuda.style.height = "".concat(valorDeuda / total * 100, "%");
+  segmentoDeuda.innerHTML = "\n    <span style=\"font-size: 1.2em; \">$".concat(valorDeuda.toLocaleString(), "</span>\n    <span style=\"font-size: 1.2em;\">").concat(etiquetaDeuda, "</span>\n  "); // Crear segmento de interés
+
+  var segmentoInteres = document.createElement('div');
+  segmentoInteres.classList.add('segment', 'segment1');
+  segmentoInteres.style.backgroundColor = colorInteres;
+  segmentoInteres.style.height = "".concat(valorInteres / total * 100, "%");
+  segmentoInteres.innerHTML = "\n     <span style=\"font-size: 1.2em;\">".concat(etiquetaInteres, "</span>\n    <span style=\"font-size: 1.2em;\">$").concat(valorInteres.toLocaleString(), "</span>\n   \n  "); // Añadir los segmentos a la barra (interés arriba)
+
+  bar.appendChild(segmentoInteres);
+  bar.appendChild(segmentoDeuda); // Añadir la barra al contenedor de la gráfica
+
+  chartContainer.appendChild(bar);
+  contenedor.appendChild(chartContainer); // Animación de llenado
+
+  setTimeout(function () {
+    segmentoInteres.style.opacity = 1;
+    segmentoInteres.style.transform = 'scaleY(1)';
+    segmentoDeuda.style.opacity = 1;
+    segmentoDeuda.style.transform = 'scaleY(1)';
+  }, 100); // Retraso para activar la animación
+} // Selecciona el contenedor principal donde se añadirán las gráficas
+
+
+var chartsContainer = document.getElementById('charts-container');
 
 /***/ }),
 
@@ -3083,6 +4004,8 @@ document.addEventListener('DOMContentLoaded', function () {
     columns: [{
       data: 'id'
     }, {
+      data: 'fecha'
+    }, {
       data: 'product'
     }, {
       data: 'client'
@@ -3090,10 +4013,6 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'advisor'
     }, {
       data: 'progress'
-    }, {
-      data: 'in_progress'
-    }, {
-      data: 'deadline'
     }, {
       data: 'options'
     }],
@@ -3184,6 +4103,8 @@ document.addEventListener('DOMContentLoaded', function () {
     columns: [{
       data: 'id'
     }, {
+      data: 'fecha'
+    }, {
       data: 'product'
     }, {
       data: 'client'
@@ -3191,10 +4112,6 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'advisor'
     }, {
       data: 'progress'
-    }, {
-      data: 'in_progress'
-    }, {
-      data: 'deadline'
     }, {
       data: 'options'
     }],
@@ -3336,6 +4253,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-wallet', {
     processing: true,
+    isShowing: false,
     responsive: {
       details: {
         type: 'column',
@@ -3423,9 +4341,72 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 });
+/* mis pestamos */
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-mis-prestamos', {
+    processing: true,
+    isShowing: false,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-wallet/mis-restamos/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'status'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'pagado'
+    }, {
+      data: 'capital_pendiente'
+    }, {
+      data: 'capital_recuperado'
+    }, {
+      data: 'interes_proyectado'
+    }, {
+      data: 'interes_cobrado'
+    }, {
+      data: 'comision_kc'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-mis-prestamos tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
 document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-down-wallet', {
     processing: true,
+    isShowing: false,
     responsive: {
       details: {
         type: 'column',
@@ -3702,6 +4683,8 @@ if (document.getElementById('checkIslimit')) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 var refresh = {
   'newCredit': creditRefresh
@@ -3778,19 +4761,7 @@ $().ready(function () {
 
   $("#frm-template_control_desk_step1").validate({
     rules: {
-      'credit[payment_capacity_period]': {
-        required: true
-      },
-      'credit[payment_capacity]': {
-        required: true
-      },
-      'client_person[birth_date]': {
-        required: true
-      },
-      'client_person[labor_old]': {
-        required: true
-      },
-      'client_person[employee_category]': {
+      'url_redirect_next': {
         required: true
       }
     },
@@ -3843,6 +4814,95 @@ $().ready(function () {
         saveForm('frm-template_control_desk_step2', 'controlDesk');
       }
     }
+  });
+  $("#frm-template_control_desk_step2_task1").validate({
+    rules: {
+      'client_person[ID_primer_apellido]': {
+        required: true
+      },
+      'client_person[ID_segundo_apellido]': {
+        required: true
+      },
+      'client_person[ID_nombres]': {
+        required: true
+      },
+      'client_person[ID_vigencia]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step2_task1', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step2_task2").validate({
+    rules: {
+      'client_person[ID_CIC]': {
+        required: true,
+        number: true
+      },
+      'client_person[ID_IDC]': {
+        required: true,
+        number: true,
+        minlength: 9,
+        maxlength: 9
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step2_task2', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step2_task3").validate({
+    rules: {
+      'client_person[payroll_date]': {
+        required: true
+      },
+      'client_person[payroll_total]': {
+        number: true,
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step2_task3', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_dynamic_step2").validate({
+    rules: {
+      'pay_off[deadline_date]': {
+        required: true
+      },
+      'pay_off[ammount]': {
+        number: true,
+        required: true
+      },
+      'pay_off[bank_clabe]': {
+        required: true,
+        number: true,
+        minlength: 18,
+        maxlength: 18
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_dynamic_step2', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step3_task3").validate({
+    rules: {
+      'credit[payroll_payment_capacity]': _defineProperty({
+        required: true
+      }, "required", true)
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step3_task3', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step3_task").submit(function (event) {
+    event.preventDefault();
+    saveForm('frm-template_control_desk_step3_task', 'controlDesk');
   });
 
   window.getLoanAvailableByProduct = function (product) {
@@ -4090,9 +5150,72 @@ $().ready(function () {
     form_control_desk_step4.addEventListener('submit', function (event) {
       event.preventDefault(); // Evita que el formulario se envíe automáticamente
 
-      saveForm('frm-template_control_desk_step4', 'controlDesk'); // Aquí puedes agregar el código para enviar los datos del formulario con Axios u otro método
+      saveForm('frm-template_control_desk_step4', 'controlDesk');
     });
   }
+
+  if (document.getElementById('frm-template_control_desk_step3_task4')) {
+    var _form_control_desk_step = document.getElementById('frm-template_control_desk_step3_task4'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_step3_task4', 'controlDesk');
+    });
+  }
+
+  if (document.getElementById('frm-template_control_desk_step3_task5')) {
+    var _form_control_desk_step2 = document.getElementById('frm-template_control_desk_step3_task5'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step2.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_step3_task5', 'controlDesk');
+    });
+  }
+
+  if (document.getElementById('frm-template_control_desk_dynamic_step3')) {
+    var _form_control_desk_step3 = document.getElementById('frm-template_control_desk_dynamic_step3'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step3.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_dynamic_step3', 'controlDesk');
+    });
+  }
+
+  if (document.getElementById('frm-template_control_desk_step4_task1')) {
+    var _form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4_task1'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step4.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_step4_task1', 'controlDesk');
+    });
+  }
+
+  if (document.getElementById('frm-template_control_desk_step4_task2')) {
+    var _form_control_desk_step5 = document.getElementById('frm-template_control_desk_step4_task2'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step5.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_control_desk_step4_task2', 'controlDesk');
+    });
+  }
+
+  window.openModalValidateControlDesk = function (creditId) {
+    axios.get("/panel/template/validate/" + creditId + "/controlDesk").then(function (response) {
+      var result = response.data;
+      $('#content-validate-control-desk').html(result);
+      $('#modalValidateControlDesk').modal('show');
+    })["catch"](function (e) {});
+  };
 
   $("#frm-template_control_desk_step5").validate({
     rules: {
@@ -4155,6 +5278,34 @@ $().ready(function () {
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
       saveForm('frm-template_delivery_step2', 'delivery');
+    }
+  });
+  $("#frm-template_delivery_task1_step1").validate({
+    rules: {
+      'credit[delivered]': {
+        required: true
+      },
+      'credit[delivered_date]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_delivery_task1_step1', 'delivery');
+    }
+  });
+  $("#frm-template_delivery_dynamic_task_step1").validate({
+    rules: {
+      'credit_pay_off[delivered]': {
+        required: true
+      },
+      'credit_pay_off[delivered_date]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_delivery_dynamic_task_step1', 'delivery');
     }
   });
   $("#frm-template_payment_step2").validate({
@@ -4645,6 +5796,7 @@ function saveForm(id_form, model) {
     url_redirect = $('#url_redirect').val();
   }
 
+  console.log(model);
   data.append('model', model);
   data.append('id_rel', id_rel);
   axios.post("/panel/action-form", data).then(function (response) {
@@ -4676,7 +5828,19 @@ function saveForm(id_form, model) {
 
     window.location = url_redirect;
   })["catch"](function (e) {});
-} //*boton saltar en swap etapa 2_3   
+}
+
+window.saveAndContinueTask = function (id_form) {
+  var model = $('#action-model').val();
+  var newUrl = $('#url_redirect_next').val();
+  $('#url_redirect').val(newUrl);
+  saveForm(id_form, model);
+};
+
+window.cancelTask = function () {
+  var url = $('#url_redirect').val();
+  window.location = url;
+}; //*boton saltar en swap etapa 2_3   
 
 
 window.saltarSwap = function () {
@@ -5340,7 +6504,10 @@ window.modalUser = function (type, user_id) {
 function setDataUser(user_id) {
   var route_datatable = $('#route_datatable').val();
   axios.get("/panel/user/" + route_datatable + "/" + user_id).then(function (response) {
-    var result = response.data;
+    var data = response.data;
+    var result = data.user;
+    var agreements = data.agreements;
+    $('#agreements').val(null).trigger('change');
 
     if (document.getElementById('rol') != '') {
       //*limpiar los valores razon social
@@ -5381,6 +6548,15 @@ function setDataUser(user_id) {
     if (document.getElementById('financial_products_id')) {
       var financial_products_id = result.financial_products_id.split(',');
       $('#financial_products_id').val(financial_products_id).trigger('change');
+    }
+
+    if (document.getElementById('agreements')) {
+      // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+      var agreementValues = agreements.map(function (item) {
+        return item.agreement_id;
+      }); // Seleccionar los valores correspondientes en los selects
+
+      $('#agreements').val(agreementValues).trigger('change');
     }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
@@ -5927,6 +7103,2057 @@ channel.bind('kaaxclub-event', function (data) {
   });
 });
 
+/***/ }),
+
+/***/ "./node_modules/rfc-facil/dist/rfc-facil.es5.js":
+/*!******************************************************!*\
+  !*** ./node_modules/rfc-facil/dist/rfc-facil.es5.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var map = {
+    ' ': '00',
+    '0': '00',
+    '1': '01',
+    '2': '02',
+    '3': '03',
+    '4': '04',
+    '5': '05',
+    '6': '06',
+    '7': '07',
+    '8': '08',
+    '9': '09',
+    '&': '10',
+    A: '11',
+    B: '12',
+    C: '13',
+    D: '14',
+    E: '15',
+    F: '16',
+    G: '17',
+    H: '18',
+    I: '19',
+    J: '21',
+    K: '22',
+    L: '23',
+    M: '24',
+    N: '25',
+    O: '26',
+    P: '27',
+    Q: '28',
+    R: '29',
+    S: '32',
+    T: '33',
+    U: '34',
+    V: '35',
+    W: '36',
+    X: '37',
+    Y: '38',
+    Z: '39',
+    Ñ: '40'
+};
+var digits = '123456789ABCDEFGHIJKLMNPQRSTUVWXYZ';
+function calculate(fullName) {
+    var mappedFullName = '0' +
+        normalize(fullName)
+            .split('')
+            .map(mapCharacterToTwoDigitsCode)
+            .join('');
+    var sum = sumPairsOfDigits(mappedFullName);
+    var lastThreeDigits = sum % 1000;
+    var quo = lastThreeDigits / 34;
+    var reminder = lastThreeDigits % 34;
+    return digits.charAt(quo) + digits.charAt(reminder);
+}
+// remove accents without removing the Ñ (u0303)
+// and remove special characters: .'-,
+function normalize(input) {
+    return input
+        .toUpperCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u0302]/g, '')
+        .replace(/[\u0304-\u036f]/g, '')
+        .replace(/N\u0303/g, 'Ñ')
+        .replace(/[-\.',]/g, ''); // remove .'-,
+}
+function sumPairsOfDigits(input) {
+    var sum = 0;
+    for (var i = 0; i < input.length - 1; i++) {
+        var firstPair = parseInt(input.substring(i, i + 2), 10);
+        var secondPair = parseInt(input.substring(i + 1, i + 2), 10);
+        sum += firstPair * secondPair;
+    }
+    return sum;
+}
+function mapCharacterToTwoDigitsCode(c) {
+    var m = map[c];
+    if (!m) {
+        throw Error("No two-digit code mapping for char " + c);
+    }
+    return m;
+}
+
+var map$1 = {
+    '0': 0,
+    '1': 1,
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7': 7,
+    '8': 8,
+    '9': 9,
+    A: 10,
+    B: 11,
+    C: 12,
+    D: 13,
+    E: 14,
+    F: 15,
+    G: 16,
+    H: 17,
+    I: 18,
+    J: 19,
+    K: 20,
+    L: 21,
+    M: 22,
+    N: 23,
+    '&': 24,
+    O: 25,
+    P: 26,
+    Q: 27,
+    R: 28,
+    S: 29,
+    T: 30,
+    U: 31,
+    V: 32,
+    W: 33,
+    X: 34,
+    Y: 35,
+    Z: 36,
+    ' ': 37,
+    Ñ: 38
+};
+function calculate$1(rfc12Digits) {
+    var sum = rfc12Digits
+        .split('')
+        .map(function (c) { return map$1[c.toUpperCase()] || 0; })
+        .reduce(function (sum, current, index) { return sum + current * (13 - index); }, 0);
+    var reminder = sum % 11;
+    if (reminder === 0) {
+        return '0';
+    }
+    else {
+        return (11 - reminder).toString(16).toUpperCase(); // from 1 to A (hex)
+    }
+}
+
+function dateCode(day, month, year) {
+    return year.toString().slice(-2) + zeroPadded(month) + zeroPadded(day);
+}
+function zeroPadded(n) {
+    return ('00' + n).slice(-2);
+}
+
+function removeAccents(input) {
+    return input.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function naturalPersonTenDigitsCode(person) {
+    return new NameCode(person).toString() + birthdayCode(person);
+}
+// matches any ocurrence of the special particles as a word: '^foo | foo | foo$''
+var specialParticlesRegex = new RegExp('(?:' +
+    ['DE', 'LA', 'LAS', 'MC', 'VON', 'DEL', 'LOS', 'Y', 'MAC', 'VAN', 'MI']
+        .map(function (p) { return "^" + p + " | " + p + " | " + p + "$"; })
+        .join('|') +
+    ')', 'g');
+function birthdayCode(person) {
+    return dateCode(person.day, person.month, person.year);
+}
+var NameCode = /** @class */ (function () {
+    function NameCode(person) {
+        this.person = person;
+        this.filteredPersonName = this.getFilteredPersonName();
+    }
+    NameCode.prototype.toString = function () {
+        return this.obfuscateForbiddenWords(this.calculateCode());
+    };
+    NameCode.prototype.calculateCode = function () {
+        if (this.isEmpty(this.person.firstLastName)) {
+            return (this.normalize(this.person.secondLastName).substring(0, 2) +
+                this.filteredPersonName.substring(0, 2));
+        }
+        else if (this.isEmpty(this.person.secondLastName)) {
+            return (this.normalize(this.person.firstLastName).substring(0, 2) +
+                this.filteredPersonName.substring(0, 2));
+        }
+        else if (this.isFirstLastNameIsTooShort()) {
+            return (this.normalize(this.person.firstLastName).charAt(0) +
+                this.normalize(this.person.secondLastName).charAt(0) +
+                this.filteredPersonName.substring(0, 2));
+        }
+        else {
+            return (this.normalize(this.person.firstLastName).charAt(0) +
+                this.firstVowelExcludingFirstCharacterOf(this.normalize(this.person.firstLastName)) +
+                this.normalize(this.person.secondLastName).charAt(0) +
+                this.filteredPersonName.charAt(0));
+        }
+    };
+    NameCode.prototype.obfuscateForbiddenWords = function (s) {
+        var match = s.match(/(BUE[IY]|CAC[AO]|CAGA|KOGE|KAKA|MAME|KOJO|[KQ]ULO|CAGO|CO[GJ]E|COJO|FETO|JOTO|KA[CG]O)/) || s.match(/(MAMO|MEAR|M[EI]ON|MOCO|MULA|PED[AO]|PENE|PUT[AO]|RATA|RUIN)/);
+        return match ? s.substring(0, 3) + 'X' : s;
+    };
+    // filter out common names (if more than one is provided)
+    NameCode.prototype.getFilteredPersonName = function () {
+        var normalized = this.normalize(this.person.name);
+        if (this.person.name.split(' ').length > 1) {
+            return normalized.replace(/^(JOSE|MARIA|MA|MA\.)\s+/i, '');
+        }
+        return normalized;
+    };
+    NameCode.prototype.normalize = function (s) {
+        return removeAccents(s.toUpperCase())
+            .replace(/\s+/g, '  ') // double space to allow multiple special-particles matching
+            .replace(specialParticlesRegex, '')
+            .replace(/\s+/g, ' ') // reset space
+            .trim();
+    };
+    NameCode.prototype.firstVowelExcludingFirstCharacterOf = function (s) {
+        var result = /[aeiou]/i.exec(s.slice(1));
+        if (!result) {
+            throw new Error('');
+        }
+        return result[0];
+    };
+    NameCode.prototype.isFirstLastNameIsTooShort = function () {
+        return this.normalize(this.person.firstLastName).length <= 2;
+    };
+    NameCode.prototype.isEmpty = function (s) {
+        return s === null || typeof s === 'undefined' || this.normalize(s).length === 0;
+    };
+    return NameCode;
+}());
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+/**
+ * Merges a set of default keys with a target object
+ * (Like _.defaults, but will also extend onto null/undefined)
+ *
+ * @param {Object} [target] The object to extend
+ * @param {Object} defaults The object to default to
+ * @return {Object} extendedTarget
+ */
+
+function defaults(target, defs) {
+  if (target == null) target = {};
+  var ret = {};
+  var keys = Object.keys(defs);
+  for (var i = 0, len = keys.length; i < len; i++) {
+    var key = keys[i];
+    ret[key] = target[key] || defs[key];
+  }
+  return ret;
+}
+var defaults_1 = defaults;
+
+var util = {
+	defaults: defaults_1
+};
+
+var util$1 = /*#__PURE__*/Object.freeze({
+  default: util,
+  __moduleExports: util,
+  defaults: defaults_1
+});
+
+var useLongScale = false;
+var baseSeparator = "-";
+var unitSeparator = "and ";
+var base = {
+	"0": "zero",
+	"1": "one",
+	"2": "two",
+	"3": "three",
+	"4": "four",
+	"5": "five",
+	"6": "six",
+	"7": "seven",
+	"8": "eight",
+	"9": "nine",
+	"10": "ten",
+	"11": "eleven",
+	"12": "twelve",
+	"13": "thirteen",
+	"14": "fourteen",
+	"15": "fifteen",
+	"16": "sixteen",
+	"17": "seventeen",
+	"18": "eighteen",
+	"19": "nineteen",
+	"20": "twenty",
+	"30": "thirty",
+	"40": "forty",
+	"50": "fifty",
+	"60": "sixty",
+	"70": "seventy",
+	"80": "eighty",
+	"90": "ninety"
+};
+var units = [
+	"hundred",
+	"thousand",
+	"million",
+	"billion",
+	"trillion",
+	"quadrillion",
+	"quintillion",
+	"sextillion",
+	"septillion",
+	"octillion",
+	"nonillion",
+	"decillion",
+	"undecillion",
+	"duodecillion",
+	"tredecillion",
+	"quattuordecillion",
+	"quindecillion"
+];
+var unitExceptions = [
+];
+var en = {
+	useLongScale: useLongScale,
+	baseSeparator: baseSeparator,
+	unitSeparator: unitSeparator,
+	base: base,
+	units: units,
+	unitExceptions: unitExceptions
+};
+
+var en$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale,
+  baseSeparator: baseSeparator,
+  unitSeparator: unitSeparator,
+  base: base,
+  units: units,
+  unitExceptions: unitExceptions,
+  default: en
+});
+
+var useLongScale$1 = true;
+var baseSeparator$1 = " y ";
+var unitSeparator$1 = "";
+var base$1 = {
+	"0": "cero",
+	"1": "uno",
+	"2": "dos",
+	"3": "tres",
+	"4": "cuatro",
+	"5": "cinco",
+	"6": "seis",
+	"7": "siete",
+	"8": "ocho",
+	"9": "nueve",
+	"10": "diez",
+	"11": "once",
+	"12": "doce",
+	"13": "trece",
+	"14": "catorce",
+	"15": "quince",
+	"16": "dieciséis",
+	"17": "diecisiete",
+	"18": "dieciocho",
+	"19": "diecinueve",
+	"20": "veinte",
+	"21": "veintiuno",
+	"22": "veintidós",
+	"23": "veintitrés",
+	"24": "veinticuatro",
+	"25": "veinticinco",
+	"26": "veintiséis",
+	"27": "veintisiete",
+	"28": "veintiocho",
+	"29": "veintinueve",
+	"30": "treinta",
+	"40": "cuarenta",
+	"50": "cincuenta",
+	"60": "sesenta",
+	"70": "setenta",
+	"80": "ochenta",
+	"90": "noventa",
+	"100": "cien",
+	"200": "doscientos",
+	"300": "trescientos",
+	"400": "cuatrocientos",
+	"500": "quinientos",
+	"600": "seiscientos",
+	"700": "setecientos",
+	"800": "ochocientos",
+	"900": "novecientos",
+	"1000": "mil"
+};
+var unitExceptions$1 = {
+	"1": "un"
+};
+var units$1 = [
+	{
+		singular: "ciento",
+		useBaseInstead: true,
+		useBaseException: [
+			1
+		]
+	},
+	{
+		singular: "mil",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "millón",
+		plural: "millones"
+	},
+	{
+		singular: "billón",
+		plural: "billones"
+	},
+	{
+		singular: "trillón",
+		plural: "trillones"
+	},
+	{
+		singular: "cuatrillón",
+		plural: "cuatrillones"
+	},
+	{
+		singular: "quintillón",
+		plural: "quintillones"
+	},
+	{
+		singular: "sextillón",
+		plural: "sextillones"
+	},
+	{
+		singular: "septillón",
+		plural: "septillones"
+	},
+	{
+		singular: "octillón",
+		plural: "octillones"
+	},
+	{
+		singular: "nonillón",
+		plural: "nonillones"
+	},
+	{
+		singular: "decillón",
+		plural: "decillones"
+	},
+	{
+		singular: "undecillón",
+		plural: "undecillones"
+	},
+	{
+		singular: "duodecillón",
+		plural: "duodecillones"
+	},
+	{
+		singular: "tredecillón",
+		plural: "tredecillones"
+	},
+	{
+		singular: "cuatrodecillón",
+		plural: "cuatrodecillones"
+	},
+	{
+		singular: "quindecillón",
+		plural: "quindecillones"
+	}
+];
+var es = {
+	useLongScale: useLongScale$1,
+	baseSeparator: baseSeparator$1,
+	unitSeparator: unitSeparator$1,
+	base: base$1,
+	unitExceptions: unitExceptions$1,
+	units: units$1
+};
+
+var es$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$1,
+  baseSeparator: baseSeparator$1,
+  unitSeparator: unitSeparator$1,
+  base: base$1,
+  unitExceptions: unitExceptions$1,
+  units: units$1,
+  default: es
+});
+
+var useLongScale$2 = false;
+var baseSeparator$2 = " e ";
+var unitSeparator$2 = "e ";
+var andWhenTrailing = true;
+var base$2 = {
+	"0": "zero",
+	"1": "um",
+	"2": "dois",
+	"3": "três",
+	"4": "quatro",
+	"5": "cinco",
+	"6": "seis",
+	"7": "sete",
+	"8": "oito",
+	"9": "nove",
+	"10": "dez",
+	"11": "onze",
+	"12": "doze",
+	"13": "treze",
+	"14": "catorze",
+	"15": "quinze",
+	"16": "dezesseis",
+	"17": "dezessete",
+	"18": "dezoito",
+	"19": "dezenove",
+	"20": "vinte",
+	"30": "trinta",
+	"40": "quarenta",
+	"50": "cinquenta",
+	"60": "sessenta",
+	"70": "setenta",
+	"80": "oitenta",
+	"90": "noventa",
+	"100": "cem",
+	"200": "duzentos",
+	"300": "trezentos",
+	"400": "quatrocentos",
+	"500": "quinhentos",
+	"600": "seiscentos",
+	"700": "setecentos",
+	"800": "oitocentos",
+	"900": "novecentos",
+	"1000": "mil"
+};
+var unitExceptions$2 = {
+	"1": "um"
+};
+var units$2 = [
+	{
+		singular: "cento",
+		useBaseInstead: true,
+		useBaseException: [
+			1
+		],
+		useBaseExceptionWhenNoTrailingNumbers: true,
+		andException: true
+	},
+	{
+		singular: "mil",
+		avoidPrefixException: [
+			1
+		],
+		andException: true
+	},
+	{
+		singular: "milhão",
+		plural: "milhões"
+	},
+	{
+		singular: "bilhão",
+		plural: "bilhões"
+	},
+	{
+		singular: "trilhão",
+		plural: "trilhões"
+	},
+	{
+		singular: "quadrilhão",
+		plural: "quadrilhão"
+	},
+	{
+		singular: "quintilhão",
+		plural: "quintilhões"
+	},
+	{
+		singular: "sextilhão",
+		plural: "sextilhões"
+	},
+	{
+		singular: "septilhão",
+		plural: "septilhões"
+	},
+	{
+		singular: "octilhão",
+		plural: "octilhões"
+	},
+	{
+		singular: "nonilhão",
+		plural: "nonilhões"
+	},
+	{
+		singular: "decilhão",
+		plural: "decilhões"
+	},
+	{
+		singular: "undecilhão",
+		plural: "undecilhões"
+	},
+	{
+		singular: "doudecilhão",
+		plural: "doudecilhões"
+	},
+	{
+		singular: "tredecilhão",
+		plural: "tredecilhões"
+	}
+];
+var pt = {
+	useLongScale: useLongScale$2,
+	baseSeparator: baseSeparator$2,
+	unitSeparator: unitSeparator$2,
+	andWhenTrailing: andWhenTrailing,
+	base: base$2,
+	unitExceptions: unitExceptions$2,
+	units: units$2
+};
+
+var pt$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$2,
+  baseSeparator: baseSeparator$2,
+  unitSeparator: unitSeparator$2,
+  andWhenTrailing: andWhenTrailing,
+  base: base$2,
+  unitExceptions: unitExceptions$2,
+  units: units$2,
+  default: pt
+});
+
+var useLongScale$3 = true;
+var baseSeparator$3 = " e ";
+var unitSeparator$3 = "e ";
+var andWhenTrailing$1 = true;
+var base$3 = {
+	"0": "zero",
+	"1": "um",
+	"2": "dois",
+	"3": "três",
+	"4": "quatro",
+	"5": "cinco",
+	"6": "seis",
+	"7": "sete",
+	"8": "oito",
+	"9": "nove",
+	"10": "dez",
+	"11": "onze",
+	"12": "doze",
+	"13": "treze",
+	"14": "catorze",
+	"15": "quinze",
+	"16": "dezasseis",
+	"17": "dezassete",
+	"18": "dezoito",
+	"19": "dezanove",
+	"20": "vinte",
+	"30": "trinta",
+	"40": "quarenta",
+	"50": "cinquenta",
+	"60": "sessenta",
+	"70": "setenta",
+	"80": "oitenta",
+	"90": "noventa",
+	"100": "cem",
+	"200": "duzentos",
+	"300": "trezentos",
+	"400": "quatrocentos",
+	"500": "quinhentos",
+	"600": "seiscentos",
+	"700": "setecentos",
+	"800": "oitocentos",
+	"900": "novecentos",
+	"1000": "mil"
+};
+var unitExceptions$3 = {
+	"1": "um"
+};
+var units$3 = [
+	{
+		singular: "cento",
+		useBaseInstead: true,
+		useBaseException: [
+			1
+		],
+		useBaseExceptionWhenNoTrailingNumbers: true,
+		andException: true
+	},
+	{
+		singular: "mil",
+		avoidPrefixException: [
+			1
+		],
+		andException: true
+	},
+	{
+		singular: "milhão",
+		plural: "milhões"
+	},
+	{
+		singular: "bilião",
+		plural: "biliões"
+	},
+	{
+		singular: "trilião",
+		plural: "triliões"
+	},
+	{
+		singular: "quadrilião",
+		plural: "quadriliões"
+	},
+	{
+		singular: "quintilião",
+		plural: "quintiliões"
+	},
+	{
+		singular: "sextilião",
+		plural: "sextiliões"
+	},
+	{
+		singular: "septilião",
+		plural: "septiliões"
+	},
+	{
+		singular: "octilião",
+		plural: "octiliões"
+	},
+	{
+		singular: "nonilião",
+		plural: "noniliões"
+	},
+	{
+		singular: "decilião",
+		plural: "deciliões"
+	}
+];
+var ptPT = {
+	useLongScale: useLongScale$3,
+	baseSeparator: baseSeparator$3,
+	unitSeparator: unitSeparator$3,
+	andWhenTrailing: andWhenTrailing$1,
+	base: base$3,
+	unitExceptions: unitExceptions$3,
+	units: units$3
+};
+
+var ptPT$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$3,
+  baseSeparator: baseSeparator$3,
+  unitSeparator: unitSeparator$3,
+  andWhenTrailing: andWhenTrailing$1,
+  base: base$3,
+  unitExceptions: unitExceptions$3,
+  units: units$3,
+  default: ptPT
+});
+
+var useLongScale$4 = false;
+var baseSeparator$4 = "-";
+var unitSeparator$4 = "";
+var base$4 = {
+	"0": "zéro",
+	"1": "un",
+	"2": "deux",
+	"3": "trois",
+	"4": "quatre",
+	"5": "cinq",
+	"6": "six",
+	"7": "sept",
+	"8": "huit",
+	"9": "neuf",
+	"10": "dix",
+	"11": "onze",
+	"12": "douze",
+	"13": "treize",
+	"14": "quatorze",
+	"15": "quinze",
+	"16": "seize",
+	"17": "dix-sept",
+	"18": "dix-huit",
+	"19": "dix-neuf",
+	"20": "vingt",
+	"30": "trente",
+	"40": "quarante",
+	"50": "cinquante",
+	"60": "soixante",
+	"70": "soixante-dix",
+	"80": "quatre-vingt",
+	"90": "quatre-vingt-dix"
+};
+var units$4 = [
+	{
+		singular: "cent",
+		plural: "cents",
+		avoidInNumberPlural: true,
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "mille",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "million",
+		plural: "millions"
+	},
+	{
+		singular: "milliard",
+		plural: "milliards"
+	},
+	{
+		singular: "billion",
+		plural: "billions"
+	},
+	{
+		singular: "billiard",
+		plural: "billiards"
+	},
+	{
+		singular: "trillion",
+		plural: "trillions"
+	},
+	{
+		singular: "trilliard",
+		plural: "trilliards"
+	},
+	{
+		singular: "quadrillion",
+		plural: "quadrillions"
+	},
+	{
+		singular: "quadrilliard",
+		plural: "quadrilliards"
+	},
+	{
+		singular: "quintillion",
+		plural: "quintillions"
+	},
+	{
+		singular: "quintilliard",
+		plural: "quintilliards"
+	},
+	{
+		singular: "sextillion",
+		plural: "sextillions"
+	},
+	{
+		singular: "sextilliard",
+		plural: "sextilliards"
+	},
+	{
+		singular: "septillion",
+		plural: "septillions"
+	},
+	{
+		singular: "septilliard",
+		plural: "septilliards"
+	},
+	{
+		singular: "octillion",
+		plural: "octillions"
+	}
+];
+var unitExceptions$4 = {
+	"71": "soixante et onze",
+	"72": "soixante-douze",
+	"73": "soixante-treize",
+	"74": "soixante-quatorze",
+	"75": "soixante-quinze",
+	"76": "soixante-seize",
+	"77": "soixante-dix-sept",
+	"78": "soixante-dix-huit",
+	"79": "soixante-dix-neuf",
+	"80": "quatre-vingts",
+	"91": "quatre-vingt-onze",
+	"92": "quatre-vingt-douze",
+	"93": "quatre-vingt-treize",
+	"94": "quatre-vingt-quatorze",
+	"95": "quatre-vingt-quinze",
+	"96": "quatre-vingt-seize",
+	"97": "quatre-vingt-dix-sept",
+	"98": "quatre-vingt-dix-huit",
+	"99": "quatre-vingt-dix-neuf"
+};
+var fr = {
+	useLongScale: useLongScale$4,
+	baseSeparator: baseSeparator$4,
+	unitSeparator: unitSeparator$4,
+	base: base$4,
+	units: units$4,
+	unitExceptions: unitExceptions$4
+};
+
+var fr$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$4,
+  baseSeparator: baseSeparator$4,
+  unitSeparator: unitSeparator$4,
+  base: base$4,
+  units: units$4,
+  unitExceptions: unitExceptions$4,
+  default: fr
+});
+
+var useLongScale$5 = false;
+var baseSeparator$5 = " ";
+var unitSeparator$5 = "";
+var base$5 = {
+	"0": "nulo",
+	"1": "unu",
+	"2": "du",
+	"3": "tri",
+	"4": "kvar",
+	"5": "kvin",
+	"6": "ses",
+	"7": "sep",
+	"8": "ok",
+	"9": "naŭ",
+	"10": "dek",
+	"20": "dudek",
+	"30": "tridek",
+	"40": "kvardek",
+	"50": "kvindek",
+	"60": "sesdek",
+	"70": "sepdek",
+	"80": "okdek",
+	"90": "naŭdek",
+	"100": "cent",
+	"200": "ducent",
+	"300": "tricent",
+	"400": "kvarcent",
+	"500": "kvincent",
+	"600": "sescent",
+	"700": "sepcent",
+	"800": "okcent",
+	"900": "naŭcent"
+};
+var units$5 = [
+	{
+		useBaseInstead: true,
+		useBaseException: [
+		]
+	},
+	{
+		singular: "mil",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "miliono",
+		plural: "milionoj",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "miliardo",
+		plural: "miliardoj",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "biliono",
+		plural: "bilionoj",
+		avoidPrefixException: [
+			1
+		]
+	}
+];
+var unitExceptions$5 = [
+];
+var eo = {
+	useLongScale: useLongScale$5,
+	baseSeparator: baseSeparator$5,
+	unitSeparator: unitSeparator$5,
+	base: base$5,
+	units: units$5,
+	unitExceptions: unitExceptions$5
+};
+
+var eo$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$5,
+  baseSeparator: baseSeparator$5,
+  unitSeparator: unitSeparator$5,
+  base: base$5,
+  units: units$5,
+  unitExceptions: unitExceptions$5,
+  default: eo
+});
+
+var useLongScale$6 = false;
+var baseSeparator$6 = "";
+var unitSeparator$6 = "";
+var generalSeparator = "";
+var wordSeparator = "";
+var base$6 = {
+	"0": "zero",
+	"1": "uno",
+	"2": "due",
+	"3": "tre",
+	"4": "quattro",
+	"5": "cinque",
+	"6": "sei",
+	"7": "sette",
+	"8": "otto",
+	"9": "nove",
+	"10": "dieci",
+	"11": "undici",
+	"12": "dodici",
+	"13": "tredici",
+	"14": "quattordici",
+	"15": "quindici",
+	"16": "sedici",
+	"17": "diciassette",
+	"18": "diciotto",
+	"19": "diciannove",
+	"20": "venti",
+	"21": "ventuno",
+	"23": "ventitré",
+	"28": "ventotto",
+	"30": "trenta",
+	"31": "trentuno",
+	"33": "trentatré",
+	"38": "trentotto",
+	"40": "quaranta",
+	"41": "quarantuno",
+	"43": "quaranta­tré",
+	"48": "quarantotto",
+	"50": "cinquanta",
+	"51": "cinquantuno",
+	"53": "cinquantatré",
+	"58": "cinquantotto",
+	"60": "sessanta",
+	"61": "sessantuno",
+	"63": "sessanta­tré",
+	"68": "sessantotto",
+	"70": "settanta",
+	"71": "settantuno",
+	"73": "settantatré",
+	"78": "settantotto",
+	"80": "ottanta",
+	"81": "ottantuno",
+	"83": "ottantatré",
+	"88": "ottantotto",
+	"90": "novanta",
+	"91": "novantuno",
+	"93": "novantatré",
+	"98": "novantotto",
+	"100": "cento",
+	"101": "centuno",
+	"108": "centootto",
+	"180": "centottanta",
+	"201": "duecentuno",
+	"301": "tre­cent­uno",
+	"401": "quattro­cent­uno",
+	"501": "cinque­cent­uno",
+	"601": "sei­cent­uno",
+	"701": "sette­cent­uno",
+	"801": "otto­cent­uno",
+	"901": "nove­cent­uno"
+};
+var unitExceptions$6 = {
+	"1": "un"
+};
+var units$6 = [
+	{
+		singular: "cento",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "mille",
+		plural: "mila",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "milione",
+		plural: "milioni"
+	},
+	{
+		singular: "miliardo",
+		plural: "miliardi"
+	},
+	{
+		singular: "bilione",
+		plural: "bilioni"
+	},
+	{
+		singular: "biliardo",
+		plural: "biliardi"
+	},
+	{
+		singular: "trilione",
+		plural: "trilioni"
+	},
+	{
+		singular: "triliardo",
+		plural: "triliardi"
+	},
+	{
+		singular: "quadrilione",
+		plural: "quadrilioni"
+	},
+	{
+		singular: "quadriliardo",
+		plural: "quadriliardi"
+	}
+];
+var it = {
+	useLongScale: useLongScale$6,
+	baseSeparator: baseSeparator$6,
+	unitSeparator: unitSeparator$6,
+	generalSeparator: generalSeparator,
+	wordSeparator: wordSeparator,
+	base: base$6,
+	unitExceptions: unitExceptions$6,
+	units: units$6
+};
+
+var it$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$6,
+  baseSeparator: baseSeparator$6,
+  unitSeparator: unitSeparator$6,
+  generalSeparator: generalSeparator,
+  wordSeparator: wordSeparator,
+  base: base$6,
+  unitExceptions: unitExceptions$6,
+  units: units$6,
+  default: it
+});
+
+var useLongScale$7 = false;
+var baseSeparator$7 = " ";
+var unitSeparator$7 = "và ";
+var base$7 = {
+	"0": "không",
+	"1": "một",
+	"2": "hai",
+	"3": "ba",
+	"4": "bốn",
+	"5": "năm",
+	"6": "sáu",
+	"7": "bảy",
+	"8": "tám",
+	"9": "chín",
+	"10": "mười",
+	"15": "mười lăm",
+	"20": "hai mươi",
+	"21": "hai mươi mốt",
+	"25": "hai mươi lăm",
+	"30": "ba mươi",
+	"31": "ba mươi mốt",
+	"40": "bốn mươi",
+	"41": "bốn mươi mốt",
+	"45": "bốn mươi lăm",
+	"50": "năm mươi",
+	"51": "năm mươi mốt",
+	"55": "năm mươi lăm",
+	"60": "sáu mươi",
+	"61": "sáu mươi mốt",
+	"65": "sáu mươi lăm",
+	"70": "bảy mươi",
+	"71": "bảy mươi mốt",
+	"75": "bảy mươi lăm",
+	"80": "tám mươi",
+	"81": "tám mươi mốt",
+	"85": "tám mươi lăm",
+	"90": "chín mươi",
+	"91": "chín mươi mốt",
+	"95": "chín mươi lăm"
+};
+var units$7 = [
+	"trăm",
+	"ngàn",
+	"triệu",
+	"tỷ",
+	"nghìn tỷ"
+];
+var unitExceptions$7 = [
+];
+var vi = {
+	useLongScale: useLongScale$7,
+	baseSeparator: baseSeparator$7,
+	unitSeparator: unitSeparator$7,
+	base: base$7,
+	units: units$7,
+	unitExceptions: unitExceptions$7
+};
+
+var vi$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$7,
+  baseSeparator: baseSeparator$7,
+  unitSeparator: unitSeparator$7,
+  base: base$7,
+  units: units$7,
+  unitExceptions: unitExceptions$7,
+  default: vi
+});
+
+var useLongScale$8 = false;
+var baseSeparator$8 = " ";
+var unitSeparator$8 = "";
+var base$8 = {
+	"0": "sıfır",
+	"1": "bir",
+	"2": "iki",
+	"3": "üç",
+	"4": "dört",
+	"5": "beş",
+	"6": "altı",
+	"7": "yedi",
+	"8": "sekiz",
+	"9": "dokuz",
+	"10": "on",
+	"20": "yirmi",
+	"30": "otuz",
+	"40": "kırk",
+	"50": "elli",
+	"60": "altmış",
+	"70": "yetmiş",
+	"80": "seksen",
+	"90": "doksan"
+};
+var units$8 = [
+	{
+		singular: "yüz",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "bin",
+		avoidPrefixException: [
+			1
+		]
+	},
+	"milyon",
+	"milyar",
+	"trilyon",
+	"katrilyon",
+	"kentilyon",
+	"sekstilyon",
+	"septilyon",
+	"oktilyon",
+	"nonilyon",
+	"desilyon",
+	"andesilyon",
+	"dodesilyon",
+	"tredesilyon",
+	"katordesilyon",
+	"kendesilyon"
+];
+var unitExceptions$8 = [
+];
+var tr = {
+	useLongScale: useLongScale$8,
+	baseSeparator: baseSeparator$8,
+	unitSeparator: unitSeparator$8,
+	base: base$8,
+	units: units$8,
+	unitExceptions: unitExceptions$8
+};
+
+var tr$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$8,
+  baseSeparator: baseSeparator$8,
+  unitSeparator: unitSeparator$8,
+  base: base$8,
+  units: units$8,
+  unitExceptions: unitExceptions$8,
+  default: tr
+});
+
+var useLongScale$9 = true;
+var baseSeparator$9 = "";
+var unitSeparator$9 = "és ";
+var base$9 = {
+	"0": "nulla",
+	"1": "egy",
+	"2": "kettő",
+	"3": "három",
+	"4": "négy",
+	"5": "öt",
+	"6": "hat",
+	"7": "hét",
+	"8": "nyolc",
+	"9": "kilenc",
+	"10": "tíz",
+	"11": "tizenegy",
+	"12": "tizenkettő",
+	"13": "tizenhárom",
+	"14": "tizennégy",
+	"15": "tizenöt",
+	"16": "tizenhat",
+	"17": "tizenhét",
+	"18": "tizennyolc",
+	"19": "tizenkilenc",
+	"20": "húsz",
+	"21": "huszonegy",
+	"22": "huszonkettő",
+	"23": "huszonhárom",
+	"24": "huszonnégy",
+	"25": "huszonöt",
+	"26": "huszonhat",
+	"27": "huszonhét",
+	"28": "huszonnyolc",
+	"29": "huszonkilenc",
+	"30": "harminc",
+	"40": "negyven",
+	"50": "ötven",
+	"60": "hatvan",
+	"70": "hetven",
+	"80": "nyolcvan",
+	"90": "kilencven",
+	"100": "száz",
+	"200": "kétszáz",
+	"300": "háromszáz",
+	"400": "négyszáz",
+	"500": "ötszáz",
+	"600": "hatszáz",
+	"700": "hétszáz",
+	"800": "nyolcszáz",
+	"900": "kilencszáz",
+	"1000": "ezer"
+};
+var unitExceptions$9 = {
+	"1": "egy"
+};
+var units$9 = [
+	{
+		singular: "száz",
+		useBaseInstead: true,
+		useBaseException: [
+			1
+		]
+	},
+	{
+		singular: "ezer",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "millió",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "milliárd",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "-billió",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "billiárd",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "trillió",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "trilliárd",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "kvadrillió",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "kvadrilliárd",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "kvintillió",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "kvintilliárd",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "szextillió",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "szeptillió",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "oktillió",
+		avoidPrefixException: [
+			1
+		]
+	},
+	{
+		singular: "nonillió",
+		avoidPrefixException: [
+			1
+		]
+	}
+];
+var hu = {
+	useLongScale: useLongScale$9,
+	baseSeparator: baseSeparator$9,
+	unitSeparator: unitSeparator$9,
+	base: base$9,
+	unitExceptions: unitExceptions$9,
+	units: units$9
+};
+
+var hu$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$9,
+  baseSeparator: baseSeparator$9,
+  unitSeparator: unitSeparator$9,
+  base: base$9,
+  unitExceptions: unitExceptions$9,
+  units: units$9,
+  default: hu
+});
+
+var useLongScale$10 = false;
+var baseSeparator$10 = "-";
+var unitSeparator$10 = "and ";
+var base$10 = {
+	"0": "zero",
+	"1": "one",
+	"2": "two",
+	"3": "three",
+	"4": "four",
+	"5": "five",
+	"6": "six",
+	"7": "seven",
+	"8": "eight",
+	"9": "nine",
+	"10": "ten",
+	"11": "eleven",
+	"12": "twelve",
+	"13": "thirteen",
+	"14": "fourteen",
+	"15": "fifteen",
+	"16": "sixteen",
+	"17": "seventeen",
+	"18": "eighteen",
+	"19": "nineteen",
+	"20": "twenty",
+	"30": "thirty",
+	"40": "forty",
+	"50": "fifty",
+	"60": "sixty",
+	"70": "seventy",
+	"80": "eighty",
+	"90": "ninety"
+};
+var units$10 = {
+	"2": "hundred",
+	"3": "thousand",
+	"5": "lakh",
+	"7": "crore"
+};
+var unitExceptions$10 = [
+];
+var enIndian = {
+	useLongScale: useLongScale$10,
+	baseSeparator: baseSeparator$10,
+	unitSeparator: unitSeparator$10,
+	base: base$10,
+	units: units$10,
+	unitExceptions: unitExceptions$10
+};
+
+var enIndian$1 = /*#__PURE__*/Object.freeze({
+  useLongScale: useLongScale$10,
+  baseSeparator: baseSeparator$10,
+  unitSeparator: unitSeparator$10,
+  base: base$10,
+  units: units$10,
+  unitExceptions: unitExceptions$10,
+  default: enIndian
+});
+
+var util$2 = ( util$1 && util ) || util$1;
+
+var require$$0 = ( en$1 && en ) || en$1;
+
+var require$$1 = ( es$1 && es ) || es$1;
+
+var require$$2 = ( pt$1 && pt ) || pt$1;
+
+var require$$3 = ( ptPT$1 && ptPT ) || ptPT$1;
+
+var require$$4 = ( fr$1 && fr ) || fr$1;
+
+var require$$5 = ( eo$1 && eo ) || eo$1;
+
+var require$$6 = ( it$1 && it ) || it$1;
+
+var require$$7 = ( vi$1 && vi ) || vi$1;
+
+var require$$8 = ( tr$1 && tr ) || tr$1;
+
+var require$$9 = ( hu$1 && hu ) || hu$1;
+
+var require$$10 = ( enIndian$1 && enIndian ) || enIndian$1;
+
+var lib = createCommonjsModule(function (module, exports) {
+exports = module.exports = writtenNumber;
+
+
+var languages = ["en", "es", "pt", "fr", "eo", "it", "vi", "tr"];
+var i18n = {
+  en: require$$0,
+  es: require$$1,
+  pt: require$$2,
+  ptPT: require$$3,
+  fr: require$$4,
+  eo: require$$5,
+  it: require$$6,
+  vi: require$$7,
+  tr: require$$8,
+  hu: require$$9,
+  enIndian: require$$10
+};
+exports.i18n = i18n;
+
+var shortScale = [100];
+for (var i = 1; i <= 16; i++) {
+  shortScale.push(Math.pow(10, i * 3));
+}
+
+var longScale = [100, 1000];
+for (i = 1; i <= 15; i++) {
+  longScale.push(Math.pow(10, i * 6));
+}
+
+writtenNumber.defaults = {
+  noAnd: false,
+  lang: "en"
+};
+
+/**
+ * Converts numbers to their written form.
+ *
+ * @param {Number} n The number to convert
+ * @param {Object} [options] An object representation of the options
+ * @return {String} writtenN The written form of `n`
+ */
+
+function writtenNumber(n, options) {
+  options = options || {};
+  options = util$2.defaults(options, writtenNumber.defaults);
+
+  if (n < 0) {
+    return "";
+  }
+
+  n = Math.round(+n);
+
+  var language = typeof options.lang === "string"
+    ? i18n[options.lang]
+    : options.lang;
+  var scale = language.useLongScale ? longScale : shortScale;
+  var units = language.units;
+  var unit;
+
+  if (!(units instanceof Array)) {
+    var rawUnits = units;
+
+    units = [];
+    scale = Object.keys(rawUnits);
+
+    for (var i in scale) {
+      units.push(rawUnits[scale[i]]);
+      scale[i] = Math.pow(10, parseInt(scale[i]));
+    }
+  }
+
+  if (!language) {
+    if (languages.indexOf(writtenNumber.defaults.lang) < 0) {
+      writtenNumber.defaults.lang = "en";
+    }
+
+    language = i18n[writtenNumber.defaults.lang];
+  }
+
+  var baseCardinals = language.base;
+
+  if (language.unitExceptions[n]) return language.unitExceptions[n];
+  if (baseCardinals[n]) return baseCardinals[n];
+  if (n < 100)
+    return handleSmallerThan100(n, language, unit, baseCardinals, options);
+
+  var m = n % 100;
+  var ret = [];
+
+  if (m) {
+    if (
+      options.noAnd &&
+      !(language.andException && language.andException[10])
+    ) {
+      ret.push(writtenNumber(m, options));
+    } else {
+      ret.push(language.unitSeparator + writtenNumber(m, options));
+    }
+  }
+
+  var firstSignificant;
+
+  for (var i = 0, len = units.length; i < len; i++) {
+    var r = Math.floor(n / scale[i]);
+    var divideBy;
+
+    if (i === len - 1) divideBy = 1000000;
+    else divideBy = scale[i + 1] / scale[i];
+
+    r %= divideBy;
+
+    unit = units[i];
+
+    if (!r) continue;
+    firstSignificant = scale[i];
+
+    if (unit.useBaseInstead) {
+      var shouldUseBaseException =
+        unit.useBaseException.indexOf(r) > -1 &&
+        (unit.useBaseExceptionWhenNoTrailingNumbers
+          ? i === 0 && ret.length
+          : true);
+      if (!shouldUseBaseException) {
+        ret.push(baseCardinals[r * scale[i]]);
+      } else {
+        ret.push(r > 1 && unit.plural ? unit.plural : unit.singular);
+      }
+      continue;
+    }
+
+    var str;
+    if (typeof unit === "string") {
+      str = unit;
+    } else {
+      str = r > 1 && unit.plural && (!unit.avoidInNumberPlural || !m)
+        ? unit.plural
+        : unit.singular;
+    }
+
+    if (
+      unit.avoidPrefixException &&
+      unit.avoidPrefixException.indexOf(r) > -1
+    ) {
+      ret.push(str);
+      continue;
+    }
+
+    var exception = language.unitExceptions[r];
+    var number =
+      exception ||
+      writtenNumber(
+        r,
+        util$2.defaults(
+          {
+            // Languages with and exceptions need to set `noAnd` to false
+            noAnd: !((language.andException && language.andException[r]) ||
+              unit.andException) && true
+          },
+          options
+        )
+      );
+    n -= r * scale[i];
+    ret.push(number + " " + str);
+  }
+
+  var firstSignificantN = firstSignificant * Math.floor(n / firstSignificant);
+  var rest = n - firstSignificantN;
+
+  if (
+    language.andWhenTrailing &&
+    firstSignificant &&
+    0 < rest &&
+    ret[0].indexOf(language.unitSeparator) !== 0
+  ) {
+    ret = [ret[0], language.unitSeparator.replace(/\s+$/, "")].concat(
+      ret.slice(1)
+    );
+  }
+
+  return ret.reverse().join(" ");
+}
+
+function handleSmallerThan100(n, language, unit, baseCardinals, options) {
+  var dec = Math.floor(n / 10) * 10;
+  unit = n - dec;
+  if (unit) {
+    return (
+      baseCardinals[dec] + language.baseSeparator + writtenNumber(unit, options)
+    );
+  }
+  return baseCardinals[dec];
+}
+});
+var lib_1 = lib.i18n;
+
+var toArabic = createCommonjsModule(function (module) {
+(function () {
+
+
+  /**
+   * Converts a roman number to its arabic equivalent.
+   *
+   * Will throw TypeError on non-string inputs.
+   *
+   * @param {String} roman
+   * @return {Number}
+   */
+  function toArabic (roman) {
+    if (('string' !== typeof roman) && (!(roman instanceof String))) throw new TypeError('toArabic expects a string');
+
+    // Zero is/was a special case. I'll go with Dionysius Exiguus on this one as
+    // seen on http://en.wikipedia.org/wiki/Roman_numerals#Zero
+    if (/^nulla$/i.test(roman) || !roman.length) return 0;
+
+    // Ultra magical regexp to validate roman numbers!
+    roman = roman.toUpperCase().match(/^(M{0,3})(CM|DC{0,3}|CD|C{0,3})(XC|LX{0,3}|XL|X{0,3})(IX|VI{0,3}|IV|I{0,3})$/);
+    if (!roman) throw new Error('toArabic expects a valid roman number');
+    var arabic = 0;
+
+    // Crunching the thousands...
+    arabic += roman[1].length * 1000;
+
+    // Crunching the hundreds...
+    if (roman[2] === 'CM') arabic += 900;
+    else if (roman[2] === 'CD') arabic += 400;
+    else arabic += roman[2].length * 100 + (roman[2][0] === 'D' ? 400 : 0);
+
+
+    // Crunching the tenths
+    if (roman[3] === 'XC') arabic += 90;
+    else if (roman[3] === 'XL') arabic += 40;
+    else arabic += roman[3].length * 10 + (roman[3][0] === 'L' ? 40 : 0);
+
+    // Crunching the...you see where I'm going, right?
+    if (roman[4] === 'IX') arabic += 9;
+    else if (roman[4] === 'IV') arabic += 4;
+    else arabic += roman[4].length * 1 + (roman[4][0] === 'V' ? 4 : 0);
+    return arabic;
+  }
+
+  module.exports = toArabic;
+
+})();
+});
+
+var toArabic$1 = /*#__PURE__*/Object.freeze({
+  default: toArabic,
+  __moduleExports: toArabic
+});
+
+var toRoman = createCommonjsModule(function (module) {
+(function () {
+  /**
+   * Generate the roman number for the current power of tenth
+   *
+   * @param {Number} num
+   * @param {String} one
+   * @param {String} five
+   * @param {String} ten
+   * @return {String}
+   */
+  function upToTen (num, one, five, ten) {
+    var value = '';
+    switch (num) {
+      case 0: return value;
+      case 9: return one + ten;
+      case 4: return one + five;
+    }
+    if (num >= 5) value = five, num -= 5;
+    while (num-- > 0) value += one;
+    return value;
+  }
+
+
+  /**
+   * Converts an arabic number from 0 to 3999 to its roman equivalent.
+   *
+   * Will throw TypeError on non-number inputs (stringed numbers are accepted)
+   * or NaN and Error on number under 0 or over 3999.
+   *
+   * @param {Number/String} arabic
+   * @return {String}
+   */
+  function toRoman (arabic) {
+    // Checking input first with type comparisons, convert Number() instances to
+    // a literal, etc...
+    if (arabic instanceof Number) arabic = parseInt(arabic, 10);
+    if ('string' === typeof arabic || arabic instanceof String) {
+      arabic = parseInt(arabic, 10);
+      if (isNaN(arabic)) throw new TypeError('toArabic expects a number');
+    }
+    if ('number' !== typeof arabic) throw new TypeError('toArabic expects a number');
+
+    // Rounding up "bad" numbers: NaN, negative numbers, numbers over 3999,...
+    if (isNaN(arabic)) throw new TypeError('toArabic expects a real number');
+    if (arabic < 0) throw new Error('toArabic cannot express negative numbers');
+    if (arabic > 3999) throw new Error('toArabic cannot express numbers over 3999');
+
+    // Zero is/was a special case. I'll go with Dionysius Exiguus on this one as
+    // seen on http://en.wikipedia.org/wiki/Roman_numerals#Zero
+    if (arabic === 0) return 'nulla';
+    var roman = '';
+
+    // Chomping away by the power of tenths
+    roman += upToTen(Math.floor(arabic / 1000), 'M', '', ''), arabic %= 1000;
+    roman += upToTen(Math.floor(arabic / 100), 'C', 'D', 'M'), arabic %= 100;
+    roman += upToTen(Math.floor(arabic / 10), 'X', 'L', 'C'), arabic %= 10;
+    roman += upToTen(arabic, 'I', 'V', 'X');
+    return roman;
+  }
+
+  module.exports = toRoman;
+
+})();
+});
+
+var toRoman$1 = /*#__PURE__*/Object.freeze({
+  default: toRoman,
+  __moduleExports: toRoman
+});
+
+var require$$0$1 = ( toArabic$1 && toArabic ) || toArabic$1;
+
+var require$$1$1 = ( toRoman$1 && toRoman ) || toRoman$1;
+
+var romanNumerals = createCommonjsModule(function (module) {
+(function () {
+  module.exports = {
+    toArabic: require$$0$1,
+    toRoman:require$$1$1
+  };
+})();
+});
+var romanNumerals_1 = romanNumerals.toArabic;
+var romanNumerals_2 = romanNumerals.toRoman;
+
+// higher order function
+var pipe = function () {
+    var ops = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        ops[_i] = arguments[_i];
+    }
+    return ops.reduce(function (a, b) { return function (arg) { return b(a(arg)); }; });
+};
+// higher order function
+var flatMap = function (fn) { return function (words) {
+    return words.reduce(function (acc, w) {
+        acc.push.apply(acc, fn(w));
+        return acc;
+    }, []);
+}; };
+var toUpperCase = function (s) { return s.toUpperCase(); };
+var trim = function (s) { return s.trim(); };
+var normalize$1 = pipe(toUpperCase, removeAccents, trim);
+var ignoreJuristicPersonTypeAbbreviations = function (input) {
+    return input
+        .replace(/S\.?\s?EN\s?N\.?\s?C\.?$/g, '')
+        .replace(/S\.?\s?EN\s?C\.?\s?POR\s?A\.?$/g, '')
+        .replace(/S\.?\s?EN\s?C\.?$/g, '')
+        .replace(/S\.?\s?DE\s?R\.?\s?L\.?$/g, '')
+        .replace(/S\.?\s?DE\s?R\.?\s?L\.?\s?DE\s?C\.?\s?V\.?$/g, '')
+        .replace(/S\.?\s?A\.?\s?DE\s?C\.?\s?V\.?$/g, '')
+        .replace(/S\.?\s?A\.?\s?P\.?\s?I\.?\s?DE\s?C\.?\s?V\.?$/g, '')
+        .replace(/S\.?\s?A\.?\s?S\.?\s?DE\s?C\.?\s?V\.?$/g, '')
+        .replace(/A\.?\s?EN\s?P\.?$/g, '')
+        .replace(/S\.?\s?C\.?\s?[LPS]\.?$/g, '')
+        .replace(/S\.?\s?[AC]\.?$/g, '')
+        .replace(/S\.?\s?N\.?\s?C\.?$/g, '')
+        .replace(/A\.?\s?C\.?$/g, '');
+};
+var removeEmptyWords = function (w) { return w.length > 0; };
+var splitWords = function (input) { return input.split(/[,\s]+/).filter(removeEmptyWords); };
+/*
+* This list is based on Anexo V from the official documentation
+* but some words have been commented out because the examples from
+* the same documentation contradict the list
+*/
+var forbiddenWords = [
+    'EL',
+    'LA',
+    'DE',
+    'LOS',
+    'LAS',
+    'Y',
+    'DEL',
+    'MI',
+    'POR',
+    'CON',
+    /*'AL',*/ 'SUS',
+    'E',
+    'PARA',
+    'EN',
+    'MC',
+    'VON',
+    'MAC',
+    'VAN',
+    'COMPANIA',
+    'CIA',
+    'CIA.',
+    'SOCIEDAD',
+    'SOC',
+    'SOC.',
+    'COMPANY',
+    'CO',
+    /*'COOPERATIVA', 'COOP',*/
+    'SC',
+    'SCL',
+    'SCS',
+    'SNC',
+    'SRL',
+    'CV',
+    'SA',
+    'THE',
+    'OF',
+    'AND',
+    'A'
+];
+var ignoreForbiddenWords = function (words) {
+    return words.filter(function (w) { return forbiddenWords.indexOf(w) === -1; });
+};
+var markOneLetterAbbreviations = function (words) {
+    return words.map(function (w) { return w.replace(/^([^.])\./g, '$1AABBRREEVVIIAATTIIOONN'); });
+};
+var expandSpecialCharactersInSingletonWord = flatMap(function (w) {
+    if (w.length === 1) {
+        return w
+            .replace('@', 'ARROBA')
+            .replace('´', 'APOSTROFE')
+            .replace('%', 'PORCIENTO')
+            .replace('#', 'NUMERO')
+            .replace('!', 'ADMIRACION')
+            .replace('.', 'PUNTO')
+            .replace('$', 'PESOS')
+            .replace('"', 'COMILLAS')
+            .replace('-', 'GUION')
+            .replace('/', 'DIAGONAL')
+            .replace('+', 'SUMA')
+            .replace('(', 'ABRE PARENTESIS')
+            .replace(')', 'CIERRA PARENTESIS')
+            .split(' ')
+            .filter(removeEmptyWords);
+    }
+    return [w];
+});
+var ignoreSpecialCharactersInWords = function (words) {
+    return words.map(function (w) { return w.replace(/(.+?)[@´%#!.$"-/+()](.+?)/g, '$1$2'); });
+};
+var splitOneLetterAbbreviations = flatMap(function (w) {
+    return w.split('AABBRREEVVIIAATTIIOONN').filter(removeEmptyWords);
+});
+var expandSingleArabicNumeral = function (numeral) {
+    return lib(parseInt(numeral, 10), { lang: 'es' })
+        .toUpperCase()
+        .split(/\s/)
+        .filter(removeEmptyWords);
+};
+var expandArabicNumerals = flatMap(function (word) {
+    if (word.match(/[0-9]+/)) {
+        return expandSingleArabicNumeral(word);
+    }
+    return [word];
+});
+var expandRomanNumerals = flatMap(function (word) {
+    if (word.match(/^(M{0,4})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/)) {
+        return expandSingleArabicNumeral(romanNumerals.toArabic(word));
+    }
+    return [word];
+});
+var threeDigitsCode = function (words) {
+    if (words.length >= 3) {
+        return '' + words[0].charAt(0) + words[1].charAt(0) + words[2].charAt(0);
+    }
+    else if (words.length === 2) {
+        return '' + words[0].charAt(0) + words[1].substring(0, 2);
+    }
+    else {
+        return firstThreeCharactersWithRightPad(words[0]);
+    }
+};
+var firstThreeCharactersWithRightPad = function (word) {
+    return word.length >= 3 ? word.substring(0, 3) : word.padEnd(3, 'X');
+};
+var nameCode = pipe(normalize$1, ignoreJuristicPersonTypeAbbreviations, splitWords, ignoreForbiddenWords, markOneLetterAbbreviations, expandSpecialCharactersInSingletonWord, ignoreSpecialCharactersInWords, splitOneLetterAbbreviations, expandArabicNumerals, expandRomanNumerals, threeDigitsCode);
+var juristicPersonTenDigitsCode = function (person) {
+    return nameCode(person.name) + dateCode(person.day, person.month, person.year);
+};
+
+var RfcFacil = /** @class */ (function () {
+    function RfcFacil() {
+    }
+    RfcFacil.forNaturalPerson = function (person) {
+        var t = naturalPersonTenDigitsCode(person);
+        var h = calculate(naturalPersonFullName(person));
+        var v = calculate$1(t + h);
+        return t + h + v;
+    };
+    RfcFacil.forJuristicPerson = function (person) {
+        var t = juristicPersonTenDigitsCode(person);
+        var h = calculate(person.name);
+        var v = calculate$1(' ' + t + h);
+        return t + h + v;
+    };
+    return RfcFacil;
+}());
+function naturalPersonFullName(p) {
+    return p.firstLastName + " " + p.secondLastName + " " + p.name;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RfcFacil);
+//# sourceMappingURL=rfc-facil.es5.js.map
+
+
 /***/ })
 
 /******/ 	});
@@ -6018,6 +9245,12 @@ __webpack_require__(/*! ./components/agreement/crud */ "./resources/js/component
 __webpack_require__(/*! ./components/lead/datatable */ "./resources/js/components/lead/datatable.js");
 
 __webpack_require__(/*! ./components/lead/crud */ "./resources/js/components/lead/crud.js");
+
+__webpack_require__(/*! ./components/clients/datatable */ "./resources/js/components/clients/datatable.js");
+
+__webpack_require__(/*! ./components/clients/datatable_colaboradores */ "./resources/js/components/clients/datatable_colaboradores.js");
+
+__webpack_require__(/*! ./components/clients/crud */ "./resources/js/components/clients/crud.js");
 
 __webpack_require__(/*! ./components/tag/datatable */ "./resources/js/components/tag/datatable.js");
 
@@ -6144,6 +9377,97 @@ tippy(document.querySelectorAll('.active-tooltip'), {
   },
   allowHTML: true
 });
+/* grafica dona investors */
+
+if (document.getElementById('TrafficChannelDoughnutData')) {
+  var analyticsDoughnut = function analyticsDoughnut(selector, set_data) {
+    var $selector = selector ? $(selector) : $('.analytics-doughnut');
+    $selector.each(function () {
+      var $self = $(this),
+          _self_id = $self.attr('id'),
+          _get_data = typeof set_data === 'undefined' ? eval(_self_id) : set_data;
+
+      var selectCanvas = document.getElementById(_self_id).getContext("2d");
+      var chart_data = [];
+
+      for (var i = 0; i < _get_data.datasets.length; i++) {
+        chart_data.push({
+          backgroundColor: _get_data.datasets[i].background,
+          borderWidth: 2,
+          borderColor: _get_data.datasets[i].borderColor,
+          hoverBorderColor: _get_data.datasets[i].borderColor,
+          data: _get_data.datasets[i].data
+        });
+      }
+
+      var chart = new Chart(selectCanvas, {
+        type: 'doughnut',
+        data: {
+          labels: _get_data.labels,
+          datasets: chart_data
+        },
+        options: {
+          plugins: {
+            legend: {
+              display: _get_data.legend ? _get_data.legend : false,
+              labels: {
+                boxWidth: 12,
+                padding: 20,
+                color: '#6783b8'
+              }
+            },
+            tooltip: {
+              enabled: true,
+              rtl: NioApp.State.isRTL,
+              callbacks: {
+                label: function label(context) {
+                  return "".concat(context.parsed, " ").concat(_get_data.dataUnit);
+                }
+              },
+              backgroundColor: '#fff',
+              borderColor: '#eff6ff',
+              borderWidth: 2,
+              titleFont: {
+                size: 13
+              },
+              titleColor: '#6783b8',
+              titleMarginBottom: 6,
+              bodyColor: '#9eaecf',
+              bodyFont: {
+                size: 12
+              },
+              bodySpacing: 4,
+              padding: 10,
+              footerMarginTop: 0,
+              displayColors: false
+            }
+          },
+          rotation: -1.5,
+          cutoutPercentage: 70,
+          maintainAspectRatio: false
+        }
+      });
+    });
+  }; // init chart
+
+
+  var disponiblePrestaroRetirar = $('#disponiblePrestaroRetirar').val();
+  var procesoPrestado = $('#procesoPrestado').val();
+  var prestamoCreditosActivos = $('#prestamoCreditosActivos').val();
+  var TrafficChannelDoughnutData = {
+    labels: ["Disponible para prestar o retirar", "En proceso de ser prestado", "Préstamos en créditos activos"],
+    dataUnit: 'People',
+    legend: false,
+    datasets: [{
+      borderColor: "#fff",
+      background: ["#798bff", "#b8acff", "#ffa9ce", "#f9db7b"],
+      data: [disponiblePrestaroRetirar, procesoPrestado, prestamoCreditosActivos]
+    }]
+  };
+  NioApp.coms.docReady.push(function () {
+    analyticsDoughnut();
+  });
+}
 
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
 })();

@@ -42,10 +42,10 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         //*Check user role, if it is Client person then logout
-        if ($user->hasRole(['Cliente persona'])) {
+        /* if ($user->hasRole(['Cliente persona'])) {
             $this->guard()->logout();
             $request->session()->invalidate();
             return redirect('/login')->withErrors('You are unauthorized to login');
-        }
+        } */
     }
 }

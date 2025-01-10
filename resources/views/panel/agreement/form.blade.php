@@ -64,6 +64,15 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="frm-product-name">*Vigencia</label>
+                                            <div class="form-control-wrap">
+                                               <input type="date" class="form-control" name="data[agreement_term]" id="agreement_term" required>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group"><label class="form-label">Status</label>
                                             <div class="form-control-select">
                                                 @php
@@ -80,6 +89,23 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group"><label class="form-label">Esquema de fecha SOD</label>
+                                            <div class="form-control-select">
+                                                
+                                                <select
+                                                    name="data[sod_schedule_id]"
+                                                    class="form-control" 
+                                                    id="sod_schedule_id" >
+                                                    <option value="">Seleccione una opción</option>
+                                                    @foreach ($sodNames as $sodName)
+                                                        <option value="{{ $sodName->id }}"> {{ $sodName->name }} </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <input type="hidden" id="agreement_id" name="agreement_id" value="{{ $agreement_id }}">
                                     <div class="col-12">
                                         <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">

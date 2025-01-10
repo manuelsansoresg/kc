@@ -224,6 +224,14 @@
                                                     </a>
                                                 </li><!-- .nk-menu-item -->
                                                 <li class="nk-menu-item">
+                                                    <a href="/panel/clients" class="nk-menu-link">
+                                                        <span class="nk-menu-icon">
+                                                            <em class="icon ni ni-users-fill"></em>
+                                                        </span>
+                                                        <span class="nk-menu-text">Clientes</span>
+                                                    </a>
+                                                </li><!-- .nk-menu-item -->
+                                                <li class="nk-menu-item">
                                                     <a href="/panel/tag" class="nk-menu-link">
                                                         <span class="nk-menu-icon"><em class="icon ni ni-tag"></em></span>
                                                         <span class="nk-menu-text">Etiquetas</span>
@@ -271,8 +279,8 @@
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
-                                <hr>
                                 @hasrole('Administrador|Asesor')
+                                <hr>
                                 <li class="nk-menu-item">
                                     <a href="/panel/kc-aftermarket" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span>
@@ -289,10 +297,12 @@
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
                                 {{-- modulo KC - WALLET --}}
-                                @hasrole('Administrador|Asesor|Cliente financiera|Cliente inversionista')
+                                @hasrole('Administrador|Asesor|Cliente financiera')
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">KC - WALLET</h6>
                                 </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                @hasrole('Administrador|Asesor|Cliente financiera|Cliente inversionista')
                                 <li class="nk-menu-item">
                                     @php
                                         $investor = $Minvestor::where('user_id',  Auth::user()->id)->first();
@@ -327,18 +337,24 @@
                                         <span class="nk-menu-text"><em class="icon ni ni-upload"></em> Retirar fondos</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
+                                
+                                {{-- <li class="nk-menu-item">
                                     <a href="/panel/kc-wallet/list/history" class="nk-menu-link">
-                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
                                         <span class="nk-menu-text"><em class="icon ni ni-history"></em> Historial de movimientos</span>
                                     </a>
-                                </li><!-- .nk-menu-item -->
+                                </li> --}}
                                 <li class="nk-menu-item">
                                     <a href="/panel/ayuda" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
                                         <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Ayuda</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                @hasrole('Cliente inversionista')
+                                <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
+                                    {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                    <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Mis colaboradores</span>
+                                </a>
+                                @endhasrole
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-heading">

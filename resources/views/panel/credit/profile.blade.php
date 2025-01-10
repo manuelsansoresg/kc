@@ -3,6 +3,7 @@
 
 @inject('m_lead', 'App\Models\Lead')
 @inject('m_bank', 'App\Models\Bank')
+@inject('mInvestorsCredit', 'App\Models\InvestorsCredit')
 @inject('m_history_log', 'App\Models\HistoryLog')
 @inject('m_action', 'App\Models\Action')
 @inject('m_file', 'App\Models\File')
@@ -10,7 +11,7 @@
 @inject('m_kyc', 'App\Models\Kyc')
 @inject('m_financial_product', 'App\Models\FinancialProduct')
 @inject('m_financial', 'App\Models\Financial')
-
+@inject('retention_period', 'App\Models\kaaxSidecc\RetentionPeriodDate')
 
 @php
     
@@ -57,7 +58,7 @@
     );
     $current_archive = $m_history_log->getByStatusFirst($status_credit_archive, $credit->id, 1);
     $credit_product = $m_financial_product::getById($credit->applied_financial_product);
-$financial = $m_financial::find($credit_product->financial_id);
+    $financial = $credit_product != null ? $m_financial::find($credit_product->financial_id) : null;
 @endphp
 
 
@@ -121,7 +122,11 @@ $financial = $m_financial::find($credit_product->financial_id);
 
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#survey">Encuesta</a> </li>
-                                                <li class="nav-item nav-item-trigger d-xxl-none">
+                                                
+                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                href="#pagos">Pagos</a> </li>
+                                                
+                                                        <li class="nav-item nav-item-trigger d-xxl-none">
                                                     <div class="nk-block-head-content align-self-start d-lg-none">
                                                         <a href="#" class="toggle btn btn-icon btn-trigger mt-n1"
                                                             data-target="userAside"><em
@@ -547,6 +552,15 @@ $financial = $m_financial::find($credit_product->financial_id);
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            @if ($credit->sod_agreement != null)
+                                                                @php
+                                                                    $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
+                                                                @endphp
+                                                            @endif
+                                                            <tr>
+                                                                <td><a href="{{ asset('firma_contratos/'.$nombre) }}" >{{ $nombre }}</a></td>
+                                                                <td><a href="{{ asset('firma_contratos/'.$nombre) }}" download>Descargar</a></td>
+                                                            </tr>
                                                             @foreach ($files as $file)
                                                             <tr class="tb-tnx-item">
                                                                 <td class="tb-tnx-id">
@@ -672,7 +686,57 @@ $financial = $m_financial::find($credit_product->financial_id);
                                                         </div><!-- .profile-ud-list -->
                                                     </div><!-- .nk-block -->
                                                 </div>
-
+                                                <div class="tab-pane" id="pagos">
+                                                    <div class="col-12">
+                                                        <table class="table" data-show-columns="true">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class=""># pago</th>
+                                                                    <th class="">Fecha de pago</th>
+                                                                    <th class="">Pago</th>
+                                                                    <th class="">Capital</th>
+                                                                    <th>Interés</th>
+                                                                    <th class="">IVA</th>
+                                                                    <th class="none">Estatus</th>
+                                                                    <th class="none">Fecha retención</th>
+                                                                    <th class="none">Comisión KC</th>
+                                                                </tr>
+                                                            </thead>
+                    
+                                                            <tbody>
+                                                                @if ($payments != null)
+                                                                    @foreach ($payments as $payment)
+                                                                        @php
+                                                                            $fecha_retencion = null;
+                                                                            $investorsCredit = $mInvestorsCredit::where('credit_id', $credit->id)->first();
+                                                                            if ($payment->tipo_de_pago == 4) {
+                                                                                $fecha_envio_id = $payment->fecha_envio_id;
+                                                                                $retention = $retention_period::find($fecha_envio_id);
+                                                                                $fecha_retencion = $retention != null ? date('d-m-Y', strtotime($retention->retention_date)) : null;
+                                                                            }
+                                                                           
+                                                                        @endphp
+                                                                        <tr>
+                                                                            <td> {{ $payment->numero_de_pago }} </td>
+                                                                            <td>{{ $payment->fecha_pago != '' ? date('d-m-Y', strtotime($payment->fecha_pago)) : null }}</td>
+                                                                            <td> {{ format_price($payment->pagado * $investorsCredit->percentage) }} </td>
+                                                                            <td> {{ format_price($payment->abono * $investorsCredit->percentage) }} </td>
+                                                                            <td> {{ format_price($payment->interes * $investorsCredit->percentage) }} </td>
+                                                                            <td> {{ format_price($payment->iva * $investorsCredit->percentage) }} </td>
+                                                                            
+                                                                            <td> {{ isset(config('enums.estatus_statement')[$payment->estatus_pago]) ? config('enums.estatus_statement')[$payment->estatus_pago] : null }}
+                                                                            </td>
+                                                                            <td> 
+                                                                                {{ $fecha_retencion }}
+                                                                            </td>
+                                                                            <td> {{ format_price($payment->collection_commission_amount * $investorsCredit->percentage) }} </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                         </div><!-- data-list -->

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Investor;
+use App\Models\InvestorsCredit;
 use Illuminate\Http\Request;
 
 class InvestorController extends Controller
@@ -51,7 +52,9 @@ class InvestorController extends Controller
         if($investor == null) {
             abort(404);
         }
-        return view('panel.module.wallet.resumen', compact('investor'));
+        $getTotal = InvestorsCredit::selectRaw('SUM(total_credit) as total_credit')->where('investor_id', $id)->first();
+        $totalCredit = $getTotal != null ? $getTotal->total_credit : 0;      
+        return view('panel.module.wallet.resumen', compact('investor', 'totalCredit'));
     }
 
     /**

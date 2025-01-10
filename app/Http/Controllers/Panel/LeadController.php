@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Exports\LeadExport;
 use App\Http\Controllers\Controller;
+use App\Lib\CalculadoraCredito;
 use App\Lib\CNubarium;
 use App\Lib\Csendgrid;
 use App\Lib\Manychat;
@@ -11,6 +12,7 @@ use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\Bank;
 use App\Models\ClientPerson;
+use App\Models\CreditPayOff;
 use App\Models\CurrentFinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -20,13 +22,21 @@ use App\Models\Note;
 use App\Models\File;
 use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
+use App\Models\FpTerm;
 use App\Models\Investor;
 use App\Models\InvestorsCredit;
+use App\Models\kaaxSidecc\Collection;
+use App\Models\LeadValidation;
 use App\Models\Product;
+use App\Models\SodScheduleDate;
+use App\Models\SodScheduleName;
+use App\Models\Term;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
+use Carbon\Carbon;
+use Facade\FlareClient\Http\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -47,8 +57,6 @@ class LeadController extends Controller
     public function index()
     {
         //Transaction::setTotalCapital(9);
-       
-
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
         if ($is_financiera === true) {
@@ -68,10 +76,107 @@ class LeadController extends Controller
         return response()->json(['data' => $users]);
     }
 
+    public function chartShow(Lead $lead)
+    {
+
+    }
+
     public function checkData($valInput , $id)
     {
-        $getLead = ClientPerson::checkDataModel($valInput,$id);
-        return response()->json(['exist' => $getLead]);
+        $getLead           = ClientPerson::checkDataModel($valInput,$id);
+        $field             = $id == 'cellphone' ? 'cellphone' : 'rfc';
+        $getClientPerson   = ClientPerson::where($field, $valInput)->first();
+        $agreement         = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
+        $validateAgreement = $agreement       != null && $agreement->status == 1 ? true : false;
+        $isValidateCellphone = false;
+        $isValidateRFC = false;
+        $isValidate = false;
+        $lead = null;
+        
+        if ($id == 'cellphone') {
+            $contentValidaciones      = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
+            
+            if ($getClientPerson != null && $valInput == $getClientPerson->cellphone && 
+                $getClientPerson->active == 1 && $validateAgreement == true) {
+                $isValidateCellphone = true;
+                $contentValidaciones = '<p >Validación Prospecto (celular) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
+            }
+        }
+       
+        
+        if ($id == 'rfc') {
+            $contentValidaciones      = '<p>Validación Prospecto (rfc) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
+            
+            if ($getClientPerson != null && $valInput == $getClientPerson->rfc && 
+                $getClientPerson->active == 1 && $validateAgreement == true) {
+                $isValidateRFC = true;
+                $contentValidaciones = '<p >Validación Prospecto (rfc) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
+            }
+
+        }
+        
+        $isValidate = $isValidateCellphone == true || $isValidateRFC == true ?  true : false;
+
+        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate]);
+    }
+
+    public function validateCellphoneAndRfc($cellphone , $rfc, Lead $lead)
+    {
+        $getClientPersonCellphone   = ClientPerson::where('cellphone', $cellphone)->first();
+        $getClientPersonRFC   = ClientPerson::where('rfc', $rfc)->first();
+       
+        
+        if ($getClientPersonCellphone != null) {
+            $agreement         = $getClientPersonCellphone != null ? Agreement::find($getClientPersonCellphone->agreement_id): null;
+            
+        }
+
+        if ($getClientPersonRFC != null) {
+            $agreement         = $getClientPersonRFC != null ? Agreement::find($getClientPersonRFC->agreement_id): null;
+            
+        }
+
+        $validateAgreement = $agreement       != null && $agreement->status == 1 ? true : false;
+        $isValidateCellphone = false;
+        $isValidateRFC = false;
+        
+
+        if ($getClientPersonCellphone != null && $cellphone == $getClientPersonCellphone->cellphone && 
+            $getClientPersonCellphone->active == 1 && $validateAgreement == true) {
+            $isValidateCellphone = true;
+        }
+
+        if ($getClientPersonRFC != null && $rfc == $getClientPersonRFC->rfc && 
+                $getClientPersonRFC->active == 1 && $validateAgreement == true) {
+                $isValidateRFC = true;
+        }
+        
+        $isValidate = $isValidateCellphone == true && $isValidateRFC == true ? true : false;
+
+        if ($lead->cellphone_validated == 1) {
+            $contentValidaciones = '<p >Validación Prospecto (celular) / '.$cellphone.' /<span class="text-primary"> OK </span></p>';
+        }
+        
+        if ($lead->rfc_validated == true) {
+            $contentValidaciones = '<p >Validación Prospecto (rfc) / '.$rfc.' /<span class="text-primary"> OK </span></p>';
+        }
+
+        return response()->json(['isValidate' => $isValidate, 'msg' => $contentValidaciones]);
+
+    }
+
+    public function getProducts($agreementId)
+    {
+        $getProducts = FinancialAgreement::select('financial_products.id', 'financial_products.alias')
+                        ->join('financial_products', 'financial_products.financial_id', 'financial_agreements.id')
+                        ->where(['agreement_id' => $agreementId])->get();
+        $products = array();
+        if ($getProducts != null) {
+            foreach ($getProducts as $getProduct) {
+                $products[$getProduct->id]= $getProduct->alias;
+            }
+        }
+        return response()->json($products);
     }
 
     
@@ -138,12 +243,15 @@ class LeadController extends Controller
      */
     public function create()
     {
-        $lead_id = null;
-        $lead = null;
-        $banks = Bank::all();
+        $lead_id            = null;
+        $lead               = null;
+        $banks              = Bank::all();
         $financial_products = FinancialProduct::getAll();
-        $loan_type    = config('enums.loan_type');
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type'));
+        $loan_type          = config('enums.loan_type');
+        $isNew              = true ;
+        $clientPersonId              = null ;
+
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type', 'isNew', 'clientPersonId'));
     }
 
     /**
@@ -256,6 +364,292 @@ class LeadController extends Controller
         return view('panel.lead.profile', compact('lead', 'model', 'model_action'));
     }
 
+    //TODO: POSIBLES VALIDACIONES COMPLETAS
+    public function getValidates(Lead $lead)
+    {
+        $clientPerson = ClientPerson::find($lead->client_person_id);
+
+        
+    }
+
+    public function getSoad(ClientPerson $clientPerson, Agreement $agreement, FinancialProduct $financialProduct)
+    {
+
+        $textSoad = '<p> Validación Crédito Preautorizado / SOD Activo /<span  class="text-primary"> <br> OK:   Prospecto No tiene un Salario On-Demand activo
+ </span> </p>';
+        if ($clientPerson->sod_active == 1) {
+            $textSoad = '<p>Validación Crédito Preautorizado / SOD Activo / <span class="text-danger"> <br>FAIL: Prospecto No tiene un Salario On-Demand activo</p>';
+        }
+        //validar soad en fecha
+        $getSodName = SodScheduleName::find($agreement->id);
+        $isSoadDate = '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-danger"> <br>FAIL: Solicitud fuera del rango de fechas </span> <p>';
+        $is_sod_on_date_allowed = false;
+        if ($getSodName != null) {
+            $nameField              = "schedule_$getSodName->id";
+            $alias                  = "schedule_$getSodName->id as schedule";
+            $getDate                = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
+            $isSoadDate             = $getDate!= null && $getDate->schedule == 1 ?  '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> <br>OK: Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate;
+            //dd($agreement->id, $getDate);
+
+            $is_sod_on_date_allowed = $getDate!= null && $getDate->schedule == 1 ? true : false;
+            //obtener los productos si tiene sod
+            $dailyIncomeAdjusted  = $clientPerson->daily_income_adjusted;
+            
+            $currentDate = Carbon::now()->toDateString();
+            $schedule = SodScheduleDate::selectRaw("
+                    CASE
+                        WHEN schedule_1 = 2 AND fecha = ? THEN 1
+                        ELSE DATEDIFF(fecha, (SELECT MAX(fecha) 
+                                            FROM sod_schedule_dates 
+                                            WHERE schedule_1 = 2 
+                                            AND fecha < ?))
+                    END as dias
+                ", [$currentDate, $currentDate])
+                ->where('fecha', $currentDate)
+                ->first();
+            //dd($dailyIncomeAdjusted);
+            $maximo = $dailyIncomeAdjusted * $schedule->dias;
+            // Redondear hacia abajo al múltiplo de 100
+            $maximoRedondeado = floor($maximo / 100) * 100;
+            //calcular minimo
+            $minimo = $clientPerson->daily_income_adjusted * 1;
+            $minimoRedondeado = floor($minimo / 100) * 100;
+            $contentProductSod = '<p class="text-danger"> El prospecto no puede tramitar un salario On-Demand. <br> Revisa las validaciones </p>';
+
+            
+
+            if ( $getDate->schedule == 1) {
+                $contentProductSod =  \View::make('panel.lead.product_sod ', ['minimo' => $minimoRedondeado, 'maximo' => $minimoRedondeado])->render();
+            }
+
+        }
+        
+        // Obtenemos el valor de la CLABE
+        $clabe = $clientPerson->Bank_clabe;
+
+        // Verificamos que la longitud de la CLABE sea mayor a 4
+        if (strlen($clabe) > 4) {
+            // Reemplazamos todos los caracteres excepto los últimos 4 por asteriscos
+            $maskedClabe = str_repeat('*', strlen($clabe) - 4) . substr($clabe, -4);
+        } else {
+            // Si la CLABE tiene 4 caracteres o menos, la mostramos tal cual
+            $maskedClabe = $clabe;
+        }
+
+        $tramites = array();
+
+        if ($financialProduct->type_product_id == 3) {
+            $tramites[1] =  config('enums.tipo_tramite')[1];
+        }
+
+        $validateSod = Lead::validateSod($clientPerson, $financialProduct);
+        
+        $dataReturn = array(
+                    'TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed, 
+                    'maximoRedondeado' => $maximoRedondeado, 'minimoRedondeado' => $minimoRedondeado, 'contentProductSod' => $contentProductSod,
+                    'financialProduct' => $financialProduct->name, 'comision' => $financialProduct->sod_commission_amount, 'bank_name' => $clientPerson->bank_name,
+                    'cuenta' => $maskedClabe, 'type_product_id' => $financialProduct->type_product_id, 'sodTramites' => $tramites
+        );
+        return response()->json($dataReturn);
+    }
+
+    public function getTramite(ClientPerson $clientPerson, FinancialProduct $financialProduct)
+    {
+        //validaciones sod
+        $validateSod = Lead::validateSod($clientPerson, $financialProduct);
+        $tramites = array();
+        if ($validateSod['isTramite'] == true && $financialProduct->name != 'KC Salario On-Demand' ) {
+           
+            foreach ($validateSod['tramite'] as $getTramite) {
+                $tramites[$getTramite] = config('enums.tipo_tramite')[$getTramite];
+            }
+        }
+        if ($financialProduct->name == 'KC Salario On-Demand') {
+            $tramites[1] =  config('enums.tipo_tramite')[1];
+        }
+        $dataReturn = array(
+            'sodIsTramite' => $validateSod['isTramite'], 'sodMessage' => $validateSod['message'],'sodTramites' => $tramites
+        );
+        return response()->json($dataReturn);
+    }
+
+    public function getRefinanciamiento(ClientPerson $clientPerson, FinancialProduct $financialProduct, $tramitType)
+    {
+        $getRefinanciamiento = new CalculadoraCredito();
+        $montoMaximo         = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct, $tramitType);
+        
+        $plazoMaximo  = $financialProduct->max_term;
+        $periodicidad = config('enums.periodicidad_names')[$financialProduct->periodicity_id];
+        $payment      = null;
+        $terms        = null;
+        
+        if ($financialProduct->type_product_id != 3) {
+            $payment             = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
+        }
+        
+        $productoDeseado     = null;
+        $getCollection = Collection::select('collections.kc_credit_id', 'collections.id', 'collections.fecha_cobro', 'collections.descuento', 'crm_status_list.alias', 'collections.saldo_insoluto_real')
+                                    ->join('clients_credit_info', 'clients_credit_info.credit_id', 'collections.credit_id')
+                                    ->join('crm_status_list', 'crm_status_list.id', 'collections.status')
+                                    ->where('collections.refinanciable', 1)
+                                    ->where('collections.client_id', $clientPerson->id)
+                                    ->where('clients_credit_info.producto', '<>', 3)->get();
+        
+        $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
+        
+        if ($financialProduct->max_term != null) {
+            $terms = FpTerm::select('terms.id', 'terms.term')
+            ->join('terms', 'terms.term_id',  'f_p_terms.term_id')
+            ->where('financial_product_id', $financialProduct->id)
+            ->where('terms.term', '>', $financialProduct->max_term)
+            ->pluck('terms.term', 'terms.term');
+        }
+        
+        $data = array(
+            'montoMaximo' => $montoMaximo,
+            'plazoMaximo' => $plazoMaximo,
+            'periodicidad' => $periodicidad,
+            'payment' => $payment,
+            'productoDeseado' => $productoDeseado,
+            'terms' => $terms,
+        );
+        return response()->json($data);
+    }
+
+    public function getMontoMaximo(ClientPerson $clientPerson,FinancialProduct $financialProduct, Request $request, $tramitType)
+
+    {
+        $min         = floatval($financialProduct->min_loan_amount);
+        $max         = $financialProduct->max_loan_ammount;
+        $calculadora = new CalculadoraCredito();
+        $credits     = $request->credits;
+        $plazo       = $request->plazo;
+        $descuento = 0;
+        $total = 0;
+        foreach ($credits as $credit) {
+            $getCollection = Collection::find($credit);
+            if ($getCollection != null) {
+                $descuento += $getCollection->descuento;
+                $total += $getCollection->saldo_insoluto_real;
+            }
+        }
+        if ($tramitType == 3) { //refinanciamiento
+            $pmt = $clientPerson->payment_capacity + $descuento;
+        } else {
+            $pmt = $clientPerson->payment_capacity;
+        }
+
+        $present = $calculadora->presentValue($financialProduct, $plazo, $pmt, $tramitType);
+
+        $montoArray = [];
+
+        for ($i = $min; $i <= $max; $i += 1000) {
+            if ( ($present > 0 && $present != -0) && $i > $present ) {
+                break;
+            }
+            $montoArray[$i] = $i;
+        }
+        $data = array(
+            'min' => $min,
+            'max' => $max,
+            'present' => $present,
+            'maximo' => $montoArray,
+            'descuento' => $descuento,
+            'total' => $total,
+            'total_price' => format_price($total),
+        );
+        return response()->json($data);
+    }
+
+    public function getResumen( FinancialProduct $financialProduct, $plazo, $monto, $total, $tramitType)
+    {
+        $comision = $monto * $financialProduct->opening_commission_rate / 100;
+        if ($tramitType == 3) {
+            $montoEntregar = $monto - $comision - $total;
+        } else {
+            $montoEntregar = $monto - $comision;
+        }
+        $periodicidad = config('financial_enums.periodicity_products')[$financialProduct->periodicity_id];
+        $getCalc = new CalculadoraCredito();
+        $pagoPeriodico = $getCalc->getPayment($financialProduct, $monto);
+        $pagoTotal = $plazo * $pagoPeriodico;
+        $tasaAnual = $financialProduct->annual_interest_rate;
+        $cat = $financialProduct->rate_cat;
+        
+        $kcInteres = $pagoTotal - $monto;
+        $kcPagoTotal = $pagoTotal;
+
+        $data = array(
+            'montoSolicitado' => format_price($monto),
+            'montoRefinanciar' => format_price($total),
+            'comision' => format_price($comision),
+            'monto_entregar' => format_price($montoEntregar),
+            'monto_entregar_decimal' => $montoEntregar,
+            'periodicidad' => $periodicidad,
+            'plazo' => $plazo,
+            'pagoPeriodico' => format_price($pagoPeriodico),
+            'pagoTotal' => format_price($pagoTotal),
+            'tasaAnual' => $tasaAnual / 1.16,
+            'cat' => $cat,
+
+            'kcInteres' => $kcInteres,
+            'kcPagoTotal' => $kcPagoTotal,
+        );
+        return response()->json($data);
+    }
+
+    public function getChart(FinancialProduct $financialProduct, Lead $lead, $plazo, $monto)
+    {
+        $getCalc = new CalculadoraCredito();
+        $pagoPeriodico = $getCalc->presentValue($financialProduct, $plazo, $monto);
+        $pagoTotal = $plazo * $pagoPeriodico;
+        $kcInteres = $pagoTotal - $monto;
+        $kcPagoTotal = $pagoTotal;
+
+        $creditPays = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount')
+        ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
+        ->where('credit_pay_off.lead_id', $lead->id)
+        ->get();
+        
+        $montoCompraCartera = $creditPays->sum('ammount');
+        $kcInteres = $kcInteres = $pagoTotal - $monto;
+        $kcPagoTotal = $pagoTotal;
+
+        $deudaPagoTotal = $getCalc->deudaPagoTotal($lead, $financialProduct, $plazo, $monto);
+        
+        $ahorroInteresDinero = $deudaPagoTotal - $kcPagoTotal;
+        $deudaInteres = $deudaPagoTotal - $montoCompraCartera;
+        $ahorroInteresPorcentaje = ($deudaInteres - $kcInteres) / $deudaInteres;
+        $deudaPorcentajeInteres = $deudaInteres / $montoCompraCartera;
+        $kcCapital =$montoCompraCartera;
+        $kcPorcentajeInteres = $kcInteres/$kcCapital;
+
+        $data  = array(
+            'deudaCapital' => $montoCompraCartera,
+            'kcInteres' => $kcInteres,
+            'kcPagoTotal' => $kcPagoTotal,
+
+            'ahorroInteresDinero' => $ahorroInteresDinero,
+            'ahorroInteresDinerom' => format_price($ahorroInteresDinero),
+
+            'deudaInteres' => $deudaInteres,
+            
+            'ahorroInteresPorcentaje' => $ahorroInteresPorcentaje,
+            'ahorroInteresPorcentajem' => format_price($ahorroInteresPorcentaje),
+
+            'deudaPorcentajeInteres' => $deudaPorcentajeInteres,
+            'deudaPorcentajeInteresm' => format_price($deudaPorcentajeInteres),
+            'kcCapital' => $kcCapital,
+            'kcPorcentajeInteres' => $kcPorcentajeInteres,
+            
+            'deudaPagoTotal' => $deudaPagoTotal,
+            'deudaPagoTotalm' => format_price($deudaPagoTotal),
+
+        );
+        return response()->json($data);
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -264,12 +658,14 @@ class LeadController extends Controller
      */
     public function edit($id)
     {
-        $lead_id = $id;
-        $lead = Lead::find($id);
-        $banks = Bank::all();
+        $lead_id            = $id;
+        $lead               = Lead::find($id);
+        $banks              = Bank::all();
         $financial_products = FinancialProduct::getAll();
-        $loan_type    = config('enums.loan_type');
-        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type'));
+        $loan_type          = config('enums.loan_type');
+        $isNew              = false ;
+        $clientPersonId              = $lead->client_person_id ;
+        return view('panel.lead.form', compact('lead_id', 'lead', 'banks', 'financial_products', 'loan_type', 'isNew', 'clientPersonId'));
     }
 
     /**
