@@ -18,12 +18,18 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
     const HOUR_STEP_2  = 8;
     const HOUR_STEP_2_2  = 1;
 
-    public function setURLDocument()
+    public function setURLDocument($id_rel = null)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
-        if ($step == '2') {
-            return '/panel/kc-down-wallet';
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        if ($step == 1) {
+
+            if ($is_investor === true) {
+                return '/panel/kc-down-wallet';
+            }
+            return null;
         }
+       
         return null;
     }
 
@@ -234,7 +240,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $name_form = 'frm-template_wallet_down_step2';
         $type_form    = HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2;
         $operations = config('enums.operation_status');
-        $urlRedirect = '/panel/kc-down-wallet';
+        $urlRedirect = '/panel/template/steps/kc-down-wallet/'.$history_id.'/show';
         $elements = array(
             1 => [
                 'title_section' => 'Verificar transferencia',

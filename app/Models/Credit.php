@@ -129,6 +129,26 @@ class Credit extends Model
         }
     }
 
+    /**
+     * actualizar applied_import , applied_term , applied_payment , applied_loan_total_amount 
+     */
+    public static function setAppliedImport($creditId)
+    {
+        Credit::where('id', $creditId)->update([
+            'applied_import ' => 0,
+            'applied_term' => 0,
+            'applied_payment  ' => 0,
+            'applied_loan_total_amount' => 0,
+        ]);
+    }
+
+    public static function setTotalCapitalAndMore($creditId)
+    {
+        Credit::setTotalCapital($creditId);
+        InvestorsCredit::setPlacedCapital($creditId);
+        Credit::setComissionRateAndAmount($creditId);
+    }
+
     public static function setTotalCapital($creditId)
     {
         $totalAppliedImport = 0;

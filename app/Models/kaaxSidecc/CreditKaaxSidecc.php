@@ -60,7 +60,11 @@ class CreditKaaxSidecc extends Model
             'financial_products_id' => $credit->applied_financial_product,
             'ajuste_liquidacion_terceros' => $credit->third_party_adjustment,
             'ajuste_refinanciamiento' => $credit->refinance_adjustment,
-            'collection_commission_rate' => $collection_commission_rate
+            'collection_commission_rate' => $collection_commission_rate,
+            'capital' => $credit->applied_import,
+            'plazo' => $credit->applied_term,
+            'descuento' => $credit->applied_payment,
+            'total'=>$credit->applied_loan_total_amount,
         );
         $creditKaax = CreditKaaxSidecc::create($data_credit);
         ClientsLogKaaxSidecc::addCrmLog($creditKaax->id, 'en-entrega', 'en-entrega');

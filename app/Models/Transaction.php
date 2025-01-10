@@ -43,7 +43,7 @@ class Transaction extends Model
         $total = self::getTotalCapital($investorId);
         
         if ($total != null) {
-            $investor = Investor::selectRaw('LEAST(total_available, lendable) AS loan_available')
+            $investor = Investor::selectRaw('LEAST(total_available, lendable - placed_capital) AS loan_available')
                         ->selectRaw('total_available')
                         ->where('id', $investorId)->first();
             

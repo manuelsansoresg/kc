@@ -20,6 +20,9 @@ class InvestorsCredit extends Model
         'placed_capital',
         'commission_rate',
         'commission_amount',
+        'recovered_capital',
+        'total_collected',
+        'profit_collected'
     ];
 
     public static function saveEdit($creditId)
@@ -64,6 +67,17 @@ class InvestorsCredit extends Model
             }
         }
 
+    }
+
+    public static function setPlacedCapital($creditId)
+    {
+        $investors = InvestorsCredit::where('credit_id', $creditId)->get();
+        foreach ($investors as $investor) {
+            $placedCapital = $investor->total_capital  - $investor->recoverd_capital;
+            Investor::where('id', $investor->id)->update([
+                'placed_capital' => $placedCapital
+            ]);
+        }
     }
 
     public static function listStatements($investorId)
@@ -114,5 +128,7 @@ class InvestorsCredit extends Model
            
         }
     }
+
+   
 
 }

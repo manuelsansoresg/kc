@@ -65,43 +65,54 @@ $(document).ready(function () {
   if (document.getElementById('action-model')) {
     //* get data saved 
     var getData = function getData() {
-      clearPreviewFiles();
-      var step = $('#step').val();
-      axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
-        var result = response.data;
-        var files = result.files;
-        var file_dates = result.file_date;
+      clearPreviewFiles().then(function () {
+        var step = $('#step').val();
+        axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
+          var result = response.data;
+          var files = result.files;
+          var file_dates = result.file_date;
 
-        for (var key in file_dates) {
-          if (file_dates.hasOwnProperty.call(file_dates, key)) {
-            var element_date_file = file_dates[key];
-            $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
+          for (var key in file_dates) {
+            if (file_dates.hasOwnProperty.call(file_dates, key)) {
+              var element_date_file = file_dates[key];
+              console.log(element_date_file.template_config_id);
+              $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
+            }
           }
-        }
 
-        for (var key_file in files) {
-          if (files.hasOwnProperty.call(files, key_file)) {
-            var element_file = files[key_file];
-            $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
+          for (var key_file in files) {
+            if (files.hasOwnProperty.call(files, key_file)) {
+              var element_file = files[key_file];
+              $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
+            }
           }
-        }
-      })["catch"](function (e) {});
+        })["catch"](function (e) {
+          console.error(e);
+        });
+      })["catch"](function (e) {
+        console.error(e);
+      });
     };
 
     var clearPreviewFiles = function clearPreviewFiles() {
-      var step = $('#step').val();
-      axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
-        var result = response.data;
-        var config_files = result.config_files;
+      return new Promise(function (resolve, reject) {
+        var step = $('#step').val();
+        axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
+          var result = response.data;
+          var config_files = result.config_files;
 
-        for (var key in config_files) {
-          if (config_files.hasOwnProperty.call(config_files, key)) {
-            var element = config_files[key]; //create dinamic dropzone element
-
-            $('#' + key + '-files-action-preview').html('');
+          for (var key in config_files) {
+            if (config_files.hasOwnProperty.call(config_files, key)) {
+              var element = config_files[key];
+              $('#' + key + '-files-action-preview').html('');
+            }
           }
-        }
-      })["catch"](function (e) {});
+
+          resolve();
+        })["catch"](function (e) {
+          reject(e);
+        });
+      });
     };
 
     var model = $('#action-model').val();
@@ -2132,7 +2143,8 @@ window.organizationChange = function (lead_agreement_id, financial_id, other, ap
 
 window.productChange = function (lead_product_id) {
   $('#content-importe-solicitado').hide();
-  $('#content-banco_nomina').hide(); //$('#content-tipo-credito').hide();
+  /* $('#content-banco_nomina').hide(); */
+  //$('#content-tipo-credito').hide();
 
   $('#content-consulta-buro-credito').hide();
   $('#content-financial_product_id').hide();
@@ -2150,7 +2162,8 @@ window.productChange = function (lead_product_id) {
     //portabilidad
     $('#content-financial_product_id').show();
     $('#content-importe-solicitado').show();
-    $('#content-banco_nomina').hide();
+    /* $('#content-banco_nomina').hide(); */
+
     $('#content-producto-financiero').show();
     $('#content-consulta-buro-credito').hide();
     $('#content-aval-o-garantia').hide();
@@ -2159,7 +2172,8 @@ window.productChange = function (lead_product_id) {
 
   if (product_id == 1) {
     // credito nomina
-    $('#content-banco_nomina').hide();
+
+    /* $('#content-banco_nomina').hide(); */
     $('#content-importe-solicitado').show();
     $('#content-producto-financiero').show();
     $('#content-tipo_tramite').show();
@@ -4568,6 +4582,11 @@ $().ready(function () {
           }
 
         if (type_form == 63) //form kc-wallet step2
+          {
+            $('#operation_status').val(transaction.operation_status).trigger("change");
+          }
+
+        if (type_form == 67) //form kc-wallet step2
           {
             $('#operation_status').val(transaction.operation_status).trigger("change");
           }
