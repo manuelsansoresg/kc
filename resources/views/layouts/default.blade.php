@@ -135,7 +135,7 @@
 					<div class="col-12 col-md-7 col-lg-6">
 						<!-- Hero Content -->
 						<div class="hero-content pb-5">
-							<h1 class="text-white title-header">Tu mejor decisión. Fácil y rápido</h1>
+							<h1 class="text-white title-header">Tu mejor decisión. Fácil y rápido.</h1>
 							<p class="sub-heading text-white my-4">Con KaaxClub puedes refinanciar tus deudas, adelantar tu salario trabajado y acceder a un crédito justo, de manera fácil, rápida y sin complicaciones.</p>
 							<a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%un%servicio%de%KaaxClub" class="btn btn-bordered-white swap-icon">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
 						</div>
