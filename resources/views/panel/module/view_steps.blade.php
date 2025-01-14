@@ -88,7 +88,7 @@
                                                 <a href="#" class="accordion-head" data-bs-toggle="collapse" data-bs-target="#accordion-item-documentos-{{ $key }}">
                                                     <div class="row text-secondary">
                                                         <div class="col-12 col-md-2 text-primary fw-bold fs-6 d-flex align-items-center">
-                                                            {{ $nameStep }} {{ $percent}} 
+                                                            {{ $nameStep }} 
                                                         </div>
                                                         <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps">
                                                             <div class="project-list-progress">
