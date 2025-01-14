@@ -315,7 +315,7 @@
                         </li>
                     </ul>
 
-                    <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%un%servicio%de%KaaxClub" class="btn btn-bordered swap-icon mt-4">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
+                    <a href="https://wa.me/5219999208020?text=Hola%20KaaxClub " class="btn btn-bordered swap-icon mt-4">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
                 </div>
             </div>
 
@@ -632,7 +632,7 @@
                 <div class="col-12 col-sm-6 col-lg-3 item">
                     <!-- Footer Items -->
                     <div class="footer-items">
-                        <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%un%servicio%de%KaaxClub" class="btn btn-bordered swap-icon mt-4">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
+                        <a href="https://wa.me/5219999208020?text=Hola%20KaaxClub " class="btn btn-bordered swap-icon mt-4">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
 
                     </div>
                 </div>
