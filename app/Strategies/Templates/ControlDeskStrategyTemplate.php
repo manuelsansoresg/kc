@@ -1201,8 +1201,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $stepRedirect = $taskId +1;
         $financialProduct = FinancialProduct::find($credit->applied_financial_product);
         $urlRedirect = '/panel/template/steps/controlDesk/' . $history_id . '/show';
-        if ($financialProduct->type_product_id == 3) {
-            $urlRedirect == 'panel/kc-control-desk';
+        if ($financialProduct->type_product_id === 3) {
+            $urlRedirect = '/panel/kc-control-desk';
         }
         
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit])->render();
@@ -6011,6 +6011,20 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public static function calculateStepAverage($historyId, $step)
     {
+        $history     = HistoryLog::find($historyId);
+        $credit      = Credit::find($history->id_rel);
+        $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+
+        if ($financialProduct->type_product_id == 3) {
+            if ($step == 1) {
+                $step = 4;
+            }
+            
+            if ($step == 2) {
+                $step = 3;
+            }
+        }
+        
         // Construir el nombre de la función dinámicamente
         $functionName = "ElementsTaskStep" . $step;
         
