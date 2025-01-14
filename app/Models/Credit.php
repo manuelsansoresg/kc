@@ -118,6 +118,8 @@ class Credit extends Model
         
         'credit_agreement_signed',
         'sod_agreement',
+        'info_s2_sent',
+        'credit_s2_active',
         
     ];
 

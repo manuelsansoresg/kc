@@ -563,6 +563,10 @@ $().ready(function () {
         
         });
     }
+
+   
+
+    
     
     if (document.getElementById('frm-template_control_desk_step4_task1')) {
         const form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4_task1');
@@ -688,6 +692,28 @@ $().ready(function () {
             saveForm('frm-template_delivery_task1_step1', 'delivery');
         }
     });
+
+    if (document.getElementById('frm-template_delivery_step2_task1')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_delivery_step2_task1');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_delivery_step2_task1', 'delivery');
+        
+        });
+    }
+    
+    if (document.getElementById('frm-template_delivery_step2_task2')) {
+        const form_control_desk_step4 = document.getElementById('frm-template_delivery_step2_task2');
+
+        // Maneja el evento submit del formulario
+        form_control_desk_step4.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evita que el formulario se envíe automáticamente
+        saveForm('frm-template_delivery_step2_task2', 'delivery');
+        
+        });
+    }
     
     $("#frm-template_delivery_dynamic_task_step1").validate({
         rules: {
@@ -1353,6 +1379,7 @@ window.deliverysendEmail = function (history_id) {
         .then(function (response) {
            
             window.location = '/panel/template/steps/delivery/'+history_id+'/show';
+            
 
             
         })
@@ -1414,3 +1441,13 @@ window.swapCreditContinue = function(history_id) {
         });
 }
 
+window.sendCreditActive = function(historyId)
+{
+    axios
+        .get("/panel/kc-delivery/"+historyId+"/send/active")
+        .then(function (response) {
+            window.location = '/panel/kc-delivery';
+        })
+        .catch(e => {
+        });
+}

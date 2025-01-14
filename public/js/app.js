@@ -5294,6 +5294,29 @@ $().ready(function () {
       saveForm('frm-template_delivery_task1_step1', 'delivery');
     }
   });
+
+  if (document.getElementById('frm-template_delivery_step2_task1')) {
+    var _form_control_desk_step6 = document.getElementById('frm-template_delivery_step2_task1'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step6.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_delivery_step2_task1', 'delivery');
+    });
+  }
+
+  if (document.getElementById('frm-template_delivery_step2_task2')) {
+    var _form_control_desk_step7 = document.getElementById('frm-template_delivery_step2_task2'); // Maneja el evento submit del formulario
+
+
+    _form_control_desk_step7.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+
+      saveForm('frm-template_delivery_step2_task2', 'delivery');
+    });
+  }
+
   $("#frm-template_delivery_dynamic_task_step1").validate({
     rules: {
       'credit_pay_off[delivered]': {
@@ -5951,6 +5974,12 @@ window.swapCreditContinue = function (history_id) {
     }
 
     window.location = url_redirect;
+  })["catch"](function (e) {});
+};
+
+window.sendCreditActive = function (historyId) {
+  axios.get("/panel/kc-delivery/" + historyId + "/send/active").then(function (response) {
+    window.location = '/panel/kc-delivery';
   })["catch"](function (e) {});
 };
 

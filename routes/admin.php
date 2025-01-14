@@ -236,6 +236,7 @@ Route::group(['prefix' => 'kc-control-desk'], function () {
 Route::resource('kc-delivery', '\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController')->middleware('auth');
 Route::group(['prefix' => 'kc-delivery'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController', 'list'])->middleware('auth');
+    Route::get('{history}/send/active', ['\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController', 'active'])->middleware('auth');
     Route::get('{history_id}/send-email', ['\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController', 'sendEmail'])->middleware('auth');
 });
 

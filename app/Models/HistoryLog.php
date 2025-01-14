@@ -281,6 +281,8 @@ class HistoryLog extends Model
         74 => 'Firma de contrato/Descuento/Pagaré',
         75 => 'Entrega crédito cliente',
         76 => null,
+        77 => 'Enviar info a S2',
+        78 => 'Activar crédito en S2',
     ];
 
     public static $name_model = [

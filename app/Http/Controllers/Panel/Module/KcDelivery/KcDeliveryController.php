@@ -27,6 +27,11 @@ class KcDeliveryController extends Controller
         return response()->json(['data' => $users]);
     }
 
+    public function active(HistoryLog $history)
+    {
+        HistoryLog::move($history->id_rel, HistoryLog::CREDITS_DELIVERED, $history->old_status_id, null);
+    }
+
     public function sendEmail($history_id)
     {
         $history    = HistoryLog::find($history_id);
