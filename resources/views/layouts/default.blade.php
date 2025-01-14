@@ -137,6 +137,8 @@
 							<h1 class="text-white title-header">Tu mejor decisión. Fácil y rápido.</h1>
 							<p class="sub-heading text-white my-4">Con KaaxClub puedes refinanciar tus deudas, adelantar tu salario trabajado y acceder a un crédito justo de forma fácil, rápida y sin complicaciones.</p>
 							<a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%un%servicio%de%KaaxClub" class="btn btn-bordered-white swap-icon">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
+                            <br><br>
+                            <small class="small  text-white mt-3">KaaxClub es un servicio exclusivo para colaboradores de empresas afiliadas</small>
 						</div>
 					</div>
 					<div class="col-12 col-md-5 col-lg-5 mt-4 mt-md-0 text-center">
