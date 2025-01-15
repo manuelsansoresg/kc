@@ -1207,16 +1207,13 @@ if (document.getElementById('valor-slider')) {
         
         // Obtenemos el valor actual del slider
         var sliderValue = parseFloat(slider.value);
-
-
         // Actualizamos el contenido del span con el valor actual del slider
         displayValue.innerHTML = '$' + sliderValue;
         $('#sod_withdraw_amount').val(sliderValue);
-        
         let comision = parseFloat($('#sod_commision_amount').val());
         let total = sliderValue + comision;
         console.log('slider-'+sliderValue);
-        console.log('comision'+comision);
+        console.log('comision-'+comision);  
         if (!isNaN(total)) {
             $('#sod_total_payment').val(total);
         } else {
