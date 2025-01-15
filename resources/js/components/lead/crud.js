@@ -1207,6 +1207,11 @@ if (document.getElementById('valor-slider')) {
         
         // Obtenemos el valor actual del slider
         var sliderValue = parseFloat(slider.value);
+
+        var valorMinimo = $('#valor-minimo').val(); 
+        if (isNaN(sliderValue) || sliderValue < valorMinimo) {
+            sliderValue = valorMinimo;
+        }
         
 
         // Actualizamos el contenido del span con el valor actual del slider
