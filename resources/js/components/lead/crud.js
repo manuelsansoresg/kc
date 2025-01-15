@@ -1220,6 +1220,8 @@ if (document.getElementById('valor-slider')) {
         
         let comision = parseFloat($('#sod_commision_amount').val());
         let total = sliderValue + comision;
+        console.log(sliderValue);
+        console.log(comision);
         if (!isNaN(total)) {
             $('#sod_total_payment').val(total);
         } else {

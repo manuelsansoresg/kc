@@ -3470,6 +3470,8 @@ if (document.getElementById('valor-slider')) {
     $('#sod_withdraw_amount').val(sliderValue);
     var comision = parseFloat($('#sod_commision_amount').val());
     var total = sliderValue + comision;
+    console.log(sliderValue);
+    console.log(comision);
 
     if (!isNaN(total)) {
       $('#sod_total_payment').val(total);
