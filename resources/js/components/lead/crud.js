@@ -1208,11 +1208,6 @@ if (document.getElementById('valor-slider')) {
         // Obtenemos el valor actual del slider
         var sliderValue = parseFloat(slider.value);
 
-        var valorMinimo = $('#valor-minimo').val(); 
-        if (isNaN(sliderValue) || sliderValue < valorMinimo) {
-            sliderValue = valorMinimo;
-        }
-        
 
         // Actualizamos el contenido del span con el valor actual del slider
         displayValue.innerHTML = '$' + sliderValue;
@@ -1220,8 +1215,8 @@ if (document.getElementById('valor-slider')) {
         
         let comision = parseFloat($('#sod_commision_amount').val());
         let total = sliderValue + comision;
-        console.log(sliderValue);
-        console.log(comision);
+        console.log('slider-'+sliderValue);
+        console.log('comision'+comision);
         if (!isNaN(total)) {
             $('#sod_total_payment').val(total);
         } else {
