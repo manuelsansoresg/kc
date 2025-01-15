@@ -3471,6 +3471,8 @@ if (document.getElementById('valor-slider')) {
       $('#sod_total_payment').val(total);
     } else {
       $('#sod_total_payment').val(0); // O puedes asignar un valor por defecto si es NaN
+
+      total = 0;
     }
 
     $('#valor-total').html('$' + total);
