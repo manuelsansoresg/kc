@@ -1207,6 +1207,7 @@ if (document.getElementById('valor-slider')) {
         
         // Obtenemos el valor actual del slider
         var sliderValue = parseFloat(slider.value);
+        
 
         // Actualizamos el contenido del span con el valor actual del slider
         displayValue.innerHTML = '$' + sliderValue;
@@ -1219,7 +1220,7 @@ if (document.getElementById('valor-slider')) {
         } else {
             $('#sod_total_payment').val(0); // O puedes asignar un valor por defecto si es NaN
         }
-        $('#valor-total').html('$'+sliderValue);
+        $('#valor-total').html('$'+total);
     }
 
     // Agregar el listener al slider para detectar cambios

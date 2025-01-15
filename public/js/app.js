@@ -3471,7 +3471,7 @@ if (document.getElementById('valor-slider')) {
       $('#sod_total_payment').val(0); // O puedes asignar un valor por defecto si es NaN
     }
 
-    $('#valor-total').html('$' + sliderValue);
+    $('#valor-total').html('$' + total);
   }; // Agregar el listener al slider para detectar cambios
 
 
