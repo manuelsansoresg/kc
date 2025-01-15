@@ -419,7 +419,7 @@ class LeadController extends Controller
             
 
             if ( $getDate->schedule == 1) {
-                $contentProductSod =  \View::make('panel.lead.product_sod ', ['minimo' => $minimoRedondeado, 'maximo' => $minimoRedondeado])->render();
+                $contentProductSod =  \View::make('panel.lead.product_sod ', ['minimo' => $minimoRedondeado, 'maximo' => $maximoRedondeado])->render();
             }
 
         }
