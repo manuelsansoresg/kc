@@ -68,7 +68,7 @@
                 <div class="form-group">
                     <label class="form-label">Periodicidad</label>
                     @php
-                        $periodicidad = isset(config('enums.periodicidad_valores')[$financialProduct->periodicity_id])? config('enums.periodicidad_valores')[$financialProduct->periodicity_id] : null;
+                        $periodicidad = isset(config('enums.periodicidad_names')[$financialProduct->periodicity_id])? config('enums.periodicidad_names')[$financialProduct->periodicity_id] : null;
                     @endphp
                     <div class="form-control-wrap">
                         <input type="text" class="form-control" id="periodicidad" value="{{ $periodicidad }}"  disabled>
@@ -111,8 +111,8 @@
             <div class="form-control-wrap">
                 <select class="form-select js-select2" name="credit[applied_term]" id="ref-plazo"  data-search="on" onchange="getMontoSolicitado()" required>
                     <option value="">Seleccione una opción</option>
-                    @foreach ($terms as $term)
-                        <option value="{{ $term->id }}">{{ $term->term }}</option>
+                    @foreach ($terms as $key =>  $term)
+                        <option value="{{ $key }}">{{ $term }}</option>
                     @endforeach
                 </select>
             </div>

@@ -1086,16 +1086,21 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         $total = $creditPays->sum('ammount');
         $calculadora = new CalculadoraCredito();
-        $montoMaximo = $calculadora->getMontoMaximoControlDesk($client, $financialProduct);
+        
+        $montoMaximo         = $calculadora->getMontoMaximo($client, $financialProduct, $credit->tramit_type);
+
+
         $payment = $calculadora->getPayment($financialProduct, $montoMaximo);
         $lead = Lead::find($credit->lead_id);
 
-        $terms = FpTerm::select('terms.id', 'terms.term')
-        ->join('terms', 'terms.id',  'f_p_terms.term_id')
-        ->where('financial_product_id', $financialProduct->id)
-        ->where('terms.term', '>', $financialProduct->max_term)
-        ->get();
-
+        $terms        = null;
+        if ($financialProduct->max_term != null) {
+            $terms = FpTerm::select('terms.id', 'terms.term')
+            ->join('terms', 'terms.term_id',  'f_p_terms.term_id')
+            ->where('financial_product_id', $financialProduct->id)
+            ->where('terms.term', '>', $financialProduct->max_term)
+            ->pluck('terms.term', 'terms.term');
+        }
         
         $contentInfo = \View::make('panel.credit.controldeskTask4Step3', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'creditPays' => $creditPays, 'montoMaximo' => $montoMaximo, 'financialProduct' => $financialProduct, 'payment' => $payment, 'lead' => $lead, 'terms' => $terms])->render();
 

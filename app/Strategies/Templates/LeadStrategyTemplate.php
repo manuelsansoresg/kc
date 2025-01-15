@@ -83,6 +83,7 @@ class LeadStrategyTemplate implements TemplateInterface
                 'lead_id' => $lead->id,
                 'income' => $lead->income,
                 'applied_loan_type' => $lead->applied_loan_type,
+                'tramit_type' => $lead->tramit_type,
             );
 
             //validar que el credito no exista con los mismos datos
