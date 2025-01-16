@@ -5,8 +5,12 @@ namespace App\Http\Controllers\Panel\Module;
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\CreditReference;
+use App\Models\CreditTag;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
@@ -30,12 +34,31 @@ class FormController extends Controller
         $client           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditClientPerson : null;
         $product          = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditProduct : null;
         $id_rel           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->id : null;
+        $financialProduct = $product = FinancialProduct::find($credit->applied_financial_product);
+        $getAsesor = User::find($credit->asesor_id);
         
+        $tipoCredito = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
+        $lastComment = HistoryLog::select('comment')
+                        ->where([
+                        'id_rel'=> $credit->id,
+                        'status' => 1
+                    ])->where('comment', '!=', null)->orderBy('id', 'DESC')->first();
+        $periodicity = isset(config('financial_enums.periodicity_products')[$credit->applied_periodicity]) && $credit->applied_periodicity != null ? config('financial_enums.periodicity_products')[$credit->applied_periodicity] : null;
+        $origin = isset(config('enums.origin')[$credit->origin_id]) ? config('enums.origin')[$credit->origin_id] : null;
+        $tags = CreditTag::select('tags.name')
+                ->join('tags', 'tags.id', '=', 'credit_tag.tag_id')
+                ->where('credit_id', $credit->id)
+                ->pluck('tags.name')
+                ->implode(',');
 
+            if ($tags === '') {
+                $tags = null;
+            }
+        
         if (($model == 'wallet' || $model == 'kc-down-wallet') && $history_id != 'null') {
             $id_rel = $history->id_rel;
         }
-        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
+        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'tags', 'getAsesor', 'periodicity', 'lastComment', 'origin', 'financialProduct', 'tipoCredito', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
     }
 
    

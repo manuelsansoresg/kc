@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel\Module\KcControlDesk;
 use App\Http\Controllers\Controller;
 use App\Lib\CNubarium;
 use App\Models\Credit;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Kyc;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class KcControlDeskController extends Controller
 
     public function showStep(Credit $credit)
     {
+        
         return view('Panel.module.control_desk.step', compact('credit'));
     }
 
