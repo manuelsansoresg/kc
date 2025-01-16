@@ -248,20 +248,20 @@
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
-                                <li class="nk-menu-item">
+                               {{--  <li class="nk-menu-item">
                                     <a href="/panel/kc-check-up" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
                                         <span class="nk-menu-text">KC - Check up</span>
                                     </a>
-                                </li><!-- .nk-menu-item -->
+                                </li><!-- .nk-menu-item --> --}}
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
-                                <li class="nk-menu-item">
+                                {{-- <li class="nk-menu-item">
                                     <a href="/panel/kc-swap" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-swap-alt"></em></span>
                                         <span class="nk-menu-text">KC - Swap</span>
                                     </a>
-                                </li><!-- .nk-menu-item -->
+                                </li><!-- .nk-menu-item --> --}}
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item">
@@ -289,12 +289,12 @@
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
                                 @hasrole('Administrador|Asesor|Cliente financiera')
-                                <li class="nk-menu-item">
+                                {{-- <li class="nk-menu-item">
                                     <a href="/panel/kc-payments" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
                                         <span class="nk-menu-text">KC - Payments</span>
                                     </a>
-                                </li><!-- .nk-menu-item -->
+                                </li><!-- .nk-menu-item --> --}}
                                 @endhasrole
                                 {{-- modulo KC - WALLET --}}
                                 @hasrole('Administrador|Asesor|Cliente financiera')
