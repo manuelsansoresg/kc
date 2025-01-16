@@ -66,8 +66,17 @@
                                         <br><span class="fw-bold">Ultimo comentario :</span> {{ $lastComment!= null ? $lastComment->comment : null }}
                                         <hr>
                                         <span class="fw-bold"> Documentos:</span>
-                                        <br><a href="">- INE <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                        <br><a href="">- Nómina <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                       
+                                        <table class="table">
+                                            @foreach ($files as $file)
+                                            <tr class="tb-tnx-item">
+                                                <td class="tb-tnx-id">
+                                                    <a href="{{ asset($path.'/'.$file['name']) }}" target="_blank">{{ $file['name_template'] }}</a>
+                                                </td>
+
+                                            </tr>
+                                            @endforeach
+                                        </table>
 
                                         <hr>
                                         <br>

@@ -104,8 +104,14 @@ $(document).ready(function () {
 
         if (key) {
           // Crear dinámicamente una instancia de Dropzone
+          var nameField = null;
+
+          if (document.getElementById('name_field_' + key)) {
+            nameField = $('#name_field_' + key).val();
+          }
+
           NioApp.Dropzone('#' + key, {
-            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key + '?step=' + step,
+            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key + '?step=' + step + '&nameField=' + nameField,
             init: function init() {
               this.on("sending", function (file, xhr, formData) {});
               this.on("success", function (file, message) {

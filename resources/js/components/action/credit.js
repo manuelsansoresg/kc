@@ -101,8 +101,13 @@ if (document.getElementById('action-model')) {
             console.log(key);
             if (key) {
                 // Crear dinámicamente una instancia de Dropzone
+                let nameField = null;
+                if (document.getElementById('name_field_'+key)) {
+                    nameField = $('#name_field_'+key).val();
+                }
                 NioApp.Dropzone('#' + key, {
-                    url: "/panel/files/images/" + model + '/' + id_rel + '/' + key+'?step='+step,
+                    
+                    url: "/panel/files/images/" + model + '/' + id_rel + '/' + key+'?step='+step+'&nameField='+nameField,
                     init: function () {
                         this.on("sending", function (file, xhr, formData) {
                             

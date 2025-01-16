@@ -24,6 +24,7 @@
                         <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
                             <div class="myDropzone" id="{{ isset($element['id_field'])? $element['id_field'] : null  }}"  data-max-file-size="5" data-max-files="3">
+                                <input type="hidden" id="name_field_{{ isset($element['id_field'])? $element['id_field'] : null  }}" value="{{ isset($element['name_field'])? $element['name_field'] : null  }}" >
                                 <div class="dz-message" data-dz-message> 
                                     <span class="dz-message-text">Arrastra y suelta el archivo</span>
                                     <span class="dz-message-or">o</span> 

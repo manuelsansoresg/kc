@@ -559,11 +559,12 @@
                                                                 @php
                                                                     $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
                                                                 @endphp
+                                                                <tr>
+                                                                    <td><a href="{{ asset('firma_contratos/'.$nombre) }}" >{{ $nombre }}</a></td>
+                                                                    <td><a href="{{ asset('firma_contratos/'.$nombre) }}" download>Descargar</a></td>
+                                                                </tr>
                                                             @endif
-                                                            <tr>
-                                                                <td><a href="{{ asset('firma_contratos/'.$nombre) }}" >{{ $nombre }}</a></td>
-                                                                <td><a href="{{ asset('firma_contratos/'.$nombre) }}" download>Descargar</a></td>
-                                                            </tr>
+                                                            
                                                             @foreach ($files as $file)
                                                             <tr class="tb-tnx-item">
                                                                 <td class="tb-tnx-id">

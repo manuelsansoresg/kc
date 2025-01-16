@@ -115,7 +115,7 @@
                                                                 
                                                                     @if (($key == 0 && $percent != 100) || $previousPercent == 100)
                                                                         <tr>
-                                                                            <td>{!! $list_action['name'] !!} aqui</td>
+                                                                            <td>{!! $list_action['name'] !!} </td>
                                                                             <td class="align-bottom">{!! $list_action['statusBadge'] !!}</td>
                                                                             <td>
                                                                                 @if ($list_action['status'] == 'En curso')

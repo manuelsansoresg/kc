@@ -189,6 +189,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         } 
     }
 
+   
+
     public function configFormStep1Task1($id_rel, $history_id)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : '1';
@@ -200,7 +202,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'title_section' => null,
                 'title' => '*Anverso INE',
                 'subtitle' => 'Adjunta la parte delantera de la INE',
-                'name_field' => 'anverso',
+                'name_field' => 'Anverso INE',
                 'id_field' => '1',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,

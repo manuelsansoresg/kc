@@ -38,7 +38,12 @@ class File extends Model
     {
         if ($request->hasFile('file') != false) {
             $document   = $request->file('file');
+            
             $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
+            if (isset($_GET['nameField'])) {
+                $uniquePrefix = uniqid(); 
+                $name_full = $id_rel.'-'.$_GET['nameField'] . '-'.$uniquePrefix. '.' . $document->getClientOriginalExtension();
+            }
             $path       = File::PATH;
             $date_file = ($request->date_file != null)? $request->date_file : null;
             $step = isset($request->step)? $request->step : null;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\CreditReference;
 use App\Models\CreditTag;
+use App\Models\File;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Product;
@@ -36,7 +37,8 @@ class FormController extends Controller
         $id_rel           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->id : null;
         $financialProduct = $product = FinancialProduct::find($credit->applied_financial_product);
         $getAsesor = User::find($credit->asesor_id);
-        
+        $path = File::PATH;
+        $files = File::getByIdRelandModel($credit->id, [HistoryLog::KC_CHECK_UP, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_SWAP, HistoryLog::KC_DELIVERY]);
         $tipoCredito = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
         $lastComment = HistoryLog::select('comment')
                         ->where([
@@ -58,7 +60,7 @@ class FormController extends Controller
         if (($model == 'wallet' || $model == 'kc-down-wallet') && $history_id != 'null') {
             $id_rel = $history->id_rel;
         }
-        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'tags', 'getAsesor', 'periodicity', 'lastComment', 'origin', 'financialProduct', 'tipoCredito', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
+        return view('panel.module.checkup.content_form', compact('form', 'path', 'id_rel', 'tags', 'files', 'getAsesor', 'periodicity', 'lastComment', 'origin', 'financialProduct', 'tipoCredito', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
     }
 
    
