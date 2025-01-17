@@ -49,7 +49,7 @@
             <table class="table table-striped">
                 <tr>
                     <td>CP nominal</td>
-                    <td>{{ $credit!= null ? $credit->payment_capacity : null }}</td>
+                    <td>{{ $client!= null ? $client->payment_capacity : null }}</td>
                 </tr>
                 <tr>
                     <td>Fecha nómina</td>
