@@ -1582,7 +1582,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $stepRedirect = $taskId +1;
         
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'payOff' => null, 'step' => $step, 'product' => $product])->render();
-
+        
         if ($product->type_product_id != 3) {
             $elements = array(
                 1 => [
@@ -1622,7 +1622,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                
                 3 => [
                     'title_section' => null,
-                    'title' => '*Contrato de CM',
+                    'title' => '*Contrato de crédito',
                     'subtitle' => 'Indica si el cliente ya firmó el contrato de crédito',
                     'name_field' => null,
                     'id_field' => 'ammount',
@@ -1761,7 +1761,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'options' => 'null',
                     'is_required' => false,
                     'is_disabled' => null,
-                    'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                    'value' => '/panel/kc-control-desk',
                     'col' => 'col-12'
                 ],
                 9 => [
@@ -1867,7 +1867,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'options' => 'null',
                     'is_required' => false,
                     'is_disabled' => null,
-                    'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                    'value' => '/panel/kc-control-desk',
                     'col' => 'col-12'
                 ],
                 4 => [
@@ -4052,6 +4052,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($history != null) {
 
             //validar etapa 1 
+            
             if ($step != 4 ) {
                 if ($task  == null) {
                     $percentTask1Step1   = self::percentUpload($id_rel);
@@ -4308,7 +4309,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 }
 
                 if ($step == 4) {
-
+                    
                     if ($task == 1) {
                         $labelValidate = CreditsControlDesk::$labelValidate[9];
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
@@ -4326,11 +4327,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     if ($task == 2) {
 
                         
-                        $labelValidate = $financialProduct->type_product_id != 3 ? CreditsControlDesk::$labelValidate[7] : CreditsControlDesk::$labelValidate[8];
-                       
+                        $labelValidate = $financialProduct->type_product_id != 3 ? CreditsControlDesk::$labelValidate[9] : CreditsControlDesk::$labelValidate[8];
                        
                         
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
+                        
                         
                         Credit::where('id', $credit->id)->update([
                             'credit_agreement_signed' => $request->credit_agreement_signed,
@@ -4342,6 +4343,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 1); //terminar tarea
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);
+
+                            HistoryLog::where([
+                                'id_rel' => $credit->id,
+                                'status_id' => HistoryLog::KC_CONTROL_DESK,
+                                'status' => 1,
+                            ])->update([
+                                'status' => 0
+                            ]);
+                            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_DELIVERY, null, false);
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY, $credit->id, 0);
                         }
                     }
                 }
@@ -5311,7 +5322,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             return 0; // Si no hay cliente, el porcentaje es 0.
         }
         $getFile = CreditsControlDesk::where([
-            'validation' => 'Solicitud/Descuento SOD',
+            'validation' => CreditsControlDesk::$labelValidate[9],
             'credit_id' => $credit->id,
             
         ])->count();

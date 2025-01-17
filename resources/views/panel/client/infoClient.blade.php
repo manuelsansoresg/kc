@@ -169,13 +169,13 @@
                     <td>Contrato crédito</td>
                     <td>
                     
-                        @if ($client!= null && $client->credit_agreement_signed === null)
+                        @if ($credit!= null && $credit->credit_agreement_signed === null)
                             Sin firmar 
                         @endif
-                        @if ($client!= null && $client->credit_agreement_signed === 1)
+                        @if ($credit!= null && $credit->credit_agreement_signed === 1)
                             Aceptado
                         @endif
-                        @if ($client!= null && $client->credit_agreement_signed === 0)
+                        @if ($credit!= null && $credit->credit_agreement_signed === 0)
                             Declinado
                         @endif
                         
