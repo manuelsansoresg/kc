@@ -4883,8 +4883,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         $percentages    = [
             1 => self::percentTask1Step2($history),
-            2 => self::percentTask1Step2($history),
-            3 => self::percentTask1Step3($history)
+            2 => self::percentTask2Step2($history),
+            3 => self::percentTask3Step2($history)
         ];
         
        

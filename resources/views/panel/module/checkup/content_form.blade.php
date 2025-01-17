@@ -67,10 +67,10 @@
                                         <hr>
                                         <span class="fw-bold"> Documentos:</span>
                                        
-                                        <table class="table">
+                                        <table class="table table-borderless">
                                             @foreach ($files as $file)
-                                            <tr class="tb-tnx-item">
-                                                <td class="tb-tnx-id">
+                                            <tr class="">
+                                                <td class="">
                                                     <a href="{{ asset($path.'/'.$file['name']) }}" target="_blank">{{ $file['name_template'] }}</a>
                                                 </td>
 
