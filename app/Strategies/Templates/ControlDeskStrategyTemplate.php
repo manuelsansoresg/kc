@@ -4266,12 +4266,15 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                                 HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY, $credit->id, 0);
                             }
 
+                            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, null, false);
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 0);
+
                         }
 
                         
                         
                     }
-
+                    
                     if ($task > 5) {
                         
                         
@@ -4297,8 +4300,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, $credit->id, 1); //terminar tarea dinamica
                             
-                            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, null, false);
-                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 0);
+                            
                         }
                         
                     }
