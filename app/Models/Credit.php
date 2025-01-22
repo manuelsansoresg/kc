@@ -239,7 +239,7 @@ class Credit extends Model
                 $option           = \View::make('panel.module.checkup.add_option_only_checkup_dt', ['query' => $query, 'id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
 
                 if ($history->status_id === HistoryLog::KC_AFTER_MARKET || $history->status_id === HistoryLog::KC_CONTROL_DESK || $history->status_id === HistoryLog::KC_DELIVERY || $history->status_id === HistoryLog::KC_PAYMENT) {
-                    $financialProduct = $product = FinancialProduct::find($query->applied_financial_product);
+                    $financialProduct =  FinancialProduct::find($query->applied_financial_product);
                     $tipoCredito = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
                     $alias_product = $tipoCredito!= null ? $tipoCredito->alias : null;
                     $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);

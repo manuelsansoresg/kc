@@ -238,7 +238,10 @@ class Lead extends Model
                 $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query, 'validate' => $validate,  'validate' => $validate])->render();
                 
                 $lbl_status     = '<span class="text-success">Valido</span>';
-                
+                $financialProduct =  FinancialProduct::find($query->financial_product_id);
+                $tipoCredito = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
+                $alias_product = $tipoCredito!= null ? $tipoCredito->alias : null;
+
                 $product        = $query->productLead;
                 $user           = $query->advisorLead;
                 $agreement      = $query->agreementLead;
@@ -259,7 +262,7 @@ class Lead extends Model
                         'id' => $query->id,
                         'name' => $lead_view,
                         'date' => formatDateNameMonthHour($query->created_at),
-                        'product' => ($product != null) ? $product->alias : '',
+                        'product' => $alias_product,
                         'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
                         'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
@@ -270,7 +273,7 @@ class Lead extends Model
                         'id' => $query->id,
                         'name' => $lead_view,
                         'date' => formatDateNameMonthHour($query->created_at),
-                        'product' => ($product != null) ? $product->alias : '',
+                        'product' => $alias_product,
                         'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
                         'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
