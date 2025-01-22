@@ -174,6 +174,8 @@ $().ready(function () {
             'client_person[ID_CIC]': {
                 required: true,
                 number: true,
+                minlength: 9,
+                maxlength:9
             },
             'client_person[ID_IDC]': {
                 required: true,
