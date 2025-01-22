@@ -6098,17 +6098,48 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     }
     
 
-    public function getFile($template_config_id)
+    public function getFile($template_config_id, $creditId = null,  $step = null)
     {
-        try {
-            $config = self::uploadStep3()[$template_config_id];
-        } catch (\Exception $th) {
-            try {
-                $config = self::uploadStep5()[$template_config_id];
-            } catch (\Exception $th) {
-                $config = self::uploadStep1()[$template_config_id];
+        /* $taks = self::ElementsTaskStep1($history_id, null);
+        $templateId = $step -1;
+        $task = $taks[$templateId];
+        $task['subject'] */
+        
+        if ($step == 1) {
+            $elements = array(
+                1 => [
+                    'name' => 'Cargar Anverso INE',
+                ],
+                2 => [
+                    'name' => 'Reverso INE',
+                ],
+                3 => [
+                    'name' => 'Última nómina',
+                ],
+    
+            );
+            $CreditPayOffs = CreditPayOff::select('credit_pay_off.id', 'financial_products.name')
+            ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
+            ->where(['new_kc_credit_id' => $creditId])
+            ->get();
+            $dynamicIndex = 3;
+            foreach ($CreditPayOffs as $CreditPayOff) {
+                $dynamicIndex = $dynamicIndex + 1;
+                $elements[$dynamicIndex] = array(
+                    'name' => "{$CreditPayOff->name}",
+                );
             }
+            /* $dynamicIndex = 4;
+            'name' => "{$dynamicIndex}- Capturar {$creditPayOff->name}", */
+        } else {
+            $elements = array(
+                4 => [
+                    'name' => 'Contrato firmado',
+                ],
+            );
         }
+        $config = $elements[$template_config_id];
+       
 
         return $config;
     }
