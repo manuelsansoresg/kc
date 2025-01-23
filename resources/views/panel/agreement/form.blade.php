@@ -41,6 +41,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="frm-product-name">Razón social</label>
+                                            <div class="form-control-wrap">
+                                              
+                                                <input type="text" name="data[razon_social]" id="razon_social" class="form-control">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label">Descripcion</label>
