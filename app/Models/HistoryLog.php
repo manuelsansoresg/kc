@@ -573,8 +573,23 @@ class HistoryLog extends Model
             $credit             = Credit::find($id_rel);
             Credit::sendEmailDelivered($credit->id);
         }
+        $isChange = false;
+        //change status online
+        if ($status_id == HistoryLog::KC_CHECK_UP || $status_id == HistoryLog::CREDIT_IN_PROGRESS || $status_id == HistoryLog::NEW_CREDIT_KC_CHECK_UP || $status_id == HistoryLog::KC_CONTROL_DESK || $status_id == HistoryLog::KC_DELIVERY || $status_id == HistoryLog::KC_SWAP || $status_id == HistoryLog::KC_PAYMENT) {
+            $statusOnline = 1;
+            $isChange = true;
+        }
 
-        
+        if ($status_id == HistoryLog::CREDIT_ARCHIVE || $status_id == HistoryLog::CREDIT_CANCELED || $status_id == HistoryLog::CREDIT_REJECTED || $status_id == HistoryLog::CREDITS_PAID || $status_id == HistoryLog::KC_AFTER_FORM || $status_id == HistoryLog::CREDITS_DELIVERED ) {
+            $statusOnline = 0;
+            $isChange = true;
+        }
+
+        if ($isChange === true) {
+            Credit::where('id', $credit->id)->update([
+                'credit_status' => $statusOnline
+            ]);
+        }
     }
 
     public function removeInProgress($id_rel, $status_id)

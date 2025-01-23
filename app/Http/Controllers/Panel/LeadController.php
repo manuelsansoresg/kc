@@ -12,6 +12,7 @@ use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\Bank;
 use App\Models\ClientPerson;
+use App\Models\Credit;
 use App\Models\CreditPayOff;
 use App\Models\CurrentFinancialProduct;
 use App\Models\HistoryLog;
@@ -92,6 +93,9 @@ class LeadController extends Controller
         $isValidateRFC = false;
         $isValidate = false;
         $lead = null;
+
+        
+
         
         if ($id == 'cellphone') {
             $contentValidaciones      = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
@@ -116,8 +120,17 @@ class LeadController extends Controller
         }
         
         $isValidate = $isValidateCellphone == true || $isValidateRFC == true ?  true : false;
+        $getStatus = Credit::where('client_person_id', $getClientPerson->id)->where('credit_status', 1)->count();
+        $creditStatus =  $getStatus > 0 ? false : true;
+        $nombreCliente = $getClientPerson->name.' '.$getClientPerson->last_name.' '.$getClientPerson->second_last_name;
 
-        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate]);
+        if ($creditStatus === false) {
+            $contentValidaciones .= '<p >Validación otro trámite pendiente / '.$nombreCliente.' /<span class="text-danger"> Fail </span></p>';
+        } else {
+            $contentValidaciones .= '<p >Validación otro trámite pendiente / '.$nombreCliente.' /<span class="text-primary"> OK </span></p>';
+        }
+
+        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate, 'creditStatus' => $creditStatus]);
     }
 
     public function validateCellphoneAndRfc($cellphone , $rfc, Lead $lead)

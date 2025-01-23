@@ -506,7 +506,7 @@
                         <input type="hidden" name="creditPayOffId" id="creditPayOffId" value="">
                         <input type="hidden" name="lead_id_prueba" id="lead_id_prueba" value="8">
                         
-                      <button type="submit" class="btn btn-secondary">Guardar</button>
+                      <button type="submit" class="btn btn-secondary" id="btnSave">Guardar</button>
                     </div>
                 </form>
               </div>

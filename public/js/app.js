@@ -2806,6 +2806,13 @@ window.checkDataLeadExist = function (valInput, id) {
       var isExist = result.exist;
       var clientPerson = result.clientPerson;
       var isValidate = result.isValidate;
+      var creditStatus = result.creditStatus;
+
+      if (creditStatus == false) {
+        $('#btnSave').prop('disabled', true); // Bloquea el botón
+      } else {
+        $('#btnSave').prop('disabled', false); // Desbloquea el botón
+      }
 
       if (id == 'cellphone') {
         $('#content-validaciones-phone').html(result.contentValidaciones);
