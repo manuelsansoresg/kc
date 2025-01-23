@@ -21,7 +21,7 @@
                 @endif
             </div>
             <div class="col-12">
-                <a href="#" class="btn btn-outline-primary">Salir</a>
+                <a href="/" class="btn btn-outline-primary">Salir</a>
             </div>
         </div>
     </div>
