@@ -107,7 +107,7 @@ class HomeController extends Controller
         } else {
             $isFirma = $client->cm_agreement == null ? true : false;
         }
-        $agreement = Agreement::find($client->agreement_id);
+        $agreement = Agreement::find($credit->agreement_id);
         return view('contrato_cliente', compact('client', 'history', 'isFirma', 'firma', 'token', 'agreement'));
     }
 
@@ -178,6 +178,8 @@ class HomeController extends Controller
         $token = null;
         $ip = null;
         $hostname = null;
+        
+        $agreement = Agreement::find($credit->agreement_id);
 
         $history = HistoryLog::where([
             'id_rel' => $credit->id,
@@ -197,7 +199,7 @@ class HomeController extends Controller
         } else {
             $isFirma = $credit->sod_agreement == null ? true : false;
         }
-        return view('contrato_sod', compact('client', 'credit', 'history', 'isFirma', 'firma', 'token'));
+        return view('contrato_sod', compact('client', 'credit', 'agreement', 'history', 'isFirma', 'firma', 'token'));
     }
 
     public function contratoCreditFirmaSod(Credit $credit , Request $request)
@@ -210,7 +212,7 @@ class HomeController extends Controller
         $hostname = gethostbyaddr($ip);
         $dateTime = Carbon::now()->format('d-m-Y h:i:s a');
         $isFirma = $credit->sod_agreement == null ? true : false;
-
+        $agreement = Agreement::find($credit->agreement_id);
         
 
         $data = array(
@@ -221,6 +223,8 @@ class HomeController extends Controller
             'ip' => $firma,
             'hostname' => $hostname,
             'dateTime' => $dateTime,
+            'credit' => $credit,
+            'agreement' => $agreement,
         );
         Credit::where('id', $credit->id)->update([
             'sod_agreement' => 1
