@@ -59,7 +59,7 @@
     }
 
     /* nuevo estilo*/
-    @import url(https://themes.googleusercontent.com/fonts/css?kit=fpjTOVmNbO4Lz34iLyptLUXza5VhXqVC6o75Eld_V98);
+    /* @import url(https://themes.googleusercontent.com/fonts/css?kit=fpjTOVmNbO4Lz34iLyptLUXza5VhXqVC6o75Eld_V98); */
 
         .lst-kix_list_4-1>li {
             counter-increment: lst-ctn-kix_list_4-1

@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class HomeController extends Controller
 {
@@ -113,6 +114,7 @@ class HomeController extends Controller
     public function contratoClientFirma(ClientPerson $client , Request $request)
     {
         $credit  = Credit::where('client_person_id', $client->id )->first();
+        $agreement = Agreement::find($credit->agreement_id);
         $token = $client->id.'-'.\Str::random(10);
         $firma =  $token;
         // Obtener la IP real del usuario
@@ -129,6 +131,7 @@ class HomeController extends Controller
             'ip' => $firma,
             'hostname' => $hostname,
             'dateTime' => $dateTime,
+            'agreement' => $agreement,
         );
         ClientPerson::where('id', $client->id)->update([
             'cm_agreement' => 1
@@ -141,13 +144,21 @@ class HomeController extends Controller
         ])->first();
 
         
-        
+        //dd($client->cm_agreement);
+        $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato CM.pdf';
+        $directory = public_path('firma_contratos');
+        $filePath = $directory . '/' . $nombre;
+
         if ($client->cm_agreement == null) {
+        }
+        if (!File::exists($filePath)) {
             $pdf = Pdf::loadView('contrato_cliente', $data);
             $pdf->setPaper('A4');
-            $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato CM.pdf';
+            
+            
             $pdf->save('firma_contratos/'.$nombre);
         }
+        
        
 
         
