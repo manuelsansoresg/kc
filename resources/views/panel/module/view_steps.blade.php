@@ -141,6 +141,34 @@
                             </div>
                         </div>
                     </div>
+                    @if ($model == 'controlDesk')
+                        @php
+                            $isFinish = (new $templateStrategy)->isFinish($history);
+                        @endphp
+                        {{ $isFinish }}
+                        @if ($isFinish == true)
+                            
+                            <div class="nk-block nk-block-lg">
+                                <div class="container">
+                                    <div class="row ">
+                                        <div class="col-12 col-md-8 text-end">
+                                            <a onclick="finishControlDesk({{ $history->id }})" class="btn btn-outline-success">Continuar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @else
+                            <div class="nk-block nk-block-lg">
+                                <div class="container">
+                                    <div class="row ">
+                                        <div class="col-12 col-md-8 text-end">
+                                            <a onclick="openModalValidateControlDesk({{  $history->id_rel }})" class="btn btn-outline-secondary">Continuar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
                     @if ($model == 'delivery')
                         @php
                             $isFinish = (new $templateStrategy)->isFinish($history);

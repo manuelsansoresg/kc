@@ -106,7 +106,6 @@ class HomeController extends Controller
         } else {
             $isFirma = $client->cm_agreement == null ? true : false;
         }
-        $isFirma = true;
         $agreement = Agreement::find($client->agreement_id);
         return view('contrato_cliente', compact('client', 'history', 'isFirma', 'firma', 'token', 'agreement'));
     }

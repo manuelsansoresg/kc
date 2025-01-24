@@ -586,6 +586,7 @@ class HistoryLog extends Model
         }
 
         if ($isChange === true) {
+            $credit             = Credit::find($id_rel);
             Credit::where('id', $credit->id)->update([
                 'credit_status' => $statusOnline
             ]);

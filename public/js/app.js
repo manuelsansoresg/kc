@@ -6003,6 +6003,12 @@ window.sendCreditActive = function (historyId) {
   })["catch"](function (e) {});
 };
 
+window.finishControlDesk = function (historyId) {
+  axios.get("/panel/kc-control-desk/" + historyId + "/send/finish").then(function (response) {
+    window.location = '/panel/kc-control-desk';
+  })["catch"](function (e) {});
+};
+
 /***/ }),
 
 /***/ "./resources/js/components/notification/utilities.js":

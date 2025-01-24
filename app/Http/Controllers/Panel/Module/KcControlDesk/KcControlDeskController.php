@@ -28,6 +28,11 @@ class KcControlDeskController extends Controller
         return response()->json(['data' => $users]);
     }
 
+    public function finish(HistoryLog $history)
+    {
+        HistoryLog::move($history->id_rel, HistoryLog::KC_DELIVERY, $history->old_status_id, null);
+    }
+
     public function showStep(Credit $credit)
     {
         

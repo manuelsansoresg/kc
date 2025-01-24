@@ -1761,7 +1761,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'options' => 'null',
                     'is_required' => false,
                     'is_disabled' => null,
-                    'value' => '/panel/kc-control-desk',
+                    'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                     'col' => 'col-12'
                 ],
                 9 => [
@@ -4263,8 +4263,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                                 ])->update([
                                     'status' => 0
                                 ]);
-                                HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_DELIVERY, null, false);
-                                HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY, $credit->id, 0);
+                                
                             }
 
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, null, false);
@@ -4344,15 +4343,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);
 
-                            HistoryLog::where([
-                                'id_rel' => $credit->id,
-                                'status_id' => HistoryLog::KC_CONTROL_DESK,
-                                'status' => 1,
-                            ])->update([
-                                'status' => 0
-                            ]);
-                            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_DELIVERY, null, false);
-                            HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY, $credit->id, 0);
+                           
+                            
                         }
                     }
                 }
@@ -5556,9 +5548,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP3, $credit->id, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP3, $credit->id, 1);
             
-            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_DELIVERY);
-            HistoryLog::where(['id_rel' => $credit->id, 'status_id' => HistoryLog::KC_CONTROL_DESK, 'status' => 1])
-                        ->update(['status' => 0]);
+            
 
             $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
             (new $notification_add)->send($credit->id);
@@ -6097,6 +6087,15 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
     }
     
+    public function isFinish($history)
+    {
+        $statusAllTrue = CreditsControlDesk::where('credit_id', $history->id_rel)
+                        ->get()
+                        ->every(function ($credit) {
+                            return $credit->status === 1;
+                        });
+        return $statusAllTrue ? true : false;
+    }
 
     public function getFile($template_config_id, $creditId = null,  $step = null)
     {

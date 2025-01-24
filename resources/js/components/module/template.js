@@ -1453,3 +1453,14 @@ window.sendCreditActive = function(historyId)
         .catch(e => {
         });
 }
+
+window.finishControlDesk = function(historyId)
+{
+    axios
+        .get("/panel/kc-control-desk/"+historyId+"/send/finish")
+        .then(function (response) {
+            window.location = '/panel/kc-control-desk';
+        })
+        .catch(e => {
+        });
+}
