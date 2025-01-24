@@ -145,7 +145,7 @@
                         @php
                             $isFinish = (new $templateStrategy)->isFinish($history);
                         @endphp
-                        {{ $isFinish }}
+                        
                         @if ($isFinish == true)
                             
                             <div class="nk-block nk-block-lg">
