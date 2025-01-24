@@ -6355,7 +6355,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($step == null) {
             $breadcumbs = self::optionBreadcumbStep($history);
         }
-        if ($step > 1) {
+        if ($step >= 1) {
             $breadcumbs = self::optionBreadcumblistAction($history, $step);
         }
         $view_breadcumb    = \View::make('panel.module.breadcumb', ['breadcumbs' => $breadcumbs])->render();
