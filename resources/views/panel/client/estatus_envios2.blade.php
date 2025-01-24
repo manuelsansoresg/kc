@@ -16,10 +16,10 @@
             <tr>
                 <td>Activación en S2</td>
                 <td>
-                    @if ($isCreditActive == 0)
-                        fail
+                    @if ($$credit->credit_s2_active == 1)
+                    Ok
                         @else
-                        Ok
+                        fail  
                     @endif
                 </td>
             </tr>

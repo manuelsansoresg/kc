@@ -603,12 +603,11 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $client = $credit->creditClientPerson;
         $stepRedirect = $taskId +1;
         $type = 2;
-        $getCreditKaax = CreditKaaxSidecc::where('kc_credit_id', $credit->id)->first();
-        $isCreditActive =  $getCreditKaax != null && $getCreditKaax->active == 1 ? true : false ;
+        $getCreditKaax = Credit::where('id', $credit->id)->first();
 
         $isCreditKaax = CreditKaaxSidecc::where('kc_credit_id', $credit->id)->count();
 
-        $contentInfo = \View::make('panel.client.estatus_envios2', compact('isCreditKaax', 'type', 'isCreditActive'))->render();
+        $contentInfo = \View::make('panel.client.estatus_envios2', compact('isCreditKaax', 'credit', 'type'))->render();
 
         $elements = array(
             1 => [
