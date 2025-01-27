@@ -1208,9 +1208,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $stepRedirect = $taskId +1;
         $financialProduct = FinancialProduct::find($credit->applied_financial_product);
         $urlRedirect = '/panel/template/steps/controlDesk/' . $history_id . '/show';
-        if ($financialProduct->type_product_id === 3) {
+       /*  if ($financialProduct->type_product_id === 3) {
             $urlRedirect = '/panel/kc-control-desk';
-        }
+        } */
         
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit])->render();
 
@@ -1867,7 +1867,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'options' => 'null',
                     'is_required' => false,
                     'is_disabled' => null,
-                    'value' => '/panel/kc-control-desk',
+                    'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                     'col' => 'col-12'
                 ],
                 4 => [
@@ -4255,16 +4255,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, $credit->id, 0);
 
-                            if ($financialProduct->type_product_id == 3) {
-                                HistoryLog::where([
-                                    'id_rel' => $credit->id,
-                                    'status_id' => HistoryLog::KC_CONTROL_DESK,
-                                    'status' => 1,
-                                ])->update([
-                                    'status' => 0
-                                ]);
-                                
-                            }
 
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 0);

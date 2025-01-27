@@ -145,28 +145,30 @@
                         @php
                             $isFinish = (new $templateStrategy)->isFinish($history);
                         @endphp
-                        
-                        @if ($isFinish == true)
+                        @if ($totalPercent == 100)
                             
-                            <div class="nk-block nk-block-lg">
-                                <div class="container">
-                                    <div class="row ">
-                                        <div class="col-12 col-md-8 text-end">
-                                            <a onclick="finishControlDesk({{ $history->id }})" class="btn btn-outline-success">Continuar</a>
+                            @if ($isFinish == true)
+                                
+                                <div class="nk-block nk-block-lg">
+                                    <div class="container">
+                                        <div class="row ">
+                                            <div class="col-12 col-md-8 text-end">
+                                                <a onclick="finishControlDesk({{ $history->id }})" class="btn btn-outline-success">Continuar</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            @else
-                            <div class="nk-block nk-block-lg">
-                                <div class="container">
-                                    <div class="row ">
-                                        <div class="col-12 col-md-8 text-end">
-                                            <a onclick="openModalValidateControlDesk({{  $history->id_rel }})" class="btn btn-outline-secondary">Continuar</a>
+                                @else
+                                <div class="nk-block nk-block-lg">
+                                    <div class="container">
+                                        <div class="row ">
+                                            <div class="col-12 col-md-8 text-end">
+                                                <a onclick="openModalValidateControlDesk({{  $history->id_rel }})" class="btn btn-outline-secondary">Continuar</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endif
                     @endif
                     @if ($model == 'delivery')
