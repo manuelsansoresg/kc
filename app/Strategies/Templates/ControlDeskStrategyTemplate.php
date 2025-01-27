@@ -855,8 +855,19 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit       = Credit::find($id_rel);
         $client = $credit->creditClientPerson;
         $stepRedirect = $taskId +1;
-        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit])->render();
+        
 
+        $step = null;
+        $stepParam = isset($_GET['step']) ? $_GET['step'] : null;
+        if ($stepParam !== null) {
+            if (strpos($stepParam, '_') !== false) {
+                list($step, $taskId) = array_map('intval', explode('_', $stepParam));
+            } else {
+                $step = intval($stepParam);
+            }
+        }
+        
+        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'step' => $step])->render();
         $elements = array(
             1 => [
                 'title_section' => '',
@@ -994,7 +1005,18 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit       = Credit::find($id_rel);
         $client = $credit->creditClientPerson;
         $stepRedirect = $taskId +1;
-        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit])->render();
+
+        $stepParam = isset($_GET['step']) ? $_GET['step'] : null;
+        if ($stepParam !== null) {
+            if (strpos($stepParam, '_') !== false) {
+                list($step, $taskId) = array_map('intval', explode('_', $stepParam));
+            } else {
+                $step = intval($stepParam);
+            }
+        }
+
+
+        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'step' => $step])->render();
 
         $elements = array(
             1 => [

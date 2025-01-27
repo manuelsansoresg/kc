@@ -113,7 +113,49 @@
     @endif
 @endif
 
+@if (isset($step) && $step == 3 && $taskId === 2)
+<div class="row">
+    <div class="col-6">
+        <table class="table table-striped">
+            <tr>
+                <td>Fecha nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_date : null }}</td>
+            </tr>
+            <tr>
+                <td>Total nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_total : null }}</td>
+            </tr>
+        
+        </table>
+    </div>
+</div>
+@endif
+
+@if (isset($step) && $step == 3 && $taskId === 3)
+<div class="row">
+    <div class="col-6">
+        <table class="table table-striped">
+            <tr>
+                <td>CP nominal</td>
+                <td>{{ $client!= null ? $client->payment_capacity : null }}</td>
+            </tr>
+            <tr>
+                <td>Fecha nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_date : null }}</td>
+            </tr>
+            <tr>
+                <td>Total nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_total : null }}</td>
+            </tr>
+        
+        </table>
+    </div>
+</div>
+@endif
+
 @if (isset($step) && $step == 4 && $taskId === 1)
+
+
 <div class="row">
     <div class="col-6">
         <table class="table table-striped">
