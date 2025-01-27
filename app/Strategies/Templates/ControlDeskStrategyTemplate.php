@@ -5178,7 +5178,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
     
         // Contar los campos no nulos.
-        $elements = count(array_filter($fields, fn($field) => !empty($client->$field)));
+        $elements = count(array_filter($fields, fn($field) => !empty($credit->$field)));
     
         // Calcular el porcentaje completado.
         $total = count($fields);
