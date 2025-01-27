@@ -61,7 +61,7 @@
             <label class="form-label">Plazo</label>
             
             <div class="form-control-wrap">
-                <select class="form-select js-select2" name="data[selected_term’]" id="ref-plazo"  data-search="on" onchange="getMontoSolicitado()">
+                <select class="form-select js-select2" name="data[selected_term]" id="ref-plazo"  data-search="on" onchange="getMontoSolicitado()">
                     <option value="">Seleccione una opción</option>
                 </select>
             </div>

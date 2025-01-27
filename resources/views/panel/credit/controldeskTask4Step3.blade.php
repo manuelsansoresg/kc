@@ -1,11 +1,12 @@
 <div class="row">
     <div class="col-6">
-        <div class="form-group">
-            <label class="form-label">CP Real</label>
-            <div class="form-control-wrap">
-                <input type="number" class="form-control" name="payroll_payment_capacity" id="payroll_payment_capacity" value="{{ $credit->payroll_payment_capacity }}"  step="0.01">
-            </div>
-        </div>
+        <table class="table table-striped">
+            <tr>
+                <td>CP Real</td>
+                <td>{{ $credit->payroll_payment_capacity }}</td>
+            </tr>
+        </table>
+        
     </div>
     <div class="col-12"></div>
     <div class="col-6 mt-5">
@@ -46,6 +47,9 @@
     </div>
     <div class="col-12">
         <div class="row">
+            <div class="col-12 mt-5">
+                <span class="preview-title-lg overline-title">Compra de cartera</span>
+            </div>
             <div class="col-md-6 mt-3">
                 <div class="form-group">
                     <label class="form-label">Monto máximo</label>

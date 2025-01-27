@@ -56,7 +56,9 @@ class Lead extends Model
         'tramit_type',
         'cellphone_validated',
         'rfc_validated',
-        'go_ahead'
+        'go_ahead',
+        'selected_term',
+        'selected_loan',
     ];
 
     public static function validateSod($clientPerson, $financialProduct)
