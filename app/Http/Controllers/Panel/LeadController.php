@@ -120,9 +120,9 @@ class LeadController extends Controller
         }
         
         $isValidate = $isValidateCellphone == true || $isValidateRFC == true ?  true : false;
-        $getStatus = Credit::where('client_person_id', $getClientPerson->id)->where('credit_status', 1)->count();
+        $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->where('credit_status', 1)->count() : 0;
         $creditStatus =  $getStatus > 0 ? false : true;
-        $nombreCliente = $getClientPerson->name.' '.$getClientPerson->last_name.' '.$getClientPerson->second_last_name;
+        $nombreCliente = $getClientPerson!= null ? $getClientPerson->name.' '.$getClientPerson->last_name.' '.$getClientPerson->second_last_name : null;
 
         if ($creditStatus === false) {
             $contentValidaciones .= '<p >Validación otro trámite pendiente / '.$nombreCliente.' /<span class="text-danger"> Fail </span></p>';
