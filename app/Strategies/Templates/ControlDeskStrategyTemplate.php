@@ -1701,7 +1701,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         0 => array(
                             'link' => null,
                             'name' => 'Valida',
-                            'name_field' =>  'contrato-de-credito',
+                            'name_field' =>  'firma-de-contrato-valida',
                             'class' => null,
                             'onclick' => null,
                             'value' => 1,
@@ -1710,7 +1710,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         1 => array(
                             'link' => null,
                             'name' => 'Invalida',
-                            'name_field' => 'contrato-de-credito',
+                            'name_field' => 'firma-de-contrato-valida',
                             'class' => null,
                             'onclick' => null,
                             'value' => 0,
@@ -4339,7 +4339,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
                         
                         $labelValidate = $financialProduct->type_product_id != 3 ? CreditsControlDesk::$labelValidate[9] : CreditsControlDesk::$labelValidate[8];
-                       
+                        
                         
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
                         
