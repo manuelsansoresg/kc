@@ -4247,6 +4247,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     }
 
                     if ($task == 4) {
+                        $getProduct = FinancialProduct::where('id', $credit->applied_financial_product)->first();
+                        $product_id =  $getProduct->type_product_id; 
+                        $applied_periodicity =  $getProduct->periodicity_id; 
+                        $applied_payment = $data_credit['applied_payment']; 
+                        $applied_loan_total_amount = $data_credit['applied_loan_total_amount']; 
+                        $opening_Commission_percentage =  $getProduct->opening_commission_rate; 
+                        $net_amount =  $data_credit['net_amount']; 
+                        $opening_commission =  $data_credit['opening_commission']; 
+
+                        Credit::where('id', $credit->id)->update([
+                            'product_id' => $product_id,
+                            'applied_periodicity' => $applied_periodicity,
+                            'applied_payment' => $applied_payment,
+                            'applied_loan_total_amount' => $applied_loan_total_amount,
+                            'opening_Commission_percentage' => $opening_Commission_percentage,
+                            'net_amount' => $net_amount,
+                            'opening_commission' => $opening_commission,
+                        ]);
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
                         $percentTask4Step3  = self::DynamicPercentStep3($credit->id, $labelValidate);
                         
@@ -4339,8 +4357,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
                         
                         $labelValidate = $financialProduct->type_product_id != 3 ? CreditsControlDesk::$labelValidate[9] : CreditsControlDesk::$labelValidate[8];
-                        
-                        
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
                         
                         

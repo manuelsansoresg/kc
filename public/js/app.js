@@ -3354,10 +3354,13 @@ window.getResumen = function () {
     $('#content-monto-refinanciar').html(montoRefinanciar);
     $('#content-comision-apertura').html(comision);
     $('#content-monto-entregar').html(monto_entregar);
-    $('#content-monto-entregar').html(monto_entregar);
     $('#content-plazo').html(periodicidad);
     $('#content-monto').html(plazo);
     $('#content-pago-periodico').html(pagoPeriodico);
+    $('#applied_payment').val(pagoPeriodico);
+    $('#applied_loan_total_amount').val(result.pagoTotalSF);
+    $('#opening_commission').val(result.comisionSF);
+    $('#net_amount').val(montoEntregarDecimal);
     $('#content-pago-total').html(pagoTotal);
     $('#content-tasa-anual').html(tasaAnual);
     $('#content-cat').html(cat);

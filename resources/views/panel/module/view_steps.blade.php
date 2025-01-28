@@ -120,7 +120,8 @@
                                                                             <td>
                                                                                 @if ($list_action['status'] == 'En curso')
                                                                                     <a href="{{ $list_action['link'] }}" class="btn btn-outline-primary btn-sm">Abrir</a>
-                                                                                    @endif
+                                                                                @endif
+                                                                                <a href="{{ $list_action['link'] }}" class="btn btn-outline-primary btn-sm">Abrir</a>
                                                                             </td>
                                                                         </tr>
                                                                     @endif

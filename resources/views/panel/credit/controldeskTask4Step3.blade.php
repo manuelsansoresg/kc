@@ -194,8 +194,14 @@
     <input type="hidden" id="client_person_id" value="{{ $client->id }}">
     <input type="hidden" id="financial_product_id" value="{{ $financialProduct->id }}">
     <input type="hidden" id="applied_periodicity" name="credit[applied_periodicity]">
+    <input type="hidden" id="applied_loan_total_amount" name="credit[applied_loan_total_amount]">
+    <input type="hidden" id="opening_commission" name="credit[opening_commission]">
+    <input type="hidden" id="net_amount" name="credit[net_amount]">
     <input type="hidden" id="applied_payment" name="credit[applied_payment]">
+    
     <input type="hidden" id="tramit_type" value="{{ $credit->tramit_type }}">
+    
+    
     
     
 </div>
