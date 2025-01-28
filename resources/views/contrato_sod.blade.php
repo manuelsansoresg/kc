@@ -23,30 +23,27 @@
         }
 
         body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+    }
+    .content {
+            text-align: justify;
+            margin-bottom: 30px;
     }
 
-    .content {
-      flex: 1;
-    }
+    
 
     footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: #f8f9fa;
-      border-top: 1px solid #dee2e6;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        background-color: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+        text-align: center;
+        font-size: 12px;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
     }
 
     footer button {
@@ -731,12 +728,12 @@
             </div>
         </div>
     </header>
-
+<div class="content">
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="card mt-5">
-                    <div class="card-body">
+                <div class="{{ $token == null ? 'card' : null }} mt-5">
+                    <div class="{{ $token == null ? 'card-body' : null }}">
                         <p class="c16"><span class="c9 c3">AUTORIZACI&Oacute;N DE SALARIO BAJO DEMANDA</span></p>
     <p class="c8 c16"><span class="c9 c3"></span></p>
     <p class="c0 c8"><span class="c9 c3"></span></p>
@@ -767,46 +764,46 @@
     </table>
     <p class="c0 c8"><span class="c9 c2"></span></p>
     <p class="c0"><span class="c9 c2">Informaci&oacute;n del Salario Bajo Demanda</span></p>
-    <table class="c4">
+    <table class="table">
         <tr class="c11">
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">Folio:</span><span class="c9 c2">&nbsp;{{ $credit->id }}</span></p>
             </td>
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">Fecha:</span><span class="c9 c2">&nbsp; {{ date('d-m-Y') }} </span></p>
             </td>
         </tr>
         <tr class="c11">
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">Monto Retirado:</span><span class="c9 c2">&nbsp;${{ format_price($credit->applied_import) }}</span></p>
             </td>
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">Comisi&oacute;n:</span><span class="c9 c2">&nbsp;${{ format_price($credit->opening_commission) }}</span></p>
             </td>
         </tr>
         <tr class="c11">
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">Monto total a pagar:</span><span class="c9 c2">&nbsp;${{ format_price($credit->applied_loan_total_amount) }}</span></p>
             </td>
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">N&uacute;mero de pagos parciales:</span><span
                         class="c9 c2">&nbsp;{{ $credit->applied_term }}</span></p>
             </td>
         </tr>
         <tr class="c11">
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">Fecha de pago:</span><span class="c9 c2">&nbsp;{{ $credit->delivered_date }}</span></p>
             </td>
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">Tasa de inter&eacute;s fija anual:</span><span class="c9 c2">&nbsp;{{ $credit->applied_interest_rate }}
                         %</span></p>
             </td>
         </tr>
         <tr class="c11">
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">Costo anual total: </span>${{ format_price($credit->applied_interest_rate) }}</p>
             </td>
-            <td class="c7" colspan="1" rowspan="1">
+            <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c0"><span class="c9 c2">Todos los montos incluyen IVA</span></p>
             </td>
         </tr>
@@ -858,6 +855,16 @@
             me permito solicitar a </span><span class="c3">{{ $agreement!= null ? $agreement->razon_social : null}}</span><span class="c9 c2">&nbsp;lo
             siguiente:</span></p>
     <p class="c5"><span class="c2 c9"></span></p>
+    @if ($token != null && $isFirma === false)
+    <footer>
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </footer>
+    @endif
+
+
     <ol class="c20 lst-kix_lablrcn5fwyv-0 start" start="1">
         <li class="c13 c14 li-bullet-0"><span class="c2">Manifiesto mi voluntad para que se me realice la
                 retenci&oacute;n nominal autom&aacute;tica del sueldo que recibo como contraprestaci&oacute;n por la
@@ -906,6 +913,7 @@
             </div>
         </div>
     </div>
+</div>
     
     @if ($isFirma === true && $token == null)
         <footer>

@@ -108,7 +108,7 @@ class HomeController extends Controller
             $isFirma = $client->cm_agreement == null ? true : false;
         }
         $agreement = Agreement::find($credit->agreement_id);
-        return view('contrato_cliente', compact('client', 'history', 'isFirma', 'firma', 'token', 'agreement'));
+        return view('contrato_cliente', compact('client', 'history', 'isFirma', 'firma', 'token', 'ip', 'agreement'));
     }
 
     public function contratoClientFirma(ClientPerson $client , Request $request)
@@ -128,7 +128,7 @@ class HomeController extends Controller
             'isFirma' => $isFirma,
             'token' => $token,
             'firma' => $firma,
-            'ip' => $firma,
+            'ip' => $ip,
             'hostname' => $hostname,
             'dateTime' => $dateTime,
             'agreement' => $agreement,
@@ -152,12 +152,10 @@ class HomeController extends Controller
         if ($client->cm_agreement == null) {
         }
         if (!File::exists($filePath)) {
-            $pdf = Pdf::loadView('contrato_cliente', $data);
-            $pdf->setPaper('A4');
-            
-            
-            $pdf->save('firma_contratos/'.$nombre);
         }
+        $pdf = Pdf::loadView('contrato_cliente', $data);
+        $pdf->setPaper('A4');
+        $pdf->save('firma_contratos/'.$nombre);
         
        
 
