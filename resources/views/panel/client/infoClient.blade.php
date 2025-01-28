@@ -166,7 +166,7 @@
             <tr>
                 <td>URL contrato</td>
                 <td>
-                    {{ asset('/client/contratocm/'.$client->id) }}
+                    {{ asset('/client/contratocm/'.$client->id.'/'.$credit->id) }}
                 </td>
             </tr>
             

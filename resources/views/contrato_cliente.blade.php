@@ -1731,10 +1731,12 @@
     </div>
     
     @if ($isFirma === true && $token == null)
-        <div class="footer">
-            <a  href="/client/contratocm/{{ $client->id}}/2/exit" class="btn btn-outline-danger">Cancelar</a>
-            <a href="/client/contratocm/{{ $client->id}}/firmar" class="btn btn-success">Aceptar</a>
-        </div>
+        <footer style="text-align: right">
+            <div style="padding:10px 0px; margin-right: 20px;">
+                <a  href="/client/contratocm/{{ $client->id}}/2/exit" class="btn btn-outline-danger">Cancelar</a> &nbsp;
+                <a href="/client/contratocm/{{ $client->id}}/{{ $credit->id }}/firmar" class="btn btn-success ">Aceptar</a>
+            </div>
+        </footer>
     @endif
     @if ($token != null && $isFirma === false)
     <br>

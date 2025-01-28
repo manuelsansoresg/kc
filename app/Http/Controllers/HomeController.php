@@ -79,9 +79,8 @@ class HomeController extends Controller
         abort(404);
     }
 
-    public function contratoClient(ClientPerson $client)
+    public function contratoClient(ClientPerson $client,  Credit $credit)
     {
-        $credit  = Credit::where('client_person_id', $client->id )->orderBy('id', 'DESC')->first();
         $isFirma = false;
         $firma = null;
         $token = null;
@@ -102,18 +101,20 @@ class HomeController extends Controller
             'status' => 1,
         ])->orderBy('history_logs.id', 'DESC')
         ->first();
+
+        
         if ($statusFirmaContratoCM == null) {
             abort(404);
         } else {
             $isFirma = $client->cm_agreement == null ? true : false;
         }
+        $isFirma = true;
         $agreement = Agreement::find($credit->agreement_id);
-        return view('contrato_cliente', compact('client', 'history', 'isFirma', 'firma', 'token', 'ip', 'agreement'));
+        return view('contrato_cliente', compact('client', 'history', 'isFirma', 'credit', 'firma', 'token', 'ip', 'agreement'));
     }
 
-    public function contratoClientFirma(ClientPerson $client , Request $request)
+    public function contratoClientFirma(ClientPerson $client , Credit $credit, Request $request)
     {
-        $credit  = Credit::where('client_person_id', $client->id )->first();
         $agreement = Agreement::find($credit->agreement_id);
         $token = $client->id.'-'.\Str::random(10);
         $firma =  $token;
@@ -125,6 +126,7 @@ class HomeController extends Controller
 
         $data = array(
             'client' => $client,
+            'credit' => $credit,
             'isFirma' => $isFirma,
             'token' => $token,
             'firma' => $firma,
@@ -163,7 +165,7 @@ class HomeController extends Controller
         return redirect('/client/contratocm/'.$client->id.'/1/exit');
     }
 
-    public function contratoClientFirmaExit(ClientPerson $client , $type)
+    public function contratoClientFirmaExit(ClientPerson $client ,  $type)
     {
         return view('exit_sign', compact('type'));
     }
