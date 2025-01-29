@@ -4252,7 +4252,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         $product_id =  $getProduct->type_product_id; 
                         $applied_periodicity =  $getProduct->periodicity_id; 
                         $applied_payment = $data_credit['applied_payment']; 
-                        $applied_loan_total_amount = $data_credit['applied_loan_total_amount']; 
+                        $applied_loan_total_amount = $applied_payment * $credit->applied_term; 
                         $opening_Commission_percentage =  $getProduct->opening_commission_rate; 
                         $net_amount =  $data_credit['net_amount']; 
                         $opening_commission =  $data_credit['opening_commission']; 
