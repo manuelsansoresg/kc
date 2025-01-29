@@ -108,6 +108,7 @@ class HomeController extends Controller
         } else {
             $isFirma = $client->cm_agreement == null ? true : false;
         }
+
         
         $agreement = Agreement::find($credit->agreement_id);
         return view('contrato_cliente', compact('client', 'history', 'isFirma', 'credit', 'firma', 'token', 'ip', 'agreement'));
@@ -122,7 +123,7 @@ class HomeController extends Controller
         $ip = $request->ip(); // Esto te dará la IP del cliente
         $hostname = gethostbyaddr($ip);
         $dateTime = Carbon::now()->format('d-m-Y h:i:s a');
-        $isFirma = $client->cm_agreement == null ? true : false;
+        $isFirma = false;
 
         $data = array(
             'client' => $client,

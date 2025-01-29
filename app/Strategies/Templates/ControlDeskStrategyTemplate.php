@@ -4057,7 +4057,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 if ($getCompracartera != null) {
                     $data_credit['third_party_adjustment'] = $getMontoRefinanciar->ammount;
                 }
-                $data_credit['applied_loan_total_amount'] = $credit->applied_payment * $credit->applied_term;
+                //$data_credit['applied_loan_total_amount'] = $credit->applied_payment * $credit->applied_term;
                 $data_credit['applied_interest_rate'] = $financialProduct->annual_interest_rate;
                 $data_credit['applied_CAT'] = $financialProduct->rate_cat;
             }
@@ -4256,7 +4256,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         $opening_Commission_percentage =  $getProduct->opening_commission_rate; 
                         $net_amount =  $data_credit['net_amount']; 
                         $opening_commission =  $data_credit['opening_commission']; 
-
+                        
                         Credit::where('id', $credit->id)->update([
                             'product_id' => $product_id,
                             'applied_periodicity' => $applied_periodicity,
