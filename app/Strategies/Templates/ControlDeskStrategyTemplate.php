@@ -1936,7 +1936,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form = 'frm-template_control_desk_step2_task1';
         $type_form = HistoryLog::KC_CONTROL_DESK_TASK1_STEP2;
         $credit = Credit::find($id_rel);
-        $clientPerson = $credit->creditClientPerson;
+        $clientPerson = ClientPerson::find($credit->client_person_id);
         $elements = array(
             
             1 => [
@@ -2068,7 +2068,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form = 'frm-template_control_desk_step2_task2';
         $type_form = HistoryLog::KC_CONTROL_DESK_TASK2_STEP2;
         $credit = Credit::find($id_rel);
-        $clientPerson = $credit->creditClientPerson;
+        $clientPerson = ClientPerson::find($credit->client_person_id);
 
         $elements = array(
             
@@ -2163,8 +2163,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form = 'frm-template_control_desk_step2_task3';
         $type_form = HistoryLog::KC_CONTROL_DESK_TASK3_STEP2;
         $credit = Credit::find($id_rel);
-        $clientPerson = $credit->creditClientPerson;
-
+        
+        $clientPerson = ClientPerson::find($credit->client_person_id);
+        
         $elements = array(
             
             1 => [
@@ -2181,7 +2182,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null,
-                'value' => $clientPerson != null ? $clientPerson->payroll_date : null,
+                'value' => $credit != null ? $credit->payroll_date : null,
             ],
             2 => [
                 'title_section' => null,
@@ -2197,7 +2198,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null,
-                'value' => $clientPerson != null ? $clientPerson->payroll_total : null,
+                'value' => $credit != null ? $credit->payroll_total : null,
             ],
             3 => [
                 'title_section' => null,
