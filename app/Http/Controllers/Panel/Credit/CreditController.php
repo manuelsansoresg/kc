@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Credit;
 
 use App\Exports\ContratoExport;
 use App\Http\Controllers\Controller;
+use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\CreditReference;
 use App\Models\HistoryLog;
@@ -209,48 +210,28 @@ class CreditController extends Controller
 
     public function contractExport(Credit $credit)
     {
-        $client = $credit->creditClientPerson;
+        $client = ClientPerson::find($credit->client_person_id);
         $data_collection[] = array(
             'id' => $credit->id,
-            'client_person' => $client->client_person,
             'name' => $client->name,
-            'client_person' => $client->client_person,
             'last_name' => $client->last_name,
-            'client_person' => $client->client_person,
             'second_last_name' => $client->second_last_name,
-            'client_person' => $client->client_person,
             'cellphone' => $client->cellphone,
-            'client_person' => $client->client_person,
             'validated_clabe' => $client->validated_clabe,
-            'client_person' => $client->client_person,
             'email' => $client->email,
-            'client_person' => $client->client_person,
             'birth_date' => $client->birth_date,
-            'client_person' => $client->client_person,
             'rfc' => $client->rfc,
-            'client_person' => $client->client_person,
             'curp' => $client->curp,
-            'client_person' => $client->client_person,
             'bank_name' => $client->bank_name,
-            'client_person' => $client->client_person,
             'bank_acount_number' => $client->bank_acount_number,
-            'client_person' => $client->client_person,
             'bank_clabe' => $client->bank_clabe,
-            'client_person' => $client->client_person,
             'client_postal_code' => $client->client_postal_code,
-            'client_person' => $client->client_person,
             'client_street' => $client->client_street,
-            'client_person' => $client->client_person,
             'client_home_external_number' => $client->client_home_external_number,
-            'client_person' => $client->client_person,
             'client_home_internal_number' => $client->client_home_internal_number,
-            'client_person' => $client->client_person,
             'client_colony' => $client->client_colony,
-            'client_person' => $client->client_person,
             'client_city' => $client->client_city,
-            'client_person' => $client->client_person,
             'client_state' => $client->client_state,
-            'client_person' => $client->client_person,
             'client_country' => $client->client_country,
             'product_id' => $credit->product_id,
             'agreement_id' => $credit->agreement_id,
