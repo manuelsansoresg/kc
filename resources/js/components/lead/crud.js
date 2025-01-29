@@ -408,11 +408,7 @@ window.checkDataLeadExist = function (valInput, id)
             let isValidate = result.isValidate;
             let creditStatus = result.creditStatus;
 
-            if (creditStatus == false) {
-                $('#btnSave').prop('disabled', true); // Bloquea el botón
-            } else {
-                $('#btnSave').prop('disabled', false); // Desbloquea el botón
-            }
+            
             
 
             if (id == 'cellphone') {

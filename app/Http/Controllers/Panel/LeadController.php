@@ -120,14 +120,23 @@ class LeadController extends Controller
         }
         
         $isValidate = $isValidateCellphone == true || $isValidateRFC == true ?  true : false;
-        $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->where('credit_status', 1)->count() : 0;
+        $statusTramites = array(
+            HistoryLog::KC_CHECK_UP ,
+            HistoryLog::CREDIT_IN_PROGRESS ,
+            HistoryLog::NEW_CREDIT_KC_CHECK_UP ,
+            HistoryLog::KC_CONTROL_DESK ,
+            HistoryLog::KC_DELIVERY ,
+            HistoryLog::KC_SWAP ,
+            HistoryLog::KC_PAYMENT
+        );
+        $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
         $creditStatus =  $getStatus > 0 ? false : true;
         $nombreCliente = $getClientPerson!= null ? $getClientPerson->name.' '.$getClientPerson->last_name.' '.$getClientPerson->second_last_name : null;
 
         if ($creditStatus === false) {
-            $contentValidaciones .= '<p >Validación otro trámite pendiente / '.$nombreCliente.' /<span class="text-danger"> Fail </span></p>';
+            $contentValidaciones .= '<p >Validación otro trámite pendiente / '.$nombreCliente.' /<span class="text-danger"> Tiene trámites pendientes </span></p>';
         } else {
-            $contentValidaciones .= '<p >Validación otro trámite pendiente / '.$nombreCliente.' /<span class="text-primary"> OK </span></p>';
+            $contentValidaciones .= '<p >Validación otro trámite pendiente / '.$nombreCliente.' /<span class="text-primary"> Sin támites pendientes </span></p>';
         }
 
         return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate, 'creditStatus' => $creditStatus]);

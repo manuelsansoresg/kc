@@ -574,14 +574,14 @@ class HistoryLog extends Model
             Credit::sendEmailDelivered($credit->id);
         }
         $isChange = false;
-        //change status online
+        //si permitir trámites
         if ($status_id == HistoryLog::KC_CHECK_UP || $status_id == HistoryLog::CREDIT_IN_PROGRESS || $status_id == HistoryLog::NEW_CREDIT_KC_CHECK_UP || $status_id == HistoryLog::KC_CONTROL_DESK || $status_id == HistoryLog::KC_DELIVERY || $status_id == HistoryLog::KC_SWAP || $status_id == HistoryLog::KC_PAYMENT) {
-            $statusOnline = 1;
+            $statusOnline = $status_id;
             $isChange = true;
         }
-
+        // no permitir trámites
         if ($status_id == HistoryLog::CREDIT_ARCHIVE || $status_id == HistoryLog::CREDIT_CANCELED || $status_id == HistoryLog::CREDIT_REJECTED || $status_id == HistoryLog::CREDITS_PAID || $status_id == HistoryLog::KC_AFTER_FORM || $status_id == HistoryLog::CREDITS_DELIVERED ) {
-            $statusOnline = 0;
+            $statusOnline = $status_id;
             $isChange = true;
         }
 

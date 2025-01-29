@@ -2,6 +2,12 @@
 <p >Validación Prospecto (celular) / {{ $lead->cellphone }} /<span class="text-primary"> OK </span></p>
 @endif
 
+@if ($creditStatus === false)
+    <p >Validación otro trámite pendiente / {{ $nombreCliente }} /<span class="text-danger"> Tiene trámites pendientes </span></p>
+    @else
+    <p >Validación otro trámite pendiente / {{ $nombreCliente }} /<span class="text-primary"> Sin támites pendientes </span></p>
+@endif
+
 @if ($lead->rfc_validated == true)
 <p >Validación Prospecto (rfc) / {{ $lead->rfc}} /<span class="text-primary"> OK </span></p>
 @endif
