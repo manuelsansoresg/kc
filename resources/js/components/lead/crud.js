@@ -1118,6 +1118,7 @@ window.validateSoad = function()
     $('#content_tramit_type').hide();
     $('#content-validaciones-soad-tramite').html('');
     $('#go_ahead').val(0);
+    $('#loan_available-msg').html('');
 
     if ($('#financial_product_id').val() != null) {
         
@@ -1133,7 +1134,7 @@ window.validateSoad = function()
             let result = response.data;
             let typeProductId = result.type_product_id;
             $('#typeProductId').val(typeProductId);
-            
+            $('#loan_available-msg').html(result.loan_available);
             if ($('#is_viability').val() == 1 ) {
                 
                 saveLead();
@@ -1165,6 +1166,7 @@ window.validateSoad = function()
                 $('#is_sod_on_date_allowed').val(1);
                 $('#sod_max').val(result.maximoRedondeado);
                 $('#sod_min').val(result.minimoRedondeado);
+                
               
         
                 $('#content-validaciones-soad-date').html(isSoadDate);

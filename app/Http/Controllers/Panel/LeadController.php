@@ -470,7 +470,7 @@ class LeadController extends Controller
                     'TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed, 
                     'maximoRedondeado' => $maximoRedondeado, 'minimoRedondeado' => $minimoRedondeado, 'contentProductSod' => $contentProductSod,
                     'financialProduct' => $financialProduct->name, 'comision' => $financialProduct->sod_commission_amount, 'bank_name' => $clientPerson->bank_name,
-                    'cuenta' => $maskedClabe, 'type_product_id' => $financialProduct->type_product_id, 'sodTramites' => $tramites
+                    'cuenta' => $maskedClabe, 'type_product_id' => $financialProduct->type_product_id, 'sodTramites' => $tramites, 'loan_available' => format_price($financialProduct->loan_available)
         );
         return response()->json($dataReturn);
     }

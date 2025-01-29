@@ -3391,6 +3391,7 @@ window.validateSoad = function () {
   $('#content_tramit_type').hide();
   $('#content-validaciones-soad-tramite').html('');
   $('#go_ahead').val(0);
+  $('#loan_available-msg').html('');
 
   if ($('#financial_product_id').val() != null) {
     var clientPersonId = $('#client_person_id').val();
@@ -3401,6 +3402,7 @@ window.validateSoad = function () {
       var result = response.data;
       var typeProductId = result.type_product_id;
       $('#typeProductId').val(typeProductId);
+      $('#loan_available-msg').html(result.loan_available);
 
       if ($('#is_viability').val() == 1) {
         saveLead(); //getAllValidate();

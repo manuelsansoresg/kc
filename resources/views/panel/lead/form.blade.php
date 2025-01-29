@@ -183,6 +183,7 @@
                                                                             <select class="form-select js-select2" name="data[financial_product_id]" id="financial_product_id"  data-search="on" onchange="validateSoad()">
                                                                             
                                                                             </select>
+                                                                            <label id="loan_available-msg" class=""></label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
