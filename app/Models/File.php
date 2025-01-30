@@ -103,6 +103,7 @@ class File extends Model
         
         $files = $files->get();
         $data_file = array();
+        
         foreach ($files as $file) {
             if ($file->template_config_id != null) {
                 $view_file = \View::make('panel.action.dropcone_preview_one_file', ['file' => $file, 'model' => $model])->render();

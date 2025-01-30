@@ -130,13 +130,14 @@ $(document).ready(function () {
       axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
         var result = response.data;
         var config_files = result.config_files;
+        var step = $('#step').val();
 
         var _loop = function _loop(key) {
           if (config_files.hasOwnProperty.call(config_files, key)) {
             var element = config_files[key]; //create dinamic dropzone element
 
             NioApp.Dropzone('#' + key + '-dropzone-action', {
-              url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+              url: "/panel/files/images/" + model + '/' + id_rel + '/' + key + '?step=' + step,
               init: function init() {
                 this.on("sending", function (file, xhr, formData) {
                   var date_file = null;
