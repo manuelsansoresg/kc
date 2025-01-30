@@ -26,6 +26,7 @@ class Investor extends Model
         'loan_active',
         'funded_capital',
         'withdrawn_money',
+        'withdrawn_money',
     ];
 
     public static function setFundedCapital($investorId)
