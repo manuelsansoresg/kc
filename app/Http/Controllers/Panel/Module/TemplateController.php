@@ -26,15 +26,17 @@ class TemplateController extends Controller
         $credit  = null;
         $client  = null;
         $product  = null;
+        $creditsControldesk = null;
 
         if ($model != 'wallet' && $model != 'kc-down-wallet') {
             $credit = $history->historyCredit;
             $client = $credit->creditClientPerson;
             $product = $credit->creditProduct;
+            $creditsControldesk = CreditsControlDesk::isValidate($credit->id);
         }
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
-        $creditsControldesk = CreditsControlDesk::isValidate($credit->id);
+        
         
         if ($model == 'controlDesk' || $model == 'newCredit' || $model == 'debtCredit' || $model == 'swap' || $model == 'delivery'  || $model == 'afterMarket' || $model == 'payment' || $model == 'wallet' || $model == 'kc-down-wallet' ) {
             $list_steps       = (new $actionStrategy)->listStep($history_id);

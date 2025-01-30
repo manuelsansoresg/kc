@@ -36,6 +36,11 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         return null;
     }
 
+    public static function calculateStepAverage($historyId, $step)
+    {
+        return 0;
+    }
+
     private function getTitlesFiles()
     {
         $titles = array(
@@ -530,26 +535,55 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
         $viewStatus1 = \View::make('panel.module.status', ['status' => $status_form])->render();
         $viewStatus2 = \View::make('panel.module.status', ['status' => $status_file])->render();
+
+        $name    = [
+            1 => 'Formulario',
+            2 => 'Carga',
+        ];
+        $subject    = [
+            1 => HistoryLog::$label_subject[61],
+            2 => HistoryLog::$label_subject[62],
+        ];
+
+        $percentages    = [
+            1 => self::percentForm($history),
+            2 => self::percentFile($history->id_rel),
+        ];
+        $statuses = [];
+        $currentTaskInProgress = false;
+
+        foreach ($percentages as $index => $percent) {
+            $statuses[$index] = $currentTaskInProgress ? 'null' : ($percent >= 100 ? 'Concluido' : 'En curso');
+            if ($statuses[$index] === 'En curso') {
+                $currentTaskInProgress = true;
+            }
+        }
+
+        for ($i = 1; $i <= 2; $i++) {
+            $data[] = array(
+                'name' => $name[$i],
+                'subject' => $subject[$i],
+                'helpText' => null,
+                'status' => $statuses[$i],
+                'statusBadge' => $statuses[$i] === 'null' ? null : \View::make('panel.module.status', ['status' => $statuses[$i]])->render(),
+                'deadline' => $i === 1 ? $view_dead_line : $view_dead_line1_2,
+                'advisor' => null,
+                'link' => '/panel/action-form/wallet/'.$history->id.'/form?step=1'
+            );
+        }
         
-        $data[] = array(
-            'name' => 'Formulario',
-            'subject' => $subject1,
-            'status' => $viewStatus1,
-            'deadline' => $view_dead_line,
-            'advisor' => null,
-            'options' => $option,
-            'link' => '/panel/action-form/wallet/'.$history->id.'/form?step=1'
-        );
         
-        $data[] = array(
+        
+       /*  $data[] = array(
             'name' => 'Carga',
             'subject' => $subject2,
             'status' => $viewStatus2,
             'deadline' => $view_dead_line1_2,
             'advisor' => null,
             'options' => null,
+            'statusBadge' => null,
             'link' => '/panel/template/action-document/wallet/'.$history_id.'?step=1_2'
-        );
+        ); */
         return $data;
     }
 
@@ -655,21 +689,23 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $data = array();
 
         $data[] = array(
-            'name' => $view_count_step1,
+            'nameStep' => 'Uno',
             'step' => 'Información transferencia',
             'status' => $status_step1,
             'progress' => $view_percent_step1,
             'deadline' => '',
             'options' => $option_step1,
+            'link' => '',
         );
         
         $data[] = array(
-            'name' => $view_count_step2,
+            'nameStep' => 'Dos',
             'step' => 'Verificar transferencia',
             'status' => $status_step2,
             'progress' => $view_percent_step2,
             'deadline' => '',
             'options' => $option_step2,
+            'link' => '',
         );
         return $data;
     }
