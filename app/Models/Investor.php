@@ -56,6 +56,29 @@ class Investor extends Model
         }
     }
 
+    public static function setDataInvestor($investorId)
+    {
+        $sum = InvestorsCredit::selectRaw('
+            SUM(import) as import,
+            SUM(total_collected) as total_collected,
+            SUM(recovered_capital) as recovered_capital,
+            SUM(placed_capital) as placed_capital,
+            SUM(commission_amount) as commission_amount,
+            SUM(profit_collected) as profit_collected
+            ')->where('investor_id', $investorId)
+            ->first();
+        
+        InvestorsCredit::where('investor_id', $investorId)->update([
+            'import' => $sum->import, 
+            'total_collected' => $sum->total_collected, 
+            'recovered_capital' => $sum->recovered_capital, 
+            'placed_capital' => $sum->placed_capital, 
+            'commission_amount' => $sum->commission_amount, 
+            'profit_collected' => $sum->profit_collected, 
+        ]);
+
+    }
+
 
     public static function setLendable($request)
     {
