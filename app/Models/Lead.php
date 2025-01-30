@@ -384,8 +384,8 @@ class Lead extends Model
             }
             HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
             //*crear contacto sendgrid
-            $send_grid = new Csendgrid();
-            $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name);
+            /* $send_grid = new Csendgrid();
+            $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name); */
         } else {
             unset($data['origin_id']);
             $lead = Lead::find($request->lead_id);
@@ -484,8 +484,8 @@ class Lead extends Model
             $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
             (new $notification)->send($get_lead->id);
             //*crear contacto sendgrid
-            $send_grid = new Csendgrid();
-            $send_grid->createContact($get_lead->email, $get_lead->first_name, $get_lead->last_name);
+            /* $send_grid = new Csendgrid();
+            $send_grid->createContact($get_lead->email, $get_lead->first_name, $get_lead->last_name); */
             HistoryLog::move($get_lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         }
         $history = null;

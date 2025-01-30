@@ -165,10 +165,10 @@ class User extends Authenticatable
             $role = 'Cliente persona';
             if ($is_save == true) {
                 $to = $user->email;
-                $send_grid = new Csendgrid($to, 'creacion cuenta');
+                /* $send_grid = new Csendgrid($to, 'creacion cuenta');
                 $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
                 $send_grid->setParams(['first_name' => $user->name]);
-                $send_grid->send();
+                $send_grid->send(); */
             }
         }
 
@@ -228,10 +228,10 @@ class User extends Authenticatable
                 if ($is_report == false) {
                     $domain = 'https://app.kaaxclub.com';
                     $link_login = $domain . '/login';
-                    $send_grid = new Csendgrid($find_lead->email, 'creacion cuenta');
+                    /* $send_grid = new Csendgrid($find_lead->email, 'creacion cuenta');
                     $send_grid->setTemplate('d-ea081e65c8014113b50315a103127d13');
                     $send_grid->setParams(['first_name' => $find_lead->name, 'link_login' => $link_login, 'link_password_change' => $link_password]);
-                    $send_grid->send();
+                    $send_grid->send(); */
                 }
             } else {
                 //$link_password = 'https://app.kaaxclub.com/password/reset/'.$token.'?email='.$find_lead->email;
@@ -282,11 +282,11 @@ class User extends Authenticatable
             $user->save();
 
             $to           = $user->email;
-            $send_grid    = new Csendgrid($to, 'creacion cuenta');
+            /* $send_grid    = new Csendgrid($to, 'creacion cuenta');
 
             $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
             $send_grid->setParams(['first_name' => 'Manuel']);
-            $send_grid->send();
+            $send_grid->send(); */
             $find_user    = $user;
         }
         return $find_user;

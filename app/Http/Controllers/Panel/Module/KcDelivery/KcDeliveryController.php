@@ -42,13 +42,13 @@ class KcDeliveryController extends Controller
         try {
             $user_financial = $credit->financial_user_assigned;
             $user_email_financial = $user_financial->email;
-            $send_grid = new Csendgrid($user_email_financial, 'creacion cuenta');
+            /* $send_grid = new Csendgrid($user_email_financial, 'creacion cuenta');
             $send_grid->setTemplate('d-208896a6a91043619f40ba61cbebf5c7');
             $data_params = array(
                 'link_account' => asset('credit-resume/'.$credit->id),
             );
             $send_grid->setParams($data_params);
-            $send_grid->send();
+            $send_grid->send(); */
         } catch (\Exception $th) {
             //throw $th;
         }

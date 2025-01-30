@@ -288,12 +288,12 @@ class FinancialProduct extends Model
                 'fees_result' => $new_fees_result,
                 'tramite' => $product->proceso_tramite,
             );
-            $data_sendgrid = array_merge($data_sendgrid, $requisitos, $caracteristicas);
-            $send_grid = new Csendgrid($client->email, 'creacion cuenta');
+            /*$data_sendgrid = array_merge($data_sendgrid, $requisitos, $caracteristicas);
+             $send_grid = new Csendgrid($client->email, 'creacion cuenta');
             $send_grid->setTemplate('d-5504f61ffde84a6a9aa400a6970031b3');
             $send_grid->setParams($data_sendgrid);
             $send_grid->send();
-            Session::put('send_email', true);
+            Session::put('send_email', true); */
         }
        
      }

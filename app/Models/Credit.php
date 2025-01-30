@@ -322,7 +322,7 @@ class Credit extends Model
             $percentage         = $investorCredit->percentage * 100;
             $importePrestado    = $investorCredit->import;
 
-            $dataParams = array(
+            /* $dataParams = array(
                 'creditId' => $creditId,
                 'nombreBeneficiario' => $nombreBeneficiario,
                 'porcentajeParticipacion' => $percentage,
@@ -331,7 +331,7 @@ class Credit extends Model
             $send_grid = new Csendgrid($userInvestor->email, 'Inversionista - Aviso de nuevo crédito colocado');
             $send_grid->setTemplate('d-210b5898a0fe41f9ad746ffa3c42a3f1');
             $send_grid->setParams($dataParams);
-            $send_grid->send();
+            $send_grid->send(); */
             sleep(0.25);
         }
     }
