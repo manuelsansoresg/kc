@@ -40,7 +40,6 @@ class TemplateController extends Controller
         
         if ($model == 'controlDesk' || $model == 'newCredit' || $model == 'debtCredit' || $model == 'swap' || $model == 'delivery'  || $model == 'afterMarket' || $model == 'payment' || $model == 'wallet' || $model == 'kc-down-wallet' ) {
             $list_steps       = (new $actionStrategy)->listStep($history_id);
-            
             return view('panel.module.view_steps', compact('history_id', 'history', 'creditsControldesk', 'product', 'credit', 'client', 'model', 'breadcrumb', 'list_steps', 'actionStrategy'));
         }
         //return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb'));

@@ -299,6 +299,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $status[]               = \View::make('panel.module.status', ['status' => $status_percent_form])->render();
         $max_hour               = 12;
         
+        
         $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_ACTION_FORM], $credit->id)[0];
         $hour                   = $in_progress->date_status_progress;
         $name_advisor           = null;
@@ -315,7 +316,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             //throw $th;
         }
         
-
+        
         $menu_options   = self::menuOptions($history);
         $color_inf_credit = 'success';
 
@@ -333,7 +334,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
         
         $name[] = 'Carga';
         $name[] = 'Formulario';
-
+        
         $subject[] = HistoryLog::$label_subject[7];
         $subject[] = HistoryLog::$label_subject[8];
 
