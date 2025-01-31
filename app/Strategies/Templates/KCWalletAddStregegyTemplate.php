@@ -444,8 +444,8 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 
                 try {
                     //code...
-                    Transaction::setTotalCapital($investor_id);
                     Investor::setFundedCapital($investor_id);
+                    Transaction::setTotalCapital($investor_id);
                 } catch (\Exception $th) {
                     //throw $th;
                 }
