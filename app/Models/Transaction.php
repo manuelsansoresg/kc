@@ -119,6 +119,7 @@ class Transaction extends Model
         $idRel = $idRel != null ? $idRel : $request->id_rel;
         if ($idRel == null)
         {
+            $data['transaction_type'] = 1;
             $transaction = Transaction::create($data);
             if ($is_down == false) {
                 HistoryLog::move($transaction->id, HistoryLog::KC_WALLET, HistoryLog::KC_WALLET);

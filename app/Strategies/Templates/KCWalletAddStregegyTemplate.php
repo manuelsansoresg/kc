@@ -161,7 +161,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $is_redirect_document = false;
         
         $history = HistoryLog::find($history_id);
-        $id_rel = $id_rel == null ?  $history->id_rel : $id_rel;
+        
+        if (!isset($_GET['isNew'])) {
+            $id_rel = $id_rel == null ?  $history->id_rel : $id_rel;
+        }
         
        
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
