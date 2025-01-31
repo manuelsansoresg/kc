@@ -410,8 +410,8 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $data = $request->transaction;
         
         //formulario etapa 1
-        $data = isset($request->data)? $request['data'] : null;
-        $idRel = $data!= null ? $data['id_rel'] : null;
+        $dataRel = isset($request->data)? $request['data'] : null;
+        $idRel = $dataRel!= null ? $dataRel['id_rel'] : null;
         $transaction = Transaction::saveEdit($request, false, $idRel);
         
 
@@ -437,6 +437,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 
             }
             //confirmar transferencia exitosa
+            
             if (isset($data['operation_status']) && $data['operation_status'] == 1) {
                 $modelTransaction = $transaction['transaction'];
                 $investor_id = $modelTransaction->investor_id;
