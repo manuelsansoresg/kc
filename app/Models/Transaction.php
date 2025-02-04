@@ -110,7 +110,7 @@ class Transaction extends Model
     }
 
     
-    public static function saveEdit($request, $is_down = false, $idRel = null)
+    public static function saveEdit($request, $is_down = false, $idRel = null, $type = 1)
     {
         $data = $request->transaction;
         if (isset($data['transaction_type']) && $data['transaction_type'] == 2) {
@@ -119,7 +119,7 @@ class Transaction extends Model
         $idRel = $idRel != null ? $idRel : $request->id_rel;
         if ($idRel == null)
         {
-            $data['transaction_type'] = 1;
+            $data['transaction_type'] = $type;
             $transaction = Transaction::create($data);
             if ($is_down == false) {
                 HistoryLog::move($transaction->id, HistoryLog::KC_WALLET, HistoryLog::KC_WALLET);

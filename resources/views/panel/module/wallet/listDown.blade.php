@@ -28,7 +28,7 @@
                     <div class="nk-block nk-block-lg">
                         <div class="row">
                             <div class="col-12 py-3 text-end">
-                              <a href="/panel/action-form/kc-down-wallet/null/form?step=1&isNew=true" class="btn btn-lg btn-primary">Retirar fondos</a>
+                              <a href="/panel/action-form/kc-down-wallet/null/form?step=1&isNew=true&type=1" class="btn btn-lg btn-primary">Retirar fondos</a>
                             </div>
                           </div>
                         <div class="card card-bordered card-preview">

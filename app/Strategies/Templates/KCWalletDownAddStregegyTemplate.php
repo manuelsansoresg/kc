@@ -343,7 +343,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $dataRel = isset($request->data)? $request['data'] : null;
         $idRel = $dataRel!= null ? $dataRel['id_rel'] : null;
         
-        $transaction = Transaction::saveEdit($request, true, $idRel);
+        $transaction = Transaction::saveEdit($request, true, $idRel, 2);
 
         if ($request->history_id != 'null') {
             $history = HistoryLog::find($request->history_id);
@@ -369,6 +369,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
             if (isset($data['operation_status']) && $data['operation_status'] == 1) {
                 $modelTransaction = $transaction['transaction'];
                 $investor_id = $modelTransaction->investor_id;
+                Investor::setFundedCapital($investor_id);
                 Transaction::setTotalCapital($investor_id);
             }
 

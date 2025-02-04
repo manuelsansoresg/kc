@@ -28,7 +28,7 @@
                     <div class="nk-block nk-block-lg">
                         <div class="row">
                             <div class="col-12 py-3 text-end">
-                              <a href="/panel/action-form/wallet/null/form?step=1&isNew=true" class="btn btn-primary btn-lg">Agregar fondos</a>
+                              <a href="/panel/action-form/wallet/null/form?step=1&isNew=true&type=2" class="btn btn-primary btn-lg">Agregar fondos</a>
                             </div>
                           </div>
                         <div class="card card-bordered card-preview">
