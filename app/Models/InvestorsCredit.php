@@ -35,9 +35,6 @@ class InvestorsCredit extends Model
             $applied_loan_total_amount = $getCredit->applied_loan_total_amount;
             $getInvestors              = InvestorProduct::where('financial_products_id', $applied_financial_product)->get();
             
-            
-            //dd($getInvestors);
-            //dd($applied_financial_product);
             foreach ($getInvestors as $getInvestors) {
                 try {
                     $getInvestor = Investor::find($getInvestors->investor_id);
