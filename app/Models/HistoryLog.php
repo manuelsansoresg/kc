@@ -584,6 +584,19 @@ class HistoryLog extends Model
             $statusOnline = $status_id;
             $isChange = true;
         }
+        
+        //validar el campo status en investorsCredits
+        if ($status_id == HistoryLog::CREDIT_ARCHIVE || $status_id == HistoryLog::CREDIT_CANCELED || $status_id == HistoryLog::CREDIT_REJECTED ) {
+            InvestorsCredit::where('credit_id', $id_rel)->update([
+                'status' => 0
+            ]);
+        }
+        
+        if ($status_id == HistoryLog::CREDITS_DELIVERED) {
+            InvestorsCredit::where('credit_id', $id_rel)->update([
+                'status' => 2
+            ]);
+        }
 
         if ($isChange === true) {
             $credit             = Credit::find($id_rel);
