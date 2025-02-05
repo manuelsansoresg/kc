@@ -371,6 +371,7 @@ class HistoryLog extends Model
             $get_old_status->update(['status' => 0]);
         }
         //* if new status and old status don't exist create status
+        
         if ($get_status === null) {
             try {
                 $data['user_id']    = Auth::user()->id;
@@ -575,12 +576,12 @@ class HistoryLog extends Model
         }
         $isChange = false;
         //si permitir trámites
-        if ($status_id == HistoryLog::KC_CHECK_UP || $status_id == HistoryLog::CREDIT_IN_PROGRESS || $status_id == HistoryLog::NEW_CREDIT_KC_CHECK_UP || $status_id == HistoryLog::KC_CONTROL_DESK || $status_id == HistoryLog::KC_DELIVERY || $status_id == HistoryLog::KC_SWAP || $status_id == HistoryLog::KC_PAYMENT) {
+        if ($status_id == HistoryLog::CREDIT_ARCHIVE || $status_id == HistoryLog::CREDIT_CANCELED || $status_id == HistoryLog::CREDIT_REJECTED || $status_id == HistoryLog::CREDITS_PAID || $status_id == HistoryLog::KC_AFTER_FORM || $status_id == HistoryLog::CREDITS_DELIVERED ) {
             $statusOnline = $status_id;
             $isChange = true;
         }
         // no permitir trámites
-        if ($status_id == HistoryLog::CREDIT_ARCHIVE || $status_id == HistoryLog::CREDIT_CANCELED || $status_id == HistoryLog::CREDIT_REJECTED || $status_id == HistoryLog::CREDITS_PAID || $status_id == HistoryLog::KC_AFTER_FORM || $status_id == HistoryLog::CREDITS_DELIVERED ) {
+        if ($status_id == HistoryLog::KC_CHECK_UP || $status_id == HistoryLog::CREDIT_IN_PROGRESS || $status_id == HistoryLog::NEW_CREDIT_KC_CHECK_UP || $status_id == HistoryLog::KC_CONTROL_DESK || $status_id == HistoryLog::KC_DELIVERY || $status_id == HistoryLog::KC_SWAP || $status_id == HistoryLog::KC_PAYMENT) {
             $statusOnline = $status_id;
             $isChange = true;
         }
@@ -597,7 +598,7 @@ class HistoryLog extends Model
                 'status' => 2
             ]);
         }
-
+        
         if ($isChange === true) {
             $credit             = Credit::find($id_rel);
             Credit::where('id', $credit->id)->update([

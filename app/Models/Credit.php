@@ -148,9 +148,9 @@ class Credit extends Model
     public static function setAppliedImport($creditId)
     {
         Credit::where('id', $creditId)->update([
-            'applied_import ' => 0,
+            'applied_import' => 0,
             'applied_term' => 0,
-            'applied_payment  ' => 0,
+            'applied_payment' => 0,
             'applied_loan_total_amount' => 0,
         ]);
     }
@@ -159,7 +159,7 @@ class Credit extends Model
     {
         Credit::setTotalCapital($creditId);
         InvestorsCredit::setPlacedCapital($creditId);
-        Credit::setComissionRateAndAmount($creditId);
+        InvestorsCredit::setComissionRateAndAmount($creditId);
     }
 
     public static function setTotalCapital($creditId)
