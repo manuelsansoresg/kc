@@ -31,22 +31,23 @@ class Investor extends Model
 
     public static function setLendableAndLoanAvailable($investorId, $lendable)
     {
-        Investor::where('id', $investorId)->update([
-            'lendable' => $lendable,
-            'lendable_updated_time' => now(), // Mejor usar now() en Laravel
-        ]);
         
         $loan = InvestorsCredit::selectRaw('SUM(import) as total')
             ->where('investor_id', $investorId)
             ->where('created_at', '>', now()) // Mejor usar now() en Laravel
             ->where('status', '<>', 0)
             ->first();
+        $totalLoan =  $loan == null ? 0 : $loan->total;
+        $loan_available = $lendable - $totalLoan;
+        Investor::where('id', $investorId)->update([
+            'lendable' => $lendable,
+            'lendable_updated_time' => now(), // Mejor usar now() en Laravel
+            'loan_available' => $loan_available,
+        ]);
         
-        if ($loan && $loan->total !== null) {
-            Investor::where('id', $investorId)->update([
-                'loan_available' => $loan->total
-            ]);
-        }
+        
+        
+        
         
     }
 
