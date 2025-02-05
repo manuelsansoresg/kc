@@ -55,6 +55,7 @@ class InvestorsCredit extends Model
                     $dataInvestorCredit['total_credit'] = ($percent * $applied_loan_total_amount)/ 100;
                     if ($percent > 0 ) {
                         if ($existInvestorCredit->count() == 0) {
+                            $dataInvestorCredit['status'] = 1;
                             InvestorsCredit::create($dataInvestorCredit);
                         } else {
                             $existInvestorCredit->update($dataInvestorCredit);
