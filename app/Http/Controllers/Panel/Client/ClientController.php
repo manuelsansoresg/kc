@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\ClientPerson;
+use App\Models\Investor;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -43,6 +44,11 @@ class ClientController extends Controller
     {
         $users = ClientPerson::listDatatable(false);
         return response()->json(['data' => $users]);
+    }
+
+    public function savePrestar(Request $request)
+    {
+       Investor::setLendableAndLoanAvailable($request->investorId, $request->lendable);
     }
 
     /**

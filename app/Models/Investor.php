@@ -26,8 +26,29 @@ class Investor extends Model
         'loan_active',
         'funded_capital',
         'withdrawn_money',
-        'withdrawn_money',
+        'lendable_updated_time',
     ];
+
+    public static function setLendableAndLoanAvailable($investorId, $lendable)
+    {
+        Investor::where('id', $investorId)->update([
+            'lendable' => $lendable,
+            'lendable_updated_time' => now(), // Mejor usar now() en Laravel
+        ]);
+        
+        $loan = InvestorsCredit::selectRaw('SUM(import) as total')
+            ->where('investor_id', $investorId)
+            ->where('created_at', '>', now()) // Mejor usar now() en Laravel
+            ->where('status', '<>', 0)
+            ->first();
+        
+        if ($loan && $loan->total !== null) {
+            Investor::where('id', $investorId)->update([
+                'loan_available' => $loan->total
+            ]);
+        }
+        
+    }
 
     public static function setFundedCapital($investorId)
     {
@@ -88,9 +109,9 @@ class Investor extends Model
         $investorId   = $request->investorId;
         $checkIslimit = isset($request->checkIslimit)? $request->checkIslimit : 0;
         $data         = $request->data;
-        if ($checkIslimit == true) {
+        /* if ($checkIslimit == true) {
             $data['lendable'] = 9999999;
-        }
+        } */
         Investor::where('id', $investorId)->update($data);
         Transaction::setTotalCapital($investorId);
     }

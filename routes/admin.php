@@ -117,6 +117,7 @@ Route::group(['prefix' => 'clients'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Client\ClientController', 'list'])->middleware('auth');
     Route::get('colaboradores/show', ['\App\Http\Controllers\Panel\Client\ClientController', 'showColaboradores'])->middleware('auth');
     Route::get('list/ListColaboradores', ['\App\Http\Controllers\Panel\Client\ClientController', 'ListColaboradores'])->middleware('auth');
+    Route::post('investor/prestar/save', ['\App\Http\Controllers\Panel\Client\ClientController', 'savePrestar'])->middleware('auth');
 });
 
 Route::get('{id}/{model}/validate/show', ['\App\Http\Controllers\Panel\PanelController', 'showValidate'])->middleware('auth');
