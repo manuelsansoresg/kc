@@ -46,7 +46,7 @@ class Investor extends Model
         ]);
         
         
-        
+        Transaction::setTotalCapital($investorId);
         
         
     }
