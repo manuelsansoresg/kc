@@ -128,7 +128,7 @@ if (!function_exists('deadlineKc')) {
 if (!function_exists('format_price')) {
     function format_price($price)
     {
-        if (!is_numeric($price) || $price < 0) {
+        if ($price == null || $price == 0) {
             return '00,000.00';
         }
 
