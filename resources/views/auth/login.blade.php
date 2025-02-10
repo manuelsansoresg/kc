@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="author" content="KaaxClub">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Tú mejor decisión. Fácil y rápido.">
+    <meta name="description" content="Tu mejor decisión. Fácil y rápido.">
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="/images/favicon.ico">
     <!-- Page Title  -->
