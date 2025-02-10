@@ -128,7 +128,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
         $optionInvestor = $is_investor === true ? $getInvestor->id : $users;
         
-        $format_withdraw_available = 'Disponible para el retiro: ';
+        $format_withdraw_available = 'Disponible para retiro: $';
         $withdraw_available = $getInvestor != null && $getInvestor->withdraw_available > 0 ?   $getInvestor->withdraw_available : 0;
         $format_withdraw_available .= format_price($withdraw_available);
         $format_withdraw_available = $format_withdraw_available;
