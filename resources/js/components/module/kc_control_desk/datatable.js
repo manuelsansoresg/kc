@@ -367,7 +367,6 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'ordenante' },
             { data: 'importe' },
             { data: 'progress'},
-            { data: 'in_progress'},
             { data: 'deadline'},
             { data: 'options'},
         ],
@@ -399,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (alertParam === 'true') {
         Swal.fire({
             title: 'Solicitud de agregar fondos',
-            html: 'Hemos recibido tu Solicitud. <br> Le avisaremos y notificaremos a la brevedad',
+            html: 'Te notificaremos vía email a la brevedad',
             showCancelButton: false,
             confirmButtonText: 'ok',
             
@@ -417,7 +416,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (alertParam === 'true') {
         Swal.fire({
             title: 'Solicitud de retirar fondos',
-            html: 'Te avisaremos y notificaremos a la brevedad',
+            html: 'Te notificaremos vía email a la brevedad',
             showCancelButton: false,
             confirmButtonText: 'ok',
             
@@ -547,7 +546,6 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'ordenante' },
             { data: 'importe' },
             { data: 'progress'},
-            { data: 'in_progress'},
             { data: 'deadline'},
             { data: 'options'},
         ],

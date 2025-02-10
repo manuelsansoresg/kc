@@ -122,7 +122,9 @@
                                             <input type="hidden" id="step" value="{{ isset($_GET['step']) && $_GET['step']? $_GET['step'] : null }}">
             
                                                 <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                                    <div class="col-12 text-end">
+                                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                                    </div>
                                                 </div>
                                             </form>
                                     </div>

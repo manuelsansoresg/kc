@@ -34,7 +34,7 @@
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
                                 <div class="col-12 py-3">
-                                    <h5 class="text-primary">Disponible: {{ format_price($withdraw_available) }}</h5>
+                                    <h5 class="text-primary">Disponible: {{ format_price($withdraw_available) }} {{ $withdraw_available }}</h5>
                                 </div>
                                 <table id="dt-down-wallet" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
@@ -44,7 +44,6 @@
                                             <th data-priority="1">Ordenante</th>
                                             <th>Importe</th>
                                             <th>Progreso</th>
-                                            <th>En curso</th>
                                             <th>Estatus</th>
                                             <th></th>
                                         </tr>

@@ -78,8 +78,8 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
     {
         $elements = array(
             1 => [
-                'name' => 'Comprobante transferencia',
-                'comment' => '',
+                'name' => 'Comprobante transferencia2',
+                
                 'is_required' => true,
                 'is_date' => false,
                 'max_size' => 2, //* size in MB
@@ -128,10 +128,10 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
         $optionInvestor = $is_investor === true ? $getInvestor->id : $users;
         
-        $format_withdraw_available = 'Disponible para el retiro:';
+        $format_withdraw_available = 'Disponible para el retiro: ';
         $withdraw_available = $getInvestor != null && $getInvestor->withdraw_available > 0 ?   $getInvestor->withdraw_available : 0;
         $format_withdraw_available .= format_price($withdraw_available);
-        $format_withdraw_available = '<span class="text-primary"> '.$format_withdraw_available.'<span>';
+        $format_withdraw_available = $format_withdraw_available;
 
         $history = HistoryLog::find($history_id);
         if (!isset($_GET['isNew'])) {
@@ -191,9 +191,10 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
             4 => [
                 'title_section' => null,
                 'title' => 'Importe a retirar',
+                'subtitle' => $format_withdraw_available,
                 'name_field' => 'transaction[amount]',
                 'id_field' => 'amount',
-                'comment_admin' => $format_withdraw_available,
+                'comment_admin' => null,
                 'comment_webApp' =>  null,
                 'placeholder' => '',
                 'type' => 'number',
@@ -253,7 +254,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
             ],
         );
 
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'buttonLinkExtraFinish' => $buttonLinkExtraFinish, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_button' => 'Continuar', 'buttonLinkExtraFinish' => $buttonLinkExtraFinish, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
 

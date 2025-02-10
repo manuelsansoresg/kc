@@ -128,11 +128,16 @@ if (!function_exists('deadlineKc')) {
 if (!function_exists('format_price')) {
     function format_price($price)
     {
-        if (!$price || !is_numeric($price)) {
-            return 0;
+         // Verifica si el valor no es numérico o es negativo
+         if (!is_numeric($price) || $price < 0) {
+            return '00,000.00';
         }
 
-        return number_format($price, 2, '.', ',');
+        // Fuerza el tipo a float para manejar decimales correctamente
+        $price = (float) $price;
+        
+        // Formatea siempre con 2 decimales
+        return number_format($price, 2, '.', '');
     }
 }
 

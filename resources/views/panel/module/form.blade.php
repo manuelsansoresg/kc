@@ -291,6 +291,7 @@
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label"> {{ $indicator_required }} {{ $element['title'] }}</label>
+                        <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
 
                             <select class="form-select js-select2" {{ $element['is_disabled'] }}
@@ -415,6 +416,7 @@
             <div class="col-12 text-end">
                 <a onclick="cancelTask('{{ $name_form }}')" class="btn btn-outline-danger">Cancelar</a>
                 @if (!isset($show_btn))
+                
                         <button class="btn  btn-outline-primary" id="saveButton">{{ $name_button }}</button>
                 @endif
                 @if ($type_form == 43) {{-- swap --}}

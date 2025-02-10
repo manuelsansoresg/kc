@@ -115,7 +115,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $elements = array(
             1 => [
                 'name' => 'Comprobante transferencia',
-                'comment' => '',
+                'comment' => 'adjunta el documento comprobante',
                 'is_required' => true,
                 'is_date' => false,
                 'max_size' => 2, //* size in MB
@@ -206,6 +206,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             2 => [
                 'title_section' => null,
                 'title' => 'Tipo de operación',
+                'subtitle' => '¿Desde el mismo banco o SPEI?',
                 'name_field' => 'transaction[bank_transfer_type]',
                 'id_field' => 'bank_transfer_type',
                 'comment_admin' => null,
@@ -221,6 +222,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             3 => [
                 'title_section' => null,
                 'title' => 'Número de operación',
+                'subtitle' => 'Folio o clave de rastreo (opcional)',
                 'name_field' => 'transaction[operation_number]',
                 'id_field' => 'operation_number',
                 'comment_admin' => null,
@@ -236,6 +238,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             4 => [
                 'title_section' => null,
                 'title' => 'Importe de transferencia',
+                'subtitle' => 'Indica el importe exacto',
                 'name_field' => 'transaction[amount]',
                 'id_field' => 'amount',
                 'comment_admin' => null,

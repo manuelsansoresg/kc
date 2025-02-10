@@ -172,11 +172,10 @@ class Transaction extends Model
     
                 $transactions[] = array(
                     'id' => $transaction->id,
-                    'date' => date('Y-m-d', strtotime($transaction->created_at)),
+                    'date' => date('d-m-Y', strtotime($transaction->created_at)),
                     'ordenante' => $ordenante,
-                    'importe' => format_price($transaction->amount),
+                    'importe' => '$'.format_price($transaction->amount),
                     'progress' => $progress_bar,
-                    'in_progress' => $in_progress,
                     'deadline' => $dead_line,
                     'options' => $option
                 );
