@@ -28,6 +28,7 @@ class Investor extends Model
         'withdrawn_money',
         'lendable_updated_time',
         'total_balance',
+        'iva_collected',
     ];
 
     public static function setLendableAndLoanAvailable($investorId, $lendable)
