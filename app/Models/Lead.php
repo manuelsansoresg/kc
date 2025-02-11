@@ -246,10 +246,10 @@ class Lead extends Model
             if ($query != null) {
                 $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
                 $validate       = (new $leadStrategy)->getValidate($query->id);
-                
                 $clientPerson = ClientPerson::find($query->client_person_id);
                 $getStatus = $clientPerson != null ? Credit::where('client_person_id', $clientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
                 $creditStatus =  $getStatus > 0 ? false : true;
+                
 
                 $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'lead' => $query, 'validate' => $validate, 'creditStatus' => $creditStatus])->render();
                 $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query, 'validate' => $validate,  'validate' => $validate, 'creditStatus' => $creditStatus])->render();

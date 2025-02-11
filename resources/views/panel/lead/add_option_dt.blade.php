@@ -40,7 +40,7 @@ $user = Auth::user();
 
                 <div class="dropdown-menu dropdown-menu-end">
                     <ul class="link-list-opt no-bdr">
-                        @if ($lead->go_ahead == 0 && $creditStatus === true)
+                        @if ($lead->go_ahead == 0 && $creditStatus === false)
                             <li>
                                 <a class="pointer" onclick="modalValidate({{ $id }}, 'lead', 'dt-lead')">
                                     <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
