@@ -231,13 +231,28 @@ class Lead extends Model
 
         $get_list = HistoryLog::getByStatus([HistoryLog::CREATE_PROSPECT]);
         $data        = array();
+        $statusTramites = array(
+            HistoryLog::KC_CHECK_UP ,
+            HistoryLog::CREDIT_IN_PROGRESS ,
+            HistoryLog::NEW_CREDIT_KC_CHECK_UP ,
+            HistoryLog::KC_CONTROL_DESK ,
+            HistoryLog::KC_DELIVERY ,
+            HistoryLog::KC_SWAP ,
+            HistoryLog::KC_PAYMENT
+        );
+        
         foreach ($get_list as $row) {
             $query = $row->historyLead;
             if ($query != null) {
                 $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
                 $validate       = (new $leadStrategy)->getValidate($query->id);
-                $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'lead' => $query, 'validate' => $validate])->render();
-                $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query, 'validate' => $validate,  'validate' => $validate])->render();
+                
+                $clientPerson = ClientPerson::find($query->client_person_id);
+                $getStatus = $clientPerson != null ? Credit::where('client_person_id', $clientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
+                $creditStatus =  $getStatus > 0 ? false : true;
+
+                $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'lead' => $query, 'validate' => $validate, 'creditStatus' => $creditStatus])->render();
+                $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query, 'validate' => $validate,  'validate' => $validate, 'creditStatus' => $creditStatus])->render();
                 
                 $lbl_status     = '<span class="text-success">Valido</span>';
                 $financialProduct =  FinancialProduct::find($query->financial_product_id);
