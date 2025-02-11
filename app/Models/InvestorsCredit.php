@@ -25,6 +25,7 @@ class InvestorsCredit extends Model
         'profit_collected',
         'total_credit',
         'status',
+        'total_balance',
     ];
 
     public static function saveEdit($creditId)
