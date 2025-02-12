@@ -64,7 +64,7 @@ class CreditController extends Controller
         $status = $getCollection->status;
 
         $kcCreditId =  $getCollection->kc_credit_id;
-        $getInvestors = InvestorsCredit::where('credit_id'. $kcCreditId)->get();
+        $getInvestors = InvestorsCredit::where('credit_id', $kcCreditId)->get();
         $investorsIds  =  array();
         foreach ($getInvestors as $getInvestor) {
             $investorsIds[] = $getInvestor->id;
@@ -88,13 +88,13 @@ class CreditController extends Controller
 
         foreach ($investorsIds as $investorsId) {
             $getSum = InvestorsCredit::selectRaw(
-                'SUM(placed_capital) as placed_capital',
-                'SUM(recovered_capital) as recovered_capital',
-                'SUM(total_collected) as total_collected',
-                'SUM(profit_collected) as profit_collected',
-                'SUM(commission_amount) as commission_amount',
-                'SUM(total_balance) as total_balance',
-                'SUM(iva_collected) as iva_collected',
+                'SUM(placed_capital) as placed_capital,
+    SUM(recovered_capital) as recovered_capital,
+    SUM(total_collected) as total_collected,
+    SUM(profit_collected) as profit_collected,
+    SUM(commission_amount) as commission_amount,
+    SUM(total_balance) as total_balance,
+    SUM(iva_collected) as iva_collected'
             )
             ->where('id', $investorsId)->first();
             Investor::where('id', $investorsId)->update([

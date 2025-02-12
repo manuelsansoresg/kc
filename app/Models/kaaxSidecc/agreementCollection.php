@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class agreementCollection extends Model
 {
+    protected $connection = 'kaax_sidecc';
     protected $table = 'collections';
     protected $fillable = [
         'credit_id',
