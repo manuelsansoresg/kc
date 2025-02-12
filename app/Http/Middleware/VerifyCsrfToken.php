@@ -30,5 +30,6 @@ class VerifyCsrfToken extends Middleware
         '/action/manychat/wa-complete/lead/store',
         '/api/credit/{credit}/{s2_credit_id}/{tipo}/set',
         '/api/investor/{financial_product_id}/setTotalCapital',
+        '/api/credit/{creditId}/pago/setData',
     ];
 }
