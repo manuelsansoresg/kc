@@ -56,6 +56,7 @@ class CreditController extends Controller
 
     public function setDataPago($creditId)
     {
+        sleep(180);
         $getCollection =  agreementCollection::where('credit_id', $creditId)->first();
         $pago_acumulado_real = $getCollection->pago_acumulado_real;
         $saldo_insoluto_real = $getCollection->saldo_insoluto_real;
