@@ -21,7 +21,6 @@ class InvestorsCredit extends Model
         'commission_rate',
         'commission_amount',
         'recovered_capital',
-        'total_collected',
         'profit_collected',
         'total_credit',
         'status',

@@ -56,58 +56,49 @@ class CreditController extends Controller
 
     public function setDataPago($creditId)
     {
-        $getCollection =  agreementCollection::where('credit_id', $creditId)->first();
+         // 1. Obtener información de 'collections' asociado al 'kc_credit_id'
+        $getCollection = agreementCollection::where('kc_credit_id', $creditId)->first();
         $pago_acumulado_real = $getCollection->pago_acumulado_real;
         $saldo_insoluto_real = $getCollection->saldo_insoluto_real;
         $abono_acumulado_real = $getCollection->abono_acumulado_real;
         $saldo_total_real = $getCollection->saldo_total_real;
         $status = $getCollection->status;
 
-        $kcCreditId =  $getCollection->kc_credit_id;
-        $getInvestors = InvestorsCredit::where('credit_id'. $kcCreditId)->get();
-        $investorsIds  =  array();
-        foreach ($getInvestors as $getInvestor) {
-            $investorsIds[] = $getInvestor->id;
-            $percentage = $getInvestor->percentage;
-            $totalCollected = $getInvestor->total_collected;
-            $comissionRate = $getInvestor->commission_rate;
-            $recoveredCapital = $getInvestor->recovered_capital;
-            $profitCollected  = $getInvestor->profit_collected ;
+        // 2. Obtener lista de 'credit_id' en 'investorsCredit' asociados a los créditos obtenidos de 'collections'
+        $creditIds = InvestorsCredit::whereIn('credit_id', function($query) use ($creditId) {
+            $query->select('credit_id')->from('collections')->where('kc_credit_id', $creditId);
+        })->pluck('credit_id');
 
-            Investor::where('id', $getInvestor->id)->update([
-                'total_collected' => ($pago_acumulado_real * $percentage) / 100,
-                'placed_capital' => ($saldo_insoluto_real * $percentage) / 100,
-                'recovered_capital' => ($abono_acumulado_real * $percentage) / 100,
-                'total_balance' => ($saldo_total_real * $percentage) / 100,
+        // 3. Calcular y actualizar valores de cada 'credit_id'
+        foreach ($creditIds as $credit) {
+            $investorCredit = InvestorsCredit::where('credit_id', $credit)->first();
+            $percentage = $investorCredit->percentage / 100;
+
+            InvestorsCredit::where('credit_id', $credit)->update([
+                'total_collected' => ($pago_acumulado_real * $percentage),
+                'placed_capital' => ($saldo_insoluto_real * $percentage),
+                'recovered_capital' => ($abono_acumulado_real * $percentage),
+                'total_balance' => ($saldo_total_real * $percentage),
                 'credit_status' => $status,
-                'commission_amount' => ($totalCollected * $comissionRate)/100,
-                'profit_collected' => ($totalCollected - $recoveredCapital)/1.16,
-                'iva_collected' => $profitCollected * 0.16,
             ]);
         }
 
-        foreach ($investorsIds as $investorsId) {
-            $getSum = InvestorsCredit::selectRaw(
-                'SUM(placed_capital) as placed_capital',
-                'SUM(recovered_capital) as recovered_capital',
-                'SUM(total_collected) as total_collected',
-                'SUM(profit_collected) as profit_collected',
-                'SUM(commission_amount) as commission_amount',
-                'SUM(total_balance) as total_balance',
-                'SUM(iva_collected) as iva_collected',
-            )
-            ->where('id', $investorsId)->first();
-            Investor::where('id', $investorsId)->update([
-                'placed_capital' => $getSum->placed_capital,
-                'recovered_capital' => $getSum->recovered_capital,
-                'total_collected' => $getSum->total_collected,
-                'profit_collected' => $getSum->profit_collected,
-                'collection_commission' => $getSum->commission_amount,
-                'total_balance' => $getSum->total_balance,
-                'iva_collected' => $getSum->iva_collected,
-            ]);
-            Transaction::setTotalCapital($investorsId);
-        }
+        // 4. Obtener los investorIds de los créditos actualizados y actualizar la tabla 'investors'
+        $investorIds = InvestorsCredit::whereIn('credit_id', $creditIds)->pluck('investor_id');
+
+        $getSum = InvestorsCredit::whereIn('investor_id', $investorIds)
+            ->selectRaw("SUM(placed_capital) as placed_capital, SUM(recovered_capital) as recovered_capital, SUM(total_collected) as total_collected, SUM(profit_collected) as profit_collected, SUM(commission_amount) as commission_amount, SUM(total_balance) as total_balance, SUM(iva_collected) as iva_collected")
+            ->first();
+
+        Investor::whereIn('id', $investorIds)->update([
+            'placed_capital' => $getSum->placed_capital,
+            'recovered_capital' => $getSum->recovered_capital,
+            'total_collected' => $getSum->total_collected,
+            'profit_collected' => $getSum->profit_collected,
+            'collection_commission' => $getSum->commission_amount,
+            'total_balance' => $getSum->total_balance,
+            'iva_collected' => $getSum->iva_collected,
+        ]);
         
     }
 }

@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\DB;
 
 class agreementCollection extends Model
 {
-    use HasFactory;
     protected $table = 'collections';
     protected $fillable = [
         'credit_id',
