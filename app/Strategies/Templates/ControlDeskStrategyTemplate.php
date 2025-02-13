@@ -717,10 +717,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form    = null;
         $payOff = CreditPayOff::find($task['id']);
         
-
+        
         switch ($taskId) {
             case 1:
                 $elements = self::configFormStep3Task1($id_rel, $history_id, $task, $taskId);
+                
                 $name_form    = 'frm-template_control_desk_step3_task';
                 break;
             case 2:
@@ -746,9 +747,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 break;
         }
         
-        
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
+        
     }
 
     public function configFormStep3Task1($id_rel, $history_id, $task, $taskId)
@@ -5059,6 +5060,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data = [];
         if ($product->type_product_id != 3) {
+            
             $percentages = [];
             $subjects = [];
             $idForm = [];

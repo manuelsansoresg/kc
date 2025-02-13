@@ -90,24 +90,24 @@ class CreditController extends Controller
         foreach ($investorsIds as $investorsId) {
             $getSum = InvestorsCredit::selectRaw(
                 'SUM(placed_capital) as placed_capital,
-    SUM(recovered_capital) as recovered_capital,
-    SUM(total_collected) as total_collected,
-    SUM(profit_collected) as profit_collected,
-    SUM(commission_amount) as commission_amount,
-    SUM(total_balance) as total_balance,
-    SUM(iva_collected) as iva_collected'
-            )
-            ->where('id', $investorsId)->first();
-            Investor::where('id', $investorsId)->update([
-                'placed_capital' => $getSum->placed_capital,
-                'recovered_capital' => $getSum->recovered_capital,
-                'total_collected' => $getSum->total_collected,
-                'profit_collected' => $getSum->profit_collected,
-                'collection_commission' => $getSum->commission_amount,
-                'total_balance' => $getSum->total_balance,
-                'iva_collected' => $getSum->iva_collected,
-            ]);
-            Transaction::setTotalCapital($investorsId);
+                SUM(recovered_capital) as recovered_capital,
+                SUM(total_collected) as total_collected,
+                SUM(profit_collected) as profit_collected,
+                SUM(commission_amount) as commission_amount,
+                SUM(total_balance) as total_balance,
+                SUM(iva_collected) as iva_collected'
+                        )
+                        ->where('id', $investorsId)->first();
+                        Investor::where('id', $investorsId)->update([
+                            'placed_capital' => $getSum->placed_capital,
+                            'recovered_capital' => $getSum->recovered_capital,
+                            'total_collected' => $getSum->total_collected,
+                            'profit_collected' => $getSum->profit_collected,
+                            'collection_commission' => $getSum->commission_amount,
+                            'total_balance' => $getSum->total_balance,
+                            'iva_collected' => $getSum->iva_collected,
+                        ]);
+                        Transaction::setTotalCapital($investorsId);
         }
         
     }

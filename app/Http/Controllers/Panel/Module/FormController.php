@@ -32,7 +32,6 @@ class FormController extends Controller
         $form             = (new $actionStrategy)->configForm($credit_id, $history_id);
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
         $title            = (new $actionStrategy)->setTitle($history);
-        
         $client           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditClientPerson : null;
         $product          = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditProduct : null;
         $id_rel           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->id : null;
@@ -45,12 +44,13 @@ class FormController extends Controller
         $origin = null;
         $financialProduct = null;
         $tipoCredito = null;
-
+        
         if ($credit != null) {
             $financialProduct = $product = FinancialProduct::find($credit->applied_financial_product);
             $getAsesor = User::find($credit->asesor_id);
             
             $files = File::getByIdRelandModel($credit->id, [HistoryLog::KC_CHECK_UP, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_SWAP, HistoryLog::KC_DELIVERY]);
+            
             $tipoCredito = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
             $lastComment = HistoryLog::select('comment')
                             ->where([
@@ -68,11 +68,12 @@ class FormController extends Controller
                 if ($tags === '') {
                     $tags = null;
                 }
-            
+                
             if (($model == 'wallet' || $model == 'kc-down-wallet') && $history_id != 'null') {
                 $id_rel = $history->id_rel;
             }
         }
+        
         return view('panel.module.checkup.content_form', compact('form', 'path', 'id_rel', 'tags', 'files', 'getAsesor', 'periodicity', 'lastComment', 'origin', 'financialProduct', 'tipoCredito', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
     }
 

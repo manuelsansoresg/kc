@@ -1808,7 +1808,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
     public function getFile($template_config_id)
     {
-        $config = self::configUpload()[$template_config_id];
+        $config = @self::configUpload()[$template_config_id];
         return $config;
     }
 
