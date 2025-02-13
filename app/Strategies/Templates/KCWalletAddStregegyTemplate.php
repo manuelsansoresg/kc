@@ -2,6 +2,7 @@
 
 namespace App\Strategies\Templates;
 
+use App\Lib\Cemail;
 use App\Lib\Csendgrid;
 use App\Models\File;
 use App\Models\HistoryLog;
@@ -460,10 +461,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                         'name' => $getUserInvestor->name. ' '.$getUserInvestor->last_name. ' '.$getUserInvestor->second_last_name,
                         'link_account' => asset('panel/inversionista/'.$investor_id),
                     );
-                    $send_grid = new Csendgrid($getUserInvestor->email, 'Inversionista - Fondos agregados con éxito');
-                    $send_grid->setTemplate('d-38330ff956fc48dc89b4efad477b3985');
-                    $send_grid->setParams($data_sendgrid);
-                    $send_grid->send();
+                    //d-38330ff956fc48dc89b4efad477b3985
+                    $sendEmail = new Cemail($getUserInvestor->email, 'agregar_fondos', 'Inversionista - Fondos agregados con éxito', $data_sendgrid);
+                    $sendEmail->sendEmail();
+
                 }
             }
 
