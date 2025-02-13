@@ -320,7 +320,7 @@
                                     
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
-                                    <a href="/panel/kc-wallet/mis-prestamos/show" class="nk-menu-link">
+                                    <a href="/panel/mis-prestamos" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
                                         <span class="nk-menu-text"><em class="icon ni ni-coin-alt"></em> Mis préstamos</span>
                                     </a>

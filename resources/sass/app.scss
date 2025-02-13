@@ -50,7 +50,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination{
 }
 
 /* Selecciona elementos con la clase nk-tb-list dentro de tablas con la clase dt-wallet */
-#dt-wallet.nk-tb-list th, #dt-down-wallet.nk-tb-list th{
+#dt-wallet.nk-tb-list th, #dt-down-wallet.nk-tb-list th,  #dt-mis-prestamos.nk-tb-list th{
     color: #6576ff; /* Opcional: cambia el color del texto para mejor contraste */
 }
 

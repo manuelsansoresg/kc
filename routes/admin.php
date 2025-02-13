@@ -276,7 +276,7 @@ Route::group(['prefix' => 'kc-check-up-debt-reduction'], function () {
 Route::resource('kc-check-up-actions', '\App\Http\Controllers\Panel\Module\ActionController')->middleware('auth');
 
 Route::resource('kc-wallet', '\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController')->middleware('auth');
-
+Route::get('mis-prestamos', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'misPrestamos'])->middleware('auth');
 Route::group(['prefix' => 'kc-wallet'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'list'])->middleware('auth');
     Route::get('mis-restamos/list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'listMisPrestamos'])->middleware('auth');
@@ -285,7 +285,7 @@ Route::group(['prefix' => 'kc-wallet'], function () {
 
     Route::get('resumen/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'resumen'])->middleware('auth');
     
-    Route::get('mis-prestamos/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'misPrestamos'])->middleware('auth');
+    
     Route::get('{investor}/investor/get', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'getInvestor'])->middleware('auth');
 });
 

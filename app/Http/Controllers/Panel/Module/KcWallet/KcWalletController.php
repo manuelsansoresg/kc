@@ -70,7 +70,7 @@ class KcWalletController extends Controller
                 }
 
                 $data[] = array(
-                    'id' => $creditId,
+                    'id' => "{$creditId}".'<a href="/panel/credit/'.$getInvestorCredit->credit_id.'?tab=pagos" target="_blank"> &nbsp; <span class="badge bg-primary">Ver</span> </a>',
                     'status' => $valorStatus,
                     'importe' => $valorImporte,
                     'pagado' => $valorPagado,

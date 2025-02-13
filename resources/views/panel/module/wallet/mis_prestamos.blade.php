@@ -34,7 +34,7 @@
                                 <tr>
                                     <th>Crédito</th>
                                     <th>Estatus</th>
-                                    <th>Importe Prestado</th>
+                                    <th data-priority="1">Importe Prestado</th>
                                     <th>Pagado</th>
                                     <th>Capital pendiente</th>
                                     <th>Capital recuperado</th>
