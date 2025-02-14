@@ -13,7 +13,7 @@ class AddLoansInProcessToInvestors extends Migration
      */
     public function up()
     {
-        Schema::table('process_to_investors', function (Blueprint $table) {
+        Schema::table('investors', function (Blueprint $table) {
             $table->decimal('loans_in_process')->nullable()->after('iva_collected');
         });
     }
@@ -25,7 +25,7 @@ class AddLoansInProcessToInvestors extends Migration
      */
     public function down()
     {
-        Schema::table('process_to_investors', function (Blueprint $table) {
+        Schema::table('investors', function (Blueprint $table) {
             $table->dropColumn('loans_in_process');
         });
     }
