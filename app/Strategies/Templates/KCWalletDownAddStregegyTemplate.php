@@ -2,6 +2,7 @@
 
 namespace App\Strategies\Templates;
 
+use App\Lib\Cemail;
 use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\Investor;
@@ -372,6 +373,20 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 $investor_id = $modelTransaction->investor_id;
                 Investor::setFundedCapital($investor_id);
                 Transaction::setTotalCapital($investor_id);
+
+                $getInvestor = Investor::find($investor_id);
+                if ($getInvestor != null) {
+                    $getUserInvestor = User::find($getInvestor->user_id);
+                    $data_sendgrid = array(
+                        'name' => $getUserInvestor->name. ' '.$getUserInvestor->last_name. ' '.$getUserInvestor->second_last_name,
+                        
+                    );
+                    
+                    $sendEmail = new Cemail($getUserInvestor->email, 'retirar_fondos', 'Fondos retirados exitosamente', $data_sendgrid);
+                    $sendEmail->sendEmail();
+
+                }
+
             }
 
             if ($percent2 == 100) {
