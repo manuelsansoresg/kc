@@ -114,7 +114,7 @@ class Transaction extends Model
     {
         $data = $request->transaction;
         if (isset($data['transaction_type']) && $data['transaction_type'] == 2) {
-            $data['amount'] = -$data['amount'];
+            $data['amount'] = $data['amount'];
         }
         $idRel = $idRel != null ? $idRel : $request->id_rel;
         if ($idRel == null)
