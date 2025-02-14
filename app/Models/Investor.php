@@ -119,4 +119,66 @@ class Investor extends Model
         Investor::where('id', $investorId)->update($data);
         Transaction::setTotalCapital($investorId);
     }
+
+    public static function updateInvestorBalances($investorId)
+    {
+        $investor = Investor::find($investorId);
+        if (!$investor) {
+            return null;
+        }
+
+        // Calcular funded_capital
+        $fundedCapital = Transaction::where('investor_id', $investorId)
+            ->where('transaction_type', 1)
+            ->where('operation_status', 1)
+            ->sum('amount');
+        
+        // Calcular withdrawn_money
+        $withdrawnMoney = Transaction::where('investor_id', $investorId)
+            ->where('transaction_type', 2)
+            ->where('operation_status', 1)
+            ->sum('amount');
+        
+        // Calcular total_capital
+        $totalCapital = InvestorsCredit::where('investor_id', $investorId)
+            ->where('status', 1)
+            ->sum('import');
+        
+        // Calcular total_available
+        $totalAvailable = $fundedCapital - $totalCapital + $investor->total_collected - $investor->collection_commission - $withdrawnMoney;
+        
+        // Calcular loans_in_process
+        $loansInProcess = $totalCapital - $investor->placed_capital - $investor->recovered_capital;
+        
+        // Calcular loan_available
+        $loanAvailable = $investor->lendable - InvestorsCredit::where('investor_id', $investorId)
+            ->where('status', 1)
+            ->where('created_at', '>', $investor->lendable_updated_time)
+            ->sum('import');
+        
+        // Calcular loan_active
+        $loanActive = $loanAvailable > 999 ? 1 : 0;
+        
+        // Calcular withdraw_available
+        $withdrawAvailable = $totalAvailable - $loanAvailable;
+        
+        // Calcular account_value
+        $accountValue = $totalAvailable + $loansInProcess + $investor->placed_capital;
+        
+        // Actualizar la base de datos
+        Investor::where('id', $investorId)->update([
+            'funded_capital' => $fundedCapital,
+            'withdrawn_money' => $withdrawnMoney,
+            'total_capital' => $totalCapital,
+            'total_available' => $totalAvailable,
+            'loans_in_process' => $loansInProcess,
+            'loan_available' => $loanAvailable,
+            'loan_active' => $loanActive,
+            'withdraw_available' => $withdrawAvailable,
+            'account_value' => $accountValue
+        ]);
+
+        return Investor::find($investorId);
+    }
+
 }
