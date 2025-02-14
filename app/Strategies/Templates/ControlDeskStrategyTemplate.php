@@ -15,6 +15,7 @@ use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
 use App\Models\FpTerm;
 use App\Models\HistoryLog;
+use App\Models\Investor;
 use App\Models\InvestorsCredit;
 use App\Models\Lead;
 use App\Models\Product;
@@ -4276,11 +4277,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
                             foreach ($getInvestors as $getInvestor) {
                                 Transaction::setTotalCapital($getInvestor->investor_id);
+                                Investor::updateInvestorBalances($getInvestor->investor_id);
                             }
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, $credit->id, 1); //terminar tarea
 
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, $credit->id, 0);
+                            
                         }
                     }
 

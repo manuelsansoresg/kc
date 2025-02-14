@@ -8,6 +8,8 @@ use App\Models\Credit;
 use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\HistoryLog;
+use App\Models\Investor;
+use App\Models\InvestorsCredit;
 use App\Models\RegisterAction;
 use App\Models\TemplateFile;
 use App\Strategies\Values\ActionValues;
@@ -192,6 +194,10 @@ class ActionController extends Controller
 
         if ($request->model == 'wallet'  && $step == '2') {
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $request->id_rel, 1);
+            $getInvestors = InvestorsCredit::where('credit_id', $request->id_rel)->get();
+            foreach ($getInvestors as $getInvestor) {
+                Investor::updateInvestorBalances($getInvestor->id);
+            }
         }
         //terminar archivo retirar fondos etapa 1
         if ($request->model == 'kc-down-wallet' && $step == '2') {

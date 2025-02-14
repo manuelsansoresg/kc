@@ -591,6 +591,10 @@ class HistoryLog extends Model
             InvestorsCredit::where('credit_id', $id_rel)->update([
                 'status' => 0
             ]);
+            $getInvestors = InvestorsCredit::where('credit_id', $id_rel)->get();
+            foreach ($getInvestors as $getInvestor) {
+                Investor::updateInvestorBalances($getInvestor->investor_id);
+            }
         }
         
         

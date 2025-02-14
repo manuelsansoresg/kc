@@ -373,6 +373,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 $investor_id = $modelTransaction->investor_id;
                 Investor::setFundedCapital($investor_id);
                 Transaction::setTotalCapital($investor_id);
+                Investor::updateInvestorBalances($investor_id);
 
                 $getInvestor = Investor::find($investor_id);
                 if ($getInvestor != null) {
