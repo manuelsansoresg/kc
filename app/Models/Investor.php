@@ -120,6 +120,29 @@ class Investor extends Model
         Transaction::setTotalCapital($investorId);
     }
 
+    public static function updateFinancialProductsLoanAvailable($investorId)
+    {
+        // Obtener los productos financieros asociados al inversionista
+        $financialProductInvestorsIds = InvestorProduct::where('investor_id', $investorId)
+            ->pluck('financial_products_id')
+            ->unique();
+
+        foreach ($financialProductInvestorsIds as $financialProductId) {
+            // Obtener todos los inversionistas del producto financiero
+            $investorIds = InvestorProduct::where('financial_products_id', $financialProductId)
+                ->pluck('investor_id');
+
+            // Calcular la suma de loan_available de los inversionistas activos
+            $investorLoan = Investor::whereIn('id', $investorIds)
+                ->where('loan_active', 1)
+                ->sum('loan_available');
+
+            // Actualizar loan_available en financial_products
+            FinancialProduct::where('id', $financialProductId)
+                ->update(['loan_available' => $investorLoan]);
+        }
+    }
+
     public static function updateInvestorBalances($investorId)
     {
         $investor = Investor::find($investorId);
@@ -179,6 +202,15 @@ class Investor extends Model
         ]);
 
         return Investor::find($investorId);
+    }
+
+    public static function updateInvestorData($investorId)
+    {
+        // Primero, actualiza los balances del inversionista
+        self::updateInvestorBalances($investorId);
+
+        // Luego, actualiza loan_available en financial_products basado en los inversionistas
+        self::updateFinancialProductsLoanAvailable($investorId);
     }
 
 }

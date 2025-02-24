@@ -593,7 +593,7 @@ class HistoryLog extends Model
             ]);
             $getInvestors = InvestorsCredit::where('credit_id', $id_rel)->get();
             foreach ($getInvestors as $getInvestor) {
-                Investor::updateInvestorBalances($getInvestor->investor_id);
+                Investor::updateInvestorData($getInvestor->investor_id);
             }
         }
         

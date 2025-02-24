@@ -108,7 +108,7 @@ class CreditController extends Controller
                             'iva_collected' => $getSum->iva_collected,
                         ]);
             Transaction::setTotalCapital($investorsId);
-            Investor::updateInvestorBalances($investorsId);
+            Investor::updateInvestorData($investorsId);
         }
         
     }

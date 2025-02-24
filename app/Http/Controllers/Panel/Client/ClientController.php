@@ -49,7 +49,7 @@ class ClientController extends Controller
     public function savePrestar(Request $request)
     {
        Investor::setLendableAndLoanAvailable($request->investorId, $request->lendable);
-       Investor::updateInvestorBalances($request->investorId);
+       Investor::updateInvestorData($request->investorId);
     }
 
     /**

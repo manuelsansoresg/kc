@@ -196,7 +196,7 @@ class ActionController extends Controller
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $request->id_rel, 1);
             $getInvestors = InvestorsCredit::where('credit_id', $request->id_rel)->get();
             foreach ($getInvestors as $getInvestor) {
-                Investor::updateInvestorBalances($getInvestor->id);
+                Investor::updateInvestorData($getInvestor->id);
             }
         }
         //terminar archivo retirar fondos etapa 1
