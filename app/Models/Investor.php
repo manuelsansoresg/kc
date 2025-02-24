@@ -30,6 +30,7 @@ class Investor extends Model
         'total_balance',
         'iva_collected',
         'loans_in_process',
+        'account_value'
     ];
 
     public static function setLendableAndLoanAvailable($investorId, $lendable)

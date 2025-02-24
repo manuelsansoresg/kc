@@ -19,8 +19,8 @@
                                 <div class="card card-bordered  vh-50">
                                     <div class="card-inner">
                                         @php
-                                            $valorCuenta = $investor->placed_capial +  $investor->total_available;
-                                            $disponiblePrestar = $investor->total_available  +  $investor->loan_available;
+                                            $valorCuenta = $investor->account_value;
+                                            $disponiblePrestar = $investor->withdraw_available;
                                         @endphp
                                         <input type="hidden" id="iValorCuenta" value="{{ $valorCuenta}}">
                                         <input type="hidden" id="iTotalCredit" value="{{ $totalCredit}}">
@@ -123,13 +123,13 @@
                                             <h6 class="title">Resultados obtenidos </h6>
                                             <hr>
                                             @php
-                                                $interesesCobrados          = $investor != null  ? $investor->profit_collected / 1.16 : 0;
-                                                $IvainteresesCobrados       = $investor != null  ? $interesesCobrados * 0.16 : 0;
+                                                $interesesCobrados          = $investor != null  ? $investor->profit_collected : 0;
+                                                $IvainteresesCobrados       = $investor != null  ? $investor->iva_collected : 0;
                                                 $recuperacionCarteraVencida = 0;
                                                 
-                                                $comisionesPagadasKaax  = $investor != null  ? $investor->collection_commission  / 1.16 : 0;
+                                                $comisionesPagadasKaax  = $investor != null  ? $investor->collection_commission : 0;
                                                 $perdidasCarteraVencida = 0;
-                                                $ivaComisiones          = $investor != null  ? $comisionesPagadasKaax * 0.16 : 0;
+                                                $ivaComisiones          =  0;
 
                                                 $resultadosNetosTotales = $interesesCobrados + $IvainteresesCobrados + $recuperacionCarteraVencida + $comisionesPagadasKaax + $perdidasCarteraVencida + $recuperacionCarteraVencida;
                                             @endphp
