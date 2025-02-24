@@ -109,7 +109,7 @@
                                                     id="sod_schedule_id" >
                                                     <option value="">Seleccione una opción</option>
                                                     @foreach ($sodNames as $sodName)
-                                                        <option value="{{ $sodName->id }}"> {{ $sodName->name }} </option>
+                                                        <option value="{{ $sodName->id }}" {{ $agreement->sod_schedule_id == $sodName->id? 'selected' : null  }}> {{ $sodName->name }} </option>
                                                     @endforeach
                                                 </select>
                                             </div>
