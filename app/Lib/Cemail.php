@@ -31,25 +31,29 @@ class Cemail
     public function sendEmail()
     {
         // Convertir la lista de destinatarios en un array
-        if ($this->to === null) {
-            $getNotification = EmailNotification::find(1);
-            $recipients = array_map('trim', explode(',', $getNotification->email));
-        } else {
-            $recipients = array_map('trim', explode(',', $this->to));
-        }
-        
-        
-        // Preparar el correo utilizando la vista en la carpeta "template"
-        Mail::send("email.{$this->template}", $this->content, function ($message) use ($recipients) {
-            $message->to($recipients); // Enviar a múltiples destinatarios
-
-            if ($this->cc) {
-                // Si hay direcciones en 'cc', convertirlas en array y añadirlas
-                $ccRecipients = array_map('trim', explode(',', $this->cc));
-                $message->cc($ccRecipients);
+       try {
+            if ($this->to === null) {
+                $getNotification = EmailNotification::find(1);
+                $recipients = array_map('trim', explode(',', $getNotification->email));
+            } else {
+                $recipients = array_map('trim', explode(',', $this->to));
             }
+            
+            
+            // Preparar el correo utilizando la vista en la carpeta "template"
+            Mail::send("email.{$this->template}", $this->content, function ($message) use ($recipients) {
+                $message->to($recipients); // Enviar a múltiples destinatarios
 
-            $message->subject($this->subject);
-        });
+                if ($this->cc) {
+                    // Si hay direcciones en 'cc', convertirlas en array y añadirlas
+                    $ccRecipients = array_map('trim', explode(',', $this->cc));
+                    $message->cc($ccRecipients);
+                }
+
+                $message->subject($this->subject);
+            });
+       } catch (\Exception $e) {
+        //throw $th;
+       }
     }
 }
