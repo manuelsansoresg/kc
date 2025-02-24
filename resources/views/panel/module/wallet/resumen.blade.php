@@ -23,7 +23,7 @@
                                             $disponiblePrestar = $investor->withdraw_available;
                                         @endphp
                                         <input type="hidden" id="iValorCuenta" value="{{ $valorCuenta}}">
-                                        <input type="hidden" id="iTotalCredit" value="{{ $totalCredit}}">
+                                        <input type="hidden" id="iTotalCredit" value="{{ $valorCuenta + $investor->total_balance}}">
                                         <div class="analytic-ov d-none d-md-block">
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
