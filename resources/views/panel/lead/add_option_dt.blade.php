@@ -41,10 +41,11 @@ $user = Auth::user();
                 <div class="dropdown-menu dropdown-menu-end">
                     <ul class="link-list-opt no-bdr">
                         @php
-                            $isMove = $lead->selected_loan != null && $lead->selected_term != null ?  true : false
+                            $isMove = $lead->selected_loan > 0  && $lead->selected_term > 0  ?  true : false
                         @endphp
-                        @if ($lead->go_ahead == 0 && $creditStatus === false && $isMove === true)
+                        @if ($lead->go_ahead == 0 && $creditStatus === false || $isMove === false)
                             <li>
+                                
                                 <a class="pointer" onclick="modalValidate({{ $id }}, 'lead', 'dt-lead')">
                                     <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
                             </li>

@@ -910,6 +910,8 @@ window.changeTramite = function()
     $('#content-refinanciado').hide();
     $('#product-deseado-refinanciamiento').hide();
     $('#content-product-deseado-refinanciamiento').html('');
+    $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+    $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
 
 
     if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
@@ -1012,6 +1014,10 @@ window.getMontoSolicitado = function() {
 
         $('#table-refinanciamiento-total').html(total_price);
         $('#total-refinanciable').val(total);
+        let plazosolicitado = $('#ref-plazo').val();
+        if (plazosolicitado != '') {
+            $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+        }
         getResumen();
 
     }).catch(e => {
@@ -1071,7 +1077,18 @@ window.getResumen = function()
         getChart();
 
         $('#go_ahead').val(1);
+        $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+        $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');   
+
+        let plazosolicitado = $('#ref-plazo').val();
+        let montosolicitado = $('#ref-monto').val();
+        if (plazosolicitado != '') {
+            $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+        }
         
+        if (montosolicitado != '') {
+            $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');   
+        }
 
     }).catch(e => {
     

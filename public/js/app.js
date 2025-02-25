@@ -3233,6 +3233,8 @@ window.changeTramite = function () {
   $('#content-refinanciado').hide();
   $('#product-deseado-refinanciamiento').hide();
   $('#content-product-deseado-refinanciamiento').html('');
+  $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+  $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
 
   if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
     axios.get("/panel/lead/" + clientPersonId + "/" + productId + "/" + tramit_type + "/refinanciamiento/get").then(function (response) {
@@ -3317,6 +3319,12 @@ window.getMontoSolicitado = function () {
     });
     $('#table-refinanciamiento-total').html(total_price);
     $('#total-refinanciable').val(total);
+    var plazosolicitado = $('#ref-plazo').val();
+
+    if (plazosolicitado != '') {
+      $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+    }
+
     getResumen();
   })["catch"](function (e) {});
 };
@@ -3362,6 +3370,18 @@ window.getResumen = function () {
     $('#hmonto-entregar').val(montoEntregarDecimal);
     getChart();
     $('#go_ahead').val(1);
+    $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+    $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+    var plazosolicitado = $('#ref-plazo').val();
+    var montosolicitado = $('#ref-monto').val();
+
+    if (plazosolicitado != '') {
+      $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+    }
+
+    if (montosolicitado != '') {
+      $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+    }
   })["catch"](function (e) {});
 };
 
