@@ -33,3 +33,15 @@
     {!!  $validateSod['message'] !!}
     
 @endif
+
+@if ($lead->selected_loan != null)
+<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>
+@else
+<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>
+@endif
+
+@if ($lead->selected_term != null)
+<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-primary"> Seleccionado  </span> </p>
+@else
+<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>
+@endif
