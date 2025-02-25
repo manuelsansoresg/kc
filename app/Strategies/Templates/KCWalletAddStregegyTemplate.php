@@ -46,7 +46,9 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             $percent_upload   = self::percentFile($history->id_rel);
             $percent = ( $percent_form +  $percent_upload) / 2;
         } else {
-
+            $percent_form   = self::percentForm2($history);
+            $percent_upload   = self::percentFile($history->id_rel, 2);
+            $percent = ( $percent_form +  $percent_upload) / 2;
         }
         return $percent;
     }
@@ -888,23 +890,15 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
     public function getPercent($history, $show_current_show = false)
     {
         self::checkTaskAndFinish($history->id_rel);
-        $transaction     = Transaction::find($history->id_rel);
-        $data_actions = array(
-            HistoryLog::KC_WALLET_ADD_FORM,
-            HistoryLog::KC_WALLET_ADD_UPLOAD,
-            HistoryLog::KC_WALLET_ADD_FORM_STEP_2,
-            HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2,
-        );
-        //dd($data_actions);
-        $get_actions = HistoryLog::getByStatus($data_actions, $transaction->id);
+        $percent_form1   = self::percentForm($history) == 100 ? 1 : 0;
+        $percent_upload1   = self::percentFile($history->id_rel)== 100 ? 1 : 0;
+        $percent_form2   = self::percentForm2($history)== 100 ? 1 : 0;
+        $percent_upload2   = self::percentFile($history->id_rel, 2)== 100 ? 1 : 0;
+        $status_progress = $percent_form1 + $percent_upload1 + $percent_form2 + $percent_upload2;
+
+
         //dd($get_actions);
-        $status_progress = 0;
-        $current_show = ''; 
-        foreach ($get_actions as $key => $get_action) {
-            $status = $get_action->status_progress;
-            $status_progress += $status != null ? $status : 0;
-            //$current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
-        }
+        
         $percent =  $status_progress > 0 ? (($status_progress) / 4) * 100 : 0;
         if ($status_progress <= 2) {
             $current_show = 'Información transferencia';
