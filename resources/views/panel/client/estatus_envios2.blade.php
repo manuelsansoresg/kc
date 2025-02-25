@@ -16,7 +16,7 @@
             <tr>
                 <td>Activación en S2</td>
                 <td>
-                    @if ($$credit->credit_s2_active == 1)
+                    @if ($credit->credit_s2_active == 1)
                     Ok
                         @else
                         fail  
