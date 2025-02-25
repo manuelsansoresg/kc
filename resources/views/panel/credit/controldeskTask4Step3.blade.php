@@ -48,7 +48,7 @@
     <div class="col-12">
         <div class="row">
             <div class="col-12 mt-5">
-                <span class="preview-title-lg overline-title">Compra de cartera</span>
+                <span class="preview-title-lg overline-title">Crédito preautorizado prospectos</span>
             </div>
             <div class="col-md-6 mt-3">
                 <div class="form-group">
@@ -192,6 +192,7 @@
 
     <input type="hidden" id="isControlDesk" value="true">
     <input type="hidden" id="client_person_id" value="{{ $client->id }}">
+    <input type="hidden" id="controldesk-credit_id" value="{{ $credit->id }}">
     <input type="hidden" id="financial_product_id" value="{{ $financialProduct->id }}">
     <input type="hidden" id="applied_periodicity" name="credit[applied_periodicity]">
     <input type="hidden" id="applied_loan_total_amount" name="credit[applied_loan_total_amount]">

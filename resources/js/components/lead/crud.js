@@ -971,10 +971,15 @@ window.graficaProspecto = function()
 }
 
 
+
+
 window.getMontoSolicitado = function() {
+    
     let clientPersonId = $('#client_person_id').val();
     let productId = $('#financial_product_id').val();
     let plazo = $('#ref-plazo').val();
+    let creditElement = document.getElementById('controldesk-credit_id');
+    let creditId = creditElement ? creditElement.value : null;
     let tramit_type = $('#tramit_type').val();
     // Obtiene todos los checkboxes con nombre 'credits[]'
     var checkboxes = document.querySelectorAll('input[name="credits[]"]:checked');
@@ -992,7 +997,7 @@ window.getMontoSolicitado = function() {
     $('#total-refinanciable').val(0);
 
     axios
-    .post("/panel/lead"+'/'+clientPersonId+"/"+productId+"/"+tramit_type+"/montoMaximo/get", { credits:credits, plazo:plazo })
+    .post("/panel/lead"+'/'+clientPersonId+"/"+productId+"/"+tramit_type+"/"+creditId+"/montoMaximo/get", { credits:credits, plazo:plazo })
     .then(function (response) {
         let result = response.data;
         let maximo = result.maximo;
@@ -1023,7 +1028,6 @@ window.getMontoSolicitado = function() {
     }).catch(e => {
     
     });
-
 }
 
 window.getResumen = function()
@@ -1041,6 +1045,7 @@ window.getResumen = function()
     .then(function (response) {
         let result = response.data;
         let montoSolicitado =  result.montoSolicitado;
+        
         let montoRefinanciar =  result.montoRefinanciar;
         let comision =  result.comision;
         let monto_entregar =  result.monto_entregar;

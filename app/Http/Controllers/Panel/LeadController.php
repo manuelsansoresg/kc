@@ -538,7 +538,7 @@ class LeadController extends Controller
         return response()->json($data);
     }
 
-    public function getMontoMaximo(ClientPerson $clientPerson,FinancialProduct $financialProduct, Request $request, $tramitType)
+    public function getMontoMaximo(ClientPerson $clientPerson,FinancialProduct $financialProduct,  $tramitType , $creditId, Request $request)
 
     {
         $min         = floatval($financialProduct->min_loan_amount);
@@ -548,6 +548,11 @@ class LeadController extends Controller
         $plazo       = $request->plazo;
         $descuento = 0;
         $total = 0;
+        $creditId = $creditId === "null" ? null : $creditId;
+        $getCredit = $creditId !== null ? Credit::find($creditId) : null;
+        $paymentCapacity =  $getCredit == null ? $clientPerson->payment_capacity : $getCredit->payroll_payment_capacity;
+       
+
         foreach ($credits as $credit) {
             $getCollection = Collection::find($credit);
             if ($getCollection != null) {
@@ -556,13 +561,13 @@ class LeadController extends Controller
             }
         }
         if ($tramitType == 3) { //refinanciamiento
-            $pmt = $clientPerson->payment_capacity + $descuento;
+            $pmt = $paymentCapacity + $descuento;
         } else {
-            $pmt = $clientPerson->payment_capacity;
+            $pmt = $paymentCapacity;
         }
 
         $present = $calculadora->presentValue($financialProduct, $plazo, $pmt, $tramitType);
-
+        
         $montoArray = [];
 
         for ($i = $min; $i <= $max; $i += 1000) {
@@ -613,7 +618,7 @@ class LeadController extends Controller
             'pagoPeriodico' => format_price($pagoPeriodico),
             'pagoTotal' => format_price($pagoTotal),
             'pagoTotalSF' => $pagoTotal,
-            'tasaAnual' => $tasaAnual / 1.16,
+            'tasaAnual' => format_price($tasaAnual / 1.16),
             'cat' => $cat,
 
             'kcInteres' => $kcInteres,

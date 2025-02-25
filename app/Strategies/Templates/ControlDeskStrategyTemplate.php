@@ -1125,7 +1125,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $terms = FpTerm::select('terms.id', 'terms.term')
             ->join('terms', 'terms.term_id',  'f_p_terms.term_id')
             ->where('financial_product_id', $financialProduct->id)
-            ->where('terms.term', '>', $financialProduct->max_term)
+            ->where('terms.term', '<=', $financialProduct->max_term)
             ->pluck('terms.term', 'terms.term');
         }
         
