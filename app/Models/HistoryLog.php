@@ -344,6 +344,10 @@ class HistoryLog extends Model
         66 => 'kc-down-wallet',
         67 => 'kc-down-wallet',
         68 => 'kc-down-wallet',
+        75 => 'delivery',
+        76 => 'delivery',
+        77 => 'delivery',
+        78 => 'delivery',
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $update_old_status = true)
