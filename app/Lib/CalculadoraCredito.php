@@ -61,11 +61,14 @@ class CalculadoraCredito
         return null;
     }
 
-    public function getPayment($financialProduct, $pv)
+    public function getPayment($financialProduct, $pv, $max_term = null)
     {
         $dias = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
         $rate = $financialProduct->daily_interest_rate/ 10000  * ($dias);
         $nper = $financialProduct->max_term;
+        if ($max_term != null) {
+            $$nper = $max_term;
+        }
         $finance = new Finance;
         $payment = $finance->payment($rate, $nper, $pv);
         return $payment * -1;

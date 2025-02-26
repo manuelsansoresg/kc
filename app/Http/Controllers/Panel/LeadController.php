@@ -598,10 +598,10 @@ class LeadController extends Controller
         }
         $periodicidad = config('financial_enums.periodicity_products')[$financialProduct->periodicity_id];
         $getCalc = new CalculadoraCredito();
-        $pagoPeriodico = $getCalc->getPayment($financialProduct, $monto);
+        $pagoPeriodico = $getCalc->getPayment($financialProduct, $monto, $plazo);
         $pagoTotal = $plazo * $pagoPeriodico;
         $tasaAnual = $financialProduct->annual_interest_rate;
-        $cat = $financialProduct->rate_cat;
+        $cat = $financialProduct->real_cat;
         
         $kcInteres = $pagoTotal - $monto;
         $kcPagoTotal = $pagoTotal;
