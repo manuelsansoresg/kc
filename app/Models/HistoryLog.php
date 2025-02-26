@@ -72,15 +72,7 @@ class HistoryLog extends Model
     
     const KC_DELIVERY_TASK1_STEP2             = 77;
     const KC_DELIVERY_TASK2_STEP2             = 78;
-    
-    
-   /*  const KC_DELIVERY_FORM                    = 31;
-    
-    const KC_DELIVERY_FORM_STEP_2             = 32;
-    
-    const KC_DELIVERY_FORM_STEP_3             = 33;
 
-    const KC_DELIVERY_FORM_STEP_4             = 34; */
     
     const CREDITS_PAID                        = 35;
     const CREDITS_DELIVERED                   = 55;
