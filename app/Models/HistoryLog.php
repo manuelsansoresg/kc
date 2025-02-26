@@ -210,6 +210,10 @@ class HistoryLog extends Model
         69 => 'Determinar CP real',
         70 => 'Determinar crédito',
         71 => 'Validar clabe cliente',
+        75 => 'Entrega crédito cliente',
+        76 => null,
+        77 => 'Enviar info a S2',
+        78 => 'Activar crédito en S2',
     ];
     
     public static $label_subject = [
