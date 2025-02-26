@@ -205,7 +205,7 @@ class Credit extends Model
         $getInvestors = InvestorProduct::where('financial_products_id', $credit->applied_financial_product)->get();
 
         foreach ($getInvestors as $getInvestor) {
-            Transaction::setTotalCapital($getInvestor->investor_id);
+            //Transaction::setTotalCapital($getInvestor->investor_id);
         }
         
     }

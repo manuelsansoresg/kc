@@ -434,11 +434,8 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 
                 
                 $getTransaction = $transaction['transaction'];
-                try {
-                    Transaction::setTotalCapital($getTransaction->investor_id);
-                } catch (\Exception $th) {
-                    //throw $th;
-                }
+                //Transaction::setTotalCapital($getTransaction->investor_id);
+                
                 
                 
             }
@@ -451,7 +448,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 try {
                     //code...
                     Investor::setFundedCapital($investor_id);
-                    Transaction::setTotalCapital($investor_id);
+                    //Transaction::setTotalCapital($investor_id);
                 } catch (\Exception $th) {
                     //throw $th;
                 }

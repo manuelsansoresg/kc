@@ -50,7 +50,7 @@ class Investor extends Model
         ]);
         
         
-        Transaction::setTotalCapital($investorId);
+        //Transaction::setTotalCapital($investorId);
         
         
     }
@@ -118,7 +118,7 @@ class Investor extends Model
             $data['lendable'] = 9999999;
         } */
         Investor::where('id', $investorId)->update($data);
-        Transaction::setTotalCapital($investorId);
+        //Transaction::setTotalCapital($investorId);
     }
 
     public static function updateFinancialProductsLoanAvailable($investorId)

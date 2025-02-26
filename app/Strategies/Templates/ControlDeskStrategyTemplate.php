@@ -4276,7 +4276,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             InvestorsCredit::saveEdit($credit->id);
                             $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
                             foreach ($getInvestors as $getInvestor) {
-                                Transaction::setTotalCapital($getInvestor->investor_id);
+                                //Transaction::setTotalCapital($getInvestor->investor_id);
                                 Investor::updateInvestorData($getInvestor->investor_id);
                             }
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, $credit->id, 1); //terminar tarea
