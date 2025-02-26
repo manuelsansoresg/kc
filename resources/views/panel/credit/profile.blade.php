@@ -725,17 +725,17 @@
                                                                         <tr>
                                                                             <td> {{ $payment->numero_de_pago }} </td>
                                                                             <td>{{ $payment->fecha_pago != '' ? date('d-m-Y', strtotime($payment->fecha_pago)) : null }}</td>
-                                                                            <td> {{ format_price($payment->pagado * $investorsCredit->percentage) }} </td>
-                                                                            <td> {{ format_price($payment->abono * $investorsCredit->percentage) }} </td>
-                                                                            <td> {{ format_price($payment->interes * $investorsCredit->percentage) }} </td>
-                                                                            <td> {{ format_price($payment->iva * $investorsCredit->percentage) }} </td>
+                                                                            <td> {{ format_price(($payment->pagado * $investorsCredit->percentage) / 100) }} </td>
+                                                                            <td> {{ format_price(($payment->abono * $investorsCredit->percentag) / 100) }} </td>
+                                                                            <td> {{ format_price(($payment->interes * $investorsCredit->percentage) / 100) }} </td>
+                                                                            <td> {{ format_price(($payment->iva * $investorsCredit->percentage) / 100) }} </td>
                                                                             
                                                                             <td> {{ isset(config('enums.estatus_statement')[$payment->estatus_pago]) ? config('enums.estatus_statement')[$payment->estatus_pago] : null }}
                                                                             </td>
                                                                             <td> 
                                                                                 {{ $fecha_retencion }}
                                                                             </td>
-                                                                            <td> {{ format_price($payment->collection_commission_amount * $investorsCredit->percentage) }} </td>
+                                                                            <td> {{ format_price(($payment->collection_commission_amount * $investorsCredit->percentage)/ 100) }} </td>
                                                                         </tr>
                                                                     @endforeach
                                                                 @endif
