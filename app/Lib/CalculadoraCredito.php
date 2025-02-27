@@ -67,7 +67,7 @@ class CalculadoraCredito
         $rate = $financialProduct->daily_interest_rate/ 10000  * ($dias);
         $nper = $financialProduct->max_term;
         if ($max_term != null) {
-            $$nper = $max_term;
+            $nper = $max_term;
         }
         $finance = new Finance;
         $payment = $finance->payment($rate, $nper, $pv);
