@@ -165,7 +165,7 @@ class Investor extends Model
         
         // Calcular total_capital
         $totalCapital = InvestorsCredit::where('investor_id', $investorId)
-            ->where('status', 1)
+            ->where('status', '!=', 0)
             ->sum('import');
         
         // Calcular total_available
@@ -176,7 +176,7 @@ class Investor extends Model
         
         // Calcular loan_available
         $loanAvailable = $investor->lendable - InvestorsCredit::where('investor_id', $investorId)
-            ->where('status', 1)
+            ->where('status', '!=', 0)
             ->where('created_at', '>', $investor->lendable_updated_time)
             ->sum('import');
         
