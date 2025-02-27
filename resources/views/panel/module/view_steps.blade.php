@@ -120,7 +120,11 @@
                                                                             <td>
                                                                                 @if ($list_action['status'] == 'En curso')
                                                                                     <a href="{{ $list_action['link'] }}" class="btn btn-outline-primary btn-sm">Abrir</a>
-                                                                                    @endif
+                                                                                    
+                                                                                @endif
+                                                                                @if (($list_action['name'] == '1- Capturar Anverso INE' || $list_action['name'] == '2- Capturar Reverso INE') && ($list_action['status'] == 'Concluido') && $percent < 100  )
+                                                                                <a href="{{ $list_action['link'] }}" class="btn btn-outline-primary btn-sm">Revisar</a>
+                                                                                @endif
                                                                                     <a href="{{ $list_action['link'] }}" class="btn btn-outline-primary btn-sm">Abrir</a>
                                                                             </td>
                                                                         </tr>
