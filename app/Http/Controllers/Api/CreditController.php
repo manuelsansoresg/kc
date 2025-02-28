@@ -89,6 +89,8 @@ class CreditController extends Controller
             $recoveredCapital = ($abono_acumulado_real * $percentage) / 100;
             $profitCollected = ($totalCollected - $recoveredCapital) / 1.16;
             $ivaCollected = $profitCollected * 0.16;
+            $commissionAmount = ($totalCollected * $comissionRate) / 1.16 / 100;
+            $ivaCommission = $commissionAmount * 0.16;
 
             InvestorsCredit::where('id', $getInvestor->id)->update([
                 'total_collected' => $totalCollected,
@@ -96,9 +98,10 @@ class CreditController extends Controller
                 'recovered_capital' => $recoveredCapital,
                 'total_balance' => ($saldo_total_real * $percentage) / 100,
                 'credit_status' => $status,
-                'commission_amount' => ($totalCollected * $comissionRate) / 100,
+                'commission_amount' => $commissionAmount,
                 'profit_collected' => $profitCollected,
                 'iva_collected' => $ivaCollected,
+                'iva_commission' => $ivaCommission,
             ]);
         }
 
@@ -113,7 +116,8 @@ class CreditController extends Controller
                 SUM(profit_collected) as profit_collected,
                 SUM(commission_amount) as commission_amount,
                 SUM(total_balance) as total_balance,
-                SUM(iva_collected) as iva_collected
+                SUM(iva_collected) as iva_collected,
+                SUM(iva_commission) as iva_commission
             ')
             ->get();
 
@@ -126,11 +130,11 @@ class CreditController extends Controller
                 'collection_commission' => $getSum->commission_amount,
                 'total_balance' => $getSum->total_balance,
                 'iva_collected' => $getSum->iva_collected,
+                'iva_commission' => $getSum->iva_commission,
             ]);
 
             // Llamar a funciones de actualización
             Investor::updateInvestorData($getSum->investor_id);
         }
-        
     }
 }
