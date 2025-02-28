@@ -62,7 +62,7 @@
                                     <div class="form-group">
                                         <div class="form-label-group">
                                             <label class="form-label" for="password">Contraseña</label>
-                                            <a class="link link-primary link-sm" tabindex="-1" href="/ayuda">¿Olvido su contraseña?</a>
+                                            <a class="link link-primary link-sm" tabindex="-1" href="/password/reset">¿Olvido su contraseña?</a>
                                         </div>
                                         <div class="form-control-wrap">
                                             <a tabindex="-1" href="#" class="form-icon form-icon-right passcode-switch lg" data-target="password">
