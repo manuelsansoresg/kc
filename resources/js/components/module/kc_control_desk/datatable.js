@@ -472,10 +472,10 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'status' },
             { data: 'importe' },
             { data: 'pagado' },
-            { data: 'capital_pendiente'},
             { data: 'capital_recuperado'},
-            { data: 'interes_proyectado'},
             { data: 'interes_cobrado'},
+            { data: 'capital_pendiente'},
+            { data: 'interes_proyectado'},
             { data: 'comision_kc'},
         ],
         columnDefs:[

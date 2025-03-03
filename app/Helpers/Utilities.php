@@ -129,7 +129,7 @@ if (!function_exists('format_price')) {
     function format_price($price)
     {
         if ($price == null || $price == 0) {
-            return '00,000.00';
+            return '00.00';
         }
 
 
