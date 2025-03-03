@@ -2,6 +2,8 @@
 $user = Auth::user();
 @endphp
 @inject('m_history', 'App\Models\HistoryLog')
+@inject('m_financial_product', 'App\Models\FinancialProduct')
+
 <div class="content-options">
     <ul class="nk-tb-actions gx-1">
         @if ($lead->manychat_id != null)
@@ -41,7 +43,11 @@ $user = Auth::user();
                 <div class="dropdown-menu dropdown-menu-end">
                     <ul class="link-list-opt no-bdr">
                         @php
-                            $isMove = $lead->selected_loan > 0  && $lead->selected_term > 0  ?  true : false
+                            $isMove = true;
+                            $getFinancial = $m_financial_product::find($lead->financial_product_id);
+                            if ($getFinancial!= null && $getFinancial->type_product_id != 3) {
+                                $isMove = $lead->selected_loan > 0  && $lead->selected_term > 0  ?  true : false;
+                            }
                         @endphp
                         @if ($lead->go_ahead == 0 && $creditStatus === false || $isMove === false)
                             <li>

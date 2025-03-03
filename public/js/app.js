@@ -3216,7 +3216,7 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
       $('#tramit_type').val(tipoTramiteId).trigger("change");
     }
 
-    if (typeProductId != 3) {
+    if (typeProductId != 3 && typeProductId != '') {
       $('#content-validaciones-soad-tramite').html(sodMessage);
     }
   })["catch"](function (e) {});
@@ -3233,8 +3233,11 @@ window.changeTramite = function () {
   $('#content-refinanciado').hide();
   $('#product-deseado-refinanciamiento').hide();
   $('#content-product-deseado-refinanciamiento').html('');
-  $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
-  $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+
+  if (typeProductId != 3 && typeProductId != '') {
+    $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+    $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+  }
 
   if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
     axios.get("/panel/lead/" + clientPersonId + "/" + productId + "/" + tramit_type + "/refinanciamiento/get").then(function (response) {
@@ -3286,7 +3289,8 @@ window.getMontoSolicitado = function () {
   var plazo = $('#ref-plazo').val();
   var creditElement = document.getElementById('controldesk-credit_id');
   var creditId = creditElement ? creditElement.value : null;
-  var tramit_type = $('#tramit_type').val(); // Obtiene todos los checkboxes con nombre 'credits[]'
+  var tramit_type = $('#tramit_type').val();
+  var typeProductId = $('#typeProductId').val(); // Obtiene todos los checkboxes con nombre 'credits[]'
 
   var checkboxes = document.querySelectorAll('input[name="credits[]"]:checked'); // Inicializa un array para guardar los valores seleccionados
 
@@ -3321,10 +3325,13 @@ window.getMontoSolicitado = function () {
     });
     $('#table-refinanciamiento-total').html(total_price);
     $('#total-refinanciable').val(total);
-    var plazosolicitado = $('#ref-plazo').val();
 
-    if (plazosolicitado != '') {
-      $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+    if (typeProductId != 3 && typeProductId != '') {
+      var plazosolicitado = $('#ref-plazo').val();
+
+      if (plazosolicitado != '') {
+        $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+      }
     }
 
     getResumen();
@@ -3339,6 +3346,7 @@ window.getResumen = function () {
   var totalRefinanciable = $('#total-refinanciable').val();
   var tramit_type = $('#tramit_type').val();
   var isControlDesk = $('#isControlDesk').val();
+  var typeProductId = $('#typeProductId').val();
   $('#go_ahead').val(0);
   axios.get("/panel/lead/" + productId + "/" + plazo + '/' + monto + '/' + totalRefinanciable + '/' + tramit_type + '/getResumen').then(function (response) {
     var result = response.data;
@@ -3372,17 +3380,20 @@ window.getResumen = function () {
     $('#hmonto-entregar').val(montoEntregarDecimal);
     getChart();
     $('#go_ahead').val(1);
-    $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
-    $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
-    var plazosolicitado = $('#ref-plazo').val();
-    var montosolicitado = $('#ref-monto').val();
 
-    if (plazosolicitado != '') {
-      $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
-    }
+    if (typeProductId != 3) {
+      $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+      $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+      var plazosolicitado = $('#ref-plazo').val();
+      var montosolicitado = $('#ref-monto').val();
 
-    if (montosolicitado != '') {
-      $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+      if (plazosolicitado != '') {
+        $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+      }
+
+      if (montosolicitado != '') {
+        $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+      }
     }
   })["catch"](function (e) {});
 };

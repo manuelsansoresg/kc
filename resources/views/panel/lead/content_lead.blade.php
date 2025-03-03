@@ -1,8 +1,13 @@
+@inject('m_financial_product', 'App\Models\FinancialProduct')
 <div class="user-card">
     <div class="user-info">
         <span class="tb-lead">
             @php
-                $isMove = $lead->selected_loan > 0  && $lead->selected_term > 0  ?  true : false
+                $isMove = true;
+                $getFinancial = $m_financial_product::find($lead->financial_product_id);
+                if ($getFinancial!= null && $getFinancial->type_product_id != 3) {
+                    $isMove = $lead->selected_loan > 0  && $lead->selected_term > 0  ?  true : false;
+                }
             @endphp
             @if ($lead->go_ahead == 0 && $creditStatus === false || $isMove === false)
                 <span class="text-danger">{{ $lead->name }} {{ $lead->last_name }}  </span>
