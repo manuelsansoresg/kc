@@ -126,12 +126,13 @@
                                                 $interesesCobrados          = $investor != null  ? $investor->profit_collected : 0;
                                                 $IvainteresesCobrados       = $investor != null  ? $investor->iva_collected : 0;
                                                 $recuperacionCarteraVencida = 0;
-                                                
-                                                $comisionesPagadasKaax  = $investor != null  ? $investor->collection_commission : 0;
-                                                $perdidasCarteraVencida = 0;
-                                                $ivaComisiones          =  0;
 
-                                                $resultadosNetosTotales = $interesesCobrados + $IvainteresesCobrados + $recuperacionCarteraVencida + $comisionesPagadasKaax + $perdidasCarteraVencida + $recuperacionCarteraVencida;
+                                                $comisionesPagadasKaax      = $investor != null  ? $investor->collection_commission : 0;
+                                                $perdidasCarteraVencida     = 0;
+                                                $ivaComisiones             = $investor != null  ? $investor->iva_commission : 0;
+
+                                                $resultadosNetosTotales = $interesesCobrados + $IvainteresesCobrados + $recuperacionCarteraVencida 
+                                                                        - $comisionesPagadasKaax - $perdidasCarteraVencida - $ivaComisiones;
                                             @endphp
                                             <table class="table table-borderless">
                                                 <tr>
