@@ -58,11 +58,11 @@
                                             <span class="fw-bold">Producto:</span> {{ $product->alias }}
                                             <br><span class="fw-bold">Monto:</span> {{ format_price($credit->applied_import) }}
                                             <br><span class="fw-bold">Plazo:</span> {{ format_price($credit->applied_term) }}
-                                            <br><span class="fw-bold">Pago:</span> {{ format_price($credit->applied_loan_discount) }}
+                                            <br><span class="fw-bold">Pago:</span> {{ format_price($credit->applied_payment) }}
                                             <br><span class="fw-bold">Periodicidad:</span> {{ $periodicity }}
                                             <br><span class="fw-bold">Tipo de crédito:</span> {{ $tipoCredito->alias}}
                                             <br><span class="fw-bold">Compra cartera:</span> {{ format_price($credit->third_party_adjustment) }}
-                                            <br><span class="fw-bold">Promotor:</span> {{ $getAsesor != null ? $getAsesor->name.' '.$getAsesor->last_name.' '.$getAsesor->second_last_name : null}}
+                                            <br><span class="fw-bold">Asesor:</span> {{ $getAsesor != null ? $getAsesor->name.' '.$getAsesor->last_name.' '.$getAsesor->second_last_name : null}}
                                             <br><span class="fw-bold">Origen:</span> {{ $origin }}
                                             <br><span class="fw-bold">Etiquetas:</span> {{ $tags }}
                                             <br><span class="fw-bold">Ultimo comentario:</span> {{ $lastComment!= null ? $lastComment->comment : null }}
