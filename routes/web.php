@@ -72,11 +72,11 @@ Route::get('quiz/form', ['\App\Http\Controllers\HomeController', 'surveyForm']);
 
 Route::get('client/contratocm/{client}/{credit}', ['\App\Http\Controllers\HomeController', 'contratoClient']);
 Route::get('client/contratocm/{client}/{credit}/firmar', ['\App\Http\Controllers\HomeController', 'contratoClientFirma']);
-Route::get('client/contratocm/{client}/{type}/exit', ['\App\Http\Controllers\HomeController', 'contratoClientFirmaExit']);
+Route::get('client/contratocm/{clientId}/{type}/exit', ['\App\Http\Controllers\HomeController', 'contratoClientFirmaExit']);
 
 Route::get('client/sod/{credit}', ['\App\Http\Controllers\HomeController', 'contratoCreditSod']);
 Route::get('client/sod/{credit}/firmar', ['\App\Http\Controllers\HomeController', 'contratoCreditFirmaSod']);
-Route::get('client/sod/{credit}/{type}/exit', ['\App\Http\Controllers\HomeController', 'sodCreditFirmaExit']);
+Route::get('client/sod/{creditId}/{type}/exit', ['\App\Http\Controllers\HomeController', 'sodCreditFirmaExit']);
 
 Route::get('/nosotros', function () {
     return view('about');

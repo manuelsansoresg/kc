@@ -167,7 +167,7 @@ class HomeController extends Controller
         return redirect('/client/contratocm/'.$client->id.'/1/exit');
     }
 
-    public function contratoClientFirmaExit(ClientPerson $client ,  $type)
+    public function contratoClientFirmaExit($clientId ,  $type)
     {
         return view('exit_sign', compact('type'));
     }
@@ -247,8 +247,9 @@ class HomeController extends Controller
         return redirect('/client/sod/'.$credit->id.'/1/exit');
     }
 
-    public function sodCreditFirmaExit(ClientPerson $client , $type)
+    public function sodCreditFirmaExit($creditId , $type)
     {
+        
         return view('exitsod_sign', compact('type'));
     }
 
