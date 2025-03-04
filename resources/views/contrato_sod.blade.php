@@ -530,10 +530,9 @@
         }
 
         .c6 {
-            padding-top: 0pt;
-            padding-bottom: 0pt;
-            line-height: 1.0;
-            text-align: left
+            font-size: 10pt;
+            font-weight: 400;
+            font-family: "Calibri"
         }
 
         .c4 {
@@ -550,10 +549,9 @@
         }
 
         .c9 {
-            color: #000000;
-            text-decoration: none;
-            vertical-align: baseline;
-            font-style: normal
+            font-size: 10pt;
+            font-weight: 400;
+            font-family: "Calibri"
         }
 
         .c2 {
@@ -576,7 +574,7 @@
 
         .c3 {
             font-size: 10pt;
-            font-weight: 700;
+            font-weight: 400;
             font-family: "Calibri"
         }
 
@@ -792,7 +790,7 @@
         </tr>
         <tr class="c11">
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
-                <p class="c6"><span class="c3">Fecha de pago:</span><span class="c9 c2">&nbsp;{{ $credit->delivered_date }}</span></p>
+                <p class="c6"><span class="c3">Fecha de pago:</span><span class="c9 c2">&nbsp;{{ $credit->collection_date }}</span></p>
             </td>
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">Tasa de inter&eacute;s fija anual:</span><span class="c9 c2">&nbsp;{{ $credit->applied_interest_rate }}
@@ -801,7 +799,7 @@
         </tr>
         <tr class="c11">
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
-                <p class="c6"><span class="c3">Costo anual total: </span>${{ format_price($credit->applied_cat) }}</p>
+                <p class="c6"><span class="c3">Costo anual total: </span>{{ $credit->applied_cat }}% </p>
             </td>
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c0"><span class="c9 c2">Todos los montos incluyen IVA</span></p>
