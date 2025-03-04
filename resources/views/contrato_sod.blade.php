@@ -778,7 +778,7 @@
                 <p class="c6"><span class="c3">Monto Retirado:</span><span class="c9 c2">&nbsp;${{ format_price($credit->applied_import) }}</span></p>
             </td>
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
-                <p class="c6"><span class="c3">Comisi&oacute;n:</span><span class="c9 c2">&nbsp;${{ format_price($credit->opening_commission) }}</span></p>
+                <p class="c6"><span class="c3">Comisi&oacute;n:</span><span class="c9 c2">&nbsp;${{ format_price($credit->sod_commission) }}</span></p>
             </td>
         </tr>
         <tr class="c11">
@@ -801,7 +801,7 @@
         </tr>
         <tr class="c11">
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
-                <p class="c6"><span class="c3">Costo anual total: </span>${{ format_price($credit->applied_interest_rate) }}</p>
+                <p class="c6"><span class="c3">Costo anual total: </span>${{ format_price($credit->applied_cat) }}</p>
             </td>
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c0"><span class="c9 c2">Todos los montos incluyen IVA</span></p>
@@ -849,7 +849,7 @@
             en el Monto Retirado por concepto de Salario Bajo Demanda que recib&iacute; de </span><span class="c3">YALKU
             SERVICIOS, SAPI DE CV </span><span class="c2">, de fecha </span><span class="c3">{{ date('d-m-Y') }}</span><span class="c2">&nbsp;identificado con el n&uacute;mero </span><span
             class="c3">{{ $credit->id }}</span><span class="c2">&nbsp;, por un monto de $</span><span
-            class="c3">{{ format_price($credit->applied_loan_total_amount) }}</span><span class="c2">&nbsp;pesos, Moneda Nacional; por medio del cual
+            class="c3">{{ format_price($credit->applied_import) }}</span><span class="c2">&nbsp;pesos, Moneda Nacional; por medio del cual
             me obligo a cubrir en </span><span class="c3">{{ $credit->applied_term }}</span><span class="c2">&nbsp;abono
             con un monto total de $</span><span class="c3">{{ format_price($credit->applied_loan_total_amount) }}</span><span class="c2">&nbsp;pesos, Moneda Nacional y
             me permito solicitar a </span><span class="c3">{{ $agreement!= null ? $agreement->razon_social : null}}</span><span class="c9 c2">&nbsp;lo
