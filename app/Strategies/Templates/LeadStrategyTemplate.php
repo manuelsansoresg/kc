@@ -10,6 +10,7 @@ use App\Models\Credit;
 use App\Models\CreditNotes;
 use App\Models\CurrentFinancialProduct;
 use App\Models\File;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Product;
@@ -85,6 +86,24 @@ class LeadStrategyTemplate implements TemplateInterface
                 'applied_loan_type' => $lead->applied_loan_type,
                 'tramit_type' => $lead->tramit_type,
             );
+
+            if ($lead->product_id == 3) {
+                $financial_product_id = $lead->financial_product_id;
+                $getFinancial = FinancialProduct::find($financial_product_id);
+                $data_lead['product_id']= $lead->product_id; 
+                $data_lead['applied_financial_product']= $lead->financial_product_id; 
+                $data_lead['applied_import']= $lead->selected_loan; 
+                $data_lead['applied_term']= $lead->selected_term; 
+                $data_lead['applied_periodicity']= $getFinancial != null ? $getFinancial->periodicity_id : null ; 
+                $data_lead['applied_payment']= $lead->sod_total_payment; 
+                $data_lead['applied_loan_total_amount']= $lead->sod_total_payment; 
+                $data_lead['applied_interest_rate']=0; 
+                $data_lead['applied_CAT']= 0; 
+                $data_lead['opening_Commission_percentage']= 0; 
+                $data_lead['net_amount']= $lead->sod_withdraw_amount; 
+                $data_lead['sod_commission']= $lead->sod_commision_amount; 
+                $data_lead['opening_commission']= 0; 
+            }
 
             //validar que el credito no exista con los mismos datos
             $credit = Credit::create($data_lead);
