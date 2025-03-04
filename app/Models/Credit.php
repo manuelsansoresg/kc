@@ -121,6 +121,7 @@ class Credit extends Model
         'info_s2_sent',
         'credit_s2_active',
         'credit_status',
+        'collection_date',
         
     ];
 

@@ -14,6 +14,7 @@ use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Product;
+use App\Models\SodScheduleDate;
 use App\Strategies\TemplateInterface;
 use App\Strategies\Values\SendNotificationsValues;
 use stdClass;
@@ -88,6 +89,13 @@ class LeadStrategyTemplate implements TemplateInterface
             );
 
             if ($lead->product_id == 3) {
+                $sod_schedule_id = Agreement::where('sod_schedule_id', $lead->agreement_id)->first();
+                if ($sod_schedule_id != null) {
+                    $nameSchedule = 'schedule_'.$sod_schedule_id->sod_schedule_id;
+                    $getSchedule = SodScheduleDate::where($nameSchedule, 2)->orderBy($nameSchedule, 'ASC')->first();
+                    $data_lead['collection_date']= $getSchedule->fecha; 
+                }
+
                 $financial_product_id = $lead->financial_product_id;
                 $getFinancial = FinancialProduct::find($financial_product_id);
                 $data_lead['product_id']= $lead->product_id; 
@@ -103,6 +111,7 @@ class LeadStrategyTemplate implements TemplateInterface
                 $data_lead['net_amount']= $lead->sod_withdraw_amount; 
                 $data_lead['sod_commission']= $lead->sod_commision_amount; 
                 $data_lead['opening_commission']= 0; 
+                
             }
 
             //validar que el credito no exista con los mismos datos
