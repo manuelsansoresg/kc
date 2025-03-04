@@ -203,6 +203,8 @@ class HistoryLog extends Model
         70 => 'Determinar crédito',
         71 => 'Validar clabe cliente',
         72 => '',
+        73 => '',
+        74 => '',
         75 => 'Entrega crédito cliente',
         76 => null,
         77 => 'Enviar info a S2',
