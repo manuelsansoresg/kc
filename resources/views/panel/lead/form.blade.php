@@ -399,6 +399,12 @@
                                                         <input type="hidden" name="data[cellphone_validated]" id="cellphone_validated" value="{{ $lead != null ? $lead->cellphone_validated : null}}">
                                                         <input type="hidden" name="data[rfc_validated]" id="rfc_validated" value="{{ $lead != null ? $lead->rfc_validated : null}}">
                                                         <input type="hidden" name="data[go_ahead]" id="go_ahead" value="{{ $lead != null ? $lead->go_ahead : null}}">
+                                                        
+                                                        <input type="hidden" name="data[product_id]" id="product_id">
+                                                        <input type="hidden" name="data[selected_term]" id="selected_term">
+                                                        <input type="hidden" name="data[selected_loan]" id="selected_loan">
+                                                        
+
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>

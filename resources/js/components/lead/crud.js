@@ -1188,6 +1188,9 @@ window.validateSoad = function()
                 let isSodOnDate = result.isSodOnDate;
                 
 
+                $('#product_id').val(typeProductId);
+                $('#selected_term').val(1);
+                
                 $('#is_free_of_active_sod').val(0);
                 $('#is_sod_on_date_allowed').val(0);
                 if (soadActive != 0) {
@@ -1251,6 +1254,7 @@ if (document.getElementById('valor-slider')) {
         
         // Obtenemos el valor actual del slider
         var sliderValue = parseFloat(slider.value);
+        $('#selected_loan').val(sliderValue);
         // Actualizamos el contenido del span con el valor actual del slider
         displayValue.innerHTML = '$' + sliderValue;
         $('#sod_withdraw_amount').val(sliderValue);
