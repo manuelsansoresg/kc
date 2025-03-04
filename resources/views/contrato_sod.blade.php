@@ -916,13 +916,16 @@
 </div>
     
     @if ($isFirma === true && $token == null)
-        <footer>
-            <a  href="/client/sod/{{ $credit->id}}/2/exit" class="btn btn-outline-danger">Cancelar</a>
-            <a href="/client/sod/{{ $credit->id}}/firmar" class="btn btn-outline-primary">Aceptar</a>
+        <footer style="text-align: right">
+            <div style="padding:10px 0px; margin-right: 20px;">
+                <a  href="/client/sod/{{ $credit->id}}/2/exit" class="btn btn-outline-danger">Cancelar</a>
+                <a href="/client/sod/{{ $credit->id}}/firmar" class="btn btn-success">Aceptar</a>
+            </div>
         </footer>
     @endif
     
     @if ($token != null && $isFirma === false)
+    <br>
     <footer>
         Firma: {{ $firma}}
         La IP es: {{ $ip}}

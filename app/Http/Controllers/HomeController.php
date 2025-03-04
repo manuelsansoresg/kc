@@ -235,12 +235,11 @@ class HomeController extends Controller
 
         
         
-        if ($client->sod_agreement == null) {
-            $pdf = Pdf::loadView('contrato_sod', $data);
-            $pdf->setPaper('A4');
-            $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
-            $pdf->save('firma_contratos/'.$nombre);
-        }
+        
+        $pdf = Pdf::loadView('contrato_sod', $data);
+        $pdf->setPaper('A4');
+        $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
+        $pdf->save('firma_contratos/'.$nombre);
        
 
         
