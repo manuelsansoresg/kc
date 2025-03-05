@@ -101,4 +101,11 @@ class CalculadoraCredito
         $present = $finance->presentValue($rate, $nper, $pmt);
         return $present;
     }
+
+    public function getPaymentPresentValue($tasaInteresMensual, $plazo, $monto)
+    {
+        $finance = new Finance;
+        $payment = $finance->payment($tasaInteresMensual, $plazo, $monto);
+        return $payment;
+    }
 }

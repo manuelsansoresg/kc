@@ -3280,6 +3280,7 @@ window.changeTramite = function () {
 };
 
 window.graficaProspecto = function () {
+  getChart();
   $('#modal-chart').modal('show');
 };
 
@@ -3401,9 +3402,9 @@ window.getResumen = function () {
 function getChart() {
   var productId = $('#financial_product_id').val();
   var leadId = $('#lead_id').val();
-  var plazo = $('#ref-plazo').val();
-  var monto = $('#ref-monto').val();
-  axios.get("/panel/lead/" + productId + "/" + leadId + "/" + plazo + "/" + monto + '/getChart').then(function (response) {
+  var plazo = $('#plazo-maximo').val();
+  var monto = $('#monto-maximo').val();
+  axios.get("/panel/lead/" + productId + "/" + leadId + "/" + plazo + '/getChart').then(function (response) {
     var result = response.data;
     $('#ahorro-interes-dinero').html(result.ahorroInteresDinerom);
     $('#ahorro-interes-porcentaje').html(result.ahorroInteresPorcentaje);

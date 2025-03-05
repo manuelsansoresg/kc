@@ -968,7 +968,7 @@ window.changeTramite = function()
 
 window.graficaProspecto = function()
 {
-   
+    getChart();
     $('#modal-chart').modal('show');
 }
 
@@ -1114,11 +1114,11 @@ function getChart()
 {
     let productId = $('#financial_product_id').val();
     let leadId = $('#lead_id').val();
-    let plazo = $('#ref-plazo').val();
-    let monto = $('#ref-monto').val();
+    let plazo = $('#plazo-maximo').val();
+    let monto = $('#monto-maximo').val();
 
     axios
-        .get("/panel/lead/"+productId+"/"+leadId+"/"+plazo+"/"+monto+'/getChart')
+        .get("/panel/lead/"+productId+"/"+leadId+"/"+plazo+'/getChart')
             .then(function (response) {
                 let result = response.data;
 

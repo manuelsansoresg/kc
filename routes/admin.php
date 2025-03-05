@@ -84,7 +84,7 @@ Route::group(['prefix' => 'lead'], function () {
     Route::post('{clientPerson}/{financialProduct}/{tramitType}/{creditId}/montoMaximo/get', ['\App\Http\Controllers\Panel\LeadController', 'getMontoMaximo'])->middleware('auth');
     Route::get('{financialProduct}/{plazo}/{monto}/{total}/{tramitType}/getResumen', ['\App\Http\Controllers\Panel\LeadController', 'getResumen'])->middleware('auth');
     
-    Route::get('{financialProduct}/{lead}/{plazo}/{monto}/getChart', ['\App\Http\Controllers\Panel\LeadController', 'getChart'])->middleware('auth');
+    Route::get('{financialProduct}/{lead}/{plazo}/getChart', ['\App\Http\Controllers\Panel\LeadController', 'getChart'])->middleware('auth');
 
     Route::get('{clientPerson}/{financialProduct}/tramite/get', ['\App\Http\Controllers\Panel\LeadController', 'getTramite'])->middleware('auth');
     
