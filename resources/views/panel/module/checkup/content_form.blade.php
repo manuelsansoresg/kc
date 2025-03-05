@@ -27,7 +27,7 @@
                                     <hr>
                                     @if ($model == 'kc-down-wallet' && $clienteInversionista != null)
                                         
-                                        <div id="content-legend-kc-down-bank" class="py-2" style="display: none">
+                                        <div id="content-legend-kc-down-bank" class="py-2" >
                                             <div class="alert alert-primary " role="alert">
                                                 El dinero se depositará en máximo un día hábil.
                                                 <br><br>Cuenta de retiro:
