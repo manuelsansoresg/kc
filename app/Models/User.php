@@ -161,6 +161,9 @@ class User extends Authenticatable
         }
         $role = $request->type_user;
 
+        if ($request->type_user == 'administrador') {
+            $user->givePermissionTo('Administración');
+        }
         if ($request->type_user == 'cliente-persona') {
             $role = 'Cliente persona';
             if ($is_save == true) {
@@ -201,7 +204,11 @@ class User extends Authenticatable
                     'agreement_id' => $agreement_ids
                 ]);
             }
-            
+            if ($request->rol_id == 1) {
+                $user->givePermissionTo('RRHH');
+            } else {
+                $user->givePermissionTo('Administración');
+            }
         }
         $user->assignRole(ucfirst($role));
     }

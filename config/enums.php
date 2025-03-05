@@ -84,6 +84,10 @@ return [
         1 => 'Ventas',
         2 => 'Administración',
     ),
+    'role_user_inversionista' => array(
+        1 => 'RRHH',
+        2 => 'Administración',
+    ),
 
     //*actions
     "type_actions" => array(
