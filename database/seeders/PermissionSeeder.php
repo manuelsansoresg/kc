@@ -14,6 +14,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
+        Permission::create(['name' => 'Administración']);
         Permission::create(['name' => 'RRHH']);
     }
 }
