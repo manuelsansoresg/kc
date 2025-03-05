@@ -190,8 +190,9 @@ class LeadController extends Controller
     public function getProducts($agreementId)
     {
         $getProducts = FinancialAgreement::select('financial_products.id', 'financial_products.alias')
-                        ->join('financial_products', 'financial_products.financial_id', 'financial_agreements.id')
+                        ->join('financial_products', 'financial_products.id', 'financial_agreements.product_id')
                         ->where(['agreement_id' => $agreementId])->get();
+        
         $products = array();
         if ($getProducts != null) {
             foreach ($getProducts as $getProduct) {
