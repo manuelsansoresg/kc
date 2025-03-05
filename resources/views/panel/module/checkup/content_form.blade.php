@@ -25,12 +25,18 @@
                                     </div>
 
                                     <hr>
-                                    
-                                    <div id="content-legend-kc-down-bank" class="py-2" style="display: none">
-                                        <div class="alert alert-primary " role="alert">
-                                            Nota: El dinero se depositará a la cuenta registrada en máximo un día habil
-                                          </div>
-                                    </div>
+                                    @if ($model == 'kc-down-wallet' && $clienteInversionista != null)
+                                        
+                                        <div id="content-legend-kc-down-bank" class="py-2" style="display: none">
+                                            <div class="alert alert-primary " role="alert">
+                                                El dinero se depositará en máximo un día hábil.
+                                                <br><br>Cuenta de retiro:
+                                                <br>Banco: {{ $clienteInversionista->bank_name }}
+                                                <br>Clabe: {{ $clienteInversionista->bank_clabe }}
+                                                <br><br> Si deseas cambiar tu cuenta de retiro, comunícate con nosotros.
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div id="content-legend"></div>
                                     <p>* Campos obligatorios</p>
                                     <div class="row gy-4">

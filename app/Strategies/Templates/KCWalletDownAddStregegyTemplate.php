@@ -898,6 +898,6 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
     public function setTitle()
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
-        return 'Datos transferencia';
+        return 'Solicitud de retiro de fondos';
     }
 }

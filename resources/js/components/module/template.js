@@ -904,9 +904,9 @@ $().ready(function () {
             });
     }
 
-    if (document.getElementById('type_form') && $('#type_form').val() == '66') {
+    /* if (document.getElementById('type_form') && $('#type_form').val() == '66') {
         $('#content-legend-kc-down-bank').show();
-    }
+    } */
 
     if(document.getElementById('frm-template_wallet_step1'))
     {

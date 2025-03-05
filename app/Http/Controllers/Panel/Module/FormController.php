@@ -9,11 +9,13 @@ use App\Models\CreditTag;
 use App\Models\File;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\Investor;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FormController extends Controller
 {
@@ -44,6 +46,7 @@ class FormController extends Controller
         $origin = null;
         $financialProduct = null;
         $tipoCredito = null;
+        $clienteInversionista = null;
         
         if ($credit != null) {
             $financialProduct = $product = FinancialProduct::find($credit->applied_financial_product);
@@ -72,9 +75,16 @@ class FormController extends Controller
             if (($model == 'wallet' || $model == 'kc-down-wallet') && $history_id != 'null') {
                 $id_rel = $history->id_rel;
             }
+
+            
+        }
+
+        if ($model == 'kc-down-wallet') {
+            $clienteInversionista = User::find(Auth::user()->id);
         }
         
-        return view('panel.module.checkup.content_form', compact('form', 'path', 'id_rel', 'tags', 'files', 'getAsesor', 'periodicity', 'lastComment', 'origin', 'financialProduct', 'tipoCredito', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
+        
+        return view('panel.module.checkup.content_form', compact('form', 'clienteInversionista', 'model', 'path', 'id_rel', 'tags', 'files', 'getAsesor', 'periodicity', 'lastComment', 'origin', 'financialProduct', 'tipoCredito', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
     }
 
    
