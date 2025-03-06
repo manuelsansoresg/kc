@@ -3375,9 +3375,12 @@ window.getResumen = function () {
     if (document.getElementById('total-monto-solicitado')) {
       $('#content-monto-compra-cartera').html('');
       var totalMonto = $('#total-monto-solicitado').val();
-      var resultMontoEntregar = result.montoSolicitado_sf - totalMonto;
+      montoEntregarDecimal = result.montoSolicitado_sf - totalMonto;
       $('#content-monto-compra-cartera').html($('#total-monto-solicitado_format').val());
-      $('#content-monto-entregar').html(resultMontoEntregar);
+      $('#content-monto-entregar').html(montoEntregarDecimal.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }));
     } else {
       $('#content-monto-entregar').html(monto_entregar);
     }
