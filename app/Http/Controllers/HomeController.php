@@ -53,6 +53,11 @@ class HomeController extends Controller
         return view('quiz.survey_lead');
     }
 
+    public function grafica()
+    {
+        return view('comparador-intereses');
+    }
+
     public function whatsapp()
     {
         $whatsappUrl = 'https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%20información';
