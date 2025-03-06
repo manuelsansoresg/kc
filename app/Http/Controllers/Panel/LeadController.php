@@ -652,7 +652,7 @@ class LeadController extends Controller
         $monto = $montoCompraCartera;
 
         // Calcular pago con la tasa del producto financiero principal
-        $pagoPeriodico = $getCalc->getPaymentPresentValue($tasaInteresMensual, $plazo, $monto);
+        $pagoPeriodico = $getCalc->getPaymentPresentValue($tasaInteresMensual, $plazo, -$monto);
         $kcPagoTotal = $plazo * $pagoPeriodico;
         $kcInteres = $kcPagoTotal - $monto;
 
@@ -666,7 +666,7 @@ class LeadController extends Controller
             $tasaInteresMensualCredito = ($credit->annual_int_rate_iva / 100) / 360 * 30;
 
             // Calcular pago periódico de cada crédito
-            $pagoPeriodicoCredito = $getCalc->getPaymentPresentValue($tasaInteresMensualCredito, $plazo, $credit->ammount);
+            $pagoPeriodicoCredito = $getCalc->getPaymentPresentValue($tasaInteresMensualCredito, $plazo, -$credit->ammount);
 
             // Calcular el pago total del crédito y sumarlo a la deuda total
             $pagoTotalCredito = $plazo * $pagoPeriodicoCredito;

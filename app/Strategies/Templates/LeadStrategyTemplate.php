@@ -8,6 +8,7 @@ use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\CreditNotes;
+use App\Models\CreditPayOff;
 use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\FinancialProduct;
@@ -116,6 +117,9 @@ class LeadStrategyTemplate implements TemplateInterface
 
             //validar que el credito no exista con los mismos datos
             $credit = Credit::create($data_lead);
+            CreditPayOff::where('lead_id', $lead->id)->update([
+                'new_kc_credit_id' => $credit->id
+            ]);
             //obtener las notas de los prospectos
             $leadNotes = $lead->leadNotes;
             foreach ($leadNotes as $leadNote) {
