@@ -3364,6 +3364,10 @@ window.getResumen = function () {
     var cat = result.cat;
     var kcInteres = result.kcInteres;
     var kcPagoTotal = result.kcPagoTotal;
+    var productoFinanciero = $('#financial_product_id').val();
+    $('#selected_term').val(plazo);
+    $('#selected_loan').val(result.montoSolicitado_sf);
+    $('#applied_financial_product').val(productoFinanciero);
     $('#content-monto-solicitado').html(montoSolicitado);
     $('#content-monto-refinanciar').html(montoRefinanciar);
     $('#content-comision-apertura').html(comision);
@@ -3455,7 +3459,6 @@ window.validateSoad = function () {
         var isSoadDate = result.isSoadDate;
         var isSodOnDate = result.isSodOnDate;
         $('#product_id').val(typeProductId);
-        $('#selected_term').val(1);
         $('#is_free_of_active_sod').val(0);
         $('#is_sod_on_date_allowed').val(0);
 
@@ -3508,8 +3511,7 @@ if (document.getElementById('valor-slider')) {
     var slider = document.getElementById('slider');
     var displayValue = document.getElementById('valor-slider'); // Obtenemos el valor actual del slider
 
-    var sliderValue = parseFloat(slider.value);
-    $('#selected_loan').val(sliderValue); // Actualizamos el contenido del span con el valor actual del slider
+    var sliderValue = parseFloat(slider.value); // Actualizamos el contenido del span con el valor actual del slider
 
     displayValue.innerHTML = '$' + sliderValue;
     $('#sod_withdraw_amount').val(sliderValue);

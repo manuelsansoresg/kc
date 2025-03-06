@@ -609,6 +609,7 @@ class LeadController extends Controller
 
         $data = array(
             'montoSolicitado' => format_price($monto),
+            'montoSolicitado_sf' => $monto,
             'montoRefinanciar' => format_price($total),
             'comision' => format_price($comision),
             'comisionSF' => $comision,

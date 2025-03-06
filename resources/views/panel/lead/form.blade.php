@@ -403,6 +403,7 @@
                                                         <input type="hidden" name="data[product_id]" id="product_id">
                                                         <input type="hidden" name="data[selected_term]" id="selected_term">
                                                         <input type="hidden" name="data[selected_loan]" id="selected_loan">
+                                                        <input type="hidden" name="data[applied_financial_product]" id="applied_financial_product">
                                                         
 
                                                         <div class="col-12">
