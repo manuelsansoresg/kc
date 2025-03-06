@@ -1104,7 +1104,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         
 
-        $creditPays = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount')
+        $creditPays = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount', 'deadline_date')
         ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
         ->where('credit_pay_off.client_person_id', $client->id)
         ->get();
