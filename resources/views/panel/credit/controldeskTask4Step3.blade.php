@@ -150,6 +150,8 @@
             @if ($financialProduct->type_product_id == 2)
             <tr>
                 <td>Monto compra cartera:</td>
+                <input type="hidden" id="total-monto-solicitado" value="{{ $total }}">
+                <input type="hidden" id="total-monto-solicitado_format" value="{{ format_price($total) }}">
                 <td>$<span id="content-monto-compra-cartera"></span></td>
                 
             </tr>

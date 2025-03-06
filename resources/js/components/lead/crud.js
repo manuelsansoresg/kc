@@ -1065,6 +1065,8 @@ window.getResumen = function()
         let cat = result.cat;
         let kcInteres = result.kcInteres;
         let kcPagoTotal = result.kcPagoTotal;
+
+       
         
         let productoFinanciero = $('#financial_product_id').val();
         $('#selected_term').val(plazo);
@@ -1074,7 +1076,17 @@ window.getResumen = function()
         $('#content-monto-solicitado').html(montoSolicitado);
         $('#content-monto-refinanciar').html(montoRefinanciar);
         $('#content-comision-apertura').html(comision);
-        $('#content-monto-entregar').html(monto_entregar);
+        if (document.getElementById('total-monto-solicitado')) {
+            $('#content-monto-compra-cartera').html('');
+            let totalMonto = $('#total-monto-solicitado').val();
+            let resultMontoEntregar = result.montoSolicitado_sf - totalMonto ;
+            
+            $('#content-monto-compra-cartera').html($('#total-monto-solicitado_format').val());
+            $('#content-monto-entregar').html(resultMontoEntregar);
+            
+        } else {
+            $('#content-monto-entregar').html(monto_entregar);
+        }
         $('#content-plazo').html(periodicidad);
         $('#content-monto').html(plazo);
         $('#content-pago-periodico').html(pagoPeriodico);

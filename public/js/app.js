@@ -3371,7 +3371,17 @@ window.getResumen = function () {
     $('#content-monto-solicitado').html(montoSolicitado);
     $('#content-monto-refinanciar').html(montoRefinanciar);
     $('#content-comision-apertura').html(comision);
-    $('#content-monto-entregar').html(monto_entregar);
+
+    if (document.getElementById('total-monto-solicitado')) {
+      $('#content-monto-compra-cartera').html('');
+      var totalMonto = $('#total-monto-solicitado').val();
+      var resultMontoEntregar = result.montoSolicitado_sf - totalMonto;
+      $('#content-monto-compra-cartera').html($('#total-monto-solicitado_format').val());
+      $('#content-monto-entregar').html(resultMontoEntregar);
+    } else {
+      $('#content-monto-entregar').html(monto_entregar);
+    }
+
     $('#content-plazo').html(periodicidad);
     $('#content-monto').html(plazo);
     $('#content-pago-periodico').html(pagoPeriodico);
