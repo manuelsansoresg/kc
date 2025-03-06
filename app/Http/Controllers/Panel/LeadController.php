@@ -618,6 +618,7 @@ class LeadController extends Controller
             'periodicidad' => $periodicidad,
             'plazo' => $plazo,
             'pagoPeriodico' => format_price($pagoPeriodico),
+            'pagoPeriodico_sf' => $pagoPeriodico,
             'pagoTotal' => format_price($pagoTotal),
             'pagoTotalSF' => $pagoTotal,
             'tasaAnual' => format_price($tasaAnual / 1.16),

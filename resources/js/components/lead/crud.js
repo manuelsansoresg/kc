@@ -1060,6 +1060,7 @@ window.getResumen = function()
         let periodicidad =  result.periodicidad;
         let plazo =  result.plazo;
         let pagoPeriodico =  result.pagoPeriodico;
+        let pagoPeriodicoSF =  result.pagoPeriodico_sf;
         let pagoTotal = result.pagoTotal;
         let tasaAnual = result.tasaAnual;
         let cat = result.cat;
@@ -1094,7 +1095,7 @@ window.getResumen = function()
         $('#content-monto').html(plazo);
         $('#content-pago-periodico').html(pagoPeriodico);
         
-        $('#applied_payment').val(pagoPeriodico);
+        $('#applied_payment').val(pagoPeriodicoSF);
         $('#applied_loan_total_amount').val(result.pagoTotalSF);
         $('#opening_commission').val(result.comisionSF);
         $('#net_amount').val(montoEntregarDecimal);

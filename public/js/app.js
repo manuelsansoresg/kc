@@ -3359,6 +3359,7 @@ window.getResumen = function () {
     var periodicidad = result.periodicidad;
     var plazo = result.plazo;
     var pagoPeriodico = result.pagoPeriodico;
+    var pagoPeriodicoSF = result.pagoPeriodico_sf;
     var pagoTotal = result.pagoTotal;
     var tasaAnual = result.tasaAnual;
     var cat = result.cat;
@@ -3388,7 +3389,7 @@ window.getResumen = function () {
     $('#content-plazo').html(periodicidad);
     $('#content-monto').html(plazo);
     $('#content-pago-periodico').html(pagoPeriodico);
-    $('#applied_payment').val(pagoPeriodico);
+    $('#applied_payment').val(pagoPeriodicoSF);
     $('#applied_loan_total_amount').val(result.pagoTotalSF);
     $('#opening_commission').val(result.comisionSF);
     $('#net_amount').val(montoEntregarDecimal);
