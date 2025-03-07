@@ -134,15 +134,19 @@ class FinancialProduct extends Model
         return $sql;
     }
     
-    public static function getAll()
+    public static function getAll($isTramitar = null)
     {
         $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
             'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
             'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
             'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
         )
-            ->join('financials', 'financials.id', 'financial_products.financial_id')
-            ->orderBy('rate_kc', 'DESC')->get();
+            ->join('financials', 'financials.id', 'financial_products.financial_id');
+            if ($isTramitar != null) {
+                $sql->where('is_tramitar', '!=', 1);
+            }
+            
+            $sql = $sql->orderBy('rate_kc', 'DESC')->get();
         return $sql;
     }
     

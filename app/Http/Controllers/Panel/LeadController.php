@@ -269,7 +269,7 @@ class LeadController extends Controller
         $lead_id            = null;
         $lead               = null;
         $banks              = Bank::all();
-        $financial_products = FinancialProduct::getAll();
+        $financial_products = FinancialProduct::getAll(true);
         $loan_type          = config('enums.loan_type');
         $isNew              = true ;
         $clientPersonId              = null ;
@@ -728,7 +728,7 @@ class LeadController extends Controller
         $lead_id            = $id;
         $lead               = Lead::find($id);
         $banks              = Bank::all();
-        $financial_products = FinancialProduct::getAll();
+        $financial_products = FinancialProduct::getAll(true);
         $loan_type          = config('enums.loan_type');
         $isNew              = false ;
         $clientPersonId              = $lead->client_person_id ;
