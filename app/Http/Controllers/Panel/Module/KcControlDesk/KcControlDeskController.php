@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel\Module\KcControlDesk;
 use App\Http\Controllers\Controller;
 use App\Lib\CNubarium;
 use App\Models\Credit;
+use App\Models\CreditPayOff;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Kyc;
@@ -26,6 +27,12 @@ class KcControlDeskController extends Controller
     {
         $users = Credit::listDatatable([HistoryLog::KC_CONTROL_DESK]);
         return response()->json(['data' => $users]);
+    }
+
+    public static function getDataModal($creditPayOffId)
+    {
+        $creditPay = CreditPayOff::find($creditPayOffId);
+        return response()->json($creditPay);
     }
 
     public function finish(HistoryLog $history)

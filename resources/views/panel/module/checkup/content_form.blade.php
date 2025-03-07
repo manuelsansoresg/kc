@@ -106,6 +106,36 @@
     </div>
 </div>
 
+{{-- modal editar compra cartera --}}
+<div class="modal fade" id="modal-compra-cartera-cd" tabindex="-1" aria-labelledby="modal-compra-cartera-cdLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="frm-modal-compra-cartera-cd">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-compra-cartera-cd-title">Compra de cartera</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="form-label">*Saldo total</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control" name="data[ammount]" id="compra-cartera-ammount" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="creditPayOffId" id="creditPayOffId" value="">
+                <input type="hidden" name="credit_id"  value="{{ $id_rel }}">
+                
+              <button type="submit" class="btn btn-secondary">Guardar</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 @include('panel.action.modal.modal_reference')
 @include('panel.action.modal.modalkyc')

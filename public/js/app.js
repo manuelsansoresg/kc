@@ -6074,6 +6074,26 @@ window.finishControlDesk = function (historyId) {
   })["catch"](function (e) {});
 };
 
+window.editCompraCarteraControlDesk = function (creditPayOffId) {
+  axios.get("/panel/kc-control-desk/credit-pay-off/" + creditPayOffId + '/data/get').then(function (response) {
+    var result = response.data;
+    $('#compra-cartera-ammount').val(result.ammount);
+    $('#creditPayOffId').val(creditPayOffId);
+    $('#modal-compra-cartera-cd').modal('show');
+  })["catch"](function (e) {});
+};
+
+$("#frm-modal-compra-cartera-cd").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-modal-compra-cartera-cd");
+  var data = new FormData(new_form);
+  var leadId = $('#lead_id_compra_cartera').val();
+  axios.post("/panel/lead/credit-pay-off", data).then(function (response) {
+    var result = response.data;
+    location.reload();
+  })["catch"](function (e) {});
+});
+
 /***/ }),
 
 /***/ "./resources/js/components/notification/utilities.js":

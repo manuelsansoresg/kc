@@ -1464,3 +1464,34 @@ window.finishControlDesk = function(historyId)
         .catch(e => {
         });
 }
+
+window.editCompraCarteraControlDesk = function(creditPayOffId)
+{
+    axios
+    .get("/panel/kc-control-desk/credit-pay-off/"+creditPayOffId+'/data/get')
+    .then(function (response) {
+        let result = response.data;
+        $('#compra-cartera-ammount').val(result.ammount);
+        $('#creditPayOffId').val(creditPayOffId);
+        $('#modal-compra-cartera-cd').modal('show');
+    }).catch(e => {
+        
+    });
+}
+
+$("#frm-modal-compra-cartera-cd").submit(function (event) {
+    event.preventDefault();
+    const new_form = document.getElementById("frm-modal-compra-cartera-cd");
+    const data = new FormData(new_form);
+    let leadId = $('#lead_id_compra_cartera').val();
+    axios
+    .post("/panel/lead/credit-pay-off", data)
+        .then(function (response) {
+            let result = response.data;
+            location.reload();
+
+        })
+        .catch(e => {
+
+        });
+});

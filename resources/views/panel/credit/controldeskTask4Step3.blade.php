@@ -20,6 +20,8 @@
                     <th>Producto financiero</th>
                     <th>Saldo</th>
                     <th>Fecha límite</th>
+                    <th>Tasa anual</th>
+                    <th></th>
                 </tr>
                 
                 
@@ -33,12 +35,13 @@
                     <td>{{ $creditPay->alias }}</td>
                     <td>${{ format_price($creditPay->ammount) }}</td>
                     <td> {{ $creditPay->deadline_date }} </td>
-                
+                    <td> {{ $creditPay->annual_int_rate_iva }} </td>
+                    <td><a class="pointer" onclick="editCompraCarteraControlDesk({{$creditPay->id}})"><i class="fa-solid fa-pen"></i></a></td>
                 </tr>
             @endforeach
                 <tr>
                     <td  class="text-end">Total: </td>
-                    <td colspan="2">{{ format_price($total)}}</td>
+                    <td colspan="4">{{ format_price($total)}}</td>
                     
                 </tr>
                 
