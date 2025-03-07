@@ -5155,7 +5155,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 }
     
                 $data[] = [
-                    'name' => "{$dynamicIndex}- Capturar {$creditPayOff->name}",
+                    'name' => "{$dynamicIndex}- Validar clabe {$creditPayOff->name}",
                     'subject' => " ".$creditPayOff->name,
                     'alias' => $creditPayOff->alias,
                     'helpText' => null,
