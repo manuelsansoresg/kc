@@ -2876,6 +2876,8 @@ window.showModalCompraCartera = function () {
   $('#lead_id_compra_cartera').val(lead_id);
   $('#client_person_id_compra_cartera').val(client_person_id);
   $('#creditPayOffId').val('');
+  document.getElementById("frm-modal-compra-cartera").reset();
+  $('#frm-modal-compra-cartera .js-select2').val(null).trigger('change');
   $('#modal-compra-cartera').modal('show');
 };
 
