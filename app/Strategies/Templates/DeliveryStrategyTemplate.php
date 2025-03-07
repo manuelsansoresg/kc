@@ -304,13 +304,13 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $taks = self::ElementsTaskStep1($history_id, null);
         $templateId = $taskId -1;
         $task = $taks[$templateId];
+        //dd($taskId, $templateId, $taks);
         
         $templateId = $task['id'];
 
 
         $payOff = CreditPayOff::find($task['id']);
         
-
 
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => 6, 'credit' => $credit, 'payOff' => $payOff])->render();
 
@@ -1195,7 +1195,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $allStagesConcluded = collect($statuses)->every(fn($status) => $status === 'Concluido');
 
         // Handle dynamic tasks
-        $CreditPayOff = CreditPayOff::select('financial_products.name', 'financial_products.id')
+        $CreditPayOff = CreditPayOff::select('financial_products.name', 'credit_pay_off.id')
             ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
             ->where(['new_kc_credit_id' => $credit->id])
             ->get();
