@@ -2891,7 +2891,10 @@ window.showTableCompraCartera = function (leadId) {
     var total = result.total;
     var montoEntregar = $('#hmonto-entregar').val();
     console.log('axios');
-    $('#content-monto-compra-cartera').html(total);
+    $('#content-monto-compra-cartera').html(total.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }));
     $('#resumen-deuda-capital').val(total);
     $('#content-monto-entregar').html(total - montoEntregar);
     $('#content-table-compra-cartera').html(table);
@@ -3194,7 +3197,7 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
   $('#content-validaciones-soad-tramite').html('');
   $('#content-error-producto-preautorizado').hide();
   $('#producto-deseado').hide();
-  var typeProductId = $('#typeProductId').val(typeProductId);
+  var typeProductId = $('#typeProductId').val();
   axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/tramite/get").then(function (response) {
     var result = response.data;
     var sodIsTramite = result.sodIsTramite;
@@ -3239,7 +3242,8 @@ window.changeTramite = function () {
   if (typeProductId != 3 && typeProductId != '') {
     $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
     $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
-  }
+  } //
+
 
   if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
     axios.get("/panel/lead/" + clientPersonId + "/" + productId + "/" + tramit_type + "/refinanciamiento/get").then(function (response) {
@@ -3341,6 +3345,14 @@ window.getMontoSolicitado = function () {
   })["catch"](function (e) {});
 };
 
+function parseCurrency(value) {
+  if (!value) return 0; // Si el valor es null, vacío o undefined, devolver 0
+
+  var cleanValue = value.replace(/[^\d.]/g, ''); // Elimina cualquier caracter que no sea número o punto decimal
+
+  return parseFloat(cleanValue) || 0; // Convierte a número, si falla devuelve 0
+}
+
 window.getResumen = function () {
   var clientPersonId = $('#client_person_id').val();
   var productId = $('#financial_product_id').val();
@@ -3357,7 +3369,7 @@ window.getResumen = function () {
     var montoRefinanciar = result.montoRefinanciar;
     var comision = result.comision;
     var monto_entregar = result.monto_entregar;
-    var montoEntregarDecimal = result.monto_entregar_decimal;
+    var montoEntregarDecimal = null;
     var periodicidad = result.periodicidad;
     var plazo = result.plazo;
     var pagoPeriodico = result.pagoPeriodico;
@@ -3374,20 +3386,22 @@ window.getResumen = function () {
     $('#content-monto-solicitado').html(montoSolicitado);
     $('#content-monto-refinanciar').html(montoRefinanciar);
     $('#content-comision-apertura').html(comision);
+    var cMontoSolicitado = result.montoSolicitado_sf;
+    var cMontoCompraCartera = $('#content-monto-compra-cartera').length && $('#content-monto-compra-cartera').text().trim() ? parseCurrency($('#content-monto-compra-cartera').text().trim()) : 0;
+    console.log(' fallados');
+    var cComisionApertura = $('#content-comision-apertura').length && $('#content-comision-apertura').text().trim() ? parseCurrency($('#content-comision-apertura').text().trim()) : 0;
+    montoEntregarDecimal = cMontoSolicitado - cMontoCompraCartera - cComisionApertura;
+    monto_entregar = montoEntregarDecimal.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
 
     if (document.getElementById('total-monto-solicitado')) {
       $('#content-monto-compra-cartera').html('');
-      var totalMonto = $('#total-monto-solicitado').val();
-      montoEntregarDecimal = result.montoSolicitado_sf - totalMonto;
       $('#content-monto-compra-cartera').html($('#total-monto-solicitado_format').val());
-      $('#content-monto-entregar').html(montoEntregarDecimal.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }));
-    } else {
-      $('#content-monto-entregar').html(monto_entregar);
     }
 
+    $('#content-monto-entregar').html(monto_entregar);
     $('#content-plazo').html(periodicidad);
     $('#content-monto').html(plazo);
     $('#content-pago-periodico').html(pagoPeriodico);
