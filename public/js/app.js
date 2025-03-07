@@ -3386,21 +3386,21 @@ window.getResumen = function () {
     $('#content-monto-solicitado').html(montoSolicitado);
     $('#content-monto-refinanciar').html(montoRefinanciar);
     $('#content-comision-apertura').html(comision);
-    var cMontoSolicitado = result.montoSolicitado_sf;
-    var cMontoCompraCartera = $('#content-monto-compra-cartera').length && $('#content-monto-compra-cartera').text().trim() ? parseCurrency($('#content-monto-compra-cartera').text().trim()) : 0;
-    console.log(' fallados');
-    var cComisionApertura = $('#content-comision-apertura').length && $('#content-comision-apertura').text().trim() ? parseCurrency($('#content-comision-apertura').text().trim()) : 0;
-    montoEntregarDecimal = cMontoSolicitado - cMontoCompraCartera - cComisionApertura;
-    monto_entregar = montoEntregarDecimal.toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
 
     if (document.getElementById('total-monto-solicitado')) {
       $('#content-monto-compra-cartera').html('');
       $('#content-monto-compra-cartera').html($('#total-monto-solicitado_format').val());
     }
 
+    var cMontoSolicitado = result.montoSolicitado_sf;
+    var cMontoCompraCartera = $('#content-monto-compra-cartera').length && $('#content-monto-compra-cartera').text().trim() ? parseCurrency($('#content-monto-compra-cartera').text().trim()) : 0;
+    var cComisionApertura = $('#content-comision-apertura').length && $('#content-comision-apertura').text().trim() ? parseCurrency($('#content-comision-apertura').text().trim()) : 0; //console.log(cMontoSolicitado + '-' + cMontoCompraCartera + '-'+cComisionApertura);
+
+    montoEntregarDecimal = cMontoSolicitado - cMontoCompraCartera - cComisionApertura;
+    monto_entregar = montoEntregarDecimal.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
     $('#content-monto-entregar').html(monto_entregar);
     $('#content-plazo').html(periodicidad);
     $('#content-monto').html(plazo);

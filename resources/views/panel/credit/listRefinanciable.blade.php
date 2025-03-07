@@ -93,7 +93,7 @@
             @endif
             @if ($type_product_id == 2)
             <tr>
-                <td>Monto compra carteraaa:</td>
+                <td>Monto compra cartera:</td>
                 <td>$<span id="content-monto-compra-cartera"></span></td>
                 
             </tr>
