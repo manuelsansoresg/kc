@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Models\CreditPayOff;
 use App\Models\CreditReference;
 use App\Models\CreditTag;
 use App\Models\File;
@@ -78,13 +79,20 @@ class FormController extends Controller
 
             
         }
+        $getCompracartera = CreditPayOff::selectRaw('SUM(ammount) as ammount')
+        ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
+        ->where([
+            'new_kc_credit_id' => $credit->id,
+            'is_kc_lender' => 0
+        ])->first();
 
+        
         if ($model == 'kc-down-wallet') {
             $clienteInversionista = User::find(Auth::user()->id);
         }
         
         
-        return view('panel.module.checkup.content_form', compact('form', 'clienteInversionista', 'model', 'path', 'id_rel', 'tags', 'files', 'getAsesor', 'periodicity', 'lastComment', 'origin', 'financialProduct', 'tipoCredito', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
+        return view('panel.module.checkup.content_form', compact('form', 'getCompracartera', 'clienteInversionista', 'model', 'path', 'id_rel', 'tags', 'files', 'getAsesor', 'periodicity', 'lastComment', 'origin', 'financialProduct', 'tipoCredito', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
     }
 
    

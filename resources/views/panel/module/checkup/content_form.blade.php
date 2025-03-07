@@ -67,7 +67,7 @@
                                             <br><span class="fw-bold">Pago:</span> {{ format_price($credit->applied_payment) }}
                                             <br><span class="fw-bold">Periodicidad:</span> {{ $periodicity }}
                                             <br><span class="fw-bold">Tipo de crédito:</span> {{ $tipoCredito->alias}}
-                                            <br><span class="fw-bold">Compra cartera:</span> {{ format_price($credit->third_party_adjustment) }}
+                                            <br><span class="fw-bold">Compra cartera:</span> {{ $getCompracartera != null ?  format_price($credit->ammount) : null }}
                                             <br><span class="fw-bold">Asesor:</span> {{ $getAsesor != null ? $getAsesor->name.' '.$getAsesor->last_name.' '.$getAsesor->second_last_name : null}}
                                             <br><span class="fw-bold">Origen:</span> {{ $origin }}
                                             <br><span class="fw-bold">Etiquetas:</span> {{ $tags }}
