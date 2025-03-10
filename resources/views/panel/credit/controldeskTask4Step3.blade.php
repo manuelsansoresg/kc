@@ -100,7 +100,9 @@
         <table class="table table-striped">
             <tr>
                 <td>Plazo solicitado</td>
-                <td>{{ format_price($lead->selected_term) }}</td>
+                <td>{{ $lead->selected_term }}
+                    <input type="hidden" id="compra-cartera-plazo-solicitado" value="{{ $lead->selected_term }}">
+                </td>
             </tr>
             <tr>
                 <td>Monto solicitado</td>
@@ -111,6 +113,15 @@
     <div class="col-12 mt-5">
         <span class="preview-title-lg overline-title">¿Cuánto quieres recibir?</span>
     </div>
+    <div class="col-md-12 mt-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="sumaCompraCheck">
+            <label class="form-check-label" for="sumaCompraCheck">
+              Suma de compra de cartera
+            </label>
+        </div>
+    </div>
+
     <div class="col-md-6 mt-3">
         <div class="form-group">
             <label class="form-label">Plazo</label>
@@ -129,9 +140,12 @@
         <div class="form-group">
             <label class="form-label">Monto solicitado</label>
             
-            <div class="form-control-wrap">
-                <select class="form-select js-select2" name="credit[applied_import]" id="ref-monto"  data-search="on" onchange="getResumen()" required>
+            <div class="form-control-wrap" id="content-select-monto-solicitado">
+                <select class="form-select js-select2" name="credit[applied_import]" id="ref-monto"  data-search="on" onchange="getResumen()" required >
                 </select>
+            </div>
+            <div id="content-select-new-monto-solicitado">
+                
             </div>
             <input type="hidden" id="total-refinanciable">
         </div>

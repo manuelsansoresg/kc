@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel\Module\KcControlDesk;
 
 use App\Http\Controllers\Controller;
+use App\Lib\CalculadoraCredito;
 use App\Lib\CNubarium;
 use App\Models\Credit;
 use App\Models\CreditPayOff;
@@ -33,6 +34,45 @@ class KcControlDeskController extends Controller
     {
         $creditPay = CreditPayOff::find($creditPayOffId);
         return response()->json($creditPay);
+    }
+
+    public function calculateCompraCartera(Credit $credit, $tramitType, $plazo)
+    {
+        $descuento = 0;
+        $calculadora = new CalculadoraCredito();
+        $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+        $min         = floatval($financialProduct->min_loan_amount);
+        $max         = $financialProduct->max_loan_ammount;
+
+        $client = $credit->creditClientPerson;
+        $paymentCapacity =  $credit == null ? $client->payment_capacity : $credit->payroll_payment_capacity;
+
+        if ($tramitType == 3) { //refinanciamiento
+            $pmt = $paymentCapacity + $descuento;
+        } else {
+            $pmt = $paymentCapacity;
+        }
+
+        $present = $calculadora->presentValue($financialProduct, $plazo, $pmt, $tramitType);
+        $montoMaximo = 0; 
+        for ($i = $min; $i <= $max; $i += 1000) {
+            if (($present > 0 && $present != -0) && $i > $present) {
+                break;
+            }
+            $montoMaximo = $i;
+        }
+
+        $creditPay = CreditPayOff::select('ammount')
+        ->where('credit_pay_off.client_person_id', $client->id)
+        ->sum('ammount');
+        
+        $compraCartera = $creditPay / (100 - $financialProduct->opening_commission_rate) * 100;
+        $montoSolicitado = min($compraCartera, $montoMaximo);
+        $data = array(
+            'compraCartera' => $compraCartera,
+            'montoSolicitado' => $montoSolicitado,
+        );
+        return response()->json($data);
     }
 
     public function finish(HistoryLog $history)

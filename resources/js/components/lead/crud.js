@@ -1056,6 +1056,16 @@ window.getResumen = function()
     let productId = $('#financial_product_id').val();
     let plazo = $('#ref-plazo').val();
     let monto = $('#ref-monto').val();
+    if (document.getElementById('ref-monto-new')) {
+        monto = $('#ref-monto-new').val();
+    }
+    
+    /* if (document.getElementById('ref-monto-new')) {
+        let montoNuevo = $('#total-refinanciable').val();
+        const newMontoSolicitado = Math.min(compraCartera, montoSolicitado);
+    } */
+
+
     let totalRefinanciable = $('#total-refinanciable').val();
     let tramit_type = $('#tramit_type').val();
     let isControlDesk = $('#isControlDesk').val();
@@ -1397,3 +1407,131 @@ function crearGraficaApilada(contenedor, valorInteres, valorDeuda, colorInteres 
   
   // Selecciona el contenedor principal donde se añadirán las gráficas
   const chartsContainer = document.getElementById('charts-container');
+
+  /* seccion para controldesk compra de cartera */
+  document.addEventListener('DOMContentLoaded', function() {
+    // Obtener elementos del DOM
+    const sumaCompraCheck = document.getElementById('sumaCompraCheck');
+    const refPlazo = document.getElementById('ref-plazo');
+    const contentMontoSolicitado = document.getElementById('content-select-monto-solicitado');
+    const contentNewMontoSolicitado = document.getElementById('content-select-new-monto-solicitado');
+    
+    // Inicializar select2 si no está inicializado
+    if ($.fn.select2) {
+        $('.js-select2').select2();
+    }
+    
+    // Escuchar cambios en el checkbox
+    sumaCompraCheck.addEventListener('change', function() {
+        if (this.checked) {
+            // Ocultar el contenedor original sin modificarlo
+            contentMontoSolicitado.style.display = 'none';
+            
+            // Obtener el valor del plazo solicitado desde el campo oculto
+            const plazoSolicitadoInput = document.getElementById('compra-cartera-plazo-solicitado');
+            if (plazoSolicitadoInput && plazoSolicitadoInput.value) {
+                const plazoSolicitado = plazoSolicitadoInput.value;
+                
+                // Buscar si existe esa opción en el select de plazo y seleccionarla
+                Array.from(refPlazo.options).forEach(option => {
+                    if (option.value == plazoSolicitado) {
+                        refPlazo.value = option.value;
+                        $(refPlazo).trigger('change'); // Trigger change para select2
+                    }
+                });
+            }
+            
+            // 1. Llamar a axios para obtener los datos de compra de cartera
+            let creditId = $('#controldesk-credit_id').val();
+            let plazo = $('#ref-plazo').val();
+            let tramit_type = $('#tramit_type').val();
+            
+            axios.get('/panel/kc-control-desk/'+creditId+ '/'+tramit_type+'/'+plazo+'/compracartera/calculate')
+                .then(function(response) {
+                    const data = response.data;
+                    const compraCartera = data.compraCartera;
+                    const montoSolicitado = data.montoSolicitado;
+                    /* 
+                    const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
+                    const newMontoSolicitado = compraCartera;
+                    // Guardar el valor en un campo oculto para usarlo más tarde
+                    document.getElementById('total-refinanciable').value = montoSolicitado;
+                    
+                    // 2. Seleccionar el plazo correspondiente si existe
+                    // Obtener el valor de monto solicitado correctamente usando DOM nativo
+                    let montoSolicitadoText = '';
+                    const tablas = document.querySelectorAll('table.table-striped');
+                    
+                    // Buscar en todas las tablas la fila que contiene "Monto solicitado"
+                    tablas.forEach(tabla => {
+                        const filas = tabla.querySelectorAll('tr');
+                        filas.forEach(fila => {
+                            const celdas = fila.querySelectorAll('td');
+                            if (celdas.length >= 2 && celdas[0].textContent.trim() === 'Monto solicitado') {
+                                montoSolicitadoText = celdas[1].textContent.trim();
+                            }
+                        });
+                    });
+                    
+                    // 3. Crear elementos en el nuevo contenedor
+                    
+                    agregarElementosNuevoContenedor(montoSolicitado);
+                })
+                .catch(function(error) {
+                    console.error('Error al obtener datos de compra de cartera:', error);
+                });
+        } else {
+            // Mostrar el contenedor original sin modificarlo
+            contentMontoSolicitado.style.display = '';
+            
+            // Limpiar el contenedor nuevo
+            contentNewMontoSolicitado.innerHTML = '';
+            
+            // Vaciar el campo oculto de total refinanciable
+            document.getElementById('total-refinanciable').value = '';
+        }
+    });
+    
+    // Función para agregar elementos al nuevo contenedor
+    function agregarElementosNuevoContenedor(monto) {
+        // Limpiar el contenedor nuevo
+        contentNewMontoSolicitado.innerHTML = '';
+        
+        // Crear un input disabled visible
+        const disabledInput = document.createElement('input');
+        disabledInput.type = 'text';
+        disabledInput.className = 'form-control';
+        disabledInput.value = formatPrice(monto);
+        disabledInput.disabled = true;
+        
+        // Crear un input hidden con el valor real
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'credit[applied_import]';
+        hiddenInput.id = 'ref-monto-new';  // ID diferente para evitar conflicto
+        hiddenInput.value = monto;
+        
+        // Agregar los elementos al contenedor nuevo
+        contentNewMontoSolicitado.appendChild(disabledInput);
+        contentNewMontoSolicitado.appendChild(hiddenInput);
+        
+        // Disparar evento para cualquier otra función que dependa del cambio
+        const event = new Event('change');
+        hiddenInput.dispatchEvent(event);
+
+        
+        
+        // Si getResumen es una función global, llamarla directamente
+        if (typeof getResumen === 'function') {
+            getResumen();
+        }
+    }
+    
+    // Función auxiliar para formatear precio similar a Laravel
+    function formatPrice(amount) {
+        return '$ ' + parseFloat(amount).toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+    }
+});

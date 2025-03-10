@@ -235,6 +235,7 @@ Route::group(['prefix' => 'kc-control-desk'], function () {
 
     Route::get('{history}/send/finish', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'finish'])->middleware('auth');
     Route::get('credit-pay-off/{creditPayOffId}/data/get', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'getDataModal'])->middleware('auth');
+    Route::get('{credit}/{tramitType}/{plazo}/compracartera/calculate', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'calculateCompraCartera'])->middleware('auth');
 });
 
 Route::resource('kc-delivery', '\App\Http\Controllers\Panel\Module\KcDelivery\KcDeliveryController')->middleware('auth');
