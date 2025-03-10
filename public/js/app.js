@@ -2047,7 +2047,7 @@ $().ready(function () {
       axios.post("/panel/financial-product", data).then(function (response) {
         var result = response.data; //window.location = '/panel/financial/'+result.id+'/edit';
 
-        window.history.back();
+        showToast('Producto', 'Datos guardados', 'success');
       })["catch"](function (e) {
         var response = e.response;
         var data_errors = response.data.errors;
@@ -2287,6 +2287,34 @@ window.alerDeleteFinancialProduct = function (id) {
     }
   });
 };
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Obtener referencias a los radio buttons
+  var radioSi = document.getElementById('is_tramitar_active');
+  var radioNo = document.getElementById('is_tramitar_pending'); // Obtener todos los elementos con la clase 'tramitable'
+
+  var tramitables = document.querySelectorAll('.tramitable'); // Función para mostrar u ocultar elementos tramitables
+
+  function toggleTramitables() {
+    // Si el radio "Sí" está seleccionado, mostrar todos los elementos tramitables
+    if (radioSi.checked) {
+      tramitables.forEach(function (element) {
+        element.style.display = ''; // Muestra el elemento (valor por defecto)
+      });
+    } // Si el radio "No" está seleccionado, ocultar todos los elementos tramitables
+    else if (radioNo.checked) {
+      tramitables.forEach(function (element) {
+        element.style.display = 'none'; // Oculta el elemento
+      });
+    }
+  } // Añadir event listeners a los radio buttons
+
+
+  radioSi.addEventListener('change', toggleTramitables);
+  radioNo.addEventListener('change', toggleTramitables); // Ejecutar la función al cargar la página para establecer el estado inicial
+
+  toggleTramitables();
+});
 
 /***/ }),
 

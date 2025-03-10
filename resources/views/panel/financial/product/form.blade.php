@@ -43,7 +43,7 @@
                                                         href="{{ $product_id != null ? '#tabRequisitos' : '#' }}">Requisitos</a>
                                                 </li>
 
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                {{-- <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $product_id != null ? '#tabComision' : '#' }}">Comisiones</a>
                                                 </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
@@ -58,7 +58,7 @@
                                                 </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $product_id != null ? '#tabTramite' : '#' }}">Trámite</a>
-                                                </li>
+                                                </li> --}}
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $product_id != null ? '#tabComisiones' : '#' }}">Comisiones KC</a>
                                                 </li>
@@ -109,73 +109,10 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label" for="frm-product-name">Servicio KC</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <select name="financial_product_product_id" id=""
-                                                                            class="form-select">
-                                                                            @foreach ($products as $product)
-                                                                                <option value="{{ $product->id }}"
-                                                                                    {{ $productId == $product->id ? ' selected' : '' }}>
-                                                                                    {{ $product->alias }}
-                                                                                </option>
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="form-label">Regulación</label>
-                                                                    <div class="form-control-wrap">
-                                                                        <ul
-                                                                            class="custom-control-group g-3 align-center flex-wrap">
-                                                                            <li>
-                                                                                <div class="custom-control custom-radio">
-                                                                                    <input type="radio"
-                                                                                        class="custom-control-input"
-                                                                                        id="regulacion_active"
-                                                                                        name="regulacion" value="1"
-                                                                                        {{ $financial_product != null && $financial_product->regulacion == 1 ? 'checked' : null }}>
-                                                                                    <label class="custom-control-label"
-                                                                                        for="regulacion_active">No regulado
-                                                                                    </label>
-                                                                                </div>
-                                                                            </li>
-                                                                            <li>
-                                                                                <div class="custom-control custom-radio">
-                                                                                    <input type="radio"
-                                                                                        class="custom-control-input"
-                                                                                        id="regulacion_pending"
-                                                                                        name="regulacion" value="2"
-                                                                                        {{ $financial_product != null && $financial_product->regulacion === 2 ? 'checked' : null }}>
-                                                                                    <label class="custom-control-label"
-                                                                                        for="regulacion_pending">CONDUSEF</label>
-                                                                                </div>
-                                                                            </li>
-
-                                                                            <li>
-                                                                                <div class="custom-control custom-radio">
-                                                                                    <input type="radio"
-                                                                                        class="custom-control-input"
-                                                                                        id="regulacion_pending2"
-                                                                                        name="regulacion" value="3"
-                                                                                        {{ $financial_product != null && $financial_product->regulacion === 3 ? 'checked' : null }}>
-                                                                                    <label class="custom-control-label"
-                                                                                        for="regulacion_pending2">PROFECO</label>
-                                                                                </div>
-                                                                            </li>
-
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            
 
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
-                                                                    <label class="form-label">Opción para tramitar</label>
+                                                                    <label class="form-label">Tramitable con KC</label>
                                                                     <div class="form-control-wrap">
                                                                         <ul
                                                                             class="custom-control-group g-3 align-center flex-wrap">
@@ -208,7 +145,28 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-6 tramitable">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="frm-product-name">Servicio KC</label>
+                                                                    <div class="form-control-wrap">
+                                                                        <select name="financial_product_product_id" id=""
+                                                                            class="form-select">
+                                                                            @foreach ($products as $product)
+                                                                                <option value="{{ $product->id }}"
+                                                                                    {{ $productId == $product->id ? ' selected' : '' }}>
+                                                                                    {{ $product->alias }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                           
+                                                            
+
+                                                            
+
+                                                            <div class="col-md-6 tramitable">
                                                                 <div class="form-group">
                                                                     <label class="form-label">Permite refinanciamiento</label>
                                                                     <div class="form-control-wrap">
@@ -244,8 +202,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">&nbsp;</div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-6 tramitable">
                                                                 <div class="form-group">
                                                                     <label class="form-label">Permite crédito adicional</label>
                                                                     <div class="form-control-wrap">
@@ -282,7 +239,6 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-12">&nbsp;</div>
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="form-label">Vincular banco</label>
@@ -344,7 +300,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-6 tramitable">
                                                                 <div class="form-group">
                                                                     <label class="form-label">Consulta buro</label>
                                                                     <div class="form-control-wrap">
@@ -397,7 +353,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-6 tramitable">
                                                                 <div class="form-group">
                                                                     <label class="form-label">Aval o garantía</label>
                                                                     <div class="form-control-wrap">
