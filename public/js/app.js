@@ -1779,7 +1779,7 @@ $().ready(function () {
       var data = new FormData(new_form);
       axios.post("/panel/financial", data).then(function (response) {
         var result = response.data;
-        window.location = '/panel/financial/' + result.id + '/edit?tab=privacidad_de_datos';
+        window.location = '/panel/financial/' + result.id + '/edit';
       })["catch"](function (e) {
         var response = e.response;
         var data_errors = response.data.errors;
