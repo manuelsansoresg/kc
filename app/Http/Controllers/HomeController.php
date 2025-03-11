@@ -74,6 +74,7 @@ class HomeController extends Controller
         $getLastCreditPay = CreditPayOff::select('ammount')->where('credit_pay_off.lead_id', '=', $lead->id)->orderBy('ammount', 'DESC')->first();
         $tasaInteresBanco = $getLastCreditPay!= null ? $getLastCreditPay->ammount : 0;
         $deudaPagoTotal   = 0;
+        $plazo = $lead->selected_term != null ? $lead->selected_term : 12;
 
         foreach ($creditPays as $credit) {
             // Calcular la tasa de interés mensual para cada crédito
@@ -81,10 +82,10 @@ class HomeController extends Controller
 
             // Calcular pago periódico de cada crédito
             
-            $pagoPeriodicoCredito = $getCalc->getPaymentPresentValue($tasaInteresMensualCredito, $lead->selected_term, -$credit->ammount);
+            $pagoPeriodicoCredito = $getCalc->getPaymentPresentValue($tasaInteresMensualCredito, $plazo, -$credit->ammount);
 
             // Calcular el pago total del crédito y sumarlo a la deuda total
-            $pagoTotalCredito = $lead->selected_term * $pagoPeriodicoCredito;
+            $pagoTotalCredito = $plazo * $pagoPeriodicoCredito;
             $deudaPagoTotal += $pagoTotalCredito;
         }
 
