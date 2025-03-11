@@ -1164,6 +1164,10 @@ window.getResumen = function()
             }
         }
 
+        if (document.getElementById('validateBtnSave') && montoEntregarDecimal <= 0) {
+            $('#saveButton').hide();
+        }
+
     }).catch(e => {
     
     });

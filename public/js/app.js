@@ -3468,6 +3468,10 @@ window.getResumen = function () {
         $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
       }
     }
+
+    if (document.getElementById('validateBtnSave') && montoEntregarDecimal <= 0) {
+      $('#saveButton').hide();
+    }
   })["catch"](function (e) {});
 };
 

@@ -1222,6 +1222,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=3_'.$stepRedirect.'&step_origin=',
                 'col' => 'col-12'
             ],
+            5 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'validateBtnSave',
+                'id_field' => 'validateBtnSave',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => true,
+                'col' => 'col-12'
+            ],
         );
         return $elements;
     }
