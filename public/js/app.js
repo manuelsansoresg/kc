@@ -3745,6 +3745,7 @@ document.addEventListener('DOMContentLoaded', function () {
       contentNewMontoSolicitado.innerHTML = ''; // Vaciar el campo oculto de total refinanciable
 
       document.getElementById('total-refinanciable').value = '';
+      getMontoSolicitado();
     }
   }); // Función para agregar elementos al nuevo contenedor
 

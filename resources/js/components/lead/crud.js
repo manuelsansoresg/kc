@@ -1056,6 +1056,7 @@ window.getResumen = function()
     let productId = $('#financial_product_id').val();
     let plazo = $('#ref-plazo').val();
     let monto = $('#ref-monto').val();
+
     if (document.getElementById('ref-monto-new')) {
         monto = $('#ref-monto-new').val();
     }
@@ -1489,6 +1490,8 @@ function crearGraficaApilada(contenedor, valorInteres, valorDeuda, colorInteres 
             
             // Vaciar el campo oculto de total refinanciable
             document.getElementById('total-refinanciable').value = '';
+            getMontoSolicitado();
+            
         }
     });
     
