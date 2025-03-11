@@ -19,6 +19,7 @@
                         <div class="card-inner card-inner-lg">
                             <div class="nk-block-head">
                                 <div class="nk-block-head-content">
+                                    
                                     <h5 class="nk-block-title">Reset password</h5>
                                     <div class="nk-block-des">
                                         <p>If you forgot your password, well, then we’ll email you instructions to reset your password.</p>
@@ -47,7 +48,7 @@
                                 </div>
                             </form>
                             <div class="form-note-s2 text-center pt-4">
-                                <a href="html/pages/auths/auth-login-v2.html"><strong>Return to login</strong></a>
+                                <a href="/login"><strong>Return to login</strong></a>
                             </div>
                         </div>
                     </div>

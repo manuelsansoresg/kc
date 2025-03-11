@@ -316,6 +316,18 @@ $().ready(function () {
             }
     });
 
+    $(document).ready(function() {
+        // Regular save button
+        $("#frm-inversionista button:contains('Guardar'):not(:contains('bienvenida'))").click(function() {
+            $("#isResetpassword").val("0");
+        });
+        
+        // Save and welcome button
+        $("#frm-inversionista button:contains('Guardar y dar bienvenida')").click(function() {
+            $("#isResetpassword").val("1");
+        });
+    });
+
     $("#frmpassword").validate({
         rules: {
             user_password: {

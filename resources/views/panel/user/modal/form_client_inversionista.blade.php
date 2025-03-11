@@ -226,9 +226,10 @@
         
                                 <div class="col-12">
                                     <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                                        <input type="hidden" name="isResetpassword" id="isResetpassword" value="0">
                                         <li>
-                                            {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
-                                            <button class="btn btn-primary">Guardar</button>
+                                            <button type="submit" class="btn btn-primary" id="btn-save">Guardar</button>
+                                            <button type="submit" class="btn btn-primary" id="btn-save-welcome">Guardar y dar bienvenida</button>
                                         </li>
                                     </ul>
                                 </div>

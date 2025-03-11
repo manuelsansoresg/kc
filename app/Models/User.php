@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
+use Illuminate\Support\Facades\Password;
 
 class User extends Authenticatable
 {
@@ -127,6 +129,7 @@ class User extends Authenticatable
         $is_save                  = false;
         $financial_products_ids   = $request->financial_products_id;
         $agreement_ids            = $request->agreements;
+        $isResetpassword            = $request->isResetpassword;
         $financial_products_id    = null;
         $arrayFinancialProductsId = array();
         $arrayAgreements          = array();
@@ -208,6 +211,13 @@ class User extends Authenticatable
                 $user->givePermissionTo('RRHH');
             } else {
                 $user->givePermissionTo('Administración');
+            }
+
+            // Enviar correo de recuperación de contraseña
+            if ($isResetpassword == true) {
+                $broker = Password::broker();
+                $token = $broker->createToken($user);
+                $user->sendPasswordResetNotification($token);
             }
         }
         $user->assignRole(ucfirst($role));
@@ -498,6 +508,11 @@ class User extends Authenticatable
     public function credit()
     {
         return $this->hasOne(Credit::class);
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     
