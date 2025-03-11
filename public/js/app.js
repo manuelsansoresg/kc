@@ -3432,9 +3432,10 @@ window.getResumen = function () {
 
     var cMontoSolicitado = result.montoSolicitado_sf;
     var cMontoCompraCartera = $('#content-monto-compra-cartera').length && $('#content-monto-compra-cartera').text().trim() ? parseCurrency($('#content-monto-compra-cartera').text().trim()) : 0;
-    var cComisionApertura = $('#content-comision-apertura').length && $('#content-comision-apertura').text().trim() ? parseCurrency($('#content-comision-apertura').text().trim()) : 0; //console.log(cMontoSolicitado + '-' + cMontoCompraCartera + '-'+cComisionApertura);
+    var cComisionApertura = $('#content-comision-apertura').length && $('#content-comision-apertura').text().trim() ? parseCurrency($('#content-comision-apertura').text().trim()) : 0;
+    var cMontoRefinanciar = $('#content-monto-refinanciar').length && $('#content-monto-refinanciar').text().trim() ? parseCurrency($('#content-monto-refinanciar').text().trim()) : 0; //console.log(cMontoSolicitado + '-' + cMontoCompraCartera + '-'+cComisionApertura);
 
-    montoEntregarDecimal = cMontoSolicitado - cMontoCompraCartera - cComisionApertura;
+    montoEntregarDecimal = cMontoSolicitado - cMontoCompraCartera - cComisionApertura - cMontoRefinanciar;
     monto_entregar = montoEntregarDecimal.toLocaleString('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
