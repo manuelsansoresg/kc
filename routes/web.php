@@ -38,8 +38,8 @@ Route::get('/condiciones', function () {
 
 Route::get('hola', ['\App\Http\Controllers\HomeController', 'surveyHola']);
 
-Route::get('grafica', ['\App\Http\Controllers\HomeController', 'grafica']);
-Route::post('grafica', ['\App\Http\Controllers\HomeController', 'grafica']);
+Route::get('grafica/{lead}', ['\App\Http\Controllers\HomeController', 'grafica']);
+//Route::post('grafica', ['\App\Http\Controllers\HomeController', 'grafica']);
 
 Route::get('whatsapp', ['\App\Http\Controllers\HomeController', 'whatsapp']);
 

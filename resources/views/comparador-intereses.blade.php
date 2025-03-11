@@ -68,9 +68,7 @@ function generarID() {
 </head>
 <body class="bg-light">
     <!-- Mensaje de instrucciones -->
-    <div class="bg-primary text-white p-2 text-center">
-        <p class="mb-0 small">Esta es una aplicación PHP. Guarda este archivo como "comparador.php" y ejecútalo en tu servidor PHP para ver el resultado.</p>
-    </div>
+   
     
     <div class="container">
         <div class="row justify-content-center mt-4">
@@ -83,7 +81,7 @@ function generarID() {
                         </div>
 
                         <!-- Formulario para editar variables -->
-                        <div class="bg-light p-3 rounded mb-4">
+                        <div class="bg-light p-3 rounded mb-4" style="display: none">
                             <h5 class="fw-bold mb-3">Editar Variables:</h5>
                             <form id="comparadorForm">
                                 <div class="row">
@@ -93,7 +91,7 @@ function generarID() {
                                             type="number" 
                                             id="capital" 
                                             name="capital" 
-                                            value="<?php echo $capital; ?>" 
+                                            value="<?php echo $deudaPagoTotal; ?>" 
                                             class="form-control input-animado"
                                             step="100"
                                         >
@@ -104,7 +102,7 @@ function generarID() {
                                             type="number" 
                                             id="tasaBanco" 
                                             name="tasaBanco" 
-                                            value="<?php echo $tasaBanco; ?>" 
+                                            value="<?php echo $tasaInteresBanco; ?>" 
                                             class="form-control input-animado"
                                             step="0.1"
                                         >
@@ -115,7 +113,7 @@ function generarID() {
                                             type="number" 
                                             id="tasaDigitt" 
                                             name="tasaDigitt" 
-                                            value="<?php echo $tasaDigitt; ?>" 
+                                            value="<?php echo $tasaInteres; ?>" 
                                             class="form-control input-animado"
                                             step="0.1"
                                         >
@@ -149,23 +147,12 @@ function generarID() {
                             <!-- Será actualizado por JavaScript -->
                         </div>
                         
-                        <!-- Leyenda y capital base -->
-                        <div class="card bg-light mt-4 mb-2">
-                            <div class="card-body py-2">
-                                <div class="row" id="leyenda">
-                                    <!-- Será actualizado por JavaScript -->
-                                </div>
-                            </div>
-                        </div>
+                       
 
                         <!-- Línea divisoria -->
                         <hr class="my-4">
                         
-                        <!-- Pie de página con información de uso -->
-                        <div class="text-center text-muted small">
-                            <p>Para utilizar este comparador, guarda este archivo como "comparador.php" y ejecútalo en tu servidor PHP.</p>
-                            <p>Convertido a JavaScript Dinámico - <?php echo date('Y'); ?></p>
-                        </div>
+                       
                     </div>
                 </div>
             </div>
@@ -222,33 +209,30 @@ function generarID() {
                 <h2 class="fw-bold">
                     Ahorra <span class="text-primary">$${formatoMoneda(ahorro)}</span> (${porcentajeAhorro}%)
                 </h2>
-                <p class="text-secondary">al transferir tu deuda de tarjetas a Digitt 😊</p>
+                <p class="text-secondary">al transferir tu deuda de tarjetas a Kaaxclub 😊</p>
             `;
             
             // Actualizar sección de intereses
             document.getElementById('seccionIntereses').innerHTML = `
                 <div class="col-6 text-center">
-                    <p class="fw-semibold">Intereses</p>
-                    <p class="fs-5 fw-bold text-danger">$${formatoMoneda(interesesBanco)}</p>
-                    <p class="small">Tasa ${tasaBanco}%</p>
+                    <span class="fw-semibold">Intereses</span>
+                    <br>
+                    <span class="fs-5 fw-bold text-danger">$${formatoMoneda(interesesBanco)}</span>
+                    <br>
+                    <span class="small">Tasa ${tasaBanco}%</span>
                 </div>
                 <div class="col-6 text-center">
-                    <p class="fw-semibold">Intereses</p>
-                    <p class="fs-5 fw-bold text-primary">$${formatoMoneda(interesesDigitt)}</p>
-                    <p class="small">Tasa ${tasaDigitt}%</p>
+                    <span class="fw-semibold">Intereses</span>
+                    <br><span class="fs-5 fw-bold text-primary">$${formatoMoneda(interesesDigitt)}</span>
+                    <br><span class="small">Tasa ${tasaDigitt}%</span>
                 </div>
             `;
             
             // Actualizar gráficas de comparación
             document.getElementById('graficasComparacion').innerHTML = `
                 <!-- Barra del banco -->
-                <div class="col-3 mx-auto text-center">
-                    <!-- Etiqueta superior de interés -->
-                    <div class="mb-2">
-                        <span class="badge bg-danger bg-opacity-25 text-danger">
-                            $${formatoMoneda(interesesBanco)}
-                        </span>
-                    </div>
+                <div class="col-4 col-md-3 mx-auto text-center">
+                   
                     
                     <div class="barra-container position-relative rounded overflow-hidden shadow" style="height: ${alturaTotalBanco}px">
                         <!-- Componente de interés (parte superior) -->
@@ -275,13 +259,8 @@ function generarID() {
                 </div>
 
                 <!-- Barra de Digitt -->
-                <div class="col-3 mx-auto text-center">
-                    <!-- Etiqueta superior de interés -->
-                    <div class="mb-2">
-                        <span class="badge bg-primary bg-opacity-25 text-primary">
-                            $${formatoMoneda(interesesDigitt)}
-                        </span>
-                    </div>
+                <div class="col-4 col-md-3 mx-auto text-center">
+                   
                     
                     <div class="barra-container position-relative rounded overflow-hidden shadow" style="height: ${alturaTotalDigitt}px">
                         <!-- Componente de interés (parte superior) -->
@@ -301,28 +280,14 @@ function generarID() {
                             "
                         >
                             <div class="h-100 d-flex align-items-center justify-content-center text-white">
-                                <p class="fw-bold small m-0">Digitt</p>
+                                <p class="fw-bold small m-0">Kaaxclub</p>
                             </div>
                         </div>
                     </div>
                 </div>
             `;
             
-            // Actualizar leyenda
-            document.getElementById('leyenda').innerHTML = `
-                <div class="col-4 d-flex align-items-center">
-                    <div class="rounded-1" style="width:15px; height:15px; background-color: ${colorCapitalBanco}"></div>
-                    <span class="ms-2 small">Capital: $${formatoMoneda(capital)}</span>
-                </div>
-                <div class="col-4 d-flex align-items-center">
-                    <div class="rounded-1" style="width:15px; height:15px; background-color: ${colorBanco}"></div>
-                    <span class="ms-2 small">Interés Banco</span>
-                </div>
-                <div class="col-4 d-flex align-items-center">
-                    <div class="rounded-1" style="width:15px; height:15px; background-color: ${colorFondoDigitt}"></div>
-                    <span class="ms-2 small">Interés Digitt</span>
-                </div>
-            `;
+            
             
             // Guardar en sesión mediante AJAX (opcional)
             guardarEnSesion(capital, tasaBanco, tasaDigitt, nombreBanco);

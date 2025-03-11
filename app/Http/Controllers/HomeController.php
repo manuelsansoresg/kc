@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\CalculadoraCredito;
 use App\Lib\Manychat;
 use App\Models\Action;
 use App\Models\Agreement;
@@ -9,6 +10,7 @@ use App\Models\ApiLead;
 use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\CreditPayOff;
 use App\Models\CurrentFinancialProduct;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
@@ -53,9 +55,40 @@ class HomeController extends Controller
         return view('quiz.survey_lead');
     }
 
-    public function grafica()
+    public function grafica(Lead $lead)
     {
-        return view('comparador-intereses');
+        $getCalc = new CalculadoraCredito();
+        $financial      = FinancialProduct::where('id', $lead->financial_product_id)->first();
+        $tasaInteres =  $financial != null ?  $financial->annual_int_rate_iva : null;
+
+        $creditPays = CreditPayOff::select(
+            'credit_pay_off.id',
+            'financial_products.alias',
+            'credit_pay_off.ammount',
+            'financial_products.annual_int_rate_iva'
+        )
+        ->join('financial_products', 'credit_pay_off.financial_product_id', '=', 'financial_products.id')
+        ->where('credit_pay_off.lead_id', '=', $lead->id)
+        ->get();
+
+        $getLastCreditPay = CreditPayOff::select('ammount')->where('credit_pay_off.lead_id', '=', $lead->id)->orderBy('ammount', 'DESC')->first();
+        $tasaInteresBanco = $getLastCreditPay!= null ? $getLastCreditPay->ammount : 0;
+        $deudaPagoTotal   = 0;
+
+        foreach ($creditPays as $credit) {
+            // Calcular la tasa de interés mensual para cada crédito
+            $tasaInteresMensualCredito = ($credit->annual_int_rate_iva / 100) / 360 * 30;
+
+            // Calcular pago periódico de cada crédito
+            
+            $pagoPeriodicoCredito = $getCalc->getPaymentPresentValue($tasaInteresMensualCredito, $lead->selected_term, -$credit->ammount);
+
+            // Calcular el pago total del crédito y sumarlo a la deuda total
+            $pagoTotalCredito = $lead->selected_term * $pagoPeriodicoCredito;
+            $deudaPagoTotal += $pagoTotalCredito;
+        }
+
+        return view('comparador-intereses', compact('deudaPagoTotal', 'tasaInteres', 'tasaInteresBanco'));
     }
 
     public function whatsapp()
