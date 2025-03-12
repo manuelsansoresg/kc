@@ -515,7 +515,7 @@ class LeadController extends Controller
                                     ->join('clients_credit_info', 'clients_credit_info.credit_id', 'collections.credit_id')
                                     ->join('crm_status_list', 'crm_status_list.id', 'collections.status')
                                     ->where('collections.refinanciable', 1)
-                                    ->where('collections.client_id', $clientPerson->id)
+                                    ->where('collections.kc_client_id', $clientPerson->id)
                                     ->where('clients_credit_info.producto', '<>', 3)->get();
         
         $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();

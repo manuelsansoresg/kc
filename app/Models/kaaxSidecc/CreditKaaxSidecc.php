@@ -66,6 +66,7 @@ class CreditKaaxSidecc extends Model
             'plazo' => $credit->applied_term,
             'descuento' => $credit->applied_payment,
             'total'=>$credit->applied_loan_total_amount,
+            'kc_client_id'=>$client->id,
         );
         $creditKaax = CreditKaaxSidecc::create($data_credit);
         ClientsLogKaaxSidecc::addCrmLog($creditKaax->id, 'en-entrega', 'en-entrega');
