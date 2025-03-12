@@ -59,6 +59,7 @@ class Lead extends Model
         'go_ahead',
         'selected_term',
         'selected_loan',
+        'plazo_maximo',
     ];
 
     public static function validateSod($clientPerson, $financialProduct)

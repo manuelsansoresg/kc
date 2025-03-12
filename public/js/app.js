@@ -2926,6 +2926,9 @@ window.showTableCompraCartera = function (leadId) {
     $('#resumen-deuda-capital').val(total);
     $('#content-monto-entregar').html(total - montoEntregar);
     $('#content-table-compra-cartera').html(table);
+    var leadIdValue = document.getElementById('lead_id').value;
+    var verGraficaLink = document.getElementById('ver-grafica');
+    verGraficaLink.setAttribute('href', '/grafica/' + leadIdValue);
   })["catch"](function (e) {
     console.log('error elementos compra de cartera');
   });
@@ -3309,6 +3312,8 @@ window.changeTramite = function () {
       if (typeProductId == 2) {
         showTableCompraCartera(leadId);
       }
+
+      saveLead();
     })["catch"](function (e) {});
   }
 };

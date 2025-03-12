@@ -30,7 +30,7 @@
             <td colspan="2">{{ format_price($total)}}</td>
         </tr>
         <tr>
-            <td colspan="3" class="text-end"> <a onclick="graficaProspecto()">Ver gráfica <i class="fas fa-external-link-alt"></i> </a> </td>
+            <td colspan="3" class="text-end"> <a id="ver-grafica" class="pointer" target="_blank">Ver gráfica <i class="fas fa-external-link-alt"></i> </a> </td>
         </tr>
     </tbody>
 </table>

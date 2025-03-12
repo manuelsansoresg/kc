@@ -72,9 +72,9 @@ class HomeController extends Controller
         ->get();
 
         $getLastCreditPay = CreditPayOff::select('ammount')->where('credit_pay_off.lead_id', '=', $lead->id)->orderBy('ammount', 'DESC')->first();
-        $tasaInteresBanco = $getLastCreditPay!= null ? $getLastCreditPay->ammount : 0;
+        $tasaInteresBanco = $getLastCreditPay!= null ? $getLastCreditPay->ammount /100 : 0;
         $deudaPagoTotal   = 0;
-        $plazo = $lead->selected_term != null ? $lead->selected_term : 12;
+        $plazo = $lead->plazo_maximo != null ? $lead->plazo_maximo : 12;
 
         foreach ($creditPays as $credit) {
             // Calcular la tasa de interés mensual para cada crédito
@@ -89,7 +89,7 @@ class HomeController extends Controller
             $deudaPagoTotal += $pagoTotalCredito;
         }
 
-        return view('comparador-intereses', compact('deudaPagoTotal', 'tasaInteres', 'tasaInteresBanco'));
+        return view('comparador-intereses', compact('deudaPagoTotal', 'tasaInteres', 'tasaInteresBanco', 'lead'));
     }
 
     public function whatsapp()

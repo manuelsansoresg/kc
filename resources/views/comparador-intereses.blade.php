@@ -81,7 +81,7 @@ function generarID() {
                         </div>
 
                         <!-- Formulario para editar variables -->
-                        <div class="bg-light p-3 rounded mb-4" style="display: none">
+                        <div class="bg-light p-3 rounded mb-4" style="display:none">
                             <h5 class="fw-bold mb-3">Editar Variables:</h5>
                             <form id="comparadorForm">
                                 <div class="row">
@@ -151,14 +151,16 @@ function generarID() {
 
                         <!-- Línea divisoria -->
                         <hr class="my-4">
-                        
+                        <div class="text-center">
+                            <small>El ahorro real depende del monto exacto de tu deuda. Lo conoceras antes de firmar</small>
+                        </div>
                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <input type="hidden" id="plazo-maximo" value="{{ $lead->plazo_maximo }}">
     <!-- Bootstrap 5 JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -185,6 +187,7 @@ function generarID() {
             const tasaBanco = parseFloat(document.getElementById('tasaBanco').value);
             const tasaDigitt = parseFloat(document.getElementById('tasaDigitt').value);
             const nombreBanco = document.getElementById('nombreBanco').value;
+            const plaxoMaximo = document.getElementById('plazo-maximo').value;
             
             // Realizamos los cálculos
             const interesesBanco = parseFloat(((capital * tasaBanco) / 100).toFixed(2));
@@ -209,7 +212,9 @@ function generarID() {
                 <h2 class="fw-bold">
                     Ahorra <span class="text-primary">$${formatoMoneda(ahorro)}</span> (${porcentajeAhorro}%)
                 </h2>
-                <p class="text-secondary">al transferir tu deuda de tarjetas a Kaaxclub 😊</p>
+                <p class="text-secondary">al transferir tu deuda de tarjetas a Kaaxclub 😊
+                <br> Calculando para $${formatoMoneda(ahorro)} a ${plaxoMaximo} meses      
+                </p>
             `;
             
             // Actualizar sección de intereses

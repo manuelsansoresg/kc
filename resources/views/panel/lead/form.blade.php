@@ -212,7 +212,7 @@
                                                                                 <label class="form-label">Monto máximo</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="monto-maximo"  disabled>
+                                                                                    <input type="text" class="form-control" id="monto-maximo"  readonly>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -221,7 +221,7 @@
                                                                                 <label class="form-label">Plazo máximo</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="plazo-maximo"  disabled>
+                                                                                    <input type="text" class="form-control" name="data[plazo_maximo]" id="plazo-maximo"  readonly>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -230,7 +230,7 @@
                                                                                 <label class="form-label">Periodicidad</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="periodicidad"  disabled>
+                                                                                    <input type="text" class="form-control" id="periodicidad"  readonly>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -239,7 +239,7 @@
                                                                                 <label class="form-label">Pago periodico</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="pago-periodico"  disabled>
+                                                                                    <input type="text" class="form-control" id="pago-periodico"  readonly>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
