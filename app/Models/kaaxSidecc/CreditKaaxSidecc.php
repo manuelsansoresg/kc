@@ -19,7 +19,7 @@ class CreditKaaxSidecc extends Model
     const UPDATED_AT = 'updated';
 
     protected $fillable = [
-        'client_id', 'agreement_id', 'tipo_tramite', 'folio', 'active', 'is_prom
+        'client_id', 'kc_client_id', 'agreement_id', 'tipo_tramite', 'folio', 'active', 'is_prom
         otoer', 'liquidacion_terceros', 'tipo_firma', 'status_online', 'fecha_cobro',
         'fecha_dispersion', 'dispersion', 'file_vobo', 'vobo_aceptado', 'origen',
         'promoter_id',
