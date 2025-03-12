@@ -103,7 +103,7 @@
 							<a class="nav-link smooth-anchor" href="#contact">Contacto</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link smooth-anchor" href="#faq">Ayuda</a>
+							<a class="nav-link smooth-anchor" href="#contact">Ayuda</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link smooth-anchor" href="https://app.kaaxclub.com/">App</a>

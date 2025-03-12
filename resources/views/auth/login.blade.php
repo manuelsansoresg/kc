@@ -48,7 +48,7 @@
                                     <div class="form-group">
                                         <div class="form-label-group">
                                             <label class="form-label" for="email-address">Email</label>
-                                            <a class="link link-primary link-sm" tabindex="-1" href="/ayuda">¿Necesitas ayuda?</a>
+                                            <a class="link link-primary link-sm" tabindex="-1" href="/#contact">¿Necesitas ayuda?</a>
                                         </div>
                                         <div class="form-control-wrap">
                                             <input id="email"  placeholder="Ingresa tu email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
