@@ -103,3 +103,6 @@ Route::get('/terminos-y-condiciones', function () {
 
 
 
+Route::get('password/enviado', function() {
+    return view('salida_password'); // Crea esta vista
+})->name('password.enviado');
