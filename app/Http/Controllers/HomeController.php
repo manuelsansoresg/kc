@@ -58,38 +58,48 @@ class HomeController extends Controller
     public function grafica(Lead $lead)
     {
         $getCalc = new CalculadoraCredito();
-        $financial      = FinancialProduct::where('id', $lead->financial_product_id)->first();
-        $tasaInteres =  $financial != null ?  $financial->annual_int_rate_iva : null;
 
-        $creditPays = CreditPayOff::select(
-            'credit_pay_off.id',
+        // Obtener el capital total sumando los montos de crédito
+        $capitalTotal = CreditPayOff::where('lead_id', $lead->id)->sum('ammount');
+
+        // Obtener la tasa de interés más alta y su alias
+        $creditPayMax = CreditPayOff::select(
             'financial_products.alias',
-            'credit_pay_off.ammount',
             'financial_products.annual_int_rate_iva'
         )
         ->join('financial_products', 'credit_pay_off.financial_product_id', '=', 'financial_products.id')
-        ->where('credit_pay_off.lead_id', '=', $lead->id)
-        ->get();
+        ->where('credit_pay_off.lead_id', $lead->id)
+        ->orderByDesc('financial_products.annual_int_rate_iva') // Tomar el mayor
+        ->first();
 
-        $getLastCreditPay = CreditPayOff::select('ammount')->where('credit_pay_off.lead_id', '=', $lead->id)->orderBy('ammount', 'DESC')->first();
-        $tasaInteresBanco = $getLastCreditPay!= null ? $getLastCreditPay->ammount /100 : 0;
-        $deudaPagoTotal   = 0;
-        $plazo = $lead->plazo_maximo != null ? $lead->plazo_maximo : 12;
+        $tasaInteresBanco = $creditPayMax ? $creditPayMax->annual_int_rate_iva : 0;
+        $nombreBanco = $creditPayMax ? $creditPayMax->alias : 'Banco Desconocido';
 
-        foreach ($creditPays as $credit) {
-            // Calcular la tasa de interés mensual para cada crédito
-            $tasaInteresMensualCredito = ($credit->annual_int_rate_iva / 100) / 360 * 30;
+        // Obtener la tasa de interés de KaaxClub
+        $financial = FinancialProduct::where('id', $lead->financial_product_id)->first();
+        $tasaInteresKaaxClub = $financial ? $financial->annual_int_rate_iva : null;
 
-            // Calcular pago periódico de cada crédito
-            
-            $pagoPeriodicoCredito = $getCalc->getPaymentPresentValue($tasaInteresMensualCredito, $plazo, -$credit->ammount);
+        $plazo = $lead->plazo_maximo ?? 12; // Si no hay plazo, tomamos 12 meses por defecto
 
-            // Calcular el pago total del crédito y sumarlo a la deuda total
-            $pagoTotalCredito = $plazo * $pagoPeriodicoCredito;
-            $deudaPagoTotal += $pagoTotalCredito;
-        }
+        // Calcular intereses para la barra izquierda (Banco)
+        $tasaInteresMensualBanco = ($tasaInteresBanco / 100) / 360 * 30;
+        $pagoPeriodicoBanco = $getCalc->getPaymentPresentValue($tasaInteresMensualBanco, $plazo, -$capitalTotal);
+        $interesesBanco = $plazo * $pagoPeriodicoBanco - $capitalTotal;
 
-        return view('comparador-intereses', compact('deudaPagoTotal', 'tasaInteres', 'tasaInteresBanco', 'lead'));
+        // Calcular intereses para la barra derecha (KaaxClub)
+        $tasaInteresMensualKaaxClub = ($tasaInteresKaaxClub / 100) / 360 * 30;
+        $pagoPeriodicoKaaxClub = $getCalc->getPaymentPresentValue($tasaInteresMensualKaaxClub, $plazo, -$capitalTotal);
+        $interesesKaaxClub = $plazo * $pagoPeriodicoKaaxClub - $capitalTotal;
+
+        return view('comparador-intereses', compact(
+            'capitalTotal', 
+            'tasaInteresBanco', 
+            'tasaInteresKaaxClub', 
+            'interesesBanco', 
+            'interesesKaaxClub', 
+            'nombreBanco', 
+            'lead'
+        ));
     }
 
     public function whatsapp()

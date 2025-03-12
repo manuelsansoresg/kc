@@ -91,7 +91,7 @@ function generarID() {
                                             type="number" 
                                             id="capital" 
                                             name="capital" 
-                                            value="<?php echo $deudaPagoTotal; ?>" 
+                                            value="<?php echo $capitalTotal; ?>" 
                                             class="form-control input-animado"
                                             step="100"
                                         >
@@ -113,7 +113,7 @@ function generarID() {
                                             type="number" 
                                             id="tasaDigitt" 
                                             name="tasaDigitt" 
-                                            value="<?php echo $tasaInteres; ?>" 
+                                            value="<?php echo $tasaInteresKaaxClub; ?>" 
                                             class="form-control input-animado"
                                             step="0.1"
                                         >
