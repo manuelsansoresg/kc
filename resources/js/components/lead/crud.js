@@ -729,12 +729,12 @@ function getAllValidate()
 }
 
 
-function saveLead()
+window.saveLead = function (isFullSave)
 {
 
     const new_form = document.getElementById("frm-lead");
     const data = new FormData(new_form);
-    
+    data.append('isFullSave', isFullSave);
     axios
         .post("/panel/lead", data)
         .then(function (response) {
@@ -785,6 +785,7 @@ $().ready(function () {
 
             const new_form = document.getElementById("frm-lead");
             const data = new FormData(new_form);
+            data.append('isFullSave', 'true');
             let isExport = $('#isExport').val();
 
             axios
@@ -971,7 +972,7 @@ window.changeTramite = function()
             if (typeProductId == 2) {
                 showTableCompraCartera(leadId);
             }
-            saveLead();
+            saveLead(false);
             
         }).catch(e => {
         
@@ -1243,7 +1244,7 @@ window.validateSoad = function()
             $('#loan_available-msg').html(result.loan_available);
             if ($('#is_viability').val() == 1 ) {
                 
-                saveLead();
+                saveLead(false);
                 //getAllValidate();
             }
 

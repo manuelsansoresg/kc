@@ -3082,16 +3082,17 @@ function getAllValidate() {
   axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + '/' + lead_id + "/soad/get").then(function (response) {})["catch"](function (e) {});
 }
 
-function saveLead() {
+window.saveLead = function (isFullSave) {
   var new_form = document.getElementById("frm-lead");
   var data = new FormData(new_form);
+  data.append('isFullSave', isFullSave);
   axios.post("/panel/lead", data).then(function (response) {
     var getResult = response.data;
     var result = getResult.lead;
     $('#lead_id').val(result.id);
     $('#isNew').val(0);
   })["catch"](function (e) {});
-}
+};
 
 $().ready(function () {
   $("#frm-lead").validate({
@@ -3129,6 +3130,7 @@ $().ready(function () {
       event.preventDefault();
       var new_form = document.getElementById("frm-lead");
       var data = new FormData(new_form);
+      data.append('isFullSave', 'true');
       var isExport = $('#isExport').val();
       axios.post("/panel/lead", data).then(function (response) {
         var getResult = response.data;
@@ -3313,7 +3315,7 @@ window.changeTramite = function () {
         showTableCompraCartera(leadId);
       }
 
-      saveLead();
+      saveLead(false);
     })["catch"](function (e) {});
   }
 };
@@ -3522,7 +3524,7 @@ window.validateSoad = function () {
       $('#loan_available-msg').html(result.loan_available);
 
       if ($('#is_viability').val() == 1) {
-        saveLead(); //getAllValidate();
+        saveLead(false); //getAllValidate();
       }
 
       if (typeProductId == 1 || typeProductId == 2) {

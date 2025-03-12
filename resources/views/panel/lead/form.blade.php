@@ -410,7 +410,7 @@
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>
                                                                     {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
-                                                                    <button class="btn btn-primary" id="btnSave">Guardar</button>
+                                                                    <button  class="btn btn-primary" id="btnSave">Guardar</button>
                                                                 </li>
                                                             </ul>
                                                         </div>

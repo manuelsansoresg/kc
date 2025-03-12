@@ -18,7 +18,7 @@
                         $total += $credit->saldo_insoluto_real;
                     @endphp
                     <tr>
-                        <td> <input type="checkbox" name="credits[]" id="{{ $credit->id }}" value="{{ $credit->id }}" checked onchange="getMontoSolicitado()">  </td>
+                        <td> <input type="checkbox" name="credits[]" id="{{ $credit->id }}" value="{{ $credit->id }}" checked >  </td>
                         <td> {{ $credit->kc_credit_id }} </td>
                         <td> {{ date('d-m-Y', strtotime($credit->fecha_cobro)) }} </td>
                         <td> 

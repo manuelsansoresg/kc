@@ -360,6 +360,7 @@ class Lead extends Model
     {
         $data = $request->data;
         $credits = isset($request->credits)? $request->credits : null;
+        $isFullSave = $request->isFullSave === 'true';
 
         $is_asesor = Auth::user()->hasRole('Asesor');
 
@@ -450,7 +451,8 @@ class Lead extends Model
         }
         
         CurrentFinancialProduct::saveEdit($lead->id, $request);
-        if ($credits != null) {
+        
+        if ($isFullSave == true && $credits != null) {
             foreach ($credits as $credit) {
                 $collection = Collection::find($credit);
                 $credit = Credit::find($collection->kc_credit_id);
@@ -467,8 +469,15 @@ class Lead extends Model
                     'bank_clabe_valid' => $validated_clabe,
                     'ammount' => $importe,
                 );
-                //dd($dataPayoff, $client->id);
-                CreditPayOff::create($dataPayoff);
+                $existCredit = CreditPayOff::where([
+                    'client_person_id' => $data['client_person_id'],
+                    'lead_id' => $request->lead_id,
+                    'kc_credit_id_payed_off' => $collection->kc_credit_id,
+                    'financial_product_id' => $financial_product_id,
+                ])->count();
+                if ($existCredit == 0) {
+                    CreditPayOff::create($dataPayoff);
+                }
             }
         }
         return $lead;
