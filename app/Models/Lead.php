@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Lib\Csendgrid;
 use App\Lib\Manychat;
+use App\Models\kaaxSidecc\Collection;
 use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
@@ -358,6 +359,7 @@ class Lead extends Model
     public static function saveEdit($request)
     {
         $data = $request->data;
+        $credits = isset($request->credits)? $request->credits : null;
 
         $is_asesor = Auth::user()->hasRole('Asesor');
 
@@ -448,7 +450,27 @@ class Lead extends Model
         }
         
         CurrentFinancialProduct::saveEdit($lead->id, $request);
-        
+        if ($credits != null) {
+            foreach ($credits as $credit) {
+                $collection = Collection::find($credit);
+                $credit = Credit::find($collection->kc_credit_id);
+                $client = ClientPerson::find($credit->client_person_id);
+                $financial_product_id = $credit->applied_financial_product;
+                $importe = $collection->saldo_insoluto_real;
+                $validated_clabe = $client->bank_clabe == $client->validated_clabe ? 1 : 0;
+                $dataPayoff = array(
+                    'client_person_id' => $data['client_person_id'],
+                    'lead_id' => $request->lead_id,
+                    'kc_credit_id_payed_off' => $collection->kc_credit_id,
+                    'financial_product_id' => $financial_product_id,
+                    'bank_clabe' => $client->bank_clabe,
+                    'bank_clabe_valid' => $validated_clabe,
+                    'ammount' => $importe,
+                );
+                //dd($dataPayoff, $client->id);
+                CreditPayOff::create($dataPayoff);
+            }
+        }
         return $lead;
     }
 
