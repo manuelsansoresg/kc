@@ -209,8 +209,10 @@ class User extends Authenticatable
             }
             if ($request->rol_id == 1) {
                 $user->givePermissionTo('RRHH');
+                $user->revokePermissionTo('Administración');
             } else {
                 $user->givePermissionTo('Administración');
+                $user->revokePermissionTo('RRHH');
             }
 
             // Enviar correo de recuperación de contraseña

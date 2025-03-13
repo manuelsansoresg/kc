@@ -358,7 +358,7 @@
                                         
                                     <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Mis colaboradores</span>
+                                        <span class="nk-menu-text"> <i class="fa-solid fa-users"></i> Mis colaboradores</span>
                                     </a>
                                     @endif
                                     

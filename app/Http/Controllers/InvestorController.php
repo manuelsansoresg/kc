@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Investor;
 use App\Models\InvestorsCredit;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InvestorController extends Controller
 {
@@ -49,6 +51,11 @@ class InvestorController extends Controller
     public function show($id)
     {
         $investor = Investor::find($id);
+        $getUser = User::find(Auth::user()->id);
+        $getPermission = $getUser->can('RRHH') ;
+        if ($getPermission === true) {
+            return redirect('/panel/clients/colaboradores/show');
+        }
         if($investor == null) {
             abort(404);
         }
