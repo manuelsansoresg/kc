@@ -352,6 +352,7 @@
                                         </a>
                                     </li><!-- .nk-menu-item -->
                                     @endcan
+                                    @endhasrole
                                     @hasrole('Cliente inversionista')
                                     @if (auth()->user()->can('Administración') || auth()->user()->can('RRHH'))
                                         
@@ -363,7 +364,7 @@
                                     
                                     @endhasrole
                                 
-                                @endhasrole
+                                
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">CRÉDITOS</h6>

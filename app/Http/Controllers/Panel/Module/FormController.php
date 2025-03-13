@@ -48,6 +48,7 @@ class FormController extends Controller
         $financialProduct = null;
         $tipoCredito = null;
         $clienteInversionista = null;
+        $getCompracartera = null;
         
         if ($credit != null) {
             $financialProduct = $product = FinancialProduct::find($credit->applied_financial_product);
@@ -76,15 +77,15 @@ class FormController extends Controller
             if (($model == 'wallet' || $model == 'kc-down-wallet') && $history_id != 'null') {
                 $id_rel = $history->id_rel;
             }
-
+            $getCompracartera = CreditPayOff::selectRaw('SUM(ammount) as ammount')
+            ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
+            ->where([
+                'new_kc_credit_id' => $credit->id,
+                'is_kc_lender' => 0
+            ])->first();
             
         }
-        $getCompracartera = CreditPayOff::selectRaw('SUM(ammount) as ammount')
-        ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
-        ->where([
-            'new_kc_credit_id' => $credit->id,
-            'is_kc_lender' => 0
-        ])->first();
+       
 
         
         if ($model == 'kc-down-wallet') {
