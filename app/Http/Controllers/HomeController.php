@@ -90,7 +90,6 @@ class HomeController extends Controller
         $tasaInteresMensualKaaxClub = ($tasaInteresKaaxClub / 100) / 360 * 30;
         $pagoPeriodicoKaaxClub = $getCalc->getPaymentPresentValue($tasaInteresMensualKaaxClub, $plazo, -$capitalTotal);
         $interesesKaaxClub = $plazo * $pagoPeriodicoKaaxClub - $capitalTotal;
-
         return view('comparador-intereses', compact(
             'capitalTotal', 
             'tasaInteresBanco', 
@@ -98,7 +97,8 @@ class HomeController extends Controller
             'interesesBanco', 
             'interesesKaaxClub', 
             'nombreBanco', 
-            'lead'
+            'lead',
+            'plazo'
         ));
     }
 

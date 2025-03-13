@@ -2,15 +2,18 @@
 // Iniciar sesión para mantener los valores entre solicitudes
 session_start();
 
-// Establecer valores predeterminados (estado inicial basado en la versión React)
-$capital = isset($_SESSION['capital']) ? $_SESSION['capital'] : 5000; // Capital original (igual para ambos)
-$tasaBanco = isset($_SESSION['tasaBanco']) ? $_SESSION['tasaBanco'] : 69.0;
-$tasaDigitt = isset($_SESSION['tasaDigitt']) ? $_SESSION['tasaDigitt'] : 33.0;
-$nombreBanco = isset($_SESSION['nombreBanco']) ? $_SESSION['nombreBanco'] : 'BBVA Bancomer';
+// Establecer valores predeterminados desde las variables de Laravel
+$capital = $capitalTotal ?? 5000; // Capital original desde Laravel
+$tasaBanco = $tasaInteresBanco ?? 69.0;
+$tasaDigitt = $tasaInteresKaaxClub ?? 33.0;
+$nombreBanco = $nombreBanco ?? 'BBVA Bancomer';
 $colorBanco = '#FF5A45'; // Rojo del banco
 $colorCapitalBanco = '#162E4A'; // Azul oscuro para BBVA
 $colorDigitt = '#4E7DFF'; // Azul de Digitt
 $colorFondoDigitt = '#E9FFDB'; // Fondo verde claro
+$interesesBanco = $interesesBanco ?? 0;
+$interesesKaaxClub = $interesesKaaxClub ?? 0;
+$plazo = $plazo ?? 12;
 
 // Procesar cambios en el formulario si se han enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -91,7 +94,7 @@ function generarID() {
                                             type="number" 
                                             id="capital" 
                                             name="capital" 
-                                            value="<?php echo $capitalTotal; ?>" 
+                                            value="<?php echo $capital; ?>" 
                                             class="form-control input-animado"
                                             step="100"
                                         >
@@ -102,7 +105,7 @@ function generarID() {
                                             type="number" 
                                             id="tasaBanco" 
                                             name="tasaBanco" 
-                                            value="<?php echo $tasaInteresBanco; ?>" 
+                                            value="<?php echo $tasaBanco; ?>" 
                                             class="form-control input-animado"
                                             step="0.1"
                                         >
@@ -113,7 +116,7 @@ function generarID() {
                                             type="number" 
                                             id="tasaDigitt" 
                                             name="tasaDigitt" 
-                                            value="<?php echo $tasaInteresKaaxClub; ?>" 
+                                            value="<?php echo $tasaDigitt; ?>" 
                                             class="form-control input-animado"
                                             step="0.1"
                                         >
@@ -160,7 +163,10 @@ function generarID() {
             </div>
         </div>
     </div>
-    <input type="hidden" id="plazo-maximo" value="{{ $lead->plazo_maximo }}">
+    <input type="hidden" id="plazo-maximo" value="<?php echo $plazo; ?>">
+    <input type="hidden" id="intereses-banco-inicial" value="<?php echo $interesesBanco; ?>">
+    <input type="hidden" id="intereses-kaaxclub-inicial" value="<?php echo $interesesKaaxClub; ?>">
+    
     <!-- Bootstrap 5 JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
@@ -187,11 +193,17 @@ function generarID() {
             const tasaBanco = parseFloat(document.getElementById('tasaBanco').value);
             const tasaDigitt = parseFloat(document.getElementById('tasaDigitt').value);
             const nombreBanco = document.getElementById('nombreBanco').value;
-            const plaxoMaximo = document.getElementById('plazo-maximo').value;
+            const plazoMaximo = parseInt(document.getElementById('plazo-maximo').value);
             
-            // Realizamos los cálculos
-            const interesesBanco = parseFloat(((capital * tasaBanco) / 100).toFixed(2));
-            const interesesDigitt = parseFloat(((capital * tasaDigitt) / 100).toFixed(2));
+            // Calculamos los intereses usando la misma lógica que en Laravel
+            
+            const interesesBanco = parseFloat(document.getElementById('intereses-banco-inicial').value);
+            // Calcular intereses para Kaaxclub
+            const interesesDigitt = parseFloat(document.getElementById('intereses-kaaxclub-inicial').value);
+            // Para mostrar los intereses calculados inicialmente por Laravel
+            const interesesBancoInicial = parseFloat(document.getElementById('intereses-banco-inicial').value);
+            const interesesKaaxclubInicial = parseFloat(document.getElementById('intereses-kaaxclub-inicial').value);
+            // Usamos los valores calculados por Laravel si es la primera carga y están disponibles
             const ahorro = parseFloat((interesesBanco - interesesDigitt).toFixed(2));
             const porcentajeAhorro = parseFloat(((ahorro / interesesBanco) * 100).toFixed(2));
             
@@ -213,7 +225,7 @@ function generarID() {
                     Ahorra <span class="text-primary">$${formatoMoneda(ahorro)}</span> (${porcentajeAhorro}%)
                 </h2>
                 <p class="text-secondary">al transferir tu deuda de tarjetas a Kaaxclub 😊
-                <br> Calculando para $${formatoMoneda(ahorro)} a ${plaxoMaximo} meses      
+                <br> Calculando para $${formatoMoneda(capital)} a ${plazoMaximo} meses      
                 </p>
             `;
             
