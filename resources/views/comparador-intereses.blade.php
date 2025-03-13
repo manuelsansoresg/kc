@@ -84,7 +84,7 @@ function generarID() {
                         </div>
 
                         <!-- Formulario para editar variables -->
-                        <div class="bg-light p-3 rounded mb-4" >
+                        <div class="bg-light p-3 rounded mb-4" style="display: none">
                             <h5 class="fw-bold mb-3">Editar Variables:</h5>
                             <form id="comparadorForm">
                                 <div class="row">
