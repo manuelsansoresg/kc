@@ -20,9 +20,9 @@
                             <div class="nk-block-head">
                                 <div class="nk-block-head-content">
                                     
-                                    <h5 class="nk-block-title">Reset password</h5>
+                                    <h5 class="nk-block-title">Restablecer contraseña</h5>
                                     <div class="nk-block-des">
-                                        <p>If you forgot your password, well, then we’ll email you instructions to reset your password.</p>
+                                        <p>Si olvidaste tu contraseña, te enviaremos instrucciones para restablecerla.</p>
                                     </div>
                                 </div>
                             </div>
@@ -30,7 +30,7 @@
                                 @csrf
                                 <div class="form-group">
                                     <div class="form-label-group">
-                                        <label class="form-label" for="default-01">Email</label>
+                                        <label class="form-label" for="default-01">Correo electrónico</label>
                                     </div>
                                     <div class="form-control-wrap">
                                         
@@ -44,11 +44,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-lg btn-primary btn-block">Send Reset Link</button>
+                                    <button class="btn btn-lg btn-primary btn-block">Enviar enlace de restablecimiento</button>
                                 </div>
                             </form>
                             <div class="form-note-s2 text-center pt-4">
-                                <a href="/login"><strong>Return to login</strong></a>
+                                <a href="/login"><strong>Volver al inicio de sesión</strong></a>
                             </div>
                         </div>
                     </div>

@@ -71,8 +71,7 @@
                                     <button type="submit" class="btn btn-lg btn-primary btn-block">Continuar</button>
                                 </div>
                             </form>
-                            <div class="form-note-s2 text-center pt-4"> Already have an account? <a href="html/pages/auths/auth-login-v2.html"><strong>Sign in instead</strong></a>
-                            </div>
+                           
                             
                         </div>
                     </div>

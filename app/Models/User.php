@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use App\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Support\Facades\Password;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -217,7 +217,7 @@ class User extends Authenticatable
             if ($isResetpassword == true) {
                 $broker = Password::broker();
                 $token = $broker->createToken($user);
-                $user->sendPasswordResetNotification($token);
+                $user->notify(new \App\Notifications\WelcomePasswordSetNotification($token));
             }
         }
         $user->assignRole(ucfirst($role));
