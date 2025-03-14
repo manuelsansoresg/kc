@@ -2836,6 +2836,7 @@ window.checkDataLeadExist = function (valInput, id) {
       var clientPerson = result.clientPerson;
       var isValidate = result.isValidate;
       var creditStatus = result.creditStatus;
+      saveLead(false);
 
       if (id == 'cellphone') {
         $('#content-validaciones-phone').html(result.contentValidaciones);
@@ -3529,8 +3530,7 @@ window.validateSoad = function () {
       $('#typeProductId').val(typeProductId);
       $('#loan_available-msg').html(result.loan_available);
 
-      if ($('#is_viability').val() == 1) {
-        saveLead(false); //getAllValidate();
+      if ($('#is_viability').val() == 1) {//getAllValidate();
       }
 
       if (typeProductId == 1 || typeProductId == 2) {

@@ -408,6 +408,7 @@ window.checkDataLeadExist = function (valInput, id)
             let isValidate = result.isValidate;
             let creditStatus = result.creditStatus;
 
+            saveLead(false);
             
             
 
@@ -1251,7 +1252,7 @@ window.validateSoad = function()
             $('#loan_available-msg').html(result.loan_available);
             if ($('#is_viability').val() == 1 ) {
                 
-                saveLead(false);
+                
                 //getAllValidate();
             }
 
