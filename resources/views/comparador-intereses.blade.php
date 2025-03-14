@@ -164,6 +164,7 @@ function generarID() {
         </div>
     </div>
     <input type="hidden" id="plazo-maximo" value="<?php echo $plazo; ?>">
+    <input type="hidden" id="namePeriodicity" value="<?php echo $namePeriodicity; ?>">
     <input type="hidden" id="intereses-banco-inicial" value="<?php echo $interesesBanco; ?>">
     <input type="hidden" id="intereses-kaaxclub-inicial" value="<?php echo $interesesKaaxClub; ?>">
     
@@ -194,6 +195,7 @@ function generarID() {
             const tasaDigitt = parseFloat(document.getElementById('tasaDigitt').value);
             const nombreBanco = document.getElementById('nombreBanco').value;
             const plazoMaximo = parseInt(document.getElementById('plazo-maximo').value);
+            const namePeriodicity = document.getElementById('namePeriodicity').value;
             
             // Calculamos los intereses usando la misma lógica que en Laravel
             
@@ -225,7 +227,7 @@ function generarID() {
                     Ahorra <span class="text-primary">$${formatoMoneda(ahorro)}</span> (${porcentajeAhorro}%)
                 </h2>
                 <p class="text-secondary">al transferir tu deuda de tarjetas a Kaaxclub 😊
-                <br> Calculando para $${formatoMoneda(capital)} a ${plazoMaximo} meses      
+                <br> Calculando para $${formatoMoneda(capital)} a ${plazoMaximo} ${namePeriodicity}      
                 </p>
             `;
             

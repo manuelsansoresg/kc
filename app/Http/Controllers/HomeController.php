@@ -79,15 +79,19 @@ class HomeController extends Controller
         $financial = FinancialProduct::where('id', $lead->financial_product_id)->first();
         $tasaInteresKaaxClub = $financial ? $financial->annual_int_rate_iva : null;
 
+        $dias = isset(config('enums.periodicidad_valores')[$financial->periodicity_id]) ? config('enums.periodicidad_valores')[$financial->periodicity_id] : 30;
+        $periodicityId = $financial->periodicity_id;
+        $namePeriodicity = isset(config('enums.periodicidad_names_chart')[$financial->periodicity_id]) ? config('enums.periodicidad_names_chart')[$financial->periodicity_id] : null;
+
         $plazo = $lead->plazo_maximo ?? 12; // Si no hay plazo, tomamos 12 meses por defecto
 
         // Calcular intereses para la barra izquierda (Banco)
-        $tasaInteresMensualBanco = ($tasaInteresBanco / 100) / 360 * 30;
+        $tasaInteresMensualBanco = ($tasaInteresBanco / 100) / 360 * $dias;
         $pagoPeriodicoBanco = $getCalc->getPaymentPresentValue($tasaInteresMensualBanco, $plazo, -$capitalTotal);
         $interesesBanco = $plazo * $pagoPeriodicoBanco - $capitalTotal;
 
         // Calcular intereses para la barra derecha (KaaxClub)
-        $tasaInteresMensualKaaxClub = ($tasaInteresKaaxClub / 100) / 360 * 30;
+        $tasaInteresMensualKaaxClub = ($tasaInteresKaaxClub / 100) / 360 * $dias;
         $pagoPeriodicoKaaxClub = $getCalc->getPaymentPresentValue($tasaInteresMensualKaaxClub, $plazo, -$capitalTotal);
         $interesesKaaxClub = $plazo * $pagoPeriodicoKaaxClub - $capitalTotal;
         return view('comparador-intereses', compact(
@@ -98,7 +102,8 @@ class HomeController extends Controller
             'interesesKaaxClub', 
             'nombreBanco', 
             'lead',
-            'plazo'
+            'plazo',
+            'namePeriodicity',
         ));
     }
 
