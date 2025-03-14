@@ -1036,7 +1036,9 @@ window.getMontoSolicitado = function() {
         });
 
         $('#table-refinanciamiento-total').html(total_price);
+        
         $('#total-refinanciable').val(total);
+        
         if (typeProductId != 3 && typeProductId != '') {
             let plazosolicitado = $('#ref-plazo').val();
             if (plazosolicitado != '') {
@@ -1062,9 +1064,14 @@ window.getResumen = function()
     let productId = $('#financial_product_id').val();
     let plazo = $('#ref-plazo').val();
     let monto = $('#ref-monto').val();
-
+    let adicional = '';
     if (document.getElementById('ref-monto-new')) {
         monto = $('#ref-monto-new').val();
+    }
+
+    if (document.getElementById('isControlDesk')) {
+        let creditId = $('#controldesk-credit_id').val();
+        adicional = '?credit_id='+creditId;
     }
     
     /* if (document.getElementById('ref-monto-new')) {
@@ -1080,7 +1087,7 @@ window.getResumen = function()
     
     $('#go_ahead').val(0);
     axios
-    .get("/panel/lead/"+productId+"/"+plazo+'/'+monto+'/'+totalRefinanciable+'/'+tramit_type+'/getResumen')
+    .get("/panel/lead/"+productId+"/"+plazo+'/'+monto+'/'+totalRefinanciable+'/'+tramit_type+'/getResumen'+adicional)
     .then(function (response) {
         let result = response.data;
         let montoSolicitado =  result.montoSolicitado;

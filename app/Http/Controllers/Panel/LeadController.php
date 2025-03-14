@@ -597,6 +597,7 @@ class LeadController extends Controller
         } else {
             $montoEntregar = $monto - $comision;
         }
+        
         $periodicidad = config('financial_enums.periodicity_products')[$financialProduct->periodicity_id];
         $getCalc = new CalculadoraCredito();
         $pagoPeriodico = $getCalc->getPayment($financialProduct, $monto, $plazo);
@@ -606,6 +607,14 @@ class LeadController extends Controller
         
         $kcInteres = $pagoTotal - $monto;
         $kcPagoTotal = $pagoTotal;
+
+        if (isset($_GET['credit_id'])) {
+            $creditId = $_GET['credit_id'];
+            $total =   CreditPayOff::select('ammount')
+            ->where('credit_pay_off.new_kc_credit_id', $creditId)
+            ->where('kc_credit_id_payed_off', '!=', null)
+            ->sum('ammount');
+        }
 
         $data = array(
             'montoSolicitado' => format_price($monto),

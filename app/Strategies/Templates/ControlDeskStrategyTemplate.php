@@ -1107,7 +1107,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $creditPays = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount', 'deadline_date', 'annual_int_rate_iva')
         ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
         ->where('credit_pay_off.client_person_id', $client->id)
+        ->where('kc_credit_id_payed_off', '!=', null)
         ->get();
+        
+        $totalCompraCartera = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount', 'deadline_date', 'annual_int_rate_iva')
+        ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
+        ->where('credit_pay_off.client_person_id', $client->id)
+        ->where('kc_credit_id_payed_off', '=', null)
+        ->sum('ammount');
         
         $financialProduct = FinancialProduct::find($credit->applied_financial_product);
         
@@ -1129,7 +1136,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ->pluck('terms.term', 'terms.term');
         }
         
-        $contentInfo = \View::make('panel.credit.controldeskTask4Step3', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'creditPays' => $creditPays, 'montoMaximo' => $montoMaximo, 'financialProduct' => $financialProduct, 'payment' => $payment, 'lead' => $lead, 'terms' => $terms])->render();
+        $contentInfo = \View::make('panel.credit.controldeskTask4Step3', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'totalCompraCartera' => $totalCompraCartera, 'creditPays' => $creditPays, 'montoMaximo' => $montoMaximo, 'financialProduct' => $financialProduct, 'payment' => $payment, 'lead' => $lead, 'terms' => $terms])->render();
 
         $elements = array(
             1 => [
