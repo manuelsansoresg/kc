@@ -1467,11 +1467,12 @@ function crearGraficaApilada(contenedor, valorInteres, valorDeuda, colorInteres 
                     const data = response.data;
                     const compraCartera = data.compraCartera;
                     const montoSolicitado = data.montoSolicitado;
+                    const montoRefinanciable = data.montoRefinanciable;
                     /* 
                     const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
                     const newMontoSolicitado = compraCartera;
                     // Guardar el valor en un campo oculto para usarlo más tarde
-                    document.getElementById('total-refinanciable').value = montoSolicitado;
+                    document.getElementById('total-refinanciable').value = montoRefinanciable;
                     
                     // 2. Seleccionar el plazo correspondiente si existe
                     // Obtener el valor de monto solicitado correctamente usando DOM nativo

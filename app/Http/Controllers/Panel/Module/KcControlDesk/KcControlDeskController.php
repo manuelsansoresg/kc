@@ -64,6 +64,12 @@ class KcControlDeskController extends Controller
 
         $creditPay = CreditPayOff::select('ammount')
         ->where('credit_pay_off.client_person_id', $client->id)
+        ->where('kc_credit_id_payed_off', '!=', null)
+        ->sum('ammount');
+       
+        $montoRefinanciable = CreditPayOff::select('ammount')
+        ->where('credit_pay_off.client_person_id', $client->id)
+        ->where('kc_credit_id_payed_off', '=', null)
         ->sum('ammount');
         
         $compraCartera = $creditPay / (100 - $financialProduct->opening_commission_rate) * 100;
@@ -71,6 +77,7 @@ class KcControlDeskController extends Controller
         $data = array(
             'compraCartera' => $compraCartera,
             'montoSolicitado' => $montoSolicitado,
+            'montoRefinanciable' => $montoRefinanciable,
         );
         return response()->json($data);
     }

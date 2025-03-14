@@ -3724,12 +3724,13 @@ document.addEventListener('DOMContentLoaded', function () {
         var data = response.data;
         var compraCartera = data.compraCartera;
         var montoSolicitado = data.montoSolicitado;
+        var montoRefinanciable = data.montoRefinanciable;
         /* 
         const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
 
         var newMontoSolicitado = compraCartera; // Guardar el valor en un campo oculto para usarlo más tarde
 
-        document.getElementById('total-refinanciable').value = montoSolicitado; // 2. Seleccionar el plazo correspondiente si existe
+        document.getElementById('total-refinanciable').value = montoRefinanciable; // 2. Seleccionar el plazo correspondiente si existe
         // Obtener el valor de monto solicitado correctamente usando DOM nativo
 
         var montoSolicitadoText = '';
