@@ -12,6 +12,7 @@ use App\Models\Investor;
 use App\Models\InvestorsCredit;
 use App\Models\RegisterAction;
 use App\Models\TemplateFile;
+use App\Models\Transaction;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
@@ -193,11 +194,16 @@ class ActionController extends Controller
         }
 
         if ($request->model == 'wallet'  && $step == '2') {
+            $getTransaction = Transaction::find($request->id_rel);
+            Investor::updateInvestorData($getTransaction->investor_id);
+            Investor::updateInvestorBalances($getTransaction->investor_id);
+
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $request->id_rel, 1);
-            $getInvestors = InvestorsCredit::where('credit_id', $request->id_rel)->get();
+            /* $getInvestors = InvestorsCredit::where('credit_id', $request->id_rel)->get();
             foreach ($getInvestors as $getInvestor) {
-                Investor::updateInvestorData($getInvestor->id);
-            }
+                
+            } */
+            
         }
         //terminar archivo retirar fondos etapa 1
         if ($request->model == 'kc-down-wallet' && $step == '2') {
