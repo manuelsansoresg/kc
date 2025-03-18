@@ -148,39 +148,43 @@ class Investor extends Model
     public static function updateInvestorBalances($investorId)
     {
         $investor = Investor::find($investorId);
+        
         if (!$investor) {
             return null;
         }
-
+        
         // Calcular funded_capital
         $fundedCapital = Transaction::where('investor_id', $investorId)
             ->where('transaction_type', 1)
             ->where('operation_status', 1)
             ->sum('amount');
-        
+            
         // Calcular withdrawn_money
         $withdrawnMoney = Transaction::where('investor_id', $investorId)
             ->where('transaction_type', 2)
             ->where('operation_status', 1)
             ->sum('amount');
-        
+            
         // Calcular total_capital
         $totalCapital = InvestorsCredit::where('investor_id', $investorId)
             ->where('status', '!=', 0)
             ->sum('import');
-        
+            
         // Calcular total_available
         $totalAvailable = $fundedCapital - $totalCapital + $investor->total_collected - $investor->collection_commission - $withdrawnMoney;
         
         // Calcular loans_in_process
         $loansInProcess = $totalCapital - $investor->placed_capital - $investor->recovered_capital;
-        
+        $sumImport = 0;
+        if ($investor->lendable_updated_time != null) {
+            $sumImport = InvestorsCredit::where('investor_id', $investorId)
+                ->where('status', '!=', 0)
+                ->where('created_at', '>', $investor->lendable_updated_time)
+                ->sum('import');
+        }
         // Calcular loan_available
-        $loanAvailable = $investor->lendable - InvestorsCredit::where('investor_id', $investorId)
-            ->where('status', '!=', 0)
-            ->where('created_at', '>', $investor->lendable_updated_time)
-            ->sum('import');
-        
+        $loanAvailable = $investor->lendable - $sumImport;
+            
         // Calcular loan_active
         $loanActive = $loanAvailable > 999 ? 1 : 0;
         
