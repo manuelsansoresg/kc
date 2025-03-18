@@ -471,10 +471,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             if ($percent2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM_STEP_2, $history->id_rel, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET, $history->id_rel, 1);
-                $modelTransaction = $transaction['transaction'];
-                $investor_id = $modelTransaction->investor_id;
-
-                Investor::updateInvestorBalances($investor_id);
+                
             }
         }
         return $transaction['getTransaction'];
