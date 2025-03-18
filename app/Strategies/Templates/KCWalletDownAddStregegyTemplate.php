@@ -677,27 +677,6 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
             );
         }
 
-
-       /*  $data = array();
-        $data[] = array(
-            'name' => 'Carga',
-            'subject' => $subject2,
-            'status' => $viewStatus2,
-            'deadline' => $view_dead_line1_2,
-            'advisor' => null,
-            'options' => null,
-            'link' => '/panel/template/action-document/kc-down-wallet/'.$history_id.'?step=2'
-        );
-        $data[] = array(
-            'name' => 'Formulario',
-            'subject' => $subject1,
-            'status' => $viewStatus1,
-            'deadline' => $view_dead_line,
-            'advisor' => null,
-            'options' => $option,
-            'link' => '/panel/action-form/kc-down-wallet/'.$history->id.'/form?step=2'
-        ); */
-        
         
         return $data;
     }
@@ -710,21 +689,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         return self::actionStep($history_id);
     }
 
-    public static function calculateStepAverage($historyId, $step)
-    {
-        $history = HistoryLog::find($historyId);
-        $percent = 0;
-        if ($step == 1) {
-            $percent_form   = self::percentForm($history);
-            $percent_upload   = self::percentFile($history->id_rel);
-            $percent = ( $percent_form +  $percent_upload) / 2;
-        } else {
-            $percent_form   = self::percentForm2($history);
-            $percent_upload   = self::percentFile($history->id_rel, 2);
-            $percent = ( $percent_form +  $percent_upload) / 2;
-        }
-        return $percent;
-    }
+   
 
 
     public function listStep($history_id)
@@ -779,37 +744,33 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
     {
     }
 
+    public static function calculateStepAverage($historyId, $step)
+    {
+        $history = HistoryLog::find($historyId);
+        $percent = 0;
+        if ($step == 1) {
+            $percent_form   = self::percentForm($history);
+            $percent_upload   = self::percentFile($history->id_rel);
+            $percent = ( $percent_form +  $percent_upload) / 2;
+        } else {
+            $percent_form   = self::percentForm2($history);
+            $percent_upload   = self::percentFile($history->id_rel, 2);
+            $percent = ( $percent_form +  $percent_upload) / 2;
+        }
+        return $percent;
+    }
+
     public function getPercent($history, $show_current_show = false)
     {
         $transaction     = Transaction::find($history->id_rel);
-        $data_actions = array(
-            HistoryLog::KC_DOWN_WALLET_ADD_FORM,
-            HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2,
-            HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2,
-        );
-        //dd($data_actions);
-        $get_actions = HistoryLog::getByStatus($data_actions, $transaction->id);
-        //dd($get_actions);
-        $status_progress = 0;
-        $current_show = ''; 
-        foreach ($get_actions as $key => $get_action) {
-            $status = $get_action->status_progress;
-            $status_progress += $status != null ? $status : 0;
-            //$current_show = $status < 100 && $get_action->status_id == HistoryLog::KC_DELIVERY_UPLOAD_STEP_2 ? 'Comprobar pago': 'Verificar pago';
+        // Iterar sobre las tareas (1 a 4) y sumar los promedios
+        $totalSteps = 2; // Número total de tareas
+        $totalAverage = 0;
+        for ($step = 1; $step <= $totalSteps; $step++) {
+            $averageStep = self::calculateStepAverage($history->id, $step);
+            $totalAverage += $averageStep;
         }
-        if ($status_progress <= 2) {
-            $current_show = 'Información transferencia';
-        } elseif ($status_progress > 2) {
-            $current_show = 'Verificar transferencia';
-        }
-
-        $percent =  $status_progress > 0 ? (($status_progress) / 3) * 100 : 0;
-
-        if ($show_current_show == true) {
-            return $current_show;
-        }
-        
-        return reduceDecimal($percent);
+        return $totalSteps > 0 ? $totalAverage / $totalSteps : 0;
     }
 
     public function moduleDeadline($history)
