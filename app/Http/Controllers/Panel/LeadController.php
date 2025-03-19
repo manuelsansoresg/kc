@@ -418,7 +418,7 @@ class LeadController extends Controller
 
         $textSoad = 'Tiene un Salario On-Demand activo';
         $statusPreautorizado = 0;
-        if ($clientPerson->sod_active == 1) {
+        if ($clientPerson->sod_active == 0) {
             $textSoad = 'No tiene un Salario On-Demand activo';
             $statusPreautorizado = 1;
         }
