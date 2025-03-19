@@ -104,14 +104,22 @@ class LeadController extends Controller
             'agreement_id' => $getClientPerson->agreement_id,
         ]);
         HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
-
+        //* Execute notification in add lead
+        $notification_add   = SendNotificationsValues::STRATEGY['leadAddProspect'];
+        (new $notification_add)->send($lead->id);
+        $statusActivo = 0;
+        $contentActivo = 'Cliente activo';
+        if ($getClientPerson->active == 1) {
+            $statusActivo = 1;
+            $contentActivo = 'Cliente inactivo';
+        }
+        LeadValidation::saveEdit($lead->id, 'Prospecto - Cliente activo', $statusActivo, $contentActivo);
         if ($id == 'cellphone') {
             $contentValidaciones      = 'Sin coincidencias';
             $contentValidacionesCellphone = '';
             $statusCellphone = 0;
 
-            if ($getClientPerson != null && $valInput == $getClientPerson->cellphone && 
-                $getClientPerson->active == 1 && $validateAgreement == true) {
+            if ($getClientPerson != null && $valInput == $getClientPerson->cellphone && $validateAgreement == true) {
                 $isValidateCellphone = true;
                 $statusCellphone = 1;
                 $contentValidaciones = 'Coincidencia encontrada';
@@ -125,8 +133,7 @@ class LeadController extends Controller
             $contentValidaciones      = 'Sin coincidencias';
             $contentValidacionesRFC = 'Sin coincidencias';
             $statusRFC = 0;
-            if ($getClientPerson != null && $valInput == $getClientPerson->rfc && 
-                $getClientPerson->active == 1 && $validateAgreement == true) {
+            if ($getClientPerson != null && $valInput == $getClientPerson->rfc && $validateAgreement == true) {
                 $isValidateRFC = true;
                 $statusRFC = 1;
                 $contentValidaciones = 'Coincidencia encontrada';
