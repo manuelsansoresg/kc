@@ -466,6 +466,7 @@ class LeadController extends Controller
             $minimoRedondeado = floor($minimo / 100) * 100;
             
             $msgContentProductSod = 'Prospecto no puede tramitar un Salario On-Demand';
+            $textSoad = null;
             $statusProductSod = 0;
             
             
@@ -534,27 +535,38 @@ class LeadController extends Controller
         //validaciones sod
         $validateSod = Lead::validateSod($clientPerson, $financialProduct);
         
-        // Add validation records based on validateSod results
-        LeadValidation::saveEdit(
-            $leadId, 
-            'Crédito preautorizado - Validación SOD', 
-            $validateSod['isTramite'] ? 1 : 0,
-            $validateSod['message']
-        );
+        // Registrar cada validación individual que viene de validateSod
+        if (isset($validateSod['validations']) && is_array($validateSod['validations'])) {
+            foreach ($validateSod['validations'] as $validation) {
+                // Verificar que todos los campos necesarios existan
+                $validationName = $validation['validation_name'] ?? 'Validación sin nombre';
+                $status = $validation['status'] ?? false;
+                $message = $validation['message'] ?? 'Sin mensaje';
+
+                LeadValidation::saveEdit(
+                    $leadId,
+                    $validationName,
+                    $status ? 1 : 0,
+                    $message
+                );
+            }
+        }
         
         $tramites = array();
-        if ($validateSod['isTramite'] == true && $financialProduct->name != 'KC Salario On-Demand' ) {
-            foreach ($validateSod['tramite'] as $getTramite) {
-                $tramites[$getTramite] = config('enums.tipo_tramite')[$getTramite];
+        if (isset($validateSod['isTramite']) && $validateSod['isTramite'] == true && $financialProduct->name != 'KC Salario On-Demand') {
+            if (isset($validateSod['tramite'])) {
+                foreach ($validateSod['tramite'] as $getTramite) {
+                    $tramites[$getTramite] = config('enums.tipo_tramite')[$getTramite];
+                }
             }
         }
         if ($financialProduct->name == 'KC Salario On-Demand') {
-            $tramites[1] =  config('enums.tipo_tramite')[1];
+            $tramites[1] = config('enums.tipo_tramite')[1];
         }
         
         $dataReturn = array(
-            'sodIsTramite' => $validateSod['isTramite'], 
-            'sodMessage' => $validateSod['message'],
+            'sodIsTramite' => $validateSod['isTramite'] ?? false,
+            'sodMessage' => $validateSod['message'] ?? 'Sin mensaje',
             'sodTramites' => $tramites
         );
         return response()->json($dataReturn);
