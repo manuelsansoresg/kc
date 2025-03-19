@@ -61,12 +61,13 @@ class LeadStrategyTemplate implements TemplateInterface
             
             
 
-            //$client_person = ClientPerson::create($data_client_person);
+            $financialProduct = FinancialProduct::find($lead->financial_product_id);
+            $productTypeId = $financialProduct ? $financialProduct->type_product_id : null;
             
             //* create credit
             $data_lead = array(
                 'client_person_id' => $client_person->id,
-                'product_id' => $lead->product_id,
+                'product_id' => $productTypeId,
                 'financial_id' => $lead->financial_id,
                 'agreement_id' => $lead->agreement_id,
                 'origin_id' => $lead->origin_id,
