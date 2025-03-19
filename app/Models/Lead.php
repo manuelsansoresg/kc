@@ -267,7 +267,7 @@ class Lead extends Model
     {
        
         $is_asesor = Auth::user()->hasRole('Asesor');
-
+        
         $get_list = HistoryLog::getByStatus([HistoryLog::CREATE_PROSPECT]);
         $data        = array();
         $statusTramites = array(
