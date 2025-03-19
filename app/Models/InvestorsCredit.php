@@ -35,28 +35,29 @@ class InvestorsCredit extends Model
         $getCredit = Credit::find($creditId);
         if ($getCredit != null) {
             $applied_financial_product = $getCredit->applied_financial_product;
-            $applied_import            = $getCredit->applied_import;
+            $applied_import = $getCredit->applied_import;
             $applied_loan_total_amount = $getCredit->applied_loan_total_amount;
-            $getInvestors              = InvestorProduct::where('financial_products_id', $applied_financial_product)->get();
+            $getInvestors = InvestorProduct::where('financial_products_id', $applied_financial_product)->get();
             
             foreach ($getInvestors as $getInvestors) {
                 try {
                     $getInvestor = Investor::find($getInvestors->investor_id);
                     $getFinancialProduct = FinancialProduct::find($applied_financial_product);
                     $commissionRate = $getFinancialProduct->collection_commission_rate;
-                    $percent =  $getInvestor->loan_active == 1 ? ($getInvestor->loan_available / $getFinancialProduct->loan_available) * 100: 0;
+                    $percent =  $getInvestor->loan_active == 1 ? ($getInvestor->loan_available / $getFinancialProduct->loan_available) * 100 : 0;
                     
-                    $dataInvestorCredit = array(
+                    $dataInvestorCredit = [
                         'credit_id' => $creditId,
                         'investor_id' => $getInvestor->id,
-                        
-                    );
-                    $existInvestorCredit                   = InvestorsCredit::where($dataInvestorCredit);
-                    $dataInvestorCredit['percentage']      = $percent;
-                    $dataInvestorCredit['import']          = ($percent * $applied_import)/ 100;
+                    ];
+                    
+                    $existInvestorCredit = InvestorsCredit::where($dataInvestorCredit);
+                    $dataInvestorCredit['percentage'] = $percent;
+                    $dataInvestorCredit['import'] = ($percent * $applied_import) / 100;
                     $dataInvestorCredit['commission_rate'] = $commissionRate;
-                    $dataInvestorCredit['total_credit'] = ($percent * $applied_loan_total_amount)/ 100;
-                    if ($percent > 0 ) {
+                    $dataInvestorCredit['total_credit'] = ($percent * $applied_loan_total_amount) / 100;
+                    
+                    if ($percent > 0) {
                         if ($existInvestorCredit->count() == 0) {
                             $dataInvestorCredit['status'] = 1;
                             InvestorsCredit::create($dataInvestorCredit);
@@ -67,8 +68,23 @@ class InvestorsCredit extends Model
                 } catch (\Exception $th) {
                     //throw $th;
                 }
-                
             }
+
+            // Actualizar credit_active y sod_active en client_person
+            $clientPersonId = $getCredit->client_person_id;
+            
+            $hasActiveCredit = InvestorsCredit::whereIn('credit_id', Credit::where('client_person_id', $clientPersonId)->where('product_id', '!=', 3)->pluck('id'))
+                ->where('status', '>', 0)
+                ->exists();
+            
+            $hasActiveSod = InvestorsCredit::whereIn('credit_id', Credit::where('client_person_id', $clientPersonId)->where('product_id', '=', 3)->pluck('id'))
+                ->where('status', '>', 0)
+                ->exists();
+            
+            ClientPerson::where('id', $clientPersonId)->update([
+                'credit_active' => $hasActiveCredit ? 1 : 0,
+                'sod_active' => $hasActiveSod ? 1 : 0
+            ]);
         }
 
     }
