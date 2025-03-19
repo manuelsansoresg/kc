@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
@@ -64,47 +65,75 @@ class CreditController extends Controller
         if (!$getCollection) {
             return; // Evitar errores si no existe el registro
         }
-
+    
         $pago_acumulado_real = $getCollection->pago_acumulado_real;
         $saldo_insoluto_real = $getCollection->saldo_insoluto_real;
         $abono_acumulado_real = $getCollection->abono_acumulado_real;
         $saldo_total_real = $getCollection->saldo_total_real;
         $status = $getCollection->status;
         $kcCreditId = $getCollection->kc_credit_id;
-
+    
         $getInvestors = InvestorsCredit::where('credit_id', $kcCreditId)->get();
-
+    
         if ($getInvestors->isEmpty()) {
             return; // Evitar errores si no hay inversionistas relacionados
         }
-
+    
         $investorsIds = [];
-
+    
         foreach ($getInvestors as $getInvestor) {
-            $investorsIds[] = $getInvestor->investor_id; // Aquí se usa investor_id, no id
+            $investorsIds[] = $getInvestor->investor_id;
             $percentage = $getInvestor->percentage;
             $comissionRate = $getInvestor->commission_rate;
-
+    
             $totalCollected = ($pago_acumulado_real * $percentage) / 100;
             $recoveredCapital = ($abono_acumulado_real * $percentage) / 100;
             $profitCollected = ($totalCollected - $recoveredCapital) / 1.16;
             $ivaCollected = $profitCollected * 0.16;
-            $commissionAmount = ($totalCollected * $comissionRate) / 1.16 / 100;
-            $ivaCommission = $commissionAmount * 0.16;
-
+            $placedCapital = ($saldo_insoluto_real * $percentage) / 100;
+    
+            $newStatus = $placedCapital > 0 ? 2 : 0;
+    
             InvestorsCredit::where('id', $getInvestor->id)->update([
                 'total_collected' => $totalCollected,
-                'placed_capital' => ($saldo_insoluto_real * $percentage) / 100,
+                'placed_capital' => $placedCapital,
                 'recovered_capital' => $recoveredCapital,
                 'total_balance' => ($saldo_total_real * $percentage) / 100,
                 'credit_status' => $status,
-                'commission_amount' => $commissionAmount,
+                'commission_amount' => ($totalCollected * $comissionRate) / 100,
                 'profit_collected' => $profitCollected,
                 'iva_collected' => $ivaCollected,
-                'iva_commission' => $ivaCommission,
+                'status' => $newStatus,
             ]);
         }
-
+    
+        // Obtener los client_person_id afectados
+        $clientPersonIds = Credit::whereIn('id', $getInvestors->pluck('credit_id'))->pluck('client_person_id');
+    
+        // Actualizar client_person.credit_active
+        foreach ($clientPersonIds as $clientPersonId) {
+            $hasActiveCredits = Credit::where('client_person_id', $clientPersonId)
+                ->where('product_id', '<>', 3)
+                ->whereIn('id', InvestorsCredit::where('status', '<>', 0)->pluck('credit_id'))
+                ->exists();
+    
+            ClientPerson::where('id', $clientPersonId)->update([
+                'credit_active' => $hasActiveCredits ? 1 : 0
+            ]);
+        }
+    
+        // Actualizar client_person.sod_active
+        foreach ($clientPersonIds as $clientPersonId) {
+            $hasActiveSodCredits = Credit::where('client_person_id', $clientPersonId)
+                ->where('product_id', 3)
+                ->whereIn('id', InvestorsCredit::where('status', '<>', 0)->pluck('credit_id'))
+                ->exists();
+    
+            ClientPerson::where('id', $clientPersonId)->update([
+                'sod_active' => $hasActiveSodCredits ? 1 : 0
+            ]);
+        }
+    
         // Optimización: Obtener los valores sumados directamente para cada inversionista
         $getSums = InvestorsCredit::whereIn('investor_id', $investorsIds)
             ->groupBy('investor_id')
@@ -116,11 +145,10 @@ class CreditController extends Controller
                 SUM(profit_collected) as profit_collected,
                 SUM(commission_amount) as commission_amount,
                 SUM(total_balance) as total_balance,
-                SUM(iva_collected) as iva_collected,
-                SUM(iva_commission) as iva_commission
+                SUM(iva_collected) as iva_collected
             ')
             ->get();
-
+    
         foreach ($getSums as $getSum) {
             Investor::where('id', $getSum->investor_id)->update([
                 'placed_capital' => $getSum->placed_capital,
@@ -130,9 +158,8 @@ class CreditController extends Controller
                 'collection_commission' => $getSum->commission_amount,
                 'total_balance' => $getSum->total_balance,
                 'iva_collected' => $getSum->iva_collected,
-                'iva_commission' => $getSum->iva_commission,
             ]);
-
+    
             // Llamar a funciones de actualización
             Investor::updateInvestorData($getSum->investor_id);
         }
