@@ -1430,8 +1430,8 @@ $("#frm-archive").submit(function (event) {
 window.modalValidate = function (id, model) {
   $('#modal-validate-content').html('');
   axios.get('/panel/' + id + '/' + model + '/validate/show').then(function (response) {
-    var result = response.data;
-    $('#modal-validate-content').html(result);
+    var html = response.data.table;
+    $('#modal-validate-content').html(html);
     $('#modal-validate').modal('show');
   })["catch"](function (e) {});
 };
@@ -3820,8 +3820,6 @@ function getLeadValidations() {
   var leadId = $('#lead_id').val();
   $('#content-validaciones-tabla').html('');
   axios.get("/panel/lead/validations/".concat(leadId)).then(function (response) {
-    console.log('Response:', response); // Para depuración
-
     if (response.data.success) {
       var html = response.data.table;
       $('#content-validaciones-tabla').html(html);

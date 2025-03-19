@@ -1576,7 +1576,6 @@ function getLeadValidations() {
     $('#content-validaciones-tabla').html('');
     axios.get(`/panel/lead/validations/${leadId}`)
         .then(function (response) {
-            console.log('Response:', response); // Para depuración
             if (response.data.success) {
                 let html = response.data.table;
                 

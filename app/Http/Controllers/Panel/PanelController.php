@@ -9,6 +9,7 @@ use App\Lib\CSurveySparrow;
 use App\Lib\Pusher;
 use App\Models\Credit;
 use App\Models\Lead;
+use App\Models\LeadValidation;
 use App\Strategies\Values\ActionValues;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
@@ -41,12 +42,17 @@ class PanelController extends Controller
         
         if ($model != 'lead') {
             $validate       = (new $leadStrategy)->getValidate($id);
-            $view_validate  = \View::make('panel.table_validate', ['errors' => $validate['table']])->render();
+            $table  = \View::make('panel.table_validate', ['errors' => $validate['table']])->render();
         } else {
-            $validate       = (new $leadStrategy)->listValidate($id);
-            $view_validate = $validate;
+            $validations = LeadValidation::getValidationsByLeadId($id);
+            $table = view('lead.table_validation', ['validations' => $validations])->render();
+            
+            
         }
-        return response()->json($view_validate);
+        return response()->json([
+            'success' => true,
+            'table' => $table
+        ], 200);
     }
 
     public function noteStore($model, Request $request)
