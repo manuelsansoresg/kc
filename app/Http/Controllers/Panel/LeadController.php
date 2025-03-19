@@ -103,7 +103,7 @@ class LeadController extends Controller
             'email' => $getClientPerson->email,
             'agreement_id' => $getClientPerson->agreement_id,
         ]);
-        HistoryLog::move($lead->id, HistoryLog::ADD_PROSPECT, HistoryLog::ADD_PROSPECT);
+        HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
 
         if ($id == 'cellphone') {
             $contentValidaciones      = 'Sin coincidencias';
