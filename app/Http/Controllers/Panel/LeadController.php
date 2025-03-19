@@ -108,10 +108,10 @@ class LeadController extends Controller
         $notification_add   = SendNotificationsValues::STRATEGY['leadAddProspect'];
         (new $notification_add)->send($lead->id);
         $statusActivo = 0;
-        $contentActivo = 'Cliente activo';
+        $contentActivo = 'Cliente inactivo';
         if ($getClientPerson->active == 1) {
             $statusActivo = 1;
-            $contentActivo = 'Cliente inactivo';
+            $contentActivo = 'Cliente activo';
         }
         LeadValidation::saveEdit($lead->id, 'Prospecto - Cliente activo', $statusActivo, $contentActivo);
         if ($id == 'cellphone') {
