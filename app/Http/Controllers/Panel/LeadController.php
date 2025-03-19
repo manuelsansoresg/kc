@@ -416,13 +416,16 @@ class LeadController extends Controller
     public function getSoad(ClientPerson $clientPerson, Agreement $agreement, FinancialProduct $financialProduct, $leadId)
     {
 
-        $textSoad = 'Tiene un Salario On-Demand activo';
-        $statusPreautorizado = 0;
-        if ($clientPerson->sod_active == 0) {
-            $textSoad = 'No tiene un Salario On-Demand activo';
-            $statusPreautorizado = 1;
+        if ($financialProduct->type_product_id == 3) {
+            $textSoad = 'Tiene un Salario On-Demand activo';
+            $statusPreautorizado = 0;
+            if ($clientPerson->sod_active == 0) {
+                $textSoad = 'No tiene un Salario On-Demand activo';
+                $statusPreautorizado = 1;
+            }
+            LeadValidation::saveEdit($leadId, 'Crédito preautorizado - SOD activo', $statusPreautorizado, $textSoad);
         }
-        LeadValidation::saveEdit($leadId, 'Crédito preautorizado - SOD activo', $statusPreautorizado, $textSoad);
+        
         //validar soad en fecha
         $getSodName = SodScheduleName::find($agreement->id);
         $isSoadDate = 'Solicitud fuera del rango de fechas';
@@ -433,7 +436,9 @@ class LeadController extends Controller
             $getDate                = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
             $isSoadDate             = $getDate!= null && $getDate->schedule == 1 ?  'Solicitud dentro del rango de fechas' : $isSoadDate;
             $statusRangoFechas             = $getDate!= null && $getDate->schedule == 1 ?  1 : 0;
-            LeadValidation::saveEdit($leadId, 'Crédito preautorizado - SOD en rango de fechas permitidas', $statusRangoFechas, $isSoadDate);
+            if ($financialProduct->type_product_id == 3) {
+                LeadValidation::saveEdit($leadId, 'Crédito preautorizado - SOD en rango de fechas permitidas', $statusRangoFechas, $isSoadDate);
+            }
             //dd($agreement->id, $getDate);
 
             $is_sod_on_date_allowed = $getDate!= null && $getDate->schedule == 1 ? true : false;
@@ -459,14 +464,20 @@ class LeadController extends Controller
             //calcular minimo
             $minimo = $clientPerson->daily_income_adjusted * 1;
             $minimoRedondeado = floor($minimo / 100) * 100;
-            $contentProductSod = '<p class="text-danger"> El prospecto no puede tramitar un salario On-Demand. <br> Revisa las validaciones </p>';
-
+            
+            $msgContentProductSod = 'Prospecto no puede tramitar un Salario On-Demand';
+            $statusProductSod = 0;
+            
             
 
             if ( $getDate->schedule == 1) {
                 $contentProductSod =  \View::make('panel.lead.product_sod ', ['minimo' => $minimoRedondeado, 'maximo' => $maximoRedondeado])->render();
+                $msgContentProductSod = 'Prospecto puede tramitar un Salario On-Demand';
+                $statusProductSod = 1;
             }
-
+            if ($financialProduct->type_product_id == 3) {
+                LeadValidation::saveEdit($leadId, 'Crédito preautorizado - Trámite SOD autorizado', $statusProductSod, $msgContentProductSod);
+            }
         }
         
         // Obtenemos el valor de la CLABE
