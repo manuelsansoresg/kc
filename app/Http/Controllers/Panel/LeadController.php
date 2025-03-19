@@ -552,17 +552,24 @@ class LeadController extends Controller
             }
         }
         
-        $tramites = array();
-        
-        if (isset($validateSod['isTramite']) && $validateSod['isTramite'] == true && $financialProduct->name != 'KC Salario On-Demand') {
-            if (isset($validateSod['tramite'])) {
-                foreach ($validateSod['tramite'] as $getTramite) {
-                    $tramites[$getTramite] = config('enums.tipo_tramite')[$getTramite];
+        $tramites = [];
+        if ($clientPerson && $financialProduct) {
+            if ($financialProduct->type_product_id != 3) {
+                if ($clientPerson->credit_active == 0) {
+                    $tramites[1] = config('enums.tipo_tramite')[1]; // Crédito nuevo
+                } elseif ($clientPerson->credit_active == 1) {
+                    if ($financialProduct->additional_allowed == 1) {
+                        $tramites[2] = config('enums.tipo_tramite')[2]; // Crédito adicional
+                    }
+                    if ($financialProduct->refinancing_allowed == 1) {
+                        $tramites[3] = config('enums.tipo_tramite')[3]; // Refinanciamiento
+                    }
+                }
+            } elseif ($financialProduct->type_product_id == 3) {
+                if ($clientPerson->sod_active == 0) {
+                    $tramites[1] = config('enums.tipo_tramite')[1]; // Crédito nuevo
                 }
             }
-        }
-        if ($financialProduct->name == 'KC Salario On-Demand') {
-            $tramites[1] = config('enums.tipo_tramite')[1];
         }
         
         $dataReturn = array(
