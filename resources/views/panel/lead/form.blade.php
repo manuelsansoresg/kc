@@ -375,14 +375,19 @@
 
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Validaciónes</span>
-                                                        <div id="content-validaciones-phone"></div>
-                                                        <div id="content-validaciones-rfc"></div>
-                                                        <div id="content-validaciones"></div>
-                                                        <div id="content-validaciones-soad"></div>
-                                                        <div id="content-validaciones-soad-date"></div>
-                                                        <div id="content-validaciones-soad-tramite"></div>
-                                                        <div id="content-validaciones-plazo"></div>
-                                                        <div id="content-validaciones-monto"></div>
+                                                        <div style="display: none">
+                                                            <div id="content-validaciones-phone"></div>
+                                                            <div id="content-validaciones-rfc"></div>
+                                                            <div id="content-validaciones"></div>
+                                                            
+                                                            <div id="content-validaciones-soad"></div>
+                                                            <div id="content-validaciones-soad-date"></div>
+                                                            <div id="content-validaciones-soad-tramite"></div>
+                                                            <div id="content-validaciones-plazo"></div>
+                                                            <div id="content-validaciones-monto"></div>
+                                                        </div>
+
+                                                        <div id="content-validaciones-tabla"></div>
                 
                                                         <input type="hidden" id="lead_id" name="lead_id" value="{{ $lead_id }}">
                                                         <input type="hidden" id="isValidateCellphone"  value="false">

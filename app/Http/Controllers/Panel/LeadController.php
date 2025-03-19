@@ -94,29 +94,45 @@ class LeadController extends Controller
         $isValidate = false;
         $lead = null;
 
+        $lead = Lead::create([
+            'name' => $getClientPerson->name,
+            'last_name' => $getClientPerson->last_name,
+            'second_last_name' => $getClientPerson->second_last_name,
+            'birth_date' => $getClientPerson->birth_date,
+            'rfc' => $getClientPerson->rfc,
+            'email' => $getClientPerson->email,
+            'agreement_id' => $getClientPerson->agreement_id,
+        ]);
         
 
-        
         if ($id == 'cellphone') {
-            $contentValidaciones      = '<p>Validación Prospecto (celular) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
-            
+            $contentValidaciones      = 'Sin coincidencias';
+            $contentValidacionesCellphone = '';
+            $statusCellphone = 0;
+
             if ($getClientPerson != null && $valInput == $getClientPerson->cellphone && 
                 $getClientPerson->active == 1 && $validateAgreement == true) {
                 $isValidateCellphone = true;
-                $contentValidaciones = '<p >Validación Prospecto (celular) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
+                $statusCellphone = 1;
+                $contentValidaciones = 'Coincidencia encontrada';
+                $contentValidacionesCellphone = 'Coincidencia encontrada';
             }
+            LeadValidation::saveEdit($lead->id, 'Prospecto - Celular', $statusCellphone, $contentValidaciones);
         }
        
         
         if ($id == 'rfc') {
-            $contentValidaciones      = '<p>Validación Prospecto (rfc) / '.$valInput.' / <span class="text-danger"> FAIL</span> </p>';
-            
+            $contentValidaciones      = 'Sin coincidencias';
+            $contentValidacionesRFC = 'Sin coincidencias';
+            $statusRFC = 0;
             if ($getClientPerson != null && $valInput == $getClientPerson->rfc && 
                 $getClientPerson->active == 1 && $validateAgreement == true) {
                 $isValidateRFC = true;
-                $contentValidaciones = '<p >Validación Prospecto (rfc) / '.$valInput.' /<span class="text-primary"> OK </span></p>';
+                $statusRFC = 1;
+                $contentValidaciones = 'Coincidencia encontrada';
+                $contentValidacionesRFC = 'Coincidencia encontrada';
             }
-
+            LeadValidation::saveEdit($lead->id, 'Prospecto - RFC', $statusRFC, $contentValidaciones);
         }
         
         $isValidate = $isValidateCellphone == true || $isValidateRFC == true ?  true : false;
@@ -135,11 +151,13 @@ class LeadController extends Controller
 
         if ($creditStatus === false) {
             $contentValidaciones .= '<p >Validación otro trámite pendiente / '.$nombreCliente.' /<span class="text-danger"> Tiene trámites pendientes </span></p>';
+            LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - Trámite pendiente', 0, 'Tiene trámites pendientes');
         } else {
             $contentValidaciones .= '<p >Validación otro trámite pendiente / '.$nombreCliente.' /<span class="text-primary"> Sin támites pendientes </span></p>';
+            LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - Trámite pendiente', 1, 'Sin trámites pendientes');
         }
-
-        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate, 'creditStatus' => $creditStatus]);
+        
+        return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'lead' => $lead, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate, 'creditStatus' => $creditStatus]);
     }
 
     public function validateCellphoneAndRfc($cellphone , $rfc, Lead $lead)
@@ -395,23 +413,27 @@ class LeadController extends Controller
         
     }
 
-    public function getSoad(ClientPerson $clientPerson, Agreement $agreement, FinancialProduct $financialProduct)
+    public function getSoad(ClientPerson $clientPerson, Agreement $agreement, FinancialProduct $financialProduct, $leadId)
     {
 
-        $textSoad = '<p> Validación Crédito Preautorizado / SOD Activo /<span  class="text-primary"> <br> OK:   Prospecto No tiene un Salario On-Demand activo
- </span> </p>';
+        $textSoad = 'Tiene un Salario On-Demand activo';
+        $statusPreautorizado = 0;
         if ($clientPerson->sod_active == 1) {
-            $textSoad = '<p>Validación Crédito Preautorizado / SOD Activo / <span class="text-danger"> <br>FAIL: Prospecto No tiene un Salario On-Demand activo</p>';
+            $textSoad = 'No tiene un Salario On-Demand activo';
+            $statusPreautorizado = 1;
         }
+        LeadValidation::saveEdit($leadId, 'Crédito preautorizado - SOD activo', $statusPreautorizado, $textSoad);
         //validar soad en fecha
         $getSodName = SodScheduleName::find($agreement->id);
-        $isSoadDate = '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-danger"> <br>FAIL: Solicitud fuera del rango de fechas </span> <p>';
+        $isSoadDate = 'Solicitud fuera del rango de fechas';
         $is_sod_on_date_allowed = false;
         if ($getSodName != null) {
             $nameField              = "schedule_$getSodName->id";
             $alias                  = "schedule_$getSodName->id as schedule";
             $getDate                = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
-            $isSoadDate             = $getDate!= null && $getDate->schedule == 1 ?  '<p>Validación Crédito Preautorizado / SOD en rango de fechas permitidas / <span class="text-primary"> <br>OK: Solicitud dentro del rango de fechas </span> <p>' : $isSoadDate;
+            $isSoadDate             = $getDate!= null && $getDate->schedule == 1 ?  'Solicitud dentro del rango de fechas' : $isSoadDate;
+            $statusRangoFechas             = $getDate!= null && $getDate->schedule == 1 ?  1 : 0;
+            LeadValidation::saveEdit($leadId, 'Crédito preautorizado - SOD en rango de fechas permitidas', $statusRangoFechas, $isSoadDate);
             //dd($agreement->id, $getDate);
 
             $is_sod_on_date_allowed = $getDate!= null && $getDate->schedule == 1 ? true : false;
@@ -476,13 +498,41 @@ class LeadController extends Controller
         return response()->json($dataReturn);
     }
 
-    public function getTramite(ClientPerson $clientPerson, FinancialProduct $financialProduct)
+    public function getLeadValidations($leadId)
+    {
+        try {
+            $validations = LeadValidation::getValidationsByLeadId($leadId);
+            $table = view('lead.table_validation', ['validations' => $validations])->render();
+            
+            return response()->json([
+                'success' => true,
+                'data' => $validations,
+                'table' => $table
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener las validaciones',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getTramite(ClientPerson $clientPerson, FinancialProduct $financialProduct, $leadId)
     {
         //validaciones sod
         $validateSod = Lead::validateSod($clientPerson, $financialProduct);
+        
+        // Add validation records based on validateSod results
+        LeadValidation::saveEdit(
+            $leadId, 
+            'Crédito preautorizado - Validación SOD', 
+            $validateSod['isTramite'] ? 1 : 0,
+            $validateSod['message']
+        );
+        
         $tramites = array();
         if ($validateSod['isTramite'] == true && $financialProduct->name != 'KC Salario On-Demand' ) {
-           
             foreach ($validateSod['tramite'] as $getTramite) {
                 $tramites[$getTramite] = config('enums.tipo_tramite')[$getTramite];
             }
@@ -490,8 +540,11 @@ class LeadController extends Controller
         if ($financialProduct->name == 'KC Salario On-Demand') {
             $tramites[1] =  config('enums.tipo_tramite')[1];
         }
+        
         $dataReturn = array(
-            'sodIsTramite' => $validateSod['isTramite'], 'sodMessage' => $validateSod['message'],'sodTramites' => $tramites
+            'sodIsTramite' => $validateSod['isTramite'], 
+            'sodMessage' => $validateSod['message'],
+            'sodTramites' => $tramites
         );
         return response()->json($dataReturn);
     }

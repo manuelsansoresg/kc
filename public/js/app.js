@@ -2288,33 +2288,35 @@ window.alerDeleteFinancialProduct = function (id) {
   });
 };
 
-document.addEventListener('DOMContentLoaded', function () {
-  // Obtener referencias a los radio buttons
-  var radioSi = document.getElementById('is_tramitar_active');
-  var radioNo = document.getElementById('is_tramitar_pending'); // Obtener todos los elementos con la clase 'tramitable'
+if (document.getElementById('is_tramitar_active')) {
+  document.addEventListener('DOMContentLoaded', function () {
+    // Obtener referencias a los radio buttons
+    var radioSi = document.getElementById('is_tramitar_active');
+    var radioNo = document.getElementById('is_tramitar_pending'); // Obtener todos los elementos con la clase 'tramitable'
 
-  var tramitables = document.querySelectorAll('.tramitable'); // Función para mostrar u ocultar elementos tramitables
+    var tramitables = document.querySelectorAll('.tramitable'); // Función para mostrar u ocultar elementos tramitables
 
-  function toggleTramitables() {
-    // Si el radio "Sí" está seleccionado, mostrar todos los elementos tramitables
-    if (radioSi.checked) {
-      tramitables.forEach(function (element) {
-        element.style.display = ''; // Muestra el elemento (valor por defecto)
-      });
-    } // Si el radio "No" está seleccionado, ocultar todos los elementos tramitables
-    else if (radioNo.checked) {
-      tramitables.forEach(function (element) {
-        element.style.display = 'none'; // Oculta el elemento
-      });
-    }
-  } // Añadir event listeners a los radio buttons
+    function toggleTramitables() {
+      // Si el radio "Sí" está seleccionado, mostrar todos los elementos tramitables
+      if (radioSi.checked) {
+        tramitables.forEach(function (element) {
+          element.style.display = ''; // Muestra el elemento (valor por defecto)
+        });
+      } // Si el radio "No" está seleccionado, ocultar todos los elementos tramitables
+      else if (radioNo.checked) {
+        tramitables.forEach(function (element) {
+          element.style.display = 'none'; // Oculta el elemento
+        });
+      }
+    } // Añadir event listeners a los radio buttons
 
 
-  radioSi.addEventListener('change', toggleTramitables);
-  radioNo.addEventListener('change', toggleTramitables); // Ejecutar la función al cargar la página para establecer el estado inicial
+    radioSi.addEventListener('change', toggleTramitables);
+    radioNo.addEventListener('change', toggleTramitables); // Ejecutar la función al cargar la página para establecer el estado inicial
 
-  toggleTramitables();
-});
+    toggleTramitables();
+  });
+}
 
 /***/ }),
 
@@ -2836,7 +2838,9 @@ window.checkDataLeadExist = function (valInput, id) {
       var clientPerson = result.clientPerson;
       var isValidate = result.isValidate;
       var creditStatus = result.creditStatus;
-      saveLead(false);
+      $('#lead_id').val(result.lead.id);
+      getLeadValidations();
+      $('#isNew').val(0);
 
       if (id == 'cellphone') {
         $('#content-validaciones-phone').html(result.contentValidaciones);
@@ -3232,7 +3236,8 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
   $('#content-error-producto-preautorizado').hide();
   $('#producto-deseado').hide();
   var typeProductId = $('#typeProductId').val();
-  axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/tramite/get").then(function (response) {
+  var leadId = $('#lead_id').val();
+  axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/" + leadId + "/tramite/get").then(function (response) {
     var result = response.data;
     var sodIsTramite = result.sodIsTramite;
     var sodMessage = result.sodMessage;
@@ -3288,6 +3293,7 @@ window.changeTramite = function () {
       var payment = result.payment;
       var productoDeseado = result.productoDeseado;
       var terms = result.terms;
+      getLeadValidations();
       $('#monto-maximo').val(montoMaximo);
       $('#plazo-maximo').val(plazoMaximo);
       $('#periodicidad').val(periodicidad);
@@ -3523,8 +3529,10 @@ window.validateSoad = function () {
     var clientPersonId = $('#client_person_id').val();
     var agreement = $('#lead-origin-agreement').val();
     var productId = $('#financial_product_id').val();
+    var lead_id = $('#lead_id').val();
     $('#content-error-producto-preautorizado').hide();
-    axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + "/soad/get").then(function (response) {
+    axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + "/" + lead_id + "/soad/get").then(function (response) {
+      getLeadValidations();
       var result = response.data;
       var typeProductId = result.type_product_id;
       $('#typeProductId').val(typeProductId);
@@ -3704,69 +3712,72 @@ document.addEventListener('DOMContentLoaded', function () {
   } // Escuchar cambios en el checkbox
 
 
-  sumaCompraCheck.addEventListener('change', function () {
-    if (this.checked) {
-      // Ocultar el contenedor original sin modificarlo
-      contentMontoSolicitado.style.display = 'none'; // Obtener el valor del plazo solicitado desde el campo oculto
+  if (document.getElementById('compra-cartera-plazo-solicitado')) {
+    sumaCompraCheck.addEventListener('change', function () {
+      if (this.checked) {
+        // Ocultar el contenedor original sin modificarlo
+        contentMontoSolicitado.style.display = 'none'; // Obtener el valor del plazo solicitado desde el campo oculto
 
-      var plazoSolicitadoInput = document.getElementById('compra-cartera-plazo-solicitado');
+        var plazoSolicitadoInput = document.getElementById('compra-cartera-plazo-solicitado');
 
-      if (plazoSolicitadoInput && plazoSolicitadoInput.value) {
-        var plazoSolicitado = plazoSolicitadoInput.value; // Buscar si existe esa opción en el select de plazo y seleccionarla
+        if (plazoSolicitadoInput && plazoSolicitadoInput.value) {
+          var plazoSolicitado = plazoSolicitadoInput.value; // Buscar si existe esa opción en el select de plazo y seleccionarla
 
-        Array.from(refPlazo.options).forEach(function (option) {
-          if (option.value == plazoSolicitado) {
-            refPlazo.value = option.value;
-            $(refPlazo).trigger('change'); // Trigger change para select2
-          }
-        });
-      } // 1. Llamar a axios para obtener los datos de compra de cartera
-
-
-      var creditId = $('#controldesk-credit_id').val();
-      var plazo = $('#ref-plazo').val();
-      var tramit_type = $('#tramit_type').val();
-      axios.get('/panel/kc-control-desk/' + creditId + '/' + tramit_type + '/' + plazo + '/compracartera/calculate').then(function (response) {
-        var data = response.data;
-        var compraCartera = data.compraCartera;
-        var montoSolicitado = data.montoSolicitado;
-        var montoRefinanciable = data.montoRefinanciable;
-        /* 
-        const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
-
-        var newMontoSolicitado = compraCartera; // Guardar el valor en un campo oculto para usarlo más tarde
-
-        document.getElementById('total-refinanciable').value = montoRefinanciable; // 2. Seleccionar el plazo correspondiente si existe
-        // Obtener el valor de monto solicitado correctamente usando DOM nativo
-
-        var montoSolicitadoText = '';
-        var tablas = document.querySelectorAll('table.table-striped'); // Buscar en todas las tablas la fila que contiene "Monto solicitado"
-
-        tablas.forEach(function (tabla) {
-          var filas = tabla.querySelectorAll('tr');
-          filas.forEach(function (fila) {
-            var celdas = fila.querySelectorAll('td');
-
-            if (celdas.length >= 2 && celdas[0].textContent.trim() === 'Monto solicitado') {
-              montoSolicitadoText = celdas[1].textContent.trim();
+          Array.from(refPlazo.options).forEach(function (option) {
+            if (option.value == plazoSolicitado) {
+              refPlazo.value = option.value;
+              $(refPlazo).trigger('change'); // Trigger change para select2
             }
           });
-        }); // 3. Crear elementos en el nuevo contenedor
+        } // 1. Llamar a axios para obtener los datos de compra de cartera
 
-        agregarElementosNuevoContenedor(montoSolicitado);
-      })["catch"](function (error) {
-        console.error('Error al obtener datos de compra de cartera:', error);
-      });
-    } else {
-      // Mostrar el contenedor original sin modificarlo
-      contentMontoSolicitado.style.display = ''; // Limpiar el contenedor nuevo
 
-      contentNewMontoSolicitado.innerHTML = ''; // Vaciar el campo oculto de total refinanciable
+        var creditId = $('#controldesk-credit_id').val();
+        var plazo = $('#ref-plazo').val();
+        var tramit_type = $('#tramit_type').val();
+        axios.get('/panel/kc-control-desk/' + creditId + '/' + tramit_type + '/' + plazo + '/compracartera/calculate').then(function (response) {
+          var data = response.data;
+          var compraCartera = data.compraCartera;
+          var montoSolicitado = data.montoSolicitado;
+          var montoRefinanciable = data.montoRefinanciable;
+          /* 
+          const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
 
-      document.getElementById('total-refinanciable').value = '';
-      getMontoSolicitado();
-    }
-  }); // Función para agregar elementos al nuevo contenedor
+          var newMontoSolicitado = compraCartera; // Guardar el valor en un campo oculto para usarlo más tarde
+
+          document.getElementById('total-refinanciable').value = montoRefinanciable; // 2. Seleccionar el plazo correspondiente si existe
+          // Obtener el valor de monto solicitado correctamente usando DOM nativo
+
+          var montoSolicitadoText = '';
+          var tablas = document.querySelectorAll('table.table-striped'); // Buscar en todas las tablas la fila que contiene "Monto solicitado"
+
+          tablas.forEach(function (tabla) {
+            var filas = tabla.querySelectorAll('tr');
+            filas.forEach(function (fila) {
+              var celdas = fila.querySelectorAll('td');
+
+              if (celdas.length >= 2 && celdas[0].textContent.trim() === 'Monto solicitado') {
+                montoSolicitadoText = celdas[1].textContent.trim();
+              }
+            });
+          }); // 3. Crear elementos en el nuevo contenedor
+
+          agregarElementosNuevoContenedor(montoSolicitado);
+        })["catch"](function (error) {
+          console.error('Error al obtener datos de compra de cartera:', error);
+        });
+      } else {
+        // Mostrar el contenedor original sin modificarlo
+        contentMontoSolicitado.style.display = ''; // Limpiar el contenedor nuevo
+
+        contentNewMontoSolicitado.innerHTML = ''; // Vaciar el campo oculto de total refinanciable
+
+        document.getElementById('total-refinanciable').value = '';
+        getMontoSolicitado();
+      }
+    });
+  } // Función para agregar elementos al nuevo contenedor
+
 
   function agregarElementosNuevoContenedor(monto) {
     // Limpiar el contenedor nuevo
@@ -3804,6 +3815,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 });
+
+function getLeadValidations() {
+  var leadId = $('#lead_id').val();
+  $('#content-validaciones-tabla').html('');
+  axios.get("/panel/lead/validations/".concat(leadId)).then(function (response) {
+    console.log('Response:', response); // Para depuración
+
+    if (response.data.success) {
+      var html = response.data.table;
+      $('#content-validaciones-tabla').html(html);
+    } else {
+      $('#content-validaciones-tabla').html('No se encontraron validaciones');
+    }
+  })["catch"](function (error) {
+    console.error('Error:', error);
+    $('#content-validaciones-tabla').html('Error al obtener las validaciones');
+  });
+}
 
 /***/ }),
 

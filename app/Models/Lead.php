@@ -66,40 +66,44 @@ class Lead extends Model
     public static function validateSod($clientPerson, $financialProduct)
     {
         $active = $clientPerson->credit_active;
-        $messages   = null;
-        $messages   = false;
-        //validacion 1
+        $validations = [];
         $tramite = null;
         $isTramite = false;
+
+        // Validación 6: Crédito personal activo
         if ($active == 1) {
-            $messageVal1 =  '<p> Validación Crédito Preautorizado / Crédito Personal activo /<span  class="text-primary">  <br> OK: Prospecto tiene uno o más créditos activos
-            </span> </p>';
-            //validacion 2
+            $validations[] = [
+                'validation_id' => 6,
+                'validation_name' => 'Crédito preautorizado - Crédito personal activo',
+                'text' => 'Tiene créditos activos',
+                'status' => 0
+            ];
+
+            // Validación 11 y siguientes
             $getValidacion2 = self::ProductoFinancieroCreditoAdicional($clientPerson, $financialProduct);
-            $messageVal1 .= $getValidacion2['message'];
-            $getTramite = $getValidacion2['tramite'];
+            $validations = array_merge($validations, $getValidacion2['validations']);
+            $tramite = $getValidacion2['tramite'];
             $isTramite = $getValidacion2['isTramite'];
-            if ($getTramite != null) {
-                $tramite = $getTramite;
-            }
         } else {
-            //continuar con la validacion 5
-            $messageVal1 =  '<p> Validación Crédito Preautorizado / Crédito Personal activo /<span  class="text-danger">  <br> FAIL: Prospecto no tiene créditos activos
-            </span> </p>';
+            $validations[] = [
+                'validation_id' => 6,
+                'validation_name' => 'Crédito preautorizado - Crédito personal activo',
+                'text' => 'No tiene créditos activos',
+                'status' => 1
+            ];
+
+            // Validación 7
             $getValidacion5 = self::validateCP($clientPerson, $financialProduct);
-            $messageVal1 .=  $getValidacion5['message'];
-            $getTramite = $getValidacion5['tramite'];
+            $validations = array_merge($validations, $getValidacion5['validations']);
+            $tramite = $getValidacion5['tramite'];
             $isTramite = $getValidacion5['isTramite'];
-            if ($getTramite != null) {
-                $tramite[] = $getTramite;
-            }
         }
 
-        
-
-        $messages = $messageVal1;
-        return array('message' => $messages, 'tramite' => $tramite, 'isTramite' => $isTramite);
-
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
     //validacion 2 ¿Producto Financiero permite crédito adicional?
     public function ProductoFinancieroCreditoAdicional($clientPerson, $financialProduct)
@@ -107,73 +111,95 @@ class Lead extends Model
         $additional_allowed = $financialProduct->additional_allowed;
         $tramite = array();
         $isTramite = false;
+        $validations = [];
         
+        // Validación 11
+        $validations[] = [
+            'validation_id' => 11,
+            'validation_name' => 'Crédito preautorizado - Producto permite Crédito adicional',
+            'text' => $additional_allowed == 1 ? 'Producto permite Crédito Adicional' : 'Producto no permite Crédito Adicional',
+            'status' => $additional_allowed
+        ];
+
         if ($additional_allowed == 1) {
-            $message =  '<p> Validación Crédito Preautorizado / Producto permite Crédito adicional /<span  class="text-primary">  <br> OK: Producto permite Crédito Adicional
-            </span> </p>';
             $getValidacion3 = self::CPVersion1($clientPerson, $financialProduct);
+            $validations = array_merge($validations, $getValidacion3['validations']);
             $isTramite = $getValidacion3['isTramite'];
-            $message .=  $getValidacion3['message'];
             $tramite = $getValidacion3['tramite'];
         } else {
-            $message =  '<p> Validación Crédito Preautorizado / Producto permite Crédito adicional / <span  class="text-danger">  <br> FAIL: Producto no permite Crédito Adicional
-            </span> </p>';
             $getValidacion4 = self::ProductoFinancieroRefinanciamiento($financialProduct);
-            
+            $validations = array_merge($validations, $getValidacion4['validations']);
             $isTramite = $getValidacion4['isTramite'];
-            $message .=  $getValidacion4['message'];
             $tramite = $getValidacion4['tramite'];
         }
-        return array('message' => $message, 'tramite' => $tramite, 'isTramite' => $isTramite);
+
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
     //validacion 3  ¿Tiene CP mínima (Versión 1)?
     public function CPVersion1($clientPerson, $financialProduct)
     {
         $payment_capacity = $clientPerson->payment_capacity;
         $min_payment = $financialProduct->min_payment;
+        $validations = [];
+        $tramite = array();
+        $isTramite = false;
+
+        // Validación 7
+        $validations[] = [
+            'validation_id' => 7,
+            'validation_name' => 'Crédito preautorizado - Capacidad de pago mínima',
+            'text' => $payment_capacity > $min_payment ? 'Sí tiene CP mínima' : 'No tiene CP mínima',
+            'status' => $payment_capacity > $min_payment ? 1 : 0
+        ];
 
         if ($payment_capacity > $min_payment) {
-            $message =  '<p> Validación Crédito Preautorizado / Capacidad de Pago mínima Crédito Adicional /<span  class="text-primary">  <br> OK: Sí tiene CP mínima
-            </span> </p>';
             $tramite[] = 2; //Crédito adicional
-            //validacion 4
-            $getValidacion4 = self::ProductoFinancieroRefinanciamiento($financialProduct);
-            $isTramite = $getValidacion4['isTramite'];
-            $tramite4 = $getValidacion4['tramite'];
-            if ($tramite4 != null) {
-                $tramite[] = $tramite4;
-            }
-            $message .= $getValidacion4['message'];
-        } else {
-            $message =  '<p>Validación Crédito Preautorizado / Capacidad de Pago mínima Crédito Adicional /<span  class="text-danger">  <br> FAIL: No tiene CP mínima
-            </span> </p>';
-            //validacion 4
-            $getValidacion4 = self::ProductoFinancieroRefinanciamiento($financialProduct);
-            $isTramite = $getValidacion4['isTramite'];
-            $tramite4 = $getValidacion4['tramite'];
-            if ($tramite4 != null) {
-                $tramite[] = $tramite4;
-            }
-            $message .= $getValidacion4['message'];
         }
-        return array('message' => $message, 'tramite' => $tramite, 'isTramite' => $isTramite);
+
+        // Validación 12
+        $getValidacion4 = self::ProductoFinancieroRefinanciamiento($financialProduct);
+        $validations = array_merge($validations, $getValidacion4['validations']);
+        $isTramite = $getValidacion4['isTramite'];
+        if ($getValidacion4['tramite'] != null) {
+            $tramite[] = $getValidacion4['tramite'];
+        }
+
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
     //validacion 4 ¿Producto Financiero permite Refinanciamiento?
     public function ProductoFinancieroRefinanciamiento($financialProduct)
     {
-        $message =  '<p> Validación Crédito Preautorizado / Producto permite Refinanciamiento / <span  class="text-danger">  <br> FAIL: Producto no permite Refinanciamiento
-            </span> </p>';
         $refinancing_allowed = $financialProduct->refinancing_allowed;
         $tramite = null;
         $isTramite = false;
+        $validations = [];
         
+        // Validación 12
+        $validations[] = [
+            'validation_id' => 12,
+            'validation_name' => 'Crédito preautorizado - Producto permite Refinanciamiento',
+            'text' => $refinancing_allowed == 1 ? 'Producto permite Refinanciamiento' : 'Producto no permite Refinanciamiento',
+            'status' => $refinancing_allowed
+        ];
+
         if ($refinancing_allowed == 1) {
-            $message =  '<p>Validación Crédito Preautorizado / Producto permite Refinanciamiento /<span  class="text-primary">  <br> OK: Producto permite Refinanciamiento
-            </span> </p>';
-            $tramite = 3; //Crédito adicional
+            $tramite = 3;
             $isTramite = true;
         }
-        return array('message' => $message, 'tramite' => $tramite, 'isTramite' => $isTramite);
+
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
     //validacion 5 ¿Tiene CP mínima (Versión 2)?
     public function validateCP($clientPerson, $financialProduct)
@@ -182,15 +208,26 @@ class Lead extends Model
         $min_payment = $financialProduct->min_payment;
         $tramite = null;
         $isTramite = false;
-        $message =  '<p> Validación Crédito Preautorizado / Capacidad de Pago mínima Crédito Nuevo / <span  class="text-danger"> <br> FAIL:  No tiene CP mínima
-        </span> </p>';
+        $validations = [];
+        
+        // Validación 7
+        $validations[] = [
+            'validation_id' => 7,
+            'validation_name' => 'Crédito preautorizado - Capacidad de pago mínima',
+            'text' => $payment_capacity > $min_payment ? 'Sí tiene CP mínima' : 'No tiene CP mínima',
+            'status' => $payment_capacity > $min_payment ? 1 : 0
+        ];
+
         if ($payment_capacity > $min_payment) {
-            $message =  '<p> Validación Crédito Preautorizado / Capacidad de Pago mínima Crédito Nuevo / <span  class="text-primary"> <br> OK:  Sí tiene CP mínima
-            </span> </p>';
             $tramite = 1;
             $isTramite = true;
         }
-        return array('message' => $message, 'tramite' => $tramite, 'isTramite' => $isTramite);
+
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
 
     public static function tagLead ($lead_id, $label, $is_array = false)

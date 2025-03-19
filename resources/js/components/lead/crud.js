@@ -408,7 +408,9 @@ window.checkDataLeadExist = function (valInput, id)
             let isValidate = result.isValidate;
             let creditStatus = result.creditStatus;
 
-            saveLead(false);
+            $('#lead_id').val(result.lead.id);
+            getLeadValidations();
+            $('#isNew').val(0);
             
             
 
@@ -475,7 +477,7 @@ window.checkDataLeadExist = function (valInput, id)
                 $('#is_viability').val(0);
             }
 
-
+            
 
         })
         .catch(e => {
@@ -864,6 +866,7 @@ window.modalRegisterAction = function (id_rel) {
     $('#modal-register-action').modal('show');
 }
 
+
 //llenar tipo de tramite
 function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
 {
@@ -873,14 +876,16 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
     $('#content-error-producto-preautorizado').hide();
     $('#producto-deseado').hide();
     let typeProductId = $('#typeProductId').val()
+    let leadId = $('#lead_id').val();
 
     axios
-    .get("/panel/lead/" + clientPersonId +"/"+financialProductId+"/tramite/get")
+    .get("/panel/lead/" + clientPersonId +"/"+financialProductId+"/"+leadId+"/tramite/get")
     .then(function (response) {
         let result = response.data;
         let sodIsTramite = result.sodIsTramite;
         let sodMessage = result.sodMessage;
         let sodTramites = result.sodTramites;
+        
         if (sodIsTramite == true) {
             
             $('#content-product-select').hide();
@@ -941,7 +946,7 @@ window.changeTramite = function()
             let payment = result.payment;
             let productoDeseado = result.productoDeseado;
             let terms = result.terms;
-
+            getLeadValidations();
             
 
             $('#monto-maximo').val(montoMaximo);
@@ -1239,12 +1244,12 @@ window.validateSoad = function()
         let clientPersonId = $('#client_person_id').val();
         let agreement = $('#lead-origin-agreement').val();
         let productId = $('#financial_product_id').val();
-
+        let lead_id = $('#lead_id').val();
         $('#content-error-producto-preautorizado').hide();
         axios
-        .get("/panel/lead/"+clientPersonId+"/"+agreement+"/"+productId+"/soad/get")
+        .get("/panel/lead/"+clientPersonId+"/"+agreement+"/"+productId+"/"+lead_id+"/soad/get")
         .then(function (response) {
-            
+            getLeadValidations();
             let result = response.data;
             let typeProductId = result.type_product_id;
             $('#typeProductId').val(typeProductId);
@@ -1446,78 +1451,81 @@ function crearGraficaApilada(contenedor, valorInteres, valorDeuda, colorInteres 
     }
     
     // Escuchar cambios en el checkbox
-    sumaCompraCheck.addEventListener('change', function() {
-        if (this.checked) {
-            // Ocultar el contenedor original sin modificarlo
-            contentMontoSolicitado.style.display = 'none';
-            
-            // Obtener el valor del plazo solicitado desde el campo oculto
-            const plazoSolicitadoInput = document.getElementById('compra-cartera-plazo-solicitado');
-            if (plazoSolicitadoInput && plazoSolicitadoInput.value) {
-                const plazoSolicitado = plazoSolicitadoInput.value;
+    if (document.getElementById('compra-cartera-plazo-solicitado')) {
+        
+        sumaCompraCheck.addEventListener('change', function() {
+            if (this.checked) {
+                // Ocultar el contenedor original sin modificarlo
+                contentMontoSolicitado.style.display = 'none';
                 
-                // Buscar si existe esa opción en el select de plazo y seleccionarla
-                Array.from(refPlazo.options).forEach(option => {
-                    if (option.value == plazoSolicitado) {
-                        refPlazo.value = option.value;
-                        $(refPlazo).trigger('change'); // Trigger change para select2
-                    }
-                });
-            }
-            
-            // 1. Llamar a axios para obtener los datos de compra de cartera
-            let creditId = $('#controldesk-credit_id').val();
-            let plazo = $('#ref-plazo').val();
-            let tramit_type = $('#tramit_type').val();
-            
-            axios.get('/panel/kc-control-desk/'+creditId+ '/'+tramit_type+'/'+plazo+'/compracartera/calculate')
-                .then(function(response) {
-                    const data = response.data;
-                    const compraCartera = data.compraCartera;
-                    const montoSolicitado = data.montoSolicitado;
-                    const montoRefinanciable = data.montoRefinanciable;
-                    /* 
-                    const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
-                    const newMontoSolicitado = compraCartera;
-                    // Guardar el valor en un campo oculto para usarlo más tarde
-                    document.getElementById('total-refinanciable').value = montoRefinanciable;
+                // Obtener el valor del plazo solicitado desde el campo oculto
+                const plazoSolicitadoInput = document.getElementById('compra-cartera-plazo-solicitado');
+                if (plazoSolicitadoInput && plazoSolicitadoInput.value) {
+                    const plazoSolicitado = plazoSolicitadoInput.value;
                     
-                    // 2. Seleccionar el plazo correspondiente si existe
-                    // Obtener el valor de monto solicitado correctamente usando DOM nativo
-                    let montoSolicitadoText = '';
-                    const tablas = document.querySelectorAll('table.table-striped');
-                    
-                    // Buscar en todas las tablas la fila que contiene "Monto solicitado"
-                    tablas.forEach(tabla => {
-                        const filas = tabla.querySelectorAll('tr');
-                        filas.forEach(fila => {
-                            const celdas = fila.querySelectorAll('td');
-                            if (celdas.length >= 2 && celdas[0].textContent.trim() === 'Monto solicitado') {
-                                montoSolicitadoText = celdas[1].textContent.trim();
-                            }
-                        });
+                    // Buscar si existe esa opción en el select de plazo y seleccionarla
+                    Array.from(refPlazo.options).forEach(option => {
+                        if (option.value == plazoSolicitado) {
+                            refPlazo.value = option.value;
+                            $(refPlazo).trigger('change'); // Trigger change para select2
+                        }
                     });
-                    
-                    // 3. Crear elementos en el nuevo contenedor
-                    
-                    agregarElementosNuevoContenedor(montoSolicitado);
-                })
-                .catch(function(error) {
-                    console.error('Error al obtener datos de compra de cartera:', error);
-                });
-        } else {
-            // Mostrar el contenedor original sin modificarlo
-            contentMontoSolicitado.style.display = '';
-            
-            // Limpiar el contenedor nuevo
-            contentNewMontoSolicitado.innerHTML = '';
-            
-            // Vaciar el campo oculto de total refinanciable
-            document.getElementById('total-refinanciable').value = '';
-            getMontoSolicitado();
-            
-        }
-    });
+                }
+                
+                // 1. Llamar a axios para obtener los datos de compra de cartera
+                let creditId = $('#controldesk-credit_id').val();
+                let plazo = $('#ref-plazo').val();
+                let tramit_type = $('#tramit_type').val();
+                
+                axios.get('/panel/kc-control-desk/'+creditId+ '/'+tramit_type+'/'+plazo+'/compracartera/calculate')
+                    .then(function(response) {
+                        const data = response.data;
+                        const compraCartera = data.compraCartera;
+                        const montoSolicitado = data.montoSolicitado;
+                        const montoRefinanciable = data.montoRefinanciable;
+                        /* 
+                        const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
+                        const newMontoSolicitado = compraCartera;
+                        // Guardar el valor en un campo oculto para usarlo más tarde
+                        document.getElementById('total-refinanciable').value = montoRefinanciable;
+                        
+                        // 2. Seleccionar el plazo correspondiente si existe
+                        // Obtener el valor de monto solicitado correctamente usando DOM nativo
+                        let montoSolicitadoText = '';
+                        const tablas = document.querySelectorAll('table.table-striped');
+                        
+                        // Buscar en todas las tablas la fila que contiene "Monto solicitado"
+                        tablas.forEach(tabla => {
+                            const filas = tabla.querySelectorAll('tr');
+                            filas.forEach(fila => {
+                                const celdas = fila.querySelectorAll('td');
+                                if (celdas.length >= 2 && celdas[0].textContent.trim() === 'Monto solicitado') {
+                                    montoSolicitadoText = celdas[1].textContent.trim();
+                                }
+                            });
+                        });
+                        
+                        // 3. Crear elementos en el nuevo contenedor
+                        
+                        agregarElementosNuevoContenedor(montoSolicitado);
+                    })
+                    .catch(function(error) {
+                        console.error('Error al obtener datos de compra de cartera:', error);
+                    });
+            } else {
+                // Mostrar el contenedor original sin modificarlo
+                contentMontoSolicitado.style.display = '';
+                
+                // Limpiar el contenedor nuevo
+                contentNewMontoSolicitado.innerHTML = '';
+                
+                // Vaciar el campo oculto de total refinanciable
+                document.getElementById('total-refinanciable').value = '';
+                getMontoSolicitado();
+                
+            }
+        });
+    }
     
     // Función para agregar elementos al nuevo contenedor
     function agregarElementosNuevoContenedor(monto) {
@@ -1562,3 +1570,23 @@ function crearGraficaApilada(contenedor, valorInteres, valorDeuda, colorInteres 
         });
     }
 });
+
+function getLeadValidations() {
+    let leadId = $('#lead_id').val();
+    $('#content-validaciones-tabla').html('');
+    axios.get(`/panel/lead/validations/${leadId}`)
+        .then(function (response) {
+            console.log('Response:', response); // Para depuración
+            if (response.data.success) {
+                let html = response.data.table;
+                
+                $('#content-validaciones-tabla').html(html);
+            } else {
+                $('#content-validaciones-tabla').html('No se encontraron validaciones');
+            }
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+            $('#content-validaciones-tabla').html('Error al obtener las validaciones');
+        });
+}
