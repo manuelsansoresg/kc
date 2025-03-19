@@ -82,7 +82,7 @@ class Lead extends Model
             // Validación 11 y siguientes
             $getValidacion2 = self::ProductoFinancieroCreditoAdicional($clientPerson, $financialProduct);
             $validations = array_merge($validations, $getValidacion2['validations']);
-            $tramite = $getValidacion2['tramite'];
+            $tramite = $getValidacion2;
             $isTramite = $getValidacion2['isTramite'];
         } else {
             $validations[] = [
@@ -95,7 +95,7 @@ class Lead extends Model
             // Validación 7
             $getValidacion5 = self::validateCP($clientPerson, $financialProduct);
             $validations = array_merge($validations, $getValidacion5['validations']);
-            $tramite = $getValidacion5['tramite'];
+            $tramite = $getValidacion5;
             $isTramite = $getValidacion5['isTramite'];
         }
 
