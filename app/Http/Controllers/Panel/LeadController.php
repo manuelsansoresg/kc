@@ -553,13 +553,14 @@ class LeadController extends Controller
         }
         
         $tramites = array();
-        if (isset($validateSod['isTramite']) && $validateSod['isTramite'] == true && $financialProduct->name != 'KC Salario On-Demand') {
+        
+        /* if (isset($validateSod['isTramite']) && $validateSod['isTramite'] == true && $financialProduct->name != 'KC Salario On-Demand') {
             if (isset($validateSod['tramite'])) {
                 foreach ($validateSod['tramite'] as $getTramite) {
                     $tramites[$getTramite] = config('enums.tipo_tramite')[$getTramite];
                 }
             }
-        }
+        } */
         if ($financialProduct->name == 'KC Salario On-Demand') {
             $tramites[1] = config('enums.tipo_tramite')[1];
         }
