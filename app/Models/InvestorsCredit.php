@@ -33,58 +33,64 @@ class InvestorsCredit extends Model
     public static function saveEdit($creditId)
     {
         $getCredit = Credit::find($creditId);
-        if ($getCredit != null) {
-            $applied_financial_product = $getCredit->applied_financial_product;
-            $applied_import = $getCredit->applied_import;
-            $applied_loan_total_amount = $getCredit->applied_loan_total_amount;
-            $getInvestors = InvestorProduct::where('financial_products_id', $applied_financial_product)->get();
-            
-            foreach ($getInvestors as $getInvestors) {
-                try {
-                    $getInvestor = Investor::find($getInvestors->investor_id);
-                    $getFinancialProduct = FinancialProduct::find($applied_financial_product);
-                    $commissionRate = $getFinancialProduct->collection_commission_rate;
-                    $percent =  $getInvestor->loan_active == 1 ? ($getInvestor->loan_available / $getFinancialProduct->loan_available) * 100 : 0;
-                    
+        if (!$getCredit) {
+            return;
+        }
+
+        $appliedFinancialProduct = $getCredit->applied_financial_product;
+        $appliedImport = $getCredit->applied_import;
+        $appliedLoanTotalAmount = $getCredit->applied_loan_total_amount;
+
+        // Obtener el producto financiero del crédito
+        $getFinancialProduct = FinancialProduct::find($appliedFinancialProduct);
+        if (!$getFinancialProduct) {
+            return;
+        }
+
+        $totalLoanAvailable = $getFinancialProduct->loan_available;
+
+        // Obtener inversionistas activos que participan en este producto financiero
+        $getInvestors = InvestorProduct::where('financial_products_id', $appliedFinancialProduct)
+            ->pluck('investor_id');
+
+        $activeInvestors = Investor::whereIn('id', $getInvestors)
+            ->where('loan_active', 1)
+            ->get();
+
+        foreach ($activeInvestors as $investor) {
+            try {
+                // Cálculo del porcentaje de participación
+                $percent = ($investor->loan_available / $totalLoanAvailable) * 100;
+
+                if ($percent > 0) {
+                    // Cálculo del importe proporcional
+                    $import = ($percent * $appliedImport) / 100;
+                    $totalCredit = ($percent * $appliedLoanTotalAmount) / 100;
+
                     $dataInvestorCredit = [
                         'credit_id' => $creditId,
-                        'investor_id' => $getInvestor->id,
+                        'investor_id' => $investor->id,
+                        'percentage' => $percent,
+                        'import' => $import,
+                        'commission_rate' => $getFinancialProduct->collection_commission_rate,
+                        'total_credit' => $totalCredit,
+                        'status' => 1
                     ];
-                    
-                    $existInvestorCredit = InvestorsCredit::where($dataInvestorCredit);
-                    $dataInvestorCredit['percentage'] = $percent;
-                    $dataInvestorCredit['import'] = ($percent * $applied_import) / 100;
-                    $dataInvestorCredit['commission_rate'] = $commissionRate;
-                    $dataInvestorCredit['total_credit'] = ($percent * $applied_loan_total_amount) / 100;
-                    
-                    if ($percent > 0) {
-                        if ($existInvestorCredit->count() == 0) {
-                            $dataInvestorCredit['status'] = 1;
-                            InvestorsCredit::create($dataInvestorCredit);
-                        } else {
-                            $existInvestorCredit->update($dataInvestorCredit);
-                        }
-                    }
-                } catch (\Exception $th) {
-                    //throw $th;
-                }
-            }
 
-            // Actualizar credit_active y sod_active en client_person
-            $clientPersonId = $getCredit->client_person_id;
-            
-            $hasActiveCredit = InvestorsCredit::whereIn('credit_id', Credit::where('client_person_id', $clientPersonId)->where('product_id', '!=', 3)->pluck('id'))
-                ->where('status', '>', 0)
-                ->exists();
-            
-            $hasActiveSod = InvestorsCredit::whereIn('credit_id', Credit::where('client_person_id', $clientPersonId)->where('product_id', '=', 3)->pluck('id'))
-                ->where('status', '>', 0)
-                ->exists();
-            
-            ClientPerson::where('id', $clientPersonId)->update([
-                'credit_active' => $hasActiveCredit ? 1 : 0,
-                'sod_active' => $hasActiveSod ? 1 : 0
-            ]);
+                    // Buscar si ya existe un registro en investors_credits
+                    $existInvestorCredit = InvestorsCredit::where('credit_id', $creditId)
+                        ->where('investor_id', $investor->id)
+                        ->first();
+
+                    if (!$existInvestorCredit) {
+                        InvestorsCredit::create($dataInvestorCredit);
+                    } else {
+                        $existInvestorCredit->update($dataInvestorCredit);
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error("Error al procesar investor_id {$investor->id}: " . $e->getMessage());
+            }
         }
 
     }
