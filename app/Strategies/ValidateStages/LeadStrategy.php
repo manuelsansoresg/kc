@@ -15,7 +15,7 @@ class LeadStrategy implements ValidateStagesInterface
 {
     public function getValidate($lead_id)
     {
-        $validate = LeadValidation::getValidationsByLeadId($lead_id);
+        $validate = LeadValidation::getStatusByLeadId($lead_id);
         return $validate;
     }
 
