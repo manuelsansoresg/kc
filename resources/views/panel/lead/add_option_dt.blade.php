@@ -46,9 +46,7 @@ $user = Auth::user();
                             $getFinancial = $m_financial_product::find($lead->financial_product_id);
                             
                         @endphp
-                        <li>go_ahead: {{ $lead->go_ahead }}</li>
-                        <li>creditStatus: {{ $creditStatus }}</li>
-                        <li>validate: {{ $validate }}</li>
+                       
                         @if (($lead->go_ahead === 0  && $creditStatus === false) || $validate === 0 )
                             <li>
                                 <a class="pointer" onclick="modalValidate({{ $id }}, 'lead', 'dt-lead')">
