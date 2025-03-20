@@ -418,6 +418,13 @@ class Lead extends Model
             if ($is_asesor === true) {
                 $data['asesor_id'] =  Auth::user()->id;
             }
+            $financialProduct = FinancialProduct::find($data['financial_product_id']);
+            if ($financialProduct != null && $financialProduct && $financialProduct->type_product_id == 3) {
+                $data['selected_term'] = 1;
+                if ($data['sod_withdraw_amount'] != '') {
+                    $data['selected_loan'] = $data['sod_withdraw_amount'];
+                }
+            }
             $lead = new Lead($data);
             $lead->save();
 
