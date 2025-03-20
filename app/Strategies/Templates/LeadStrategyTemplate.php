@@ -59,11 +59,9 @@ class LeadStrategyTemplate implements TemplateInterface
                 $client_person = ClientPerson::where('rfc', $lead->rfc)->first();
             }
             
-            
-
             $financialProduct = FinancialProduct::find($lead->financial_product_id);
             $productTypeId = $financialProduct ? $financialProduct->type_product_id : null;
-            
+
             //* create credit
             $data_lead = array(
                 'client_person_id' => $client_person->id,
@@ -90,30 +88,32 @@ class LeadStrategyTemplate implements TemplateInterface
                 'tramit_type' => $lead->tramit_type,
             );
 
+            // Si el producto es SOD (product_id = 3)
             if ($lead->product_id == 3) {
                 $sod_schedule_id = Agreement::where('sod_schedule_id', $lead->agreement_id)->first();
                 if ($sod_schedule_id != null) {
                     $nameSchedule = 'schedule_'.$sod_schedule_id->sod_schedule_id;
                     $getSchedule = SodScheduleDate::where($nameSchedule, 2)->orderBy($nameSchedule, 'ASC')->first();
-                    $data_lead['collection_date']= $getSchedule->fecha; 
+                    $data_lead['collection_date'] = $getSchedule->fecha; 
                 }
 
                 $financial_product_id = $lead->financial_product_id;
                 $getFinancial = FinancialProduct::find($financial_product_id);
-                $data_lead['product_id']= $lead->product_id; 
-                $data_lead['applied_financial_product']= $lead->financial_product_id; 
-                $data_lead['applied_import']= $lead->selected_loan; 
-                $data_lead['applied_term']= $lead->selected_term; 
-                $data_lead['applied_periodicity']= $getFinancial != null ? $getFinancial->periodicity_id : null ; 
-                $data_lead['applied_payment']= $lead->sod_total_payment; 
-                $data_lead['applied_loan_total_amount']= $lead->sod_total_payment; 
-                $data_lead['applied_interest_rate']=0; 
-                $data_lead['applied_CAT']= 0; 
-                $data_lead['opening_Commission_percentage']= 0; 
-                $data_lead['net_amount']= $lead->sod_withdraw_amount; 
-                $data_lead['sod_commission']= $lead->sod_commision_amount; 
-                $data_lead['opening_commission']= 0; 
-                
+
+                // Aplicar las modificaciones solicitadas
+                $data_lead['product_id'] = $lead->product_id; 
+                $data_lead['applied_financial_product'] = $lead->financial_product_id; 
+                $data_lead['applied_import'] = $lead->sod_withdraw_amount; // Cambio aquí
+                $data_lead['applied_term'] = 1; // Cambio aquí
+                $data_lead['applied_periodicity'] = $getFinancial ? $getFinancial->periodicity_id : null;
+                $data_lead['applied_payment'] = $lead->sod_total_payment; 
+                $data_lead['applied_loan_total_amount'] = $lead->sod_total_payment; 
+                $data_lead['applied_interest_rate'] = 0; 
+                $data_lead['applied_CAT'] = 0; 
+                $data_lead['opening_Commission_percentage'] = 0; 
+                $data_lead['net_amount'] = $lead->sod_withdraw_amount; 
+                $data_lead['sod_commission'] = $lead->sod_commision_amount; 
+                $data_lead['opening_commission'] = 0; 
             }
 
             //validar que el credito no exista con los mismos datos
