@@ -45,7 +45,7 @@ $user = Auth::user();
                         @php
                             $isMove = true;
                             $getFinancial = $m_financial_product::find($lead->financial_product_id);
-                            if ($getFinancial!= null && $getFinancial->type_product_id != 3) {
+                            if ($getFinancial!= null && $validate === true && $getFinancial->type_product_id != 3) {
                                 $isMove = $lead->selected_loan > 0  && $lead->selected_term > 0  ?  true : false;
                             }
                         @endphp

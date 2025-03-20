@@ -293,7 +293,6 @@ class Lead extends Model
                 $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'lead' => $query, 'validate' => $validate, 'creditStatus' => $creditStatus])->render();
                 $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query, 'validate' => $validate,  'validate' => $validate, 'creditStatus' => $creditStatus])->render();
                 
-                $lbl_status     = '<span class="text-success">Valido</span>';
                 $financialProduct =  FinancialProduct::find($query->financial_product_id);
                 $tipoCredito = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
                 $alias_product = $tipoCredito!= null ? $tipoCredito->alias : null;
@@ -304,9 +303,7 @@ class Lead extends Model
                 
     
                 
-                if ($validate['error'] === true) {
-                    $lbl_status = '<span class="text-danger">Invalido</span>';
-                }
+                
                 $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
                 $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
 

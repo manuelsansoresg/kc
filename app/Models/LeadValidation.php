@@ -42,4 +42,59 @@ class LeadValidation extends Model
     {
         return LeadValidation::where('lead_id', $leadId)->get();
     }
+
+    public static function getStatusByLeadId($leadId){
+        $headers = array(
+            'Prospecto - Celular',
+            'Prospecto - RFC',
+            'Prospecto - Cliente activo',
+            'Crédito preautorizado - Trámite pendiente',
+            'Crédito preautorizado - SOD activo',
+            'Crédito preautorizado - SOD en rango de fechas permitidas',
+            'Crédito preautorizado - Crédito personal activo',
+            'Crédito preautorizado - Capacidad de pago mínima',
+            'Crédito seleccionado - Plazo seleccionado',
+            'Crédito seleccionado - Importe seleccionado',
+            'Crédito preautorizado - Trámite SOD autorizado',
+            'Crédito preautorizado - Producto permite Crédito adicional',
+            'Crédito preautorizado - Producto permite Refinanciamiento',
+            'Crédito preautorizado - Producto permite Crédito adicional',
+            'Crédito preautorizado - Producto permite Refinanciamiento',
+        );
+        $validations = LeadValidation::where('lead_id', $leadId)->get();
+        $allValid = true;
+        $phoneOrRfcValid = false;
+
+        // Check phone or RFC validation (at least one should be valid)
+        foreach ($validations as $validation) {
+            if ($validation->validation == 'Prospecto - Celular' || $validation->validation == 'Prospecto - RFC') {
+                if ($validation->status == 1) {
+                    $phoneOrRfcValid = true;
+                    break;
+                }
+            }
+        }
+
+        // Check all other validations must be valid (status = 1)
+        foreach ($headers as $header) {
+            if ($header != 'Prospecto - Celular' && $header != 'Prospecto - RFC') {
+                $found = false;
+                foreach ($validations as $validation) {
+                    if ($validation->validation == $header) {
+                        $found = true;
+                        if ($validation->status != 1) {
+                            $allValid = false;
+                            break 2;
+                        }
+                    }
+                }
+                if (!$found) {
+                    $allValid = false;
+                    break;
+                }
+            }
+        }
+
+        return ($phoneOrRfcValid && $allValid) ? 1 : 0;
+    }
 }
