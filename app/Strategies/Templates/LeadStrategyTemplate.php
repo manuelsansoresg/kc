@@ -13,6 +13,7 @@ use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\InvestorsCredit;
 use App\Models\Lead;
 use App\Models\Product;
 use App\Models\SodScheduleDate;
@@ -118,6 +119,7 @@ class LeadStrategyTemplate implements TemplateInterface
 
             //validar que el credito no exista con los mismos datos
             $credit = Credit::create($data_lead);
+            InvestorsCredit::saveEdit($credit->id);
             CreditPayOff::where('lead_id', $lead->id)->update([
                 'new_kc_credit_id' => $credit->id
             ]);
