@@ -52,10 +52,10 @@ class InvestorsCredit extends Model
                 if ($getInvestor && $getInvestor->loan_active == 1) {
                     $hasActiveInvestor = true;
                     $minAmount = min($loanAvailable, $applied_import);
-                    $percent = $minAmount > 0 ? ($minAmount / $getInvestor->loan_available) * 100 : 0;
+                    $percent = $loanAvailable > 0 ? ($applied_import / $getInvestor->loan_available) * 100 : 0;
                     $percent = min($percent, 100); // Asegurar que no sea mayor a 100
                     
-                    $import = ($percent * $applied_import) / 100;
+                    $import = ($percent * $minAmount) / 100;
                     $total_credit = ($percent * $applied_loan_total_amount) / 100;
                 }
                 
