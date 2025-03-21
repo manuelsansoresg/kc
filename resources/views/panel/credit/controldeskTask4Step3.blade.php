@@ -49,7 +49,7 @@
             </tbody>
         </table>
         <div class="col-12 mt-3">
-            <span class="preview-title-lg overline-title">Refinanciamiento</span>
+            <span class="preview-title-lg overline-title">Refinanciamientos</span>
         </div>
         <table class="table table-striped">
             <thead>
