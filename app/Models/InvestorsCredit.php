@@ -51,11 +51,11 @@ class InvestorsCredit extends Model
                 $getInvestor = Investor::find($investorProduct->investor_id);
                 if ($getInvestor && $getInvestor->loan_active == 1) {
                     $hasActiveInvestor = true;
-                    $minAmount = min($loanAvailable, $applied_import);
-                    $percent = $loanAvailable > 0 ? ($getInvestor->loan_available / $loanAvailable) * 100 : 0;
+                    $maxAmount = max($loanAvailable, $applied_import);
+                    $percent = $loanAvailable > 0 ? ($getInvestor->loan_available / $maxAmount) * 100 : 0;
                     $percent = min($percent, 100); // Asegurar que no sea mayor a 100
                     
-                    $import = ($percent * $minAmount) / 100;
+                    $import = ($percent * $applied_import) / 100;
                     $total_credit = ($percent * $applied_loan_total_amount) / 100;
                 }
                 
