@@ -548,13 +548,13 @@ class LeadController extends Controller
                 // Verificar que todos los campos necesarios existan
                 $validationName = $validation['validation_name'] ?? 'Validación sin nombre';
                 $status = $validation['status'] ?? false;
-                $message = $validation['message'] ?? 'Sin mensaje';
+                $text = $validation['text'] ?? 'Sin mensaje';
 
                 LeadValidation::saveEdit(
                     $leadId,
                     $validationName,
                     $status ? 1 : 0,
-                    $message
+                    $text
                 );
             }
         }
