@@ -1113,7 +1113,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $creditRefinanced = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount', 'deadline_date', 'annual_int_rate_iva')
         ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
         ->where('credit_pay_off.client_person_id', $client->id)
-        ->where('kc_credit_id_payed_off', '=!', null)
+        ->where('kc_credit_id_payed_off', '!=', null)
         ->get();
         
         $totalCompraCartera = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount', 'deadline_date', 'annual_int_rate_iva')
