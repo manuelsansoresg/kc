@@ -74,6 +74,7 @@ class LeadStrategyTemplate implements TemplateInterface
                 'type_id' => $lead->type_id,
                 'asesor_id' => $lead->asesor_id,
                 'importe_solicitado' => $lead->importe_solicitado,
+                'applied_import' => $lead->importe_solicitado,
                 'bank_id' => $lead->bank_id,
                 'tipo_credito' => $lead->tipo_credito,
                 'consulta_buro' => $lead->consulta_buro,
