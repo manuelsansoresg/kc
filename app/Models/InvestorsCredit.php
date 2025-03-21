@@ -35,8 +35,8 @@ class InvestorsCredit extends Model
         $getCredit = Credit::find($creditId);
         if ($getCredit != null) {
             $applied_financial_product = $getCredit->applied_financial_product;
-            $applied_import = $getCredit->applied_import;
-            $applied_loan_total_amount = $getCredit->applied_loan_total_amount;
+            $applied_import = $getCredit->applied_import != null ? $getCredit->applied_import : 0;
+            $applied_loan_total_amount = $getCredit->applied_loan_total_amount != null ? $getCredit->applied_loan_total_amount : 0;
             
             $getFinancialProduct = FinancialProduct::find($applied_financial_product);
             $loanAvailable = $getFinancialProduct ? $getFinancialProduct->loan_available : 0;
@@ -48,45 +48,46 @@ class InvestorsCredit extends Model
             $hasActiveInvestor = false;
             
             foreach ($getInvestors as $investorProduct) {
-                try {
-                    $getInvestor = Investor::find($investorProduct->investor_id);
+                $getInvestor = Investor::find($investorProduct->investor_id);
+                if ($getInvestor && $getInvestor->loan_active == 1) {
+                    $hasActiveInvestor = true;
+                    $minAmount = min($loanAvailable, $applied_import);
+                    $percent = $minAmount > 0 ? ($getInvestor->loan_available / $minAmount) * 100 : 0;
                     
-                    if ($getInvestor && $getInvestor->loan_active == 1) {
-                        $hasActiveInvestor = true;
-                        $percent = ($getInvestor->loan_available / min($loanAvailable, $applied_import)) * 100;
-                        $import = ($percent * $applied_import) / 100;
-                        $total_credit = ($percent * $applied_loan_total_amount) / 100;
-                    } else {
-                        $percent = 0;
-                        $import = 0;
-                        $total_credit = 0;
-                    }
-                    
-                    $dataInvestorCredit = [
-                        'credit_id' => $creditId,
-                        'investor_id' => $getInvestor ? $getInvestor->id : null,
-                        'percentage' => $percent,
-                        'import' => $import,
-                        'total_credit' => $total_credit,
-                        'commission_rate' => $getFinancialProduct->collection_commission_rate,
-                        'status' => ($percent > 0) ? 1 : 0
-                    ];
-                    
-                    $existInvestorCredit = InvestorsCredit::where('credit_id', $creditId)
-                        ->where(function ($query) use ($getInvestor) {
-                            $query->where('investor_id', $getInvestor ? $getInvestor->id : null);
-                        })->first();
-                    
-                    if ($existInvestorCredit) {
-                        $existInvestorCredit->update($dataInvestorCredit);
-                    } else {
-                        InvestorsCredit::create($dataInvestorCredit);
-                    }
-                    
-                    $totalAssigned += $import;
+                    $import = ($percent * $applied_import) / 100;
+                    $total_credit = ($percent * $applied_loan_total_amount) / 100;
+                } else {
+                    $percent = 0;
+                    $import = 0;
+                    $total_credit = 0;
+                }
+                
+                $dataInvestorCredit = [
+                    'credit_id' => $creditId,
+                    'investor_id' => $getInvestor ? $getInvestor->id : null,
+                    'percentage' => $percent,
+                    'import' => $import,
+                    'total_credit' => $total_credit,
+                    'commission_rate' => $getFinancialProduct->collection_commission_rate,
+                    'status' => ($percent > 0) ? 1 : 0
+                ];
+                
+                $existInvestorCredit = InvestorsCredit::where('credit_id', $creditId)
+                    ->where(function ($query) use ($getInvestor) {
+                        $query->where('investor_id', $getInvestor ? $getInvestor->id : null);
+                    })->first();
+                
+                if ($existInvestorCredit) {
+                    $existInvestorCredit->update($dataInvestorCredit);
+                } else {
+                    InvestorsCredit::create($dataInvestorCredit);
+                }
+                
+                $totalAssigned += $import;
+               /*  try {
                 } catch (\Exception $th) {
                     // Log error
-                }
+                } */
             }
             
             // Si no hay inversionistas activos, crear un registro con investor_id NULL
