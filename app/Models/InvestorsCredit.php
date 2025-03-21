@@ -52,14 +52,11 @@ class InvestorsCredit extends Model
                 if ($getInvestor && $getInvestor->loan_active == 1) {
                     $hasActiveInvestor = true;
                     $minAmount = min($loanAvailable, $applied_import);
-                    $percent = $minAmount > 0 ? ($getInvestor->loan_available / $minAmount) * 100 : 0;
+                    $percent = $minAmount > 0 ? ($minAmount / $getInvestor->loan_available) * 100 : 0;
+                    $percent = min($percent, 100); // Asegurar que no sea mayor a 100
                     
                     $import = ($percent * $applied_import) / 100;
                     $total_credit = ($percent * $applied_loan_total_amount) / 100;
-                } else {
-                    $percent = 0;
-                    $import = 0;
-                    $total_credit = 0;
                 }
                 
                 $dataInvestorCredit = [
@@ -69,7 +66,7 @@ class InvestorsCredit extends Model
                     'import' => $import,
                     'total_credit' => $total_credit,
                     'commission_rate' => $getFinancialProduct->collection_commission_rate,
-                    'status' => ($percent > 0) ? 1 : 0
+                    'status' => 1
                 ];
                 
                 $existInvestorCredit = InvestorsCredit::where('credit_id', $creditId)
@@ -98,7 +95,7 @@ class InvestorsCredit extends Model
                         'percentage' => 0,
                         'import' => $applied_import,
                         'total_credit' => $applied_loan_total_amount,
-                        'status' => 0
+                        'status' => 1
                     ]
                 );
             }
