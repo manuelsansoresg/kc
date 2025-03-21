@@ -13,6 +13,7 @@
         <span class="preview-title-lg overline-title">Compra de cartera</span>
         @php
             $total = 0;
+            $totalRefinanciable = 0;
         @endphp
         <table class="table table-striped">
             <thead>
@@ -42,6 +43,42 @@
                 <tr>
                     <td  class="text-end">Total: </td>
                     <td colspan="4">{{ format_price($total)}}</td>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+        <div class="col-12 mt-3">
+            <span class="preview-title-lg overline-title">Refinanciamiento</span>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Producto financiero</th>
+                    <th>Saldo</th>
+                    <th>Fecha límite</th>
+                    <th>Tasa anual</th>
+                    <th></th>
+                </tr>
+                
+                
+            </thead>
+            <tbody>
+                @foreach ($creditRefinanced as $creditRefinanced)
+                @php
+                    $totalRefinanciable += $creditRefinanced->ammount;
+                @endphp
+                <tr>
+                    <td>{{ $creditRefinanced->alias }}</td>
+                    <td>${{ format_price($creditRefinanced->ammount) }}</td>
+                    <td> {{ $creditRefinanced->deadline_date }} </td>
+                    <td> {{ $creditRefinanced->annual_int_rate_iva }} </td>
+                    <td><a class="pointer" onclick="editCompraCarteraControlDesk({{$creditRefinanced->id}})"><i class="fa-solid fa-pen"></i></a></td>
+                </tr>
+            @endforeach
+                <tr>
+                    <td  class="text-end">Total: </td>
+                    <td colspan="4">{{ format_price($totalRefinanciable)}}</td>
                     
                 </tr>
                 
