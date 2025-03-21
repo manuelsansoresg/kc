@@ -9,6 +9,7 @@ use App\Models\Credit;
 use App\Models\CreditPayOff;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\InvestorsCredit;
 use App\Models\Kyc;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,7 @@ class KcControlDeskController extends Controller
      */
     public function index()
     {
+        InvestorsCredit::saveEdit(1);
         return view('panel.module.control_desk.list');
     }
 

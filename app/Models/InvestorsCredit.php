@@ -113,6 +113,16 @@ class InvestorsCredit extends Model
                 'credit_active' => $hasActiveCredit ? 1 : 0,
                 'sod_active' => $hasActiveSod ? 1 : 0
             ]);
+
+            //validacion SOD
+            $loanAvailable = $getFinancialProduct!= null ? $getFinancialProduct->loan_available : 0;
+            $applied_import = $getCredit->applied_import;
+            $statusSOD = $applied_import > $loanAvailable ? 0 : 1;
+            
+            $request = new \stdClass();
+            $request->{'fondos-suficientes'} = $statusSOD;
+            CreditsControlDesk::saveEdit($creditId, $request, 'Fondos suficientes');
+
         }
 
     }
