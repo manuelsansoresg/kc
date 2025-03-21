@@ -455,7 +455,7 @@ class HomeController extends Controller
         $status_email   = true;
         $view_info      = null;
 
-        if ($product!= null && $product->is_tramitar == 3 && $product->is_vincular_banco == 1 && ($credit != null && $credit->bank_id === null)) {
+        if ($product!= null && $product->is_tramitar == 1 && $product->is_vincular_banco == 1 && ($credit != null && $credit->bank_id === null)) {
             $status_email = true; //*no 
         }
         if ($product != null) {
