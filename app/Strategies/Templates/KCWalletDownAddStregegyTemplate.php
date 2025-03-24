@@ -783,10 +783,69 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
     public function breadcrumb($history, $type = null)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
+        $title = $type == 3 ? 'Acción carga' : 'Solicitud de retiro de fondos';
+        $isNew = isset($_GET['isNew']) ? $_GET['isNew'] : null;
+
         $breadcumbs = self::optionBreadcumbStep($history);
-        
-        if ($type == 2) {
-            $breadcumbs = self::optionBreadcumblistAction($history);
+        if ($isNew == true) {
+            $breadcumbs = array(
+                0 => array(
+                    'title' => 'Inicio',
+                    'link' => '/panel/home',
+                    'active' => null
+                ),
+                1 => array(
+                    'title' => 'KC - Wallet',
+                    'link' => null,
+                    'active' => null
+                ),
+                2 => array(
+                    'title' => 'Retirar fondos',
+                    'link' => '/panel/kc-down-wallet',
+                    'active' => null
+                ),
+                
+                4 => array(
+                    'title' => $title,
+                    'link' => null,
+                    'active' => true
+                ),
+                
+            );
+        } else {
+
+            if ($step == 1 || $step == 2) {
+                $breadcumbs = array(
+                    0 => array(
+                        'title' => 'Inicio',
+                        'link' => '/panel/home',
+                        'active' => null
+                    ),
+                    1 => array(
+                        'title' => 'KC - Wallet',
+                        'link' => null,
+                        'active' => null
+                    ),
+                    2 => array(
+                        'title' => 'Retirar fondos',
+                        'link' => '/panel/kc-down-wallet',
+                        'active' => null
+                    ),
+                    3 => array(
+                        'title' => 'Etapas',
+                        'link' => '/panel/template/steps/kc-down-wallet/'.$history->id.'/show',
+                        'active' => null
+                    ),
+                    4 => array(
+                        'title' => $title,
+                        'link' => null,
+                        'active' => true
+                    ),
+                    
+                );
+    
+                
+            }
         }
         $view_breadcumb    = \View::make('panel.module.breadcumb', ['breadcumbs' => $breadcumbs])->render();
         return $view_breadcumb;
@@ -822,14 +881,16 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
             ),
             1 => array(
                 'title' => 'KC - Wallet',
-                'link' => '/panel/kc-wallet',
+                'link' => null,
                 'active' => null
             ),
             2 => array(
-                'title' => 'etapas',
-                'link' => null,
-                'active' => true
+                'title' => 'Retirar fondos',
+                'link' => '/panel/kc-down-wallet',
+                'active' => null
             ),
+            
+            
         );
         return $breadcumbs;
     }

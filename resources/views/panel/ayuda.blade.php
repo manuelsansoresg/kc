@@ -15,6 +15,7 @@
                                     <ul class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                         <li class="breadcrumb-item ">KC - Wallet</li>
+                                        <li class="breadcrumb-item active">Ayuda</li>
                                     </ul>
                                 </nav>
                             </div>
