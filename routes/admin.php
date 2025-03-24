@@ -90,6 +90,7 @@ Route::group(['prefix' => 'lead'], function () {
     Route::get('{clientPerson}/{financialProduct}/{leadId}/tramite/get', ['\App\Http\Controllers\Panel\LeadController', 'getTramite'])->middleware('auth');
 
     Route::get('validations/{leadId}', [LeadController::class, 'getLeadValidations']);
+    Route::get('validations/{leadId}/loan/term', [LeadController::class, 'getLeadValidationsLoanTerm']);
     
     Route::post('{lead_id}/advisor/store', ['\App\Http\Controllers\Panel\LeadController', 'advisorStore'])->middleware('auth');
     Route::post('{lead_id}/client-person/store', ['\App\Http\Controllers\Panel\LeadController', 'storeClientPerson'])->middleware('auth');

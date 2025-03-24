@@ -745,6 +745,7 @@ window.saveLead = function (isFullSave)
             let result = getResult.lead;
             $('#lead_id').val(result.id);
             $('#isNew').val(0);
+            getLeadValidations();
         })
         .catch(e => {
         });
@@ -946,7 +947,9 @@ window.changeTramite = function()
             let payment = result.payment;
             let productoDeseado = result.productoDeseado;
             let terms = result.terms;
-            getLeadValidations();
+            
+            
+            
             
 
             $('#monto-maximo').val(montoMaximo);
@@ -997,7 +1000,6 @@ window.graficaProspecto = function()
 
 
 window.getMontoSolicitado = function() {
-    
     let clientPersonId = $('#client_person_id').val();
     let productId = $('#financial_product_id').val();
     let plazo = $('#ref-plazo').val();
@@ -1051,6 +1053,7 @@ window.getMontoSolicitado = function() {
                 $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
             }
         }
+        
         getResumen();
 
     }).catch(e => {
@@ -1064,13 +1067,17 @@ function parseCurrency(value) {
     return parseFloat(cleanValue) || 0; // Convierte a número, si falla devuelve 0
 }
 
+
+
 window.getResumen = function()
 {
+    
     let clientPersonId = $('#client_person_id').val();
     let productId = $('#financial_product_id').val();
     let plazo = $('#ref-plazo').val();
     let monto = $('#ref-monto').val();
     let adicional = '';
+    
     if (document.getElementById('ref-monto-new')) {
         monto = $('#ref-monto-new').val();
     }
@@ -1093,7 +1100,7 @@ window.getResumen = function()
     
     $('#go_ahead').val(0);
     axios
-    .get("/panel/lead/"+productId+"/"+plazo+'/'+monto+'/'+totalRefinanciable+'/'+tramit_type+'/getResumen'+adicional)
+    .get("/panel/lead/"+productId+"/"+plazo+'/'+(monto || 0)+'/'+(totalRefinanciable || 0)+'/'+tramit_type+'/getResumen'+adicional)
     .then(function (response) {
         let result = response.data;
         let montoSolicitado =  result.montoSolicitado;
@@ -1112,7 +1119,7 @@ window.getResumen = function()
         let kcInteres = result.kcInteres;
         let kcPagoTotal = result.kcPagoTotal;
 
-       
+        
         
         let productoFinanciero = $('#financial_product_id').val();
         $('#selected_term').val(plazo);
@@ -1191,7 +1198,13 @@ window.getResumen = function()
         if (document.getElementById('validateBtnSave') && montoEntregarDecimal <= 0) {
             $('#saveButton').hide();
         }
-
+        saveLead(false)
+            .then(() => {
+                getLeadValidations();
+            })
+            .catch(error => {
+                console.error('Error saving lead:', error);
+            });
     }).catch(e => {
     
     });
@@ -1587,5 +1600,16 @@ function getLeadValidations() {
         .catch(function (error) {
             console.error('Error:', error);
             $('#content-validaciones-tabla').html('Error al obtener las validaciones');
+        });
+}
+
+function getLeadValidationsLoanTerm() {
+    let leadId = $('#lead_id').val();
+    axios.get(`/panel/lead/validations/${leadId}/loan/term`)
+        .then(function (response) {
+            getLeadValidations();
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
         });
 }

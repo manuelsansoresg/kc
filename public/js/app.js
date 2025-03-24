@@ -3096,6 +3096,7 @@ window.saveLead = function (isFullSave) {
     var result = getResult.lead;
     $('#lead_id').val(result.id);
     $('#isNew').val(0);
+    getLeadValidations();
   })["catch"](function (e) {});
 };
 
@@ -3293,7 +3294,6 @@ window.changeTramite = function () {
       var payment = result.payment;
       var productoDeseado = result.productoDeseado;
       var terms = result.terms;
-      getLeadValidations();
       $('#monto-maximo').val(montoMaximo);
       $('#plazo-maximo').val(plazoMaximo);
       $('#periodicidad').val(periodicidad);
@@ -3421,7 +3421,7 @@ window.getResumen = function () {
   var isControlDesk = $('#isControlDesk').val();
   var typeProductId = $('#typeProductId').val();
   $('#go_ahead').val(0);
-  axios.get("/panel/lead/" + productId + "/" + plazo + '/' + monto + '/' + totalRefinanciable + '/' + tramit_type + '/getResumen' + adicional).then(function (response) {
+  axios.get("/panel/lead/" + productId + "/" + plazo + '/' + (monto || 0) + '/' + (totalRefinanciable || 0) + '/' + tramit_type + '/getResumen' + adicional).then(function (response) {
     var result = response.data;
     var montoSolicitado = result.montoSolicitado;
     var montoRefinanciar = result.montoRefinanciar;
@@ -3493,6 +3493,12 @@ window.getResumen = function () {
     if (document.getElementById('validateBtnSave') && montoEntregarDecimal <= 0) {
       $('#saveButton').hide();
     }
+
+    saveLead(false).then(function () {
+      getLeadValidations();
+    })["catch"](function (error) {
+      console.error('Error saving lead:', error);
+    });
   })["catch"](function (e) {});
 };
 
@@ -3829,6 +3835,15 @@ function getLeadValidations() {
   })["catch"](function (error) {
     console.error('Error:', error);
     $('#content-validaciones-tabla').html('Error al obtener las validaciones');
+  });
+}
+
+function getLeadValidationsLoanTerm() {
+  var leadId = $('#lead_id').val();
+  axios.get("/panel/lead/validations/".concat(leadId, "/loan/term")).then(function (response) {
+    getLeadValidations();
+  })["catch"](function (error) {
+    console.error('Error:', error);
   });
 }
 

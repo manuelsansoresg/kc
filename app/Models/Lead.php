@@ -520,6 +520,16 @@ class Lead extends Model
                 }
             }
         }
+
+        $msgTerm = 'Crédito seleccionado - Plazo seleccionado';
+        $selectedTerm = $lead->selected_term > 0  ? 1 : 0;
+        $textTerm = $lead->selected_term > 0 ? 'Seleccionado' : 'Sin seleccionar';
+        $selectedLoan = $lead->selected_loan > 0 ? 1 : 0;
+        $textLoan = $lead->selected_loan > 0 ? 'Seleccionado' : 'Sin seleccionar';
+        $msgLoan = 'Crédito seleccionado - Importe seleccionado';
+
+        LeadValidation::saveEdit($lead->id, $msgTerm, $selectedTerm, $textTerm);
+        LeadValidation::saveEdit($lead->id, $msgLoan, $selectedLoan, $textLoan);
         return $lead;
     }
 

@@ -311,6 +311,9 @@ class LeadController extends Controller
     public function store(Request $request)
     {
         $lead = Lead::saveEdit($request);
+
+        
+        
         return response()->json(['lead' => $lead]);
     }
 
@@ -535,6 +538,20 @@ class LeadController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function getLeadValidationsLoanTerm($leadId)
+    {
+        $lead = Lead::find($leadId);
+        $msgTerm = 'Crédito seleccionado - Plazo seleccionado';
+        $selectedTerm = $lead->selected_term > 0  ? 1 : 0;
+        $textTerm = $lead->selected_term > 0 ? 'Seleccionado' : 'Sin seleccionar';
+        $selectedLoan = $lead->selected_loan > 0 ? 1 : 0;
+        $textLoan = $lead->selected_loan > 0 ? 'Seleccionado' : 'Sin seleccionar';
+        $msgLoan = 'Crédito seleccionado - Importe seleccionado';
+
+        LeadValidation::saveEdit($leadId, $msgTerm, $selectedTerm, $textTerm);
+        LeadValidation::saveEdit($leadId, $msgLoan, $selectedLoan, $textLoan);
     }
 
     public function getTramite(ClientPerson $clientPerson, FinancialProduct $financialProduct, $leadId)
