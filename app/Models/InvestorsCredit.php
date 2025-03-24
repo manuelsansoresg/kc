@@ -124,7 +124,7 @@ class InvestorsCredit extends Model
             CreditsControlDesk::saveEdit($creditId, $request, 'Fondos suficientes');
 
         }
-
+        Investor::updateInvestorData($creditId);
     }
 
     public static function setPlacedCapital($creditId)
