@@ -13,6 +13,7 @@ use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\Investor;
 use App\Models\InvestorsCredit;
 use App\Models\Lead;
 use App\Models\Product;
@@ -166,6 +167,11 @@ class LeadStrategyTemplate implements TemplateInterface
             //*create account automatically
             Lead::createClientPerson($lead->id, $is_report, $history->id);
             InvestorsCredit::saveEdit($credit->id);
+            $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
+            foreach ($getInvestors as $getInvestor) {
+                //Transaction::setTotalCapital($getInvestor->investor_id);
+                Investor::updateInvestorData($getInvestor->investor_id);
+            }
         }
         return $history;
     }
