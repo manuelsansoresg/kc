@@ -10,6 +10,8 @@ use App\Models\File;
 use App\Models\Financial;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\Investor;
+use App\Models\InvestorsCredit;
 use App\Models\kaaxSidecc\Collection;
 use App\Models\kaaxSidecc\CreditKaaxSidecc;
 use App\Models\Lead;
@@ -774,6 +776,14 @@ class DeliveryStrategyTemplate implements TemplateInterface
                         HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2, $credit->id, 0);
                         
                         CreditKaaxSidecc::sendCreditKaaxSidecc($credit->id);
+                        InvestorsCredit::where('credit_id', $credit->id)->update([ 
+                            'status' => 2
+                        ]);
+                        $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
+                        foreach ($getInvestors as $getInvestor) {
+                            //Transaction::setTotalCapital($getInvestor->investor_id);
+                            Investor::updateInvestorData($getInvestor->investor_id);
+                        }
 
                        /*  $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
                         (new $notification_add)->send($credit->id); */
