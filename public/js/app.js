@@ -3492,6 +3492,8 @@ window.getResumen = function () {
 
     if (document.getElementById('validateBtnSave') && montoEntregarDecimal <= 0) {
       $('#saveButton').hide();
+    } else {
+      $('#saveButton').show();
     }
 
     saveLead(false).then(function () {

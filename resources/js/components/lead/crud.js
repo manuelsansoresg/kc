@@ -1155,6 +1155,7 @@ window.getResumen = function()
 
         //console.log(cMontoSolicitado + '-' + cMontoCompraCartera + '-'+cComisionApertura);
         montoEntregarDecimal = cMontoSolicitado - cMontoCompraCartera - cComisionApertura - cMontoRefinanciar;
+        
         monto_entregar = montoEntregarDecimal.toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
@@ -1197,6 +1198,8 @@ window.getResumen = function()
 
         if (document.getElementById('validateBtnSave') && montoEntregarDecimal <= 0) {
             $('#saveButton').hide();
+        } else {
+            $('#saveButton').show();
         }
         saveLead(false)
             .then(() => {
