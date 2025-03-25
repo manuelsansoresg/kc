@@ -120,7 +120,7 @@ class LeadStrategyTemplate implements TemplateInterface
 
             //validar que el credito no exista con los mismos datos
             $credit = Credit::create($data_lead);
-            InvestorsCredit::saveEdit($credit->id);
+            
             CreditPayOff::where('lead_id', $lead->id)->update([
                 'new_kc_credit_id' => $credit->id
             ]);
@@ -165,7 +165,7 @@ class LeadStrategyTemplate implements TemplateInterface
 
             //*create account automatically
             Lead::createClientPerson($lead->id, $is_report, $history->id);
-
+            InvestorsCredit::saveEdit($credit->id);
         }
         return $history;
     }
