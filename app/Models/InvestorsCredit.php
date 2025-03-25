@@ -49,6 +49,7 @@ class InvestorsCredit extends Model
     
             foreach ($getInvestors as $investorProduct) {
                 $getInvestor = Investor::find($investorProduct->investor_id);
+                Investor::updateInvestorData($getInvestor->id);
                 if ($getInvestor && $getInvestor->loan_active == 1) {
                     $hasActiveInvestor = true;
                     $maxAmount = max($loanAvailable, $applied_import);
@@ -124,7 +125,8 @@ class InvestorsCredit extends Model
             CreditsControlDesk::saveEdit($creditId, $request, 'Fondos suficientes');
 
         }
-        Investor::updateInvestorData($creditId);
+        
+        
     }
 
     public static function setPlacedCapital($creditId)

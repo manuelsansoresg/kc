@@ -214,9 +214,10 @@ class Investor extends Model
     {
         // Primero, actualiza los balances del inversionista
         self::updateInvestorBalances($investorId);
-
+        
         // Luego, actualiza loan_available en financial_products basado en los inversionistas
         self::updateFinancialProductsLoanAvailable($investorId);
+        
     }
 
 }

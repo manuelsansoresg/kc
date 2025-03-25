@@ -22,7 +22,7 @@ class KcControlDeskController extends Controller
      */
     public function index()
     {
-        InvestorsCredit::saveEdit(1);
+        
         return view('panel.module.control_desk.list');
     }
 
