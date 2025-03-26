@@ -33,9 +33,11 @@
                           </div>
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
+                                @hasrole('Cliente inversionista')
                                 <div class="col-12 py-3">
-                                    <h5 class="text-primary">Disponible: {{ format_price($withdraw_available) }} {{ $withdraw_available }}</h5>
+                                    <h5 class="text-primary">Disponible: {{ format_price($withdraw_available) }}</h5>
                                 </div>
+                                @endhasrole
                                 <table id="dt-down-wallet" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>
