@@ -50,7 +50,7 @@ class DocumentController extends Controller
             
         }
         
-        if ($model == 'wallet') { //agregar fondo
+        if ($model == 'wallet' || $model == 'kc-down-wallet') { //agregar fondo
             $isTitleDescription = false;
         }
 
