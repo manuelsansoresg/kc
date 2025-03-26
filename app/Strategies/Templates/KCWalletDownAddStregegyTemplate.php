@@ -553,21 +553,17 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         
         $name    = [
             1 => 'Formulario',
-            2 => 'Carga',
         ];
         $subject    = [
             1 => HistoryLog::$label_subject[66],
-            2 => HistoryLog::$label_subject[66],
         ];
 
         $percentages    = [
             1 => self::percentForm($history),
-            2 => self::percentFile($history->id_rel, 1),
         ];
         
         $link    = [
             1 => "/panel/action-form/kc-down-wallet/{$history_id}/form?step=1&step_origin=null",
-            2  => "/panel/template/action-document/kc-down-wallet/{$history_id}?step=1"
         ];
         $statuses = [];
         $currentTaskInProgress = false;
@@ -579,7 +575,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
             }
         }
 
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 1; $i++) {
             $data[] = array(
                 'name' => $name[$i],
                 'subject' => $subject[$i],
@@ -722,7 +718,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $data = array();
 
         $data[] = array(
-            'nameStep' => 'UNO',
+            'nameStep' => 'SOLICITUD',
             'step' => 'Información transferencia',
             'status' => $status_step1,
             'progress' => $view_percent_step1,
@@ -731,7 +727,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         );
         
         $data[] = array(
-            'nameStep' => 'Dos',
+            'nameStep' => 'CONFIRMACIÓN',
             'step' => 'Verificar transferencia',
             'status' => $status_step2,
             'progress' => $view_percent_step2,
@@ -750,8 +746,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $percent = 0;
         if ($step == 1) {
             $percent_form   = self::percentForm($history);
-            $percent_upload   = self::percentFile($history->id_rel);
-            $percent = ( $percent_form +  $percent_upload) / 2;
+            $percent = $percent_form;
         } else {
             $percent_form   = self::percentForm2($history);
             $percent_upload   = self::percentFile($history->id_rel, 2);
