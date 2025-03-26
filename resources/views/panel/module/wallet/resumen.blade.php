@@ -267,11 +267,16 @@
                         <p>
                             Es la cantidad de dinero que está disponible para ser prestada. Esta cantidad irá disminuyendo conforme se vayan entregando créditos.
                             El total de esta cantidad podrá verse en "En proceso de ser prestado"
+                            <br>
+                            Disponible: ${{ format_price($totalAvailable) }}
                         </p>
                         <input type="number" min="201" name="lendable" id="lendable" max="{{ $totalAvailable }}" class="form-control" value="{{ $investor->lendable }}">
                         <div class="col-12 mt-3">
-                            Disponible: {{ format_price($totalAvailable) }}
-                            <p>El importe no debe ser mayor al dinero disponible
+                            
+                            <p>
+                                Advertencias:
+                                <br>
+                                El importe no debe ser mayor al dinero disponible
                                 <br>
                                 El importe debe ser mayor a 200 pesos
                             </p>
