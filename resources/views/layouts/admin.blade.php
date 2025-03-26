@@ -355,11 +355,12 @@
                                     @endhasrole
                                     @hasrole('Cliente inversionista')
                                     @if (auth()->user()->can('Administración') || auth()->user()->can('RRHH'))
-                                        
+                                    <li class="nk-menu-item">
                                     <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
                                         <span class="nk-menu-text"> <i class="fa-solid fa-users"></i> Mis colaboradores</span>
                                     </a>
+                                    </li><!-- .nk-menu-item -->
                                     @endif
                                     
                                     @endhasrole
