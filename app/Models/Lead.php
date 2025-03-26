@@ -438,7 +438,7 @@ class Lead extends Model
             /* $send_grid = new Csendgrid();
             $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name); */
         } else {
-            unset($data['origin_id']);
+            //unset($data['origin_id']);
 
             $financialProduct = FinancialProduct::find($data['financial_product_id']);
             if ($financialProduct != null && $financialProduct && $financialProduct->type_product_id == 3) {
