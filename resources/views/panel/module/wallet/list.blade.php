@@ -44,7 +44,6 @@
                                             <th data-priority="1">Ordenante</th>
                                             <th>Importe</th>
                                             <th>Progreso</th>
-                                            <th>En curso</th>
                                             <th>Estatus</th>
                                             <th></th>
                                         </tr>
