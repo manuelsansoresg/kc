@@ -106,7 +106,7 @@
 							<a class="nav-link smooth-anchor" href="#contact">Ayuda</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link smooth-anchor" href="https://app.kaaxclub.com/">App</a>
+							<a class="btn btn-bordered-white swap-icon btn-xs btn-app" href="https://app.kaaxclub.com/" target="_blank">App</a>
 						</li>
 						
 					</ul>
