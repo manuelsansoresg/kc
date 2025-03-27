@@ -32,22 +32,22 @@ class CreditKaaxSidecc extends Model
 
     public static function sendCreditKaaxSidecc($id_rel)
     {
-        $credit                     = Credit::find($id_rel);
-        $client                     = $credit->creditClientPerson;
-        $financialProduct           = FinancialProduct::find($credit->applied_financial_product);
-        $collection_commission_rate = $financialProduct != null ? $financialProduct->collection_commission_rate : null;
+        $credit = Credit::find($id_rel);
+        $client = $credit->creditClientPerson;
+        $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+        $collection_commission_rate = $financialProduct ? $financialProduct->collection_commission_rate : null;
 
-        //*buscar si existe cliente en sidecc
-        $data_client = array(
+        // * Buscar o actualizar cliente en Sidecc
+        $data_client = [
             'apellido_1' => $client->last_name,
             'apellido_2' => $client->second_last_name,
             'nombre' => $client->name,
             'rfc' => $client->rfc,
-        );
-        
+        ];
         $clientKaaxSidecc = ClientKaaxSidecc::updateOrCreate(['rfc' => $client->rfc], $data_client);
 
-        $data_credit = array(
+        // * Buscar o actualizar crédito en Sidecc
+        $data_credit = [
             'kc_credit_id' => $credit->id,
             'client_id' => $clientKaaxSidecc->id,
             'agreement_id' => $credit->agreement_id,
@@ -65,42 +65,44 @@ class CreditKaaxSidecc extends Model
             'capital' => $credit->applied_import,
             'plazo' => $credit->applied_term,
             'descuento' => $credit->applied_payment,
-            'total'=>$credit->applied_loan_total_amount,
-            'kc_client_id'=>$client->id,
-        );
-        $creditKaax = CreditKaaxSidecc::create($data_credit);
-        ClientsLogKaaxSidecc::addCrmLog($creditKaax->id, 'en-entrega', 'en-entrega');
+            'total' => $credit->applied_loan_total_amount,
+            'kc_client_id' => $client->id,
+        ];
+        $creditKaax = CreditKaaxSidecc::updateOrCreate(['kc_credit_id' => $credit->id], $data_credit);
 
-        $data_client_credit_info = array(
+        // * Agregar log de CRM solo si se creó un nuevo crédito
+        if ($creditKaax->wasRecentlyCreated) {
+            ClientsLogKaaxSidecc::addCrmLog($creditKaax->id, 'en-entrega', 'en-entrega');
+        }
+
+        // * Buscar o actualizar información del crédito del cliente
+        $data_client_credit_info = [
             'credit_id' => $creditKaax->id,
-            'kc_credit_id'=>$credit->id,  
-            'capital'=> $credit->applied_import,  
-            'plazo_quincenas'=>$credit->applied_term,  
-            'descuento'=>$credit->applied_payment,  
-            'tasa'=>$credit->applied_interest_rate,  
-            'monto_total'=>$credit->applied_loan_total_amount,  
-            'cat'=>$credit->applied_CAT,  
-            'comision_apertura'=>$credit->opening_commission,  
-            'capital_cobrar'=>$credit->net_amount,  
+            'kc_credit_id' => $credit->id,
+            'capital' => $credit->applied_import,
+            'plazo_quincenas' => $credit->applied_term,
+            'descuento' => $credit->applied_payment,
+            'tasa' => $credit->applied_interest_rate,
+            'monto_total' => $credit->applied_loan_total_amount,
+            'cat' => $credit->applied_CAT,
+            'comision_apertura' => $credit->opening_commission,
+            'capital_cobrar' => $credit->net_amount,
             'producto' => $credit->applied_financial_product,
             'comision_total' => $credit->opening_commission,
-        );
-        $client_credit_info_kaax = ClientsCreditInfoKaaxSidecc::create($data_client_credit_info);
+        ];
+        ClientsCreditInfoKaaxSidecc::updateOrCreate(['kc_credit_id' => $credit->id], $data_client_credit_info);
 
-        $data_job_info = array(
+        // * Buscar o actualizar información laboral del cliente
+        $data_job_info = [
             'credit_id' => $creditKaax->id,
-            'numero_trabajador' => $client->employee_number, 
-            'area_laboral' => $client->employee_area, 
-        );
-        ClientsJobInfoKaaxSidecc::create($data_job_info);
+            'numero_trabajador' => $client->employee_number,
+            'area_laboral' => $client->employee_area,
+        ];
+        ClientsJobInfoKaaxSidecc::updateOrCreate(['credit_id' => $creditKaax->id], $data_job_info);
 
-        // Crear una nueva instancia del cliente HTTP
-        $client = new Client();
-
-        // Preparar la solicitud GET
+        // * Hacer solicitud a la API externa
+        $clientHttp = new Client();
         $request = new GuzzleHttp\Psr7\Request('GET', 'https://kaaxclub.sidecc.xyz/api/credit/' . $creditKaax->id . '/createTa');
-
-        // Enviar la solicitud y obtener la respuesta
-        $response = $client->send($request);
+        $response = $clientHttp->send($request);
     }
 }
