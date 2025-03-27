@@ -128,7 +128,6 @@ class User extends Authenticatable
     {
         $is_save                  = false;
         $financial_products_ids   = $request->financial_products_id;
-        $agreement_ids            = $request->agreements;
         $isResetpassword            = $request->isResetpassword;
         $financial_products_id    = null;
         $arrayFinancialProductsId = array();
@@ -199,13 +198,15 @@ class User extends Authenticatable
                 ]);
             }
 
-            InvestorsAgreement::where('investor_id', $investor->id)->delete();
+            if (isset($request->agreements)) {
+                InvestorsAgreement::where('investor_id', $investor->id)->delete();
 
-            foreach ($agreement_ids as $agreement_ids) {
-                InvestorsAgreement::create([
-                    'investor_id' => $investor->id,
-                    'agreement_id' => $agreement_ids
-                ]);
+                foreach ($request->agreements as $agreement_id) {
+                    InvestorsAgreement::create([
+                        'investor_id' => $investor->id,
+                        'agreement_id' => $agreement_id
+                    ]);
+                }
             }
             if ($request->rol_id == 1) {
                 $user->givePermissionTo('RRHH');

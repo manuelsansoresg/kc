@@ -420,6 +420,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $dataRel = isset($request->data)? $request['data'] : null;
         $idRel = $dataRel!= null ? $dataRel['id_rel'] : null;
         $transaction = Transaction::saveEdit($request, false, $idRel);
+
+        if (isset($data['investor_id'])) {
+            Investor::updateInvestorData($data['investor_id']);
+        }
         
 
         if ($request->history_id != 'null') {

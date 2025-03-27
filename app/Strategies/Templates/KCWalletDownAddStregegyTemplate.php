@@ -347,6 +347,10 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         
         $transaction = Transaction::saveEdit($request, true, $idRel, 2);
 
+        if (isset($data['investor_id'])) {
+            Investor::updateInvestorData($data['investor_id']);
+        }
+
         if ($request->history_id != 'null') {
             $history = HistoryLog::find($request->history_id);
             $percent = self::percentForm($history);
