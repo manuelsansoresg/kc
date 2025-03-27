@@ -41,11 +41,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="analytic-data analytic-ov-data">
-                                                    <div class="title">En proceso de ser prestado &nbsp; </div>
+                                                    <div class="title">Apartado para ser prestado &nbsp; </div>
                                                     <div class="amount">${{ format_price($investor->loan_available) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></div>
                                                     <div class="change down"><a href="#"  data-bs-toggle="modal"
                                                         data-bs-target="#modalPrestar">Editar</a></div>
                                                 </div>
+                                                
+                                               
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Préstamos en créditos activos</div>
                                                     <div class="amount">${{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
@@ -97,7 +99,7 @@
 
                                             </div>
                                             <div id="tooltip-proceso">
-                                                <b>En proceso de ser prestado</b>
+                                                <b>Apartado para ser prestado</b>
                                                 <br><br>
                                                 Dinero destinado para préstamos. Este dinero no está disponible para retirar a tu cuenta a menos que modifiques la cantidad de dinero asignada para ser prestada.
 
