@@ -776,8 +776,9 @@ class DeliveryStrategyTemplate implements TemplateInterface
                         HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2, $credit->id, 0);
                         
                         CreditKaaxSidecc::sendCreditKaaxSidecc($credit->id);
-                        InvestorsCredit::where('credit_id', $credit->id)->update([ 
-                            'status' => 2
+                        InvestorsCredit::where('credit_id', $credit->id)->update([
+                            'status' => 2,
+                            'placed_capital' => \DB::raw('import')
                         ]);
                         $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
                         foreach ($getInvestors as $getInvestor) {
