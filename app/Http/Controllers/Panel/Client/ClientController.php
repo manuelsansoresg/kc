@@ -42,7 +42,7 @@ class ClientController extends Controller
 
     public function ListColaboradores()
     {
-        $users = ClientPerson::listDatatable(false);
+        $users = ClientPerson::listDatatable(false, 'colaboradores');
         return response()->json(['data' => $users]);
     }
 

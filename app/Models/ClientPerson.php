@@ -104,14 +104,14 @@ class ClientPerson extends Model
         'cm_agreement_sign',
     ];
 
-    public static function listDatatable($isAdmin = true)
+    public static function listDatatable($isAdmin = true, $origin = null)
     {
         if ($isAdmin === true) {
             $clientPersons = ClientPerson::all();
             $data        = array();
             foreach ($clientPersons as $query) {
                 $agreement = Agreement::find($query->agreement_id);
-                $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id])->render();
+                $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id, 'origin' => $origin])->render();
                 $data[] = array(
                     'id' => $query->id,
                     'name' =>  $query->name.' '.$query->last_name.' '.$query->second_last_name,
@@ -133,7 +133,7 @@ class ClientPerson extends Model
                 $getClientPersons = ClientPerson::whereIn('agreement_id', $agreementIds)->get();
                 foreach ($getClientPersons as $query) {
                     $agreement = Agreement::find($query->agreement_id);
-                    $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id])->render();
+                    $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id, 'origin' => $origin])->render();
                     $data[] = array(
                         'id' => $query->id,
                         'name' =>  $query->name.' '.$query->last_name.' '.$query->second_last_name,
