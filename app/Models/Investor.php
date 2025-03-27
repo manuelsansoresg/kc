@@ -158,7 +158,7 @@ class Investor extends Model
         // Obtener todas las transacciones en una sola consulta
         $transactions = Transaction::where('investor_id', $investorId)
             ->whereIn('transaction_type', [1, 2])
-            ->where('operation_status', '!=', 1)
+            ->where('operation_status', 0)
             ->selectRaw("
                 SUM(CASE WHEN transaction_type = 1 AND operation_status = 1 THEN amount ELSE 0 END) AS funded_capital,
                 SUM(CASE WHEN transaction_type = 1 AND operation_status = 0 THEN amount ELSE 0 END) AS pending_funded_capital,
