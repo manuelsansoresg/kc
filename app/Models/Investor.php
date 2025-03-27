@@ -150,24 +150,23 @@ class Investor extends Model
     public static function updateInvestorBalances($investorId)
     {
         $investor = Investor::find($investorId);
-    
+
         if (!$investor) {
             return null;
         }
-
-        // Obtener todas las transacciones en una sola consulta
+    
+        // ✅ Obtener todas las transacciones en una sola consulta sin filtro global de `operation_status`
         $transactions = Transaction::where('investor_id', $investorId)
             ->whereIn('transaction_type', [1, 2])
-            ->where('operation_status', 0)
             ->selectRaw("
                 SUM(CASE WHEN transaction_type = 1 AND operation_status = 1 THEN amount ELSE 0 END) AS funded_capital,
-                SUM(CASE WHEN transaction_type = 1 AND operation_status = 0 THEN amount ELSE 0 END) AS pending_funded_capital,
+                SUM(CASE WHEN transaction_type = 1 AND operation_status != 1 THEN amount ELSE 0 END) AS pending_funded_capital,
                 SUM(CASE WHEN transaction_type = 2 AND operation_status = 1 THEN amount ELSE 0 END) AS withdrawn_money,
-                SUM(CASE WHEN transaction_type = 2 AND operation_status = 0 THEN amount ELSE 0 END) AS pending_withdrawn_money
+                SUM(CASE WHEN transaction_type = 2 AND operation_status != 1 THEN amount ELSE 0 END) AS pending_withdrawn_money
             ")
             ->first();
-
-        // Obtener inversiones en una sola consulta
+    
+        // ✅ Obtener inversiones en una sola consulta
         $investments = InvestorsCredit::where('investor_id', $investorId)
             ->where('status', '>=', 1)
             ->selectRaw("
@@ -175,8 +174,8 @@ class Investor extends Model
                 SUM(CASE WHEN status = 1 THEN import ELSE 0 END) AS loans_in_process
             ")
             ->first();
-
-        // Calcular los valores
+    
+        // ✅ Definir valores con null-safe
         $fundedCapital = $transactions->funded_capital ?? 0;
         $pendingFundedCapital = $transactions->pending_funded_capital ?? 0;
         $withdrawnMoney = $transactions->withdrawn_money ?? 0;
@@ -184,31 +183,33 @@ class Investor extends Model
         
         $totalCapital = $investments->total_capital ?? 0;
         $loansInProcess = $investments->loans_in_process ?? 0;
-
-        // Calcular total_available
-        $totalAvailable = $fundedCapital - $totalCapital - $loansInProcess + $investor->total_collected - $investor->collection_commission - $withdrawnMoney - $pendingWithdrawnMoney;
-
-        // Calcular loan_used (lo que ya ha sido prestado después de lendable_updated_time)
+    
+        // ✅ Calcular total_available
+        $totalAvailable = $fundedCapital - $totalCapital - $loansInProcess 
+            + $investor->total_collected - $investor->collection_commission 
+            - $withdrawnMoney - $pendingWithdrawnMoney;
+    
+        // ✅ Calcular loanUsed (dinero prestado después de lendable_updated_time)
         $loanUsed = ($investor->lendable_updated_time !== null) 
             ? InvestorsCredit::where('investor_id', $investorId)
                 ->where('status', '!=', 0)
                 ->where('created_at', '>', $investor->lendable_updated_time)
                 ->sum('import')
             : 0;
-
-        // Calcular loan_available
+    
+        // ✅ Calcular loan_available
         $loanAvailable = $investor->lendable - $loanUsed;
-
-        // Calcular loan_active
+    
+        // ✅ Calcular loan_active
         $loanActive = $loanAvailable > 999 ? 1 : 0;
-
-        // Calcular withdraw_available
-        $withdrawAvailable = $totalAvailable - $loanAvailable;
-
-        // Calcular account_value
+    
+        // ✅ Evitar valores negativos en withdraw_available
+        $withdrawAvailable = max(0, $totalAvailable - $loanAvailable);
+    
+        // ✅ Calcular account_value
         $accountValue = $totalAvailable + $loansInProcess + $pendingWithdrawnMoney - $investor->placed_capital;
-
-        // Actualizar en la base de datos
+    
+        // ✅ Actualizar en la base de datos
         $investor->update([
             'funded_capital' => $fundedCapital,
             'pending_funded_capital' => $pendingFundedCapital,
@@ -222,7 +223,7 @@ class Investor extends Model
             'withdraw_available' => $withdrawAvailable,
             'account_value' => $accountValue
         ]);
-
+    
         return $investor;
     }
 
