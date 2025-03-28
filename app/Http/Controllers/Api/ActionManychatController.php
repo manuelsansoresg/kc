@@ -149,4 +149,16 @@ class ActionManychatController extends Controller
         ]);
         return $lead;
     }
+
+    public function validatePhone(Request $request)
+    {
+        $data = $request->all();
+        $cellphone = $data['phone'];
+        
+        // Remover el prefijo +52 si existe
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        
+        // Buscar en ClientPerson si existe el teléfono y retornar true o false
+        return \App\Models\ClientPerson::where('cellphone', $cleanPhone)->exists();
+    }
 }
