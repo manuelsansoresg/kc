@@ -50,7 +50,16 @@
                                             <form method = "post" id = "frm-client" action = "">
                                                 @csrf
                                                 <div class = "row gy-4">
-                                                    <span class = "preview-title-lg overline-title">General</span>
+                                                    <div class="col-6">
+                                                        <span class = "preview-title-lg overline-title">General</span>
+                                                    </div>
+                                                    <div class="col-6 text-end">
+                                                        @if ($client_id != null)
+                                                            <a href="/client-person/{{ $client_id }}/history" data-bs-dismiss="modal" class="btn btn-outline-primary">Historial de cambios</a>
+                                                        @endif
+                                                    </div>
+                                                    
+
                                                     <div class = "col-md-6">
                                                         <div class = "form-group">
                                                             <label class = "form-label">Celular</label>
@@ -210,7 +219,8 @@
                                                     <div class = "col-12">
                                                         <ul class = "align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                             <li>
-                                                                {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
+                                                             
+                                                                
                                                                 <button class = "btn btn-primary"
                                                                     id = "btnSave">Guardar</button>
                                                             </li>
