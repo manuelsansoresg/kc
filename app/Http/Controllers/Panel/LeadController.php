@@ -103,6 +103,10 @@ class LeadController extends Controller
             'email' => $getClientPerson->email,
             'agreement_id' => $getClientPerson->agreement_id,
         ]);
+        //* Execute notification in create lead
+        $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+        (new $notification)->send($lead->id);
+        
         HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         //* Execute notification in add lead
         $notification_add   = SendNotificationsValues::STRATEGY['leadAddProspect'];
