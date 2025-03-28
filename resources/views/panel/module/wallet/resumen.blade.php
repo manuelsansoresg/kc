@@ -311,7 +311,7 @@
                                 $totalIngresos     = $recursosFondeados + $totalCollected;
                                 
                                 $prestamosRealizados       = $investor != null ? $investor->total_capital : 0;
-                                $comisionesPagadas         = $investor != null ? $investor->collections_commission  + $investor->iva_commmission : 0;
+                                $comisionesPagadas         = $investor != null ? $investor->collection_commission  + $investor->iva_commission : 0;
                                 $recursosRetirados         = $investor != null ? $investor->withdrawn_money : 0;
                                 $perdidasporCarteraVencida = 0;
                                 $totalEgresos              = $prestamosRealizados + $comisionesPagadas + $recursosRetirados + $perdidasporCarteraVencida;
