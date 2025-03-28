@@ -156,12 +156,36 @@ class ClientPerson extends Model
         $clientId = $request->client_id;
         $data = $request->data;
         $data['active'] = isset($data['active'])? 1 : 0;
+        
         if ($clientId == null) {
-            $client =  ClientPerson::create($data);
-        } else {
-            $client = ClientPerson::where('id', $clientId)->update($data);
+            $client = ClientPerson::create($data);
+            return $client;
+        } 
+
+        // Obtener datos antiguos antes de la actualización
+        $oldData = ClientPerson::find($clientId);
+        $oldValues = $oldData->toArray();
+
+        // Realizar la actualización
+        ClientPerson::where('id', $clientId)->update($data);
+        
+        // Obtener el registro actualizado
+        $updatedData = ClientPerson::find($clientId);
+        
+        // Registrar cambios en el historial
+        foreach ($data as $field => $newValue) {
+            if (isset($oldValues[$field]) && $oldValues[$field] !== $newValue) {
+                ClientPersonHistory::create([
+                    'client_person_id' => $clientId,
+                    'user_id' => auth()->id(),
+                    'field_name' => $field,
+                    'old_value' => $oldValues[$field],
+                    'new_value' => $newValue
+                ]);
+            }
         }
-        return $client;
+
+        return $updatedData;
     }
 
     public static function checkDataModel($valueInput , $id)
@@ -180,5 +204,10 @@ class ClientPerson extends Model
         return $this->belongsTo(Agreement::class, 'agreement_id')->withDefault([
             'name' => '',
         ]);
+    }
+
+    public function history()
+    {
+        return $this->hasMany(ClientPersonHistory::class);
     }
 }

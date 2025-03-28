@@ -4,6 +4,7 @@ use App\Http\Controllers\DeployController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClientPersonHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,3 +107,6 @@ Route::get('/terminos-y-condiciones', function () {
 Route::get('password/enviado', function() {
     return view('salida_password'); // Crea esta vista
 })->name('password.enviado');
+
+Route::get('/client-person/{id}/history', [ClientPersonHistoryController::class, 'show'])
+    ->name('client.person.history');
