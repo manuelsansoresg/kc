@@ -161,6 +161,15 @@ class ActionManychatController extends Controller
         
         // Buscar en ClientPerson si existe el teléfono y retornar true o false
         $validate = ClientPerson::where('cellphone', $cleanPhone)->exists();
+
+        $dataField = array(
+            'Prospecto -  Celular' => $validate,
+
+        );
+        $manychat = new Manychat();
+        $manychat_id    = $data['id'];
+        $manychat->setCustomFields($dataField, $manychat_id);
+
         return response()->json(['validate' => $validate]);
     }
 }
