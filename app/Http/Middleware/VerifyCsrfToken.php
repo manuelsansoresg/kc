@@ -31,5 +31,6 @@ class VerifyCsrfToken extends Middleware
         '/api/credit/{credit}/{s2_credit_id}/{tipo}/set',
         '/api/investor/{financial_product_id}/setTotalCapital',
         '/api/credit/{creditId}/pago/setData',
+        '/validate-phone',
     ];
 }
