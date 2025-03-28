@@ -164,7 +164,6 @@ class ActionManychatController extends Controller
 
         $dataField = array(
             'Prospecto -  Celular' => $validate,
-
         );
         $manychat = new Manychat();
         $manychat_id    = $data['id'];
