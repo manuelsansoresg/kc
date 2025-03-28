@@ -229,6 +229,7 @@ return [
         'Tipo de crédito' =>  10202818,
         'URL Reporte' =>  10298820,
         'URL Encuesta' =>  10357823,
+        'Prospecto -  Celular' =>  12660578,
     ),
 
     "funding_operation" => array(
