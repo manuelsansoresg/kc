@@ -7,6 +7,7 @@ use App\Lib\Manychat;
 use App\Models\Agreement;
 use App\Models\ApiActionManychat;
 use App\Models\Bank;
+use App\Models\ClientPerson;
 use App\Models\Lead;
 use App\Models\Product;
 use App\Strategies\Values\TemplateValues;
@@ -159,6 +160,7 @@ class ActionManychatController extends Controller
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
         
         // Buscar en ClientPerson si existe el teléfono y retornar true o false
-        return \App\Models\ClientPerson::where('cellphone', $cleanPhone)->exists();
+        $validate = ClientPerson::where('cellphone', $cleanPhone)->exists();
+        return response()->json(['validate' => $validate]);
     }
 }
