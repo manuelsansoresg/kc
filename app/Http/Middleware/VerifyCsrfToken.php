@@ -32,5 +32,6 @@ class VerifyCsrfToken extends Middleware
         '/api/investor/{financial_product_id}/setTotalCapital',
         '/api/credit/{creditId}/pago/setData',
         '/validate-phone',
+        '/set-url-rfc',
     ];
 }
