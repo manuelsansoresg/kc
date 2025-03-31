@@ -220,4 +220,33 @@ class ActionManychatController extends Controller
         $manychat->setCustomFields($dataField, $manychat_id);
         
     }
+
+    public function validateClienteActivo(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['phone'];
+        $rfc = $data['rfc'] ?? null; // Asumiendo que el RFC viene en la solicitud
+
+        // Remover el prefijo +52 si existe
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+
+        // Primero intentar buscar por celular
+        $clientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+
+        // Si no se encuentra por celular y tenemos un RFC, intentar buscar por RFC
+        if (!$clientPerson && $rfc) {
+            $clientPerson = ClientPerson::where('rfc', $rfc)->first();
+        }
+
+        // Ahora $clientPerson contendrá el resultado de la búsqueda por celular o por RFC,
+        // o será null si no se encontró ningún registro con esos criterios
+        $validacionClienteActivo = false;
+        if ($clientPerson != null && $clientPerson->active == 1) {
+            $validacionClienteActivo = true;
+        }
+        $manychat = new Manychat();
+        $dataInfoUser = $manychat->getInfoUser($manychat_id);
+        return response()->json(['validate' => $validacionClienteActivo, 'dataInfoUser' => $dataInfoUser]);
+    }
 }

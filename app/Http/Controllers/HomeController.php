@@ -626,6 +626,10 @@ class HomeController extends Controller
             ]);
             $dataField = array(
                 'Prospecto - Formulario RFC llenado' => true,
+                'Prospecto - Primer apellido' => $validated['primer_apellido'],
+                'Prospecto - Segundo apellido' => $validated['segundo_apellido'],
+                'Prospecto - Fecha de nacimiento' => $validated['fecha_nacimiento'],
+                'Prospecto - RFC' => $validated['rfc'],
             );
             $manychat = new Manychat();
             $manychat->setCustomFields($dataField, $decoded_id);
@@ -638,5 +642,6 @@ class HomeController extends Controller
     public function showValidateIdentityExit($token)
     {
         return view('validate-identity-exit', compact('token'));
+        
     }
 }

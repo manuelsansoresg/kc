@@ -33,5 +33,6 @@ class VerifyCsrfToken extends Middleware
         '/api/credit/{creditId}/pago/setData',
         '/validate-phone',
         '/set-url-rfc',
+        '/validate-cliente-activo',
     ];
 }

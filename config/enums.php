@@ -230,8 +230,13 @@ return [
         'URL Reporte' =>  10298820,
         'URL Encuesta' =>  10357823,
         'Prospecto -  Validación Celular' =>  12660578,
+        'Prospecto - RFC' =>  12761482,
+        'Prospecto - Primer apellido' =>  12761459,
+        'Prospecto - Segundo apellido' =>  12761460,
+        'Prospecto - Fecha de nacimiento' =>  12761511,
         'Prospecto - Validación RFC' =>  12762039,
         'Prospecto - Formulario RFC llenado' =>  12762173,
+        'Prospecto - Validación Cliente Activo' =>  12763922,
     ),
 
     "funding_operation" => array(
