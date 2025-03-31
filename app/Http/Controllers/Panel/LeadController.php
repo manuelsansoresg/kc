@@ -93,27 +93,39 @@ class LeadController extends Controller
         $isValidateRFC = false;
         $isValidate = false;
         $lead = null;
+        if ($getClientPerson != null) {
+            $lead = Lead::create([
+                'name' => $getClientPerson->name,
+                'last_name' => $getClientPerson->last_name,
+                'second_last_name' => $getClientPerson->second_last_name,
+                'birth_date' => $getClientPerson->birth_date,
+                'rfc' => $getClientPerson->rfc,
+                'email' => $getClientPerson->email,
+                'agreement_id' => $getClientPerson->agreement_id,
+            ]);
+             //* Execute notification in create lead
+            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+            (new $notification)->send($lead->id);
+            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+            
+        } else {
+            $lead = Lead::create([
+                $field => $valInput,
+              
+            ]);
+             //* Execute notification in create lead
+            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+            (new $notification)->send($lead->id);
+            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+        }
+       
 
-        $lead = Lead::create([
-            'name' => $getClientPerson->name,
-            'last_name' => $getClientPerson->last_name,
-            'second_last_name' => $getClientPerson->second_last_name,
-            'birth_date' => $getClientPerson->birth_date,
-            'rfc' => $getClientPerson->rfc,
-            'email' => $getClientPerson->email,
-            'agreement_id' => $getClientPerson->agreement_id,
-        ]);
-        //* Execute notification in create lead
-        $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
-        (new $notification)->send($lead->id);
-        
-        HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+       
         //* Execute notification in add lead
-        $notification_add   = SendNotificationsValues::STRATEGY['leadAddProspect'];
-        (new $notification_add)->send($lead->id);
+      //TODO: revisar que la validacion si no existe el celular como quedaria la tabla leadvalidation
         $statusActivo = 0;
         $contentActivo = 'Cliente inactivo';
-        if ($getClientPerson->active == 1) {
+        if ($getClientPerson != null && $getClientPerson->active == 1) {
             $statusActivo = 1;
             $contentActivo = 'Cliente activo';
         }
