@@ -229,7 +229,9 @@ return [
         'Tipo de crédito' =>  10202818,
         'URL Reporte' =>  10298820,
         'URL Encuesta' =>  10357823,
-        'Prospecto -  Celular' =>  12660578,
+        'Prospecto -  Validación Celular' =>  12660578,
+        'Prospecto - Validación RFC' =>  12762039,
+        'Prospecto - Formulario RFC llenado' =>  12762173,
     ),
 
     "funding_operation" => array(

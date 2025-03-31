@@ -8,6 +8,7 @@ use App\Models\Agreement;
 use App\Models\ApiActionManychat;
 use App\Models\Bank;
 use App\Models\ClientPerson;
+use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Product;
 use App\Strategies\Values\SendNotificationsValues;
@@ -156,7 +157,7 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $cellphone = $data['phone'];
-        
+        $manychat_id    = $data['id'];
         // Remover el prefijo +52 si existe
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
         
@@ -164,20 +165,59 @@ class ActionManychatController extends Controller
         $validate = ClientPerson::where('cellphone', $cleanPhone)->exists();
 
         $dataField = array(
-            'Prospecto -  Celular' => $validate,
+            'Prospecto -  Validación Celular' => $validate,
         );
+
+        $getClientPerson   = ClientPerson::where('cellphone', $cleanPhone)->first();
+        if ($getClientPerson != null) {
+            $lead = Lead::create([
+                'name' => $getClientPerson->name,
+                'last_name' => $getClientPerson->last_name,
+                'second_last_name' => $getClientPerson->second_last_name,
+                'birth_date' => $getClientPerson->birth_date,
+                'rfc' => $getClientPerson->rfc,
+                'email' => $getClientPerson->email,
+                'agreement_id' => $getClientPerson->agreement_id,
+                'manychat_id' => $manychat_id,
+            ]);
+                //* Execute notification in create lead
+            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+            (new $notification)->send($lead->id);
+            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+            
+        } else {
+            $lead = Lead::create([
+                'manychat_id' => $manychat_id,
+                'cellphone' => $cleanPhone,
+            ]);
+            //* Execute notification in create lead
+            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+            (new $notification)->send($lead->id);
+            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+        }
+
         $manychat = new Manychat();
-        $manychat_id    = $data['id'];
+        
         $manychat->setCustomFields($dataField, $manychat_id);
 
-        $lead = Lead::create([
-            'manychat_id' => $manychat_id,
-            'cellphone' => $cleanPhone,
-        ]);
+        
          //* Execute notification in create lead
          $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
          (new $notification)->send($lead->id);
 
         return response()->json(['validate' => $validate]);
+    }
+
+    public function setUrlRfc(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id    = $data['id'];
+        $url = base64_encode(hash('sha256', $manychat_id . env('APP_KEY')));
+        $dataField = array(
+            'Prospecto - Validación RFC' => $url,
+        );
+        $manychat = new Manychat();
+        $manychat->setCustomFields($dataField, $manychat_id);
+        
     }
 }

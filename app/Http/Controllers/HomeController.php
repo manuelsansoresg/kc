@@ -586,4 +586,57 @@ class HomeController extends Controller
         }
         return response()->json(['is_block' => $is_block]);
     }
+
+    public function showValidateIdentity($token)
+    {
+        return view('validate-identity', compact('token'));
+    }
+
+    public function storeValidateIdentity(Request $request)
+    {
+        $validated = $request->validate([
+            'token' => 'required',
+            'primer_apellido' => 'required|string|max:255',
+            'segundo_apellido' => 'required|string|max:255',
+            'nombres' => 'required|string|max:255',
+            'fecha_nacimiento' => 'required|date',
+            'rfc' => 'nullable|string|max:13'
+        ]);
+        // Decode and extract manychat_id from URL
+        // The token is a hash of manychat_id + APP_KEY, so we need to find the manychat_id that generates this hash
+        $token = $request->token;
+        $manychat_ids = Lead::pluck('manychat_id')->toArray();
+        
+        foreach ($manychat_ids as $id) {
+            if ($token === base64_encode(hash('sha256', $id . env('APP_KEY')))) {
+                $decoded_id = $id;
+                break;
+            }
+        }
+        
+        // Assuming the token is related to a manychat_id
+        $lead = Lead::where('manychat_id', $decoded_id)->first();
+        
+        if ($lead) {
+            $lead->update([
+                'first_name' => $validated['nombres'],
+                'last_name' => $validated['primer_apellido'] . ' ' . $validated['segundo_apellido'],
+                'birth_date' => $validated['fecha_nacimiento'],
+                'rfc' => $validated['rfc']
+            ]);
+            $dataField = array(
+                'Prospecto - Formulario RFC llenado' => true,
+            );
+            $manychat = new Manychat();
+            $manychat->setCustomFields($dataField, $decoded_id);
+
+            return redirect('/validate-identity/'.$token.'/exit');
+        }
+        return redirect()->back()->with('error', 'No se pudo procesar la información');
+    }
+
+    public function showValidateIdentityExit($token)
+    {
+        return view('validate-identity-exit', compact('token'));
+    }
 }

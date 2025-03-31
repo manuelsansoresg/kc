@@ -42,5 +42,7 @@ Route::get('credit/{credit}/{s2_credit_id}/{tipo}/set', ['\App\Http\Controllers\
 Route::get('investor/{financial_product_id}/setTotalCapital', ['\App\Http\Controllers\Api\CreditController', 'apiSetTotalCapital']);
 Route::get('credit/{creditId}/pago/setData', ['\App\Http\Controllers\Api\CreditController', 'setDataPago']);
 
+
 Route::post('validate-phone', [ActionManychatController::class, 'validatePhone']);
 
+Route::post('set-url-rfc', [ActionManychatController::class, 'setUrlRfc']);

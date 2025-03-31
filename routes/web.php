@@ -110,3 +110,7 @@ Route::get('password/enviado', function() {
 
 Route::get('/client-person/{id}/history', [ClientPersonHistoryController::class, 'show'])
     ->name('client.person.history');
+
+Route::get('/validate-identity/{token}', [App\Http\Controllers\HomeController::class, 'showValidateIdentity'])->name('validate.identity');
+Route::post('/validate-identity', [App\Http\Controllers\HomeController::class, 'storeValidateIdentity'])->name('validate.identity.store');
+Route::get('/validate-identity/{token}/exit', [App\Http\Controllers\HomeController::class, 'showValidateIdentityExit'])->name('validate.identity.exit');
