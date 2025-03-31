@@ -226,7 +226,22 @@ class ActionManychatController extends Controller
         $data = $request->all();
         $manychat_id = $data['id'];
         $cellphone = $data['phone'];
-        $rfc = $data['rfc'] ?? null; // Asumiendo que el RFC viene en la solicitud
+        $rfc = null; 
+
+        $manychat = new Manychat();
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $status = $info->status;
+
+        if ($status != 'error') {
+            $data = $info->data;
+            $custom_fields = $data->custom_fields;
+            foreach ($custom_fields as $key => $custom_field) {
+                if ($custom_field->name == 'Prospecto - RFC') {
+                    $rfc = $custom_field->value;
+                    break;
+                }
+            }
+        }
 
         // Remover el prefijo +52 si existe
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
@@ -245,8 +260,11 @@ class ActionManychatController extends Controller
         if ($clientPerson != null && $clientPerson->active == 1) {
             $validacionClienteActivo = true;
         }
-        $manychat = new Manychat();
-        $dataInfoUser = $manychat->getInfoUser($manychat_id);
-        return response()->json(['validate' => $validacionClienteActivo, 'dataInfoUser' => $dataInfoUser]);
+       
+        $dataField = array(
+            'Prospecto - Validación Cliente Activo' => $validacionClienteActivo,
+        );
+        $manychat->setCustomFields($dataField, $manychat_id);
+        return response()->json(['validate' => $validacionClienteActivo, 'rfc' => $rfc]);
     }
 }
