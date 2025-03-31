@@ -10,6 +10,7 @@ use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Lead;
 use App\Models\Product;
+use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
 
@@ -168,6 +169,14 @@ class ActionManychatController extends Controller
         $manychat = new Manychat();
         $manychat_id    = $data['id'];
         $manychat->setCustomFields($dataField, $manychat_id);
+
+        $lead = Lead::create([
+            'manychat_id' => $manychat_id,
+            'cellphone' => $cleanPhone,
+        ]);
+         //* Execute notification in create lead
+         $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+         (new $notification)->send($lead->id);
 
         return response()->json(['validate' => $validate]);
     }
