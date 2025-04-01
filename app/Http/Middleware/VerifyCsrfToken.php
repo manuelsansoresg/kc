@@ -36,5 +36,7 @@ class VerifyCsrfToken extends Middleware
         '/validate-cliente-activo',
         '/validate-tramite-pendiente',
         '/create-lead',
+        '/validate-identity',
+        '/validate-identity/get',
     ];
 }

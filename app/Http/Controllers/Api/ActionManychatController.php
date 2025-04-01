@@ -317,4 +317,32 @@ class ActionManychatController extends Controller
         return response()->json(['validate' => $validacionTramitePendiente]);
         
     }
+
+    public function validateIdentity(Request $request)
+    {
+        $data = $request->all();
+        $cellphone = $data['phone'];
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->update([
+            'identity_validated' => true,
+        ]);
+        return response()->json(['validate' => $getClientPerson]);
+       
+    }
+
+    public function getValidateIdentity(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['phone'];
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $identity_validated = $getClientPerson->identity_validated;
+        $dataField = array(
+            'Prospecto - Validación Identidad' => $identity_validated,
+        );
+        $manychat = new Manychat();
+        $manychat->setCustomFields($dataField, $manychat_id);
+        return response()->json(['validate' => $identity_validated]);
+    }
 }
