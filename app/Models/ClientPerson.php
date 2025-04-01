@@ -102,6 +102,7 @@ class ClientPerson extends Model
         'validated_clabe',
         'cm_agreement',
         'cm_agreement_sign',
+        'identity_validated',
     ];
 
     public static function listDatatable($isAdmin = true, $origin = null)
