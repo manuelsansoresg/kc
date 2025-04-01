@@ -337,7 +337,7 @@ class ActionManychatController extends Controller
         $cellphone = $data['phone'];
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
-        $identity_validated = $getClientPerson->identity_validated;
+        $identity_validated = $getClientPerson != null ? $getClientPerson->identity_validated : false;
         $dataField = array(
             'Prospecto - Validación Identidad' => $identity_validated,
         );
