@@ -326,7 +326,7 @@ class ActionManychatController extends Controller
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->update([
             'identity_validated' => true,
         ]);
-        return response()->json(['validate' => $getClientPerson]);
+        return response()->json(['validate' => true]);
        
     }
 
