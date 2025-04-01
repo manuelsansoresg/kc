@@ -49,4 +49,4 @@ Route::post('set-url-rfc', [ActionManychatController::class, 'setUrlRfc']);
 Route::post('validate-cliente-activo', [ActionManychatController::class, 'validateClienteActivo']);
 Route::post('validate-tramite-pendiente', [ActionManychatController::class, 'validateTramitePendiente']);
 Route::post('validate-identity', [ActionManychatController::class, 'validateIdentity']);
-Route::get('validate-identity/get', [ActionManychatController::class, 'getValidateIdentity']);
+Route::post('validate-identity-get', [ActionManychatController::class, 'getValidateIdentity']);
