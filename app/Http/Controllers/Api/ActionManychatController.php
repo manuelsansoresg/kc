@@ -185,14 +185,11 @@ class ActionManychatController extends Controller
                 
             
         } else {
-            $lead = Lead::where('manychat_id', $manychat_id)->update([
+            Lead::where('manychat_id', $manychat_id)->update([
                 'manychat_id' => $manychat_id,
                 'cellphone' => $cleanPhone,
             ]);
-            //* Execute notification in create lead
-            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
-            (new $notification)->send($lead->id);
-            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+           
         }
 
         $manychat = new Manychat();
