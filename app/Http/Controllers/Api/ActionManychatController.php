@@ -171,7 +171,7 @@ class ActionManychatController extends Controller
 
         $getClientPerson   = ClientPerson::where('cellphone', $cleanPhone)->first();
         if ($getClientPerson != null) {
-            $lead = Lead::create([
+            $lead = Lead::where('manychat_id', $manychat_id)->update([
                 'name' => $getClientPerson->name,
                 'last_name' => $getClientPerson->last_name,
                 'second_last_name' => $getClientPerson->second_last_name,
@@ -181,13 +181,11 @@ class ActionManychatController extends Controller
                 'agreement_id' => $getClientPerson->agreement_id,
                 'manychat_id' => $manychat_id,
             ]);
-                //* Execute notification in create lead
-            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
-            (new $notification)->send($lead->id);
-            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+          
+                
             
         } else {
-            $lead = Lead::create([
+            $lead = Lead::where('manychat_id', $manychat_id)->update([
                 'manychat_id' => $manychat_id,
                 'cellphone' => $cleanPhone,
             ]);
@@ -207,6 +205,25 @@ class ActionManychatController extends Controller
          (new $notification)->send($lead->id);
 
         return response()->json(['validate' => $validate]);
+    }
+
+    public function createLead(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['phone'];
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+       
+        $lead = Lead::create([
+            'manychat_id' => $manychat_id,
+            'cellphone' => $cleanPhone,
+        ]);
+        //* Execute notification in create lead
+        $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+        (new $notification)->send($lead->id);
+        HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+
+        return response()->json(['lead' => $lead]);
     }
 
     public function setUrlRfc(Request $request)
