@@ -237,6 +237,7 @@ return [
         'Prospecto - Validación RFC' =>  12762039,
         'Prospecto - Formulario RFC llenado' =>  12762173,
         'Prospecto - Validación Cliente Activo' =>  12763922,
+        'Crédito Preautorizado - Trámite pendiente' =>  12764303,
     ),
 
     "funding_operation" => array(

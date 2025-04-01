@@ -8,6 +8,7 @@ use App\Models\Agreement;
 use App\Models\ApiActionManychat;
 use App\Models\Bank;
 use App\Models\ClientPerson;
+use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Product;
@@ -266,5 +267,48 @@ class ActionManychatController extends Controller
         );
         $manychat->setCustomFields($dataField, $manychat_id);
         return response()->json(['validate' => $validacionClienteActivo, 'rfc' => $rfc]);
+    }
+
+    public function validateTramitePendiente(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['phone'];
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $rfc = null;
+        $manychat = new Manychat();
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $status = $info->status;
+        if ($status != 'error') {
+            $data = $info->data;
+            $custom_fields = $data->custom_fields;
+            foreach ($custom_fields as $key => $custom_field) {
+                if ($custom_field->name == 'Prospecto - RFC') {
+                    $rfc = $custom_field->value;
+                    break;
+                }
+            }
+        }
+        if (!$getClientPerson && $rfc) {
+            $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
+        }
+        $statusTramites = array(
+            HistoryLog::KC_CHECK_UP ,
+            HistoryLog::CREDIT_IN_PROGRESS ,
+            HistoryLog::NEW_CREDIT_KC_CHECK_UP ,
+            HistoryLog::KC_CONTROL_DESK ,
+            HistoryLog::KC_DELIVERY ,
+            HistoryLog::KC_SWAP ,
+            HistoryLog::KC_PAYMENT
+        );
+        $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
+        $validacionTramitePendiente = $getStatus > 0 ? false : true;
+        $dataField = array(
+            'Crédito Preautorizado - Trámite pendiente' => $validacionTramitePendiente,
+        );
+        $manychat->setCustomFields($dataField, $manychat_id);
+        return response()->json(['validate' => $validacionTramitePendiente]);
+        
     }
 }

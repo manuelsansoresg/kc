@@ -34,5 +34,6 @@ class VerifyCsrfToken extends Middleware
         '/validate-phone',
         '/set-url-rfc',
         '/validate-cliente-activo',
+        '/validate-tramite-pendiente',
     ];
 }

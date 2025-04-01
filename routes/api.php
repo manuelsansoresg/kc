@@ -47,3 +47,4 @@ Route::post('validate-phone', [ActionManychatController::class, 'validatePhone']
 
 Route::post('set-url-rfc', [ActionManychatController::class, 'setUrlRfc']);
 Route::post('validate-cliente-activo', [ActionManychatController::class, 'validateClienteActivo']);
+Route::post('validate-tramite-pendiente', [ActionManychatController::class, 'validateTramitePendiente']);
