@@ -181,8 +181,6 @@ class ActionManychatController extends Controller
                 'agreement_id' => $getClientPerson->agreement_id,
                 'manychat_id' => $manychat_id,
             ]);
-          
-                
             
         } else {
             Lead::where('manychat_id', $manychat_id)->update([
@@ -193,13 +191,7 @@ class ActionManychatController extends Controller
         }
 
         $manychat = new Manychat();
-        
         $manychat->setCustomFields($dataField, $manychat_id);
-
-        
-         //* Execute notification in create lead
-         $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
-         (new $notification)->send($lead->id);
 
         return response()->json(['validate' => $validate]);
     }
