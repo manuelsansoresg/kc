@@ -9,6 +9,7 @@ use App\Models\ApiActionManychat;
 use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\FinancialAgreement;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Product;
@@ -344,5 +345,33 @@ class ActionManychatController extends Controller
         $manychat = new Manychat();
         $manychat->setCustomFields($dataField, $manychat_id);
         return response()->json(['validate' => $identity_validated]);
+    }
+
+    public function validateSodActive(Request $request)
+    {
+        $manychat = new Manychat();
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['phone'];
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $sod_active = 0;
+        if ($getClientPerson != null && $getClientPerson->sod_active == 0) {
+            $sod_active = 1;
+        }
+        $dataField = array(
+            'SOD - Activo' => $sod_active,
+        );
+        $manychat->setCustomFields($dataField, $manychat_id);
+    }
+
+    public function validateFechasPermitidas(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['phone'];
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $lead = Lead::where('manychat_id', $manychat_id)->first();
+        $financialAgreement = FinancialAgreement::where('agreement_id', $lead->agreement_id)->first();
     }
 }

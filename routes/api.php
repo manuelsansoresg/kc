@@ -50,3 +50,5 @@ Route::post('validate-cliente-activo', [ActionManychatController::class, 'valida
 Route::post('validate-tramite-pendiente', [ActionManychatController::class, 'validateTramitePendiente']);
 Route::post('validate-identity', [ActionManychatController::class, 'validateIdentity']);
 Route::post('validate-identity-get', [ActionManychatController::class, 'getValidateIdentity']);
+Route::post('validate-sod-active', [ActionManychatController::class, 'validateSodActive']);
+Route::post('validate-fechas-permitidas', [ActionManychatController::class, 'validateFechasPermitidas']);
