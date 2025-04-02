@@ -616,13 +616,15 @@ class HomeController extends Controller
         
         // Assuming the token is related to a manychat_id
         $lead = Lead::where('manychat_id', $decoded_id)->first();
-        
+        $clientPerson = ClientPerson::where('rfc', $validated['rfc'])->first();
+        $agreementId  = $clientPerson != null ? $clientPerson->agreement_id : null;
         if ($lead) {
             $lead->update([
                 'first_name' => $validated['nombres'],
                 'last_name' => $validated['primer_apellido'] . ' ' . $validated['segundo_apellido'],
                 'birth_date' => $validated['fecha_nacimiento'],
-                'rfc' => $validated['rfc']
+                'rfc' => $validated['rfc'],
+                'agreement_id' => $agreementId
             ]);
             $dataField = array(
                 'Prospecto - Formulario RFC llenado' => true,

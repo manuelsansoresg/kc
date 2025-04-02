@@ -375,4 +375,34 @@ class ActionManychatController extends Controller
         $lead = Lead::where('manychat_id', $manychat_id)->first();
         $financialAgreement = FinancialAgreement::where('agreement_id', $lead->agreement_id)->first();
     }
+
+    public function setSod(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['phone'];
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $rfc = null;
+        $manychat = new Manychat();
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $status = $info->status;
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        if ($status != 'error') {
+            $data = $info->data;
+            $custom_fields = $data->custom_fields;
+            foreach ($custom_fields as $key => $custom_field) {
+                if ($custom_field->name == 'Prospecto - RFC') {
+                    $rfc = $custom_field->value;
+                    break;
+                }
+            }
+        }
+        if (!$getClientPerson && $rfc) {
+            $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
+        }
+        
+        $lead = Lead::where('manychat_id', $manychat_id)->update([
+            'product_id' => 1,
+        ]);
+    }
 }
