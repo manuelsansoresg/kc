@@ -272,7 +272,7 @@ class ActionManychatController extends Controller
             'Prospecto - Validación Cliente Activo' => $validacionClienteActivo,
         );
         $manychat->setCustomFields($dataField, $manychat_id);
-        return response()->json(['validate' => $validacionClienteActivo, 'rfc' => $rfc]);
+        return response()->json(['validate' => $validacionClienteActivo]);
     }
 
     public function validateTramitePendiente(Request $request)
