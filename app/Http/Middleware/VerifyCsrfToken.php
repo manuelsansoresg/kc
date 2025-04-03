@@ -40,5 +40,6 @@ class VerifyCsrfToken extends Middleware
         '/validate-identity/get',
         '/validate-sod-active',
         '/validate-fechas-permitidas',
+        '/set-sod/{productId}',
     ];
 }

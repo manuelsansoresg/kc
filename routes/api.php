@@ -52,4 +52,4 @@ Route::post('validate-identity', [ActionManychatController::class, 'validateIden
 Route::post('validate-identity-get', [ActionManychatController::class, 'getValidateIdentity']);
 Route::post('validate-sod-active', [ActionManychatController::class, 'validateSodActive']);
 Route::post('validate-fechas-permitidas', [ActionManychatController::class, 'validateFechasPermitidas']);
-Route::post('set-sod', [ActionManychatController::class, 'setSod']);
+Route::post('set-sod/{productId}', [ActionManychatController::class, 'setSod']);

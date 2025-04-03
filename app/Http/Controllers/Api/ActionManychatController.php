@@ -377,9 +377,15 @@ class ActionManychatController extends Controller
         $financialAgreement = FinancialAgreement::where('agreement_id', $lead->agreement_id)->first();
     }
 
-    public function setSod(Request $request)
+    public function setSod($productId, Request $request)
     {
         $data = $request->all();
+        $products = array(
+            '1' => 'Crédito personal',
+            '2' => 'Soluciona tu deuda',
+            '3' => 'Salario On-Demand',
+            );
+        
         $manychat_id = $data['id'];
         $cellphone = $data['phone'];
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
@@ -397,18 +403,6 @@ class ActionManychatController extends Controller
                     $rfc = $custom_field->value;
                     break;
                 }
-                if ($custom_field->name == 'Crédito Personal' && $custom_field->value == true) {
-                    $productName ='Crédito personal';
-                    break;
-                }
-                if ($custom_field->name == 'Salario On-Demand' && $custom_field->value == true) {
-                    $productName ='Soluciona tu deuda';
-                    break;
-                }
-                if ($custom_field->name == 'Soluciona tu deuda' && $custom_field->value == true) {
-                    $productName ='Salario On-Demand';
-                    break;
-                }
             }
         }
         if (!$getClientPerson && $rfc) {
@@ -416,7 +410,7 @@ class ActionManychatController extends Controller
         }
         $getLead = Lead::where('manychat_id', $manychat_id)->first();
 
-        $getProduct = Product::where('alias', $productName)->first();
+        $getProduct = Product::where('alias', $products[$productId])->first();
         $getFinancialProduct = FinancialProduct::select('financial_products.id')->join('financial_agreements', 'financial_agreements.product_id', 'financial_products.id')
         ->where('product_id', $getProduct->id)
         ->where('financial_agreements.agreement_id', $getLead->agreement_id)
