@@ -10,6 +10,7 @@ use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\FinancialAgreement;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
 use App\Models\Product;
@@ -383,6 +384,7 @@ class ActionManychatController extends Controller
         $cellphone = $data['phone'];
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
         $rfc = null;
+        $productName = null;
         $manychat = new Manychat();
         $info = json_decode($manychat->getInfoUser($manychat_id));
         $status = $info->status;
@@ -395,14 +397,33 @@ class ActionManychatController extends Controller
                     $rfc = $custom_field->value;
                     break;
                 }
+                if ($custom_field->name == 'Crédito Personal' && $custom_field->value == true) {
+                    $productName ='Crédito personal';
+                    break;
+                }
+                if ($custom_field->name == 'Salario On-Demand' && $custom_field->value == true) {
+                    $productName ='Soluciona tu deuda';
+                    break;
+                }
+                if ($custom_field->name == 'Soluciona tu deuda' && $custom_field->value == true) {
+                    $productName ='Salario On-Demand';
+                    break;
+                }
             }
         }
         if (!$getClientPerson && $rfc) {
             $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
         }
-        
-        $lead = Lead::where('manychat_id', $manychat_id)->update([
-            'product_id' => 1,
+        $getLead = Lead::where('manychat_id', $manychat_id)->first();
+
+        $getProduct = Product::where('alias', $productName)->first();
+        $getFinancialProduct = FinancialProduct::select('financial_products.id')->join('financial_agreements', 'financial_agreements.product_id', 'financial_products.id')
+        ->where('product_id', $getProduct->id)
+        ->where('financial_agreements.agreement_id', $getLead->agreement_id)
+        ->first();
+        Lead::where('manychat_id', $manychat_id)->update([
+            'product_id' => $getFinancialProduct->id,
         ]);
+        return response()->json(['validate' => true]);
     }
 }
