@@ -474,6 +474,32 @@ class ActionManychatController extends Controller
         $lead = Lead::getMontoMinMax($request);
         $minimoRedondeado = $lead['monto_minimo'];
         $maximoRedondeado = $lead['monto_maximo'];
-        
+
+        $manychat = new Manychat();
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $status = $info->status;
+        $montoSolicitado = null;
+        $validateMontoSolicitado = false;
+        if ($status != 'error') {
+            $data = $info->data;
+            $custom_fields = $data->custom_fields;
+            foreach ($custom_fields as $key => $custom_field) {
+                if ($custom_field->name == 'SOD - Monto solicitado') {
+                    $montoSolicitado = $custom_field->value;
+                    break;
+                }
+            }
+        }
+
+        if ($montoSolicitado != null) {
+            if ($montoSolicitado <= $maximoRedondeado && $montoSolicitado >= $minimoRedondeado) {
+                $validateMontoSolicitado = true;
+            }
+        }
+        $dataField = array(
+            'SOD - Validar monto solicitado' => $validateMontoSolicitado,
+        );
+        $manychat->setCustomFields($dataField, $manychat_id);
+        return response()->json(['validate' => true]);
     }
 }

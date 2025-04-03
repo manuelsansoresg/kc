@@ -243,6 +243,7 @@ return [
         'SOD - Fechas permitidas' =>  12769426,
         'SOD - Monto Máximo disponible' =>  12769433,
         'SOD - Monto Mínimo disponible' =>  12771272,
+        'SOD - Validar monto solicitado' =>  12774554,
     ),
 
     "funding_operation" => array(
