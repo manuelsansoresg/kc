@@ -423,6 +423,6 @@ class ActionManychatController extends Controller
                 'product_id' => $getFinancialProduct->id,
             ]);
         }
-        return response()->json(['validate' => true, 'productId' => $getProduct->id, 'agreement_id' => $getClientPerson->agreement_id]);
+        return response()->json(['validate' => true]);
     }
 }
