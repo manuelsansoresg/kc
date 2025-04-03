@@ -363,9 +363,13 @@ class ActionManychatController extends Controller
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $sod_active = 0;
+        $textSoad = 'Tiene un Salario On-Demand activo';
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         if ($getClientPerson != null && $getClientPerson->sod_active == 0) {
+            $textSoad = 'No tiene un Salario On-Demand activo';
             $sod_active = 1;
         }
+        LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - SOD activo', $sod_active, $textSoad);
         $dataField = array(
             'SOD - Activo' => $sod_active,
         );
