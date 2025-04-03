@@ -315,7 +315,7 @@ class ActionManychatController extends Controller
         $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
         $validacionTramitePendiente = $getStatus > 0 ? false : true;
         $dataField = array(
-            'Crédito Preautorizado - Trámite pendiente' => $validacionTramitePendiente,
+            'Prospecto - Validar trámite pendiente' => $validacionTramitePendiente,
         );
         $manychat->setCustomFields($dataField, $manychat_id);
         return response()->json(['validate' => $validacionTramitePendiente]);

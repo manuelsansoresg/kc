@@ -237,7 +237,7 @@ return [
         'Prospecto - Validación RFC' =>  12762039,
         'Prospecto - Formulario RFC llenado' =>  12762173,
         'Prospecto - Validación Cliente Activo' =>  12763922,
-        'Crédito Preautorizado - Trámite pendiente' =>  12764303,
+        'Prospecto - Validar trámite pendiente' =>  12780359,
         'Prospecto - Validación Identidad' =>  12774539,
         'SOD - Activo' =>  12764303,
     ),
