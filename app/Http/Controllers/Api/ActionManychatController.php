@@ -172,8 +172,9 @@ class ActionManychatController extends Controller
         );
 
         $getClientPerson   = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $getLead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         if ($getClientPerson != null) {
-            $lead = Lead::where('manychat_id', $manychat_id)->update([
+            $lead = Lead::where('id', $getLead->id)->update([
                 'name' => $getClientPerson->name,
                 'last_name' => $getClientPerson->last_name,
                 'second_last_name' => $getClientPerson->second_last_name,
@@ -182,10 +183,11 @@ class ActionManychatController extends Controller
                 'email' => $getClientPerson->email,
                 'agreement_id' => $getClientPerson->agreement_id,
                 'manychat_id' => $manychat_id,
+                'cellphone' => $cleanPhone,
             ]);
             
         } else {
-            Lead::where('manychat_id', $manychat_id)->update([
+            Lead::where('id', $getLead->id)->update([
                 'manychat_id' => $manychat_id,
                 'cellphone' => $cleanPhone,
             ]);

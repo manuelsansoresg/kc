@@ -615,23 +615,27 @@ class HomeController extends Controller
         }
         
         // Assuming the token is related to a manychat_id
-        $lead = Lead::where('manychat_id', $decoded_id)->first();
+        $lead = Lead::where('manychat_id', $decoded_id)->orderBy('id', 'desc')->first();
         $clientPerson = ClientPerson::where('rfc', $validated['rfc'])->first();
         $agreementId  = $clientPerson != null ? $clientPerson->agreement_id : null;
-        if ($lead) {
+        if ($lead!= null && $clientPerson != null) {
             $lead->update([
-                'first_name' => $validated['nombres'],
-                'last_name' => $validated['primer_apellido'] . ' ' . $validated['segundo_apellido'],
-                'birth_date' => $validated['fecha_nacimiento'],
-                'rfc' => $validated['rfc'],
-                'agreement_id' => $agreementId
+
+                'name' => $clientPerson->name,
+                'last_name' => $clientPerson->last_name,
+                'second_last_name' => $clientPerson->second_last_name,
+                'birth_date' => $clientPerson->birth_date,
+                'rfc' => $clientPerson->rfc,
+                'email' => $clientPerson->email,
+                'agreement_id' => $clientPerson->agreement_id,
+                'cellphone' => $clientPerson->cellphone,
             ]);
             $dataField = array(
                 'Prospecto - Formulario RFC llenado' => true,
-                'Prospecto - Primer apellido' => $validated['primer_apellido'],
-                'Prospecto - Segundo apellido' => $validated['segundo_apellido'],
-                'Prospecto - Fecha de nacimiento' => $validated['fecha_nacimiento'],
-                'Prospecto - RFC' => $validated['rfc'],
+                'Prospecto - Primer apellido' => $clientPerson->last_name,
+                'Prospecto - Segundo apellido' => $clientPerson->second_last_name,
+                'Prospecto - Fecha de nacimiento' => $clientPerson->birth_date,
+                'Prospecto - RFC' => $clientPerson->rfc,
             );
             $manychat = new Manychat();
             $manychat->setCustomFields($dataField, $decoded_id);
