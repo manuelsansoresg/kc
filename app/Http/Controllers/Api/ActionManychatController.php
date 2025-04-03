@@ -419,7 +419,7 @@ class ActionManychatController extends Controller
         ->first();
         if ($getFinancialProduct != null) {
             $getLead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
-            Lead::where('id', $getLead->id)->orderBy('id', 'desc')->update([
+            Lead::where('id', $getLead->id)->update([
                 'product_id' => $getFinancialProduct->id,
             ]);
         }
