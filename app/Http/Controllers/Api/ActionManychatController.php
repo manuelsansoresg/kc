@@ -13,9 +13,13 @@ use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
+use App\Models\LeadValidation;
 use App\Models\Product;
+use App\Models\SodScheduleDate;
+use App\Models\SodScheduleName;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ActionManychatController extends Controller
@@ -375,8 +379,30 @@ class ActionManychatController extends Controller
         $manychat_id = $data['id'];
         $cellphone = $data['phone'];
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
-        $lead = Lead::where('manychat_id', $manychat_id)->first();
-        $financialAgreement = FinancialAgreement::where('agreement_id', $lead->agreement_id)->first();
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+        $financialProduct = FinancialProduct::where('id', $lead->product_id)->first();
+        //validar soad en fecha
+        $getSodName = SodScheduleName::find($lead->agreement_id);
+        $isSoadDate = 'Solicitud fuera del rango de fechas';
+        $is_sod_on_date_allowed = false;
+        $statusRangoFechas = 0;
+        if ($getSodName != null) {
+            $nameField              = "schedule_$getSodName->id";
+            $alias                  = "schedule_$getSodName->id as schedule";
+            $getDate                = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
+            $isSoadDate             = $getDate!= null && $getDate->schedule == 1 ?  'Solicitud dentro del rango de fechas' : $isSoadDate;
+            $statusRangoFechas             = $getDate!= null && $getDate->schedule == 1 ?  1 : 0;
+            if ($financialProduct->type_product_id == 3) {
+                LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - SOD en rango de fechas permitidas', $statusRangoFechas, $isSoadDate);
+            }
+
+        }
+        $dataField = array(
+            'SOD - Fechas permitidas' => $is_sod_on_date_allowed,
+        );
+        $manychat = new Manychat();
+        $manychat->setCustomFields($dataField, $manychat_id);
+        return response()->json(['validate' => $is_sod_on_date_allowed]);
     }
 
     public function setSod($productId, Request $request)
@@ -426,5 +452,57 @@ class ActionManychatController extends Controller
             ]);
         }
         return response()->json(['validate' => true]);
+    }
+
+    public function getMontoMinMax(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['phone'];
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $manychat = new Manychat();
+        $rfc = null;
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $status = $info->status;
+        if ($status != 'error') {
+            $data = $info->data;
+            $custom_fields = $data->custom_fields;
+            foreach ($custom_fields as $key => $custom_field) {
+                if ($custom_field->name == 'Prospecto - RFC') {
+                    $rfc = $custom_field->value;
+                    break;
+                }
+            }
+        }
+        if (!$getClientPerson && $rfc) {
+            $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
+        }
+        //calcular minimo
+        $minimo = $getClientPerson->daily_income_adjusted * 1;
+        $minimoRedondeado = floor($minimo / 100) * 100;
+        //calcular maximo
+        $currentDate = Carbon::now()->toDateString();
+        $schedule = SodScheduleDate::selectRaw("
+                    CASE
+                        WHEN schedule_1 = 2 AND fecha = ? THEN 1
+                        ELSE DATEDIFF(fecha, (SELECT MAX(fecha) 
+                                            FROM sod_schedule_dates 
+                                            WHERE schedule_1 = 2 
+                                            AND fecha < ?))
+                    END as dias
+                ", [$currentDate, $currentDate])
+                ->where('fecha', $currentDate)
+                ->first();
+        $dailyIncomeAdjusted  = $getClientPerson->daily_income_adjusted;
+        $maximo = $dailyIncomeAdjusted * $schedule->dias;
+        // Redondear hacia abajo al múltiplo de 100
+        $maximoRedondeado = floor($maximo / 100) * 100;
+        $dataField = array(
+            'SOD - Monto Máximo disponible' => $maximoRedondeado,
+            'SOD - Monto Mínimo disponible' => $minimoRedondeado,
+        );
+        $manychat->setCustomFields($dataField, $manychat_id);
+        return response()->json(['monto_minimo' => $minimoRedondeado, 'monto_maximo' => $maximoRedondeado]);
     }
 }

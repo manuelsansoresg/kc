@@ -240,6 +240,9 @@ return [
         'Prospecto - Validar trámite pendiente' =>  12780359,
         'Prospecto - Validación Identidad' =>  12774539,
         'SOD - Activo' =>  12764303,
+        'SOD - Fechas permitidas' =>  12769426,
+        'SOD - Monto Máximo disponible' =>  12769433,
+        'SOD - Monto Mínimo disponible' =>  12771272,
     ),
 
     "funding_operation" => array(
