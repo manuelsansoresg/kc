@@ -417,13 +417,11 @@ class ActionManychatController extends Controller
         ->where('type_product_id', $getProduct->id)
         ->where('financial_agreements.agreement_id', $getClientPerson->agreement_id)
         ->first();
-        $getLead = Lead::where('cellphone', $cleanPhone)->first();
-        if (!$getLead) {
-            $getLead = Lead::where('rfc', $rfc)->first();
+        if ($getFinancialProduct != null) {
+            Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->update([
+                'product_id' => $getFinancialProduct->id,
+            ]);
         }
-        Lead::where('manychat_id', $manychat_id)->update([
-            'product_id' => $getFinancialProduct->id,
-        ]);
         return response()->json(['validate' => true, 'productId' => $getProduct->id, 'agreement_id' => $getClientPerson->agreement_id]);
     }
 }
