@@ -411,8 +411,10 @@ class ActionManychatController extends Controller
         $getLead = Lead::where('manychat_id', $manychat_id)->first();
 
         $getProduct = Product::where('alias', $products[$productId])->first();
-        $getFinancialProduct = FinancialProduct::select('financial_products.id')->join('financial_agreements', 'financial_agreements.product_id', 'financial_products.id')
-        ->where('product_id', $getProduct->id)
+        $getFinancialProduct = FinancialProduct::select('financial_products.id')
+        
+        ->join('financial_agreements', 'financial_agreements.product_id', 'financial_products.id')
+        ->where('type_product_id', $getProduct->id)
         ->where('financial_agreements.agreement_id', $getLead->agreement_id)
         ->first();
         Lead::where('manychat_id', $manychat_id)->update([
