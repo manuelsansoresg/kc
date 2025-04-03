@@ -408,21 +408,22 @@ class ActionManychatController extends Controller
         if (!$getClientPerson && $rfc) {
             $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
         }
-        $getLead = Lead::where('cellphone', $cleanPhone)->first();
-        if (!$getLead) {
-            $getLead = Lead::where('rfc', $rfc)->first();
-        }
+        
 
         $getProduct = Product::where('alias', $products[$productId])->first();
         $getFinancialProduct = FinancialProduct::select('financial_products.id')
 
         ->join('financial_agreements', 'financial_agreements.product_id', 'financial_products.id')
         ->where('type_product_id', $getProduct->id)
-        ->where('financial_agreements.agreement_id', $getLead->agreement_id)
+        ->where('financial_agreements.agreement_id', $getClientPerson->agreement_id)
         ->first();
-        /* Lead::where('manychat_id', $manychat_id)->update([
+        $getLead = Lead::where('cellphone', $cleanPhone)->first();
+        if (!$getLead) {
+            $getLead = Lead::where('rfc', $rfc)->first();
+        }
+        Lead::where('manychat_id', $manychat_id)->update([
             'product_id' => $getFinancialProduct->id,
-        ]); */
-        return response()->json(['validate' => true, 'productId' => $getProduct->id, 'agreement_id' => $getLead->agreement_id]);
+        ]);
+        return response()->json(['validate' => true, 'productId' => $getProduct->id, 'agreement_id' => $getClientPerson->agreement_id]);
     }
 }
