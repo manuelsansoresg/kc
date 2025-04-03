@@ -408,7 +408,10 @@ class ActionManychatController extends Controller
         if (!$getClientPerson && $rfc) {
             $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
         }
-        $getLead = Lead::where('manychat_id', $manychat_id)->first();
+        $getLead = Lead::where('cellphone', $cleanPhone)->first();
+        if (!$getLead) {
+            $getLead = Lead::where('rfc', $rfc)->first();
+        }
 
         $getProduct = Product::where('alias', $products[$productId])->first();
         $getFinancialProduct = FinancialProduct::select('financial_products.id')
