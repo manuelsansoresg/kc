@@ -636,12 +636,23 @@ class HomeController extends Controller
                 'Prospecto - Segundo apellido' => $clientPerson->second_last_name,
                 'Prospecto - Fecha de nacimiento' => $clientPerson->birth_date,
                 'Prospecto - RFC' => $clientPerson->rfc,
+                'Prospecto - Validación RFC' => true,
             );
             $manychat = new Manychat();
             $manychat->setCustomFields($dataField, $decoded_id);
 
             return redirect('/validate-identity/'.$token.'/exit');
         }
+        $dataField = array(
+            'Prospecto - Formulario RFC llenado' => true,
+            'Prospecto - Primer apellido' => $clientPerson->last_name,
+            'Prospecto - Segundo apellido' => $clientPerson->second_last_name,
+            'Prospecto - Fecha de nacimiento' => $clientPerson->birth_date,
+            'Prospecto - RFC' => $clientPerson->rfc,
+            'Prospecto - Validación RFC' => false,
+        );
+        $manychat = new Manychat();
+        $manychat->setCustomFields($dataField, $decoded_id);
         return redirect()->back()->with('error', 'No se pudo procesar la información');
     }
 
