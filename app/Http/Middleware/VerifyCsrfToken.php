@@ -42,5 +42,6 @@ class VerifyCsrfToken extends Middleware
         '/validate-fechas-permitidas',
         '/set-sod/{productId}',
         '/getMontoMinMax',
+        '/validate-monto-solicitado',
     ];
 }

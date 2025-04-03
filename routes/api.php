@@ -54,3 +54,4 @@ Route::post('validate-sod-active', [ActionManychatController::class, 'validateSo
 Route::post('validate-fechas-permitidas', [ActionManychatController::class, 'validateFechasPermitidas']);
 Route::post('set-sod/{productId}', [ActionManychatController::class, 'setSod']);
 Route::post('getMontoMinMax', [ActionManychatController::class, 'getMontoMinMax']);
+Route::post('validate-monto-solicitado', [ActionManychatController::class, 'validateMontoSolicitado']);

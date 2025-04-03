@@ -460,53 +460,20 @@ class ActionManychatController extends Controller
 
     public function getMontoMinMax(Request $request)
     {
+        $lead = Lead::getMontoMinMax($request);
+        $minimoRedondeado = $lead['monto_minimo'];
+        $maximoRedondeado = $lead['monto_maximo'];
+        return response()->json(['monto_minimo' => $minimoRedondeado, 'monto_maximo' => $maximoRedondeado]);
+    }
+
+    public function validateMontoSolicitado(Request $request)
+    {
         $data = $request->all();
         $manychat_id = $data['id'];
-        $cellphone = $data['phone'];
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
-        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
-        $manychat = new Manychat();
-        $rfc = null;
-        $info = json_decode($manychat->getInfoUser($manychat_id));
-        $status = $info->status;
-        if ($status != 'error') {
-            $data = $info->data;
-            $custom_fields = $data->custom_fields;
-            foreach ($custom_fields as $key => $custom_field) {
-                if ($custom_field->name == 'Prospecto - RFC') {
-                    $rfc = $custom_field->value;
-                    break;
-                }
-            }
-        }
-        if (!$getClientPerson && $rfc) {
-            $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
-        }
-        //calcular minimo
-        $minimo = $getClientPerson->daily_income_adjusted * 1;
-        $minimoRedondeado = floor($minimo / 100) * 100;
-        //calcular maximo
-        $currentDate = Carbon::now()->toDateString();
-        $schedule = SodScheduleDate::selectRaw("
-                    CASE
-                        WHEN schedule_1 = 2 AND fecha = ? THEN 1
-                        ELSE DATEDIFF(fecha, (SELECT MAX(fecha) 
-                                            FROM sod_schedule_dates 
-                                            WHERE schedule_1 = 2 
-                                            AND fecha < ?))
-                    END as dias
-                ", [$currentDate, $currentDate])
-                ->where('fecha', $currentDate)
-                ->first();
-        $dailyIncomeAdjusted  = $getClientPerson->daily_income_adjusted;
-        $maximo = $dailyIncomeAdjusted * $schedule->dias;
-        // Redondear hacia abajo al múltiplo de 100
-        $maximoRedondeado = floor($maximo / 100) * 100;
-        $dataField = array(
-            'SOD - Monto Máximo disponible' => $maximoRedondeado,
-            'SOD - Monto Mínimo disponible' => $minimoRedondeado,
-        );
-        $manychat->setCustomFields($dataField, $manychat_id);
-        return response()->json(['monto_minimo' => $minimoRedondeado, 'monto_maximo' => $maximoRedondeado]);
+
+        $lead = Lead::getMontoMinMax($request);
+        $minimoRedondeado = $lead['monto_minimo'];
+        $maximoRedondeado = $lead['monto_maximo'];
+        
     }
 }
