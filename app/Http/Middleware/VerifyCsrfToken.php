@@ -41,5 +41,6 @@ class VerifyCsrfToken extends Middleware
         '/validate-sod-active',
         '/validate-fechas-permitidas',
         '/set-sod/{productId}',
+        '/getMontoMinMax',
     ];
 }
