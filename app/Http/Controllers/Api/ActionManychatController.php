@@ -580,6 +580,7 @@ class ActionManychatController extends Controller
         $template   = TemplateValues::STRATEGY['lead'];
         $move       = (new $template)->move($lead->id);
         return response()->json(['lead' => $move]);
+        
     }
 
 }
