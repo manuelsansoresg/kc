@@ -240,10 +240,20 @@ class LeadController extends Controller
             $sodAvailable
         );
 
+        // Validate that at least one product ID has a value
+        $hasValidProduct = false;
+        foreach($productsId as $productId) {
+            if(!empty($productId)) {
+                $hasValidProduct = true;
+                break;
+            }
+        }
+
         $getProducts = FinancialAgreement::select('financial_products.id', 'financial_products.alias')
                         ->join('financial_products', 'financial_products.id', 'financial_agreements.product_id')
                         ->where(['agreement_id' => $agreementId]);
-        if ($clientPerson != null) {
+
+        if ($clientPerson != null && $hasValidProduct) {
             $getProducts->whereIn('financial_products.type_product_id', $productsId);
         }
         $getProducts = $getProducts->get();
