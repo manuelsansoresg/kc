@@ -228,12 +228,26 @@ class LeadController extends Controller
 
     }
 
-    public function getProducts($agreementId)
+    public function getProducts($agreementId, $clientPersonId)
     {
+        $clientPerson = ClientPerson::find($clientPersonId);
+        $cpAvailable = $clientPerson->cp_available;
+        $stdAvailable = $clientPerson->std_available;
+        $sodAvailable = $clientPerson->sod_available;
+        $productsId = array(
+            $cpAvailable,
+            $stdAvailable,
+            $sodAvailable
+        );
+
         $getProducts = FinancialAgreement::select('financial_products.id', 'financial_products.alias')
                         ->join('financial_products', 'financial_products.id', 'financial_agreements.product_id')
-                        ->where(['agreement_id' => $agreementId])->get();
-        
+                        ->where(['agreement_id' => $agreementId]);
+        if ($clientPerson != null) {
+            $getProducts->whereIn('financial_products.type_product_id', $productsId);
+        }
+        $getProducts = $getProducts->get();
+
         $products = array();
         if ($getProducts != null) {
             foreach ($getProducts as $getProduct) {

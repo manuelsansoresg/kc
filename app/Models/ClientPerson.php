@@ -103,6 +103,9 @@ class ClientPerson extends Model
         'cm_agreement',
         'cm_agreement_sign',
         'identity_validated',
+        'cp_available',
+        'std_available',
+        'sod_available',
     ];
 
     public static function listDatatable($isAdmin = true, $origin = null)

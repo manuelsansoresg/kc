@@ -593,10 +593,11 @@ window.editCompraCartera = function(creditPayOffId)
 
 window.getProductsByAgreementId = function(leadId, productId)
 {
+    let clientPersonId = $('#client_person_id').val();
     const selectElement = document.getElementById('financial_product_id');
     selectElement.options.length = 0; // Limpiar el select
     axios
-    .get("/panel/lead/" + leadId + "/getProducts")
+    .get("/panel/lead/" + leadId + '/' + clientPersonId + "/getProducts")
     .then(function (response) {
         let products = response.data;
             Object.keys(products).forEach(key => {
