@@ -2985,10 +2985,11 @@ window.editCompraCartera = function (creditPayOffId) {
 };
 
 window.getProductsByAgreementId = function (leadId, productId) {
+  var clientPersonId = $('#client_person_id').val();
   var selectElement = document.getElementById('financial_product_id');
   selectElement.options.length = 0; // Limpiar el select
 
-  axios.get("/panel/lead/" + leadId + "/getProducts").then(function (response) {
+  axios.get("/panel/lead/" + leadId + '/' + clientPersonId + "/getProducts").then(function (response) {
     var products = response.data;
     Object.keys(products).forEach(function (key) {
       var option = document.createElement('option');
