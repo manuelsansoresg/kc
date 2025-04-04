@@ -88,7 +88,7 @@ class LeadController extends Controller
         $field             = $id == 'cellphone' ? 'cellphone' : 'rfc';
         $getClientPerson   = ClientPerson::where($field, $valInput)->first();
         $agreement         = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
-        $validateAgreement = $agreement       != null && $agreement->status == 1 ? true : false;
+        $validateAgreement = $agreement != null && $agreement->status == 1 ? true : false;
         $isValidateCellphone = false;
         $isValidateRFC = false;
         $isValidate = false;

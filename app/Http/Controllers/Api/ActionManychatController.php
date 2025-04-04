@@ -167,15 +167,15 @@ class ActionManychatController extends Controller
         $manychat_id    = $data['id'];
         // Remover el prefijo +52 si existe
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $contentValidaciones      = 'Sin coincidencias';
+        $statusCellphone = 0;
         
-        // Buscar en ClientPerson si existe el teléfono y retornar true o false
-        $validate = ClientPerson::where('cellphone', $cleanPhone)->exists();
-
-        $dataField = array(
-            'Prospecto -  Validación Celular' => $validate,
-        );
+       
 
         $getClientPerson   = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $agreement         = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
+        $validateAgreement = $agreement != null && $agreement->status == 1 ? true : false;
+
         $getLead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         if ($getClientPerson != null) {
             $lead = Lead::where('id', $getLead->id)->update([
@@ -197,11 +197,19 @@ class ActionManychatController extends Controller
             ]);
            
         }
+        if ($getClientPerson != null && $validateAgreement == true) {
+            $statusCellphone = 1;
+            $contentValidaciones = 'Coincidencia encontrada';
+        }
+        LeadValidation::saveEdit($lead->id, 'Prospecto - Celular', $statusCellphone, $contentValidaciones);
 
+        $dataField = array(
+            'Prospecto -  Validación Celular' => $statusCellphone,
+        );
         $manychat = new Manychat();
         $manychat->setCustomFields($dataField, $manychat_id);
 
-        return response()->json(['validate' => $validate]);
+        return response()->json(['validate' => $statusCellphone]);
     }
 
     public function createLead(Request $request)
