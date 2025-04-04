@@ -15,6 +15,7 @@ use App\Models\CurrentFinancialProduct;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
+use App\Models\LeadValidation;
 use App\Models\Notification;
 use App\Models\Sendgridtest;
 use App\Models\TokenForms;
@@ -617,7 +618,16 @@ class HomeController extends Controller
         // Assuming the token is related to a manychat_id
         $lead = Lead::where('manychat_id', $decoded_id)->orderBy('id', 'desc')->first();
         $clientPerson = ClientPerson::where('rfc', $validated['rfc'])->first();
-        $agreementId  = $clientPerson != null ? $clientPerson->agreement_id : null;
+        $agreement         = $clientPerson != null ? Agreement::find($clientPerson->agreement_id): null;
+        $validateAgreement = $agreement != null && $agreement->status == 1 ? true : false;
+
+        $contentValidaciones      = 'Sin coincidencias';
+        $statusRFC = 1;
+        if ($clientPerson != null && $validateAgreement == true) {
+            $statusRFC = 0;
+            $contentValidacionesRFC = 'Coincidencia encontrada';
+        }
+        LeadValidation::saveEdit($lead->id, 'Prospecto - RFC', $statusRFC, $contentValidaciones);
         if ($lead!= null && $clientPerson != null) {
             $lead->update([
 

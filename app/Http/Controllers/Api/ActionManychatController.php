@@ -250,7 +250,7 @@ class ActionManychatController extends Controller
         $manychat_id = $data['id'];
         $cellphone = $data['phone'];
         $rfc = null; 
-
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         $manychat = new Manychat();
         $info = json_decode($manychat->getInfoUser($manychat_id));
         $status = $info->status;
@@ -280,9 +280,14 @@ class ActionManychatController extends Controller
         // Ahora $clientPerson contendrá el resultado de la búsqueda por celular o por RFC,
         // o será null si no se encontró ningún registro con esos criterios
         $validacionClienteActivo = false;
+        $statusActivo = 0;
+        $contentActivo = 'Cliente inactivo';
         if ($clientPerson != null && $clientPerson->active == 1) {
             $validacionClienteActivo = true;
+            $statusActivo = 1;
+            $contentActivo = 'Cliente activo';
         }
+        LeadValidation::saveEdit($lead->id, 'Prospecto - Cliente activo', $statusActivo, $contentActivo);
        
         $dataField = array(
             'Prospecto - Validación Cliente Activo' => $validacionClienteActivo,
@@ -302,6 +307,7 @@ class ActionManychatController extends Controller
         $manychat = new Manychat();
         $info = json_decode($manychat->getInfoUser($manychat_id));
         $status = $info->status;
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         if ($status != 'error') {
             $data = $info->data;
             $custom_fields = $data->custom_fields;
@@ -326,6 +332,11 @@ class ActionManychatController extends Controller
         );
         $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
         $validacionTramitePendiente = $getStatus > 0 ? false : true;
+        if ($validacionTramitePendiente == false) {
+            LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - Trámite pendiente', 0, 'Tiene trámites pendientes');
+        } else {
+            LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - Trámite pendiente', 1, 'Sin trámites pendientes');
+        }
         $dataField = array(
             'Prospecto - Validar trámite pendiente' => $validacionTramitePendiente,
         );
