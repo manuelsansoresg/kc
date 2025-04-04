@@ -43,5 +43,6 @@ class VerifyCsrfToken extends Middleware
         '/set-sod/{productId}',
         '/getMontoMinMax',
         '/validate-monto-solicitado',
+        '/servicios-disponibles',
     ];
 }

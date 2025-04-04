@@ -502,4 +502,54 @@ class ActionManychatController extends Controller
         $manychat->setCustomFields($dataField, $manychat_id);
         return response()->json(['validate' => true]);
     }
+
+    public function serviciosDisponibles(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $rfc = null;
+        $cellphone = $data['phone'];
+        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+
+        $manychat = new Manychat();
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $status = $info->status;
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        if ($status != 'error') {
+            $data = $info->data;
+            $custom_fields = $data->custom_fields;
+            foreach ($custom_fields as $key => $custom_field) {
+                if ($custom_field->name == 'Prospecto - RFC') {
+                    $rfc = $custom_field->value;
+                    break;
+                }
+            }
+        }
+        if (!$getClientPerson && $rfc) {
+            $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
+        }
+
+        $cpAvailable = $getClientPerson->cp_available;
+        $stdAvailable = $getClientPerson->std_available;
+        $sodAvailable = $getClientPerson->sod_available;
+        
+        $products = '';
+        if ($cpAvailable !== null) {
+            $products .= $cpAvailable;
+        }
+        if ($stdAvailable !== null) {
+            $products .= $stdAvailable;
+        }
+        if ($sodAvailable !== null) {
+            $products .= $sodAvailable;
+        }
+
+
+        $dataField = array(
+            'Prospecto - Servicios KC disponibles' => $products,
+        );
+        $manychat->setCustomFields($dataField, $manychat_id);
+        return response()->json(['products' => $products]);
+       
+    }
 }

@@ -55,3 +55,4 @@ Route::post('validate-fechas-permitidas', [ActionManychatController::class, 'val
 Route::post('set-sod/{productId}', [ActionManychatController::class, 'setSod']);
 Route::post('getMontoMinMax', [ActionManychatController::class, 'getMontoMinMax']);
 Route::post('validate-monto-solicitado', [ActionManychatController::class, 'validateMontoSolicitado']);
+Route::post('servicios-disponibles', [ActionManychatController::class, 'serviciosDisponibles']);

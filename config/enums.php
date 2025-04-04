@@ -244,6 +244,7 @@ return [
         'SOD - Monto Máximo disponible' =>  12769433,
         'SOD - Monto Mínimo disponible' =>  12771272,
         'SOD - Validar monto solicitado' =>  12774554,
+        'Prospecto - Servicios KC disponibles' =>  12781319,
     ),
 
     "funding_operation" => array(
