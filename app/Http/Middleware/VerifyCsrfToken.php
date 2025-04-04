@@ -44,5 +44,6 @@ class VerifyCsrfToken extends Middleware
         '/getMontoMinMax',
         '/validate-monto-solicitado',
         '/servicios-disponibles',
+        '/send-control-desk',
     ];
 }

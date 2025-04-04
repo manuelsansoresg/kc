@@ -571,4 +571,15 @@ class ActionManychatController extends Controller
         return response()->json(['products' => $products]);
        
     }
+
+    public function sendControlDesk(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+        $template   = TemplateValues::STRATEGY['lead'];
+        $move       = (new $template)->move($lead->id);
+        return response()->json(['lead' => $move]);
+    }
+
 }

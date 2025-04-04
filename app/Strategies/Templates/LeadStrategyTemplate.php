@@ -29,7 +29,7 @@ class LeadStrategyTemplate implements TemplateInterface
         $get_lead = Lead::find($id);
         self::setCustomFieldsManyChat($get_lead->id);
 
-        $lead = Lead::find($id);;
+        $lead = Lead::find($id);
         $history_id = null;
         $history = null;
         if ($lead !== null) {
