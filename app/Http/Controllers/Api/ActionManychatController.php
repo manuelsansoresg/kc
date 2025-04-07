@@ -587,6 +587,8 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id = $data['id'];
+        $firmaContrato = false;
+        $urlContrato = null;
         $credit = Credit::where([
             'manychat_id' => $manychat_id,
             'credit_status' => HistoryLog::KC_CONTROL_DESK
@@ -602,5 +604,6 @@ class ActionManychatController extends Controller
             );
            $manychat->setCustomFields($dataField, $manychat_id);
         }
+        return response()->json(['firmaContrato' => $firmaContrato, 'urlContrato' => $urlContrato]);
     }
 }
