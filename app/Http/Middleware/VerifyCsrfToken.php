@@ -45,5 +45,6 @@ class VerifyCsrfToken extends Middleware
         '/validate-monto-solicitado',
         '/servicios-disponibles',
         '/send-control-desk',
+        '/firma-contrato-cm',
     ];
 }

@@ -245,6 +245,8 @@ return [
         'SOD - Monto Mínimo disponible' =>  12771272,
         'SOD - Validar monto solicitado' =>  12774554,
         'Prospecto - Servicios KC disponibles' =>  12781319,
+        'Prospecto - Firma Contrato CM' =>  12800456,
+        'Prospecto - URL contrato CM' =>  12762039,
     ),
 
     "funding_operation" => array(
