@@ -247,6 +247,8 @@ return [
         'Prospecto - Servicios KC disponibles' =>  12781319,
         'Prospecto - Firma Contrato CM' =>  12800456,
         'Prospecto - URL contrato CM' =>  12762039,
+        'Prospecto - Firma Solicitud/Descuento SOD' =>  12800636,
+        'Prospecto - URL Solicitud/Descuento SOD' =>  12800638,
     ),
 
     "funding_operation" => array(

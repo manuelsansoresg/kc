@@ -59,3 +59,4 @@ Route::post('servicios-disponibles', [ActionManychatController::class, 'servicio
 Route::post('send-control-desk', [ActionManychatController::class, 'sendControlDesk']);
 
 Route::post('firma-contrato-cm', [ActionManychatController::class, 'firmaContratoCm']);
+Route::post('firma-descuento-sod', [ActionManychatController::class, 'firmaDescuentoSod']);

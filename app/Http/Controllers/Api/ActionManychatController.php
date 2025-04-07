@@ -606,4 +606,27 @@ class ActionManychatController extends Controller
         }
         return response()->json(['firmaContrato' => $firmaContrato, 'urlContrato' => $urlContrato]);
     }
+
+    public function firmaDescuentoSod(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $firmaContrato = false;
+        $urlContrato = null;
+        $credit = Credit::where([
+            'manychat_id' => $manychat_id,
+            'credit_status' => HistoryLog::KC_CONTROL_DESK
+        ])->first();
+        if ($credit != null) {
+            $manychat = new Manychat();
+            $firmaContrato = $credit->sod_agreement == 1 ? true : false;
+            $urlContrato =  asset('/client/sod/'.$credit->id);
+            $dataField = array(
+                'Prospecto - Firma Solicitud/Descuento SOD' => $firmaContrato,
+                'Prospecto - URL Solicitud/Descuento SOD' => $urlContrato,
+            );
+           $manychat->setCustomFields($dataField, $manychat_id);
+        }
+        return response()->json(['firmaContrato' => $firmaContrato, 'urlContrato' => $urlContrato]);
+    }
 }
