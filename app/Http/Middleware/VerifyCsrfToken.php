@@ -47,5 +47,6 @@ class VerifyCsrfToken extends Middleware
         '/send-control-desk',
         '/firma-contrato-cm',
         '/firma-descuento-sod',
+        '/firma-contrato-cm-finish',
     ];
 }

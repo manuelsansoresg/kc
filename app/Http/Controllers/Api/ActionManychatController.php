@@ -9,6 +9,7 @@ use App\Models\ApiActionManychat;
 use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\CreditsControlDesk;
 use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
@@ -626,6 +627,27 @@ class ActionManychatController extends Controller
                 'Prospecto - URL Solicitud/Descuento SOD' => $urlContrato,
             );
            $manychat->setCustomFields($dataField, $manychat_id);
+        }
+        return response()->json(['firmaContrato' => $firmaContrato, 'urlContrato' => $urlContrato]);
+    }
+
+    public function firmaContratoCmFinish(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $firmaContrato = false;
+        $urlContrato = null;
+        $credit = Credit::where([
+            'manychat_id' => $manychat_id,
+            'credit_status' => HistoryLog::KC_CONTROL_DESK
+        ])->first();
+        if ($credit != null) {
+            $labelValidate = CreditsControlDesk::$labelValidate[9];
+            CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);   
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 1); //terminar tarea
+    
+            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);         
         }
         return response()->json(['firmaContrato' => $firmaContrato, 'urlContrato' => $urlContrato]);
     }

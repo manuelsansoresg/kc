@@ -60,3 +60,4 @@ Route::post('send-control-desk', [ActionManychatController::class, 'sendControlD
 
 Route::post('firma-contrato-cm', [ActionManychatController::class, 'firmaContratoCm']);
 Route::post('firma-descuento-sod', [ActionManychatController::class, 'firmaDescuentoSod']);
+Route::post('firma-contrato-cm-finish', [ActionManychatController::class, 'firmaContratoCmFinish']);
