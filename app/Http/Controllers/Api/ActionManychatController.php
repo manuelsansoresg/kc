@@ -635,8 +635,6 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id = $data['id'];
-        $firmaContrato = false;
-        $urlContrato = null;
         $credit = Credit::where([
             'manychat_id' => $manychat_id,
             'credit_status' => HistoryLog::KC_CONTROL_DESK
@@ -649,6 +647,33 @@ class ActionManychatController extends Controller
     
             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);        
+            $status = true;
+        }
+        return response()->json(['status' => $status]);
+    }
+
+    public function firmaDescuentoSodFinish(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $credit = Credit::where([
+            'manychat_id' => $manychat_id,
+            'credit_status' => HistoryLog::KC_CONTROL_DESK
+        ])->first();
+        $status = false;
+        if ($credit != null) {
+            $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+            $labelValidate = $financialProduct->type_product_id != 3 ? CreditsControlDesk::$labelValidate[9] : CreditsControlDesk::$labelValidate[8];
+            CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
+            
+            
+            Credit::where('id', $credit->id)->update([
+                'credit_agreement_signed' => $request->credit_agreement_signed,
+                
+            ]);   
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 1); //terminar tarea
+            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);
             $status = true;
         }
         return response()->json(['status' => $status]);
