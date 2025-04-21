@@ -167,11 +167,9 @@ class ActionManychatController extends Controller
         $cellphone = $data['phone'];
         $manychat_id    = $data['id'];
         // Remover el prefijo +52 si existe
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $contentValidaciones      = 'Sin coincidencias';
         $statusCellphone = 0;
-        
-       
 
         $getClientPerson   = ClientPerson::where('cellphone', $cleanPhone)->first();
         $agreement         = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
@@ -218,7 +216,7 @@ class ActionManychatController extends Controller
         $data = $request->all();
         $manychat_id = $data['id'];
         $cellphone = $data['phone'];
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);   
        
         $lead = Lead::create([
             'manychat_id' => $manychat_id,
@@ -268,7 +266,7 @@ class ActionManychatController extends Controller
         }
 
         // Remover el prefijo +52 si existe
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
 
         // Primero intentar buscar por celular
         $clientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
@@ -301,8 +299,8 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id = $data['id'];
-        $cellphone = $data['phone'];
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cellphone = $data['phone'];    
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $rfc = null;
         $manychat = new Manychat();
@@ -349,8 +347,8 @@ class ActionManychatController extends Controller
     public function validateIdentity(Request $request)
     {
         $data = $request->all();
-        $cellphone = $data['phone'];
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cellphone = $data['phone'];    
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->update([
             'identity_validated' => true,
         ]);
