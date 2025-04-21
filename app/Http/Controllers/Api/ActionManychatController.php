@@ -234,7 +234,7 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id    = $data['id'];
-        $url = base64_encode(hash('sha256', $manychat_id . env('APP_KEY')));
+        $url = env('APP_URL').'validate-identity/'.base64_encode(hash('sha256', $manychat_id . env('APP_KEY')));
         $dataField = array(
             'Prospecto - Validación RFC' => $url,
         );
