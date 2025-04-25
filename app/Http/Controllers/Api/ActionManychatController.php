@@ -197,11 +197,10 @@ class ActionManychatController extends Controller
             $statusCellphone = true;
             $contentValidaciones = 'Coincidencia encontrada';
         } else {
-            Lead::where('id', $getLead->id)->update([
+            $lead =Lead::where('id', $getLead->id)->update([
                 'manychat_id' => $manychat_id,
                 'cellphone' => $cleanPhone,
             ]);
-           
         }
       
         LeadValidation::saveEdit($lead->id, 'Prospecto - Celular', $statusCellphone, $contentValidaciones);

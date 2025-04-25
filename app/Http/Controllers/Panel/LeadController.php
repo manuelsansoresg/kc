@@ -57,6 +57,13 @@ class LeadController extends Controller
      */
     public function index()
     {
+
+        $dataField = array(
+            'Prospecto -  Validación Celular' => true,
+        );
+        $manychat = new Manychat();
+        $manychat->setCustomFields($dataField, '2080577218');
+
         //Transaction::setTotalCapital(9);
         $is_financiera = Auth::user()->hasRole('Cliente financiera');
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
