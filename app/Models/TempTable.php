@@ -11,4 +11,7 @@ class TempTable extends Model
     protected $table = 'temp';
     protected $fillable = ['data'];
     public $timestamps = false;
+    
+    const CREATED_AT = null;
+    const UPDATED_AT = null;
 }
