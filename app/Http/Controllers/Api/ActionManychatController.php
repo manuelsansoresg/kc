@@ -174,6 +174,10 @@ class ActionManychatController extends Controller
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $contentValidaciones      = 'Sin coincidencias';
         $statusCellphone = 0;
+        $data['cleanPhone'] = $cleanPhone;
+        TempTable::create([
+            'data' => json_encode($data),
+        ]);
 
         $getClientPerson   = ClientPerson::where('cellphone', $cleanPhone)->first();
         $agreement         = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
