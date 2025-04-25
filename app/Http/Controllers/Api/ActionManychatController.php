@@ -203,7 +203,7 @@ class ActionManychatController extends Controller
             ]);
         }
       
-        LeadValidation::saveEdit($lead->id, 'Prospecto - Celular', $statusCellphone, $contentValidaciones);
+        LeadValidation::saveEdit($getLead->id, 'Prospecto - Celular', $statusCellphone, $contentValidaciones);
 
         $dataField = array(
             'Prospecto -  Validación Celular' => $statusCellphone,
