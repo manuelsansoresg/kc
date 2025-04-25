@@ -168,7 +168,7 @@ class ActionManychatController extends Controller
         $cellphone = $data['phone'];
         $manychat_id    = $data['id'];
         TempTable::create([
-            'data' => $data,
+            'data' => json_encode($data),
         ]);
         // Remover el prefijo +52 si existe
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
