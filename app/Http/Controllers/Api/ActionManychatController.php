@@ -165,11 +165,9 @@ class ActionManychatController extends Controller
     public function validatePhone(Request $request)
     {
         $data = $request->all();
-        $cellphone = $data['phone'];
+        $cellphone = $data['whatsapp_phone'];
         $manychat_id    = $data['id'];
-        TempTable::create([
-            'data' => json_encode($data),
-        ]);
+       
         // Remover el prefijo +52 si existe
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $contentValidaciones      = 'Sin coincidencias';
@@ -223,7 +221,7 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id = $data['id'];
-        $cellphone = $data['phone'];
+        $cellphone = $data['whatsapp_phone'];
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);   
        
         $lead = Lead::create([
@@ -255,7 +253,7 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id = $data['id'];
-        $cellphone = $data['phone'];
+        $cellphone = $data['whatsapp_phone'];
         $rfc = null; 
         $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         $manychat = new Manychat();
@@ -307,7 +305,7 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id = $data['id'];
-        $cellphone = $data['phone'];    
+        $cellphone = $data['whatsapp_phone'];    
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $rfc = null;
@@ -355,7 +353,7 @@ class ActionManychatController extends Controller
     public function validateIdentity(Request $request)
     {
         $data = $request->all();
-        $cellphone = $data['phone'];    
+        $cellphone = $data['whatsapp_phone'];    
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->update([
             'identity_validated' => true,
@@ -368,7 +366,7 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id = $data['id'];
-        $cellphone = $data['phone'];
+        $cellphone = $data['whatsapp_phone'];
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $identity_validated = $getClientPerson != null ? $getClientPerson->identity_validated : false;
@@ -385,7 +383,7 @@ class ActionManychatController extends Controller
         $manychat = new Manychat();
         $data = $request->all();
         $manychat_id = $data['id'];
-        $cellphone = $data['phone'];
+        $cellphone = $data['whatsapp_phone'];
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $sod_active = 0;
@@ -407,7 +405,7 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id = $data['id'];
-        $cellphone = $data['phone'];
+        $cellphone = $data['whatsapp_phone'];
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
         $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         $financialProduct = FinancialProduct::where('id', $lead->product_id)->first();
@@ -445,7 +443,7 @@ class ActionManychatController extends Controller
             );
         
         $manychat_id = $data['id'];
-        $cellphone = $data['phone'];
+        $cellphone = $data['whatsapp_phone'];
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
         $rfc = null;
         $productName = null;
@@ -534,7 +532,7 @@ class ActionManychatController extends Controller
         $data = $request->all();
         $manychat_id = $data['id'];
         $rfc = null;
-        $cellphone = $data['phone'];
+        $cellphone = $data['whatsapp_phone'];
         $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
 
         $manychat = new Manychat();
