@@ -202,7 +202,7 @@ class ActionManychatController extends Controller
             ]);
            
         }
-        if ($getClientPerson != null && $validateAgreement == true) {
+        if ($getClientPerson != null) {
             $statusCellphone = 1;
             $contentValidaciones = 'Coincidencia encontrada';
         }
