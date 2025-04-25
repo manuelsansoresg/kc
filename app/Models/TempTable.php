@@ -9,4 +9,5 @@ class TempTable extends Model
 {
     use HasFactory;
     protected $table = 'temp';
+    protected $fillable = ['data'];
 }
