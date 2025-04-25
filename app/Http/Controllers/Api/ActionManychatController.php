@@ -194,7 +194,8 @@ class ActionManychatController extends Controller
                 'manychat_id' => $manychat_id,
                 'cellphone' => $cleanPhone,
             ]);
-            
+            $statusCellphone = true;
+            $contentValidaciones = 'Coincidencia encontrada';
         } else {
             Lead::where('id', $getLead->id)->update([
                 'manychat_id' => $manychat_id,
@@ -202,10 +203,7 @@ class ActionManychatController extends Controller
             ]);
            
         }
-        if ($getClientPerson != null) {
-            $statusCellphone = 1;
-            $contentValidaciones = 'Coincidencia encontrada';
-        }
+      
         LeadValidation::saveEdit($lead->id, 'Prospecto - Celular', $statusCellphone, $contentValidaciones);
 
         $dataField = array(
