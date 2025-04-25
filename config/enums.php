@@ -234,7 +234,7 @@ return [
         'Prospecto - Primer apellido' =>  12761459,
         'Prospecto - Segundo apellido' =>  12761460,
         'Prospecto - Fecha de nacimiento' =>  12761511,
-        'Prospecto - Validación RFC' =>  12762039,
+        'Prospecto - Validación RFC' =>  12761571,
         'Prospecto - Formulario RFC llenado' =>  12762173,
         'Prospecto - Validación Cliente Activo' =>  12763922,
         'Prospecto - Validar trámite pendiente' =>  12780359,
