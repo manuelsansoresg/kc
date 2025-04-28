@@ -642,7 +642,7 @@ class HomeController extends Controller
             $manychat = new Manychat();
             $manychat->setCustomFields($dataField, $token);
 
-            //return redirect('/validate-identity/'.$token.'/exit');
+            return redirect('/validate-identity/'.$token.'/exit');
         }
         $dataField = array(
             'Prospecto - Formulario RFC llenado' => true,
@@ -654,7 +654,7 @@ class HomeController extends Controller
         );
         $manychat = new Manychat();
         $manychat->setCustomFields($dataField, $token);
-        //return redirect()->back()->with('error', 'No se pudo procesar la información');
+        return redirect()->back()->with('error', 'No se pudo procesar la información');
     }
 
     public function showValidateIdentityExit($token)
