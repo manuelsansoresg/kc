@@ -606,17 +606,8 @@ class HomeController extends Controller
         // Decode and extract manychat_id from URL
         // The token is a hash of manychat_id + APP_KEY, so we need to find the manychat_id that generates this hash
         $token = $request->token;
-        $manychat_ids = Lead::pluck('manychat_id')->toArray();
         
-        foreach ($manychat_ids as $id) {
-            if ($token === base64_encode(hash('sha256', $id . env('APP_KEY')))) {
-                $decoded_id = $id;
-                break;
-            }
-        }
-        
-        // Assuming the token is related to a manychat_id
-        $lead = Lead::where('manychat_id', $decoded_id)->orderBy('id', 'desc')->first();
+        $lead = Lead::where('manychat_id', $token)->orderBy('id', 'desc')->first();
         $clientPerson = ClientPerson::where('rfc', $validated['rfc'])->first();
         $agreement         = $clientPerson != null ? Agreement::find($clientPerson->agreement_id): null;
         $validateAgreement = $agreement != null && $agreement->status == 1 ? true : false;
@@ -649,9 +640,9 @@ class HomeController extends Controller
                 'Prospecto - Validación RFC' => true,
             );
             $manychat = new Manychat();
-            $manychat->setCustomFields($dataField, $decoded_id);
+            $manychat->setCustomFields($dataField, $token);
 
-            return redirect('/validate-identity/'.$token.'/exit');
+            //return redirect('/validate-identity/'.$token.'/exit');
         }
         $dataField = array(
             'Prospecto - Formulario RFC llenado' => true,
@@ -662,8 +653,8 @@ class HomeController extends Controller
             'Prospecto - Validación RFC' => false,
         );
         $manychat = new Manychat();
-        $manychat->setCustomFields($dataField, $decoded_id);
-        return redirect()->back()->with('error', 'No se pudo procesar la información');
+        $manychat->setCustomFields($dataField, $token);
+        //return redirect()->back()->with('error', 'No se pudo procesar la información');
     }
 
     public function showValidateIdentityExit($token)
