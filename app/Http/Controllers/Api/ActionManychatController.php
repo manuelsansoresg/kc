@@ -239,7 +239,7 @@ class ActionManychatController extends Controller
         $manychat_id    = $data['id'];
         $url = env('APP_URL').'validate-identity/'.base64_encode(hash('sha256', $manychat_id . env('APP_KEY')));
         $dataField = array(
-            'Prospecto - Validación RFC' => $url,
+            'Prospectos - URL validación RFC' => $url,
         );
         $manychat = new Manychat();
         $manychat->setCustomFields($dataField, $manychat_id);
