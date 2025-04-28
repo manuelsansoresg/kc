@@ -243,7 +243,7 @@ class ActionManychatController extends Controller
         );
         $manychat = new Manychat();
         $manychat->setCustomFields($dataField, $manychat_id);
-        
+        return response()->json(['URL' => $url]);
     }
 
     public function validateClienteActivo(Request $request)
