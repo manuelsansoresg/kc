@@ -401,7 +401,7 @@ class ActionManychatController extends Controller
             $textSoad = 'No tiene un Salario On-Demand activo';
             $sod_active = true;
         }
-        LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - SOD activo', $sod_active, $textSoad);
+        LeadValidation::saveEdit($lead->id, 'SOD - Activo', $sod_active, $textSoad);
         $dataField = array(
             'SOD - Activo' => $sod_active,
         );
