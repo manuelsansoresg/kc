@@ -603,52 +603,48 @@ class LeadController extends Controller
 
     public function getTramite(ClientPerson $clientPerson, FinancialProduct $financialProduct, $leadId)
     {
-        //validaciones sod
+        // Validaciones de Salario On Demand
         $validateSod = Lead::validateSod($clientPerson, $financialProduct);
-        
-        // Registrar cada validación individual que viene de validateSod
+
+        // Registrar cada validación individual
         if (isset($validateSod['validations']) && is_array($validateSod['validations'])) {
             foreach ($validateSod['validations'] as $validation) {
-                // Verificar que todos los campos necesarios existan
-                $validationName = $validation['validation_name'] ?? 'Validación sin nombre';
-                $status = $validation['status'] ?? false;
-                $text = $validation['text'] ?? 'Sin mensaje';
-
                 LeadValidation::saveEdit(
                     $leadId,
-                    $validationName,
-                    $status ? 1 : 0,
-                    $text
+                    $validation['validation_name'] ?? 'Validación sin nombre',
+                    isset($validation['status']) && $validation['status'] ? 1 : 0,
+                    $validation['text'] ?? 'Sin mensaje'
                 );
             }
         }
-        
+
         $tramites = [];
+
         if ($clientPerson && $financialProduct) {
             if ($financialProduct->type_product_id != 3) {
-                if ($clientPerson->credit_active == 0) {
+                // Créditos normales
+                if ($clientPerson->new_tramit_allowed == 1) {
                     $tramites[1] = config('enums.tipo_tramite')[1]; // Crédito nuevo
-                } elseif ($clientPerson->credit_active == 1) {
-                    if ($financialProduct->additional_allowed == 1) {
-                        $tramites[2] = config('enums.tipo_tramite')[2]; // Crédito adicional
-                    }
-                    if ($financialProduct->refinancing_allowed == 1) {
-                        $tramites[3] = config('enums.tipo_tramite')[3]; // Refinanciamiento
-                    }
+                }
+                if ($clientPerson->additional_tramit_allowed == 1) {
+                    $tramites[2] = config('enums.tipo_tramite')[2]; // Crédito adicional
+                }
+                if ($clientPerson->ref_tramit_allowed == 1) {
+                    $tramites[3] = config('enums.tipo_tramite')[3]; // Refinanciamiento
                 }
             } elseif ($financialProduct->type_product_id == 3) {
+                // Salario On Demand
                 if ($clientPerson->sod_active == 0) {
                     $tramites[1] = config('enums.tipo_tramite')[1]; // Crédito nuevo
                 }
             }
         }
-        
-        $dataReturn = array(
+
+        return response()->json([
             'sodIsTramite' => $validateSod['isTramite'] ?? false,
             'sodMessage' => $validateSod['message'] ?? 'Sin mensaje',
             'sodTramites' => $tramites
-        );
-        return response()->json($dataReturn);
+        ]);
     }
 
     public function getRefinanciamiento(ClientPerson $clientPerson, FinancialProduct $financialProduct, $tramitType)
