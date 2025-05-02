@@ -133,9 +133,9 @@ class CreditController extends Controller
             // Aquí integrar la actualización de los trámites permitidos
             $latestFinancialProductId = optional($credits->last())->applied_financial_product;
 
-            /* if ($latestFinancialProductId) {
+            if ($latestFinancialProductId) {
                 self::updateTramitAllowed($clientPersonId, $latestFinancialProductId);
-            } */
+            }
         }
 
         // Actualizar los datos de los inversionistas
@@ -166,5 +166,70 @@ class CreditController extends Controller
 
             Investor::updateInvestorData($getSum->investor_id);
         }
+    }
+
+    public function updateTramitAllowed($clientPersonId, $financialProductId)
+    {
+        // Obtener el cliente
+        $clientPerson = ClientPerson::find($clientPersonId);
+        if (!$clientPerson) {
+            return false;
+        }
+
+        // Obtener el producto financiero
+        $financialProduct = FinancialProduct::find($financialProductId);
+        if (!$financialProduct) {
+            return false;
+        }
+
+        // Inicializar valores
+        $newTramitAllowed = 0;
+        $additionalTramitAllowed = 0;
+        $refTramitAllowed = 0;
+
+        if ($clientPerson->credit_active == 0) {
+            // No tiene créditos activos
+            $newTramitAllowed = 1;
+            $additionalTramitAllowed = 0;
+            $refTramitAllowed = 0;
+        } else {
+            // Tiene créditos activos
+            $newTramitAllowed = 0;
+
+            // Evaluar si el producto permite crédito adicional
+            if ($financialProduct->additional_allowed == 1) {
+                $additionalTramitAllowed = 1;
+            } else {
+                $additionalTramitAllowed = 0;
+            }
+
+            // Evaluar si el producto permite refinanciamiento
+            if ($financialProduct->refinancing_allowed == 1) {
+                // Buscar créditos del cliente
+                $creditIds = Credit::where('client_person_id', $clientPersonId)->pluck('id');
+
+                // Verificar si hay al menos un crédito refinanciable
+                $hasRefinanciable = InvestorsCredit::whereIn('credit_id', $creditIds)
+                    ->where('refinanciable', 1)
+                    ->exists();
+
+                if ($hasRefinanciable) {
+                    $refTramitAllowed = 1;
+                } else {
+                    $refTramitAllowed = 0;
+                }
+            } else {
+                $refTramitAllowed = 0;
+            }
+        }
+
+        // Actualizar los campos en client_person
+        $clientPerson->update([
+            'new_tramit_allowed' => $newTramitAllowed,
+            'additional_tramit_allowed' => $additionalTramitAllowed,
+            'ref_tramit_allowed' => $refTramitAllowed,
+        ]);
+
+        return true;
     }
 }
