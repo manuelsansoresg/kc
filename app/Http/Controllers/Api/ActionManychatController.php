@@ -567,20 +567,17 @@ class ActionManychatController extends Controller
         
         $products = '';
         
-        if ($stdAvailable !== null) {
-            $products .= $stdAvailable;
-        }
-
         if ($sodAvailable !== null) {
             $products .= $sodAvailable;
+        }
+
+        if ($stdAvailable !== null) {
+            $products .= $stdAvailable;
         }
 
         if ($cpAvailable !== null) {
             $products .= $cpAvailable;
         }
-        
-       
-
 
         $dataField = array(
             'Prospecto - Servicios KC disponibles' => $products,
