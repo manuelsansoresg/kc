@@ -350,6 +350,7 @@ class ActionManychatController extends Controller
     public function validateIdentity(Request $request)
     {
         $data = $request->all();
+        $manychat_id = $data['id'];
         $cellphone = $data['whatsapp_phone'];    
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
@@ -361,6 +362,9 @@ class ActionManychatController extends Controller
         $getClientPerson->update([
             'identity_validated' => $identity_validated,
         ]);
+
+        
+
         return response()->json(['validate' => $identity_validated]);
        
     }
