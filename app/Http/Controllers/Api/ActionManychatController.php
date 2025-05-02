@@ -382,7 +382,7 @@ class ActionManychatController extends Controller
         );
         $manychat = new Manychat();
         $manychat->setCustomFields($dataField, $manychat_id);
-        return response()->json(['validate' => $getClientPerson]);
+        return response()->json(['validate' => $cleanPhone]);
     }
 
     public function validateSodActive(Request $request)
