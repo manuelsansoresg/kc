@@ -239,7 +239,7 @@ return [
         'Prospecto - Formulario RFC llenado' =>  12762173,
         'Prospecto - Validación Cliente Activo' =>  12763922,
         'Prospecto - Validar trámite pendiente' =>  12780359,
-        'Prospecto - Validación Identidad' =>  12774539,
+        'Prospecto - Validación Identidad' =>  12761574,
         'SOD - Activo' =>  12764303,
         'SOD - Fechas permitidas' =>  12769426,
         'SOD - Monto Máximo disponible' =>  12769433,
