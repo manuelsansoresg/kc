@@ -566,15 +566,20 @@ class ActionManychatController extends Controller
         $sodAvailable = $getClientPerson->sod_available;
         
         $products = '';
-        if ($cpAvailable !== null) {
-            $products .= $cpAvailable;
-        }
+        
         if ($stdAvailable !== null) {
             $products .= $stdAvailable;
         }
+
         if ($sodAvailable !== null) {
             $products .= $sodAvailable;
         }
+
+        if ($cpAvailable !== null) {
+            $products .= $cpAvailable;
+        }
+        
+       
 
 
         $dataField = array(
