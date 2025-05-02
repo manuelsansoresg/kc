@@ -376,7 +376,7 @@ class ActionManychatController extends Controller
         $cellphone = $data['whatsapp_phone'];
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
-        $identity_validated = $getClientPerson != null ? $getClientPerson->identity_validated : false;
+        $identity_validated = $getClientPerson != null && $getClientPerson->identity_validated == 1 ? true : false;
         $dataField = array(
             'Prospecto - Validación Identidad' => $identity_validated,
         );
