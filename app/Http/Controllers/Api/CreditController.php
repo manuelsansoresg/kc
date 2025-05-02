@@ -72,6 +72,7 @@ class CreditController extends Controller
         $saldo_total_real = $getCollection->saldo_total_real;
         $status = $getCollection->status;
         $kcCreditId = $getCollection->kc_credit_id;
+        $refinanciable = $getCollection->refinanciable;
 
         $getInvestors = InvestorsCredit::where('credit_id', $kcCreditId)->get();
 
@@ -100,10 +101,12 @@ class CreditController extends Controller
                 'recovered_capital' => $recoveredCapital,
                 'total_balance' => ($saldo_total_real * $percentage) / 100,
                 'credit_status' => $status,
+                'refinanciable' => $refinanciable,
                 'commission_amount' => ($totalCollected * $comissionRate) / 100,
                 'profit_collected' => $profitCollected,
                 'iva_collected' => $ivaCollected,
                 'status' => $newStatus,
+
             ]);
         }
 
