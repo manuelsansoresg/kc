@@ -556,13 +556,13 @@ class ActionManychatController extends Controller
         
         $products = '';
         if ($cpAvailable !== null) {
-            $products .= $cpAvailable;
+            $products = $cpAvailable;
         }
         if ($stdAvailable !== null) {
-            $products .= $stdAvailable;
+            $products = $stdAvailable;
         }
         if ($sodAvailable !== null) {
-            $products .= $sodAvailable;
+            $products = $sodAvailable;
         }
 
 
