@@ -59,6 +59,13 @@ class LeadController extends Controller
     {
 
         $dataField = array(
+            'Prospecto - Validación Identidad' => true,
+        );
+
+        $manychat = new Manychat();
+        $manychat->setCustomFields($dataField, '749696996');
+
+        $dataField = array(
             'Prospecto -  Validación Celular' => true,
         );
         $manychat = new Manychat();
