@@ -352,10 +352,16 @@ class ActionManychatController extends Controller
         $data = $request->all();
         $cellphone = $data['whatsapp_phone'];    
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
-        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->update([
-            'identity_validated' => true,
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $identity_validated = false;
+        if ($getClientPerson != null) {
+            $identity_validated =  true;
+        }
+
+        $getClientPerson->update([
+            'identity_validated' => $identity_validated,
         ]);
-        return response()->json(['validate' => true]);
+        return response()->json(['validate' => $identity_validated]);
        
     }
 
