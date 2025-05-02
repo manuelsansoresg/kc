@@ -349,12 +349,18 @@ class ActionManychatController extends Controller
 
     public function validateIdentity(Request $request)
     {
+        $manychat_id = $data['id'];
         $data = $request->all();
         $cellphone = $data['whatsapp_phone'];    
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->update([
             'identity_validated' => true,
         ]);
+        $dataField = array(
+            'Prospecto - Validación Identidad' => true,
+        );
+        $manychat = new Manychat();
+        $manychat->setCustomFields($dataField, $manychat_id);
         return response()->json(['validate' => true]);
        
     }
