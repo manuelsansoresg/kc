@@ -395,11 +395,13 @@ window.checkDataLeadExist = function (valInput, id)
 {
     let getValue = valInput.value;
     let messageElement = document.getElementById(id+'-msg');
+    let lead_id = $('#lead_id').val() || null;
+    
     $('#content-validaciones').html('');
     if (getValue != '') {
         messageElement.textContent = "";
         axios
-        .get("/panel/lead/"+getValue+"/"+id+"/check")
+        .get("/panel/lead/"+getValue+"/"+id+"/"+lead_id+"/check")
         .then(function (response) {
             
             let result = response.data;

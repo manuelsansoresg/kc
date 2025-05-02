@@ -98,7 +98,7 @@ Route::group(['prefix' => 'lead'], function () {
 
     Route::get('{lead}/preview/profile', ['\App\Http\Controllers\Panel\LeadController', 'previewProfile'])->middleware('auth');
 
-    Route::get('{value}/{id}/check', ['\App\Http\Controllers\Panel\LeadController', 'checkData'])->middleware('auth');
+    Route::get('{value}/{id}/{lead_id}/check', ['\App\Http\Controllers\Panel\LeadController', 'checkData'])->middleware('auth');
     
     Route::get('{cellphone}/{rfc}/{lead}/get/validate', ['\App\Http\Controllers\Panel\LeadController', 'validateCellphoneAndRfc'])->middleware('auth');
     

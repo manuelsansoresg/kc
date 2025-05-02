@@ -89,7 +89,7 @@ class LeadController extends Controller
 
     }
 
-    public function checkData($valInput , $id)
+    public function checkData($valInput , $id, $leadId)
     {
         $getLead           = ClientPerson::checkDataModel($valInput,$id);
         $field             = $id == 'cellphone' ? 'cellphone' : 'rfc';
@@ -101,29 +101,49 @@ class LeadController extends Controller
         $isValidate = false;
         $lead = null;
         if ($getClientPerson != null) {
-            $lead = Lead::create([
-                'name' => $getClientPerson->name,
-                'last_name' => $getClientPerson->last_name,
-                'second_last_name' => $getClientPerson->second_last_name,
-                'birth_date' => $getClientPerson->birth_date,
-                'rfc' => $getClientPerson->rfc,
-                'email' => $getClientPerson->email,
-                'agreement_id' => $getClientPerson->agreement_id,
-            ]);
+            if ($leadId != 'null') {
+                $lead = Lead::find($leadId);
+                $lead->update([
+                    'name' => $getClientPerson->name,
+                    'last_name' => $getClientPerson->last_name,
+                    'second_last_name' => $getClientPerson->second_last_name,
+                    'birth_date' => $getClientPerson->birth_date,
+                    'rfc' => $getClientPerson->rfc,
+                    'email' => $getClientPerson->email,
+                    'agreement_id' => $getClientPerson->agreement_id,
+                ]);
+            } else {
+                $lead = Lead::create([
+                    'name' => $getClientPerson->name,
+                    'last_name' => $getClientPerson->last_name,
+                    'second_last_name' => $getClientPerson->second_last_name,
+                    'birth_date' => $getClientPerson->birth_date,
+                    'rfc' => $getClientPerson->rfc,
+                    'email' => $getClientPerson->email,
+                    'agreement_id' => $getClientPerson->agreement_id,
+                ]);
+            }
              //* Execute notification in create lead
             $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
             (new $notification)->send($lead->id);
             HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
             
         } else {
-            $lead = Lead::create([
-                $field => $valInput,
-              
-            ]);
-             //* Execute notification in create lead
-            $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
-            (new $notification)->send($lead->id);
-            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+            if ($leadId != 'null') {
+                $lead = Lead::find($leadId);
+                $lead->update([
+                    $field => $valInput,
+                ]);
+            } else {
+                $lead = Lead::create([
+                    $field => $valInput,
+                ]);
+                 //* Execute notification in create lead
+                $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+                (new $notification)->send($lead->id);
+                HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+            }
+            
         }
        
 

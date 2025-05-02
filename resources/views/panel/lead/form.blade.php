@@ -89,7 +89,7 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Fecha de nacimiento</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="date" class="form-control" name="data[birth_date]" id="lead-birth_date" onchange="createRfc()">
+                                                                    <input type="date" class="form-control" name="data[birth_date]" id="lead-birth_date" onblur="createRfc()">
                                                                     <label id="birth_date-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>

@@ -2833,11 +2833,12 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
 window.checkDataLeadExist = function (valInput, id) {
   var getValue = valInput.value;
   var messageElement = document.getElementById(id + '-msg');
+  var lead_id = $('#lead_id').val() || null;
   $('#content-validaciones').html('');
 
   if (getValue != '') {
     messageElement.textContent = "";
-    axios.get("/panel/lead/" + getValue + "/" + id + "/check").then(function (response) {
+    axios.get("/panel/lead/" + getValue + "/" + id + "/" + lead_id + "/check").then(function (response) {
       var result = response.data;
       var isExist = result.exist;
       var clientPerson = result.clientPerson;
