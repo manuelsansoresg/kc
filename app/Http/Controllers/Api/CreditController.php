@@ -63,37 +63,37 @@ class CreditController extends Controller
         $getCollection = AgreementCollection::where('credit_id', $creditId)->first();
 
         if (!$getCollection) {
-            return; // Evitar errores si no existe el registro
+            return;
         }
-    
+
         $pago_acumulado_real = $getCollection->pago_acumulado_real;
         $saldo_insoluto_real = $getCollection->saldo_insoluto_real;
         $abono_acumulado_real = $getCollection->abono_acumulado_real;
         $saldo_total_real = $getCollection->saldo_total_real;
         $status = $getCollection->status;
         $kcCreditId = $getCollection->kc_credit_id;
-    
+
         $getInvestors = InvestorsCredit::where('credit_id', $kcCreditId)->get();
-    
+
         if ($getInvestors->isEmpty()) {
-            return; // Evitar errores si no hay inversionistas relacionados
+            return;
         }
-    
+
         $investorsIds = [];
-    
+
         foreach ($getInvestors as $getInvestor) {
             $investorsIds[] = $getInvestor->investor_id;
             $percentage = $getInvestor->percentage;
             $comissionRate = $getInvestor->commission_rate;
-    
+
             $totalCollected = ($pago_acumulado_real * $percentage) / 100;
             $recoveredCapital = ($abono_acumulado_real * $percentage) / 100;
             $profitCollected = ($totalCollected - $recoveredCapital) / 1.16;
             $ivaCollected = $profitCollected * 0.16;
             $placedCapital = ($saldo_insoluto_real * $percentage) / 100;
-    
+
             $newStatus = $placedCapital > 0 ? 2 : 0;
-    
+
             InvestorsCredit::where('id', $getInvestor->id)->update([
                 'total_collected' => $totalCollected,
                 'placed_capital' => $placedCapital,
@@ -106,35 +106,39 @@ class CreditController extends Controller
                 'status' => $newStatus,
             ]);
         }
-    
+
         // Obtener los client_person_id afectados
         $clientPersonIds = Credit::whereIn('id', $getInvestors->pluck('credit_id'))->pluck('client_person_id');
-    
-        // Actualizar client_person.credit_active
+
+        // Optimizar: solo una vez los InvestorsCredit activos
+        $investorsCreditActive = InvestorsCredit::where('status', '<>', 0)->pluck('credit_id');
+
         foreach ($clientPersonIds as $clientPersonId) {
-            $hasActiveCredits = Credit::where('client_person_id', $clientPersonId)
-                ->where('product_id', '<>', 3)
-                ->whereIn('id', InvestorsCredit::where('status', '<>', 0)->pluck('credit_id'))
-                ->exists();
-    
+            $credits = Credit::where('client_person_id', $clientPersonId)->get();
+
+            $hasActiveCredits = $credits->where('product_id', '!=', 3)
+                ->whereIn('id', $investorsCreditActive)
+                ->isNotEmpty();
+
+            $hasActiveSodCredits = $credits->where('product_id', 3)
+                ->whereIn('id', $investorsCreditActive)
+                ->isNotEmpty();
+
+            // Actualizar credit_active y sod_active
             ClientPerson::where('id', $clientPersonId)->update([
-                'credit_active' => $hasActiveCredits ? 1 : 0
+                'credit_active' => $hasActiveCredits ? 1 : 0,
+                'sod_active' => $hasActiveSodCredits ? 1 : 0,
             ]);
+
+            // Aquí integrar la actualización de los trámites permitidos
+            $latestFinancialProductId = optional($credits->last())->applied_financial_product;
+
+            /* if ($latestFinancialProductId) {
+                self::updateTramitAllowed($clientPersonId, $latestFinancialProductId);
+            } */
         }
-    
-        // Actualizar client_person.sod_active
-        foreach ($clientPersonIds as $clientPersonId) {
-            $hasActiveSodCredits = Credit::where('client_person_id', $clientPersonId)
-                ->where('product_id', 3)
-                ->whereIn('id', InvestorsCredit::where('status', '<>', 0)->pluck('credit_id'))
-                ->exists();
-    
-            ClientPerson::where('id', $clientPersonId)->update([
-                'sod_active' => $hasActiveSodCredits ? 1 : 0
-            ]);
-        }
-    
-        // Optimización: Obtener los valores sumados directamente para cada inversionista
+
+        // Actualizar los datos de los inversionistas
         $getSums = InvestorsCredit::whereIn('investor_id', $investorsIds)
             ->groupBy('investor_id')
             ->selectRaw('
@@ -148,7 +152,7 @@ class CreditController extends Controller
                 SUM(iva_collected) as iva_collected
             ')
             ->get();
-    
+
         foreach ($getSums as $getSum) {
             Investor::where('id', $getSum->investor_id)->update([
                 'placed_capital' => $getSum->placed_capital,
@@ -159,8 +163,7 @@ class CreditController extends Controller
                 'total_balance' => $getSum->total_balance,
                 'iva_collected' => $getSum->iva_collected,
             ]);
-    
-            // Llamar a funciones de actualización
+
             Investor::updateInvestorData($getSum->investor_id);
         }
     }

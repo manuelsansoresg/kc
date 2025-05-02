@@ -271,6 +271,7 @@ class CreditController extends Controller
                     ->where('numero_de_pago', '!=', 0)
                     ->get();
         }
+        
         return view('panel.credit.profile', compact('credit', 'payments'));
     }
 

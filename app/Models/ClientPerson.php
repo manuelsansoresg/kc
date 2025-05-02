@@ -106,6 +106,10 @@ class ClientPerson extends Model
         'cp_available',
         'std_available',
         'sod_available',
+
+        'new_tramit_allowed',
+        'additional_tramit_allowed',
+        'ref_tramit_allowed',
     ];
 
     public static function listDatatable($isAdmin = true, $origin = null)

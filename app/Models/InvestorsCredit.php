@@ -28,6 +28,7 @@ class InvestorsCredit extends Model
         'credit_status',
         'iva_collected',
         'iva_commission',
+        'refinanciable',
     ];
 
     public static function saveEdit($creditId)
