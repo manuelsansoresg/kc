@@ -382,7 +382,8 @@ class ActionManychatController extends Controller
         );
         $manychat = new Manychat();
         $manychat->setCustomFields($dataField, $manychat_id);
-        return response()->json(['validate' => $getClientPerson]);
+        return response()->json(['validate' => $identity_validated]);
+
     }
 
     public function validateSodActive(Request $request)
