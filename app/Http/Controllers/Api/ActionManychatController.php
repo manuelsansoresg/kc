@@ -392,7 +392,7 @@ class ActionManychatController extends Controller
         $data = $request->all();
         $manychat_id = $data['id'];
         $cellphone = $data['whatsapp_phone'];
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $sod_active = false;
         $textSoad = 'Tiene un Salario On-Demand activo';
