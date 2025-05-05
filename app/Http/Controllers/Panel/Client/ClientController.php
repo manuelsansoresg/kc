@@ -7,6 +7,7 @@ use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\ClientPerson;
 use App\Models\Investor;
+use App\Models\InvestorsCredit;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -50,6 +51,7 @@ class ClientController extends Controller
     {
        Investor::setLendableAndLoanAvailable($request->investorId, $request->lendable);
        Investor::updateInvestorData($request->investorId);
+       InvestorsCredit::updateInvestorCredits($request->investorId);
     }
 
     /**
