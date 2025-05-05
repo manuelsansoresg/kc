@@ -406,7 +406,7 @@ class ActionManychatController extends Controller
             'SOD - Activo' => $sod_active,
         );
         $manychat->setCustomFields($dataField, $manychat_id);
-        return response()->json(['validate' => $sod_active]);
+        return response()->json(['validate' => $sod_active, 'getClientPerson' => $getClientPerson]);
     }
 
     public function validateFechasPermitidas(Request $request)
