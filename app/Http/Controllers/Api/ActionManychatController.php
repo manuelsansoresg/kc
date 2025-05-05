@@ -488,7 +488,7 @@ class ActionManychatController extends Controller
                 'product_id' => $getFinancialProduct->id,
             ]);
         }
-        return response()->json(['validate' => true]);
+        return response()->json(['validate' => true, 'product_id' => $productId]);
     }
 
     public function getMontoMinMax(Request $request)
