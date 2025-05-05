@@ -397,7 +397,7 @@ class ActionManychatController extends Controller
         $sod_active = false;
         $textSoad = 'Tiene un Salario On-Demand activo';
         $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
-        if ($getClientPerson != null && $getClientPerson->sod_active == 0) {
+        if ($getClientPerson != null && $getClientPerson->sod_active === 0) {
             $textSoad = 'No tiene un Salario On-Demand activo';
             $sod_active = true;
         }
