@@ -69,7 +69,7 @@ class Lead extends Model
         $data = $request->all();
         $manychat_id = $data['id'];
         $cellphone = $data['phone'];
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $manychat = new Manychat();
         $rfc = null;
