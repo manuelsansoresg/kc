@@ -430,6 +430,7 @@ class ActionManychatController extends Controller
             $statusRangoFechas             = $getDate!= null && $getDate->schedule == 1 ?  1 : 0;
             if ($financialProduct->type_product_id == 3) {
                 LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - SOD en rango de fechas permitidas', $statusRangoFechas, $isSoadDate);
+                $is_sod_on_date_allowed = true;
             }
 
         }
