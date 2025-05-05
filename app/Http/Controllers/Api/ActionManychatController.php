@@ -406,7 +406,7 @@ class ActionManychatController extends Controller
             'SOD - Activo' => $sod_active,
         );
         $manychat->setCustomFields($dataField, $manychat_id);
-        return response()->json(['validate' => $sod_active, 'getClientPerson' => $getClientPerson, 'cleanPhone' => $cleanPhone]);
+        return response()->json(['validate' => $sod_active]);
     }
 
     public function validateFechasPermitidas(Request $request)
@@ -414,7 +414,7 @@ class ActionManychatController extends Controller
         $data = $request->all();
         $manychat_id = $data['id'];
         $cellphone = $data['whatsapp_phone'];
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         $financialProduct = FinancialProduct::where('id', $lead->product_id)->first();
         //validar soad en fecha
@@ -452,7 +452,7 @@ class ActionManychatController extends Controller
         
         $manychat_id = $data['id'];
         $cellphone = $data['whatsapp_phone'];
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $rfc = null;
         $productName = null;
         $manychat = new Manychat();
@@ -541,7 +541,7 @@ class ActionManychatController extends Controller
         $manychat_id = $data['id'];
         $rfc = null;
         $cellphone = $data['whatsapp_phone'];
-        $cleanPhone = preg_replace('/^\+52/', '', $cellphone);
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
 
         $manychat = new Manychat();
         $info = json_decode($manychat->getInfoUser($manychat_id));
