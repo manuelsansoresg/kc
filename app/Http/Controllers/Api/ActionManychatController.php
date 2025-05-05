@@ -485,7 +485,7 @@ class ActionManychatController extends Controller
         if ($getFinancialProduct != null) {
             $getLead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
             Lead::where('id', $getLead->id)->update([
-                'product_id' => $getFinancialProduct->id,
+                'product_id' => $productId,
             ]);
         }
         return response()->json(['validate' => true, 'product_id' => $productId]);
