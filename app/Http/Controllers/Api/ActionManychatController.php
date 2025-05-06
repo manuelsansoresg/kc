@@ -433,7 +433,7 @@ class ActionManychatController extends Controller
             ->first();
 
             if ($matchedProduct != null) {
-                $getSodName = SodScheduleName::find($lead->agreement_id);
+                $getSodName = SodScheduleName::find($getClientPerson->agreement_id);
                 if ($getSodName != null) {
                     $nameField              = "schedule_$getSodName->id";
                     $alias                  = "schedule_$getSodName->id as schedule";
