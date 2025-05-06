@@ -439,6 +439,7 @@ class ActionManychatController extends Controller
         );
         $manychat = new Manychat();
         $manychat->setCustomFields($dataField, $manychat_id);
+        $is_sod_on_date_allowed = true;
         return response()->json(['validate' => $is_sod_on_date_allowed]);
     }
 
