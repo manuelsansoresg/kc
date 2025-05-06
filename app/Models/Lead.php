@@ -72,22 +72,8 @@ class Lead extends Model
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $manychat = new Manychat();
-        $rfc = null;
-        $info = json_decode($manychat->getInfoUser($manychat_id));
-        $status = $info->status;
-        if ($status != 'error') {
-            $data = $info->data;
-            $custom_fields = $data->custom_fields;
-            foreach ($custom_fields as $key => $custom_field) {
-                if ($custom_field->name == 'Prospecto - RFC') {
-                    $rfc = $custom_field->value;
-                    break;
-                }
-            }
-        }
-        if (!$getClientPerson && $rfc) {
-            $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
-        }
+        
+       
         //calcular minimo
         $minimo = $getClientPerson->daily_income_adjusted * 1;
         $minimoRedondeado = floor($minimo / 100) * 100;
