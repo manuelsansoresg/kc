@@ -416,25 +416,41 @@ class ActionManychatController extends Controller
         $cellphone = $data['whatsapp_phone'];
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
-        $financialProduct = FinancialProduct::where('id', $lead->product_id)->first();
-        //validar soad en fecha
-        $getSodName = SodScheduleName::find($lead->agreement_id);
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        
         $isSoadDate = 'Solicitud fuera del rango de fechas';
         $is_sod_on_date_allowed = false;
         $statusRangoFechas = 0;
-        if ($getSodName != null) {
-            $nameField              = "schedule_$getSodName->id";
-            $alias                  = "schedule_$getSodName->id as schedule";
-            $getDate                = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
-            $isSoadDate             = $getDate!= null && $getDate->schedule == 1 ?  'Solicitud dentro del rango de fechas' : $isSoadDate;
-            $statusRangoFechas             = $getDate!= null && $getDate->schedule == 1 ?  1 : 0;
-            if ($financialProduct->type_product_id == 3) {
-                LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - SOD en rango de fechas permitidas', $statusRangoFechas, $isSoadDate);
-                $is_sod_on_date_allowed = true;
-            }
 
+        if ($getClientPerson != null) {
+            
+            $productIds = FinancialAgreement::where('agreement_id', $getClientPerson->agreement_id)
+            ->pluck('product_id')
+            ->toArray();
+            
+            $matchedProduct = FinancialProduct::whereIn('id', $productIds)
+            ->where('type_product_id', $lead->product_id)
+            ->first();
+
+            if ($matchedProduct != null) {
+                $getSodName = SodScheduleName::find($lead->agreement_id);
+                if ($getSodName != null) {
+                    $nameField              = "schedule_$getSodName->id";
+                    $alias                  = "schedule_$getSodName->id as schedule";
+                    $getDate                = SodScheduleDate::select($alias)->where(['fecha' => date('Y-m-d')])->first();
+                    $isSoadDate             = $getDate!= null && $getDate->schedule == 1 ?  'Solicitud dentro del rango de fechas' : $isSoadDate;
+                    $statusRangoFechas             = $getDate!= null && $getDate->schedule == 1 ?  1 : 0;
+                    if ($matchedProduct->type_product_id == 3) {
+                        LeadValidation::saveEdit($lead->id, 'Crédito preautorizado - SOD en rango de fechas permitidas', $statusRangoFechas, $isSoadDate);
+                        $is_sod_on_date_allowed = true;
+                    }
+        
+                }
+            }
         }
-        $is_sod_on_date_allowed = true;
+
+
+
         $dataField = array(
             'SOD - Fechas permitidas' => $is_sod_on_date_allowed,
         );
@@ -476,20 +492,29 @@ class ActionManychatController extends Controller
             $getClientPerson = ClientPerson::where('rfc', $rfc)->first();
         }
         
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        if ($getClientPerson != null) {
+            //$getFinancialAgreement = FinancialAgreement::where('agreement_id', $getClientPerson->agreement_id)->where('product_id', $productId)->first();
+            $productIds = FinancialAgreement::where('agreement_id', $getClientPerson->agreement_id)
+                                 ->pluck('product_id')
+                                 ->toArray();
+            $matchedProduct = FinancialProduct::whereIn('id', $productIds)
+            ->where('type_product_id', $productId)
+            ->first();
 
-        $getProduct = Product::where('alias', $products[$productId])->first();
-        $getFinancialProduct = FinancialProduct::select('financial_products.id')
-
-        ->join('financial_agreements', 'financial_agreements.product_id', 'financial_products.id')
-        ->where('type_product_id', $getProduct->id)
-        ->where('financial_agreements.agreement_id', $getClientPerson->agreement_id)
-        ->first();
-        if ($getFinancialProduct != null) {
-            $getLead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
-            Lead::where('id', $getLead->id)->update([
-                'product_id' => $productId,
-            ]);
+            if ($matchedProduct != null) {
+                Lead::where('id', $lead->id)->update([
+                    'product_id' => $productId,
+                    'applied_financial_product' => $matchedProduct->id,
+                    'product_id' => $matchedProduct->id,
+                ]);
+            }
         }
+        
+
+        
+       
         return response()->json(['validate' => true, 'product_id' => $productId]);
     }
 
