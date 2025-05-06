@@ -507,7 +507,6 @@ class ActionManychatController extends Controller
                 Lead::where('id', $lead->id)->update([
                     'product_id' => $productId,
                     'applied_financial_product' => $matchedProduct->id,
-                    'product_id' => $matchedProduct->id,
                 ]);
             }
         }
