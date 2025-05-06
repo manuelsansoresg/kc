@@ -357,6 +357,16 @@ class ActionManychatController extends Controller
         $identity_validated = false;
         if ($getClientPerson != null) {
             $identity_validated =  true;
+            $lead = Lead::where('manychat_id', $manychat_id)->first();
+            $lead->update([
+                'name' => $getClientPerson->name,
+                'last_name' => $getClientPerson->last_name,
+                'second_last_name' => $getClientPerson->second_last_name,
+                'birth_date' => $getClientPerson->birth_date,
+                'rfc' => $getClientPerson->rfc,
+                'email' => $getClientPerson->email,
+                'agreement_id' => $getClientPerson->agreement_id,
+            ]);
         }
 
         $getClientPerson->update([
@@ -377,6 +387,19 @@ class ActionManychatController extends Controller
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $identity_validated = $getClientPerson != null && $getClientPerson->identity_validated == 1 ? true : false;
+        if ($identity_validated == true) {
+            $lead = Lead::where('manychat_id', $manychat_id)->first();
+            $lead->update([
+                'name' => $getClientPerson->name,
+                'last_name' => $getClientPerson->last_name,
+                'second_last_name' => $getClientPerson->second_last_name,
+                'birth_date' => $getClientPerson->birth_date,
+                'rfc' => $getClientPerson->rfc,
+                'email' => $getClientPerson->email,
+                'agreement_id' => $getClientPerson->agreement_id,
+                
+            ]);
+        }
         $dataField = array(
             'Prospecto - Validación Identidad' => $identity_validated,
         );
