@@ -631,12 +631,16 @@ class ActionManychatController extends Controller
         $manychat_id = $data['id'];
         $firmaContrato = false;
         $urlContrato = null;
+        $cellphone = $data['whatsapp_phone'];
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+
         $credit = Credit::where([
-            'manychat_id' => $manychat_id,
+            'client_person_id' => $getClientPerson->id,
             'credit_status' => HistoryLog::KC_CONTROL_DESK
         ])->first();
         if ($credit != null) {
-            $client = $credit->creditClientPerson;
+            $client = $getClientPerson;
             $manychat = new Manychat();
             $firmaContrato = $client!= null && $client->cm_agreement == 1 ? true : false;
             $urlContrato = $client!= null ? asset('/client/contratocm/'.$client->id.'/'.$credit->id) : null;
