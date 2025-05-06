@@ -542,9 +542,15 @@ class ActionManychatController extends Controller
 
     public function getMontoMinMax(Request $request)
     {
+        $data = $request->all();
+        $manychat_id = $data['id'];
         $lead = Lead::getMontoMinMax($request);
         $minimoRedondeado = $lead['monto_minimo'];
         $maximoRedondeado = $lead['monto_maximo'];
+        Lead::where('manychat_id', $manychat_id)->update([
+            'sod_min' => $minimoRedondeado,
+            'sod_max' => $maximoRedondeado,
+        ]);
         return response()->json(['monto_minimo' => $minimoRedondeado, 'monto_maximo' => $maximoRedondeado]);
     }
 
