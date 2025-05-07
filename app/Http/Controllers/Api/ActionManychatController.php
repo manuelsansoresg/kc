@@ -357,7 +357,7 @@ class ActionManychatController extends Controller
         $identity_validated = false;
         if ($getClientPerson != null) {
             $identity_validated =  true;
-            $lead = Lead::where('manychat_id', $manychat_id)->first();
+            $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
             $lead->update([
                 'name' => $getClientPerson->name,
                 'last_name' => $getClientPerson->last_name,
@@ -389,7 +389,7 @@ class ActionManychatController extends Controller
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $identity_validated = $getClientPerson != null && $getClientPerson->identity_validated == 1 ? true : false;
         if ($identity_validated == 1) {
-            $lead = Lead::where('manychat_id', $manychat_id)->first();
+            $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
             $lead->update([
                 'name' => $getClientPerson->name,
                 'last_name' => $getClientPerson->last_name,
@@ -549,7 +549,7 @@ class ActionManychatController extends Controller
         $lead = Lead::getMontoMinMax($request);
         $minimoRedondeado = $lead['monto_minimo'];
         $maximoRedondeado = $lead['monto_maximo'];
-        Lead::where('manychat_id', $manychat_id)->update([
+        Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->update([
             'sod_min' => $minimoRedondeado,
             'sod_max' => $maximoRedondeado,
         ]);
@@ -588,7 +588,7 @@ class ActionManychatController extends Controller
         }
 
         if ($validateMontoSolicitado == true) {
-            Lead::where('manychat_id', $manychat_id)->update([
+            Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->update([
                 'selected_loan' => $montoSolicitado,
             ]);
         }
@@ -769,7 +769,7 @@ class ActionManychatController extends Controller
         $cellphone = $data['whatsapp_phone'];
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
-        $getLead = Lead::where('manychat_id', $manychat_id)->first();
+        $getLead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         
         $mcData = array(
             'client_person_id' => $getClientPerson->id,
