@@ -763,5 +763,20 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $manychat_id = $data['id'];
+        $cellphone = $data['whatsapp_phone'];
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $getLead = Lead::where('manychat_id', $manychat_id)->first();
+        
+        $mcData = array(
+            'client_person_id' => $getClientPerson->id,
+            'product_id' => $getLead->product_id,
+            'selected_loan' => $getLead->selected_loan,
+            'selected_term' => $getLead->product_id == 3 ? 1 : 0,
+            'financial_product_id' => $getLead->applied_financial_product,
+        );
+        $leadData = Lead::prepareLeadDataFromMC($mcData);
+        Lead::where('id', $getLead->id)->update($leadData);
+        return response()->json(['status' => true]);
     }    
 }

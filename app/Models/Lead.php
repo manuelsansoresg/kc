@@ -716,6 +716,49 @@ class Lead extends Model
         return $channel;
     }
 
+    public static function prepareLeadDataFromMC(array $mcData)
+    {
+        // Extraer IDs desde ManyChat
+        $clientPersonId = $mcData['client_person_id'] ?? null;
+        $productId = $mcData['product_id'] ?? null;
+        $selectedLoan = $mcData['selected_loan'] ?? 0;
+        $selectedTerm = $productId == 3 ? 1 : ($mcData['selected_term'] ?? null);
+        $appliedFinancialProduct = $mcData['financial_product_id'] ?? null;
+
+        // Obtener modelos desde BD
+        $clientPerson = ClientPerson::find($clientPersonId);
+        $financialProduct = FinancialProduct::find($appliedFinancialProduct);
+
+        // Calcular comisión
+        $sodCommissionAmount = $productId == 3 ? ($financialProduct->sod_commission_amount ?? 0) : 0;
+        $sodWithdrawAmount = $selectedLoan;
+        $sodTotalPayment = $sodWithdrawAmount + $sodCommissionAmount;
+
+        // Preparar arreglo de datos
+        $data = [
+            'agreement_id' => $clientPerson->agreement_id ?? null,
+            'product_id' => $productId,
+            'name' => $clientPerson->name ?? null,
+            'last_name' => $clientPerson->last_name ?? null,
+            'second_last_name' => $clientPerson->second_last_name ?? null,
+            'cellphone' => $clientPerson->cellphone ?? null,
+            'email' => $clientPerson->email ?? null,
+            'rfc' => $clientPerson->rfc ?? null,
+            'birth_date' => $clientPerson->birth_date ?? null,
+            'client_person_id' => $clientPersonId,
+            'sod_total_payment' => $sodTotalPayment,
+            'selected_term' => $selectedTerm,
+            'selected_loan' => $selectedLoan,
+            'sod_commision_amount' => $sodCommissionAmount,
+            'sod_withdraw_amount' => $sodWithdrawAmount,
+            'applied_financial_product' => $appliedFinancialProduct,
+            'importe_solicitado' => $selectedLoan,
+            'financial_product_id' => $appliedFinancialProduct,
+        ];
+
+        return $data;
+    }
+
     public function agreementLead()
     {
         return $this->belongsTo(Agreement::class, 'agreement_id');
