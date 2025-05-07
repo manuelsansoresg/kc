@@ -584,6 +584,12 @@ class ActionManychatController extends Controller
                 $validateMontoSolicitado = true;
             }
         }
+
+        if ($validateMontoSolicitado == true) {
+            Lead::where('manychat_id', $manychat_id)->update([
+                'selected_loan' => $montoSolicitado,
+            ]);
+        }
         $dataField = array(
             'SOD - Validar monto solicitado' => $validateMontoSolicitado,
         );
