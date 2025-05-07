@@ -657,7 +657,7 @@ class ActionManychatController extends Controller
         $manychat_id = $data['id'];
         $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         $template   = TemplateValues::STRATEGY['lead'];
-        $move       = (new $template)->move($lead->id);
+        $move       = (new $template)->move($lead->id, false, true);
         return response()->json(['lead' => $move]);
         
     }
@@ -676,6 +676,7 @@ class ActionManychatController extends Controller
             'client_person_id' => $getClientPerson->id,
             'credit_status' => HistoryLog::KC_CONTROL_DESK
         ])->first();
+
         if ($credit != null) {
             $client = $getClientPerson;
             $manychat = new Manychat();

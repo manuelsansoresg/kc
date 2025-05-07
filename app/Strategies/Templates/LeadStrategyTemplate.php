@@ -24,7 +24,7 @@ use stdClass;
 
 class LeadStrategyTemplate implements TemplateInterface
 {
-    public function move($id, $is_report = false)
+    public function move($id, $is_report = false, $is_origin_api = false)
     {
         $get_lead = Lead::find($id);
         self::setCustomFieldsManyChat($get_lead->id);
@@ -59,6 +59,12 @@ class LeadStrategyTemplate implements TemplateInterface
                 ClientPerson::where('rfc', $lead->rfc)
                             ->update($data_client_person);
                 $client_person = ClientPerson::where('rfc', $lead->rfc)->first();
+            }
+
+            if ($is_origin_api === true) {
+                Lead::where('id', $lead->id)->update([
+                    'client_person_id' => $client_person->id,
+                ]);
             }
             
             $financialProduct = FinancialProduct::find($lead->financial_product_id);
