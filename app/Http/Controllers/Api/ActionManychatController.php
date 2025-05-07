@@ -366,6 +366,7 @@ class ActionManychatController extends Controller
                 'rfc' => $getClientPerson->rfc,
                 'email' => $getClientPerson->email,
                 'agreement_id' => $getClientPerson->agreement_id,
+                'client_person_id' => $getClientPerson->id,
             ]);
         }
 
@@ -387,7 +388,7 @@ class ActionManychatController extends Controller
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $identity_validated = $getClientPerson != null && $getClientPerson->identity_validated == 1 ? true : false;
-        if ($identity_validated == true) {
+        if ($identity_validated == 1) {
             $lead = Lead::where('manychat_id', $manychat_id)->first();
             $lead->update([
                 'name' => $getClientPerson->name,
@@ -397,6 +398,7 @@ class ActionManychatController extends Controller
                 'rfc' => $getClientPerson->rfc,
                 'email' => $getClientPerson->email,
                 'agreement_id' => $getClientPerson->agreement_id,
+                'client_person_id' => $getClientPerson->id,
                 
             ]);
         }
