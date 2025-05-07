@@ -62,3 +62,4 @@ Route::post('firma-contrato-cm', [ActionManychatController::class, 'firmaContrat
 Route::post('firma-descuento-sod', [ActionManychatController::class, 'firmaDescuentoSod']);
 Route::post('firma-contrato-cm-finish', [ActionManychatController::class, 'firmaContratoCmFinish']);
 Route::post('firma-descuento-sod-finish', [ActionManychatController::class, 'firmaDescuentoSodFinish']);
+Route::post('aditional-data-save', [ActionManychatController::class, 'aditionalDataSave']);

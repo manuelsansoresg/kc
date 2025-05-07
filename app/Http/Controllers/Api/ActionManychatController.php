@@ -758,4 +758,10 @@ class ActionManychatController extends Controller
         }
         return response()->json(['status' => $status]);
     }
+
+    public function aditionalDataSave(Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+    }    
 }
