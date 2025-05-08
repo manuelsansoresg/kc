@@ -65,3 +65,5 @@ Route::post('firma-descuento-sod-finish', [ActionManychatController::class, 'fir
 Route::post('aditional-data-save', [ActionManychatController::class, 'aditionalDataSave']);
 
 Route::post('get-allowed-tramits', [ActionManychatController::class, 'getAllowedTramits']);
+
+Route::post('tipo-tramite/{tramit_type}/store', [ActionManychatController::class, 'storeTipoTramite']);

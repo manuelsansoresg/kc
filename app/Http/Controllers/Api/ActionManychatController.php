@@ -796,5 +796,16 @@ class ActionManychatController extends Controller
         $manychat->setCustomFields($dataField, $manychat_id);
         return response()->json(['allowedTramits' => $allowedTramits]);
     }
-    
+
+    public function storeTipoTramite($tramit_type, Request $request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+        Lead::where('id', $lead->id)->update([
+            'tramit_type' => $tramit_type,
+        ]);
+        return response()->json(['status' => true]);
+    }
+
 }

@@ -51,5 +51,6 @@ class VerifyCsrfToken extends Middleware
         '/firma-descuento-sod-finish',
         '/aditional-data-save',
         '/get-allowed-tramits',
+        '/tipo-tramite/{tramit_type}/store',
     ];
 }
