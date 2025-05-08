@@ -818,6 +818,7 @@ class ActionManychatController extends Controller
         $financialProduct = FinancialProduct::find($lead->applied_financial_product);
         $tramitType       = $lead->tramit_type;
         $payment          = null;
+        $manychat         = new Manychat();
 
         $getRefinanciamiento = new CalculadoraCredito();
         $montoMaximo         = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct, $tramitType);
@@ -833,6 +834,13 @@ class ActionManychatController extends Controller
             'pago_maximo' => $payment,
             'periodicity' => $financialProduct->periodicity_id,
         ]);
+        $dataField = array(
+            'Crédito P - Monto máximo' => $montoMaximo,
+            'Crédito P - Plazo máximo' => $plazoMaximo,
+            'Crédito P - Pago periódico' => $payment,
+            'Crédito P - Periodicidad' => $periodicidad,
+        );
+        $manychat->setCustomFields($dataField, $manychat_id);
         return response()->json(['status' => true, 'montoMaximo' => $montoMaximo, 'plazoMaximo' => $plazoMaximo, 'payment' => $payment, 'periodicidad' => $periodicidad]);
         
     }

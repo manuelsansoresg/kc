@@ -251,6 +251,10 @@ return [
         'Prospecto - Firma Solicitud/Descuento SOD' =>  12800636,
         'Prospecto - URL Solicitud/Descuento SOD' =>  12800638,
         'Crédito P - Tipos trámites disponibles' =>  12974922,
+        'Crédito P - Monto máximo' =>  12930754,
+        'Crédito P - Plazo máximo' =>  12930819,
+        'Crédito P - Pago periódico' =>  12976537,
+        'Crédito P - Periodicidad' =>  12976539,
     ),
 
     "funding_operation" => array(
