@@ -16,7 +16,7 @@ class AddMontoMaximoAndPagoMaximoAndPeriodicityToLeads extends Migration
         Schema::table('leads', function (Blueprint $table) {
             $table->decimal('monto_maximo', 10, 2)->nullable()->after('plazo_maximo');
             $table->decimal('pago_maximo', 10, 2)->nullable()->after('monto_maximo');
-            $table->integer('periodicidad')->nullable()->after('pago_maximo');
+            $table->integer('periodicity')->nullable()->after('pago_maximo');
         });
     }
 
@@ -30,7 +30,7 @@ class AddMontoMaximoAndPagoMaximoAndPeriodicityToLeads extends Migration
         Schema::table('leads', function (Blueprint $table) {
             $table->dropColumn('monto_maximo');
             $table->dropColumn('pago_maximo');
-            $table->dropColumn('periodicidad');
+            $table->dropColumn('periodicity');
         });
     }
 }

@@ -64,7 +64,7 @@ class Lead extends Model
         'plazo_maximo',
         'monto_maximo',
         'pago_maximo',
-        'periodicidad',
+        'periodicity',
     ];
 
     public function getMontoMinMax($request)

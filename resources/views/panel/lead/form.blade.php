@@ -231,7 +231,7 @@
                                                                                 
                                                                                 <div class="form-control-wrap">
                                                                                     <input type="text" class="form-control" id="periodicidad"  readonly>
-                                                                                    <input type="hidden" name="data[periodicidad]" id="periodicidad-hidden">
+                                                                                    <input type="hidden" name="data[periodicity]" id="periodicidad-hidden">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
