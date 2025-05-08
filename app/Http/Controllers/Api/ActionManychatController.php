@@ -833,7 +833,7 @@ class ActionManychatController extends Controller
             'pago_maximo' => $payment,
             'periodicity' => $financialProduct->periodicity_id,
         ]);
-        return response()->json(['status' => true]);
+        return response()->json(['status' => true, 'montoMaximo' => $montoMaximo, 'plazoMaximo' => $plazoMaximo, 'payment' => $payment, 'periodicidad' => $periodicidad]);
         
     }
 }
