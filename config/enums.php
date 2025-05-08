@@ -250,6 +250,7 @@ return [
         'Prospecto - URL contrato CM' =>  12800457,
         'Prospecto - Firma Solicitud/Descuento SOD' =>  12800636,
         'Prospecto - URL Solicitud/Descuento SOD' =>  12800638,
+        'Crédito P - Tipos trámites disponibles' =>  12974922,
     ),
 
     "funding_operation" => array(

@@ -781,5 +781,20 @@ class ActionManychatController extends Controller
         $leadData = Lead::prepareLeadDataFromMC($mcData);
         Lead::where('id', $getLead->id)->update($leadData);
         return response()->json(['status' => true]);
-    }    
+    } 
+
+    public function getAllowedTramits(Request $request)
+    {
+        $manychat = new Manychat();
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+        $allowedTramits = ClientPerson::getAllowedTramitsForManyChat($lead->id);
+        $dataField = array(
+            'Crédito P - Tipos trámites disponibles' => $allowedTramits,
+        );
+        $manychat->setCustomFields($dataField, $manychat_id);
+        return response()->json(['allowedTramits' => $allowedTramits]);
+    }
+    
 }
