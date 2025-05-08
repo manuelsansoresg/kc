@@ -52,5 +52,6 @@ class VerifyCsrfToken extends Middleware
         '/aditional-data-save',
         '/get-allowed-tramits',
         '/tipo-tramite/{tramit_type}/store',
+        '/monto/plazo/pago/periodicidad/set',
     ];
 }

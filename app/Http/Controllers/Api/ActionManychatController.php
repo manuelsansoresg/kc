@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Lib\CalculadoraCredito;
 use App\Lib\Manychat;
 use App\Models\Agreement;
 use App\Models\ApiActionManychat;
@@ -808,4 +809,31 @@ class ActionManychatController extends Controller
         return response()->json(['status' => true]);
     }
 
+    public function setMontoPlazoPagoPeriodicidad(Request $request)
+    {
+        $data             = $request->all();
+        $manychat_id      = $data['id'];
+        $lead             = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+        $clientPerson     = ClientPerson::find($lead->client_person_id);
+        $financialProduct = FinancialProduct::find($lead->applied_financial_product);
+        $tramitType       = $lead->tramit_type;
+        $payment          = null;
+
+        $getRefinanciamiento = new CalculadoraCredito();
+        $montoMaximo         = $getRefinanciamiento->getMontoMaximo($clientPerson, $financialProduct, $tramitType);
+        $plazoMaximo         = $financialProduct->max_term;
+        $periodicidad        = config('enums.periodicidad_names')[$financialProduct->periodicity_id];
+
+        if ($financialProduct->type_product_id != 3) {
+            $payment = $getRefinanciamiento->getPayment($financialProduct, $montoMaximo);
+        }
+        Lead::where('id', $lead->id)->update([
+            'plazo_maximo' => $plazoMaximo,
+            'monto_maximo' => $montoMaximo,
+            'pago_maximo' => $payment,
+            'periodicity' => $financialProduct->periodicity_id,
+        ]);
+        return response()->json(['status' => true]);
+        
+    }
 }

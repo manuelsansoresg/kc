@@ -698,6 +698,7 @@ class LeadController extends Controller
             'payment' => $payment,
             'productoDeseado' => $productoDeseado,
             'terms' => $terms,
+            'periodicidad_id' => $financialProduct->periodicity_id,
         );
         return response()->json($data);
     }

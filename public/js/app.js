@@ -3304,6 +3304,7 @@ window.changeTramite = function () {
       $('#monto-maximo').val(montoMaximo);
       $('#plazo-maximo').val(plazoMaximo);
       $('#periodicidad').val(periodicidad);
+      $('#periodicidad-hidden').val(result.periodicidad_id);
       $('#pago-periodico').val(payment);
       $('#content-refinanciado').show();
       $('#content-product-select').show();

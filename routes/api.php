@@ -67,3 +67,4 @@ Route::post('aditional-data-save', [ActionManychatController::class, 'aditionalD
 Route::post('get-allowed-tramits', [ActionManychatController::class, 'getAllowedTramits']);
 
 Route::post('tipo-tramite/{tramit_type}/store', [ActionManychatController::class, 'storeTipoTramite']);
+Route::post('/monto/plazo/pago/periodicidad/set', [ActionManychatController::class, 'setMontoPlazoPagoPeriodicidad']);

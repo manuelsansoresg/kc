@@ -212,7 +212,7 @@
                                                                                 <label class="form-label">Monto máximo</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="monto-maximo"  readonly>
+                                                                                    <input type="text" class="form-control" id="monto-maximo" name="data[monto_maximo]"  readonly>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -231,6 +231,7 @@
                                                                                 
                                                                                 <div class="form-control-wrap">
                                                                                     <input type="text" class="form-control" id="periodicidad"  readonly>
+                                                                                    <input type="hidden" name="data[periodicidad]" id="periodicidad-hidden">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -239,7 +240,7 @@
                                                                                 <label class="form-label">Pago periodico</label>
                                                                                 
                                                                                 <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="pago-periodico"  readonly>
+                                                                                    <input type="text" class="form-control" id="pago-periodico" name="data[pago_maximo]"  readonly>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
