@@ -2152,6 +2152,12 @@ $(document).ready(function () {
         year: year
       });
       $('input[name="rfc"]').val(rfc);
+
+      if (rfc != '') {
+        $('#text-rfc-error').show();
+      } else {
+        $('#text-rfc-error').hide();
+      }
     }
   } // Calcular RFC cuando cambie cualquiera de los campos relevantes
 

@@ -21,6 +21,11 @@ $(document).ready(function() {
             });
 
             $('input[name="rfc"]').val(rfc);
+            if (rfc != '') {
+                $('#text-rfc-error').show();
+            } else {
+                $('#text-rfc-error').hide();
+            }
         }
     }
 

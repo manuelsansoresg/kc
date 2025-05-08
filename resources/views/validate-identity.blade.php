@@ -76,30 +76,31 @@
                         <input type="hidden" name="token" value="{{ $token }}">
                         
                         <div class="mb-3">
+                            <label class="form-label">Primer apellido</label>
                             <input type="text" 
                                    class="form-control" 
                                    name="primer_apellido" 
-                                   placeholder="Primer apellido" 
                                    required>
                         </div>
                         
                         <div class="mb-3">
+                            <label class="form-label">Segundo apellido</label>
                             <input type="text" 
                                    class="form-control" 
                                    name="segundo_apellido" 
-                                   placeholder="Segundo apellido" 
                                    required>
                         </div>
                         
                         <div class="mb-3">
+                            <label class="form-label">Nombre(s)</label>
                             <input type="text" 
                                    class="form-control" 
                                    name="nombres" 
-                                   placeholder="Nombre(s)" 
                                    required>
                         </div>
                         
                         <div class="mb-3">
+                            <label class="form-label">Fecha de nacimiento</label>
                             <input type="date" 
                                    class="form-control" 
                                    name="fecha_nacimiento" 
@@ -107,10 +108,13 @@
                         </div>
                         
                         <div class="mb-4">
+                            <label class="form-label">RFC</label>
                             <input type="text" 
                                    class="form-control" 
-                                   name="rfc" 
-                                   placeholder="RFC: si está mal, modifícalo">
+                                   name="rfc">
+                            <small class="text-danger small" id="text-rfc-error" style="display: none;">
+                                Si está mal tu RFC, puedes modificarlo.
+                            </small>
                         </div>
                         
                         <div class="d-grid">
