@@ -251,40 +251,38 @@ class LeadController extends Controller
 
     public function getProducts($agreementId, $clientPersonId)
     {
+        // Obtener al cliente
         $clientPerson = ClientPerson::find($clientPersonId);
-        $cpAvailable = $clientPerson->cp_available;
-        $stdAvailable = $clientPerson->std_available;
-        $sodAvailable = $clientPerson->sod_available;
-        $productsId = array(
-            $cpAvailable,
-            $stdAvailable,
-            $sodAvailable
-        );
-
-        // Validate that at least one product ID has a value
-        $hasValidProduct = false;
-        foreach($productsId as $productId) {
-            if(!empty($productId)) {
-                $hasValidProduct = true;
-                break;
-            }
+        if (!$clientPerson) {
+            return []; // Cliente no encontrado
         }
 
-        $getProducts = FinancialAgreement::select('financial_products.id', 'financial_products.alias')
-                        ->join('financial_products', 'financial_products.id', 'financial_agreements.product_id')
-                        ->where(['agreement_id' => $agreementId]);
-
-        if ($clientPerson != null && $hasValidProduct) {
-            $getProducts->whereIn('financial_products.type_product_id', $productsId);
+        // Mapear los productos disponibles
+        $availableTypes = [];
+        if ($clientPerson->cp_available) {
+            $availableTypes[] = 1; // CP
         }
-        $getProducts = $getProducts->get();
-
-        $products = array();
-        if ($getProducts != null) {
-            foreach ($getProducts as $getProduct) {
-                $products[$getProduct->id]= $getProduct->alias;
-            }
+        if ($clientPerson->std_available) {
+            $availableTypes[] = 2; // STD
         }
+        if ($clientPerson->sod_available) {
+            $availableTypes[] = 3; // SOD
+        }
+
+        if (empty($availableTypes)) {
+            return []; // No tiene productos disponibles
+        }
+
+        // Obtener los IDs de productos del convenio del cliente
+        $productIdsFromAgreement = FinancialAgreement::where('agreement_id', $clientPerson->agreement_id)
+            ->pluck('product_id');
+
+        // Obtener productos disponibles por convenio Y por disponibilidad del cliente
+        $products = FinancialProduct::whereIn('id', $productIdsFromAgreement)
+            ->whereIn('type_product_id', $availableTypes)
+            ->pluck('alias', 'id'); // Devuelve un array [id => alias]
+
+        $products->toArray();
         return response()->json($products);
     }
 
