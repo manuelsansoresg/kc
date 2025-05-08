@@ -99,11 +99,20 @@ class LeadStrategyTemplate implements TemplateInterface
 
             // Si el producto es SOD (product_id = 3)
             if ($lead->product_id == 3) {
-                $sod_schedule_id = Agreement::where('sod_schedule_id', $lead->agreement_id)->first();
-                if ($sod_schedule_id != null) {
-                    $nameSchedule = 'schedule_'.$sod_schedule_id->sod_schedule_id;
-                    $getSchedule = SodScheduleDate::where($nameSchedule, 2)->orderBy($nameSchedule, 'ASC')->first();
-                    $data_lead['collection_date'] = $getSchedule->fecha; 
+                $sod_schedule = Agreement::where('sod_schedule_id', $lead->agreement_id)->first();
+
+                if ($sod_schedule) {
+                    $scheduleColumn = 'schedule_' . $sod_schedule->sod_schedule_id;
+                    $today = date('Y-m-d');
+
+                    $getSchedule = SodScheduleDate::whereDate('fecha', '>=', $today)
+                        ->where($scheduleColumn, 2)
+                        ->orderBy('fecha', 'asc')
+                        ->first();
+
+                    if ($getSchedule) {
+                        $data_lead['collection_date'] = $getSchedule->fecha;
+                    }
                 }
 
                 $financial_product_id = $lead->financial_product_id;
