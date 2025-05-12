@@ -174,9 +174,7 @@ class ActionManychatController extends Controller
         $contentValidaciones      = 'Sin coincidencias';
         $statusCellphone = 0;
         $dataCellphone['cleanPhone'] = $cleanPhone;
-        TempTable::create([
-            'data' => json_encode($dataCellphone),
-        ]);
+        
 
         $getClientPerson   = ClientPerson::where('cellphone', $cleanPhone)->first();
         $agreement         = $getClientPerson != null ? Agreement::find($getClientPerson->agreement_id): null;
