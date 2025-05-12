@@ -357,6 +357,8 @@ class ActionManychatController extends Controller
         if ($getClientPerson != null) {
             $identity_validated =  true;
             $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+            $cellphone_validated = $lead->cellphone != null ? true : false;
+            $rfc_validated = $lead->cellphone == null && $lead->rfc != null ? true : false;
             $lead->update([
                 'name' => $getClientPerson->name,
                 'last_name' => $getClientPerson->last_name,
@@ -366,6 +368,8 @@ class ActionManychatController extends Controller
                 'email' => $getClientPerson->email,
                 'agreement_id' => $getClientPerson->agreement_id,
                 'client_person_id' => $getClientPerson->id,
+                'cellphone_validated' => $cellphone_validated,
+                'rfc_validated' => $rfc_validated,
             ]);
         }
 
@@ -389,6 +393,9 @@ class ActionManychatController extends Controller
         $identity_validated = $getClientPerson != null && $getClientPerson->identity_validated == 1 ? true : false;
         if ($identity_validated == 1) {
             $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+            $cellphone_validated = $lead->cellphone != null ? true : false;
+            $rfc_validated = $lead->cellphone == null && $lead->rfc != null ? true : false;
+
             $lead->update([
                 'name' => $getClientPerson->name,
                 'last_name' => $getClientPerson->last_name,
@@ -398,7 +405,8 @@ class ActionManychatController extends Controller
                 'email' => $getClientPerson->email,
                 'agreement_id' => $getClientPerson->agreement_id,
                 'client_person_id' => $getClientPerson->id,
-                
+                'cellphone_validated' => $cellphone_validated,
+                'rfc_validated' => $rfc_validated,
             ]);
         }
         $dataField = array(
