@@ -264,6 +264,8 @@ window.validateLeadEdit = function(lead_id)
             let isValidate = result.isValidate;
             let contentValidaciones = result.msg;
 
+            
+
             let client_person_id = $('#client_person_id').val();
             if (isValidate == true) {
                 $('#is_viability').val(1);
@@ -314,7 +316,7 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     $('#lead-origin-agreement').val(lead.agreement_id);
 
                     getProductsByAgreementId(lead.agreement_id, lead.financial_product_id);
-
+                    
                     //getFinancialProduct(lead.id, 1);
 
                     if (is_change_origen == true) {
@@ -352,7 +354,6 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     $('#client_person_id').val(lead.client_person_id);
                     validateLeadEdit(lead_id); // Luego ejecuta validateLeadEdit
                     
-                
                     //changeOrigen(lead.channel_id);
                     
                     
@@ -381,7 +382,7 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     // Set the checked property based on the variables
                     checkboxViability.checked = is_viability === 1;
                     checkboxViabilityCredit.checked = is_viability_credit === 1;
-                    
+                    waitForTramitTypeOptions(lead.tramit_type);
 
 
         })
@@ -905,7 +906,7 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
         }
     
         if (tipoTramiteId != 'null') {
-            $('#tramit_type').val(tipoTramiteId).trigger("change");
+            waitForTramitTypeOptions(tipoTramiteId);
         }
         if (typeProductId != 3 && typeProductId != '') {
             $('#content-validaciones-soad-tramite').html(sodMessage);
@@ -1281,7 +1282,7 @@ window.validateSoad = function()
                 //getAllValidate();
             }
 
-            if (typeProductId == 1 || typeProductId == 2) {
+            if (typeProductId == 1 || typeProductId == 2 || typeProductId == 3) {
                 $('#content_tramit_type').show();
                 //llenar el arreglo de tipo de trámite
                 setSelectTramite(clientPersonId, productId, null);
@@ -1619,4 +1620,16 @@ function getLeadValidationsLoanTerm() {
         .catch(function (error) {
             console.error('Error:', error);
         });
+}
+
+function waitForTramitTypeOptions(value) {
+    const select = document.getElementById('tramit_type');
+    const checkOptions = () => {
+        if (select.options.length > 0) {
+            $('#tramit_type').val(value).trigger("change");
+        } else {
+            setTimeout(checkOptions, 100); // Check again in 100ms
+        }
+    };
+    checkOptions();
 }

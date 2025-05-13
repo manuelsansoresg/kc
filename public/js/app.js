@@ -2825,6 +2825,7 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
 
     checkboxViability.checked = is_viability === 1;
     checkboxViabilityCredit.checked = is_viability_credit === 1;
+    waitForTramitTypeOptions(lead.tramit_type);
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
@@ -3265,7 +3266,7 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
     }
 
     if (tipoTramiteId != 'null') {
-      $('#tramit_type').val(tipoTramiteId).trigger("change");
+      waitForTramitTypeOptions(tipoTramiteId);
     }
 
     if (typeProductId != 3 && typeProductId != '') {
@@ -3557,7 +3558,7 @@ window.validateSoad = function () {
       if ($('#is_viability').val() == 1) {//getAllValidate();
       }
 
-      if (typeProductId == 1 || typeProductId == 2) {
+      if (typeProductId == 1 || typeProductId == 2 || typeProductId == 3) {
         $('#content_tramit_type').show(); //llenar el arreglo de tipo de trámite
 
         setSelectTramite(clientPersonId, productId, null);
@@ -3855,6 +3856,20 @@ function getLeadValidationsLoanTerm() {
   })["catch"](function (error) {
     console.error('Error:', error);
   });
+}
+
+function waitForTramitTypeOptions(value) {
+  var select = document.getElementById('tramit_type');
+
+  var checkOptions = function checkOptions() {
+    if (select.options.length > 0) {
+      $('#tramit_type').val(value).trigger("change");
+    } else {
+      setTimeout(checkOptions, 100); // Check again in 100ms
+    }
+  };
+
+  checkOptions();
 }
 
 /***/ }),
