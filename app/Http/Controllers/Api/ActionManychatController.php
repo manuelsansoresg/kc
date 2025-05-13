@@ -537,7 +537,7 @@ class ActionManychatController extends Controller
 
             if ($matchedProduct != null) {
                 Lead::where('id', $lead->id)->update([
-                    'applied_financial_product' => $matchedProduct->id,
+                    'financial_product_id' => $matchedProduct->id,
                 ]);
             }
         }
@@ -751,7 +751,7 @@ class ActionManychatController extends Controller
         ])->first();
         $status = false;
         if ($credit != null) {
-            $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+            $financialProduct = FinancialProduct::find($credit->financial_product_id);
             $labelValidate = $financialProduct->type_product_id != 3 ? CreditsControlDesk::$labelValidate[9] : CreditsControlDesk::$labelValidate[8];
             CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
             
@@ -782,7 +782,7 @@ class ActionManychatController extends Controller
             'product_id' => $getLead->product_id,
             'selected_loan' => $getLead->selected_loan,
             'selected_term' => $getLead->product_id == 3 ? 1 : 0,
-            'financial_product_id' => $getLead->applied_financial_product,
+            'financial_product_id' => $getLead->financial_product_id,
         );
         $leadData = Lead::prepareLeadDataFromMC($mcData);
         Lead::where('id', $getLead->id)->update($leadData);
@@ -820,7 +820,7 @@ class ActionManychatController extends Controller
         $manychat_id      = $data['id'];
         $lead             = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         $clientPerson     = ClientPerson::find($lead->client_person_id);
-        $financialProduct = FinancialProduct::find($lead->applied_financial_product);
+        $financialProduct = FinancialProduct::find($lead->financial_product_id);
         $tramitType       = $lead->tramit_type;
         $payment          = null;
         $manychat         = new Manychat();

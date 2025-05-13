@@ -387,7 +387,7 @@ class LeadController extends Controller
         $bank                = $getBank      != null ? $getBank->name : null;
         $getFinancialProduct = FinancialProduct::
                                 join('financials', 'financials.id', 'financial_products.financial_id')
-                                ->where('financial_products.id',$lead->applied_financial_product)->first();
+                                ->where('financial_products.id',$lead->financial_product_id)->first();
         $financialProcuct = $getFinancialProduct!= null ? $getFinancialProduct->commercial_name .'-'. $getFinancialProduct->alias  : null;
         $financials = '';
 
