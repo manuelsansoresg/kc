@@ -499,6 +499,8 @@ class LeadController extends Controller
         $getSodName = SodScheduleName::find($agreement->id);
         $isSoadDate = 'Solicitud fuera del rango de fechas';
         $is_sod_on_date_allowed = false;
+        $contentProductSod = null; 
+        
         if ($getSodName != null) {
             $nameField              = "schedule_$getSodName->id";
             $alias                  = "schedule_$getSodName->id as schedule";
