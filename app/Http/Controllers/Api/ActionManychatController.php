@@ -527,7 +527,7 @@ class ActionManychatController extends Controller
         $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         
-        if ($getClientPerson != null && $productId == 3) { //solo aplicar tipo de tramite cuando sea sod
+        if ($getClientPerson != null) { //solo aplicar tipo de tramite cuando sea sod
             $productIds = FinancialAgreement::where('agreement_id', $getClientPerson->agreement_id)
                                  ->pluck('product_id')
                                  ->toArray();
