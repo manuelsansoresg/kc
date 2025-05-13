@@ -18,4 +18,6 @@ class ClientPersonHistoryController extends Controller
 
         return view('client.history', compact('client', 'history'));
     }
+
+    
 } 
