@@ -6,7 +6,7 @@
                 $getFinancial = $m_financial_product::find($lead->financial_product_id);
                 
             @endphp
-            @if (($lead->go_ahead === 0  && $creditStatus === false) || $validate === 0 )
+            @if ($validate == false )
                 <span class="text-danger">{{ $lead->name }} {{ $lead->last_name }}  </span>
             @else
                 <span class="text-success">{{ $lead->name }} {{ $lead->last_name }}  </span>

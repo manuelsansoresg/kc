@@ -63,13 +63,20 @@ class LeadValidation extends Model
         );
 
         $validations = LeadValidation::where('lead_id', $leadId)->get();
+        $validateMonto = false;
         
         // Check phone or RFC validation (at least one should be valid)
         $phoneOrRfcValid = false;
         foreach ($validations as $validation) {
-            if ($validation->validation == 'Prospecto - Celular' || $validation->validation == 'Prospecto - RFC') {
+           /*  if ($validation->validation == 'Prospecto - Celular' || $validation->validation == 'Prospecto - RFC') {
                 if ($validation->status == 1) {
                     $phoneOrRfcValid = true;
+                    break;
+                }
+            } */
+            if ($validation->validation == 'Crédito seleccionado - Importe seleccionado') {
+                if ($validation->status == 1) {
+                    $validateMonto = true;
                     break;
                 }
             }
@@ -84,6 +91,6 @@ class LeadValidation extends Model
             }
         }
 
-        return ($phoneOrRfcValid && $allValid) ? 1 : 0;
+        return $validateMonto;
     }
 }
