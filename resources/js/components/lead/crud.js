@@ -314,7 +314,7 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     setTimeout(() => {
                         console.log('finish');
                         $('#tramit_type').prop('disabled', false);
-                        $('#tramit_type').val(1).trigger("change");
+                        $('#tramit_type').val(lead.tramit_type).trigger("change");
                     }, 7000);
                     //productChange(product_id);
                     //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
