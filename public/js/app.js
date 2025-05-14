@@ -3273,6 +3273,10 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
       $('#content-error-producto-preautorizado').show();
     }
 
+    if (typeProductId == 3) {
+      $('#content-product-select').hide();
+    }
+
     if (tipoTramiteId != 'null') {
       $('#tramit_type').val(tipoTramiteId).trigger("change");
     }
