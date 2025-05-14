@@ -1288,12 +1288,9 @@ window.validateSoad = function()
                 //getAllValidate();
             }
 
-            if (typeProductId == 1 || typeProductId == 2 || typeProductId == 3) {
-                $('#content_tramit_type').show();
+            $('#content_tramit_type').show();
                 //llenar el arreglo de tipo de trámite
                 setSelectTramite(clientPersonId, productId, null);
-                
-            }
             
 
             if (typeProductId == 3 ) {

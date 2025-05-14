@@ -3566,11 +3566,9 @@ window.validateSoad = function () {
       if ($('#is_viability').val() == 1) {//getAllValidate();
       }
 
-      if (typeProductId == 1 || typeProductId == 2 || typeProductId == 3) {
-        $('#content_tramit_type').show(); //llenar el arreglo de tipo de trámite
+      $('#content_tramit_type').show(); //llenar el arreglo de tipo de trámite
 
-        setSelectTramite(clientPersonId, productId, null);
-      }
+      setSelectTramite(clientPersonId, productId, null);
 
       if (typeProductId == 3) {
         var TextSoad = result.TextSoad;
