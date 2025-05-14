@@ -253,7 +253,11 @@ if (document.getElementById('action-model')) {
 
 $().ready(function () {
     
-    getData();
+    if (document.getElementById('action-id_rel')) {
+        getData();
+    }
+
+
     $("#frm-action-files").validate({
         rules: {
             'date_file[]': {

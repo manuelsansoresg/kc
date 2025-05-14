@@ -209,7 +209,10 @@ $(document).ready(function () {
   }
 
   $().ready(function () {
-    getData();
+    if (document.getElementById('action-id_rel')) {
+      getData();
+    }
+
     $("#frm-action-files").validate({
       rules: {
         'date_file[]': {
@@ -2765,7 +2768,13 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
     var result = response.data;
     var lead = result.lead;
     var is_viability = lead.is_viability;
-    var is_viability_credit = lead.is_viability_credit; //productChange(product_id);
+    var is_viability_credit = lead.is_viability_credit;
+    $('#tramit_type').prop('disabled', true);
+    setTimeout(function () {
+      console.log('finish');
+      $('#tramit_type').prop('disabled', false);
+      $('#tramit_type').val(1).trigger("change");
+    }, 7000); //productChange(product_id);
     //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
 
     $('#lead-origin-agreement').val(lead.agreement_id);
@@ -2825,7 +2834,6 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
 
     checkboxViability.checked = is_viability === 1;
     checkboxViabilityCredit.checked = is_viability_credit === 1;
-    waitForTramitTypeOptions(lead.tramit_type);
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
@@ -3266,7 +3274,7 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
     }
 
     if (tipoTramiteId != 'null') {
-      waitForTramitTypeOptions(tipoTramiteId);
+      $('#tramit_type').val(tipoTramiteId).trigger("change");
     }
 
     if (typeProductId != 3 && typeProductId != '') {
@@ -3856,20 +3864,6 @@ function getLeadValidationsLoanTerm() {
   })["catch"](function (error) {
     console.error('Error:', error);
   });
-}
-
-function waitForTramitTypeOptions(value) {
-  var select = document.getElementById('tramit_type');
-
-  var checkOptions = function checkOptions() {
-    if (select.options.length > 0) {
-      $('#tramit_type').val(value).trigger("change");
-    } else {
-      setTimeout(checkOptions, 100); // Check again in 100ms
-    }
-  };
-
-  checkOptions();
 }
 
 /***/ }),

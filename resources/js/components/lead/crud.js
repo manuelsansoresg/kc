@@ -310,7 +310,12 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     let lead          = result.lead;
                     let is_viability  = lead.is_viability;
                     let is_viability_credit = lead.is_viability_credit;
-
+                    $('#tramit_type').prop('disabled', true);
+                    setTimeout(() => {
+                        console.log('finish');
+                        $('#tramit_type').prop('disabled', false);
+                        $('#tramit_type').val(1).trigger("change");
+                    }, 7000);
                     //productChange(product_id);
                     //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
                     $('#lead-origin-agreement').val(lead.agreement_id);
@@ -382,8 +387,8 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     // Set the checked property based on the variables
                     checkboxViability.checked = is_viability === 1;
                     checkboxViabilityCredit.checked = is_viability_credit === 1;
-                    waitForTramitTypeOptions(lead.tramit_type);
-
+                    
+                    
 
         })
         .catch(e => {
@@ -613,6 +618,7 @@ window.getProductsByAgreementId = function(leadId, productId)
         if (productId != 'null') {
             $('#financial_product_id').val(productId).trigger("change");
         }
+        
     })
     .catch(e => {
 
@@ -906,7 +912,7 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
         }
     
         if (tipoTramiteId != 'null') {
-            waitForTramitTypeOptions(tipoTramiteId);
+            $('#tramit_type').val(tipoTramiteId).trigger("change");
         }
         if (typeProductId != 3 && typeProductId != '') {
             $('#content-validaciones-soad-tramite').html(sodMessage);
@@ -1620,16 +1626,4 @@ function getLeadValidationsLoanTerm() {
         .catch(function (error) {
             console.error('Error:', error);
         });
-}
-
-function waitForTramitTypeOptions(value) {
-    const select = document.getElementById('tramit_type');
-    const checkOptions = () => {
-        if (select.options.length > 0) {
-            $('#tramit_type').val(value).trigger("change");
-        } else {
-            setTimeout(checkOptions, 100); // Check again in 100ms
-        }
-    };
-    checkOptions();
 }
