@@ -448,6 +448,10 @@ class Lead extends Model
             $data['aval_o_garantia'] = $data['aval_o_garantia'] === null ? 1 : $data['aval_o_garantia']; 
         }
 
+        if (!isset($data['tramit_type'])) {
+            $data['tramit_type'] = 1;
+        }
+
         
         $data['is_viability'] = isset($data['is_viability']) ? $data['is_viability'] : 0 ; 
         

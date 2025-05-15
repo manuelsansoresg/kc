@@ -3574,6 +3574,7 @@ window.validateSoad = function () {
         console.log('typeProductId-' + typeProductId);
         $('#producto-deseado').show();
         document.getElementById('slider').disabled = true;
+        document.getElementById('tramit_type').disabled = true;
       }
 
       if ($('#is_viability').val() == 1) {//getAllValidate();
