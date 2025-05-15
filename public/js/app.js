@@ -3251,9 +3251,9 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
 
   $('#content-validaciones-soad-tramite').html('');
   $('#content-error-producto-preautorizado').hide();
-  $('#producto-deseado').hide();
   var typeProductId = $('#typeProductId').val();
   var leadId = $('#lead_id').val();
+  var productId = $('#financial_product_id').val();
   axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/" + leadId + "/tramite/get").then(function (response) {
     var result = response.data;
     var sodIsTramite = result.sodIsTramite;
@@ -3271,10 +3271,6 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
     } else {
       $('#content-product-select').show();
       $('#content-error-producto-preautorizado').show();
-    }
-
-    if (typeProductId == 3) {
-      $('#content-product-select').hide();
     }
 
     if (tipoTramiteId != 'null') {
@@ -3295,6 +3291,7 @@ window.changeTramite = function () {
   var typeProductId = $('#typeProductId').val();
   var leadId = document.getElementById("lead_id").value;
   $('#content-product-select').hide();
+  $('#content-product').hide();
   $('#content-refinanciado').hide();
   $('#product-deseado-refinanciamiento').hide();
   $('#content-product-deseado-refinanciamiento').html('');
@@ -3319,8 +3316,12 @@ window.changeTramite = function () {
       $('#periodicidad').val(periodicidad);
       $('#periodicidad-hidden').val(result.periodicidad_id);
       $('#pago-periodico').val(payment);
-      $('#content-refinanciado').show();
-      $('#content-product-select').show();
+
+      if (typeProductId != 3) {
+        $('#content-product-select').show();
+        $('#content-refinanciado').show();
+      }
+
       $('#product-deseado-refinanciamiento').show();
       $('#content-product-deseado-refinanciamiento').html(productoDeseado);
       var selectTramite = document.getElementById('ref-plazo');
@@ -3546,6 +3547,7 @@ function getChart() {
 
 
 window.validateSoad = function () {
+  $('#content-refinanciado').hide();
   $('#content-validaciones-soad').html('');
   $('#content-validaciones-soad-date').html('');
   $('#content-product').html('');
@@ -3553,6 +3555,7 @@ window.validateSoad = function () {
   $('#content-validaciones-soad-tramite').html('');
   $('#go_ahead').val(0);
   $('#loan_available-msg').html('');
+  $('#producto-deseado').hide();
 
   if ($('#financial_product_id').val() != null) {
     var clientPersonId = $('#client_person_id').val();
@@ -3566,6 +3569,12 @@ window.validateSoad = function () {
       var typeProductId = result.type_product_id;
       $('#typeProductId').val(typeProductId);
       $('#loan_available-msg').html(result.loan_available);
+
+      if (typeProductId == 3) {
+        console.log('typeProductId-' + typeProductId);
+        $('#producto-deseado').show();
+        document.getElementById('slider').disabled = true;
+      }
 
       if ($('#is_viability').val() == 1) {//getAllValidate();
       }
@@ -3594,8 +3603,8 @@ window.validateSoad = function () {
         $('#content-validaciones-soad-date').html(isSoadDate);
 
         if (isSodOnDate == true) {
+          document.getElementById('slider').disabled = false;
           $('#content-product').html(result.contentProductSod);
-          $('#producto-deseado').show();
           $('#go_ahead').val(1); //valores slider
 
           var slider = document.getElementById('slider');
@@ -3619,8 +3628,6 @@ window.validateSoad = function () {
             selectElement.appendChild(option);
           });
           $('#content_tramit_type').show();
-        } else {
-          $('#producto-deseado').hide();
         }
       }
     })["catch"](function (e) {});
