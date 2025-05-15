@@ -12,7 +12,7 @@
                 <form method="post" id="frm-inversionista" action="/panel/user/administrador">
                     @csrf
                     @php
-                        $roles = config('enums.role_user_financial');
+                        $roles = config('enums.role_user_inversionista');
                     @endphp
                     <ul class="nav nav-tabs">
                         <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab" href="#tabItem1">Cuenta</a>
@@ -37,7 +37,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group"><label class="form-label">*Rol</label>
+                                    <div class="form-group"><label class="form-label">*Permiso</label>
                                         <div class="form-control-select">
                                             <select name="rol_id" class="form-control" id="rol_id" onchange="showRazon()">
                                                 <option value="">Selecciona una opción</option>
@@ -226,9 +226,10 @@
         
                                 <div class="col-12">
                                     <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                                        <input type="hidden" name="isResetpassword" id="isResetpassword" value="0">
                                         <li>
-                                            {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
-                                            <button class="btn btn-primary">Guardar</button>
+                                            <button type="submit" class="btn btn-primary" id="btn-save">Guardar</button>
+                                            <button type="submit" class="btn btn-primary" id="btn-save-welcome">Guardar y dar bienvenida</button>
                                         </li>
                                     </ul>
                                 </div>

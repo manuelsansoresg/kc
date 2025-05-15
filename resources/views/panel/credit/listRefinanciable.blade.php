@@ -18,7 +18,7 @@
                         $total += $credit->saldo_insoluto_real;
                     @endphp
                     <tr>
-                        <td> <input type="checkbox" name="credits[]" id="{{ $credit->id }}" value="{{ $credit->id }}" checked onchange="getMontoSolicitado()">  </td>
+                        <td> <input type="checkbox" name="credits[]" id="{{ $credit->id }}" value="{{ $credit->id }}" checked >  </td>
                         <td> {{ $credit->kc_credit_id }} </td>
                         <td> {{ date('d-m-Y', strtotime($credit->fecha_cobro)) }} </td>
                         <td> 
@@ -61,7 +61,7 @@
             <label class="form-label">Plazo</label>
             
             <div class="form-control-wrap">
-                <select class="form-select js-select2" name="data[selected_term’]" id="ref-plazo"  data-search="on" onchange="getMontoSolicitado()">
+                <select class="form-select js-select2" name="data[selected_term]" id="ref-plazo"  data-search="on" onchange="getMontoSolicitado()">
                     <option value="">Seleccione una opción</option>
                 </select>
             </div>

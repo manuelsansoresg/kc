@@ -15,7 +15,7 @@ class Agreement extends Model
         'loan_available',
         'sod_schedule_id',
         'agreement_term',
-        'agreement_term'
+        'razon_social',
     ];
 
 

@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Password;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -126,7 +128,7 @@ class User extends Authenticatable
     {
         $is_save                  = false;
         $financial_products_ids   = $request->financial_products_id;
-        $agreement_ids            = $request->agreements;
+        $isResetpassword            = $request->isResetpassword;
         $financial_products_id    = null;
         $arrayFinancialProductsId = array();
         $arrayAgreements          = array();
@@ -161,14 +163,17 @@ class User extends Authenticatable
         }
         $role = $request->type_user;
 
+        if ($request->type_user == 'administrador') {
+            $user->givePermissionTo('Administración');
+        }
         if ($request->type_user == 'cliente-persona') {
             $role = 'Cliente persona';
             if ($is_save == true) {
                 $to = $user->email;
-                $send_grid = new Csendgrid($to, 'creacion cuenta');
+                /* $send_grid = new Csendgrid($to, 'creacion cuenta');
                 $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
                 $send_grid->setParams(['first_name' => $user->name]);
-                $send_grid->send();
+                $send_grid->send(); */
             }
         }
 
@@ -193,15 +198,30 @@ class User extends Authenticatable
                 ]);
             }
 
-            InvestorsAgreement::where('investor_id', $investor->id)->delete();
+            if (isset($request->agreements)) {
+                InvestorsAgreement::where('investor_id', $investor->id)->delete();
 
-            foreach ($agreement_ids as $agreement_ids) {
-                InvestorsAgreement::create([
-                    'investor_id' => $investor->id,
-                    'agreement_id' => $agreement_ids
-                ]);
+                foreach ($request->agreements as $agreement_id) {
+                    InvestorsAgreement::create([
+                        'investor_id' => $investor->id,
+                        'agreement_id' => $agreement_id
+                    ]);
+                }
             }
-            
+            if ($request->rol_id == 1) {
+                $user->givePermissionTo('RRHH');
+                $user->revokePermissionTo('Administración');
+            } else {
+                $user->givePermissionTo('Administración');
+                $user->revokePermissionTo('RRHH');
+            }
+
+            // Enviar correo de recuperación de contraseña
+            if ($isResetpassword == true) {
+                $broker = Password::broker();
+                $token = $broker->createToken($user);
+                $user->notify(new \App\Notifications\WelcomePasswordSetNotification($token));
+            }
         }
         $user->assignRole(ucfirst($role));
     }
@@ -228,10 +248,10 @@ class User extends Authenticatable
                 if ($is_report == false) {
                     $domain = 'https://app.kaaxclub.com';
                     $link_login = $domain . '/login';
-                    $send_grid = new Csendgrid($find_lead->email, 'creacion cuenta');
+                    /* $send_grid = new Csendgrid($find_lead->email, 'creacion cuenta');
                     $send_grid->setTemplate('d-ea081e65c8014113b50315a103127d13');
                     $send_grid->setParams(['first_name' => $find_lead->name, 'link_login' => $link_login, 'link_password_change' => $link_password]);
-                    $send_grid->send();
+                    $send_grid->send(); */
                 }
             } else {
                 //$link_password = 'https://app.kaaxclub.com/password/reset/'.$token.'?email='.$find_lead->email;
@@ -282,11 +302,11 @@ class User extends Authenticatable
             $user->save();
 
             $to           = $user->email;
-            $send_grid    = new Csendgrid($to, 'creacion cuenta');
+            /* $send_grid    = new Csendgrid($to, 'creacion cuenta');
 
             $send_grid->setTemplate('d-2e7d6583de1647f4bc12ab6410b956b2');
             $send_grid->setParams(['first_name' => 'Manuel']);
-            $send_grid->send();
+            $send_grid->send(); */
             $find_user    = $user;
         }
         return $find_user;
@@ -491,6 +511,11 @@ class User extends Authenticatable
     public function credit()
     {
         return $this->hasOne(Credit::class);
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     

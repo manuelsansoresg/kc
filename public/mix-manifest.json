@@ -3,6 +3,7 @@
     "/js/app.js": "/js/app.js",
     "/js/report_app.js": "/js/report_app.js",
     "/js/survey.js": "/js/survey.js",
+    "/js/manychat.js": "/js/manychat.js",
     "/assets_report/css/app.css": "/assets_report/css/app.css",
     "/css/app.css": "/css/app.css"
 }

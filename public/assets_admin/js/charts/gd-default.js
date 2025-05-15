@@ -585,7 +585,7 @@
     let iValorCuenta = $('#iValorCuenta').val();
     let iTotalCredit = $('#iTotalCredit').val();
     var salesOverview = {
-      labels: ["01", "02"],
+      labels: ["Hoy", "Último cobro"],
       dataUnit: 'BTC',
       lineTension: 0.1,
       datasets: [{
@@ -690,7 +690,7 @@
                 }
               }],
               xAxes: [{
-                display: false,
+                display: true,
                 stacked: _get_data.stacked ? _get_data.stacked : false,
                 ticks: {
                   fontSize: 9,

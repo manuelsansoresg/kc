@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\CalculadoraCredito;
 use App\Lib\Manychat;
 use App\Models\Action;
 use App\Models\Agreement;
@@ -9,10 +10,12 @@ use App\Models\ApiLead;
 use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\CreditPayOff;
 use App\Models\CurrentFinancialProduct;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
+use App\Models\LeadValidation;
 use App\Models\Notification;
 use App\Models\Sendgridtest;
 use App\Models\TokenForms;
@@ -23,6 +26,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
 
 class HomeController extends Controller
 {
@@ -52,6 +56,58 @@ class HomeController extends Controller
         return view('quiz.survey_lead');
     }
 
+    public function grafica(Lead $lead)
+    {
+        $getCalc = new CalculadoraCredito();
+
+        // Obtener el capital total sumando los montos de crédito
+        $capitalTotal = CreditPayOff::where('lead_id', $lead->id)->sum('ammount');
+
+        // Obtener la tasa de interés más alta y su alias
+        $creditPayMax = CreditPayOff::select(
+            'financial_products.alias',
+            'financial_products.annual_int_rate_iva'
+        )
+        ->join('financial_products', 'credit_pay_off.financial_product_id', '=', 'financial_products.id')
+        ->where('credit_pay_off.lead_id', $lead->id)
+        ->orderByDesc('financial_products.annual_int_rate_iva') // Tomar el mayor
+        ->first();
+
+        $tasaInteresBanco = $creditPayMax ? $creditPayMax->annual_int_rate_iva : 0;
+        $nombreBanco = $creditPayMax ? $creditPayMax->alias : 'Banco Desconocido';
+
+        // Obtener la tasa de interés de KaaxClub
+        $financial = FinancialProduct::where('id', $lead->financial_product_id)->first();
+        $tasaInteresKaaxClub = $financial ? $financial->annual_int_rate_iva : null;
+
+        $dias = isset(config('enums.periodicidad_valores')[$financial->periodicity_id]) ? config('enums.periodicidad_valores')[$financial->periodicity_id] : 30;
+        $periodicityId = $financial->periodicity_id;
+        $namePeriodicity = isset(config('enums.periodicidad_names_chart')[$financial->periodicity_id]) ? config('enums.periodicidad_names_chart')[$financial->periodicity_id] : null;
+
+        $plazo = $lead->plazo_maximo ?? 12; // Si no hay plazo, tomamos 12 meses por defecto
+
+        // Calcular intereses para la barra izquierda (Banco)
+        $tasaInteresMensualBanco = ($tasaInteresBanco / 100) / 360 * $dias;
+        $pagoPeriodicoBanco = $getCalc->getPaymentPresentValue($tasaInteresMensualBanco, $plazo, -$capitalTotal);
+        $interesesBanco = $plazo * $pagoPeriodicoBanco - $capitalTotal;
+
+        // Calcular intereses para la barra derecha (KaaxClub)
+        $tasaInteresMensualKaaxClub = ($tasaInteresKaaxClub / 100) / 360 * $dias;
+        $pagoPeriodicoKaaxClub = $getCalc->getPaymentPresentValue($tasaInteresMensualKaaxClub, $plazo, -$capitalTotal);
+        $interesesKaaxClub = $plazo * $pagoPeriodicoKaaxClub - $capitalTotal;
+        return view('comparador-intereses', compact(
+            'capitalTotal', 
+            'tasaInteresBanco', 
+            'tasaInteresKaaxClub', 
+            'interesesBanco', 
+            'interesesKaaxClub', 
+            'nombreBanco', 
+            'lead',
+            'plazo',
+            'namePeriodicity',
+        ));
+    }
+
     public function whatsapp()
     {
         $whatsappUrl = 'https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%20información';
@@ -60,6 +116,7 @@ class HomeController extends Controller
         return Redirect::to($whatsappUrl);
     }
 
+    
     function slackNotification()
     {
     
@@ -78,9 +135,8 @@ class HomeController extends Controller
         abort(404);
     }
 
-    public function contratoClient(ClientPerson $client)
+    public function contratoClient(ClientPerson $client,  Credit $credit)
     {
-        $credit  = Credit::where('client_person_id', $client->id )->first();
         $isFirma = false;
         $firma = null;
         $token = null;
@@ -99,36 +155,42 @@ class HomeController extends Controller
             'is_credit' => 1,
             'status_id' => HistoryLog::KC_CONTROL_DESK_TASK1_STEP4,
             'status' => 1,
-        ])->first();
+        ])->orderBy('history_logs.id', 'DESC')
+        ->first();
+
+        
         if ($statusFirmaContratoCM == null) {
             abort(404);
         } else {
             $isFirma = $client->cm_agreement == null ? true : false;
         }
-        return view('contrato_cliente', compact('client', 'history', 'isFirma', 'firma', 'token'));
+
+        
+        $agreement = Agreement::find($credit->agreement_id);
+        return view('contrato_cliente', compact('client', 'history', 'isFirma', 'credit', 'firma', 'token', 'ip', 'agreement'));
     }
 
-    public function contratoClientFirma(ClientPerson $client , Request $request)
+    public function contratoClientFirma(ClientPerson $client , Credit $credit, Request $request)
     {
-        $credit  = Credit::where('client_person_id', $client->id )->first();
+        $agreement = Agreement::find($credit->agreement_id);
         $token = $client->id.'-'.\Str::random(10);
         $firma =  $token;
         // Obtener la IP real del usuario
         $ip = $request->ip(); // Esto te dará la IP del cliente
         $hostname = gethostbyaddr($ip);
         $dateTime = Carbon::now()->format('d-m-Y h:i:s a');
-        $isFirma = $client->cm_agreement == null ? true : false;
-
-        
+        $isFirma = false;
 
         $data = array(
             'client' => $client,
+            'credit' => $credit,
             'isFirma' => $isFirma,
             'token' => $token,
             'firma' => $firma,
-            'ip' => $firma,
+            'ip' => $ip,
             'hostname' => $hostname,
             'dateTime' => $dateTime,
+            'agreement' => $agreement,
         );
         ClientPerson::where('id', $client->id)->update([
             'cm_agreement' => 1
@@ -141,20 +203,26 @@ class HomeController extends Controller
         ])->first();
 
         
-        
+        //dd($client->cm_agreement);
+        $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato CM.pdf';
+        $directory = public_path('firma_contratos');
+        $filePath = $directory . '/' . $nombre;
+
         if ($client->cm_agreement == null) {
-            $pdf = Pdf::loadView('contrato_cliente', $data);
-            $pdf->setPaper('A4');
-            $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato CM.pdf';
-            $pdf->save('firma_contratos/'.$nombre);
         }
+        if (!File::exists($filePath)) {
+        }
+        $pdf = Pdf::loadView('contrato_cliente', $data);
+        $pdf->setPaper('A4');
+        $pdf->save('firma_contratos/'.$nombre);
+        
        
 
         
         return redirect('/client/contratocm/'.$client->id.'/1/exit');
     }
 
-    public function contratoClientFirmaExit(ClientPerson $client , $type)
+    public function contratoClientFirmaExit($clientId ,  $type)
     {
         return view('exit_sign', compact('type'));
     }
@@ -167,6 +235,8 @@ class HomeController extends Controller
         $token = null;
         $ip = null;
         $hostname = null;
+        
+        $agreement = Agreement::find($credit->agreement_id);
 
         $history = HistoryLog::where([
             'id_rel' => $credit->id,
@@ -186,7 +256,7 @@ class HomeController extends Controller
         } else {
             $isFirma = $credit->sod_agreement == null ? true : false;
         }
-        return view('contrato_sod', compact('client', 'credit', 'history', 'isFirma', 'firma', 'token'));
+        return view('contrato_sod', compact('client', 'credit', 'agreement', 'history', 'isFirma', 'firma', 'token'));
     }
 
     public function contratoCreditFirmaSod(Credit $credit , Request $request)
@@ -199,7 +269,7 @@ class HomeController extends Controller
         $hostname = gethostbyaddr($ip);
         $dateTime = Carbon::now()->format('d-m-Y h:i:s a');
         $isFirma = $credit->sod_agreement == null ? true : false;
-
+        $agreement = Agreement::find($credit->agreement_id);
         
 
         $data = array(
@@ -210,6 +280,8 @@ class HomeController extends Controller
             'ip' => $firma,
             'hostname' => $hostname,
             'dateTime' => $dateTime,
+            'credit' => $credit,
+            'agreement' => $agreement,
         );
         Credit::where('id', $credit->id)->update([
             'sod_agreement' => 1
@@ -218,20 +290,20 @@ class HomeController extends Controller
 
         
         
-        if ($client->sod_agreement == null) {
-            $pdf = Pdf::loadView('contrato_sod', $data);
-            $pdf->setPaper('A4');
-            $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
-            $pdf->save('firma_contratos/'.$nombre);
-        }
+        
+        $pdf = Pdf::loadView('contrato_sod', $data);
+        $pdf->setPaper('A4');
+        $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
+        $pdf->save('firma_contratos/'.$nombre);
        
 
         
         return redirect('/client/sod/'.$credit->id.'/1/exit');
     }
 
-    public function sodCreditFirmaExit(ClientPerson $client , $type)
+    public function sodCreditFirmaExit($creditId , $type)
     {
+        
         return view('exitsod_sign', compact('type'));
     }
 
@@ -514,5 +586,80 @@ class HomeController extends Controller
             $is_block = $user->tyc_accept === 1 ? false : true;
         }
         return response()->json(['is_block' => $is_block]);
+    }
+
+    public function showValidateIdentity($token)
+    {
+        return view('validate-identity', compact('token'));
+    }
+
+    public function storeValidateIdentity(Request $request)
+    {
+        $validated = $request->validate([
+            'token' => 'required',
+            'primer_apellido' => 'required|string|max:255',
+            'segundo_apellido' => 'required|string|max:255',
+            'nombres' => 'required|string|max:255',
+            'fecha_nacimiento' => 'required|date',
+            'rfc' => 'nullable|string|max:13'
+        ]);
+        // Decode and extract manychat_id from URL
+        // The token is a hash of manychat_id + APP_KEY, so we need to find the manychat_id that generates this hash
+        $token = $request->token;
+        
+        $lead = Lead::where('manychat_id', $token)->orderBy('id', 'desc')->first();
+        $clientPerson = ClientPerson::where('rfc', $validated['rfc'])->first();
+        $agreement         = $clientPerson != null ? Agreement::find($clientPerson->agreement_id): null;
+        $validateAgreement = $agreement != null && $agreement->status == 1 ? true : false;
+
+        $contentValidaciones      = 'Sin coincidencias';
+        $statusRFC = 1;
+        if ($clientPerson != null && $validateAgreement == true) {
+            $statusRFC = 0;
+            $contentValidacionesRFC = 'Coincidencia encontrada';
+        }
+        LeadValidation::saveEdit($lead->id, 'Prospecto - RFC', $statusRFC, $contentValidaciones);
+        if ($lead!= null && $clientPerson != null) {
+            $lead->update([
+
+                'name' => $clientPerson->name,
+                'last_name' => $clientPerson->last_name,
+                'second_last_name' => $clientPerson->second_last_name,
+                'birth_date' => $clientPerson->birth_date,
+                'rfc' => $clientPerson->rfc,
+                'email' => $clientPerson->email,
+                'agreement_id' => $clientPerson->agreement_id,
+                'cellphone' => $clientPerson->cellphone,
+            ]);
+            $dataField = array(
+                'Prospecto - Formulario RFC llenado' => true,
+                'Prospecto - Primer apellido' => $clientPerson->last_name,
+                'Prospecto - Segundo apellido' => $clientPerson->second_last_name,
+                'Prospecto - Fecha de nacimiento' => $clientPerson->birth_date,
+                'Prospecto - RFC' => $clientPerson->rfc,
+                'Prospecto - Validación RFC' => true,
+            );
+            $manychat = new Manychat();
+            $manychat->setCustomFields($dataField, $token);
+
+            return redirect('/validate-identity/'.$token.'/exit');
+        }
+        $dataField = array(
+            'Prospecto - Formulario RFC llenado' => true,
+            'Prospecto - Primer apellido' => $clientPerson->last_name,
+            'Prospecto - Segundo apellido' => $clientPerson->second_last_name,
+            'Prospecto - Fecha de nacimiento' => $clientPerson->birth_date,
+            'Prospecto - RFC' => $clientPerson->rfc,
+            'Prospecto - Validación RFC' => false,
+        );
+        $manychat = new Manychat();
+        $manychat->setCustomFields($dataField, $token);
+        return redirect()->back()->with('error', 'No se pudo procesar la información');
+    }
+
+    public function showValidateIdentityExit($token)
+    {
+        return view('validate-identity-exit', compact('token'));
+        
     }
 }

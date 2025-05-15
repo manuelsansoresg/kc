@@ -25,12 +25,18 @@
                                     </div>
 
                                     <hr>
-                                    
-                                    <div id="content-legend-kc-down-bank" class="py-2" style="display: none">
-                                        <div class="alert alert-primary " role="alert">
-                                            Nota: El dinero se depositará a la cuenta registrada en máximo un día habil
-                                          </div>
-                                    </div>
+                                    @if ($model == 'kc-down-wallet' && $clienteInversionista != null)
+                                        
+                                        <div id="content-legend-kc-down-bank" class="py-2" >
+                                            <div class="alert alert-primary " role="alert">
+                                                El dinero se depositará en máximo un día hábil.
+                                                <br><br>Cuenta de retiro:
+                                                <br>Banco: {{ $clienteInversionista->bank_name }}
+                                                <br>Clabe: {{ $clienteInversionista->bank_clabe }}
+                                                <br><br> Si deseas cambiar tu cuenta de retiro, comunícate con nosotros.
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div id="content-legend"></div>
                                     <p>* Campos obligatorios</p>
                                     <div class="row gy-4">
@@ -44,42 +50,54 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3 d-none d-md-block offset-md-1">
-                            <div class="card">
-                                <div class="card-body">
-                                    <span>
-                                        <span class="fw-bold">NOMBRE :</span> {{ $credit->client->id }} - {{ $credit->client->name }} {{ $credit->client->last_name }} {{ $credit->client->second_last_name }}
-                                        <br> <span class="fw-bold">RFC :</span>  {{ $credit->client->rfc }}
-                                        <br><span class="fw-bold">Organización :</span>  {{ $credit->client->agreement->name }}
-                                        <br><span class="fw-bold">Tel :</span> : {{ $credit->client->cellphone }}
-                                        <br><br>
-                                        <span class="fw-bold">Producto :</span> SOD
-                                        <br><span class="fw-bold">Monto :</span> SOD
-                                        <br><span class="fw-bold">Plazo :</span> SOD
-                                        <br><span class="fw-bold">Pago :</span> SOD
-                                        <br><span class="fw-bold">Periodicidad :</span> SOD
-                                        <br><span class="fw-bold">Tipo de crédito :</span> SOD
-                                        <br><span class="fw-bold">Compra cartera :</span> SOD
-                                        <br><span class="fw-bold">Promotor :</span> SOD
-                                        <br><span class="fw-bold">Origen :</span> SOD
-                                        <br><span class="fw-bold">Etiquetas :</span> SOD
-                                        <br><span class="fw-bold">Ultimo comentario :</span> SOD
-                                        <hr>
-                                        <span class="fw-bold"> Documentos:</span>
-                                        <br><a href="">- INE <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                        <br><a href="">- Nómina <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-
-                                        <hr>
-                                        <br>
-
-                                        <br><a href="">Ver crédito <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                        <br><a href="">Ver cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                        <br><a href="">Chatear con cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                        @if ($credit != null)
+                            
+                            <div class="col-md-3 d-none d-md-block offset-md-1">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <span>
+                                            <span class="fw-bold">Nombre:</span> {{ $credit->client->id }} - {{ $credit->client->name }} {{ $credit->client->last_name }} {{ $credit->client->second_last_name }}
+                                            <br> <span class="fw-bold">RFC:</span>  {{ $credit->client->rfc }}
+                                            <br><span class="fw-bold">Organización:</span>  {{ $credit->client->agreement->name }}
+                                            <br><span class="fw-bold">Tel:</span>  {{ $credit->client->cellphone }}
+                                            <br><br>
+                                            <span class="fw-bold">Producto:</span> {{ $product->alias }}
+                                            <br><span class="fw-bold">Monto:</span> {{ format_price($credit->applied_import) }}
+                                            <br><span class="fw-bold">Plazo:</span> {{ format_price($credit->applied_term) }}
+                                            <br><span class="fw-bold">Pago:</span> {{ format_price($credit->applied_payment) }}
+                                            <br><span class="fw-bold">Periodicidad:</span> {{ $periodicity }}
+                                            <br><span class="fw-bold">Tipo de crédito:</span> {{ $tipoCredito->alias}}
+                                            <br><span class="fw-bold">Compra cartera:</span> {{ $getCompracartera != null ?  format_price($credit->ammount) : null }}
+                                            <br><span class="fw-bold">Asesor:</span> {{ $getAsesor != null ? $getAsesor->name.' '.$getAsesor->last_name.' '.$getAsesor->second_last_name : null}}
+                                            <br><span class="fw-bold">Origen:</span> {{ $origin }}
+                                            <br><span class="fw-bold">Etiquetas:</span> {{ $tags }}
+                                            <br><span class="fw-bold">Ultimo comentario:</span> {{ $lastComment!= null ? $lastComment->comment : null }}
+                                            <hr>
+                                            <span class="fw-bold"> Documentos:</span>
                                         
-                                    </span>
+                                            <table class="table table-borderless">
+                                                @foreach ($files as $file)
+                                                <tr class="">
+                                                    <td class="">
+                                                        <a href="{{ asset($path.'/'.$file['name']) }}" target="_blank">{{ $file['name_template'] }}</a>
+                                                    </td>
+
+                                                </tr>
+                                                @endforeach
+                                            </table>
+
+                                            <hr>
+                                            <br>
+
+                                            <br><a href="/panel/credit/{{ $credit->id }}">Ver crédito <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                            <br><a href="/panel/client/{{ $client->id }}">Ver cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                            <br><a href="/https://manychat.com/fb861553/chat/">Chatear con cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                            
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
 
                 </div>
@@ -88,6 +106,36 @@
     </div>
 </div>
 
+{{-- modal editar compra cartera --}}
+<div class="modal fade" id="modal-compra-cartera-cd" tabindex="-1" aria-labelledby="modal-compra-cartera-cdLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="frm-modal-compra-cartera-cd">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modal-compra-cartera-cd-title">Compra de cartera</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+               
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="form-label">*Saldo total</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control" name="data[ammount]" id="compra-cartera-ammount" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="creditPayOffId" id="creditPayOffId" value="">
+                <input type="hidden" name="credit_id"  value="{{ $id_rel }}">
+                
+              <button type="submit" class="btn btn-secondary">Guardar</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 @include('panel.action.modal.modal_reference')
 @include('panel.action.modal.modalkyc')

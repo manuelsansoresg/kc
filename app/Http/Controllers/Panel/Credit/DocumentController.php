@@ -50,11 +50,14 @@ class DocumentController extends Controller
             
         }
         
-        if ($model == 'wallet') { //agregar fondo
+        if ($model == 'wallet' || $model == 'kc-down-wallet') { //agregar fondo
             $isTitleDescription = false;
         }
 
-        return view('panel.credit.files', compact('title', 'isTitleDescription', 'files', 'credit_id', 'model', 'product', 'credit', 'client', 'history', 'url_redirect', 'transaction'));
+        $actionStrategy   = TemplateValues::STRATEGY[$model];
+        @$breadcrumb       = (new $actionStrategy)->breadcrumb($history, 3);
+
+        return view('panel.credit.files', compact('title', 'isTitleDescription', 'breadcrumb', 'files', 'credit_id', 'model', 'product', 'credit', 'client', 'history', 'url_redirect', 'transaction'));
     }
 
     /**

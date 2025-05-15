@@ -21,7 +21,7 @@ window.modalUser = function (type, user_id) {
         $('#content-pass_confirm').show();
         $('#user_id').val(null);
         $('#type_user').val(route_datatable);
-
+        
     } else {
         let lbluser = route_datatable;
         if (route_datatable == 'cliente-financiera') {
@@ -44,6 +44,7 @@ window.modalUser = function (type, user_id) {
 
 function setDataUser(user_id) {
     let route_datatable = $('#route_datatable').val();
+    
     axios
     .get("/panel/user/"+route_datatable+"/"+user_id)
     .then(function (response) {
@@ -313,6 +314,18 @@ $().ready(function () {
              });
             
             }
+    });
+
+    $(document).ready(function() {
+        // Regular save button
+        $("#frm-inversionista button:contains('Guardar'):not(:contains('bienvenida'))").click(function() {
+            $("#isResetpassword").val("0");
+        });
+        
+        // Save and welcome button
+        $("#frm-inversionista button:contains('Guardar y dar bienvenida')").click(function() {
+            $("#isResetpassword").val("1");
+        });
     });
 
     $("#frmpassword").validate({

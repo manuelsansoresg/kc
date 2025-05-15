@@ -10,6 +10,10 @@ use App\Models\File;
 use App\Models\Financial;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\Investor;
+use App\Models\InvestorsCredit;
+use App\Models\kaaxSidecc\Collection;
+use App\Models\kaaxSidecc\CreditKaaxSidecc;
 use App\Models\Lead;
 use App\Models\Product;
 use App\Models\User;
@@ -83,6 +87,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $step = null;
         $taskId = null;
         
+        
 
         if ($stepParam !== null) {
             if (strpos($stepParam, '_') !== false) {
@@ -91,14 +96,17 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 $step = intval($stepParam);
             }
         }
+        
         if ($step == 1 && $taskId == 1) {
             return self::configFormStep1Task1($id_rel, $history_id, $taskId);
         } elseif ($step == 1 && $taskId > 1) {
             return self::configDynamicFormStep1Task1($id_rel, $history_id, $taskId);
         }
         
-        elseif ($step == 2) {
-            return self::configFormstep2($id_rel, $history_id);
+        elseif ($step == 2 && $taskId == 1) {
+            return self::configFormstep2($id_rel, $history_id, $taskId);
+        }elseif ($step == 2 && $taskId == 2) {
+            return self::configFormStep2Task2($id_rel, $history_id, $taskId);
         } 
     }
 
@@ -187,7 +195,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'title_section' => null,
                 'title' => '*Comprobante de entrega',
                 'subtitle' => 'Adjunta evidencia de la transferencia',
-                'name_field' => 'anverso',
+                'name_field' => 'Comprobante de entrega',
                 'id_field' => '1',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
@@ -298,13 +306,13 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $taks = self::ElementsTaskStep1($history_id, null);
         $templateId = $taskId -1;
         $task = $taks[$templateId];
+        //dd($taskId, $templateId, $taks);
         
         $templateId = $task['id'];
 
 
         $payOff = CreditPayOff::find($task['id']);
         
-
 
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => 6, 'credit' => $credit, 'payOff' => $payOff])->render();
 
@@ -383,7 +391,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'title_section' => null,
                 'title' => '*Comprobante de entrega',
                 'subtitle' => 'Adjunta evidencia de la transferencia',
-                'name_field' => 'anverso',
+                'name_field' => 'Comprobante de entrega',
                 'id_field' => $taskId,
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
@@ -481,95 +489,219 @@ class DeliveryStrategyTemplate implements TemplateInterface
     }
 
 
-    public function configFormstep2($id_rel, $history_id)
+    public function configFormstep2($id_rel, $history_id, $taskId)
     {
-        $credit           = Credit::find($id_rel);
-        $history          = HistoryLog::find($history_id);
-        $name_form        = 'frm-template_delivery_step2';
-        $type_form        = HistoryLog::KC_DELIVERY_FORM_STEP_2;
-        $status_id        = HistoryLog::KC_DELIVERY_FORM_STEP_3;
-        $status_cancel    = HistoryLog::CREDIT_CANCELED;
-        $old_status       = $history->old_status_id;
-        $status_reject    = HistoryLog::CREDIT_REJECTED;
-        $url_finish       = '/panel/template/steps/delivery/'.$history_id.'/show';
+        $name_form    = 'frm-template_delivery_step2_task1';
+        $type_form    = HistoryLog::KC_DELIVERY_TASK1_STEP2;
+        $credit       = Credit::find($id_rel);
+        $client = $credit->creditClientPerson;
+        $stepRedirect = $taskId +1;
+
+        $isCreditKaax = CreditKaaxSidecc::where('kc_credit_id', $credit->id)->count();
+        $type = 1;
+        $isCreditActive = null;
+
+        $contentInfo = \View::make('panel.client.estatus_envios2', compact('isCreditKaax', 'type', 'isCreditActive'))->render();
 
         $elements = array(
-
-            0 => [
-                'title_section' => 'Confirmar firma',
-                'title' => null,
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' => null,
-                'placeholder' => null,
-                'type' => null,
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => null,
-                'is_disabled' => null
-            ],
-
             1 => [
-                'title_section' => null,
-                'title' => 'Docs. Firmados',
-                'name_field' => null,
-                'id_field' => null,
+                'title_section' => '',
+                'title' => null,
+                'subtitle' => null,
+                
+                'id_field' => 'deadline_date',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'href',
-                'link' => null,
-                'onclick' => 'deliveryFinish('.$history_id.', '.$status_id.',"'.$url_finish.'", false)',
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
+                'col' => 'col-12',
+                'type' => 'div',
+                'content' => $contentInfo,
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
-            ],
-            2 => [
-                'title_section' => null,
-                'title' => 'Cancelar credito',
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'href',
-                'link' => null,
-                'onclick' => 'moveModal("Cancelar", '.$credit->id.', '.$status_cancel.', '.$old_status.', "dt-delivery")',
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
-            ],
-            3 => [
-                'title_section' => null,
-                'title' => 'Rechazar crédito',
-                'name_field' => null,
-                'id_field' => null,
-                'comment_admin' => null,
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'href',
-                'link' => null,
-                'onclick' => 'moveModal("Rechazar", '.$credit->id.', '.$status_reject.', '.$old_status.', "dt-delivery")',
-                'class' => 'btn btn-primary',
-                'target' => '_blank',
-                'is_option_array' => false,
-                'options' => null,
-                'is_required' => true,
-                'is_disabled' => null,
-                'col' => 'col-12 col-md-4'
             ],
             
+            2 => [
+                'title_section' => null,
+                'title' => '*Envío info a s2',
+                'subtitle' => ' Confirma si la info se envió correctamente a S2',
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'radio',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 'delivery',
+                'col' => 'col-6',
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'name' => 'Valida',
+                        'name_field' => 'info_s2_sent',
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 1,
+                        'is_required' => true,
+                    ),
+                    1 => array(
+                        'link' => null,
+                        'name' => 'Invalida',
+                        'name_field' => 'info_s2_sent',
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 0,
+                        'is_required' => true,
+                        
+                    ),
+                )
+            ],
+           
+            3 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/steps/delivery/' . $history_id . '/show',
+                'col' => 'col-12'
+            ],
+            4 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect_next',
+                'id_field' => 'url_redirect_next',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/action-form/delivery/'.$history_id.'/form?step=2_'.$stepRedirect.'&step_origin=',
+                'col' => 'col-12'
+            ],
         );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form, 'show_btn' => false])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        return $list;
+    }
+    
+    public function configFormStep2Task2($id_rel, $history_id, $taskId)
+    {
+        $name_form    = 'frm-template_delivery_step2_task2';
+        $type_form    = HistoryLog::KC_DELIVERY_TASK2_STEP2;
+        $credit       = Credit::find($id_rel);
+        $client = $credit->creditClientPerson;
+        $stepRedirect = $taskId +1;
+        $type = 2;
+        $getCreditKaax = Credit::where('id', $credit->id)->first();
+
+        $isCreditKaax = CreditKaaxSidecc::where('kc_credit_id', $credit->id)->count();
+
+        $contentInfo = \View::make('panel.client.estatus_envios2', compact('isCreditKaax', 'credit', 'type'))->render();
+
+        $elements = array(
+            1 => [
+                'title_section' => '',
+                'title' => null,
+                'subtitle' => null,
+                
+                'id_field' => 'deadline_date',
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'col' => 'col-12',
+                'type' => 'div',
+                'content' => $contentInfo,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null,
+            ],
+            
+            2 => [
+                'title_section' => null,
+                'title' => '*Activación crédito en S2',
+                'subtitle' => 'Confirma si el crédito se activó correctamente',
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'radio',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 'delivery',
+                'col' => 'col-6',
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'name' => 'Valida',
+                        'name_field' => 'credit_s2_active',
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 1,
+                        'is_required' => true,
+                    ),
+                    1 => array(
+                        'link' => null,
+                        'name' => 'Invalida',
+                        'name_field' => 'credit_s2_active',
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 0,
+                        'is_required' => true,
+                        
+                    ),
+                )
+            ],
+           
+            3 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect',
+                'id_field' => 'url_redirect',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/template/steps/delivery/' . $history_id . '/show',
+                'col' => 'col-12'
+            ],
+            4 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'url_redirect_next',
+                'id_field' => 'url_redirect_next',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '/panel/action-form/delivery/'.$history_id.'/form?step=2_'.$stepRedirect.'&step_origin=',
+                'col' => 'col-12'
+            ],
+        );
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
 
@@ -643,6 +775,17 @@ class DeliveryStrategyTemplate implements TemplateInterface
                         HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2, HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2, null, false);
                         HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2, $credit->id, 0);
                         
+                        CreditKaaxSidecc::sendCreditKaaxSidecc($credit->id);
+                        InvestorsCredit::where('credit_id', $credit->id)->update([
+                            'status' => 2,
+                            'placed_capital' => \DB::raw('import')
+                        ]);
+                        $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
+                        foreach ($getInvestors as $getInvestor) {
+                            //Transaction::setTotalCapital($getInvestor->investor_id);
+                            Investor::updateInvestorData($getInvestor->investor_id);
+                        }
+
                        /*  $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
                         (new $notification_add)->send($credit->id); */
                     }
@@ -679,6 +822,31 @@ class DeliveryStrategyTemplate implements TemplateInterface
                     }
                     
                    
+                }
+            }
+            if ($step == 2) {
+                if ($task == 1) {
+                    Credit::find($credit->id)->update([
+                        'info_s2_sent' => $request->info_s2_sent
+                    ]);
+                    $percentTask1Step1  = self::percentTask1Step2($history);
+                    if ($percentTask1Step1 == 100) {
+                        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_TASK1_STEP2, $credit->id, 1); //terminar tarea1
+                        //iniciar tarea 1 etapa 2
+                        HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_TASK2_STEP2, HistoryLog::KC_DELIVERY_TASK2_STEP2, null, false);
+                        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_TASK2_STEP2, $credit->id, 0);
+                    }
+                }
+
+                if ($task == 2) {
+                    Credit::find($credit->id)->update([
+                        'credit_s2_active' => $request->credit_s2_active
+                    ]);
+                    $percentTask2Step1  = self::percentTask2Step2($history);
+                    if ($percentTask2Step1 == 100) {
+                        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_TASK2_STEP2, $credit->id, 1); //terminar tarea1
+                        
+                    }
                 }
             }
         }
@@ -804,7 +972,6 @@ class DeliveryStrategyTemplate implements TemplateInterface
     {
         
         if ($step == 2) {
-            return null;
             return self::actionStep2($history_id);
         }
         return self::actionStep1($history_id);
@@ -839,6 +1006,32 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return $percent;
     }
     
+    public function percentTask1Step2($history)
+    {
+        $credit = $history->historyCredit;
+        $fields = ['info_s2_sent'];
+        // Contar los campos no nulos.
+        $elements = count(array_filter($fields, fn($field) => !empty($credit->$field)));
+
+        $total = count($fields);
+        $percent = ($elements / $total) * 100;
+    
+        return $percent;
+    }
+    
+    public function percentTask2Step2($history)
+    {
+        $credit = $history->historyCredit;
+        $fields = ['credit_s2_active'];
+        // Contar los campos no nulos.
+        $elements = count(array_filter($fields, fn($field) => !empty($credit->$field)));
+
+        $total = count($fields);
+        $percent = ($elements / $total) * 100;
+    
+        return $percent;
+    }
+
     public function percentDynamicTaskStep1($history, $creditPayOffId, $taskId)
     {
         $credit = $history->historyCredit;
@@ -1013,7 +1206,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $allStagesConcluded = collect($statuses)->every(fn($status) => $status === 'Concluido');
 
         // Handle dynamic tasks
-        $CreditPayOff = CreditPayOff::select('financial_products.name', 'financial_products.id')
+        $CreditPayOff = CreditPayOff::select('financial_products.name', 'credit_pay_off.id')
             ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
             ->where(['new_kc_credit_id' => $credit->id])
             ->get();
@@ -1050,7 +1243,47 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
     public function ElementsTaskStep2($history_id, $step_origin = null)
     {
+        $history        = HistoryLog::find($history_id);
+        $percentages    = [
+            1 => self::percentTask1Step2($history),
+            2 => self::percentTask2Step2($history),
+        ];
+        $subjects = [
+            1 => HistoryLog::$label_subject[HistoryLog::KC_DELIVERY_TASK1_STEP2],
+            2 => HistoryLog::$label_subject[HistoryLog::KC_DELIVERY_TASK2_STEP2],
+            
+        ];
 
+        $currentTaskInProgress = false;
+        $statuses = [];
+        foreach ($percentages as $index => $percent) {
+            $statuses[$index] = $currentTaskInProgress ? 'null' : ($percent >= 100 ? 'Concluido' : 'En curso');
+            if ($statuses[$index] === 'En curso') {
+                $currentTaskInProgress = true;
+            }
+        }
+        $currentTaskInProgress = false;
+
+
+        for ($i = 1; $i <= 2; $i++) {
+            
+            $data[] = [
+                'name' => "{$i}- " . ($subjects[$i]),
+                'subject' => null ,
+                'helpText' => null,
+                'status' => $statuses[$i],
+                'statusBadge' => $statuses[$i] === 'null' ? null : \View::make('panel.module.status', ['status' => $statuses[$i]])->render(),
+                'advisor' => null,
+                'link' => "/panel/action-form/delivery/{$history_id}/form?step=2_{$i}&step_origin=null",
+                'id' => null,
+                'count_id' => $i,
+
+
+            ];
+        }
+
+        
+        return $data;
     }
 
     public function deadLineStep2($history)
@@ -1079,51 +1312,10 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return null;
     }
 
-    public function actionStep2($history_id)
+    public function actionStep2($history_id, $step_origin = null)
     {
 
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
-        $percent_form   = self::percentStep2($credit->id);
-        $status_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $name_advisor   = null;
-        
-        try {
-            $user                         = User::find($advisor->id);
-            $role                         = (isset(User::$alias_role[$user->getRoleNames()[0]])) ? User::$alias_role[$user->getRoleNames()[0]] : '';
-            $name_advisor                 = $role . ' - ' . $advisor->name . ' ' . $advisor->last_name;
-            if ($advisor->id == Auth::user()->id) {
-                $name_advisor = 'Tú';
-            }
-        } catch (\Exception $th) {
-        //throw $th;
-        }
-
-        $menu_options                 = self::menuOptions($history, 2);
-        
-        $view_dead_line_step2         = self::deadLineStep2($history);
-
-        $form_option                  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form2']])->render();
-        $form_option_2                = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['form']])->render();
-
-        
-        $status_file    = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $data = array();
-
-        $subject1 = HistoryLog::$label_subject[32];
-        $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
-
-        $data[] = array(
-            'name' => 'API',
-            'subject' => $subject1,
-            'status' =>  $viewStatus1,
-            'deadline' => $view_dead_line_step2,
-            'advisor' => $name_advisor,
-            'options' => $form_option_2,
-            'link' => '/panel/action-form/delivery/'.$history_id.'/form?step=2'
-        );
-        return $data;
+        return self::ElementsTaskStep2($history_id, $step_origin);
     }
 
     public function deadLineStep3($history)
@@ -1542,40 +1734,56 @@ class DeliveryStrategyTemplate implements TemplateInterface
         return ($credit != null && $credit->delivered == 1) ? 100 : 0;
     }
 
+    public static function calculateStepAverage($historyId, $step)
+    {
+        
+        // Construir el nombre de la función dinámicamente
+        $functionName = "ElementsTaskStep" . $step;
+        
+        // Verificar que la función exista
+        if (!method_exists(self::class, $functionName)) {
+            return 0; // Evitar errores si la función no existe
+        }
+
+        // Llamar a la función dinámica y obtener los elementos
+        $elements = self::$functionName($historyId);
+        
+        // Filtrar los elementos con status "Concluido"
+        $concluidos = array_filter($elements, function($element) {
+            return isset($element['status']) && $element['status'] === 'Concluido';
+        });
+
+        // Calcular el promedio de esta tarea
+        $totalElements = count($elements);
+        $totalConcluidos = count($concluidos);
+        
+        return $totalElements > 0 ? ($totalConcluidos / $totalElements) * 100 : 0;
+    }
     
 
     //* get all percentages of the shares
     public function getPercent($history, $show_current_show = false)
     {
-        $credit     = $history->historyCredit;
-        $data_actions = array(
-            HistoryLog::KC_DELIVERY_TASK1_STEP1,
-           /*  HistoryLog::KC_DELIVERY_FORM_STEP_3,
-            HistoryLog::KC_DELIVERY_FORM_STEP_4, */
-        );
-        
-        $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
-        $status_progress = 0;
-        $current_show = null;
+        $credit = $history->historyCredit;
+        $fields = ['credit_s2_active', 'info_s2_sent'];
+        // Contar los campos no nulos.
+        $elements = count(array_filter($fields, fn($field) => !empty($credit->$field)));
 
-        foreach ($get_actions as $key => $get_action) {
-            $status = $get_action->status_progress;
-            $status_progress += $status != null ? $status : 0;
-        }
-        
-        if ($status_progress == 0) {
-            $current_show = 'Enviar info a s2';
-        }  elseif ($status_progress > 1) {
-            $current_show = 'Activar crédito';
-        }
-        //dd($status_progress, $current_show);
-        $percent =  (($status_progress) / 2) * 100;
+        $total = count($fields);
+        $percent = ($elements / $total) * 100;
+    
+        return $percent;
+    }
+    
+    public function isFinish($history)
+    {
+        $credit = $history->historyCredit;
+        $fields = ['credit_s2_active', 'info_s2_sent'];
 
-        if ($show_current_show == true) {
-            return $current_show;
-        }
-        
-        return reduceDecimal($percent);
+        // Verificar si todos los campos tienen valor 1.
+        $allFieldsAreOne = collect($fields)->every(fn($field) => isset($credit->$field) && $credit->$field == 1);
+
+        return $allFieldsAreOne;
     }
 
     public function getlblStatusApi($history)
@@ -1611,7 +1819,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
     public function getFile($template_config_id)
     {
-        $config = self::configUpload()[$template_config_id];
+        $config = @self::configUpload()[$template_config_id];
         return $config;
     }
 

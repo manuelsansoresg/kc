@@ -20,12 +20,17 @@
                                             $title = array('newCredit' => 'KC - Check up', 'debtCredit' => 'KC - Check up', 'controlDesk' => 'KC - Control desk', 'swap' => 'KC - Swap' , 'delivery' => 'KC - Delivery');
                                             $route = array('newCredit' => 'kc-check-up', 'debtCredit' => 'kc-check-up', 'controlDesk' => 'kc-control-desk', 'swap' => 'kc-swap' , 'delivery' => 'kc-delivery');
                                         @endphp
+                                        @if ($breadcrumb == null)
                                         <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                         <li class="breadcrumb-item active"><a href="/panel/{{ isset($route[Request::segment(4)])? $route[Request::segment(4)] : '' }}"> {{ isset($title[Request::segment(4)])? $title[Request::segment(4)] : '' }} </a>
                                         <li class="breadcrumb-item active"><a href="/panel/template/steps/{{ Request::segment(4) }}/{{  $history->id }}/show">Etapas</a>
                                         <li class="breadcrumb-item active"><a href="/panel/template/actions/{{ Request::segment(4) }}/{{  $history->id }}/show">Tareas</a>
                                         <li class="breadcrumb-item active">Acción carga
                                         </li>
+                                    @else
+                                        {!! $breadcrumb !!}
+                                    @endif
+                                       
                                     </ul>
                                 </nav>
                                 @if ($isTitleDescription == true)
@@ -122,7 +127,9 @@
                                             <input type="hidden" id="step" value="{{ isset($_GET['step']) && $_GET['step']? $_GET['step'] : null }}">
             
                                                 <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                                    <div class="col-12 text-end">
+                                                        <button type="submit" class="btn btn-primary">Guardar</button>
+                                                    </div>
                                                 </div>
                                             </form>
                                     </div>

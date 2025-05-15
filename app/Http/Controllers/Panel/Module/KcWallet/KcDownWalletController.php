@@ -18,7 +18,7 @@ class KcDownWalletController extends Controller
      */
     public function index()
     {
-        $investor = Investor::find(Auth::user()->id);
+        $investor = Investor::where('user_id', Auth::user()->id)->first();
         $withdraw_available = null;
         if ($investor != null) {
             $withdraw_available = $investor->withdraw_available;

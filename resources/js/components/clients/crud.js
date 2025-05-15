@@ -9,14 +9,18 @@ $().ready(function () {
         },
         submitHandler: function (form, event) {
             event.preventDefault();
-
+            let origin = $('#origin').val();
             const new_form = document.getElementById("frm-client");
             const data = new FormData(new_form);
 
             axios
                 .post("/panel/clients", data)
                 .then(function (response) {
-                    window.location = '/panel/clients';
+                    if (origin == 'colaboradores') {
+                        window.location = '/panel/clients/colaboradores/show';
+                    } else {
+                        window.location = '/panel/clients';
+                    }
                 })
                 .catch(e => {
                 });

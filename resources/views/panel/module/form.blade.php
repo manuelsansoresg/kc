@@ -24,6 +24,7 @@
                         <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
                             <div class="myDropzone" id="{{ isset($element['id_field'])? $element['id_field'] : null  }}"  data-max-file-size="5" data-max-files="3">
+                                <input type="hidden" id="name_field_{{ isset($element['id_field'])? $element['id_field'] : null  }}" value="{{ isset($element['name_field'])? $element['name_field'] : null  }}" >
                                 <div class="dz-message" data-dz-message> 
                                     <span class="dz-message-text">Arrastra y suelta el archivo</span>
                                     <span class="dz-message-or">o</span> 
@@ -45,6 +46,7 @@
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group {{ $class_form_group }}">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                        <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
                             <input type="text" class="form-control 
                             @if (isset( $element['class_input']))
@@ -113,6 +115,7 @@
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                        <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
                             <textarea type="text" class="form-control" {{ $element['is_disabled'] }}
                                 name="{{ $element['name_field'] }}" placeholder="{{ $element['placeholder'] }}"
@@ -174,6 +177,7 @@
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                        <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
                             <input type="number" class="form-control" {{ $element['is_disabled'] }}
                                 name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}" {{ isset($element['is_required']) && $element['is_required'] == true ? 'required' :  null }}
@@ -204,6 +208,7 @@
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                        <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
                             <input type="date" class="form-control" {{ $element['is_disabled'] }}
                                 name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}">
@@ -222,6 +227,7 @@
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                        <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
                             <input type="email" class="form-control" {{ $element['is_disabled'] }}
                                 name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}"  value="{{ $value }}">
@@ -260,7 +266,7 @@
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
-                        
+                        <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
                             <select class="form-select select2multiple" name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" multiple="multiple"  data-search="on">
                                 <option value="">Escribe para buscar</option>
@@ -285,6 +291,7 @@
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
                     <div class="form-group">
                         <label class="form-label"> {{ $indicator_required }} {{ $element['title'] }}</label>
+                        <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
                         <div class="form-control-wrap">
 
                             <select class="form-select js-select2" {{ $element['is_disabled'] }}
@@ -409,6 +416,7 @@
             <div class="col-12 text-end">
                 <a onclick="cancelTask('{{ $name_form }}')" class="btn btn-outline-danger">Cancelar</a>
                 @if (!isset($show_btn))
+                
                         <button class="btn  btn-outline-primary" id="saveButton">{{ $name_button }}</button>
                 @endif
                 @if ($type_form == 43) {{-- swap --}}

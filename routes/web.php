@@ -4,6 +4,7 @@ use App\Http\Controllers\DeployController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClientPersonHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,10 @@ Route::get('/condiciones', function () {
 });
 
 Route::get('hola', ['\App\Http\Controllers\HomeController', 'surveyHola']);
+
+Route::get('grafica/{lead}', ['\App\Http\Controllers\HomeController', 'grafica']);
+//Route::post('grafica', ['\App\Http\Controllers\HomeController', 'grafica']);
+
 Route::get('whatsapp', ['\App\Http\Controllers\HomeController', 'whatsapp']);
 
 Route::get('slack/notification', ['\App\Http\Controllers\HomeController', 'slackNotification']);
@@ -70,13 +75,13 @@ Route::post('lead/form/store', ['\App\Http\Controllers\HomeController', 'leadFor
 
 Route::get('quiz/form', ['\App\Http\Controllers\HomeController', 'surveyForm']);
 
-Route::get('client/contratocm/{client}', ['\App\Http\Controllers\HomeController', 'contratoClient']);
-Route::get('client/contratocm/{client}/firmar', ['\App\Http\Controllers\HomeController', 'contratoClientFirma']);
-Route::get('client/contratocm/{client}/{type}/exit', ['\App\Http\Controllers\HomeController', 'contratoClientFirmaExit']);
+Route::get('client/contratocm/{client}/{credit}', ['\App\Http\Controllers\HomeController', 'contratoClient']);
+Route::get('client/contratocm/{client}/{credit}/firmar', ['\App\Http\Controllers\HomeController', 'contratoClientFirma']);
+Route::get('client/contratocm/{clientId}/{type}/exit', ['\App\Http\Controllers\HomeController', 'contratoClientFirmaExit']);
 
 Route::get('client/sod/{credit}', ['\App\Http\Controllers\HomeController', 'contratoCreditSod']);
 Route::get('client/sod/{credit}/firmar', ['\App\Http\Controllers\HomeController', 'contratoCreditFirmaSod']);
-Route::get('client/sod/{credit}/{type}/exit', ['\App\Http\Controllers\HomeController', 'sodCreditFirmaExit']);
+Route::get('client/sod/{creditId}/{type}/exit', ['\App\Http\Controllers\HomeController', 'sodCreditFirmaExit']);
 
 Route::get('/nosotros', function () {
     return view('about');
@@ -99,3 +104,13 @@ Route::get('/terminos-y-condiciones', function () {
 
 
 
+Route::get('password/enviado', function() {
+    return view('salida_password'); // Crea esta vista
+})->name('password.enviado');
+
+Route::get('/client-person/{id}/history', [ClientPersonHistoryController::class, 'show'])
+    ->name('client.person.history');
+
+Route::get('/validate-identity/{token}', [App\Http\Controllers\HomeController::class, 'showValidateIdentity'])->name('validate.identity');
+Route::post('/validate-identity', [App\Http\Controllers\HomeController::class, 'storeValidateIdentity'])->name('validate.identity.store');
+Route::get('/validate-identity/{token}/exit', [App\Http\Controllers\HomeController::class, 'showValidateIdentityExit'])->name('validate.identity.exit');

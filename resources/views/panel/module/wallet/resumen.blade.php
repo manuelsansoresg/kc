@@ -19,11 +19,11 @@
                                 <div class="card card-bordered  vh-50">
                                     <div class="card-inner">
                                         @php
-                                            $valorCuenta = $investor->placed_capial +  $investor->total_available;
-                                            $disponiblePrestar = $investor->total_available  +  $investor->loan_available;
+                                            $valorCuenta = $investor->account_value;
+                                            $disponiblePrestar = $investor->withdraw_available;
                                         @endphp
                                         <input type="hidden" id="iValorCuenta" value="{{ $valorCuenta}}">
-                                        <input type="hidden" id="iTotalCredit" value="{{ $totalCredit}}">
+                                        <input type="hidden" id="iTotalCredit" value="{{ $valorCuenta + $investor->total_balance}}">
                                         <div class="analytic-ov d-none d-md-block">
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
@@ -41,11 +41,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="analytic-data analytic-ov-data">
-                                                    <div class="title">En proceso de ser prestado &nbsp; </div>
+                                                    <div class="title">Apartado para ser prestado &nbsp; </div>
                                                     <div class="amount">${{ format_price($investor->loan_available) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></div>
                                                     <div class="change down"><a href="#"  data-bs-toggle="modal"
                                                         data-bs-target="#modalPrestar">Editar</a></div>
                                                 </div>
+                                                
+                                               
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Préstamos en créditos activos</div>
                                                     <div class="amount">${{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
@@ -97,7 +99,7 @@
 
                                             </div>
                                             <div id="tooltip-proceso">
-                                                <b>En proceso de ser prestado</b>
+                                                <b>Apartado para ser prestado</b>
                                                 <br><br>
                                                 Dinero destinado para préstamos. Este dinero no está disponible para retirar a tu cuenta a menos que modifiques la cantidad de dinero asignada para ser prestada.
 
@@ -123,15 +125,16 @@
                                             <h6 class="title">Resultados obtenidos </h6>
                                             <hr>
                                             @php
-                                                $interesesCobrados          = $investor != null  ? $investor->profit_collected / 1.16 : 0;
-                                                $IvainteresesCobrados       = $investor != null  ? $interesesCobrados * 0.16 : 0;
+                                                $interesesCobrados          = $investor != null  ? $investor->profit_collected : 0;
+                                                $IvainteresesCobrados       = $investor != null  ? $investor->iva_collected : 0;
                                                 $recuperacionCarteraVencida = 0;
-                                                
-                                                $comisionesPagadasKaax  = $investor != null  ? $investor->collection_commission  / 1.16 : 0;
-                                                $perdidasCarteraVencida = 0;
-                                                $ivaComisiones          = $investor != null  ? $comisionesPagadasKaax * 0.16 : 0;
 
-                                                $resultadosNetosTotales = $interesesCobrados + $IvainteresesCobrados + $recuperacionCarteraVencida + $comisionesPagadasKaax + $perdidasCarteraVencida + $recuperacionCarteraVencida;
+                                                $comisionesPagadasKaax      = $investor != null  ? $investor->collection_commission : 0;
+                                                $perdidasCarteraVencida     = 0;
+                                                $ivaComisiones             = $investor != null  ? $investor->iva_commission : 0;
+
+                                                $resultadosNetosTotales = $interesesCobrados + $IvainteresesCobrados + $recuperacionCarteraVencida 
+                                                                        - $comisionesPagadasKaax - $perdidasCarteraVencida - $ivaComisiones;
                                             @endphp
                                             <table class="table table-borderless">
                                                 <tr>
@@ -219,7 +222,7 @@
                            </div>
                             
                            <div class="row mt-5">
-                            <div class="col-12">
+                            <div class="col-6">
                                 
                                 <div class="card">
                                     <div class="card-body">
@@ -266,11 +269,25 @@
                         <p>
                             Es la cantidad de dinero que está disponible para ser prestada. Esta cantidad irá disminuyendo conforme se vayan entregando créditos.
                             El total de esta cantidad podrá verse en "En proceso de ser prestado"
+                            <br>
+                            Disponible: ${{ format_price($totalAvailable) }}
                         </p>
-                        <input type="number" min="201" max="{{ $totalAvailable }}" class="form-control">
+                        <input type="number" min="201" name="lendable" id="lendable" max="{{ $totalAvailable }}" class="form-control" value="{{ $investor->lendable }}">
+                        <div class="col-12 mt-3">
+                            
+                            <p>
+                                Advertencias:
+                                <br>
+                                El importe no debe ser mayor al dinero disponible
+                                <br>
+                                El importe debe ser mayor a 200 pesos
+                            </p>
+                        </div>
+                        <input type="hidden" id="totalAvailable" value="{{ $totalAvailable }}">
+                        <input type="hidden" name="investorId" id="investorId" value="{{ $investor->id }}">
                         <div class="col-12 mt-3 text-end">
                             <a href="#" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</a>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="button" onclick="prestarInversionista()" class="btn btn-primary">Guardar</button>
                         </div>
                    </form>
                 </div>
@@ -294,7 +311,7 @@
                                 $totalIngresos     = $recursosFondeados + $totalCollected;
                                 
                                 $prestamosRealizados       = $investor != null ? $investor->total_capital : 0;
-                                $comisionesPagadas         = $investor != null ? $investor->collection_commmission : 0;
+                                $comisionesPagadas         = $investor != null ? $investor->collection_commission  + $investor->iva_commission : 0;
                                 $recursosRetirados         = $investor != null ? $investor->withdrawn_money : 0;
                                 $perdidasporCarteraVencida = 0;
                                 $totalEgresos              = $prestamosRealizados + $comisionesPagadas + $recursosRetirados + $perdidasporCarteraVencida;

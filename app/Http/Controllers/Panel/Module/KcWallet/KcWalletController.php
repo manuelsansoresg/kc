@@ -50,8 +50,8 @@ class KcWalletController extends Controller
 
             foreach ($getInvestorCredits as $getInvestorCredit) {
                 $getCollection   = Collection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
-                $creditId        = $getInvestorCredit->id;
-                $valorStatus     = 'Pendiente';
+                $creditId        = $getInvestorCredit->credit_id;
+                
                 $importe         = $getInvestorCredit->import ;
                 $pagado          = $getInvestorCredit->total_collected;
                 $porPagar        = $getInvestorCredit->placed_capital;
@@ -63,20 +63,19 @@ class KcWalletController extends Controller
                 $interesProyectado = format_price($getInvestorCredit->total_credit  - $getInvestorCredit->import);
                 if ($getCollection != null) {
                     $percentage      = $getInvestorCredit->percentage / 100;
-                    $getStatus       = CrmStatusListKaaxSidecc::getStatus($getCollection->status);
                     $getInvestor     = Investor::find($getInvestorCredit->investor_id);
-                    $getCredit       = Credit::find($getInvestorCredit->credit_id);
-                    $valorStatus     = $getStatus->name;
                 }
+                $getCredit       = Credit::find($getInvestorCredit->credit_id);
+                $valorStatus     = HistoryLog::$label_status[$getCredit->credit_status];
 
                 $data[] = array(
-                    'id' => $creditId,
+                    'id' => "{$creditId}".'<a href="/panel/credit/'.$getInvestorCredit->credit_id.'?tab=pagos" target="_blank"> &nbsp; <span class="badge bg-primary">Ver</span> </a>',
                     'status' => $valorStatus,
                     'importe' => $valorImporte,
                     'pagado' => $valorPagado,
-                    'capital_pendiente' => $valorPorPagar,
                     'capital_recuperado' => format_price($getInvestorCredit->recovered_capital),
                     'interes_proyectado' => $interesProyectado,
+                    'capital_pendiente' => $valorPorPagar,
                     'interes_cobrado' => format_price($getInvestorCredit->profit_collected),
                     'comision_kc' => format_price($getInvestorCredit->commission_amount),
                 );

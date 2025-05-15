@@ -31,11 +31,11 @@
             <table class="table table-striped">
                 <tr>
                     <td>Fecha nómina</td>
-                    <td>{{ $credit!= null ? $credit->payroll_date : null }}</td>
+                    <td>{{ $client!= null ? $client->payroll_date : null }}</td>
                 </tr>
                 <tr>
                     <td>Total nómina</td>
-                    <td>{{ $credit!= null ? $credit->payroll_total : null }}</td>
+                    <td>{{ $client!= null ? $client->payroll_total : null }}</td>
                 </tr>
             
             </table>
@@ -49,15 +49,15 @@
             <table class="table table-striped">
                 <tr>
                     <td>CP nominal</td>
-                    <td>{{ $credit!= null ? $credit->payment_capacity : null }}</td>
+                    <td>{{ $client!= null ? $client->payment_capacity : null }}</td>
                 </tr>
                 <tr>
                     <td>Fecha nómina</td>
-                    <td>{{ $credit!= null ? $credit->payroll_date : null }}</td>
+                    <td>{{ $client!= null ? $client->payroll_date : null }}</td>
                 </tr>
                 <tr>
                     <td>Total nómina</td>
-                    <td>{{ $credit!= null ? $credit->payroll_total : null }}</td>
+                    <td>{{ $client!= null ? $client->payroll_total : null }}</td>
                 </tr>
             
             </table>
@@ -113,7 +113,49 @@
     @endif
 @endif
 
+@if (isset($step) && $step == 3 && $taskId === 2)
+<div class="row">
+    <div class="col-6">
+        <table class="table table-striped">
+            <tr>
+                <td>Fecha nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_date : null }}</td>
+            </tr>
+            <tr>
+                <td>Total nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_total : null }}</td>
+            </tr>
+        
+        </table>
+    </div>
+</div>
+@endif
+
+@if (isset($step) && $step == 3 && $taskId === 3)
+<div class="row">
+    <div class="col-6">
+        <table class="table table-striped">
+            <tr>
+                <td>CP nominal</td>
+                <td>{{ $client!= null ? $client->payment_capacity : null }}</td>
+            </tr>
+            <tr>
+                <td>Fecha nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_date : null }}</td>
+            </tr>
+            <tr>
+                <td>Total nómina</td>
+                <td>{{ $credit!= null ? $credit->payroll_total : null }}</td>
+            </tr>
+        
+        </table>
+    </div>
+</div>
+@endif
+
 @if (isset($step) && $step == 4 && $taskId === 1)
+
+
 <div class="row">
     <div class="col-6">
         <table class="table table-striped">
@@ -124,7 +166,7 @@
             <tr>
                 <td>URL contrato</td>
                 <td>
-                    {{ asset('/client/contratocm/'.$client->id) }}
+                    {{ asset('/client/contratocm/'.$client->id.'/'.$credit->id) }}
                 </td>
             </tr>
             
@@ -135,7 +177,7 @@
 
 @if (isset($step) && $step == 4 && $taskId === 2)
 <div class="row">
-    @if (isset($product) && $product->alias == 'Salario On-Demand')
+    @if (isset($product) && $product->type_product_id == 3)
     <div class="col-6">
         <table class="table table-striped">
             <tr>
@@ -169,13 +211,13 @@
                     <td>Contrato crédito</td>
                     <td>
                     
-                        @if ($client!= null && $client->credit_agreement_signed === null)
+                        @if ($credit!= null && $credit->credit_agreement_signed === null)
                             Sin firmar 
                         @endif
-                        @if ($client!= null && $client->credit_agreement_signed === 1)
+                        @if ($credit!= null && $credit->credit_agreement_signed === 1)
                             Aceptado
                         @endif
-                        @if ($client!= null && $client->credit_agreement_signed === 0)
+                        @if ($credit!= null && $credit->credit_agreement_signed === 0)
                             Declinado
                         @endif
                         

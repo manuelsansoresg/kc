@@ -51,6 +51,7 @@ class CreditPayOffController extends Controller
         $creditPays = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount')
         ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
         ->where('credit_pay_off.lead_id', $id)
+        ->where('kc_credit_id_payed_off', '=', null)
         ->get();
         
         $total = $creditPays->sum('ammount');

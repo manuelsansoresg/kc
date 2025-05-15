@@ -2,6 +2,8 @@
 $user = Auth::user();
 @endphp
 @inject('m_history', 'App\Models\HistoryLog')
+@inject('m_financial_product', 'App\Models\FinancialProduct')
+
 <div class="content-options">
     <ul class="nk-tb-actions gx-1">
         @if ($lead->manychat_id != null)
@@ -40,7 +42,12 @@ $user = Auth::user();
 
                 <div class="dropdown-menu dropdown-menu-end">
                     <ul class="link-list-opt no-bdr">
-                        @if ($lead->go_ahead == 0)
+                        @php
+                            $getFinancial = $m_financial_product::find($lead->financial_product_id);
+                            
+                        @endphp
+                       
+                        @if (($lead->go_ahead === 0  && $creditStatus === false) || $validate === 0 )
                             <li>
                                 <a class="pointer" onclick="modalValidate({{ $id }}, 'lead', 'dt-lead')">
                                     <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>

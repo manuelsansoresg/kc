@@ -28,12 +28,13 @@
                                     <div class="preview-block">
                                         <div class="row gy-4">
                                             <ul class="nav nav-tabs">
+                                                <li class="nav-item"> <a class="nav-link {{ (!isset($_GET['tab']))? 'active' : '' }}" data-bs-toggle="tab"
+                                                    href="#tabGeneral">General</a> </li>
                                                 <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'productos')? 'active' : '' }}" data-bs-toggle="tab"
                                                     href="{{ $financial_id != null ? '#tabProduct' : '#' }}">Productos financieros</a>
                                             </li>
-                                                <li class="nav-item"> <a class="nav-link {{ (!isset($_GET['tab']))? 'active' : '' }}" data-bs-toggle="tab"
-                                                        href="#tabGeneral">General</a> </li>
-                                                <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'privacidad_de_datos')? 'active' : '' }}" data-bs-toggle="tab"
+                                               
+                                                {{-- <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'privacidad_de_datos')? 'active' : '' }}" data-bs-toggle="tab"
                                                         href="{{ $financial_id != null ? '#tabDataPrivacy' : '#' }}">Privacidad
                                                         de datos</a> </li>
 
@@ -41,7 +42,7 @@
                                                         href="{{ $financial_id != null ? '#tabBuro' : '#' }}">Buró</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $financial_id != null ? '#tabBilling' : '#' }}">Datos
-                                                        facturación</a> </li>
+                                                        facturación</a> </li> --}}
                                                 
                                             </ul>
                                             <div class="tab-content">
@@ -94,7 +95,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                           {{--  <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="form-label"
                                                                         for="frm-product-name">Logo</label>
@@ -139,7 +140,7 @@
 
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
 
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
@@ -178,7 +179,7 @@
                                                             </div>
 
 
-                                                            <div class="col-md-6">
+                                                            {{-- <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="form-label"
                                                                         for="frm-product-name">Inicio de
@@ -231,7 +232,7 @@
                                                                             value="{{ $phone }}">
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </div> --}}
 
                                                             <div class="col-md-12">
                                                                 <div class="form-group">

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ActionManychatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,33 @@ Route::post('action/manychat/wa-complete/lead/store', ['\App\Http\Controllers\Ap
 
 Route::get('credit/{credit}/{s2_credit_id}/{tipo}/set', ['\App\Http\Controllers\Api\CreditController', 'activar']);
 
-Route::get('credit/{credit}/{s2_credit_id}/{tipo}/set', ['\App\Http\Controllers\Api\CreditController', 'activar']);
 
 Route::get('investor/{financial_product_id}/setTotalCapital', ['\App\Http\Controllers\Api\CreditController', 'apiSetTotalCapital']);
+Route::get('credit/{creditId}/pago/setData', ['\App\Http\Controllers\Api\CreditController', 'setDataPago']);
+
+
+Route::post('validate-phone', [ActionManychatController::class, 'validatePhone']);
+Route::post('create-lead', [ActionManychatController::class, 'createLead']);
+Route::post('set-url-rfc', [ActionManychatController::class, 'setUrlRfc']);
+Route::post('validate-cliente-activo', [ActionManychatController::class, 'validateClienteActivo']);
+Route::post('validate-tramite-pendiente', [ActionManychatController::class, 'validateTramitePendiente']);
+Route::post('validate-identity', [ActionManychatController::class, 'validateIdentity']);
+Route::post('validate-identity-get', [ActionManychatController::class, 'getValidateIdentity']);
+Route::post('validate-sod-active', [ActionManychatController::class, 'validateSodActive']);
+Route::post('validate-fechas-permitidas', [ActionManychatController::class, 'validateFechasPermitidas']);
+Route::post('set-sod/{productId}', [ActionManychatController::class, 'setSod']);
+Route::post('getMontoMinMax', [ActionManychatController::class, 'getMontoMinMax']);
+Route::post('validate-monto-solicitado', [ActionManychatController::class, 'validateMontoSolicitado']);
+Route::post('servicios-disponibles', [ActionManychatController::class, 'serviciosDisponibles']);
+Route::post('send-control-desk', [ActionManychatController::class, 'sendControlDesk']);
+
+Route::post('firma-contrato-cm', [ActionManychatController::class, 'firmaContratoCm']);
+Route::post('firma-descuento-sod', [ActionManychatController::class, 'firmaDescuentoSod']);
+Route::post('firma-contrato-cm-finish', [ActionManychatController::class, 'firmaContratoCmFinish']);
+Route::post('firma-descuento-sod-finish', [ActionManychatController::class, 'firmaDescuentoSodFinish']);
+Route::post('aditional-data-save', [ActionManychatController::class, 'aditionalDataSave']);
+
+Route::post('get-allowed-tramits', [ActionManychatController::class, 'getAllowedTramits']);
+
+Route::post('tipo-tramite/{tramit_type}/store', [ActionManychatController::class, 'storeTipoTramite']);
+Route::post('monto/plazo/pago/periodicidad/set', [ActionManychatController::class, 'setMontoPlazoPagoPeriodicidad']);

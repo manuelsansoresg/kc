@@ -4,6 +4,7 @@ require('./components/toastr');
 require('./components/notification/utilities');
 require('./components/datatable');
 require('./components/user/crud');
+require('./components/user/investor');
 require('./components/user/datatable_admin');
 require('./components/user/datatable_financiera');
 require('./components/user/datatable_inversionista');

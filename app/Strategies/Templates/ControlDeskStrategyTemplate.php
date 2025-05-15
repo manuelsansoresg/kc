@@ -15,9 +15,11 @@ use App\Models\FinancialAgreement;
 use App\Models\FinancialProduct;
 use App\Models\FpTerm;
 use App\Models\HistoryLog;
+use App\Models\Investor;
 use App\Models\InvestorsCredit;
 use App\Models\Lead;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\TemplateInterface;
 use App\Strategies\Values\SendNotificationsValues;
@@ -189,6 +191,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         } 
     }
 
+   
+
     public function configFormStep1Task1($id_rel, $history_id)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : '1';
@@ -200,7 +204,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'title_section' => null,
                 'title' => '*Anverso INE',
                 'subtitle' => 'Adjunta la parte delantera de la INE',
-                'name_field' => 'anverso',
+                'name_field' => 'Anverso INE',
                 'id_field' => '1',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
@@ -326,7 +330,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'title_section' => null,
                 'title' => '*Reverso INE',
                 'subtitle' => 'Adjunta la parte delantera de la INE',
-                'name_field' => 'ine delantera',
+                'name_field' => 'Reverso INE',
                 'id_field' => '2',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
@@ -678,7 +682,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     {
         $credit       = Credit::find($id_rel);
         $client = $credit->creditClientPerson;
-        
+        $product = FinancialProduct::find($credit->applied_financial_product);
         
 
         $loan_type    = config('enums.loan_type');
@@ -700,17 +704,25 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
         
         $taks = self::ElementsTaskStep3($history_id, null);
-        $templateId = $taskId -1;
+        
+        if ($product->type_product_id != 3) {
+            $templateId = $taskId -1;
+        } else {
+            $templateId = 0;
+        }
+        
+        
         $task = $taks[$templateId];
         $type_form    = $task['idForm'];
         
         $name_form    = null;
         $payOff = CreditPayOff::find($task['id']);
         
-
+        
         switch ($taskId) {
             case 1:
                 $elements = self::configFormStep3Task1($id_rel, $history_id, $task, $taskId);
+                
                 $name_form    = 'frm-template_control_desk_step3_task';
                 break;
             case 2:
@@ -736,9 +748,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 break;
         }
         
-        
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
+        
     }
 
     public function configFormStep3Task1($id_rel, $history_id, $task, $taskId)
@@ -846,8 +858,19 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit       = Credit::find($id_rel);
         $client = $credit->creditClientPerson;
         $stepRedirect = $taskId +1;
-        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit])->render();
+        
 
+        $step = null;
+        $stepParam = isset($_GET['step']) ? $_GET['step'] : null;
+        if ($stepParam !== null) {
+            if (strpos($stepParam, '_') !== false) {
+                list($step, $taskId) = array_map('intval', explode('_', $stepParam));
+            } else {
+                $step = intval($stepParam);
+            }
+        }
+        
+        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'step' => $step])->render();
         $elements = array(
             1 => [
                 'title_section' => '',
@@ -985,7 +1008,18 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit       = Credit::find($id_rel);
         $client = $credit->creditClientPerson;
         $stepRedirect = $taskId +1;
-        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit])->render();
+
+        $stepParam = isset($_GET['step']) ? $_GET['step'] : null;
+        if ($stepParam !== null) {
+            if (strpos($stepParam, '_') !== false) {
+                list($step, $taskId) = array_map('intval', explode('_', $stepParam));
+            } else {
+                $step = intval($stepParam);
+            }
+        }
+
+
+        $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'step' => $step])->render();
 
         $elements = array(
             1 => [
@@ -1070,27 +1104,45 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         
 
-        $creditPays = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount')
+        $creditPays = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount', 'deadline_date', 'annual_int_rate_iva')
+        ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
+        ->where('credit_pay_off.new_kc_credit_id', $credit->id)
+        ->where('kc_credit_id_payed_off', '=', null)
+        ->get();
+
+        $creditRefinanced = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount', 'deadline_date', 'annual_int_rate_iva')
         ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
         ->where('credit_pay_off.client_person_id', $client->id)
+        ->where('kc_credit_id_payed_off', '!=', null)
         ->get();
+        
+        $totalCompraCartera = CreditPayOff::select('credit_pay_off.id', 'financial_products.alias', 'credit_pay_off.ammount', 'deadline_date', 'annual_int_rate_iva')
+        ->join('financial_products', 'credit_pay_off.financial_product_id', 'financial_products.id')
+        ->where('credit_pay_off.client_person_id', $client->id)
+        ->where('kc_credit_id_payed_off', '=', null)
+        ->sum('ammount');
         
         $financialProduct = FinancialProduct::find($credit->applied_financial_product);
         
         $total = $creditPays->sum('ammount');
         $calculadora = new CalculadoraCredito();
-        $montoMaximo = $calculadora->getMontoMaximoControlDesk($client, $financialProduct);
+        
+        $montoMaximo         = $calculadora->getMontoMaximo($client, $financialProduct, $credit->tramit_type);
+
+
         $payment = $calculadora->getPayment($financialProduct, $montoMaximo);
         $lead = Lead::find($credit->lead_id);
 
-        $terms = FpTerm::select('terms.id', 'terms.term')
-        ->join('terms', 'terms.id',  'f_p_terms.term_id')
-        ->where('financial_product_id', $financialProduct->id)
-        ->where('terms.term', '>', $financialProduct->max_term)
-        ->get();
-
+        $terms        = null;
+        if ($financialProduct->max_term != null) {
+            $terms = FpTerm::select('terms.id', 'terms.term')
+            ->join('terms', 'terms.term_id',  'f_p_terms.term_id')
+            ->where('financial_product_id', $financialProduct->id)
+            ->where('terms.term', '<=', $financialProduct->max_term)
+            ->pluck('terms.term', 'terms.term');
+        }
         
-        $contentInfo = \View::make('panel.credit.controldeskTask4Step3', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'creditPays' => $creditPays, 'montoMaximo' => $montoMaximo, 'financialProduct' => $financialProduct, 'payment' => $payment, 'lead' => $lead, 'terms' => $terms])->render();
+        $contentInfo = \View::make('panel.credit.controldeskTask4Step3', ['client' => $client, 'taskId' => $taskId, 'creditRefinanced' => $creditRefinanced, 'credit' => $credit, 'totalCompraCartera' => $totalCompraCartera, 'creditPays' => $creditPays, 'montoMaximo' => $montoMaximo, 'financialProduct' => $financialProduct, 'payment' => $payment, 'lead' => $lead, 'terms' => $terms])->render();
 
         $elements = array(
             1 => [
@@ -1183,6 +1235,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=3_'.$stepRedirect.'&step_origin=',
                 'col' => 'col-12'
             ],
+            5 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'validateBtnSave',
+                'id_field' => 'validateBtnSave',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => true,
+                'col' => 'col-12'
+            ],
         );
         return $elements;
     }
@@ -1192,8 +1260,11 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit       = Credit::find($id_rel);
         $client = $credit->creditClientPerson;
         $stepRedirect = $taskId +1;
-
-
+        $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+        $urlRedirect = '/panel/template/steps/controlDesk/' . $history_id . '/show';
+       /*  if ($financialProduct->type_product_id === 3) {
+            $urlRedirect = '/panel/kc-control-desk';
+        } */
         
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit])->render();
 
@@ -1269,7 +1340,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => 'null',
                 'is_required' => false,
                 'is_disabled' => null,
-                'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                'value' => $urlRedirect,
                 'col' => 'col-12'
             ],
             4 => [
@@ -1563,9 +1634,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
 
         $stepRedirect = $taskId +1;
+        
         $contentInfo = \View::make('panel.client.infoClient', ['client' => $client, 'taskId' => $taskId, 'credit' => $credit, 'payOff' => null, 'step' => $step, 'product' => $product])->render();
-
-        if ($product->alias != 'Salario On-Demand') {
+        
+        if ($product->type_product_id != 3) {
             $elements = array(
                 1 => [
                     'title_section' => '',
@@ -1604,7 +1676,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                
                 3 => [
                     'title_section' => null,
-                    'title' => '*Contrato de CM',
+                    'title' => '*Contrato de crédito',
                     'subtitle' => 'Indica si el cliente ya firmó el contrato de crédito',
                     'name_field' => null,
                     'id_field' => 'ammount',
@@ -1661,7 +1733,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         0 => array(
                             'link' => null,
                             'name' => 'Valida',
-                            'name_field' =>  'contrato-de-credito',
+                            'name_field' =>  'firma-de-contrato-valida',
                             'class' => null,
                             'onclick' => null,
                             'value' => 1,
@@ -1670,7 +1742,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         1 => array(
                             'link' => null,
                             'name' => 'Invalida',
-                            'name_field' => 'contrato-de-credito',
+                            'name_field' => 'firma-de-contrato-valida',
                             'class' => null,
                             'onclick' => null,
                             'value' => 0,
@@ -1684,7 +1756,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'title_section' => null,
                     'title' => '*Contrato firmado',
                     'subtitle' => 'Adjunta el contrato firmado',
-                    'name_field' => 'anverso',
+                    'name_field' => 'Contrato firmado',
                     'id_field' => '4',
                     'comment_admin' => null,
                     'comment_webApp' =>  null,
@@ -1743,7 +1815,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'options' => 'null',
                     'is_required' => false,
                     'is_disabled' => null,
-                    'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                    'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                     'col' => 'col-12'
                 ],
                 9 => [
@@ -1849,7 +1921,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     'options' => 'null',
                     'is_required' => false,
                     'is_disabled' => null,
-                    'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
+                    'value' => '/panel/template/steps/controlDesk/'.$history_id.'/show',
                     'col' => 'col-12'
                 ],
                 4 => [
@@ -1896,7 +1968,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form = 'frm-template_control_desk_step2_task1';
         $type_form = HistoryLog::KC_CONTROL_DESK_TASK1_STEP2;
         $credit = Credit::find($id_rel);
-        $clientPerson = $credit->creditClientPerson;
+        $clientPerson = ClientPerson::find($credit->client_person_id);
         $elements = array(
             
             1 => [
@@ -2028,7 +2100,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form = 'frm-template_control_desk_step2_task2';
         $type_form = HistoryLog::KC_CONTROL_DESK_TASK2_STEP2;
         $credit = Credit::find($id_rel);
-        $clientPerson = $credit->creditClientPerson;
+        $clientPerson = ClientPerson::find($credit->client_person_id);
 
         $elements = array(
             
@@ -2123,15 +2195,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $name_form = 'frm-template_control_desk_step2_task3';
         $type_form = HistoryLog::KC_CONTROL_DESK_TASK3_STEP2;
         $credit = Credit::find($id_rel);
-        $clientPerson = $credit->creditClientPerson;
-
+        
+        $clientPerson = ClientPerson::find($credit->client_person_id);
+        
         $elements = array(
             
             1 => [
                 'title_section' => null,
                 'title' => 'Fecha nómina',
                 'subtitle' => 'Captura la fecha del recibo de nómina',
-                'name_field' => 'client_person[payroll_date]',
+                'name_field' => 'credit[payroll_date]',
                 'id_field' => 'payroll_date',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
@@ -2141,13 +2214,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null,
-                'value' => $clientPerson != null ? $clientPerson->payroll_date : null,
+                'value' => $credit != null ? $credit->payroll_date : null,
             ],
             2 => [
                 'title_section' => null,
                 'title' => 'Total nómina',
                 'subtitle' => 'Captura el total del recibo de nómina (percepciones menos deducciones)',
-                'name_field' => 'client_person[payroll_total]',
+                'name_field' => 'credit[payroll_total]',
                 'id_field' => 'payroll_total',
                 'comment_admin' => null,
                 'comment_webApp' =>  null,
@@ -2157,7 +2230,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => true,
                 'is_disabled' => null,
-                'value' => $clientPerson != null ? $clientPerson->payroll_total : null,
+                'value' => $credit != null ? $credit->payroll_total : null,
             ],
             3 => [
                 'title_section' => null,
@@ -4016,7 +4089,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 if ($getCompracartera != null) {
                     $data_credit['third_party_adjustment'] = $getMontoRefinanciar->ammount;
                 }
-                $data_credit['applied_loan_total_amount'] = $credit->applied_payment * $credit->applied_term;
+                //$data_credit['applied_loan_total_amount'] = $credit->applied_payment * $credit->applied_term;
                 $data_credit['applied_interest_rate'] = $financialProduct->annual_interest_rate;
                 $data_credit['applied_CAT'] = $financialProduct->rate_cat;
             }
@@ -4034,6 +4107,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($history != null) {
 
             //validar etapa 1 
+            
             if ($step != 4 ) {
                 if ($task  == null) {
                     $percentTask1Step1   = self::percentUpload($id_rel);
@@ -4206,14 +4280,39 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     }
 
                     if ($task == 4) {
+                        $getProduct = FinancialProduct::where('id', $credit->applied_financial_product)->first();
+                        $product_id =  $getProduct->type_product_id; 
+                        $applied_periodicity =  $getProduct->periodicity_id; 
+                        $applied_payment = $data_credit['applied_payment']; 
+                        $applied_loan_total_amount = $applied_payment * $credit->applied_term; 
+                        $opening_Commission_percentage =  $getProduct->opening_commission_rate; 
+                        $net_amount =  $data_credit['net_amount']; 
+                        $opening_commission =  $data_credit['opening_commission']; 
+                        
+                        Credit::where('id', $credit->id)->update([
+                            'product_id' => $product_id,
+                            'applied_periodicity' => $applied_periodicity,
+                            'applied_payment' => $applied_payment,
+                            'applied_loan_total_amount' => $applied_loan_total_amount,
+                            'opening_Commission_percentage' => $opening_Commission_percentage,
+                            'net_amount' => $net_amount,
+                            'opening_commission' => $opening_commission,
+                        ]);
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
                         $percentTask4Step3  = self::DynamicPercentStep3($credit->id, $labelValidate);
                         
                         if ($percentTask4Step3 == 100) {
+                            InvestorsCredit::saveEdit($credit->id);
+                            $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
+                            foreach ($getInvestors as $getInvestor) {
+                                //Transaction::setTotalCapital($getInvestor->investor_id);
+                                Investor::updateInvestorData($getInvestor->investor_id);
+                            }
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, $credit->id, 1); //terminar tarea
 
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, $credit->id, 0);
+                            
                         }
                     }
 
@@ -4235,10 +4334,17 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, $credit->id, 0);
+
+
+                            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, null, false);
+                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 0);
+
                         }
+
+                        
                         
                     }
-
+                    
                     if ($task > 5) {
                         
                         
@@ -4264,8 +4370,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3, $credit->id, 1); //terminar tarea dinamica
                             
-                            HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, null, false);
-                            HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 0);
+                            
                         }
                         
                     }
@@ -4273,7 +4378,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 }
 
                 if ($step == 4) {
-
+                    
                     if ($task == 1) {
                         $labelValidate = CreditsControlDesk::$labelValidate[9];
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
@@ -4289,21 +4394,25 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                     }
 
                     if ($task == 2) {
-                        $labelValidate = $financialProduct->alias != 'Salario On-Demand' ? CreditsControlDesk::$labelValidate[7] : CreditsControlDesk::$labelValidate[8];
+
                         
+                        $labelValidate = $financialProduct->type_product_id != 3 ? CreditsControlDesk::$labelValidate[9] : CreditsControlDesk::$labelValidate[8];
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);
+                        
                         
                         Credit::where('id', $credit->id)->update([
                             'credit_agreement_signed' => $request->credit_agreement_signed,
                             
                         ]);
                         $percentTask2Step4 = self::percentTask2Step4($history->id);
-
+                        
                         if ($percentTask2Step4 == 100) {
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 1); //terminar tarea
-    
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);
+
+                           
+                            
                         }
                     }
                 }
@@ -4461,8 +4570,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         $data = array();
         
-
-        if ($product!= null && $product->alias != 'Salario On-Demand') {
+        
+        if ($product!= null && $product->type_product_id != 3) {
             $data[] = array(
                 'nameStep' => 'Documentos',
                 'status' => $statusStep1,
@@ -4484,7 +4593,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'link' => '',
                 'percent' => self::calculateStepAverage($history_id, 3),
             );
-        } elseif ($product!= null && $product->alias == 'Salario On-Demand') {
+            $data[] = array(
+            
+                'nameStep' => 'Firmas',
+                'status' => $statusStep2,
+                'link' => '',
+                'percent' => self::calculateStepAverage($history_id, 5),
+            );
+            
+        } elseif ($product!= null && $product->type_product_id == 3) {
+            
+            $data[] = array(
+            
+                'nameStep' => 'Firmas',
+                'status' => $statusStep2,
+                'link' => '',
+                'percent' => self::calculateStepAverage($history_id, 5),
+            );
+
             $data[] = array(
                 
                 'nameStep' => 'KYC/MDC',
@@ -4493,13 +4619,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'percent' => self::calculateStepAverage($history_id, 4),
             );
         }
-        $data[] = array(
-            
-            'nameStep' => 'Firmas',
-            'status' => $statusStep2,
-            'link' => '',
-            'percent' => self::calculateStepAverage($history_id, 5),
-        );
+       
 
        
         return $data;
@@ -4540,7 +4660,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $history = HistoryLog::find($history_id);
         $credit   = $history->historyCredit;
         $product  = FinancialProduct::find($credit->applied_financial_product);
-        if ($product->alias != 'Salario On-Demand') {
+        if ($product->type_product_id != 3) {
             
             if ($step == 2) {
                 try {
@@ -4573,9 +4693,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             }
         } else {
             if ($step == 1) {
-                return self::listTasksStep3($history_id);
+                return self::listTasksStep4($history_id);
             }
-            return self::listTasksStep4($history_id);
+            return self::listTasksStep3($history_id);
         }
 
     }
@@ -4836,8 +4956,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
         $percentages    = [
             1 => self::percentTask1Step2($history),
-            2 => self::percentTask1Step2($history),
-            3 => self::percentTask1Step3($history)
+            2 => self::percentTask2Step2($history),
+            3 => self::percentTask3Step2($history)
         ];
         
        
@@ -4971,7 +5091,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $view_dead_line_form    = self::deadLineStep1($history);
 
         $data = [];
-        if ($product->alias != 'Salario On-Demand') {
+        if ($product->type_product_id != 3) {
+            
             $percentages = [];
             $subjects = [];
             $idForm = [];
@@ -5046,7 +5167,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
         //  dynamic tasks
 
-        if ($product->alias != 'Salario On-Demand') {
+        if ($product->type_product_id != 3) {
             $CreditPayOff = CreditPayOff::select('credit_pay_off.id', 'financial_products.name', 'financial_products.alias')
                 ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
                 ->where(['new_kc_credit_id' => $credit->id])
@@ -5063,7 +5184,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 }
     
                 $data[] = [
-                    'name' => "{$dynamicIndex}- Capturar {$creditPayOff->name}",
+                    'name' => "{$dynamicIndex}- Validar clabe {$creditPayOff->name}",
                     'subject' => " ".$creditPayOff->name,
                     'alias' => $creditPayOff->alias,
                     'helpText' => null,
@@ -5136,7 +5257,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
     
         // Contar los campos no nulos.
-        $elements = count(array_filter($fields, fn($field) => !empty($client->$field)));
+        $elements = count(array_filter($fields, fn($field) => !empty($credit->$field)));
     
         // Calcular el porcentaje completado.
         $total = count($fields);
@@ -5157,13 +5278,18 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $advisor = $credit->creditAdvisor;
         $product = FinancialProduct::find($credit->applied_financial_product);
 
+        if ($product->type_product_id != 3) {
+            # code...
+        } else {
+            
+
+        }
+        
         $percentages    = [
             1 => self::percentTask1Step4($history_id),
             2 => self::percentTask2Step4($history_id),
            
         ];
-        
-       
 
         $name_advisor = null;
         try {
@@ -5179,7 +5305,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $view_dead_line_form    = self::deadLineStep1($history);
 
         $data = [];
-        $subjectfirmaContrato = $product->alias != 'Salario On-Demand' ? HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK2_STEP4] : 'Firma Solicitud/Descuento SOD';
+        $subjectfirmaContrato = $product->type_product_id != 3 ? HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK2_STEP4] : 'Firma Solicitud/Descuento SOD';
         $subjects = [
             1 => HistoryLog::$label_subject[HistoryLog::KC_CONTROL_DESK_TASK1_STEP4],
             2 => $subjectfirmaContrato,
@@ -5231,7 +5357,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $fields = ['cm_agreement_sign'];
 
         $creditsValidate = CreditsControlDesk::where([
-            'validation' => $labelValidate = CreditsControlDesk::$labelValidate[9],
+            'validation' => CreditsControlDesk::$labelValidate[9],
             'credit_id' => $credit->id,
         ])->count();
         
@@ -5247,7 +5373,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $client = $credit->creditClientPerson;
         $product = FinancialProduct::find($credit->applied_financial_product);
 
-        if ($product->alias == 'Salario On-Demand') {
+        if ($product->type_product_id == 3) {
             $fields = ['sod_agreement'];
         } else {
             $fields = ['credit_agreement_signed'];
@@ -5256,12 +5382,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($credit === null) {
             return 0; // Si no hay cliente, el porcentaje es 0.
         }
-        $getFile = File::where([
-            'model' => HistoryLog::KC_CONTROL_DESK,
-            'id_rel' => $credit->id,
-            'step' => 4,
+        $getFile = CreditsControlDesk::where([
+            'validation' => CreditsControlDesk::$labelValidate[9],
+            'credit_id' => $credit->id,
+            
         ])->count();
-          
+        
         // Contar los campos no nulos.
         $elements = count(array_filter($fields, function($field) use ($credit) {
             return isset($credit->$field) && ($credit->$field === 1 || $credit->$field === 0);
@@ -5491,9 +5617,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP3, $credit->id, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP3, $credit->id, 1);
             
-            HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY, HistoryLog::KC_DELIVERY);
-            HistoryLog::where(['id_rel' => $credit->id, 'status_id' => HistoryLog::KC_CONTROL_DESK, 'status' => 1])
-                        ->update(['status' => 0]);
+            
 
             $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
             (new $notification_add)->send($credit->id);
@@ -5966,6 +6090,20 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public static function calculateStepAverage($historyId, $step)
     {
+        $history     = HistoryLog::find($historyId);
+        $credit      = Credit::find($history->id_rel);
+        $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+
+        if ($financialProduct->type_product_id == 3) {
+            if ($step == 1) {
+                $step = 4;
+            }
+            
+            if ($step == 2) {
+                $step = 3;
+            }
+        }
+        
         // Construir el nombre de la función dinámicamente
         $functionName = "ElementsTaskStep" . $step;
         
@@ -5995,7 +6133,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $credit  = $history->historyCredit;
         $product  = FinancialProduct::find($credit->applied_financial_product);
 
-        if ($product->alias != 'Salario On-Demand') {
+        if ($product->type_product_id != 3) {
             
             $totalSteps = 4; // Número total de tareas
             $totalAverage = 0;
@@ -6018,18 +6156,60 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         
     }
     
-
-    public function getFile($template_config_id)
+    public function isFinish($history)
     {
-        try {
-            $config = self::uploadStep3()[$template_config_id];
-        } catch (\Exception $th) {
-            try {
-                $config = self::uploadStep5()[$template_config_id];
-            } catch (\Exception $th) {
-                $config = self::uploadStep1()[$template_config_id];
+        $statusAllTrue = CreditsControlDesk::where('credit_id', $history->id_rel)
+                        ->get()
+                        ->every(function ($credit) {
+                            return $credit->status === 1;
+                        });
+        $creditControl = CreditsControlDesk::where('validation', 'Fondos suficientes')->where('credit_id', $history->id_rel)->first();
+        
+        return  $creditControl != null  && $creditControl->status == 1 && $statusAllTrue  ? true : false;
+    }
+
+    public function getFile($template_config_id, $creditId = null,  $step = null)
+    {
+        /* $taks = self::ElementsTaskStep1($history_id, null);
+        $templateId = $step -1;
+        $task = $taks[$templateId];
+        $task['subject'] */
+        
+        if ($step == 1) {
+            $elements = array(
+                1 => [
+                    'name' => 'Cargar Anverso INE',
+                ],
+                2 => [
+                    'name' => 'Reverso INE',
+                ],
+                3 => [
+                    'name' => 'Última nómina',
+                ],
+    
+            );
+            $CreditPayOffs = CreditPayOff::select('credit_pay_off.id', 'financial_products.name')
+            ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
+            ->where(['new_kc_credit_id' => $creditId])
+            ->get();
+            $dynamicIndex = 3;
+            foreach ($CreditPayOffs as $CreditPayOff) {
+                $dynamicIndex = $dynamicIndex + 1;
+                $elements[$dynamicIndex] = array(
+                    'name' => "{$CreditPayOff->name}",
+                );
             }
+            /* $dynamicIndex = 4;
+            'name' => "{$dynamicIndex}- Capturar {$creditPayOff->name}", */
+        } else {
+            $elements = array(
+                4 => [
+                    'name' => 'Contrato firmado',
+                ],
+            );
         }
+        $config = $elements[$template_config_id];
+       
 
         return $config;
     }
@@ -6246,7 +6426,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($step == null) {
             $breadcumbs = self::optionBreadcumbStep($history);
         }
-        if ($step == 1 || $step == 2 || $step == 3 || $step == 4 || $step == 5) {
+        if ($step >= 1) {
             $breadcumbs = self::optionBreadcumblistAction($history, $step);
         }
         $view_breadcumb    = \View::make('panel.module.breadcumb', ['breadcumbs' => $breadcumbs])->render();

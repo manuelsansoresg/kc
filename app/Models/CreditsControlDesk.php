@@ -27,6 +27,7 @@ class CreditsControlDesk extends Model
         7 => 'Contrato de crédito',
         8 => 'Solicitud/Descuento SOD',
         9 => 'Firma de contrato válida',
+        10 => 'Fondos suficientes',
     ];
 
     public static function saveEdit($creditId, $request, $validate, $task_id = null, $isOnlyCreate = false, $mandatory =1, $aliasProduct = null)
@@ -36,8 +37,8 @@ class CreditsControlDesk extends Model
         if ($validate == 'dynamic') {
             $validate = $aliasProduct;
         }
-        
         $value = $request->$idvalue;
+        
         $getExist = CreditsControlDesk::where([
             'credit_id' => $creditId,
             'validation' => $validate,

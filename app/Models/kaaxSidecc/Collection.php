@@ -13,6 +13,7 @@ class Collection extends Model
     protected $fillable = [
         'credit_id',
         'client_id',
+        'kc_client_id',
         'agreement_id',
         'folio',
         'capital',

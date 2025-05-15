@@ -8,23 +8,28 @@ use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
 use App\Models\CreditNotes;
+use App\Models\CreditPayOff;
 use App\Models\CurrentFinancialProduct;
 use App\Models\File;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\Investor;
+use App\Models\InvestorsCredit;
 use App\Models\Lead;
 use App\Models\Product;
+use App\Models\SodScheduleDate;
 use App\Strategies\TemplateInterface;
 use App\Strategies\Values\SendNotificationsValues;
 use stdClass;
 
 class LeadStrategyTemplate implements TemplateInterface
 {
-    public function move($id, $is_report = false)
+    public function move($id, $is_report = false, $is_origin_api = false)
     {
         $get_lead = Lead::find($id);
         self::setCustomFieldsManyChat($get_lead->id);
 
-        $lead = Lead::find($id);;
+        $lead = Lead::find($id);
         $history_id = null;
         $history = null;
         if ($lead !== null) {
@@ -55,15 +60,20 @@ class LeadStrategyTemplate implements TemplateInterface
                             ->update($data_client_person);
                 $client_person = ClientPerson::where('rfc', $lead->rfc)->first();
             }
-            
-            
 
-            //$client_person = ClientPerson::create($data_client_person);
+            if ($is_origin_api === true) {
+                Lead::where('id', $lead->id)->update([
+                    'client_person_id' => $client_person->id,
+                ]);
+            }
             
+            $financialProduct = FinancialProduct::find($lead->financial_product_id);
+            $productTypeId = $financialProduct ? $financialProduct->type_product_id : null;
+
             //* create credit
             $data_lead = array(
                 'client_person_id' => $client_person->id,
-                'product_id' => $lead->product_id,
+                'product_id' => $productTypeId,
                 'financial_id' => $lead->financial_id,
                 'agreement_id' => $lead->agreement_id,
                 'origin_id' => $lead->origin_id,
@@ -71,6 +81,7 @@ class LeadStrategyTemplate implements TemplateInterface
                 'type_id' => $lead->type_id,
                 'asesor_id' => $lead->asesor_id,
                 'importe_solicitado' => $lead->importe_solicitado,
+                'applied_import' => $lead->selected_loan,
                 'bank_id' => $lead->bank_id,
                 'tipo_credito' => $lead->tipo_credito,
                 'consulta_buro' => $lead->consulta_buro,
@@ -83,10 +94,52 @@ class LeadStrategyTemplate implements TemplateInterface
                 'lead_id' => $lead->id,
                 'income' => $lead->income,
                 'applied_loan_type' => $lead->applied_loan_type,
+                'tramit_type' => $lead->tramit_type,
             );
+
+            // Si el producto es SOD (product_id = 3)
+            if ($lead->product_id == 3) {
+                $sod_schedule = Agreement::where('sod_schedule_id', $lead->agreement_id)->first();
+
+                if ($sod_schedule) {
+                    $scheduleColumn = 'schedule_' . $sod_schedule->sod_schedule_id;
+                    $today = date('Y-m-d');
+
+                    $getSchedule = SodScheduleDate::whereDate('fecha', '>=', $today)
+                        ->where($scheduleColumn, 2)
+                        ->orderBy('fecha', 'asc')
+                        ->first();
+
+                    if ($getSchedule) {
+                        $data_lead['collection_date'] = $getSchedule->fecha;
+                    }
+                }
+
+                $financial_product_id = $lead->financial_product_id;
+                $getFinancial = FinancialProduct::find($financial_product_id);
+
+                // Aplicar las modificaciones solicitadas
+                $data_lead['product_id'] = $lead->product_id; 
+                $data_lead['applied_financial_product'] = $lead->financial_product_id; 
+                $data_lead['applied_import'] = $lead->sod_withdraw_amount; // Cambio aquí
+                $data_lead['applied_term'] = 1; // Cambio aquí
+                $data_lead['applied_periodicity'] = $getFinancial ? $getFinancial->periodicity_id : null;
+                $data_lead['applied_payment'] = $lead->sod_total_payment; 
+                $data_lead['applied_loan_total_amount'] = $lead->sod_total_payment; 
+                $data_lead['applied_interest_rate'] = 0; 
+                $data_lead['applied_CAT'] = 0; 
+                $data_lead['opening_Commission_percentage'] = 0; 
+                $data_lead['net_amount'] = $lead->sod_withdraw_amount; 
+                $data_lead['sod_commission'] = $lead->sod_commision_amount; 
+                $data_lead['opening_commission'] = 0; 
+            }
 
             //validar que el credito no exista con los mismos datos
             $credit = Credit::create($data_lead);
+            
+            CreditPayOff::where('lead_id', $lead->id)->update([
+                'new_kc_credit_id' => $credit->id
+            ]);
             //obtener las notas de los prospectos
             $leadNotes = $lead->leadNotes;
             foreach ($leadNotes as $leadNote) {
@@ -128,7 +181,12 @@ class LeadStrategyTemplate implements TemplateInterface
 
             //*create account automatically
             Lead::createClientPerson($lead->id, $is_report, $history->id);
-
+            InvestorsCredit::saveEdit($credit->id);
+            $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
+            foreach ($getInvestors as $getInvestor) {
+                //Transaction::setTotalCapital($getInvestor->investor_id);
+                Investor::updateInvestorData($getInvestor->investor_id);
+            }
         }
         return $history;
     }

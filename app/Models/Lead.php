@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Lib\Csendgrid;
 use App\Lib\Manychat;
+use App\Models\kaaxSidecc\Collection;
 use App\Strategies\Notifications\Models\Pusher;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
 use App\Strategies\Values\ValidateStagesValues;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -56,46 +58,94 @@ class Lead extends Model
         'tramit_type',
         'cellphone_validated',
         'rfc_validated',
-        'go_ahead'
+        'go_ahead',
+        'selected_term',
+        'selected_loan',
+        'plazo_maximo',
+        'monto_maximo',
+        'pago_maximo',
+        'periodicity',
     ];
+
+    public function getMontoMinMax($request)
+    {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['whatsapp_phone'];
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $manychat = new Manychat();
+        
+       
+        //calcular minimo
+        $minimo = $getClientPerson->daily_income_adjusted * 1;
+        $minimoRedondeado = floor($minimo / 100) * 100;
+        //calcular maximo
+        $currentDate = Carbon::now()->toDateString();
+        $schedule = SodScheduleDate::selectRaw("
+                    CASE
+                        WHEN schedule_1 = 2 AND fecha = ? THEN 1
+                        ELSE DATEDIFF(fecha, (SELECT MAX(fecha) 
+                                            FROM sod_schedule_dates 
+                                            WHERE schedule_1 = 2 
+                                            AND fecha < ?))
+                    END as dias
+                ", [$currentDate, $currentDate])
+                ->where('fecha', $currentDate)
+                ->first();
+        $dailyIncomeAdjusted  = $getClientPerson->daily_income_adjusted;
+        $maximo = $dailyIncomeAdjusted * $schedule->dias;
+        // Redondear hacia abajo al múltiplo de 100
+        $maximoRedondeado = floor($maximo / 100) * 100;
+        $dataField = array(
+            'SOD - Monto Máximo disponible' => $maximoRedondeado,
+            'SOD - Monto Mínimo disponible' => $minimoRedondeado,
+        );
+        $manychat->setCustomFields($dataField, $manychat_id);
+        return array('monto_minimo' => $minimoRedondeado, 'monto_maximo' => $maximoRedondeado);
+    }
 
     public static function validateSod($clientPerson, $financialProduct)
     {
         $active = $clientPerson->credit_active;
-        $messages   = null;
-        $messages   = false;
-        //validacion 1
+        $validations = [];
         $tramite = null;
         $isTramite = false;
+
+        // Validación 6: Crédito personal activo
         if ($active == 1) {
-            $messageVal1 =  '<p> Validación Crédito Preautorizado / Crédito Personal activo /<span  class="text-primary">  <br> OK: Prospecto tiene uno o más créditos activos
-            </span> </p>';
-            //validacion 2
+            $validations[] = [
+                'validation_id' => 6,
+                'validation_name' => 'Crédito preautorizado - Crédito personal activo',
+                'text' => 'Tiene créditos activos',
+                'status' => 0
+            ];
+
+            // Validación 11 y siguientes
             $getValidacion2 = self::ProductoFinancieroCreditoAdicional($clientPerson, $financialProduct);
-            $messageVal1 .= $getValidacion2['message'];
-            $getTramite = $getValidacion2['tramite'];
+            $validations = array_merge($validations, $getValidacion2['validations']);
+            $tramite = $getValidacion2;
             $isTramite = $getValidacion2['isTramite'];
-            if ($getTramite != null) {
-                $tramite = $getTramite;
-            }
         } else {
-            //continuar con la validacion 5
-            $messageVal1 =  '<p> Validación Crédito Preautorizado / Crédito Personal activo /<span  class="text-danger">  <br> FAIL: Prospecto no tiene créditos activos
-            </span> </p>';
+            $validations[] = [
+                'validation_id' => 6,
+                'validation_name' => 'Crédito preautorizado - Crédito personal activo',
+                'text' => 'No tiene créditos activos',
+                'status' => 1
+            ];
+
+            // Validación 7
             $getValidacion5 = self::validateCP($clientPerson, $financialProduct);
-            $messageVal1 .=  $getValidacion5['message'];
-            $getTramite = $getValidacion5['tramite'];
+            $validations = array_merge($validations, $getValidacion5['validations']);
+            $tramite = $getValidacion5;
             $isTramite = $getValidacion5['isTramite'];
-            if ($getTramite != null) {
-                $tramite[] = $getTramite;
-            }
         }
 
-        
-
-        $messages = $messageVal1;
-        return array('message' => $messages, 'tramite' => $tramite, 'isTramite' => $isTramite);
-
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
     //validacion 2 ¿Producto Financiero permite crédito adicional?
     public function ProductoFinancieroCreditoAdicional($clientPerson, $financialProduct)
@@ -103,73 +153,95 @@ class Lead extends Model
         $additional_allowed = $financialProduct->additional_allowed;
         $tramite = array();
         $isTramite = false;
+        $validations = [];
         
+        // Validación 11
+        $validations[] = [
+            'validation_id' => 11,
+            'validation_name' => 'Crédito preautorizado - Producto permite Crédito adicional',
+            'text' => $additional_allowed == 1 ? 'Producto permite Crédito Adicional' : 'Producto no permite Crédito Adicional',
+            'status' => $additional_allowed
+        ];
+
         if ($additional_allowed == 1) {
-            $message =  '<p> Validación Crédito Preautorizado / Producto permite Crédito adicional /<span  class="text-primary">  <br> OK: Producto permite Crédito Adicional
-            </span> </p>';
             $getValidacion3 = self::CPVersion1($clientPerson, $financialProduct);
+            $validations = array_merge($validations, $getValidacion3['validations']);
             $isTramite = $getValidacion3['isTramite'];
-            $message .=  $getValidacion3['message'];
             $tramite = $getValidacion3['tramite'];
         } else {
-            $message =  '<p> Validación Crédito Preautorizado / Producto permite Crédito adicional / <span  class="text-danger">  <br> FAIL: Producto no permite Crédito Adicional
-            </span> </p>';
             $getValidacion4 = self::ProductoFinancieroRefinanciamiento($financialProduct);
-            
+            $validations = array_merge($validations, $getValidacion4['validations']);
             $isTramite = $getValidacion4['isTramite'];
-            $message .=  $getValidacion4['message'];
             $tramite = $getValidacion4['tramite'];
         }
-        return array('message' => $message, 'tramite' => $tramite, 'isTramite' => $isTramite);
+
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
     //validacion 3  ¿Tiene CP mínima (Versión 1)?
     public function CPVersion1($clientPerson, $financialProduct)
     {
         $payment_capacity = $clientPerson->payment_capacity;
         $min_payment = $financialProduct->min_payment;
+        $validations = [];
+        $tramite = array();
+        $isTramite = false;
+
+        // Validación 7
+        $validations[] = [
+            'validation_id' => 7,
+            'validation_name' => 'Crédito preautorizado - Capacidad de pago mínima',
+            'text' => $payment_capacity > $min_payment ? 'Sí tiene CP mínima' : 'No tiene CP mínima',
+            'status' => $payment_capacity > $min_payment ? 1 : 0
+        ];
 
         if ($payment_capacity > $min_payment) {
-            $message =  '<p> Validación Crédito Preautorizado / Capacidad de Pago mínima Crédito Adicional /<span  class="text-primary">  <br> OK: Sí tiene CP mínima
-            </span> </p>';
             $tramite[] = 2; //Crédito adicional
-            //validacion 4
-            $getValidacion4 = self::ProductoFinancieroRefinanciamiento($financialProduct);
-            $isTramite = $getValidacion4['isTramite'];
-            $tramite4 = $getValidacion4['tramite'];
-            if ($tramite4 != null) {
-                $tramite[] = $tramite4;
-            }
-            $message .= $getValidacion4['message'];
-        } else {
-            $message =  '<p>Validación Crédito Preautorizado / Capacidad de Pago mínima Crédito Adicional /<span  class="text-danger">  <br> FAIL: No tiene CP mínima
-            </span> </p>';
-            //validacion 4
-            $getValidacion4 = self::ProductoFinancieroRefinanciamiento($financialProduct);
-            $isTramite = $getValidacion4['isTramite'];
-            $tramite4 = $getValidacion4['tramite'];
-            if ($tramite4 != null) {
-                $tramite[] = $tramite4;
-            }
-            $message .= $getValidacion4['message'];
         }
-        return array('message' => $message, 'tramite' => $tramite, 'isTramite' => $isTramite);
+
+        // Validación 12
+        $getValidacion4 = self::ProductoFinancieroRefinanciamiento($financialProduct);
+        $validations = array_merge($validations, $getValidacion4['validations']);
+        $isTramite = $getValidacion4['isTramite'];
+        if ($getValidacion4['tramite'] != null) {
+            $tramite[] = $getValidacion4['tramite'];
+        }
+
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
     //validacion 4 ¿Producto Financiero permite Refinanciamiento?
     public function ProductoFinancieroRefinanciamiento($financialProduct)
     {
-        $message =  '<p> Validación Crédito Preautorizado / Producto permite Refinanciamiento / <span  class="text-danger">  <br> FAIL: Producto no permite Refinanciamiento
-            </span> </p>';
         $refinancing_allowed = $financialProduct->refinancing_allowed;
         $tramite = null;
         $isTramite = false;
+        $validations = [];
         
+        // Validación 12
+        $validations[] = [
+            'validation_id' => 12,
+            'validation_name' => 'Crédito preautorizado - Producto permite Refinanciamiento',
+            'text' => $refinancing_allowed == 1 ? 'Producto permite Refinanciamiento' : 'Producto no permite Refinanciamiento',
+            'status' => $refinancing_allowed
+        ];
+
         if ($refinancing_allowed == 1) {
-            $message =  '<p>Validación Crédito Preautorizado / Producto permite Refinanciamiento /<span  class="text-primary">  <br> OK: Producto permite Refinanciamiento
-            </span> </p>';
-            $tramite = 3; //Crédito adicional
+            $tramite = 3;
             $isTramite = true;
         }
-        return array('message' => $message, 'tramite' => $tramite, 'isTramite' => $isTramite);
+
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
     //validacion 5 ¿Tiene CP mínima (Versión 2)?
     public function validateCP($clientPerson, $financialProduct)
@@ -178,15 +250,26 @@ class Lead extends Model
         $min_payment = $financialProduct->min_payment;
         $tramite = null;
         $isTramite = false;
-        $message =  '<p> Validación Crédito Preautorizado / Capacidad de Pago mínima Crédito Nuevo / <span  class="text-danger"> <br> FAIL:  No tiene CP mínima
-        </span> </p>';
+        $validations = [];
+        
+        // Validación 7
+        $validations[] = [
+            'validation_id' => 7,
+            'validation_name' => 'Crédito preautorizado - Capacidad de pago mínima',
+            'text' => $payment_capacity > $min_payment ? 'Sí tiene CP mínima' : 'No tiene CP mínima',
+            'status' => $payment_capacity > $min_payment ? 1 : 0
+        ];
+
         if ($payment_capacity > $min_payment) {
-            $message =  '<p> Validación Crédito Preautorizado / Capacidad de Pago mínima Crédito Nuevo / <span  class="text-primary"> <br> OK:  Sí tiene CP mínima
-            </span> </p>';
             $tramite = 1;
             $isTramite = true;
         }
-        return array('message' => $message, 'tramite' => $tramite, 'isTramite' => $isTramite);
+
+        return [
+            'validations' => $validations,
+            'tramite' => $tramite,
+            'isTramite' => $isTramite
+        ];
     }
 
     public static function tagLead ($lead_id, $label, $is_array = false)
@@ -226,28 +309,43 @@ class Lead extends Model
     {
        
         $is_asesor = Auth::user()->hasRole('Asesor');
-
+        
         $get_list = HistoryLog::getByStatus([HistoryLog::CREATE_PROSPECT]);
         $data        = array();
+        $statusTramites = array(
+            HistoryLog::KC_CHECK_UP ,
+            HistoryLog::CREDIT_IN_PROGRESS ,
+            HistoryLog::NEW_CREDIT_KC_CHECK_UP ,
+            HistoryLog::KC_CONTROL_DESK ,
+            HistoryLog::KC_DELIVERY ,
+            HistoryLog::KC_SWAP ,
+            HistoryLog::KC_PAYMENT
+        );
+        
         foreach ($get_list as $row) {
             $query = $row->historyLead;
             if ($query != null) {
                 $leadStrategy   = ValidateStagesValues::STRATEGY['lead'];
                 $validate       = (new $leadStrategy)->getValidate($query->id);
-                $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'lead' => $query, 'validate' => $validate])->render();
-                $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query, 'validate' => $validate,  'validate' => $validate])->render();
+                $clientPerson = ClientPerson::find($query->client_person_id);
+                $getStatus = $clientPerson != null ? Credit::where('client_person_id', $clientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
+                $creditStatus =  $getStatus > 0 ? false : true;
                 
-                $lbl_status     = '<span class="text-success">Valido</span>';
+
+                $option         = \View::make('panel.lead.add_option_dt', [ 'type' => 2, 'id' => $query->id, 'lead' => $query, 'validate' => $validate, 'creditStatus' => $creditStatus])->render();
+                $lead_view      = \View::make('panel.lead.content_lead', ['lead' => $query, 'validate' => $validate,  'validate' => $validate, 'creditStatus' => $creditStatus])->render();
                 
+                $financialProduct =  FinancialProduct::find($query->financial_product_id);
+                $tipoCredito = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
+                $alias_product = $tipoCredito!= null ? $tipoCredito->alias : null;
+
                 $product        = $query->productLead;
                 $user           = $query->advisorLead;
                 $agreement      = $query->agreementLead;
                 
     
                 
-                if ($validate['error'] === true) {
-                    $lbl_status = '<span class="text-danger">Invalido</span>';
-                }
+                
                 $origin = (isset(config('enums.origin')[$query->origin_id]))? config('enums.origin')[$query->origin_id] : '';
                 $label = (isset(config('enums.temperatures')[$query->temperature_id]))? config('enums.temperatures')[$query->temperature_id] : '';
 
@@ -259,7 +357,7 @@ class Lead extends Model
                         'id' => $query->id,
                         'name' => $lead_view,
                         'date' => formatDateNameMonthHour($query->created_at),
-                        'product' => ($product != null) ? $product->alias : '',
+                        'product' => $alias_product,
                         'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
                         'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
@@ -270,7 +368,7 @@ class Lead extends Model
                         'id' => $query->id,
                         'name' => $lead_view,
                         'date' => formatDateNameMonthHour($query->created_at),
-                        'product' => ($product != null) ? $product->alias : '',
+                        'product' => $alias_product,
                         'organizacion' => isset($agreement->name)? $agreement->name : null,
                         'label' => $label,
                         'advisor' => ($user != null) ? $user->name.' '.$user->last_name.' '.$user->second_last_name : '',
@@ -337,6 +435,8 @@ class Lead extends Model
     public static function saveEdit($request)
     {
         $data = $request->data;
+        $credits = isset($request->credits)? $request->credits : null;
+        $isFullSave = $request->isFullSave === 'true';
 
         $is_asesor = Auth::user()->hasRole('Asesor');
 
@@ -348,21 +448,23 @@ class Lead extends Model
             $data['aval_o_garantia'] = $data['aval_o_garantia'] === null ? 1 : $data['aval_o_garantia']; 
         }
 
+        if (!isset($data['tramit_type'])) {
+            $data['tramit_type'] = 1;
+        }
+
         
         $data['is_viability'] = isset($data['is_viability']) ? $data['is_viability'] : 0 ; 
         
         
         $data['is_viability_credit'] = isset($data['is_viability_credit']) ? $data['is_viability_credit'] : 0 ; 
 
-       /*  if (isset($data['agreement_id']) && $data['agreement_id'] == 0) { //si es  0 se insertara el nuevo agreement
-            unset($data['agreement_id']);
-            $new_agreement = Agreement::create([ 'name' => $request->new_agreement, 'description' => $request->new_agreement, 'status' => 1]);
-            $data['agreement_id'] = $new_agreement->id;
-        } */
+
+       
         if ($request->isNew === '1') {
             if ($is_asesor === true) {
                 $data['asesor_id'] =  Auth::user()->id;
             }
+           
             $lead = new Lead($data);
             $lead->save();
 
@@ -379,10 +481,18 @@ class Lead extends Model
             }
             HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
             //*crear contacto sendgrid
-            $send_grid = new Csendgrid();
-            $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name);
+            /* $send_grid = new Csendgrid();
+            $send_grid->createContact($lead->email, $lead->first_name, $lead->last_name); */
         } else {
-            unset($data['origin_id']);
+            //unset($data['origin_id']);
+            $financialProduct = FinancialProduct::find($data['financial_product_id']);
+            if ($financialProduct != null && $financialProduct && $financialProduct->type_product_id == 3) {
+                $data['selected_term'] = 1;
+                if ($data['sod_withdraw_amount'] != '') {
+                    $data['selected_loan'] = $data['sod_withdraw_amount'];
+                }
+            }
+            
             $lead = Lead::find($request->lead_id);
             $lead->fill($data);
             $lead->update();
@@ -427,6 +537,44 @@ class Lead extends Model
         
         CurrentFinancialProduct::saveEdit($lead->id, $request);
         
+        if ($isFullSave == true && $credits != null) {
+            foreach ($credits as $credit) {
+                $collection = Collection::find($credit);
+                $credit = Credit::find($collection->kc_credit_id);
+                $client = ClientPerson::find($credit->client_person_id);
+                $financial_product_id = $credit->applied_financial_product;
+                $importe = $collection->saldo_insoluto_real;
+                $validated_clabe = $client->bank_clabe == $client->validated_clabe ? 1 : 0;
+                $dataPayoff = array(
+                    'client_person_id' => $data['client_person_id'],
+                    'lead_id' => $request->lead_id,
+                    'kc_credit_id_payed_off' => $collection->kc_credit_id,
+                    'financial_product_id' => $financial_product_id,
+                    'bank_clabe' => $client->bank_clabe,
+                    'bank_clabe_valid' => $validated_clabe,
+                    'ammount' => $importe,
+                );
+                $existCredit = CreditPayOff::where([
+                    'client_person_id' => $data['client_person_id'],
+                    'lead_id' => $request->lead_id,
+                    'kc_credit_id_payed_off' => $collection->kc_credit_id,
+                    'financial_product_id' => $financial_product_id,
+                ])->count();
+                if ($existCredit == 0) {
+                    CreditPayOff::create($dataPayoff);
+                }
+            }
+        }
+
+        $msgTerm = 'Crédito seleccionado - Plazo seleccionado';
+        $selectedTerm = $lead->selected_term > 0  ? 1 : 0;
+        $textTerm = $lead->selected_term > 0 ? 'Seleccionado' : 'Sin seleccionar';
+        $selectedLoan = $lead->selected_loan > 0 ? 1 : 0;
+        $textLoan = $lead->selected_loan > 0 ? 'Seleccionado' : 'Sin seleccionar';
+        $msgLoan = 'Crédito seleccionado - Importe seleccionado';
+
+        LeadValidation::saveEdit($lead->id, $msgTerm, $selectedTerm, $textTerm);
+        LeadValidation::saveEdit($lead->id, $msgLoan, $selectedLoan, $textLoan);
         return $lead;
     }
 
@@ -479,8 +627,8 @@ class Lead extends Model
             $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
             (new $notification)->send($get_lead->id);
             //*crear contacto sendgrid
-            $send_grid = new Csendgrid();
-            $send_grid->createContact($get_lead->email, $get_lead->first_name, $get_lead->last_name);
+            /* $send_grid = new Csendgrid();
+            $send_grid->createContact($get_lead->email, $get_lead->first_name, $get_lead->last_name); */
             HistoryLog::move($get_lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         }
         $history = null;
@@ -573,6 +721,49 @@ class Lead extends Model
                 break;
         }
         return $channel;
+    }
+
+    public static function prepareLeadDataFromMC(array $mcData)
+    {
+        // Extraer IDs desde ManyChat
+        $clientPersonId = $mcData['client_person_id'] ?? null;
+        $productId = $mcData['product_id'] ?? null;
+        $selectedLoan = $mcData['selected_loan'] ?? 0;
+        $selectedTerm = $productId == 3 ? 1 : ($mcData['selected_term'] ?? null);
+        $appliedFinancialProduct = $mcData['financial_product_id'] ?? null;
+
+        // Obtener modelos desde BD
+        $clientPerson = ClientPerson::find($clientPersonId);
+        $financialProduct = FinancialProduct::find($appliedFinancialProduct);
+
+        // Calcular comisión
+        $sodCommissionAmount = $productId == 3 ? ($financialProduct->sod_commission_amount ?? 0) : 0;
+        $sodWithdrawAmount = $selectedLoan;
+        $sodTotalPayment = $sodWithdrawAmount + $sodCommissionAmount;
+
+        // Preparar arreglo de datos
+        $data = [
+            'agreement_id' => $clientPerson->agreement_id ?? null,
+            'product_id' => $productId,
+            'name' => $clientPerson->name ?? null,
+            'last_name' => $clientPerson->last_name ?? null,
+            'second_last_name' => $clientPerson->second_last_name ?? null,
+            'cellphone' => $clientPerson->cellphone ?? null,
+            'email' => $clientPerson->email ?? null,
+            'rfc' => $clientPerson->rfc ?? null,
+            'birth_date' => $clientPerson->birth_date ?? null,
+            'client_person_id' => $clientPersonId,
+            'sod_total_payment' => $sodTotalPayment,
+            'selected_term' => $selectedTerm,
+            'selected_loan' => $selectedLoan,
+            'sod_commision_amount' => $sodCommissionAmount,
+            'sod_withdraw_amount' => $sodWithdrawAmount,
+            'applied_financial_product' => $appliedFinancialProduct,
+            'importe_solicitado' => $selectedLoan,
+            'financial_product_id' => $appliedFinancialProduct,
+        ];
+
+        return $data;
     }
 
     public function agreementLead()

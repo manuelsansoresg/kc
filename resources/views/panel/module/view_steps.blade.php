@@ -20,17 +20,15 @@
                                                 <ul class="breadcrumb">
                                                     @if ($breadcrumb == null)
                                                         <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
-                                                        <li class="breadcrumb-item "><a href="/panel/kc-check-up">KC - Check
-                                                                up</a>
+                                                        <li class="breadcrumb-item "><a href="/panel/kc-check-up">KC - Check up</a></li>
                                                         <li class="breadcrumb-item active">Etapas</li>
                                                     @else
                                                         {!! $breadcrumb !!}
                                                     @endif
-
                                                 </ul>
                                             </nav>
                                         </div>
-                                        <div class=" d-block d-md-none">
+                                        <div class="d-block d-md-none">
                                             <div class="col-12">
                                                 <span class="text-primary overline-title small">
                                                     @if ($product != null)
@@ -46,7 +44,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                     
+
                                         <div class="col-12">
                                             <span class="text-primary overline-title small">
                                                 @if ($credit != null)
@@ -67,20 +65,16 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
-
                     </div>
                     <div class="nk-block nk-block-lg">
                         <div class="container">
                             <div class="row ">
-                                {{-- nuevo diseño --}}
                                 @php
-                                    $templateStrategy = TemplateValues::STRATEGY['controlDesk'];
-                                    $totalPercent = (new $templateStrategy)->getPercent($history);
-                                    $previousPercent = 100; // Inicializamos en 100 para permitir que la primera etapa funcione
-                                @endphp
+                                $templateStrategy = TemplateValues::STRATEGY[$model];
+                                $totalPercent = (new $templateStrategy)->getPercent($history);
+                                $previousPercent = 100; // Iniciamos con 100
+                            @endphp
 
                             @if ($list_steps != null)
                                 @foreach ($list_steps as $key => $list_step)
@@ -91,19 +85,15 @@
                                     <div class="col-12 col-md-8">
                                         <div id="accordion" class="accordion mt-2">
                                             <div class="accordion-item">
-                                                <a href="#" class="accordion-head"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#accordion-item-documentos-{{ $key }}">
+                                                <a href="#" class="accordion-head" data-bs-toggle="collapse" data-bs-target="#accordion-item-documentos-{{ $key }}">
                                                     <div class="row text-secondary">
-
                                                         <div class="col-12 col-md-2 text-primary fw-bold fs-6 d-flex align-items-center">
-                                                            {{ $nameStep }} - {{ $percent }}
+                                                            {{ $nameStep }} 
                                                         </div>
                                                         <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps">
                                                             <div class="project-list-progress">
                                                                 <div class="progress progress-pill progress-md bg-light">
-                                                                    <div class="progress-bar"
-                                                                        style="width: {{ $percent }}%;"></div>
+                                                                    <div class="progress-bar" style="width: {{ $percent }}%;"></div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -111,33 +101,31 @@
                                                     </div>
                                                     <span class="accordion-icon"></span>
                                                 </a>
-                                                <div class="accordion-body collapse show"
-                                                    id="accordion-item-documentos-{{ $key }}"
-                                                    data-bs-parent="#accordion">
+                                                <div class="accordion-body collapse show" id="accordion-item-documentos-{{ $key }}" data-bs-parent="#accordion">
                                                     <div class="accordion-inner">
+                                                        @php
+                                                            $indice = $key + 1;
+                                                            $list_actions = $indice > 0 ? (new $actionStrategy())->listActionByStep($history_id, $indice) : null;
+                                                        @endphp
                                                         <table class="table table-borderless" style="width: 60%;">
-                                                            @php
-                                                                $indice = $key + 1;
-                                                                $list_actions = $indice > 0 ? (new $actionStrategy())->listActionByStep($history_id, $indice) : null;
-                                                            @endphp
+                                                            
+
                                                             @if ($list_actions != null)
                                                                 @foreach ($list_actions as $list_action)
-                                                                    @if ($previousPercent == 100 || $key == 0) <!-- Validamos condiciones -->
+                                                                
+                                                                    @if (($key == 0 && $percent != 100) || $previousPercent == 100)
                                                                         <tr>
-                                                                            <td>{!! $list_action['name'] !!}</td>
+                                                                            <td>{!! $list_action['name'] !!} </td>
                                                                             <td class="align-bottom">{!! $list_action['statusBadge'] !!}</td>
                                                                             <td>
                                                                                 @if ($list_action['status'] == 'En curso')
                                                                                     <a href="{{ $list_action['link'] }}" class="btn btn-outline-primary btn-sm">Abrir</a>
+                                                                                    
                                                                                 @endif
-                                                                            </td>
-                                                                        </tr>
-                                                                        @else
-                                                                        <tr>
-                                                                            <td>{!! $list_action['name'] !!}</td>
-                                                                            <td class="align-bottom"></td>
-                                                                            <td>
-                                                                               
+                                                                                @if (($list_action['name'] == '1- Capturar Anverso INE' || $list_action['name'] == '2- Capturar Reverso INE') && ($list_action['status'] == 'Concluido') && $percent < 100  )
+                                                                                <a href="{{ $list_action['link'] }}" class="btn btn-outline-primary btn-sm">Revisar</a>
+                                                                                @endif
+                                                                                    <a href="{{ $list_action['link'] }}" class="btn btn-outline-primary btn-sm">Abrir</a>
                                                                             </td>
                                                                         </tr>
                                                                     @endif
@@ -150,42 +138,61 @@
                                         </div>
                                     </div>
                                     @php
-                                        $previousPercent = $percent; // Actualizamos el porcentaje de la etapa anterior
+                                        $previousPercent = $percent;
                                     @endphp
                                 @endforeach
+                            @endif
 
-
-                                    @if ($totalPercent == 100 && $creditsControldesk == true)
-                                        <div class="col-8 mt-4 text-end">
-                                            <a onclick="moveCrm({{$credit->id}}, {{ $m_history::KC_DELIVERY }}, {{ $m_history::KC_CONTROL_DESK }}, '/panel/kc-control-desk')" class="btn btn-outline-success">Continuar</a>
-                                        </div>
-                                    @else
-                                    <div class="col-8 mt-4 text-end">
-                                        <a onclick="openModalValidateControlDesk({{ $credit->id }})" class="btn btn-outline-secondary">Continuar</a>
-                                    </div>
-                                    @endif
-                                @endif
-                               
-                                {{--/ nuevo diseño --}}
-                                <div class="col-12 col-md-10 mt-5 d-none">
-                                    <div class="card card-bordered card-preview">
-                                        <div class="card-inner">
-                                            <div class="row text-secondary d-none d-md-flex">
-                                                <div class="d-none d-md-flex" id="content-header-steps">
-                                                    <div class="col-12 col-md-1 fw-bold">#</div>
-                                                    <div class="col-12 col-md-3 fw-bold">Etapa</div>
-                                                    <div class="col-12 col-md-3 fw-bold">Estatus</div>
-                                                    <div class="col-12 col-md-3 fw-bold">Progreso</div>
-                                                    <div class="col-12 col-md-1 fw-bold"></div>
-                                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if ($model == 'controlDesk')
+                        @php
+                            $isFinish = (new $templateStrategy)->isFinish($history);
+                        @endphp
+                        @if ($totalPercent == 100)
+                            
+                            @if ($isFinish == true)
+                                
+                                <div class="nk-block nk-block-lg">
+                                    <div class="container">
+                                        <div class="row ">
+                                            <div class="col-12 col-md-8 text-end">
+                                                <a onclick="finishControlDesk({{ $history->id }})" class="btn btn-outline-success">Continuar</a>
                                             </div>
-                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                @else
+                                <div class="nk-block nk-block-lg">
+                                    <div class="container">
+                                        <div class="row ">
+                                            <div class="col-12 col-md-8 text-end">
+                                                <a onclick="openModalValidateControlDesk({{  $history->id_rel }})" class="btn btn-outline-secondary">Continuar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
+                    @endif
+                    @if ($model == 'delivery')
+                        @php
+                            $isFinish = (new $templateStrategy)->isFinish($history);
+                        @endphp
+                        @if ($isFinish == true)
+                            
+                            <div class="nk-block nk-block-lg">
+                                <div class="container">
+                                    <div class="row ">
+                                        <div class="col-12 col-md-8 text-end">
+                                            <a onclick="sendCreditActive({{ $history->id }})" class="btn btn-outline-success">Finalizar</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        @endif
+                    @endif
                 </div>
             </div>
         </div>
@@ -193,23 +200,23 @@
     <input type="hidden" id="history_id" value="{{ $history_id }}">
     <input type="hidden" id="model" value="{{ $model }}">
     <input type="hidden" id="refresh-dt" value="dt-lead">
+  
 
     <div class="modal fade" id="modalValidateControlDesk" tabindex="-1" aria-labelledby="modalValidateControlDeskLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="modal-title" id="modalValidateControlDeskLabel">No puedes continuar</h5>
+                    <p class="text-muted">Revisa las validaciones</p>
+                    <div id="content-validate-control-desk"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <h5 class="modal-title" id="modalValidateControlDeskLabel">No puedes continuar</h5>
-              <p class="text-muted">Revisa las validaciónes</p>
-              <div id="content-validate-control-desk"></div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
 @endsection

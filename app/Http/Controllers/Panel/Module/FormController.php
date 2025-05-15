@@ -4,11 +4,19 @@ namespace App\Http\Controllers\Panel\Module;
 
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
+use App\Models\CreditPayOff;
 use App\Models\CreditReference;
+use App\Models\CreditTag;
+use App\Models\File;
+use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
+use App\Models\Investor;
+use App\Models\Product;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FormController extends Controller
 {
@@ -19,6 +27,7 @@ class FormController extends Controller
      */
     public function index($model, $history_id)
     {
+        
         $actionStrategy   = TemplateValues::STRATEGY[$model];
         $history          = HistoryLog::find($history_id);
         $credit           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $history->historyCredit : null;
@@ -26,16 +35,65 @@ class FormController extends Controller
         $form             = (new $actionStrategy)->configForm($credit_id, $history_id);
         $breadcrumb       = (new $actionStrategy)->breadcrumb($history);
         $title            = (new $actionStrategy)->setTitle($history);
-        
         $client           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditClientPerson : null;
         $product          = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->creditProduct : null;
         $id_rel           = $model != 'wallet' && $model != 'kc-down-wallet'  && $history != null ? $credit->id : null;
+        $path = File::PATH;
+        $tags = null;
+        $files = array();
+        $getAsesor = null;
+        $periodicity = null;
+        $lastComment = null;
+        $origin = null;
+        $financialProduct = null;
+        $tipoCredito = null;
+        $clienteInversionista = null;
+        $getCompracartera = null;
         
-
-        if (($model == 'wallet' || $model == 'kc-down-wallet') && $history_id != 'null') {
-            $id_rel = $history->id_rel;
+        if ($credit != null) {
+            $financialProduct = $product = FinancialProduct::find($credit->applied_financial_product);
+            $getAsesor = User::find($credit->asesor_id);
+            
+            $files = File::getByIdRelandModel($credit->id, [HistoryLog::KC_CHECK_UP, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_SWAP, HistoryLog::KC_DELIVERY]);
+            
+            $tipoCredito = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
+            $lastComment = HistoryLog::select('comment')
+                            ->where([
+                            'id_rel'=> $credit->id,
+                            'status' => 1
+                        ])->where('comment', '!=', null)->orderBy('id', 'DESC')->first();
+            $periodicity = isset(config('financial_enums.periodicity_products')[$credit->applied_periodicity]) && $credit->applied_periodicity != null ? config('financial_enums.periodicity_products')[$credit->applied_periodicity] : null;
+            $origin = isset(config('enums.origin')[$credit->origin_id]) ? config('enums.origin')[$credit->origin_id] : null;
+            $tags = CreditTag::select('tags.name')
+                    ->join('tags', 'tags.id', '=', 'credit_tag.tag_id')
+                    ->where('credit_id', $credit->id)
+                    ->pluck('tags.name')
+                    ->implode(',');
+    
+                if ($tags === '') {
+                    $tags = null;
+                }
+                
+            if (($model == 'wallet' || $model == 'kc-down-wallet') && $history_id != 'null') {
+                $id_rel = $history->id_rel;
+            }
+            $getCompracartera = CreditPayOff::selectRaw('SUM(ammount) as ammount')
+            ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
+            ->where([
+                'new_kc_credit_id' => $credit->id,
+                'is_kc_lender' => 0
+            ])->first();
+            
         }
-        return view('panel.module.checkup.content_form', compact('form', 'id_rel', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
+       
+
+        
+        if ($model == 'kc-down-wallet') {
+            $clienteInversionista = User::find(Auth::user()->id);
+        }
+        
+        
+        return view('panel.module.checkup.content_form', compact('form', 'getCompracartera', 'clienteInversionista', 'model', 'path', 'id_rel', 'tags', 'files', 'getAsesor', 'periodicity', 'lastComment', 'origin', 'financialProduct', 'tipoCredito', 'title', 'product', 'credit', 'client', 'history', 'breadcrumb'));
     }
 
    

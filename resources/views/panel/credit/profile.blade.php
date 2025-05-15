@@ -38,9 +38,30 @@
     $status = array(
         $m_history_log::KC_CHECK_UP,
         $m_history_log::KC_CHECK_UP_DEBT_REDUCTION,
-        $m_history_log::KC_SWAP,
+        $m_history_log::CREDIT_ARCHIVE,
+        $m_history_log::CREDIT_CANCELED,
+        $m_history_log::CREDIT_REJECTED,
+        $m_history_log::CREDIT_IN_PROGRESS,
         $m_history_log::KC_CONTROL_DESK,
+        $m_history_log::KC_CONTROL_DESK_TASK1_STEP1,
+        $m_history_log::KC_CONTROL_DESK_TASK2_STEP1,
+        $m_history_log::KC_CONTROL_DESK_TASK3_STEP1,
+        $m_history_log::KC_CONTROL_DESK_TASK2_STEP2,
+        $m_history_log::KC_CONTROL_DESK_TASK3_STEP2,
         $m_history_log::KC_DELIVERY,
+        $m_history_log::CREDITS_PAID,
+        $m_history_log::CREDITS_DELIVERED,
+        $m_history_log::KC_CONTROL_DESK_DYNAMIC_TASK_STEP2,
+        $m_history_log::KC_CONTROL_DESK_TASK2_STEP3,
+        $m_history_log::KC_CONTROL_DESK_TASK3_STEP3,
+        $m_history_log::KC_CONTROL_DESK_TASK4_STEP3,
+        $m_history_log::KC_CONTROL_DESK_TASK5_STEP3,
+        $m_history_log::KC_CONTROL_DESK_DYNAMIC_TASK_STEP3,
+        $m_history_log::KC_CONTROL_DESK_TASK1_STEP4,
+        $m_history_log::KC_CONTROL_DESK_TASK2_STEP4,
+        $m_history_log::KC_DELIVERY_TASK1_STEP1,
+        $m_history_log::KC_DELIVERY__DYNAMIC_TASK_STEP2,
+        $m_history_log::KC_DELIVERY_TASK2_STEP2,
     );
     $histories = $m_history_log->getByStatus($status, $credit->id, null);
     $leyend_status = $m_history_log::$label_status;
@@ -103,9 +124,11 @@
                                 <div class="card-inner card-inner-lg">
                                     <div class="nk-block">
                                         <div class="nk-data data-list">
-
+                                            @php
+                                                $tab = isset($_GET['tab'])?$_GET['tab'] : null;
+                                            @endphp
                                             <ul class="nav nav-tabs">
-                                                <li class="nav-item"> <a class="nav-link active" data-bs-toggle="tab"
+                                                <li class="nav-item"> <a class="nav-link {{ $tab == null ? 'active' : null}}" data-bs-toggle="tab"
                                                         href="#tabGeneral">General</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabHistorial">Historial</a> </li>
@@ -122,8 +145,8 @@
 
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#survey">Encuesta</a> </li>
-                                                
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                               
+                                                <li class="nav-item"> <a class="nav-link {{ $tab == 'pagos'? 'active' : null}}" data-bs-toggle="tab"
                                                 href="#pagos">Pagos</a> </li>
                                                 
                                                         <li class="nav-item nav-item-trigger d-xxl-none">
@@ -136,7 +159,7 @@
 
                                             </ul>
                                             <div class="tab-content">
-                                                <div class="tab-pane active" id="tabGeneral">
+                                                <div class="tab-pane {{ $tab == null ? 'active' : null}}" id="tabGeneral">
                                                     <div class="card-inner">
                                                         <div class="nk-block">
                                                             <div class="nk-block-head nk-block-head-line">
@@ -552,15 +575,19 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            @php
+                                                                $nombre = null;
+                                                            @endphp
                                                             @if ($credit->sod_agreement != null)
                                                                 @php
                                                                     $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
                                                                 @endphp
+                                                                <tr>
+                                                                    <td><a href="{{ asset('firma_contratos/'.$nombre) }}" >{{ $nombre }}</a></td>
+                                                                    <td><a href="{{ asset('firma_contratos/'.$nombre) }}" download>Descargar</a></td>
+                                                                </tr>
                                                             @endif
-                                                            <tr>
-                                                                <td><a href="{{ asset('firma_contratos/'.$nombre) }}" >{{ $nombre }}</a></td>
-                                                                <td><a href="{{ asset('firma_contratos/'.$nombre) }}" download>Descargar</a></td>
-                                                            </tr>
+                                                            
                                                             @foreach ($files as $file)
                                                             <tr class="tb-tnx-item">
                                                                 <td class="tb-tnx-id">
@@ -686,7 +713,7 @@
                                                         </div><!-- .profile-ud-list -->
                                                     </div><!-- .nk-block -->
                                                 </div>
-                                                <div class="tab-pane" id="pagos">
+                                                <div class="tab-pane {{ $tab == 'pagos' ? 'active' : null}}" id="pagos">
                                                     <div class="col-12">
                                                         <table class="table" data-show-columns="true">
                                                             <thead>
@@ -719,17 +746,17 @@
                                                                         <tr>
                                                                             <td> {{ $payment->numero_de_pago }} </td>
                                                                             <td>{{ $payment->fecha_pago != '' ? date('d-m-Y', strtotime($payment->fecha_pago)) : null }}</td>
-                                                                            <td> {{ format_price($payment->pagado * $investorsCredit->percentage) }} </td>
-                                                                            <td> {{ format_price($payment->abono * $investorsCredit->percentage) }} </td>
-                                                                            <td> {{ format_price($payment->interes * $investorsCredit->percentage) }} </td>
-                                                                            <td> {{ format_price($payment->iva * $investorsCredit->percentage) }} </td>
+                                                                            <td> {{ format_price(($payment->pagado * $investorsCredit->percentage) / 100) }} </td>
+                                                                            <td> {{ format_price(($payment->abono * $investorsCredit->percentag) / 100) }} </td>
+                                                                            <td> {{ format_price(($payment->interes * $investorsCredit->percentage) / 100) }} </td>
+                                                                            <td> {{ format_price(($payment->iva * $investorsCredit->percentage) / 100) }} </td>
                                                                             
                                                                             <td> {{ isset(config('enums.estatus_statement')[$payment->estatus_pago]) ? config('enums.estatus_statement')[$payment->estatus_pago] : null }}
                                                                             </td>
                                                                             <td> 
                                                                                 {{ $fecha_retencion }}
                                                                             </td>
-                                                                            <td> {{ format_price($payment->collection_commission_amount * $investorsCredit->percentage) }} </td>
+                                                                            <td> {{ format_price(($payment->collection_commission_amount * $investorsCredit->percentage)/ 100) }} </td>
                                                                         </tr>
                                                                     @endforeach
                                                                 @endif

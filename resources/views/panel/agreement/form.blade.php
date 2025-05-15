@@ -41,6 +41,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label" for="frm-product-name">Razón social</label>
+                                            <div class="form-control-wrap">
+                                              
+                                                <input type="text" name="data[razon_social]" id="razon_social" class="form-control">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="form-label">Descripcion</label>
@@ -99,7 +109,7 @@
                                                     id="sod_schedule_id" >
                                                     <option value="">Seleccione una opción</option>
                                                     @foreach ($sodNames as $sodName)
-                                                        <option value="{{ $sodName->id }}"> {{ $sodName->name }} </option>
+                                                        <option value="{{ $sodName->id }}" {{ $agreement->sod_schedule_id == $sodName->id? 'selected' : null  }}> {{ $sodName->name }} </option>
                                                     @endforeach
                                                 </select>
                                             </div>

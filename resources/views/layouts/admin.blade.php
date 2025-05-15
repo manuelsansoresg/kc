@@ -14,7 +14,7 @@
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description"
-        content="Tú mejor decisión. Fácil y rápido.">
+        content="Tu mejor decisión. Fácil y rápido.">
     <!-- Fav Icon  -->
     <link href="{{ asset('images/favicon.ico') }}" rel="icon">
     <!-- Page Title  -->
@@ -248,20 +248,20 @@
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
-                                <li class="nk-menu-item">
+                               {{--  <li class="nk-menu-item">
                                     <a href="/panel/kc-check-up" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check"></em></span>
                                         <span class="nk-menu-text">KC - Check up</span>
                                     </a>
-                                </li><!-- .nk-menu-item -->
+                                </li><!-- .nk-menu-item --> --}}
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
-                                <li class="nk-menu-item">
+                                {{-- <li class="nk-menu-item">
                                     <a href="/panel/kc-swap" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-swap-alt"></em></span>
                                         <span class="nk-menu-text">KC - Swap</span>
                                     </a>
-                                </li><!-- .nk-menu-item -->
+                                </li><!-- .nk-menu-item --> --}}
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item">
@@ -289,12 +289,12 @@
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
                                 @hasrole('Administrador|Asesor|Cliente financiera')
-                                <li class="nk-menu-item">
+                                {{-- <li class="nk-menu-item">
                                     <a href="/panel/kc-payments" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
                                         <span class="nk-menu-text">KC - Payments</span>
                                     </a>
-                                </li><!-- .nk-menu-item -->
+                                </li><!-- .nk-menu-item --> --}}
                                 @endhasrole
                                 {{-- modulo KC - WALLET --}}
                                 @hasrole('Administrador|Asesor|Cliente financiera')
@@ -303,59 +303,69 @@
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
                                 @hasrole('Administrador|Asesor|Cliente financiera|Cliente inversionista')
-                                <li class="nk-menu-item">
-                                    @php
-                                        $investor = $Minvestor::where('user_id',  Auth::user()->id)->first();
-                                        $investorId = $investor!= null ? $investor->id : null;
-                                    @endphp
-                                    @if ($investorId != null)
-                                        <a href="/panel/inversionista/{{ $investorId }}" class="nk-menu-link">
-                                            <span class="nk-menu-text"><em class="icon ni ni-invest"></em> Resumen</span>
+                                @can('Administración')
+                                
+                                    <li class="nk-menu-item">
+                                        @php
+                                            $investor = $Minvestor::where('user_id',  Auth::user()->id)->first();
+                                            $investorId = $investor!= null ? $investor->id : null;
+                                        @endphp
+                                        @if ($investorId != null)
+                                            <a href="/panel/inversionista/{{ $investorId }}" class="nk-menu-link">
+                                                <span class="nk-menu-text"><em class="icon ni ni-invest"></em> Resumen</span>
+                                            </a>
+                                        @else
+                                            <a href="#" class="nk-menu-link">
+                                                <span class="nk-menu-text"><em class="icon ni ni-invest"></em> Resumen</span>
+                                            </a>
+                                        @endif
+                                        
+                                    </li><!-- .nk-menu-item -->
+                                    <li class="nk-menu-item">
+                                        <a href="/panel/mis-prestamos" class="nk-menu-link">
+                                            {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                            <span class="nk-menu-text"><em class="icon ni ni-coin-alt"></em> Mis préstamos</span>
                                         </a>
-                                    @else
-                                        <a href="#" class="nk-menu-link">
-                                            <span class="nk-menu-text"><em class="icon ni ni-invest"></em> Resumen</span>
+                                    </li><!-- .nk-menu-item -->
+                                    <li class="nk-menu-item">
+                                        <a href="/panel/kc-wallet" class="nk-menu-link">
+                                            {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                            <span class="nk-menu-text"> <em class="icon ni ni-download"></em> Agregar fondos</span>
                                         </a>
+                                    </li><!-- .nk-menu-item -->
+                                    <li class="nk-menu-item">
+                                        <a href="/panel/kc-down-wallet" class="nk-menu-link">
+                                            {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                            <span class="nk-menu-text"><em class="icon ni ni-upload"></em> Retirar fondos</span>
+                                        </a>
+                                    </li><!-- .nk-menu-item -->
+                                    
+                                    {{-- <li class="nk-menu-item">
+                                        <a href="/panel/kc-wallet/list/history" class="nk-menu-link">
+                                            <span class="nk-menu-text"><em class="icon ni ni-history"></em> Historial de movimientos</span>
+                                        </a>
+                                    </li> --}}
+                                    <li class="nk-menu-item">
+                                        <a href="/panel/ayuda" class="nk-menu-link">
+                                            {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                            <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Ayuda</span>
+                                        </a>
+                                    </li><!-- .nk-menu-item -->
+                                    @endcan
+                                    @endhasrole
+                                    @hasrole('Cliente inversionista')
+                                    @if (auth()->user()->can('Administración') || auth()->user()->can('RRHH'))
+                                    <li class="nk-menu-item">
+                                    <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text"> <i class="fa-solid fa-users"></i> Mis colaboradores</span>
+                                    </a>
+                                    </li><!-- .nk-menu-item -->
                                     @endif
                                     
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="/panel/kc-wallet/mis-prestamos/show" class="nk-menu-link">
-                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text"><em class="icon ni ni-coin-alt"></em> Mis préstamos</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="/panel/kc-wallet" class="nk-menu-link">
-                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text"> <em class="icon ni ni-download"></em> Agregar fondos</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                <li class="nk-menu-item">
-                                    <a href="/panel/kc-down-wallet" class="nk-menu-link">
-                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text"><em class="icon ni ni-upload"></em> Retirar fondos</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
+                                    @endhasrole
                                 
-                                {{-- <li class="nk-menu-item">
-                                    <a href="/panel/kc-wallet/list/history" class="nk-menu-link">
-                                        <span class="nk-menu-text"><em class="icon ni ni-history"></em> Historial de movimientos</span>
-                                    </a>
-                                </li> --}}
-                                <li class="nk-menu-item">
-                                    <a href="/panel/ayuda" class="nk-menu-link">
-                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Ayuda</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                @hasrole('Cliente inversionista')
-                                <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
-                                    {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                    <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Mis colaboradores</span>
-                                </a>
-                                @endhasrole
-                                @endhasrole
+                                
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-heading">
                                     <h6 class="overline-title text-primary-alt">CRÉDITOS</h6>

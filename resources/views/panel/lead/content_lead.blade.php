@@ -1,10 +1,15 @@
+@inject('m_financial_product', 'App\Models\FinancialProduct')
 <div class="user-card">
     <div class="user-info">
         <span class="tb-lead">
-            @if ($lead->go_ahead == 0)
-                <span class="text-danger">{{ $lead->name }} {{ $lead->last_name }} </span>
+            @php
+                $getFinancial = $m_financial_product::find($lead->financial_product_id);
+                
+            @endphp
+            @if ($validate == false )
+                <span class="text-danger">{{ $lead->name }} {{ $lead->last_name }}  </span>
             @else
-                <span class="text-success">{{ $lead->name }} {{ $lead->last_name }} </span>
+                <span class="text-success">{{ $lead->name }} {{ $lead->last_name }}  </span>
             @endif
             
             

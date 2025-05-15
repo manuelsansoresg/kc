@@ -103,10 +103,10 @@
 							<a class="nav-link smooth-anchor" href="#contact">Contacto</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link smooth-anchor" href="#faq">Ayuda</a>
+							<a class="nav-link smooth-anchor" href="#contact">Ayuda</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link smooth-anchor" href="https://app.kaaxclub.com/">App</a>
+							<a class="btn btn-bordered-white swap-icon btn-xs btn-app" href="https://app.kaaxclub.com/" target="_blank">App</a>
 						</li>
 						
 					</ul>
@@ -135,8 +135,10 @@
 						<!-- Hero Content -->
 						<div class="hero-content pb-5">
 							<h1 class="text-white title-header">Tu mejor decisión. Fácil y rápido.</h1>
-							<p class="sub-heading text-white my-4">Con KaaxClub puedes refinanciar tus deudas, adelantar tu salario trabajado y acceder a un crédito justo, de manera fácil, rápida y sin complicaciones.</p>
+							<p class="sub-heading text-white my-4">Con KaaxClub puedes refinanciar tus deudas, adelantar tu salario trabajado y acceder a un crédito justo de forma fácil, rápida y sin complicaciones.</p>
 							<a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%un%servicio%de%KaaxClub" class="btn btn-bordered-white swap-icon">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
+                            <br><br>
+                            <small class="small  text-white mt-3">KaaxClub es un servicio exclusivo para colaboradores de empresas afiliadas</small>
 						</div>
 					</div>
 					<div class="col-12 col-md-5 col-lg-5 mt-4 mt-md-0 text-center">
@@ -183,8 +185,9 @@
 					<div class="col-12 col-md-10 col-lg-7">
 						<!-- Intro -->
 						<div class="intro text-center">
-							<h2 class="title  layout-2 mt-0">Soluciones financieras reales para ti</h2>
-							<p class="">KaaxClub te ofrece soluciones rápidas, justas y accesibles para mejorar tu bienestar financiero.
+							<h2 class="title  layout-2 mt-0">Soluciones financieras reales</h2>
+							<p class="">En KaaxClub, creamos soluciones financieras diseñadas para mejorar tu bienestar financiero:
+
                             </p>
 						</div>
 					</div>
@@ -226,7 +229,7 @@
             <div class="col-12 col-lg-6">
                 <div class="content">
                     <h2 class="mt-0">El trámite más fácil y rápido</h2>
-                    <p>Atención personalizada durante el proceso y durante toda la vida del crédito
+                    <p>Atención personalizada desde el inicio de tu solicitud hasta el final de tu crédito o trámite.
                     </p>
 
                     <ul class="list-group list-group-flush">
@@ -234,17 +237,18 @@
                             <i class="bi bi-1-circle format-number"></i>
                             <span>Inicia la solicitud a través de Whatsapp o la App. <br></span>
                         </li>
-                        <li class="list-group-item d-flex align-items-center gap-2 border-0 p-0 mt-3">
-                            <i class="bi bi-2-circle format-number"></i>
-                            <span>Elige el servicio que más te convenga. <br></span>
-                        </li>
+                        
                         <li class="list-group-item d-flex align-items-center gap-2 border-0 p-0 mt-3">
                             <i class="bi bi-3-circle format-number"></i>
-                            <span>Recibe el dinero en tu cuenta de nómina.</span>
+                            <span>Elige el servicio que mejor se adapte a tus necesidades.</span>
                         </li>
                         <li class="list-group-item d-flex align-items-center gap-2 border-0 p-0 mt-3">
                             <i class="bi bi-4-circle format-number"></i>
-                            <span>Paga automáticamente vía descuento de nómina.</span>
+                            <span>Recibe tu dinero directamente en tu cuenta de nómina.</span>
+                        </li>
+                        <li class="list-group-item d-flex align-items-center gap-2 border-0 p-0 mt-3">
+                            <i class="bi bi-4-circle format-number"></i>
+                            <span>Realiza tus pagos automáticamente vía descuento de nómina.</span>
                         </li>
                     </ul>
                     
@@ -311,7 +315,7 @@
                         </li>
                     </ul>
 
-                    <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%un%servicio%de%KaaxClub" class="btn btn-bordered swap-icon mt-4">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
+                    <a href="https://wa.me/5219999208020?text=Hola%20KaaxClub " class="btn btn-bordered swap-icon mt-4">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
                 </div>
             </div>
 
@@ -628,7 +632,7 @@
                 <div class="col-12 col-sm-6 col-lg-3 item">
                     <!-- Footer Items -->
                     <div class="footer-items">
-                        <a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%un%servicio%de%KaaxClub" class="btn btn-bordered swap-icon mt-4">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
+                        <a href="https://wa.me/5219999208020?text=Hola%20KaaxClub " class="btn btn-bordered swap-icon mt-4">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
 
                     </div>
                 </div>

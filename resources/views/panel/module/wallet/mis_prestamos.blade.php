@@ -20,6 +20,7 @@
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item ">KC - Wallet</li>
+                                            <li class="breadcrumb-item active">Mis prestamos</li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -34,12 +35,12 @@
                                 <tr>
                                     <th>Crédito</th>
                                     <th>Estatus</th>
-                                    <th>Importe Prestado</th>
-                                    <th>Pagado</th>
-                                    <th>Capital pendiente</th>
+                                    <th data-priority="1">Prestado</th>
+                                    <th>Total cobrado</th>
                                     <th>Capital recuperado</th>
-                                    <th>Interés proyectado</th>
                                     <th>Interés cobrado</th>
+                                    <th>Capital pendiente</th>
+                                    <th>Interés proyectado</th>
                                     <th>Comisión KC</th>
                                     <th></th>
                                 </tr>

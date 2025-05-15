@@ -89,7 +89,7 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Fecha de nacimiento</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="date" class="form-control" name="data[birth_date]" id="lead-birth_date" onchange="createRfc()">
+                                                                    <input type="date" class="form-control" name="data[birth_date]" id="lead-birth_date" onblur="createRfc()">
                                                                     <label id="birth_date-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
@@ -174,7 +174,6 @@
                                                                 <hr class="preview-hr">
                                                             </div>
                                                             <div class="row">
-
                                                                 <div class="col-md-6">
                                                                     <div class="form-group">
                                                                         <label class="form-label">Producto financiero</label>
@@ -183,6 +182,7 @@
                                                                             <select class="form-select js-select2" name="data[financial_product_id]" id="financial_product_id"  data-search="on" onchange="validateSoad()">
                                                                             
                                                                             </select>
+                                                                            <label id="loan_available-msg" class=""></label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -197,82 +197,78 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div id="content-product-select" style="display: none">
+                                                        </div>
 
-                                                                <span class="preview-title-lg overline-title mt-5">Producto Preautorizado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
-                                                                <div class="col-12 mt-n4">
-                                                                    <hr class="preview-hr">
-                                                                    <div id="content-error-producto-preautorizado" style="display: none">
-                                                                        <span class="text-danger">No se puede realizar ningún trámite, revisa las validaciones.</span>
-                                                                    </div>
-                                                                    <div class="row" style="display: none" id="content-refinanciado">
-                                                                        <div class="col-md-6 mt-3">
-                                                                            <div class="form-group">
-                                                                                <label class="form-label">Monto máximo</label>
-                                                                                
-                                                                                <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="monto-maximo"  disabled>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 mt-3">
-                                                                            <div class="form-group">
-                                                                                <label class="form-label">Plazo máximo</label>
-                                                                                
-                                                                                <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="plazo-maximo"  disabled>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 mt-3">
-                                                                            <div class="form-group">
-                                                                                <label class="form-label">Periodicidad</label>
-                                                                                
-                                                                                <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="periodicidad"  disabled>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6 mt-3">
-                                                                            <div class="form-group">
-                                                                                <label class="form-label">Pago periodico</label>
-                                                                                
-                                                                                <div class="form-control-wrap">
-                                                                                    <input type="text" class="form-control" id="pago-periodico"  disabled>
-                                                                                </div>
+                                                        <div id="content-product-select" style="display: none">
+                                                            <span class="preview-title-lg overline-title mt-5">Producto Preautorizado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
+                                                            <div class="col-12 mt-n4">
+                                                                <hr class="preview-hr">
+                                                                <div id="content-error-producto-preautorizado" style="display: none">
+                                                                    <span class="text-danger">No se puede realizar ningún trámite, revisa las validaciones.</span>
+                                                                </div>
+                                                                <div class="row" style="display: none" id="content-refinanciado">
+                                                                    <div class="col-md-6 mt-3">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Monto máximo</label>
+                                                                            <div class="form-control-wrap">
+                                                                                <input type="text" class="form-control" id="monto-maximo" name="data[monto_maximo]"  readonly>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    
-                                                                    <div id="content-product"></div>
-                                                                    <div class="row" id="producto-deseado" style="display: none">
-                                                                        <div class="col-12 mt-5">
-                                                                            <span class="preview-title-lg overline-title">Producto deseado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
-                                                                            <div class="col-12 mt-1">
-                                                                                <label for="customRange3" class="form-label">¿Cuanto deseas retirar?</label>
-                                                                                <input type="range" class="form-range" min="0" max="5" step="100" id="slider">
-                                                                            </div>
-                                                                            <div class="row">
-                                                                                <div class="col-12 col-md-6">$<span id="valor-minimo"></span> </div>
-                                                                                <div class="col-12 col-md-6 text-start text-md-end">$<span id="valor-maximo"></span></div>
-                                                                            </div>
-                                                                            <div class="row mt-4">
-                                                                                <div class="col-12">
-                                                                                    <p class="h6">RESUMEN:</p>
-                                                                                    <p>Monto a retirar : <span id="valor-slider" class="fw-bold">$15,000</span> <br>
-                                                                                    Comisión : <span id="valor-comision" class="fw-bold">$46.40</span> <br>
-                                                                                    Total a pagar : <span id="valor-total" class="fw-bold">$1,546</span> <br>
-                                                                                    Banco : <span id="valor-banco" class="fw-bold"></span> <br>
-                                                                                    Cuenta : <span id="valor-cuenta" class="fw-bold">*********12</span> <br>
-                                                                                </div>
+                                                                    <div class="col-md-6 mt-3">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Plazo máximo</label>
+                                                                            <div class="form-control-wrap">
+                                                                                <input type="text" class="form-control" name="data[plazo_maximo]" id="plazo-maximo"  readonly>
                                                                             </div>
                                                                         </div>
-                                                                   </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 mt-3">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Periodicidad</label>
+                                                                            <div class="form-control-wrap">
+                                                                                <input type="text" class="form-control" id="periodicidad"  readonly>
+                                                                                <input type="hidden" name="data[periodicity]" id="periodicidad-hidden">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 mt-3">
+                                                                        <div class="form-group">
+                                                                            <label class="form-label">Pago periodico</label>
+                                                                            <div class="form-control-wrap">
+                                                                                <input type="text" class="form-control" id="pago-periodico" name="data[pago_maximo]"  readonly>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                          
                                                         </div>
-                                                        
+
+                                                        <div id="content-product"></div>
+                                                        <div class="row" id="producto-deseado" style="display: none">
+                                                            <div class="col-12 mt-5">
+                                                                <span class="preview-title-lg overline-title">Producto deseado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
+                                                                <div class="col-12 mt-1">
+                                                                    <label for="customRange3" class="form-label">¿Cuanto deseas retirar?</label>
+                                                                    <input type="range" class="form-range" min="0" max="5" step="100" id="slider">
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-12 col-md-6">$<span id="valor-minimo"></span> </div>
+                                                                    <div class="col-12 col-md-6 text-start text-md-end">$<span id="valor-maximo"></span></div>
+                                                                </div>
+                                                                <div class="row mt-4">
+                                                                    <div class="col-12">
+                                                                        <p class="h6">RESUMEN:</p>
+                                                                        <p>Monto a retirar : <span id="valor-slider" class="fw-bold">$15,000</span> <br>
+                                                                        Comisión : <span id="valor-comision" class="fw-bold">$46.40</span> <br>
+                                                                        Total a pagar : <span id="valor-total" class="fw-bold">$1,546</span> <br>
+                                                                        Banco : <span id="valor-banco" class="fw-bold"></span> <br>
+                                                                        Cuenta : <span id="valor-cuenta" class="fw-bold">*********12</span> <br>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                         <div id="product-deseado-refinanciamiento" style="display: none">
 
                                                             <span class="preview-title-lg overline-title mt-5">Producto deseado <a href="" target="_blank" class="perfil-cliente ml-5">Perfíl del cliente</a> <i class="fas fa-external-link-alt"></i> </span>
@@ -374,12 +370,19 @@
 
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Validaciónes</span>
-                                                        <div id="content-validaciones-phone"></div>
-                                                        <div id="content-validaciones-rfc"></div>
-                                                        <div id="content-validaciones"></div>
-                                                        <div id="content-validaciones-soad"></div>
-                                                        <div id="content-validaciones-soad-date"></div>
-                                                        <div id="content-validaciones-soad-tramite"></div>
+                                                        <div style="display: none">
+                                                            <div id="content-validaciones-phone"></div>
+                                                            <div id="content-validaciones-rfc"></div>
+                                                            <div id="content-validaciones"></div>
+                                                            
+                                                            <div id="content-validaciones-soad"></div>
+                                                            <div id="content-validaciones-soad-date"></div>
+                                                            <div id="content-validaciones-soad-tramite"></div>
+                                                            <div id="content-validaciones-plazo"></div>
+                                                            <div id="content-validaciones-monto"></div>
+                                                        </div>
+
+                                                        <div id="content-validaciones-tabla"></div>
                 
                                                         <input type="hidden" id="lead_id" name="lead_id" value="{{ $lead_id }}">
                                                         <input type="hidden" id="isValidateCellphone"  value="false">
@@ -396,11 +399,18 @@
                                                         <input type="hidden" name="data[cellphone_validated]" id="cellphone_validated" value="{{ $lead != null ? $lead->cellphone_validated : null}}">
                                                         <input type="hidden" name="data[rfc_validated]" id="rfc_validated" value="{{ $lead != null ? $lead->rfc_validated : null}}">
                                                         <input type="hidden" name="data[go_ahead]" id="go_ahead" value="{{ $lead != null ? $lead->go_ahead : null}}">
+                                                        
+                                                        <input type="hidden" name="data[product_id]" id="product_id">
+                                                        <input type="hidden" name="data[selected_term]" id="selected_term">
+                                                        <input type="hidden" name="data[selected_loan]" id="selected_loan">
+                                                        <input type="hidden" name="data[applied_financial_product]" id="applied_financial_product">
+                                                        
+
                                                         <div class="col-12">
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>
                                                                     {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
-                                                                    <button class="btn btn-primary" id="btnSave">Guardar</button>
+                                                                    <button  class="btn btn-primary" id="btnSave">Guardar</button>
                                                                 </li>
                                                             </ul>
                                                         </div>
@@ -506,7 +516,7 @@
                         <input type="hidden" name="creditPayOffId" id="creditPayOffId" value="">
                         <input type="hidden" name="lead_id_prueba" id="lead_id_prueba" value="8">
                         
-                      <button type="submit" class="btn btn-secondary">Guardar</button>
+                      <button type="submit" class="btn btn-secondary" id="btnSave">Guardar</button>
                     </div>
                 </form>
               </div>

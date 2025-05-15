@@ -50,6 +50,7 @@ $().ready(function () {
                 let agreement = result.agreement;
                 let financials   = result.financials;
                 $('#agreement-name').val(agreement.name);
+                $('#razon_social').val(agreement.razon_social);
                 $('#agreement-description').val(agreement.description);
                 $('#agreement_term').val(agreement.agreement_term);
                 

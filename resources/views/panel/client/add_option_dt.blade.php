@@ -14,7 +14,7 @@ $user = Auth::user();
         <div class="dropdown-menu dropdown-menu-end">
             <ul class="link-list-opt no-bdr">
                 <li>
-                    <a class="pointer" href="/panel/clients/{{ $id }}/edit">
+                    <a class="pointer" href="/panel/clients/{{ $id }}/edit{{ $origin == 'colaboradores' ? '?origin=colaboradores' : '' }}">
                         <em class="icon ni ni-user-fill"></em>
                         <span class="">Editar</span></a>
                 </li>

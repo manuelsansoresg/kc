@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="author" content="KaaxClub">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Tú mejor decisión. Fácil y rápido.">
+    <meta name="description" content="Tu mejor decisión. Fácil y rápido.">
     <!-- Fav Icon  -->
     <link rel="shortcut icon" href="/images/favicon.ico">
     <!-- Page Title  -->
@@ -30,7 +30,7 @@
                             </div>
                             <div class="nk-block nk-block-middle nk-auth-body">
                                 <div class="brand-logo pb-5">
-                                    <a href="html/index.html" class="logo-link">
+                                    <a href="/" class="logo-link">
                                         <img class="logo-light logo-img logo-img-lg" src="{{ asset('images/logo-dark.png') }}"  alt="logo">
                                         <img class="logo-dark logo-img logo-img-lg" src="{{ asset('images/logo-dark.png') }}"  alt="logo-dark">
                                     </a>
@@ -48,7 +48,7 @@
                                     <div class="form-group">
                                         <div class="form-label-group">
                                             <label class="form-label" for="email-address">Email</label>
-                                            <a class="link link-primary link-sm" tabindex="-1" href="/ayuda">¿Necesitas ayuda?</a>
+                                            <a class="link link-primary link-sm" tabindex="-1" href="/#contact">¿Necesitas ayuda?</a>
                                         </div>
                                         <div class="form-control-wrap">
                                             <input id="email"  placeholder="Ingresa tu email" type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
@@ -62,7 +62,7 @@
                                     <div class="form-group">
                                         <div class="form-label-group">
                                             <label class="form-label" for="password">Contraseña</label>
-                                            <a class="link link-primary link-sm" tabindex="-1" href="/ayuda">¿Olvido su contraseña?</a>
+                                            <a class="link link-primary link-sm" tabindex="-1" href="/password/reset">¿Olvido su contraseña?</a>
                                         </div>
                                         <div class="form-control-wrap">
                                             <a tabindex="-1" href="#" class="form-icon form-icon-right passcode-switch lg" data-target="password">

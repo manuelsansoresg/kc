@@ -101,8 +101,13 @@ if (document.getElementById('action-model')) {
             console.log(key);
             if (key) {
                 // Crear dinámicamente una instancia de Dropzone
+                let nameField = null;
+                if (document.getElementById('name_field_'+key)) {
+                    nameField = $('#name_field_'+key).val();
+                }
                 NioApp.Dropzone('#' + key, {
-                    url: "/panel/files/images/" + model + '/' + id_rel + '/' + key+'?step='+step,
+                    
+                    url: "/panel/files/images/" + model + '/' + id_rel + '/' + key+'?step='+step+'&nameField='+nameField,
                     init: function () {
                         this.on("sending", function (file, xhr, formData) {
                             
@@ -128,13 +133,14 @@ if (document.getElementById('action-model')) {
             .then(function (response) {
                 let result = response.data;
                 let config_files = result.config_files;
-    
+                let step = $('#step').val();
+
                 for (const key in config_files) {
                     if (config_files.hasOwnProperty.call(config_files, key)) {
                         const element = config_files[key];
                         //create dinamic dropzone element
                         NioApp.Dropzone('#' + key + '-dropzone-action', {
-                            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+                            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key+'?step='+ step,
                             init: function () {
                                 this.on("sending", function (file, xhr, formData) {
                                     let date_file = null;
@@ -247,7 +253,11 @@ if (document.getElementById('action-model')) {
 
 $().ready(function () {
     
-    getData();
+    if (document.getElementById('action-id_rel')) {
+        getData();
+    }
+
+
     $("#frm-action-files").validate({
         rules: {
             'date_file[]': {

@@ -84,6 +84,10 @@ return [
         1 => 'Ventas',
         2 => 'Administración',
     ),
+    'role_user_inversionista' => array(
+        1 => 'RRHH',
+        2 => 'Administración',
+    ),
 
     //*actions
     "type_actions" => array(
@@ -225,6 +229,32 @@ return [
         'Tipo de crédito' =>  10202818,
         'URL Reporte' =>  10298820,
         'URL Encuesta' =>  10357823,
+        'Prospecto -  Validación Celular' =>  12660578,
+        'Prospecto - RFC' =>  12761482,
+        'Prospecto - Primer apellido' =>  12761459,
+        'Prospecto - Segundo apellido' =>  12761460,
+        'Prospecto - Fecha de nacimiento' =>  12761511,
+        'Prospecto - Validación RFC' =>  12761571,
+        'Prospectos - URL validación RFC' =>  12762039,
+        'SOD - Activo' =>  12769424,
+        'Prospecto - Formulario RFC llenado' =>  12762173,
+        'Prospecto - Validación Cliente Activo' =>  12763922,
+        'Prospecto - Validar trámite pendiente' =>  12780359,
+        'Prospecto - Validación Identidad' =>  12761574,
+        'SOD - Fechas permitidas' =>  12769426,
+        'SOD - Monto Máximo disponible' =>  12769433,
+        'SOD - Monto Mínimo disponible' =>  12771272,
+        'SOD - Validar monto solicitado' =>  12774554,
+        'Prospecto - Servicios KC disponibles' =>  12946595,
+        'Prospecto - Firma Contrato CM' =>  12800456,
+        'Prospecto - URL contrato CM' =>  12800457,
+        'Prospecto - Firma Solicitud/Descuento SOD' =>  12800636,
+        'Prospecto - URL Solicitud/Descuento SOD' =>  12800638,
+        'Crédito P - Tipos trámites disponibles' =>  12974922,
+        'Crédito P - Monto máximo' =>  12930754,
+        'Crédito P - Plazo máximo' =>  12930819,
+        'Crédito P - Pago periódico' =>  12976537,
+        'Crédito P - Periodicidad' =>  12976539,
     ),
 
     "funding_operation" => array(
@@ -263,6 +293,12 @@ return [
         2 => 'Catorcenal',
         3 => 'Quincenal',
         4 => 'Mensual'
+    ),
+    'periodicidad_names_chart' => array(
+        1 => 'Semanas',
+        2 => 'Catorcenas',
+        3 => 'Quincenas',
+        4 => 'Meses'
     ),
     'tipo_tramite' => array(
         1 => 'Crédito nuevo',

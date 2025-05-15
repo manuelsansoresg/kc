@@ -1008,8 +1008,8 @@ class SwapStrategyTemplate implements TemplateInterface
 
             if (isset($data_credit['signed']) && $data_credit['signed'] == 1) {
                 $credit   = Credit::find($id_rel);
-                $send_grid_sender = new Csendgrid();
-                $send_grid_sender = $send_grid_sender->createSender($credit->id);
+                /* $send_grid_sender = new Csendgrid();
+                $send_grid_sender = $send_grid_sender->createSender($credit->id); */
                 HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_2, $credit->id, 1);
             }
             if (isset($data_credit['termination_email_sent']) && $data_credit['termination_email_sent'] == 1) {
@@ -1026,11 +1026,11 @@ class SwapStrategyTemplate implements TemplateInterface
                     HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_3, $credit->id, 0);
 
                     if ($request->send_email == 1) {
-                        $send_grid_create_sender = new Csendgrid();
-                        $sender = $send_grid_create_sender->createEmail($credit->id);
+                        /* $send_grid_create_sender = new Csendgrid();
+                        $sender = $send_grid_create_sender->createEmail($credit->id); */
     
                         $get_files_attach = File::getFilesBySwap($credit->id);
-                        $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', $sender, '', $get_files_attach);
+                        /* $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', $sender, '', $get_files_attach);
                         $send_grid->setTemplate('d-944f2768988a43dca2e0ad689954fd20');
                         $data_params = array(
                             'name' => $client->name,
@@ -1042,7 +1042,7 @@ class SwapStrategyTemplate implements TemplateInterface
                             'current_loan' => $credit->current_loan,
                          );
                         $send_grid->setParams($data_params);
-                        $send_grid->send();
+                        $send_grid->send(); */
                     }
                 }
             }

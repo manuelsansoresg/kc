@@ -38,7 +38,12 @@ class File extends Model
     {
         if ($request->hasFile('file') != false) {
             $document   = $request->file('file');
+            
             $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
+            if (isset($_GET['nameField'])) {
+                $uniquePrefix = uniqid(); 
+                $name_full = $id_rel.'-'.$_GET['nameField'] . '-'.$uniquePrefix. '.' . $document->getClientOriginalExtension();
+            }
             $path       = File::PATH;
             $date_file = ($request->date_file != null)? $request->date_file : null;
             $step = isset($request->step)? $request->step : null;
@@ -75,7 +80,7 @@ class File extends Model
         $new_file = array();
         foreach ($files as $file) {
             $fileStrategy   = TemplateValues::STRATEGY[HistoryLog::$name_model[$file->model]];
-            $get_file       = (new $fileStrategy)->getFile($file->template_config_id);
+            $get_file       = (new $fileStrategy)->getFile($file->template_config_id, $file->id_rel, $file->step);
             if (isset( $get_file['name'])) {
                 $new_file[] = array('name_template' => $get_file['name'], 'name' => $file->name);
             }
@@ -98,6 +103,7 @@ class File extends Model
         
         $files = $files->get();
         $data_file = array();
+        
         foreach ($files as $file) {
             if ($file->template_config_id != null) {
                 $view_file = \View::make('panel.action.dropcone_preview_one_file', ['file' => $file, 'model' => $model])->render();

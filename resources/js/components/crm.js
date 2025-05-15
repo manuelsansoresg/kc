@@ -122,13 +122,14 @@ $( "#frm-archive" ).submit(function( event ) {
     move(id_rel, 'frm-archive', 'modal-archive', dt, title, msg);
 });
 
+
 window.modalValidate = function(id, model){
     $('#modal-validate-content').html('');
     axios
     .get('/panel/'+id+'/'+model+'/validate/show')
     .then(function (response) {
-        let result = response.data;
-        $('#modal-validate-content').html(result);
+        let html = response.data.table;
+        $('#modal-validate-content').html(html);
         $('#modal-validate').modal('show');
     })
     .catch(e => {

@@ -264,6 +264,8 @@ window.validateLeadEdit = function(lead_id)
             let isValidate = result.isValidate;
             let contentValidaciones = result.msg;
 
+            
+
             let client_person_id = $('#client_person_id').val();
             if (isValidate == true) {
                 $('#is_viability').val(1);
@@ -308,13 +310,18 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     let lead          = result.lead;
                     let is_viability  = lead.is_viability;
                     let is_viability_credit = lead.is_viability_credit;
-
+                    $('#tramit_type').prop('disabled', true);
+                    setTimeout(() => {
+                        console.log('finish');
+                        $('#tramit_type').prop('disabled', false);
+                        $('#tramit_type').val(lead.tramit_type).trigger("change");
+                    }, 7000);
                     //productChange(product_id);
                     //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
                     $('#lead-origin-agreement').val(lead.agreement_id);
 
                     getProductsByAgreementId(lead.agreement_id, lead.financial_product_id);
-
+                    
                     //getFinancialProduct(lead.id, 1);
 
                     if (is_change_origen == true) {
@@ -352,7 +359,6 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     $('#client_person_id').val(lead.client_person_id);
                     validateLeadEdit(lead_id); // Luego ejecuta validateLeadEdit
                     
-                
                     //changeOrigen(lead.channel_id);
                     
                     
@@ -382,7 +388,7 @@ function setData(is_change_origen, isChange, isChangeBirthDay) {
                     checkboxViability.checked = is_viability === 1;
                     checkboxViabilityCredit.checked = is_viability_credit === 1;
                     
-
+                    
 
         })
         .catch(e => {
@@ -395,17 +401,27 @@ window.checkDataLeadExist = function (valInput, id)
 {
     let getValue = valInput.value;
     let messageElement = document.getElementById(id+'-msg');
+    let lead_id = $('#lead_id').val() || null;
+    
     $('#content-validaciones').html('');
     if (getValue != '') {
         messageElement.textContent = "";
         axios
-        .get("/panel/lead/"+getValue+"/"+id+"/check")
+        .get("/panel/lead/"+getValue+"/"+id+"/"+lead_id+"/check")
         .then(function (response) {
             
             let result = response.data;
             let isExist = result.exist;
             let clientPerson = result.clientPerson;
             let isValidate = result.isValidate;
+            let creditStatus = result.creditStatus;
+
+            $('#lead_id').val(result.lead.id);
+            getLeadValidations();
+            $('#isNew').val(0);
+            
+            
+
             if (id == 'cellphone') {
                 $('#content-validaciones-phone').html(result.contentValidaciones);
             } else{
@@ -469,7 +485,7 @@ window.checkDataLeadExist = function (valInput, id)
                 $('#is_viability').val(0);
             }
 
-
+            
 
         })
         .catch(e => {
@@ -484,6 +500,9 @@ window.showModalCompraCartera = function() {
     $('#lead_id_compra_cartera').val(lead_id);
     $('#client_person_id_compra_cartera').val(client_person_id);
     $('#creditPayOffId').val('');
+    document.getElementById("frm-modal-compra-cartera").reset();
+    $('#frm-modal-compra-cartera .js-select2').val(null).trigger('change');
+
     $('#modal-compra-cartera').modal('show');
 }
 
@@ -501,10 +520,18 @@ window.showTableCompraCartera = function (leadId)
         let total = result.total;
         let montoEntregar = $('#hmonto-entregar').val();
         console.log('axios');
-        $('#content-monto-compra-cartera').html(total);
+        $('#content-monto-compra-cartera').html(total.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }));
+        
         $('#resumen-deuda-capital').val(total);
         $('#content-monto-entregar').html(total - montoEntregar );
         $('#content-table-compra-cartera').html(table);
+
+        var leadIdValue = document.getElementById('lead_id').value;
+        var verGraficaLink = document.getElementById('ver-grafica');
+        verGraficaLink.setAttribute('href', '/grafica/' + leadIdValue);
     })
     .catch(e => {
         console.log('error elementos compra de cartera');
@@ -574,10 +601,11 @@ window.editCompraCartera = function(creditPayOffId)
 
 window.getProductsByAgreementId = function(leadId, productId)
 {
+    let clientPersonId = $('#client_person_id').val();
     const selectElement = document.getElementById('financial_product_id');
     selectElement.options.length = 0; // Limpiar el select
     axios
-    .get("/panel/lead/" + leadId + "/getProducts")
+    .get("/panel/lead/" + leadId + '/' + clientPersonId + "/getProducts")
     .then(function (response) {
         let products = response.data;
             Object.keys(products).forEach(key => {
@@ -590,6 +618,7 @@ window.getProductsByAgreementId = function(leadId, productId)
         if (productId != 'null') {
             $('#financial_product_id').val(productId).trigger("change");
         }
+        
     })
     .catch(e => {
 
@@ -713,12 +742,12 @@ function getAllValidate()
 }
 
 
-function saveLead()
+window.saveLead = function (isFullSave)
 {
 
     const new_form = document.getElementById("frm-lead");
     const data = new FormData(new_form);
-    
+    data.append('isFullSave', isFullSave);
     axios
         .post("/panel/lead", data)
         .then(function (response) {
@@ -726,6 +755,7 @@ function saveLead()
             let result = getResult.lead;
             $('#lead_id').val(result.id);
             $('#isNew').val(0);
+            getLeadValidations();
         })
         .catch(e => {
         });
@@ -769,6 +799,7 @@ $().ready(function () {
 
             const new_form = document.getElementById("frm-lead");
             const data = new FormData(new_form);
+            data.append('isFullSave', 'true');
             let isExport = $('#isExport').val();
 
             axios
@@ -846,6 +877,7 @@ window.modalRegisterAction = function (id_rel) {
     $('#modal-register-action').modal('show');
 }
 
+
 //llenar tipo de tramite
 function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
 {
@@ -853,16 +885,18 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
     selectElement.options.length = 0; // Limpiar el select
     $('#content-validaciones-soad-tramite').html('');
     $('#content-error-producto-preautorizado').hide();
-    $('#producto-deseado').hide();
-    let typeProductId = $('#typeProductId').val(typeProductId)
+    let typeProductId = $('#typeProductId').val()
+    let leadId = $('#lead_id').val();
+    let productId = $('#financial_product_id').val();
 
     axios
-    .get("/panel/lead/" + clientPersonId +"/"+financialProductId+"/tramite/get")
+    .get("/panel/lead/" + clientPersonId +"/"+financialProductId+"/"+leadId+"/tramite/get")
     .then(function (response) {
         let result = response.data;
         let sodIsTramite = result.sodIsTramite;
         let sodMessage = result.sodMessage;
         let sodTramites = result.sodTramites;
+        
         if (sodIsTramite == true) {
             
             $('#content-product-select').hide();
@@ -876,13 +910,18 @@ function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId)
             $('#content-product-select').show();
             $('#content-error-producto-preautorizado').show();
         }
+
+        
     
         if (tipoTramiteId != 'null') {
             $('#tramit_type').val(tipoTramiteId).trigger("change");
         }
-        if (typeProductId != 3) {
+        if (typeProductId != 3 && typeProductId != '') {
             $('#content-validaciones-soad-tramite').html(sodMessage);
         }
+
+        
+       
     })
     .catch(e => {
 
@@ -902,11 +941,19 @@ window.changeTramite = function()
     let leadId =  document.getElementById("lead_id").value;
     
     $('#content-product-select').hide();
+    $('#content-product').hide();
     $('#content-refinanciado').hide();
     $('#product-deseado-refinanciamiento').hide();
     $('#content-product-deseado-refinanciamiento').html('');
 
-
+    
+    if (typeProductId != 3 && typeProductId != '') {
+        $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+        $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+    }
+    
+    
+    //
     if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
         axios
         .get("/panel/lead/"+clientPersonId+"/"+productId+"/"+tramit_type+"/refinanciamiento/get")
@@ -918,16 +965,22 @@ window.changeTramite = function()
             let payment = result.payment;
             let productoDeseado = result.productoDeseado;
             let terms = result.terms;
-
+            
+            
+            
             
 
             $('#monto-maximo').val(montoMaximo);
             $('#plazo-maximo').val(plazoMaximo);
             $('#periodicidad').val(periodicidad);
+            $('#periodicidad-hidden').val(result.periodicidad_id);
             $('#pago-periodico').val(payment);
             
-            $('#content-refinanciado').show();
-            $('#content-product-select').show();
+            if (typeProductId != 3) {
+                $('#content-product-select').show();
+                $('#content-refinanciado').show();
+            } 
+
             
             $('#product-deseado-refinanciamiento').show();
             $('#content-product-deseado-refinanciamiento').html(productoDeseado);
@@ -950,6 +1003,8 @@ window.changeTramite = function()
             if (typeProductId == 2) {
                 showTableCompraCartera(leadId);
             }
+            saveLead(false);
+            
         }).catch(e => {
         
         });
@@ -959,16 +1014,21 @@ window.changeTramite = function()
 
 window.graficaProspecto = function()
 {
-   
+    getChart();
     $('#modal-chart').modal('show');
 }
+
+
 
 
 window.getMontoSolicitado = function() {
     let clientPersonId = $('#client_person_id').val();
     let productId = $('#financial_product_id').val();
     let plazo = $('#ref-plazo').val();
+    let creditElement = document.getElementById('controldesk-credit_id');
+    let creditId = creditElement ? creditElement.value : null;
     let tramit_type = $('#tramit_type').val();
+    let typeProductId = $('#typeProductId').val();
     // Obtiene todos los checkboxes con nombre 'credits[]'
     var checkboxes = document.querySelectorAll('input[name="credits[]"]:checked');
     
@@ -985,7 +1045,7 @@ window.getMontoSolicitado = function() {
     $('#total-refinanciable').val(0);
 
     axios
-    .post("/panel/lead"+'/'+clientPersonId+"/"+productId+"/"+tramit_type+"/montoMaximo/get", { credits:credits, plazo:plazo })
+    .post("/panel/lead"+'/'+clientPersonId+"/"+productId+"/"+tramit_type+"/"+creditId+"/montoMaximo/get", { credits:credits, plazo:plazo })
     .then(function (response) {
         let result = response.data;
         let maximo = result.maximo;
@@ -1006,52 +1066,133 @@ window.getMontoSolicitado = function() {
         });
 
         $('#table-refinanciamiento-total').html(total_price);
+        
         $('#total-refinanciable').val(total);
+        
+        if (typeProductId != 3 && typeProductId != '') {
+            let plazosolicitado = $('#ref-plazo').val();
+            if (plazosolicitado != '') {
+                $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+            }
+        }
+        
         getResumen();
 
     }).catch(e => {
     
     });
-
 }
+
+function parseCurrency(value) {
+    if (!value) return 0; // Si el valor es null, vacío o undefined, devolver 0
+    let cleanValue = value.replace(/[^\d.]/g, ''); // Elimina cualquier caracter que no sea número o punto decimal
+    return parseFloat(cleanValue) || 0; // Convierte a número, si falla devuelve 0
+}
+
+
 
 window.getResumen = function()
 {
+    
     let clientPersonId = $('#client_person_id').val();
     let productId = $('#financial_product_id').val();
     let plazo = $('#ref-plazo').val();
     let monto = $('#ref-monto').val();
+    let adicional = '';
+    
+    if (document.getElementById('ref-monto-new')) {
+        monto = $('#ref-monto-new').val();
+    }
+
+    if (document.getElementById('isControlDesk')) {
+        let creditId = $('#controldesk-credit_id').val();
+        adicional = '?credit_id='+creditId;
+    }
+    
+    /* if (document.getElementById('ref-monto-new')) {
+        let montoNuevo = $('#total-refinanciable').val();
+        const newMontoSolicitado = Math.min(compraCartera, montoSolicitado);
+    } */
+
+
     let totalRefinanciable = $('#total-refinanciable').val();
     let tramit_type = $('#tramit_type').val();
     let isControlDesk = $('#isControlDesk').val();
+    let typeProductId = $('#typeProductId').val();
+    
     $('#go_ahead').val(0);
     axios
-    .get("/panel/lead/"+productId+"/"+plazo+'/'+monto+'/'+totalRefinanciable+'/'+tramit_type+'/getResumen')
+    .get("/panel/lead/"+productId+"/"+plazo+'/'+(monto || 0)+'/'+(totalRefinanciable || 0)+'/'+tramit_type+'/getResumen'+adicional)
     .then(function (response) {
         let result = response.data;
         let montoSolicitado =  result.montoSolicitado;
+        
         let montoRefinanciar =  result.montoRefinanciar;
         let comision =  result.comision;
         let monto_entregar =  result.monto_entregar;
-        let montoEntregarDecimal =  result.monto_entregar_decimal;
+        let montoEntregarDecimal =  null;
         let periodicidad =  result.periodicidad;
         let plazo =  result.plazo;
         let pagoPeriodico =  result.pagoPeriodico;
+        let pagoPeriodicoSF =  result.pagoPeriodico_sf;
         let pagoTotal = result.pagoTotal;
         let tasaAnual = result.tasaAnual;
         let cat = result.cat;
         let kcInteres = result.kcInteres;
         let kcPagoTotal = result.kcPagoTotal;
+
         
+        
+        let productoFinanciero = $('#financial_product_id').val();
+        $('#selected_term').val(plazo);
+        $('#selected_loan').val(result.montoSolicitado_sf);
+        $('#applied_financial_product').val(productoFinanciero);
 
         $('#content-monto-solicitado').html(montoSolicitado);
         $('#content-monto-refinanciar').html(montoRefinanciar);
         $('#content-comision-apertura').html(comision);
-        $('#content-monto-entregar').html(monto_entregar);
+        
+        
+
+        if (document.getElementById('total-monto-solicitado')) {
+            $('#content-monto-compra-cartera').html('');
+            
+            $('#content-monto-compra-cartera').html($('#total-monto-solicitado_format').val());
+           
+            
+        } 
+
+        let cMontoSolicitado = result.montoSolicitado_sf;
+        let cMontoCompraCartera = $('#content-monto-compra-cartera').length && $('#content-monto-compra-cartera').text().trim() 
+                          ? parseCurrency($('#content-monto-compra-cartera').text().trim()) 
+                          : 0;
+
+        let cComisionApertura = $('#content-comision-apertura').length && $('#content-comision-apertura').text().trim() 
+                                ? parseCurrency($('#content-comision-apertura').text().trim()) 
+                                : 0;
+        
+        let cMontoRefinanciar = $('#content-monto-refinanciar').length && $('#content-monto-refinanciar').text().trim() 
+        ? parseCurrency($('#content-monto-refinanciar').text().trim()) 
+        : 0;
+
+        //console.log(cMontoSolicitado + '-' + cMontoCompraCartera + '-'+cComisionApertura);
+        montoEntregarDecimal = cMontoSolicitado - cMontoCompraCartera - cComisionApertura - cMontoRefinanciar;
+        
+        monto_entregar = montoEntregarDecimal.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        
         $('#content-monto-entregar').html(monto_entregar);
         $('#content-plazo').html(periodicidad);
         $('#content-monto').html(plazo);
         $('#content-pago-periodico').html(pagoPeriodico);
+        
+        $('#applied_payment').val(pagoPeriodicoSF);
+        $('#applied_loan_total_amount').val(result.pagoTotalSF);
+        $('#opening_commission').val(result.comisionSF);
+        $('#net_amount').val(montoEntregarDecimal);
+        
         $('#content-pago-total').html(pagoTotal);
         $('#content-tasa-anual').html(tasaAnual);
         $('#content-cat').html(cat);
@@ -1061,8 +1202,34 @@ window.getResumen = function()
         getChart();
 
         $('#go_ahead').val(1);
-        
+     
 
+        if (typeProductId !=  3) {
+            $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+            $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');   
+            let plazosolicitado = $('#ref-plazo').val();
+            let montosolicitado = $('#ref-monto').val();
+            if (plazosolicitado != '') {
+                $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+            }
+            
+            if (montosolicitado != '') {
+                $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');   
+            }
+        }
+
+        if (document.getElementById('validateBtnSave') && montoEntregarDecimal <= 0) {
+            $('#saveButton').hide();
+        } else {
+            $('#saveButton').show();
+        }
+        saveLead(false)
+            .then(() => {
+                getLeadValidations();
+            })
+            .catch(error => {
+                console.error('Error saving lead:', error);
+            });
     }).catch(e => {
     
     });
@@ -1072,11 +1239,11 @@ function getChart()
 {
     let productId = $('#financial_product_id').val();
     let leadId = $('#lead_id').val();
-    let plazo = $('#ref-plazo').val();
-    let monto = $('#ref-monto').val();
+    let plazo = $('#plazo-maximo').val();
+    let monto = $('#monto-maximo').val();
 
     axios
-        .get("/panel/lead/"+productId+"/"+leadId+"/"+plazo+"/"+monto+'/getChart')
+        .get("/panel/lead/"+productId+"/"+leadId+"/"+plazo+'/getChart')
             .then(function (response) {
                 let result = response.data;
 
@@ -1102,40 +1269,49 @@ function getChart()
 //validar soad activo y si existe la fecha en bd
 window.validateSoad = function()
 {
+    $('#content-refinanciado').hide();
     $('#content-validaciones-soad').html('');
     $('#content-validaciones-soad-date').html('');
     $('#content-product').html('');
     $('#content_tramit_type').hide();
     $('#content-validaciones-soad-tramite').html('');
     $('#go_ahead').val(0);
+    $('#loan_available-msg').html('');
+    $('#producto-deseado').hide();
 
     if ($('#financial_product_id').val() != null) {
         
         let clientPersonId = $('#client_person_id').val();
         let agreement = $('#lead-origin-agreement').val();
         let productId = $('#financial_product_id').val();
-
+        let lead_id = $('#lead_id').val();
         $('#content-error-producto-preautorizado').hide();
         axios
-        .get("/panel/lead/"+clientPersonId+"/"+agreement+"/"+productId+"/soad/get")
+        .get("/panel/lead/"+clientPersonId+"/"+agreement+"/"+productId+"/"+lead_id+"/soad/get")
         .then(function (response) {
-            
+            getLeadValidations();
             let result = response.data;
             let typeProductId = result.type_product_id;
             $('#typeProductId').val(typeProductId);
             
+            $('#loan_available-msg').html(result.loan_available);
+
+            if (typeProductId == 3) {
+                console.log('typeProductId-'+typeProductId);
+                $('#producto-deseado').show();
+                document.getElementById('slider').disabled = true;
+                document.getElementById('tramit_type').disabled = true;
+            }
+
             if ($('#is_viability').val() == 1 ) {
                 
-                saveLead();
+                
                 //getAllValidate();
             }
 
-            if (typeProductId == 1 || typeProductId == 2) {
-                $('#content_tramit_type').show();
+            $('#content_tramit_type').show();
                 //llenar el arreglo de tipo de trámite
                 setSelectTramite(clientPersonId, productId, null);
-                
-            }
             
 
             if (typeProductId == 3 ) {
@@ -1145,6 +1321,9 @@ window.validateSoad = function()
                 let isSodOnDate = result.isSodOnDate;
                 
 
+                $('#product_id').val(typeProductId);
+                
+                
                 $('#is_free_of_active_sod').val(0);
                 $('#is_sod_on_date_allowed').val(0);
                 if (soadActive != 0) {
@@ -1155,14 +1334,14 @@ window.validateSoad = function()
                 $('#is_sod_on_date_allowed').val(1);
                 $('#sod_max').val(result.maximoRedondeado);
                 $('#sod_min').val(result.minimoRedondeado);
+                
               
         
                 $('#content-validaciones-soad-date').html(isSoadDate);
                 
                 if (isSodOnDate == true) {
-                    
+                    document.getElementById('slider').disabled = false;
                     $('#content-product').html(result.contentProductSod);
-                    $('#producto-deseado').show();
                     $('#go_ahead').val(1);
                     //valores slider
                     var slider = document.getElementById('slider');
@@ -1188,8 +1367,6 @@ window.validateSoad = function()
                         });
                     $('#content_tramit_type').show();
                     
-                } else {
-                    $('#producto-deseado').hide();
                 }
                 
                 
@@ -1207,19 +1384,22 @@ if (document.getElementById('valor-slider')) {
         
         // Obtenemos el valor actual del slider
         var sliderValue = parseFloat(slider.value);
-
+        
         // Actualizamos el contenido del span con el valor actual del slider
         displayValue.innerHTML = '$' + sliderValue;
         $('#sod_withdraw_amount').val(sliderValue);
-        
         let comision = parseFloat($('#sod_commision_amount').val());
         let total = sliderValue + comision;
+        console.log('slider-'+sliderValue);
+        console.log('comision-'+comision);  
         if (!isNaN(total)) {
             $('#sod_total_payment').val(total);
+            
         } else {
             $('#sod_total_payment').val(0); // O puedes asignar un valor por defecto si es NaN
+            total = 0;
         }
-        $('#valor-total').html('$'+sliderValue);
+        $('#valor-total').html('$'+total);
     }
 
     // Agregar el listener al slider para detectar cambios
@@ -1298,3 +1478,167 @@ function crearGraficaApilada(contenedor, valorInteres, valorDeuda, colorInteres 
   
   // Selecciona el contenedor principal donde se añadirán las gráficas
   const chartsContainer = document.getElementById('charts-container');
+
+  /* seccion para controldesk compra de cartera */
+  document.addEventListener('DOMContentLoaded', function() {
+    // Obtener elementos del DOM
+    const sumaCompraCheck = document.getElementById('sumaCompraCheck');
+    const refPlazo = document.getElementById('ref-plazo');
+    const contentMontoSolicitado = document.getElementById('content-select-monto-solicitado');
+    const contentNewMontoSolicitado = document.getElementById('content-select-new-monto-solicitado');
+    
+    // Inicializar select2 si no está inicializado
+    if ($.fn.select2) {
+        $('.js-select2').select2();
+    }
+    
+    // Escuchar cambios en el checkbox
+    if (document.getElementById('compra-cartera-plazo-solicitado')) {
+        
+        sumaCompraCheck.addEventListener('change', function() {
+            if (this.checked) {
+                // Ocultar el contenedor original sin modificarlo
+                contentMontoSolicitado.style.display = 'none';
+                
+                // Obtener el valor del plazo solicitado desde el campo oculto
+                const plazoSolicitadoInput = document.getElementById('compra-cartera-plazo-solicitado');
+                if (plazoSolicitadoInput && plazoSolicitadoInput.value) {
+                    const plazoSolicitado = plazoSolicitadoInput.value;
+                    
+                    // Buscar si existe esa opción en el select de plazo y seleccionarla
+                    Array.from(refPlazo.options).forEach(option => {
+                        if (option.value == plazoSolicitado) {
+                            refPlazo.value = option.value;
+                            $(refPlazo).trigger('change'); // Trigger change para select2
+                        }
+                    });
+                }
+                
+                // 1. Llamar a axios para obtener los datos de compra de cartera
+                let creditId = $('#controldesk-credit_id').val();
+                let plazo = $('#ref-plazo').val();
+                let tramit_type = $('#tramit_type').val();
+                
+                axios.get('/panel/kc-control-desk/'+creditId+ '/'+tramit_type+'/'+plazo+'/compracartera/calculate')
+                    .then(function(response) {
+                        const data = response.data;
+                        const compraCartera = data.compraCartera;
+                        const montoSolicitado = data.montoSolicitado;
+                        const montoRefinanciable = data.montoRefinanciable;
+                        /* 
+                        const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
+                        const newMontoSolicitado = compraCartera;
+                        // Guardar el valor en un campo oculto para usarlo más tarde
+                        document.getElementById('total-refinanciable').value = montoRefinanciable;
+                        
+                        // 2. Seleccionar el plazo correspondiente si existe
+                        // Obtener el valor de monto solicitado correctamente usando DOM nativo
+                        let montoSolicitadoText = '';
+                        const tablas = document.querySelectorAll('table.table-striped');
+                        
+                        // Buscar en todas las tablas la fila que contiene "Monto solicitado"
+                        tablas.forEach(tabla => {
+                            const filas = tabla.querySelectorAll('tr');
+                            filas.forEach(fila => {
+                                const celdas = fila.querySelectorAll('td');
+                                if (celdas.length >= 2 && celdas[0].textContent.trim() === 'Monto solicitado') {
+                                    montoSolicitadoText = celdas[1].textContent.trim();
+                                }
+                            });
+                        });
+                        
+                        // 3. Crear elementos en el nuevo contenedor
+                        
+                        agregarElementosNuevoContenedor(montoSolicitado);
+                    })
+                    .catch(function(error) {
+                        console.error('Error al obtener datos de compra de cartera:', error);
+                    });
+            } else {
+                // Mostrar el contenedor original sin modificarlo
+                contentMontoSolicitado.style.display = '';
+                
+                // Limpiar el contenedor nuevo
+                contentNewMontoSolicitado.innerHTML = '';
+                
+                // Vaciar el campo oculto de total refinanciable
+                document.getElementById('total-refinanciable').value = '';
+                getMontoSolicitado();
+                
+            }
+        });
+    }
+    
+    // Función para agregar elementos al nuevo contenedor
+    function agregarElementosNuevoContenedor(monto) {
+        // Limpiar el contenedor nuevo
+        contentNewMontoSolicitado.innerHTML = '';
+        
+        // Crear un input disabled visible
+        const disabledInput = document.createElement('input');
+        disabledInput.type = 'text';
+        disabledInput.className = 'form-control';
+        disabledInput.value = formatPrice(monto);
+        disabledInput.disabled = true;
+        
+        // Crear un input hidden con el valor real
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'credit[applied_import]';
+        hiddenInput.id = 'ref-monto-new';  // ID diferente para evitar conflicto
+        hiddenInput.value = monto;
+        
+        // Agregar los elementos al contenedor nuevo
+        contentNewMontoSolicitado.appendChild(disabledInput);
+        contentNewMontoSolicitado.appendChild(hiddenInput);
+        
+        // Disparar evento para cualquier otra función que dependa del cambio
+        const event = new Event('change');
+        hiddenInput.dispatchEvent(event);
+
+        
+        
+        // Si getResumen es una función global, llamarla directamente
+        if (typeof getResumen === 'function') {
+            getResumen();
+        }
+    }
+    
+    // Función auxiliar para formatear precio similar a Laravel
+    function formatPrice(amount) {
+        return '$ ' + parseFloat(amount).toLocaleString('es-CO', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+    }
+});
+
+function getLeadValidations() {
+    let leadId = $('#lead_id').val();
+    $('#content-validaciones-tabla').html('');
+    axios.get(`/panel/lead/validations/${leadId}`)
+        .then(function (response) {
+            if (response.data.success) {
+                let html = response.data.table;
+                
+                $('#content-validaciones-tabla').html(html);
+            } else {
+                $('#content-validaciones-tabla').html('No se encontraron validaciones');
+            }
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+            $('#content-validaciones-tabla').html('Error al obtener las validaciones');
+        });
+}
+
+function getLeadValidationsLoanTerm() {
+    let leadId = $('#lead_id').val();
+    axios.get(`/panel/lead/validations/${leadId}/loan/term`)
+        .then(function (response) {
+            getLeadValidations();
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+}

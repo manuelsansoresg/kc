@@ -118,6 +118,10 @@ class Credit extends Model
         
         'credit_agreement_signed',
         'sod_agreement',
+        'info_s2_sent',
+        'credit_s2_active',
+        'credit_status',
+        'collection_date',
         
     ];
 
@@ -145,9 +149,9 @@ class Credit extends Model
     public static function setAppliedImport($creditId)
     {
         Credit::where('id', $creditId)->update([
-            'applied_import ' => 0,
+            'applied_import' => 0,
             'applied_term' => 0,
-            'applied_payment  ' => 0,
+            'applied_payment' => 0,
             'applied_loan_total_amount' => 0,
         ]);
     }
@@ -156,7 +160,7 @@ class Credit extends Model
     {
         Credit::setTotalCapital($creditId);
         InvestorsCredit::setPlacedCapital($creditId);
-        Credit::setComissionRateAndAmount($creditId);
+        InvestorsCredit::setComissionRateAndAmount($creditId);
     }
 
     public static function setTotalCapital($creditId)
@@ -202,7 +206,7 @@ class Credit extends Model
         $getInvestors = InvestorProduct::where('financial_products_id', $credit->applied_financial_product)->get();
 
         foreach ($getInvestors as $getInvestor) {
-            Transaction::setTotalCapital($getInvestor->investor_id);
+            //Transaction::setTotalCapital($getInvestor->investor_id);
         }
         
     }
@@ -237,6 +241,9 @@ class Credit extends Model
                 $option           = \View::make('panel.module.checkup.add_option_only_checkup_dt', ['query' => $query, 'id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
 
                 if ($history->status_id === HistoryLog::KC_AFTER_MARKET || $history->status_id === HistoryLog::KC_CONTROL_DESK || $history->status_id === HistoryLog::KC_DELIVERY || $history->status_id === HistoryLog::KC_PAYMENT) {
+                    $financialProduct =  FinancialProduct::find($query->applied_financial_product);
+                    $tipoCredito = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
+                    $alias_product = $tipoCredito!= null ? $tipoCredito->alias : null;
                     $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
                     $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
                 }

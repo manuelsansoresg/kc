@@ -102,16 +102,24 @@ class ClientPerson extends Model
         'validated_clabe',
         'cm_agreement',
         'cm_agreement_sign',
+        'identity_validated',
+        'cp_available',
+        'std_available',
+        'sod_available',
+
+        'new_tramit_allowed',
+        'additional_tramit_allowed',
+        'ref_tramit_allowed',
     ];
 
-    public static function listDatatable($isAdmin = true)
+    public static function listDatatable($isAdmin = true, $origin = null)
     {
         if ($isAdmin === true) {
             $clientPersons = ClientPerson::all();
             $data        = array();
             foreach ($clientPersons as $query) {
                 $agreement = Agreement::find($query->agreement_id);
-                $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id])->render();
+                $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id, 'origin' => $origin])->render();
                 $data[] = array(
                     'id' => $query->id,
                     'name' =>  $query->name.' '.$query->last_name.' '.$query->second_last_name,
@@ -133,7 +141,7 @@ class ClientPerson extends Model
                 $getClientPersons = ClientPerson::whereIn('agreement_id', $agreementIds)->get();
                 foreach ($getClientPersons as $query) {
                     $agreement = Agreement::find($query->agreement_id);
-                    $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id])->render();
+                    $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id, 'origin' => $origin])->render();
                     $data[] = array(
                         'id' => $query->id,
                         'name' =>  $query->name.' '.$query->last_name.' '.$query->second_last_name,
@@ -156,18 +164,72 @@ class ClientPerson extends Model
         $clientId = $request->client_id;
         $data = $request->data;
         $data['active'] = isset($data['active'])? 1 : 0;
+        
         if ($clientId == null) {
-            $client =  ClientPerson::create($data);
-        } else {
-            $client = ClientPerson::where('id', $clientId)->update($data);
+            $client = ClientPerson::create($data);
+            return $client;
+        } 
+
+        // Obtener datos antiguos antes de la actualización
+        $oldData = ClientPerson::find($clientId);
+        $oldValues = $oldData->toArray();
+
+        // Realizar la actualización
+        ClientPerson::where('id', $clientId)->update($data);
+        
+        // Obtener el registro actualizado
+        $updatedData = ClientPerson::find($clientId);
+        
+        // Registrar cambios en el historial
+        foreach ($data as $field => $newValue) {
+            if (isset($oldValues[$field]) && $oldValues[$field] !== $newValue) {
+                ClientPersonHistory::create([
+                    'client_person_id' => $clientId,
+                    'user_id' => auth()->id(),
+                    'field_name' => $field,
+                    'old_value' => $oldValues[$field],
+                    'new_value' => $newValue
+                ]);
+            }
         }
-        return $client;
+
+        return $updatedData;
     }
 
     public static function checkDataModel($valueInput , $id)
     {
         $cp =  ClientPerson::where($id, $valueInput)->count();
         return $cp;
+    }
+
+    public function getAllowedTramitsForManyChat($leadId)
+    {
+
+        // Obtener el lead
+        $lead = Lead::find($leadId);
+        if (!$lead) {
+            return response()->json(['error' => 'Lead not found'], 404);
+        }
+
+        // Obtener el cliente relacionado
+        $clientPerson = ClientPerson::find($lead->client_person_id);
+        if (!$clientPerson) {
+            return response()->json(['error' => 'Client not found'], 404);
+        }
+
+        // Obtener valores originales
+        $newTramit = $clientPerson->new_tramit_allowed ?? 0;
+        $additionalTramit = $clientPerson->additional_tramit_allowed ?? 0;
+        $refTramit = $clientPerson->ref_tramit_allowed ?? 0;
+
+        // Si el producto es SOD (product_id = 3), solo se permite nuevo
+        if ($lead->product_id == 3) {
+            $allowed = '100';
+        } else {
+            $allowed = "{$newTramit}{$additionalTramit}{$refTramit}";
+        }
+
+        return $allowed;
     }
 
     public function credit()
@@ -180,5 +242,10 @@ class ClientPerson extends Model
         return $this->belongsTo(Agreement::class, 'agreement_id')->withDefault([
             'name' => '',
         ]);
+    }
+
+    public function history()
+    {
+        return $this->hasMany(ClientPersonHistory::class);
     }
 }
