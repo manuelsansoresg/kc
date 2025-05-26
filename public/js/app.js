@@ -49,7 +49,7 @@ function getNotes() {
 }
 
 window.creditRefresh = function () {
-  $('#modal-lead-note').modal('hide');
+  $('#modal-note').modal('hide');
   getTags();
   getNotes();
 };
@@ -61,124 +61,142 @@ window.deleteTag = function (tag_id) {
   })["catch"](function (e) {});
 };
 
-if (document.getElementById('action-model')) {
-  //* get data saved 
-  var getData = function getData() {
-    clearPreviewFiles();
+$(document).ready(function () {
+  if (document.getElementById('action-model')) {
+    //* get data saved 
+    var getData = function getData() {
+      clearPreviewFiles().then(function () {
+        var step = $('#step').val();
+        axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
+          var result = response.data;
+          var files = result.files;
+          var file_dates = result.file_date;
+
+          for (var key in file_dates) {
+            if (file_dates.hasOwnProperty.call(file_dates, key)) {
+              var element_date_file = file_dates[key];
+              console.log(element_date_file.template_config_id);
+              $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
+            }
+          }
+
+          for (var key_file in files) {
+            if (files.hasOwnProperty.call(files, key_file)) {
+              var element_file = files[key_file];
+              $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
+            }
+          }
+        })["catch"](function (e) {
+          console.error(e);
+        });
+      })["catch"](function (e) {
+        console.error(e);
+      });
+    };
+
+    var clearPreviewFiles = function clearPreviewFiles() {
+      return new Promise(function (resolve, reject) {
+        var step = $('#step').val();
+        axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
+          var result = response.data;
+          var config_files = result.config_files;
+
+          for (var key in config_files) {
+            if (config_files.hasOwnProperty.call(config_files, key)) {
+              var element = config_files[key];
+              $('#' + key + '-files-action-preview').html('');
+            }
+          }
+
+          resolve();
+        })["catch"](function (e) {
+          reject(e);
+        });
+      });
+    };
+
+    var model = $('#action-model').val();
+    var id_rel = $('#action-id_rel').val();
     var step = $('#step').val();
-    axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
-      var result = response.data;
-      var files = result.files;
-      var file_dates = result.file_date;
 
-      for (var key in file_dates) {
-        if (file_dates.hasOwnProperty.call(file_dates, key)) {
-          var element_date_file = file_dates[key];
-          $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
-        }
-      }
+    if (model == '') {
+      model = null;
+    } //*get configuration in template
 
-      for (var key_file in files) {
-        if (files.hasOwnProperty.call(files, key_file)) {
-          var element_file = files[key_file];
-          $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
-        }
-      }
-    })["catch"](function (e) {});
-  };
 
-  var clearPreviewFiles = function clearPreviewFiles() {
-    var step = $('#step').val();
     axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
       var result = response.data;
       var config_files = result.config_files;
 
-      for (var key in config_files) {
+      var _loop = function _loop(key) {
         if (config_files.hasOwnProperty.call(config_files, key)) {
           var element = config_files[key]; //create dinamic dropzone element
 
-          $('#' + key + '-files-action-preview').html('');
+          NioApp.Dropzone('#' + key + '-dropzone-action', {
+            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+            init: function init() {
+              this.on("sending", function (file, xhr, formData) {
+                var date_file = null;
+
+                if (document.getElementById(key + '-date_file')) {
+                  date_file = $('#' + key + '-date_file').val();
+                }
+
+                formData.append("date_file", date_file);
+              });
+              this.on("success", function (file, message) {
+                getData();
+              });
+              this.on("complete", function (file) {
+                this.removeAllFiles(true);
+              });
+            }
+          });
         }
-      }
+      };
+
+      for (var key in config_files) {
+        _loop(key);
+      } //
+
     })["catch"](function (e) {});
-  };
 
-  var model = $('#action-model').val();
-  var id_rel = $('#action-id_rel').val();
-  var step = $('#step').val();
-
-  if (model == '') {
-    model = null;
-  } //*get configuration in template
-
-
-  axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
-    var result = response.data;
-    var config_files = result.config_files;
-
-    var _loop = function _loop(key) {
-      if (config_files.hasOwnProperty.call(config_files, key)) {
-        var element = config_files[key]; //create dinamic dropzone element
-
-        NioApp.Dropzone('#' + key + '-dropzone-action', {
-          url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
-          init: function init() {
-            this.on("sending", function (file, xhr, formData) {
-              var date_file = null;
-
-              if (document.getElementById(key + '-date_file')) {
-                date_file = $('#' + key + '-date_file').val();
-              }
-
-              formData.append("date_file", date_file);
-            });
-            this.on("success", function (file, message) {
-              getData();
-            });
-            this.on("complete", function (file) {
-              this.removeAllFiles(true);
-            });
-          }
-        });
-      }
+    window.deleteFileTemplate = function (model, id) {
+      $('#frm-register-action-preview').html('');
+      axios.get("/panel/temp/images/" + id + "/delete").then(function (response) {
+        getData();
+        showToast('Archivos', 'Archivo borrado', 'success');
+      })["catch"](function (e) {});
     };
 
-    for (var key in config_files) {
-      _loop(key);
-    } //
-
-  })["catch"](function (e) {});
-
-  window.deleteFileTemplate = function (model, id) {
-    $('#frm-register-action-preview').html('');
-    axios.get("/panel/temp/images/" + id + "/delete").then(function (response) {
+    $().ready(function () {
       getData();
-      showToast('Archivos', 'Archivo borrado', 'success');
-    })["catch"](function (e) {});
-  };
+      $("#frm-action-files").validate({
+        rules: {
+          'date_file[]': {
+            required: true
+          }
+        },
+        submitHandler: function submitHandler(form, event) {
+          event.preventDefault();
+          var new_form = document.getElementById("frm-action-files");
+          var data = new FormData(new_form); // Extract the step value from the URL
 
-  $().ready(function () {
-    getData();
-    $("#frm-action-files").validate({
-      rules: {
-        'date_file[]': {
-          required: true
+          var urlParams = new URLSearchParams(window.location.search);
+          var step = urlParams.get('step'); // Add the step value to the FormData
+
+          data.append('step', step);
+          axios.post("/panel/files/template/date", data).then(function (response) {
+            var result = response.data;
+            var url_redirect = null;
+            url_redirect = $('#url_redirect').val();
+            window.location = url_redirect;
+          })["catch"](function (e) {});
         }
-      },
-      submitHandler: function submitHandler(form, event) {
-        event.preventDefault();
-        var new_form = document.getElementById("frm-action-files");
-        var data = new FormData(new_form);
-        axios.post("/panel/files/template/date", data).then(function (response) {
-          var result = response.data;
-          var url_redirect = null;
-          url_redirect = $('#url_redirect').val();
-          window.location = url_redirect;
-        })["catch"](function (e) {});
-      }
+      });
     });
-  });
-}
+  }
+});
 
 /***/ }),
 
@@ -193,13 +211,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
 
 
-window.actionModal = function (id, is_new) {
-  /*  if (document.getElementById('modal-action-id-rel-lead')) {
-       getPerson(id);
-    } */
+window.actionModal = function (id, is_new, is_lead) {
+  var model = is_lead == true ? 'lead' : 'credit';
+  var section = is_lead == true ? 1 : 2;
   resetAction();
-  getAdvisorLead(id);
+  getAdvisorLead(model, id);
   $('#modal-action-id-rel').val(id);
+  $('#modal-action-id-section').val(section);
+
+  if (is_new == 'true') {
+    $('#modal-action-id-action').val(null);
+  }
+
+  $('#modal-action').modal('show');
+};
+
+window.addActionIntoActions = function (id, is_new, is_lead) {
+  $('#modal-list-actions').modal('hide');
+  var model = is_lead == true ? 'lead' : 'credit';
+  var section = is_lead == true ? 1 : 2;
+  resetAction();
+  getAdvisorLead(model, id);
+  $('#modal-action-id-rel').val(id);
+  $('#modal-action-id-section').val(section);
 
   if (is_new == 'true') {
     $('#modal-action-id-action').val(null);
@@ -216,10 +250,9 @@ if (document.getElementById('frm-action')) {
   });
 }
 
-function getAdvisorLead(lead_id) {
-  axios.get("/panel/lead/" + lead_id).then(function (response) {
+function getAdvisorLead(model, id_rel) {
+  axios.get("/panel/" + model + "/" + id_rel + '/advisor/show').then(function (response) {
     var result = response.data;
-    var lead = result.lead;
     var advisor = result.advisor;
 
     if (advisor != null) {
@@ -255,6 +288,9 @@ $().ready(function () {
       },
       'data[advisor_id]': {
         required: true
+      },
+      'data[start_time]': {
+        required: true
       }
     },
     submitHandler: function submitHandler(form, event) {
@@ -280,6 +316,10 @@ $().ready(function () {
         } else {
           $('#modal-action').modal('hide');
 
+          if (document.getElementById('is_refresh')) {
+            location.reload(); // Recargar la página
+          }
+
           if (refresh_dt != 'null') {
             (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
           } else {
@@ -301,7 +341,7 @@ function resetAction() {
   $('#modal-action-end_date').val('');
   $('#modal-action-description').val('');
   $('#modal-action-id-action').val('null');
-  $('#modal-action-complete-active').prop("checked", true);
+  $('#modal-action-complete-pending').prop("checked", true);
   $("#lead-asesor-id").val('').trigger('change');
   $("#lead-asesor-id").prop("disabled", false);
 }
@@ -351,7 +391,9 @@ $().ready(function () {
         $('#modal-register-action').modal('hide');
 
         if (refresh_dt != 'null') {
-          (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+          /* showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+          refreshListActions(); */
+          location.reload();
         } else {
           refreshListActions();
         }
@@ -376,6 +418,7 @@ window.deleteRegisterAction = function (action_id) {
   axios["delete"]("/panel/register-action/" + action_id).then(function (response) {
     if (refresh_dt != 'null') {
       (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+      refreshListActions();
     } else {
       refreshListActions();
     }
@@ -399,6 +442,10 @@ window.alerDeleteAction = function (id) {
 window.deleteAction = function (id) {
   var refresh_dt = $('#refresh-dt').val();
   axios["delete"]("/panel/action/" + id).then(function (response) {
+    if (document.getElementById('modal-list-actions')) {
+      location.reload(); // Recargar la página
+    }
+
     if (refresh_dt != 'null') {
       (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
     } else {
@@ -412,7 +459,7 @@ window.deleteAction = function (id) {
 } */
 
 
-window.setModalAction = function (action_id, disabled) {
+window.setModalAction = function (action_id, disabled, section) {
   if (disabled == true) {
     $('#frm-action input, textarea, select').attr('disabled', 'disabled');
     $('#modal-action-save').hide();
@@ -436,13 +483,9 @@ window.setModalAction = function (action_id, disabled) {
       $("#modal-action-start_time").val(action.start_time);
       $("#modal-action-end_date").val(action.end_date);
       $("#modal-action-description").val(action.description);
-      $("#modal-action-id-rel").val(action.id_rel); //$("#lead-asesor-id").val(advisor.id).trigger('change');
-
-      /* if (lead != null) {
-          $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
-      }  */
-
+      $("#modal-action-id-rel").val(action.id_rel);
       $('#modal-action').modal('show');
+      $('#lead-asesor-id').val(action.advisor_id).trigger("change");
 
       if (action.status == 1) {
         $('#modal-action-complete-active').prop("checked", true);
@@ -532,7 +575,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 document.addEventListener('DOMContentLoaded', function () {
   var status = $('#dt-action-status').val();
-  var table = NioApp.DataTable('#dt-lead-acctions', {
+  var model = $('#model').val();
+  var table = NioApp.DataTable('#dt-actions', {
     processing: true,
     responsive: {
       details: {
@@ -549,7 +593,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
     },
-    ajax: '/panel/action/' + status + '/dt/show',
+    ajax: '/panel/action/' + status + '/' + model + '/dt/show',
     columns: [{
       data: 'type'
     },
@@ -558,10 +602,6 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'name'
     }, {
       data: 'date_in'
-    }, {
-      data: 'date_fin'
-    }, {
-      data: 'advisor'
     }, {
       data: 'options',
       className: 'nk-tb-col-tools text-end'
@@ -680,14 +720,122 @@ $().ready(function () {
       var agreement = result.agreement;
       var financials = result.financials;
       $('#agreement-name').val(agreement.name);
-      $('#agreement-description').val(agreement.description);
-      $('#agreement-financials').val(financials);
-      $('#agreement-financials').trigger("change");
-      $('#agreement-status').val(agreement.status).trigger("change"); //$('#agreement-status option[value="' + agreement.status + '"]').trigger("change");
+      $('#agreement-description').val(agreement.description); // Limpia las selecciones actuales en el select múltiple
+
+      $('#agreement-financials').val(null).trigger('change');
+      $('#agreement-status').val(agreement.status).trigger("change"); // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+
+      var financialValues = financials.map(function (item) {
+        return item.id;
+      }); // Seleccionar los valores correspondientes en los selects
+
+      $('#agreement-financials').val(financialValues).trigger('change'); //$('#agreement-status option[value="' + agreement.status + '"]').trigger("change");
     })["catch"](function (e) {
       $('#admin_email-error-exist').show();
     });
   }
+
+  function getProductComision(product_id) {
+    $('#content-costo-contratacion').html('');
+    $('#comisiones').html('');
+    axios.get("/panel/product-fee/" + product_id).then(function (response) {
+      var result = response.data;
+      $('#content-costo-contratacion').html(result.costoContratacion);
+      $('#comisiones').html(result.comisiones);
+    })["catch"](function (e) {
+      $('#admin_email-error-exist').show();
+    });
+  }
+
+  window.editProductFee = function (productFee, product_id, type) {
+    $('#frm-product-fees')[0].reset();
+    $('#product_fee').val(productFee);
+    $('#financial_product_id').val(product_id);
+    $('#comision_type').val(type);
+    axios.get("/panel/product-fee/" + productFee + '/showproductFee').then(function (response) {
+      var result = response.data;
+
+      if (result != null) {
+        $('#concepto').val(result.concepto);
+        $('#periodicidad').val(result.periodicidad);
+        $('#moneda').val(result.moneda);
+
+        if (result.is_valor_fijo == 1) {
+          $('#type_active').prop('checked', true).click();
+        } else {
+          $('#type_pending').prop('checked', true).click();
+        }
+
+        $('#valor').val(result.valor);
+        $('#porcentaje').val(result.porcentaje);
+        $('#referencia').val(result.referencia);
+        $('#modal-product-fees').modal('show');
+      }
+    })["catch"](function (e) {});
+  };
+  /* borrar comisiones */
+
+
+  window.deleteProductFee = function (product_fee_id) {
+    var product_id = $('#product_id').val();
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, elimina',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        axios["delete"]("/panel/product-fee/" + product_fee_id).then(function (response) {
+          getProductComision(product_id);
+        })["catch"](function (e) {});
+      }
+    });
+  };
+  /* borrar comisiones */
+
+
+  if (document.getElementById('financial_product_id')) {
+    var product_id = $('#product_id').val();
+    getProductComision(product_id);
+  }
+
+  $("#frm-product-fees").validate({
+    rules: {
+      'data[concepto]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var product_id = $('#financial_product_id').val();
+      var new_form = document.getElementById("frm-product-fees");
+      var data = new FormData(new_form);
+      axios.post("/panel/product-fee", data).then(function (response) {
+        getProductComision(product_id);
+        $('#modal-product-fees').modal('hide');
+        new_form.reset();
+      })["catch"](function (e) {});
+    }
+  }); //modal productfee
+
+  window.modalProductComision = function (product_fee, product_id, type) {
+    $('#product_fee').val(product_fee);
+    $('#financial_product_id').val(product_id);
+    $('#comision_type').val(type);
+    $('#modal-product-fees').modal('show');
+  };
+
+  window.showValorFijo = function (show_fijo) {
+    $('#content-valor-fijo').hide();
+    $('#content-no-valor-fijo').hide();
+
+    if (show_fijo) {
+      $('#content-valor-fijo').show();
+    } else {
+      $('#content-no-valor-fijo').show();
+    }
+  };
 });
 
 /***/ }),
@@ -946,11 +1094,29 @@ function move(id, form, modal, datatable, title, msg) {
   })["catch"](function (e) {});
 }
 
-window.deliveryFinish = function (id, statusid, urlredirect) {
+window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
+  if (is_modal == true) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        actionDeliveryFinish(id, statusid, urlredirect);
+      }
+    });
+  } else {
+    actionDeliveryFinish(id, statusid, urlredirect);
+  }
+};
+
+function actionDeliveryFinish(id, statusid, urlredirect) {
   axios.get("/panel/action/" + id + "/" + statusid + "/finish").then(function (response) {
     window.location = urlredirect;
   })["catch"](function (e) {});
-};
+}
 
 window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#frm-archive').trigger("reset");
@@ -961,6 +1127,11 @@ window.moveModal = function (title, id, statusid, old_status_id, dt) {
   $('#dt').val(dt);
   $('#modal-archive-title').html(title);
   getReason(title);
+
+  if (title == 'Archivar' || title == 'Cancelar') {
+    $('#content-lead').show();
+  }
+
   $('#modal-archive').modal('show');
 };
 
@@ -973,6 +1144,7 @@ window.moveModalLead = function (title, id, statusid, old_status_id, dt) {
   $('#dt').val(dt);
   $('#modal-archive-title').html(title);
   getReason('ArchivarLead');
+  $('#content-lead').show();
   $('#modal-archive').modal('show');
 };
 
@@ -1007,7 +1179,9 @@ window.modalValidate = function (id, model) {
   })["catch"](function (e) {});
 };
 
-window.desition = function (credit_id, financial_id, type) {
+window.desition = function (history_id, credit_id, financial_id, type, status_id, is_elegir) {
+  var url_redirect = type == 1 ? '/panel/kc-check-up' : '/panel/kc-swap';
+  var param_get = is_elegir == 0 ? '?is_notify=true' : '?is_notify=false';
   Swal.fire({
     title: '¿Estás seguro?',
     icon: 'warning',
@@ -1016,13 +1190,13 @@ window.desition = function (credit_id, financial_id, type) {
     cancelButtonText: 'Mejor no'
   }).then(function (result) {
     if (result.value) {
-      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
+      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept" + param_get).then(function (response) {
         var reason = response.data;
 
-        if (type == 1) {
-          window.location = '/panel/kc-check-up';
+        if (is_elegir == 0) {
+          deliveryFinish(history_id, status_id, url_redirect, false);
         } else {
-          window.location = '/panel/kc-swap';
+          window.location = url_redirect;
         }
       })["catch"](function (e) {});
     }
@@ -1376,6 +1550,135 @@ $("#frm-financial-buro").submit(function (event) {
     showToast('Financiera', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
+
+if (document.getElementById('alcance_beneficios')) {
+  refreshListComplementary();
+}
+
+function refreshListComplementary() {
+  var product_id = $('#product_id').val();
+  axios.get("/panel/product-complementary/list/" + product_id + "/refresh").then(function (response) {
+    var result = response.data; // Asignar valores al select de alcance_beneficios
+
+    var alcanceSelect = document.getElementById('alcance_beneficios');
+    alcanceSelect.innerHTML = ''; // Limpia el select actual
+
+    result.complementary_alcance.forEach(function (alcance) {
+      var option = document.createElement('option');
+      option.value = alcance.description;
+      option.text = alcance.description;
+      alcanceSelect.appendChild(option);
+    });
+    var alcanceBeneficiosArray = result.my_product.alcance_beneficios.split(',');
+    $('#alcance_beneficios').val(alcanceBeneficiosArray).trigger('change'); // Repite el mismo proceso para los otros selects (restriccion_exclusion, programa_educacion_financiera, referencia_comparativa)
+    // Asignar valores al select de restriccion_exclusion
+
+    var restriccionSelect = document.getElementById('restriccion_exclusion');
+    restriccionSelect.innerHTML = '';
+    result.complementary_restricciones.forEach(function (restriccion) {
+      var option = document.createElement('option');
+      option.value = restriccion.description;
+      option.text = restriccion.description;
+      restriccionSelect.appendChild(option);
+    });
+    var alcanceRestriccionArray = result.my_product.restriccion_exclusion.split(',');
+    $('#restriccion_exclusion').val(alcanceRestriccionArray).trigger('change'); // Asignar valores al select de programa_educacion_financiera
+
+    var programaSelect = document.getElementById('programa_educacion_financiera');
+    programaSelect.innerHTML = '';
+    result.complementary_programas.forEach(function (programa) {
+      var option = document.createElement('option');
+      option.value = programa.description;
+      option.text = programa.description;
+      programaSelect.appendChild(option);
+    });
+    var alcanceProgramaArray = result.my_product.programa_educacion_financiera.split(',');
+    $('#programa_educacion_financiera').val(alcanceProgramaArray).trigger('change'); // Asignar valores al select de referencia_comparativa
+
+    var referenciaSelect = document.getElementById('referencia_comparativa');
+    referenciaSelect.innerHTML = '';
+    result.complementary_referencias.forEach(function (referencia) {
+      var option = document.createElement('option');
+      option.value = referencia.description;
+      option.text = referencia.description;
+      referenciaSelect.appendChild(option);
+    });
+    var ReferenciaArray = result.my_product.referencia_comparativa.split(',');
+    $('#referencia_comparativa').val(ReferenciaArray).trigger('change');
+    var bankIdsArray = result.my_product.bank_ids.split(',');
+    $('#bank_ids').val(bankIdsArray).trigger('change');
+  })["catch"](function (e) {});
+}
+/*  alcance_beneficios
+restriccion_exclusion
+programa_educacion_financiera
+referencia_comparativa */
+
+
+window.modalComplementary = function (type) {
+  // Definir un arreglo con los títulos correspondientes a cada tipo
+  var titles = ['ALCANCE O BENEFICIOS', 'RESTRICCIONES O EXCLUSIONES', 'PROGRAMAS DE EDUCACIÓN FINANCIERA', 'REFERENCIAS CORPORATIVAS'];
+  var product_id = $('#product_id').val(); // Verificar que el tipo esté dentro del rango válido
+
+  if (type >= 1 && type <= titles.length) {
+    // Asignar el valor del título al elemento con ID 'title-complementary'
+    document.getElementById('title-complementary').textContent = titles[type - 1];
+    $('#type-complementary-service').val(type);
+    $('#product-complementary-service').val(product_id);
+    showContentComplementary();
+  } else {
+    // Tratamiento para tipos fuera del rango válido
+    document.getElementById('title-complementary').textContent = 'Título no válido';
+  }
+
+  $('#modal-complementary').modal('show');
+};
+
+$("#frm-complementary").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-complementary");
+  var data = new FormData(new_form);
+  axios.post("/panel/product-complementary", data).then(function (response) {
+    // Resetea el formulario
+    $('#product-complementary-description').val('');
+    $('#product-complementary-id').val('');
+    refreshListComplementary();
+    showContentComplementary();
+  })["catch"](function (e) {});
+});
+
+function showContentComplementary() {
+  var product_id = $('#product_id').val();
+  var type = $('#type-complementary-service').val();
+  axios.get("/panel/product-complementary/" + product_id + '/' + type).then(function (response) {
+    var result = response.data;
+    $('#content-complementary').html(result);
+  })["catch"](function (e) {});
+}
+
+window.deleteComplementary = function (complementary_id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      axios["delete"]("/panel/product-complementary/" + complementary_id).then(function (response) {
+        showContentComplementary();
+      })["catch"](function (e) {});
+    }
+  });
+};
+
+window.editComplementary = function (complementary_id, description) {
+  $('#product-complementary-description').val(description);
+  $('#product-complementary-id').val(complementary_id);
+  var type = $('#type-complementary-service').val();
+  modalComplementary(type);
+};
+
 $("#frm-financial-billing").submit(function (event) {
   event.preventDefault();
   var new_form = document.getElementById("frm-financial-billing");
@@ -1487,6 +1790,28 @@ $().ready(function () {
       });
     }
   });
+
+  if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null') {
+    var product_id = $('#product_id').val(); // Limpia las selecciones actuales en el select múltiple
+
+    $('#product_periodicity_id').val(null).trigger('change');
+    $('#product-principal_pay').val(null).trigger('change');
+    axios.get("/panel/financial-product/" + product_id + '/getPeriodicityAndPaymentMethod').then(function (response) {
+      var result = response.data;
+      var periodicities = result.periodicities;
+      var payments = result.payments; // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+
+      var periodicityValues = periodicities.map(function (item) {
+        return item.periodicity_id;
+      });
+      var paymentValues = payments.map(function (item) {
+        return item.payment_method_id;
+      }); // Seleccionar los valores correspondientes en los selects
+
+      $('#product_periodicity_id').val(periodicityValues).trigger('change');
+      $('#product-principal_pay').val(paymentValues).trigger('change');
+    })["catch"](function (e) {});
+  }
 });
 $("#frm-financial-buro").submit(function (event) {
   event.preventDefault();
@@ -1497,6 +1822,15 @@ $("#frm-financial-buro").submit(function (event) {
     showToast('Producto', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
+
+window.showBank = function (is_show) {
+  $('#content-bank').hide();
+
+  if (is_show == true) {
+    $('#content-bank').show();
+  }
+};
+
 $("#frm-financial-comision").submit(function (event) {
   event.preventDefault();
   var new_form = document.getElementById("frm-financial-comision");
@@ -1513,6 +1847,15 @@ $("#frm-financial-contact").submit(function (event) {
   axios.post("/panel/financial-product", data).then(function (response) {
     var result = response.data;
     showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+$("#frm-financial-requisitos").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-requisitos");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Financiera', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
 $("#frm-financial-rate").submit(function (event) {
@@ -1556,6 +1899,52 @@ $("#frm-financial-chart").submit(function (event) {
   })["catch"](function (e) {});
 });
 
+if (document.getElementById('tramite-proceso_tramite')) {
+  var ckeditor = CKEDITOR.replace('tramite-proceso_tramite', {
+    toolbar: [{
+      name: 'basicstyles',
+      items: ['Bold', 'Italic', 'Font', 'FontSize', 'TextColor', 'BGColor', 'RemoveFormat']
+    }, {
+      name: 'paragraph',
+      items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+    }, {
+      name: 'insert',
+      items: ['Table']
+    }],
+    language: 'es-mx'
+  }); //*axios que devuelva el valor proceso_tramite
+
+  var product_id = $('#product_id').val();
+  setTimeout(function () {
+    axios.get("/panel/financial-product/" + product_id + "/getTramite").then(function (response) {
+      var result = response.data;
+      CKEDITOR.instances['tramite-proceso_tramite'].setData(result.proceso_tramite);
+    })["catch"](function (e) {// Manejar errores aquí
+    });
+  }, 2000); // 2000 milisegundos = 2 segundos
+}
+
+$("#frm-financial-tramite").submit(function (event) {
+  event.preventDefault();
+  var desc = CKEDITOR.instances['tramite-proceso_tramite'].getData();
+  $('#tramite-proceso_tramite').val(desc);
+  var new_form = document.getElementById("frm-financial-tramite");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+$("#frm-comisioneskc").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-comisioneskc");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+
 window.deleteFinancialProduct = function (id) {
   axios["delete"]("/panel/financial-product/" + id).then(function (response) {
     (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financial-product', 'Producto', 'Registro borrado');
@@ -1571,7 +1960,7 @@ window.alerDeleteFinancialProduct = function (id) {
     cancelButtonText: 'Mejor no'
   }).then(function (result) {
     if (result.value) {
-      deleteProduct(id);
+      deleteFinancialProduct(id);
     }
   });
 };
@@ -1609,6 +1998,8 @@ if (document.getElementById('dt-financial-product')) {
         },
         ajax: '/panel/financial/product/' + financial_id + '/list/show',
         columns: [{
+          data: 'id'
+        }, {
           data: 'name'
         }, {
           data: 'status'
@@ -1644,22 +2035,22 @@ window.modalNote = function (note_id, model_note) {
   $('#id_rel').val(note_id);
   $('#model_note').val(model_note);
   $('#modal-lead-description').val('');
-  $('#modal-lead-note').modal('show');
+  $('#modal-note').modal('show');
 };
 
 var refresh = {
   'credit': creditRefresh
 };
-$("#frm-lead-note").submit(function (event) {
+$("#frm-note").submit(function (event) {
   event.preventDefault();
   var model_note = $('#model_note').val();
   var refresh_dt = $('#refresh-dt').val();
-  var new_form = document.getElementById("frm-lead-note");
+  var new_form = document.getElementById("frm-note");
   var data = new FormData(new_form);
   axios.post("/panel/" + model_note + "/note", data).then(function (response) {
     if (refresh_dt != 'null') {
       (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
-      $('#modal-lead-note').modal('hide');
+      $('#modal-note').modal('hide');
     } else {
       refresh[model_note]();
     }
@@ -1667,12 +2058,33 @@ $("#frm-lead-note").submit(function (event) {
 });
 
 window.copyToClipBoardReport = function () {
-  var content = document.getElementById('url_report').value;
-  navigator.clipboard.writeText(content).then(function () {
-    showToast('', 'URL copiada en el portapapeles', 'success');
-  })["catch"](function (err) {
-    console.log('Something went wrong', err);
-  });
+  var content = document.getElementById('url_report').value; // Intentar usar la API del Portapapeles (navigator.clipboard) si está disponible
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(content).then(function () {
+      showToast('', 'URL copiada en el portapapeles', 'success');
+    })["catch"](function (err) {
+      console.log('No se pudo copiar al portapapeles con la API del Portapapeles', err);
+    });
+  } else {
+    // Si la API del Portapapeles no está disponible, usar métodos alternativos
+    var textarea = document.createElement('textarea');
+    textarea.value = content;
+    textarea.style.position = 'fixed'; // Para asegurarse de que sea visible
+
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      var successful = document.execCommand('copy');
+      var msg = successful ? 'URL copiada en el portapapeles' : 'No se pudo copiar al portapapeles';
+      showToast('', msg, successful ? 'success' : 'error');
+    } catch (err) {
+      console.log('No se pudo copiar al portapapeles con el método alternativo', err);
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
 };
 
 /***/ }),
@@ -1686,6 +2098,14 @@ window.copyToClipBoardReport = function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 $('.js-select2').select2({
   placeholder: "Escribe para buscar..",
@@ -1695,11 +2115,12 @@ $('.select2multiple').select2({
   placeholder: "Escribe para buscar.."
 }); //onchangeOrganization
 
-window.organizationChange = function (lead_agreement_id, financial_id, other) {
+window.organizationChange = function (lead_agreement_id, financial_id, other, applied_financial_product) {
   if (other != null) {
     lead_agreement_id = 0;
     $('#new_agreement').val(other);
-  }
+  } //alert(lead_agreement_id);
+
 
   if (lead_agreement_id != null) {
     $('#lead-agreement').val(lead_agreement_id).trigger("change");
@@ -1716,15 +2137,19 @@ window.organizationChange = function (lead_agreement_id, financial_id, other) {
     $('#lead-content-agreement').hide();
   } else {
     getFinancial(lead_agreement, financial_id);
+    getFinancialByAgreement(lead_agreement, applied_financial_product);
   }
 };
 
 window.productChange = function (lead_product_id) {
   $('#content-importe-solicitado').hide();
-  $('#content-banco_nomina').hide();
-  $('#content-tipo-credito').hide();
+  /* $('#content-banco_nomina').hide(); */
+  //$('#content-tipo-credito').hide();
+
   $('#content-consulta-buro-credito').hide();
   $('#content-financial_product_id').hide();
+  $('#content-aval-o-garantia').hide();
+  $('#content-comment').hide();
   $('#lead-financial_id').val(null).trigger('change');
 
   if (lead_product_id != null) {
@@ -1732,24 +2157,63 @@ window.productChange = function (lead_product_id) {
   }
 
   var product_id = $("#lead-product-id").val();
-  $('#content-financial').hide();
 
   if (product_id == 2) {
-    $('#content-financial').show();
+    //portabilidad
     $('#content-financial_product_id').show();
     $('#content-importe-solicitado').show();
-    $('#content-banco_nomina').show();
-    $('#content-tipo-credito').show();
-    $('#content-consulta-buro-credito').show();
+    /* $('#content-banco_nomina').hide(); */
+
+    $('#content-producto-financiero').show();
+    $('#content-consulta-buro-credito').hide();
+    $('#content-aval-o-garantia').hide();
+    $('#content-ingreso-mensual').show();
   }
 
   if (product_id == 1) {
+    // credito nomina
+
+    /* $('#content-banco_nomina').hide(); */
     $('#content-importe-solicitado').show();
-    $('#content-banco_nomina').show();
+    $('#content-producto-financiero').show();
+    $('#content-tipo_tramite').show();
     $('#content-tipo-credito').show();
-    $('#content-consulta-buro-credito').show();
+    $('#content-consulta-buro-credito').hide();
+    $('#content-aval-o-garantia').hide();
+    $('#content-ingreso-mensual').show();
+  }
+
+  if (product_id == 4) {
+    // on-demand
+    $('#content-producto-financiero').show();
+    $('#content-ingreso-mensual').hide();
+  }
+
+  if (product_id == 3) {
+    //Asesoria
+    $('#content-comment').show();
+    $('#content-aval-o-garantia').hide();
   }
 };
+
+function getFinancialByAgreement(agreementId, applied_financial_product) {
+  var selectElement = document.getElementById('applied_financial_product');
+  selectElement.options.length = 0; // Limpiar el select
+
+  axios.get("/panel/agreement/" + agreementId + "/financial-product/show").then(function (response) {
+    var financialProducts = response.data;
+    Object.keys(financialProducts).forEach(function (key) {
+      var option = document.createElement('option');
+      option.value = key;
+      option.textContent = financialProducts[key];
+      selectElement.appendChild(option);
+    });
+
+    if (applied_financial_product != 'null') {
+      $('#applied_financial_product').val(applied_financial_product).trigger("change");
+    }
+  })["catch"](function (e) {});
+}
 
 function getFinancial(lead_id, financial_id) {
   $('#lead-financial_id').empty();
@@ -1781,33 +2245,18 @@ function getFinancial(lead_id, financial_id) {
   });
 }
 
-window.getFinancialProduct = function (product_id) {
-  $('#lead-financial-product-id').empty();
-  var financial_id = $('#lead-financial_id').val();
-  axios.get("/panel/lead/financial/product/" + financial_id + "/show").then(function (response) {
+window.getFinancialProduct = function (id, type) {
+  axios.get("/panel/action/financial/product/" + id + "/" + type + '/show').then(function (response) {
     var result = response.data;
-    $('#lead-financial-product-id').empty();
+    var financials = result.financials;
+    console.log(financials);
+    var financialValues = financials.map(function (item) {
+      return item.product_id;
+    }); // Limpia las selecciones actuales en el select múltiple
 
-    if (result != null) {
-      var lead_financial = $('#lead-financial-product-id');
+    $('#lead-financial-product-id').val(null).trigger('change'); // Seleccionar los valores correspondientes en los selects
 
-      for (var key in result) {
-        var element = result[key];
-        var option = new Option(element.name, element.id, true, true);
-        lead_financial.append(option).trigger('change');
-      }
-
-      console.log('aqui' + product_id);
-
-      if (product_id == null) {
-        $('#lead-financial-product-id').val(null).trigger('change');
-      } else {
-        // Esperar 2 segundos antes de ejecutar el trigger 'change'
-        setTimeout(function () {
-          $('#lead-financial-product-id').val(product_id).trigger('change');
-        }, 2000);
-      }
-    }
+    $('#lead-financial-product-id').val(financialValues).trigger('change');
   })["catch"](function (e) {});
 };
 
@@ -1881,10 +2330,12 @@ function setData(is_change_origen, is_change_organization) {
     var financials = result.financials;
     var product_id = lead.product_id;
     var other = lead.other;
+    var is_viability = lead.is_viability;
+    var is_viability_credit = lead.is_viability_credit;
     console.log(product_id);
     productChange(product_id);
-    organizationChange(lead.agreement_id, lead.financial_id, other);
-    getFinancialProduct(lead.financial_product_id);
+    organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
+    getFinancialProduct(lead.id, 1);
 
     if (is_change_origen == true) {
       $('#lead-origin').val(lead.origin_id);
@@ -1893,29 +2344,72 @@ function setData(is_change_origen, is_change_organization) {
 
     $('#lead-asesor-id').val(lead.asesor_id);
     $('#lead-asesor-id').trigger("change");
-    $('#lead-type_id').val(lead.type_id);
-    $('#lead-type_id').trigger("change");
+    /* $('#lead-type_id').val(lead.type_id);
+    $('#lead-type_id').trigger("change"); */
+
     $('#lead-name').val(lead.name);
     $('#lead-last_name').val(lead.last_name);
     $('#lead-second_last_name').val(lead.second_last_name);
     $('#lead-cellphone').val(lead.cellphone);
     $('#lead-email').val(lead.email);
-    $('#content-financial').hide();
+    $('#lead-rfc').val(lead.rfc);
 
-    if (product_id == 2) {
-      $('#content-financial').show();
+    if (document.getElementById('lead-manychat_id')) {
+      $('#lead-manychat_id').val(lead.manychat_id);
     }
 
+    $('#lead-comment').val(lead.comment);
     changeOrigen(lead.channel_id);
     $('#lead-temperature-id').val(lead.financial_id).trigger("change");
     $('#importe_solicitado').val(lead.importe_solicitado);
+    $('#income').val(lead.income);
     $('#bank_id').val(lead.bank_id).trigger("change");
     $('#tipo_credito').val(lead.tipo_credito).trigger("change");
     $('#consulta_buro').val(lead.consulta_buro).trigger("change");
+    checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
+
+    checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+
+    checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+
+    $('#applied_loan_type').val(lead.applied_loan_type).trigger("change"); // Get the checkbox elements
+
+    var checkboxViability = document.getElementById('is_viability');
+    var checkboxViabilityCredit = document.getElementById('is_viability_credit'); // Set the checked property based on the variables
+
+    checkboxViability.checked = is_viability === 1;
+    checkboxViabilityCredit.checked = is_viability_credit === 1;
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
 }
+
+window.checkDataLeadExist = function (valInput, id) {
+  var getValue = valInput.value;
+  var messageElement = document.getElementById(id + '-msg');
+
+  if (valInput != '') {
+    messageElement.textContent = "";
+    axios.get("/panel/lead/" + getValue + "/" + id + "/check").then(function (response) {
+      var result = response.data;
+      var isExist = result.exist;
+
+      if (isExist > 0) {
+        if (id != 'rfc') {
+          messageElement.textContent = "Ya está en uso";
+        } else {
+          messageElement.textContent = "Recurrente";
+          $('.text-viabilidad').html('Recurrente');
+        }
+      } else {
+        if (id == 'rfc') {
+          messageElement.innerHTML = "<b>Nuevo</b>";
+          $('.text-viabilidad').html('Nuevo');
+        }
+      }
+    })["catch"](function (e) {});
+  }
+};
 
 window.deleteLead = function (lead_id) {
   axios.get("panel/lead/" + lead_id + "/delete").then(function (response) {
@@ -2004,20 +2498,17 @@ $().ready(function () {
         required: true
       },
       'data[last_name]': {
-        required: true
+        required: false
       },
       'data[cellphone]': {
         number: true,
         minlength: 10
       },
       'data[email]': {
-        required: true,
+        required: false,
         email: true
       },
       'data[origin_id]': {
-        required: true
-      },
-      'data[channel_id]': {
         required: true
       },
       'new_agreement': {
@@ -2036,13 +2527,85 @@ $().ready(function () {
       event.preventDefault();
       var new_form = document.getElementById("frm-lead");
       var data = new FormData(new_form);
+      var isExport = $('#isExport').val();
       axios.post("/panel/lead", data).then(function (response) {
-        var result = response.data;
-        window.location = '/panel/lead';
+        var getResult = response.data;
+        var result = getResult.lead;
+
+        if (isExport == 'true') {
+          $('#lead_id').val(result.id); //exportar
+
+          exportLead(result.id);
+        } else {
+          window.location = '/panel/lead';
+        }
       })["catch"](function (e) {});
     }
   });
+
+  function exportLead(_x) {
+    return _exportLead.apply(this, arguments);
+  }
+
+  function _exportLead() {
+    _exportLead = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(leadId) {
+      var fileName, formData, response, blob, link;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              fileName = 'KC - Datos exportados' + leadId + '.csv'; // Replace with your logic
+
+              formData = new FormData();
+              formData.append('lead_id', leadId);
+              _context.next = 5;
+              return axios.post("/panel/lead/" + leadId + "/data/export", formData, {
+                responseType: 'blob'
+              });
+
+            case 5:
+              response = _context.sent;
+              blob = new Blob(["\uFEFF", response.data], {
+                type: 'text/csv;charset=utf-8'
+              });
+
+              if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, fileName);
+              } else {
+                link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = fileName;
+                link.click();
+              }
+
+              $('#isExport').val(false);
+
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+    return _exportLead.apply(this, arguments);
+  }
 });
+
+window.saveAndExportLead = function () {
+  $('#isExport').val(true);
+  document.getElementById('btnSave').click();
+};
+/* modal vista previa perfil */
+
+
+window.modalPreviewProfile = function (lead_id) {
+  $('content-preview-profile').html('');
+  axios.get("/panel/lead/" + lead_id + "/preview/profile").then(function (response) {
+    var result = response.data;
+    $('#content-preview-profile').html(result);
+    $('#modal-preview-profile').modal('show');
+  })["catch"](function (e) {});
+};
 
 window.modalPasswod = function (user_id) {
   $('#password_user_id').val(user_id);
@@ -2080,7 +2643,7 @@ document.addEventListener('DOMContentLoaded', function () {
     module_id = $('#module_id').val();
   }
 
-  var table = NioApp.DataTable('#dt-lead', {
+  var table_lead = NioApp.DataTable('#dt-lead', {
     processing: true,
     responsive: {
       details: {
@@ -2108,14 +2671,10 @@ document.addEventListener('DOMContentLoaded', function () {
       data: 'date'
     }, {
       data: 'product'
-    }, {
-      data: 'origin'
-    }, {
+    },
+    /* { data: 'organizacion' }, */
+    {
       data: 'label'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'status'
     }, {
       data: 'options'
     }],
@@ -2129,7 +2688,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }); // Expand table rows on click
 
   $('#dt-lead tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
+    var row = table_lead.row($(this).closest('tr'));
 
     if (row.child.isShown()) {
       row.child.hide();
@@ -2772,6 +3331,208 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+/* wallet */
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-wallet', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-wallet/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'date'
+    }, {
+      data: 'ordenante'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-wallet tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+
+  if (document.getElementById('dt-wallet')) {
+    var urlParams = new URLSearchParams(window.location.search);
+    var alertParam = urlParams.get('alert');
+
+    if (alertParam === 'true') {
+      Swal.fire({
+        title: 'Solicitud de agregar fondos',
+        html: 'Hemos recibido tu Solicitud. <br> Le avisaremos y notificaremos a la brevedad',
+        showCancelButton: false,
+        confirmButtonText: 'ok'
+      }).then(function (result) {
+        if (result.value) {}
+      });
+    }
+  }
+
+  if (document.getElementById('dt-down-wallet')) {
+    var _urlParams = new URLSearchParams(window.location.search);
+
+    var _alertParam = _urlParams.get('alertdown');
+
+    if (_alertParam === 'true') {
+      Swal.fire({
+        title: 'Solicitud de retirar fondos',
+        html: 'Te avisaremos y notificaremos a la brevedad',
+        showCancelButton: false,
+        confirmButtonText: 'ok'
+      }).then(function (result) {
+        if (result.value) {}
+      });
+    }
+  }
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-down-wallet', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-down-wallet/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'date'
+    }, {
+      data: 'ordenante'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-down-wallet tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-wallet-history', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-wallet/list/history/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'fecha'
+    }, {
+      data: 'tipo'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'comision'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  }); // Expand table rows on click
+
+  $('#dt-wallet-history tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
 document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-kc-swap', {
     processing: true,
@@ -2905,6 +3666,33 @@ $().ready(function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/module/resumen.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/module/resumen.js ***!
+  \***************************************************/
+/***/ (() => {
+
+if (document.getElementById('checkIslimit')) {
+  var checkbox = document.getElementById('checkIslimit');
+  var numberInput = document.getElementById('lendable'); // Set initial state based on checkbox checked status
+
+  numberInput.disabled = checkbox.checked;
+  checkbox.addEventListener('change', function () {
+    numberInput.disabled = this.checked;
+  });
+  $("#frm-inversionista-prestamo").submit(function (event) {
+    event.preventDefault();
+    var InvestorId = $('#investorId').val();
+    var new_form = document.getElementById("frm-inversionista-prestamo");
+    var data = new FormData(new_form);
+    axios.post("/panel/inversionista", data).then(function (response) {
+      window.location = '/panel/inversionista/' + InvestorId;
+    })["catch"](function (e) {});
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/js/components/module/template.js":
 /*!****************************************************!*\
   !*** ./resources/js/components/module/template.js ***!
@@ -3013,12 +3801,12 @@ $().ready(function () {
   });
   $("#frm-template_control_desk_step2").validate({
     rules: {
-      'credit[applied_financial_product]': {
-        required: true
-      },
-      'credit[applied_loan_type]': {
-        required: true
-      },
+      /*  'credit[applied_financial_product]': {
+           required: true,
+       },
+       'credit[applied_loan_type]': {
+           required: true,
+       }, */
       'credit[applied_import]': {
         required: true
       },
@@ -3043,9 +3831,75 @@ $().ready(function () {
     },
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
-      saveForm('frm-template_control_desk_step2', 'controlDesk');
+      var input_loan = $('#input_loan').val();
+      var applied_import = $('#applied_import').val();
+
+      if (input_loan != '' && parseFloat(applied_import) > parseFloat(input_loan)) {
+        Swal.fire({
+          text: 'El importe solicitado no puede ser mayor al disponible',
+          icon: 'warning'
+        });
+      } else {
+        saveForm('frm-template_control_desk_step2', 'controlDesk');
+      }
     }
   });
+
+  window.getLoanAvailableByProduct = function (product) {
+    $('#text-loan').html('');
+    $('#input_loan').val('');
+    var productId = product.value;
+    $('#applied_loan_total_amount').val('');
+    $('#applied_payment').val('');
+    $('#applied_term').val('');
+    $('#applied_interest_rate').val('');
+    $('#applied_CAT').val('');
+    axios.get("/panel/financial-product/" + productId).then(function (response) {
+      var result = response.data;
+
+      if (result != null) {
+        // Use Intl.NumberFormat for locale-aware currency formatting
+        var formatter = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          // Replace with your desired currency code
+          minimumFractionDigits: 2 // Ensure at least two decimal places
+
+        });
+        var loan_available = result.loan_available == null || undefined ? 0 : result.loan_available;
+        var formattedAmount = formatter.format(loan_available);
+        $('#text-loan').html('Disponible: ' + formattedAmount);
+        $('#input_loan').val(loan_available);
+        $('#comision').val(result.sod_commission_amount);
+        $('#producto').val(result.type_product_id);
+
+        if (result.type_product_id == 6) {
+          $('#applied_term').val(1);
+          $('#applied_interest_rate').val(0);
+          $('#applied_CAT').val(0);
+        }
+
+        setBajoDemanda();
+      }
+    })["catch"](function (e) {
+      console.error('Error fetching loan available:', e);
+    });
+  };
+
+  window.setBajoDemanda = function () {
+    var comision = parseFloat($('#comision').val());
+    var inputAppliedImport = document.getElementById('applied_import');
+    inputAppliedImport.addEventListener('input', function () {
+      var importeSolicitado = parseFloat(inputAppliedImport.value);
+      var productId = $('#producto').val();
+
+      if (productId == 6) {
+        $('#applied_loan_total_amount').val(importeSolicitado + comision);
+        $('#applied_payment').val(importeSolicitado + comision);
+      }
+    });
+  };
+
   $("#frm-template_control_desk_step3_1").validate({
     rules: {
       'client_person[sex]': {
@@ -3056,39 +3910,18 @@ $().ready(function () {
         minlength: 13,
         maxlength: 13
       },
-      'client_person[nationality]': {
-        required: true
-      },
-      'client_person[birth_state]': {
-        required: true
-      },
       'client_person[curp]': {
-        required: true,
+        required: false,
         minlength: 18,
         maxlength: 18
       },
       'client_person[client_postal_code]': {
-        required: true,
+        required: false,
         number: true,
         minlength: 5,
         maxlength: 5
       },
-      'client_person[client_street]': {
-        required: true
-      },
-      'client_person[client_home_external_number]': {
-        required: true
-      },
-      'client_person[client_colony]': {
-        required: true
-      },
-      'client_person[client_city]': {
-        required: true
-      },
-      'client_person[client_state]': {
-        required: true
-      },
-      'client_person[client_country]': {
+      'client_person[bank_name]': {
         required: true
       },
       'client_person[bank_card_number]': {
@@ -3104,35 +3937,18 @@ $().ready(function () {
       'client_person[bank_clabe]': {
         number: true,
         minlength: 18,
-        maxlength: 18
+        maxlength: 18,
+        required: true
       },
       'client_person[monthly_income]': {
-        required: true,
+        required: false,
         number: true
       },
       'client_person[workplace_postal_code]': {
-        required: true,
+        required: false,
         number: true,
         minlength: 5,
         maxlength: 5
-      },
-      'client_person[workplace_street]': {
-        required: true
-      },
-      'client_person[workplace_home_external_number]': {
-        required: true
-      },
-      'client_person[workplace_colony]': {
-        required: true
-      },
-      'client_person[workplace_city]': {
-        required: true
-      },
-      'client_person[workplace_state]': {
-        required: true
-      },
-      'client_person[workplace_country]': {
-        required: true
       }
     },
     submitHandler: function submitHandler(form, event) {
@@ -3290,7 +4106,44 @@ $().ready(function () {
     },
     submitHandler: function submitHandler(form, event) {
       event.preventDefault();
-      saveForm('frm-template_control_desk_step5', 'controlDesk');
+      TotalCredits();
+    }
+  });
+
+  function TotalCredits() {
+    var creditId = $('#id_rel').val();
+    axios.get("/panel/client/" + creditId + "/credit/total").then(function (response) {
+      var result = response.data;
+      var total = result.total;
+
+      if (total > 1) {
+        saveForm('frm-template_control_desk_step5', 'controlDesk');
+      } else {
+        Swal.fire({
+          title: 'Este es un cliente nuevo',
+          text: 'Confirmo que se incluyó el contrato de comisión mercantil para un cliente nuevo',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Continuar',
+          cancelButtonText: 'Cancelar'
+        }).then(function (result) {
+          if (result.value) {
+            saveForm('frm-template_control_desk_step5', 'controlDesk');
+          }
+        });
+      }
+    })["catch"](function (e) {});
+  }
+
+  $("#frm-template_control_desk_step5_2").validate({
+    rules: {
+      'credit[signed]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step5_2', 'controlDesk');
     }
   });
   $("#frm-template_delivery_step2").validate({
@@ -3430,6 +4283,94 @@ $().ready(function () {
       event.preventDefault();
       saveForm('frm-template_swap_step3', 'swap');
     }
+  });
+  /* wallet */
+
+  $("#frm-template_wallet_step1").validate({
+    rules: {
+      'transaction[investor_id]': {
+        required: true
+      },
+      'transaction[bank_transfer_type]': {
+        required: true
+      },
+      'transaction[amount]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_step1', 'wallet');
+    }
+  }); //if exist implement onchange select
+
+  window.getValue = function (get) {
+    $('#content-legend').html('');
+    var ordenante = get.value;
+    axios.get("/panel/kc-wallet/" + ordenante + "/investor/get").then(function (response) {
+      var result = response.data;
+      $('#content-legend').html(result);
+    })["catch"](function (e) {});
+  };
+
+  if (document.getElementById('type_form') && $('#type_form').val() == '66') {
+    $('#content-legend-kc-down-bank').show();
+  }
+
+  if (document.getElementById('frm-template_wallet_step1')) {
+    var investorIdInput = document.getElementById('investor_id'); // Check if investor_id element exists and is a hidden input
+
+    if (investorIdInput && investorIdInput.type === 'hidden') {
+      getValue(investorIdInput);
+    }
+  }
+
+  $("#frm-template_wallet_step1_2").validate({
+    rules: {
+      'transaction[operation_status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_step1_2', 'wallet');
+    }
+  }); //* wallet-down
+
+  $("#frm-template_wallet_down_step1").validate({
+    rules: {
+      'transaction[investor_id]': {
+        required: true
+      },
+      'transaction[amount]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var withdraw_available = $('#withdraw_available').val();
+      var amount = $('#amount').val();
+
+      if (withdraw_available != '' && parseFloat(amount) > parseFloat(withdraw_available)) {
+        Swal.fire({
+          text: 'El importe a retirar debe ser menor  al disponible para el retiro',
+          icon: 'warning'
+        });
+      } else {
+        saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
+      }
+    }
+  });
+  $("#frm-template_wallet_down_step2").validate({
+    rules: {
+      'transaction[operation_status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_down_step2', 'kc-down-wallet');
+    }
   }); //*get data
 
   if (document.getElementById('id_rel')) {
@@ -3437,10 +4378,11 @@ $().ready(function () {
     var type_form = $('#type_form').val();
 
     if (id_rel != '') {
-      axios.get("/panel/action-form/" + id_rel).then(function (response) {
+      axios.get("/panel/action-form/" + id_rel + "/" + type_form + '/form/get').then(function (response) {
         var result = response.data;
         var credit = result.credit;
         var client = result.client;
+        var transaction = result.transaction;
 
         if (type_form == 8) {
           //checkup
@@ -3453,6 +4395,7 @@ $().ready(function () {
 
         if (type_form == 12) //reduccion
           {
+            getFinancialProduct(credit.id, 2);
             organizationChange(credit.agreement_id, credit.financial_id);
             $('#name').val(client.name);
             $('#last_name').val(client.last_name);
@@ -3464,6 +4407,7 @@ $().ready(function () {
             $('#current_term').val(credit.current_term);
             $('#current_principal_balance').val(credit.current_principal_balance / 100);
             $('#current_total_balance').val(credit.current_total_balance / 100);
+            $('#tipo_credito').val(credit.tipo_credito).trigger("change");
           }
 
         if (type_form == 23) //form kc-desktop step1
@@ -3628,6 +4572,31 @@ $().ready(function () {
           {
             $('#signed').val(credit.signed).trigger("change");
           }
+
+        if (type_form == 61) //form kc-wallet step1
+          {
+            $('#investor_id').val(transaction.investor_id).trigger("change");
+            $('#bank_transfer_type').val(transaction.bank_transfer_type).trigger("change");
+            $('#operation_number').val(transaction.operation_number);
+            $('#amount').val(transaction.amount);
+          }
+
+        if (type_form == 63) //form kc-wallet step2
+          {
+            $('#operation_status').val(transaction.operation_status).trigger("change");
+          }
+
+        if (type_form == 67) //form kc-wallet step2
+          {
+            $('#operation_status').val(transaction.operation_status).trigger("change");
+          }
+
+        if (type_form == 66) //form kc-wallet step1
+          {
+            $('#investor_id').val(transaction.investor_id).trigger("change");
+            $('#transaction_type').val(transaction.transaction_type);
+            $('#amount').val(Math.abs(transaction.amount));
+          }
       })["catch"](function (e) {});
     }
   }
@@ -3670,6 +4639,7 @@ function saveForm(id_form, model) {
   var data = new FormData(new_form);
   var id_rel = $('#id_rel').val();
   var url_redirect = null;
+  var is_redirect_document = null;
 
   if (document.getElementById('url_redirect')) {
     url_redirect = $('#url_redirect').val();
@@ -3684,9 +4654,35 @@ function saveForm(id_form, model) {
       window.history.back();
     }
 
+    if (document.getElementById('url_redirect_finish')) {
+      // Obtener el valor de "id"
+      var id = result.id; // Obtener el elemento "url_redirect_finish"
+
+      var urlRedirectFinishElement = document.getElementById('url_redirect_finish'); // Obtener el valor actual de data-redirect
+
+      var currentDataRedirect = urlRedirectFinishElement.getAttribute('data-redirect'); // Reemplazar {history_id} con el valor de "id"
+
+      var updatedDataRedirect = currentDataRedirect.replace('{history_id}', id); // Actualizar el valor de data-redirect
+
+      urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
+      /* window.location = updatedDataRedirect; */
+
+      url_redirect = updatedDataRedirect;
+
+      if (url_redirect.includes('{id}')) {
+        url_redirect = url_redirect.replace('{id}', result.id);
+      }
+    }
+
     window.location = url_redirect;
   })["catch"](function (e) {});
-} //TODO: alerta si detecto kyc
+} //*boton saltar en swap etapa 2_3   
+
+
+window.saltarSwap = function () {
+  $('#send_email').val(0);
+  $("#frm-template_swap_step2-3").submit(); // Envía el formulario
+}; //TODO: alerta si detecto kyc
 
 
 window.kycCreditHistory = function (history_id, type) {
@@ -4309,6 +5305,10 @@ window.modalUser = function (type, user_id) {
     $('#frmfinanciera').trigger("reset");
   }
 
+  if (document.getElementById('frm-inversionista')) {
+    $('#frm-inversionista').trigger("reset");
+  }
+
   if (type === 1) {
     $('#user-admin-title').html('Crear usuario ' + title);
     $('#content-password').show();
@@ -4362,7 +5362,26 @@ function setDataUser(user_id) {
     $('#cellphone').val(result.cellphone);
     $('#email').val(result.email);
     $('#status option[value="' + result.status + '"]').attr("selected", "selected");
+
+    if (result.agreement_id != '') {
+      $('#agreement_id option[value="' + result.agreement_id + '"]').attr("selected", "selected");
+      $('#bank_name').val(result.bank_name);
+      $('#bank_card_number').val(result.bank_card_number);
+      $('#bank_account_number').val(result.bank_account_number);
+      $('#bank_clabe').val(result.bank_clabe);
+      $('#bank_account_holder').val(result.bank_account_holder);
+      $('#investment_bank_name').val(result.investment_bank_name);
+      $('#investment_bank_account_holder').val(result.investment_bank_account_holder);
+      $('#investment_bank_account_number').val(result.investment_bank_account_number);
+      $('#investment_bank_clabe').val(result.investment_bank_clabe);
+    }
+
     $('#is_access_config option[value="' + result.is_access_config + '"]').attr("selected", "selected");
+
+    if (document.getElementById('financial_products_id')) {
+      var financial_products_id = result.financial_products_id.split(',');
+      $('#financial_products_id').val(financial_products_id).trigger('change');
+    }
   })["catch"](function (e) {
     $('#admin_email-error-exist').show();
   });
@@ -4483,6 +5502,63 @@ $().ready(function () {
         }
 
         console.log(e.response);
+      });
+    }
+  });
+  $("#frm-inversionista").validate({
+    rules: {
+      financial_products_id: {
+        required: true
+      },
+      type_person: {
+        required: true
+      },
+      rol_id: {
+        required: true
+      },
+      name: {
+        required: true
+      },
+      last_name: {
+        required: true
+      },
+      cellphone: {
+        number: true,
+        minlength: 10
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 8
+      },
+      pass_confirm: {
+        required: true,
+        minlength: 8,
+        equalTo: "#password"
+      },
+      status: {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#admin_email-error-exist').hide();
+      var new_form = document.getElementById("frm-inversionista");
+      var data = new FormData(new_form);
+      axios.post("/panel/user/administrador", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-inversionista', 'Datos actualizados', 'Información actualizada correctamente');
+        $('#modal-user-admin').modal('hide');
+      })["catch"](function (e) {
+        var response = e.response;
+        var errors = response.data.errors;
+
+        if (errors.email) {
+          $('#admin_email-error-exist').show();
+        }
       });
     }
   });
@@ -4625,6 +5701,105 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/user/datatable_inversionista.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/user/datatable_inversionista.js ***!
+  \*****************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var table = NioApp.DataTable('#dt-inversionista', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/user/' + route + '/list/show',
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'email'
+    }, {
+      data: 'cellphone'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/user/datatable_user.js":
+/*!********************************************************!*\
+  !*** ./resources/js/components/user/datatable_user.js ***!
+  \********************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var queryParam = new URLSearchParams(window.location.search).get('query');
+  var table = NioApp.DataTable('#dt-search-user', {
+    processing: true,
+    searching: false,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/user/search?query=' + queryParam,
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'cellphone'
+    }, {
+      data: 'origin'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
 /***/ "./resources/js/components/utilities.js":
 /*!**********************************************!*\
   !*** ./resources/js/components/utilities.js ***!
@@ -4650,6 +5825,51 @@ function showInfo(redirect, idDatatable, title, msg) {
     $('#' + idDatatable).DataTable().ajax.reload();
   }
 }
+
+window.showNotes = function (id_rel, is_lead) {
+  var model = is_lead == true ? 'lead' : 'credit';
+  axios.get('/panel/' + model + '/' + id_rel + '/notes/list').then(function (response) {
+    var result = response.data;
+    $('#content-notes').html(result.notes);
+    $('#addNote').html(result.addNote);
+    $('#modal-list-note').modal('show');
+  })["catch"](function (e) {});
+};
+
+window.AddNoteIntoNotes = function (note_id, model_note) {
+  $('#modal-list-note').modal('hide');
+  $('#id_rel').val(note_id);
+  $('#model_note').val(model_note);
+  $('#modal-lead-description').val('');
+  $('#modal-note').modal('show');
+};
+
+window.showModalActions = function (lead_id, is_lead) {
+  var model = is_lead == true ? 'lead' : 'credit';
+  $('#id-rel-action').val(lead_id);
+  $('#model-action').val(model);
+  refreshAction(lead_id, model, 'in_progress', 'content-profile-in_progress');
+  refreshAction(lead_id, model, 'completed', 'content-profile-completed');
+  $('#modal-list-actions').modal('show');
+  var addAction = '<a class="pointer" onclick="addActionIntoActions(' + lead_id + ', true, ' + is_lead + ')"><em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>';
+  $('#addActions').html(addAction);
+};
+/* window.searchClient = function (event)
+{
+    if (event.key === 'Enter') {
+        //event.preventDefault();
+        let query = $('#query').val();
+        axios
+            .post('/panel/user/search', {query:query})
+            .then(function (response) {
+                let result = response.data;
+                console.log(result);
+            })
+            .catch(e => {
+                
+            });
+    }
+} */
 
 /***/ }),
 
@@ -4783,6 +6003,10 @@ __webpack_require__(/*! ./components/user/datatable_admin */ "./resources/js/com
 
 __webpack_require__(/*! ./components/user/datatable_financiera */ "./resources/js/components/user/datatable_financiera.js");
 
+__webpack_require__(/*! ./components/user/datatable_inversionista */ "./resources/js/components/user/datatable_inversionista.js");
+
+__webpack_require__(/*! ./components/user/datatable_user */ "./resources/js/components/user/datatable_user.js");
+
 __webpack_require__(/*! ./components/product/datatable_product */ "./resources/js/components/product/datatable_product.js");
 
 __webpack_require__(/*! ./components/product/crud */ "./resources/js/components/product/crud.js");
@@ -4821,6 +6045,8 @@ __webpack_require__(/*! ./components/module/datatable */ "./resources/js/compone
 
 __webpack_require__(/*! ./components/module/template */ "./resources/js/components/module/template.js");
 
+__webpack_require__(/*! ./components/module/resumen */ "./resources/js/components/module/resumen.js");
+
 __webpack_require__(/*! ./components/module/kc_check_up/datatable */ "./resources/js/components/module/kc_check_up/datatable.js");
 
 __webpack_require__(/*! ./components/module/kc_check_up/action/datatable */ "./resources/js/components/module/kc_check_up/action/datatable.js");
@@ -4840,13 +6066,19 @@ __webpack_require__(/*! ./components/credit/product/datatable */ "./resources/js
 __webpack_require__(/*! ./components/credit/datatable_in_progress */ "./resources/js/components/credit/datatable_in_progress.js");
 
 window.moveElement = function (section, id, idDatatable) {
+  // Deshabilita el botón para evitar clics múltiples
+  var button = document.querySelector('.moveElement');
+  button.disabled = true;
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {
     if (idDatatable == null) {
       location.reload();
     } else {
       $('#' + idDatatable).DataTable().ajax.reload();
     }
-  })["catch"](function (e) {});
+  })["catch"](function (e) {})["finally"](function () {
+    // Habilita el botón nuevamente después de que se complete la solicitud Axios
+    button.disabled = false;
+  });
 };
 
 window.msgProfile = function () {
@@ -4903,6 +6135,15 @@ $().ready(function () {
 });
 
  */
+
+tippy(document.querySelectorAll('.active-tooltip'), {
+  content: function content(reference) {
+    var id = reference.getAttribute('data-template');
+    var template = document.getElementById(id);
+    return template.innerHTML;
+  },
+  allowHTML: true
+});
 
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
 })();

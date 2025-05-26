@@ -28,6 +28,9 @@
                                     <div class="preview-block">
                                         <div class="row gy-4">
                                             <ul class="nav nav-tabs">
+                                                <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'productos')? 'active' : '' }}" data-bs-toggle="tab"
+                                                    href="{{ $financial_id != null ? '#tabProduct' : '#' }}">Productos financieros</a>
+                                            </li>
                                                 <li class="nav-item"> <a class="nav-link {{ (!isset($_GET['tab']))? 'active' : '' }}" data-bs-toggle="tab"
                                                         href="#tabGeneral">General</a> </li>
                                                 <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'privacidad_de_datos')? 'active' : '' }}" data-bs-toggle="tab"
@@ -39,9 +42,7 @@
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="{{ $financial_id != null ? '#tabBilling' : '#' }}">Datos
                                                         facturación</a> </li>
-                                                <li class="nav-item"> <a class="nav-link {{ (isset($_GET['tab']) && $_GET['tab'] == 'productos')? 'active' : '' }}" data-bs-toggle="tab"
-                                                        href="{{ $financial_id != null ? '#tabProduct' : '#' }}">Productos financieros</a>
-                                                </li>
+                                                
                                             </ul>
                                             <div class="tab-content">
 
@@ -766,6 +767,7 @@
                                                                     <tr>
                                                                         <th>ID</th>
                                                                         <th>Nombre</th>
+                                                                        <th>Activo</th>
                                                                         <th></th>
                                                                     </tr>
                                                                 </thead>

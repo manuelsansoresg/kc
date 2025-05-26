@@ -1,4 +1,7 @@
 <?php
+
+use Carbon\Carbon;
+
 if (!function_exists('formatDateNameMonth')) {
     function formatDateNameMonth($date, $is_time = true)
     {
@@ -21,6 +24,29 @@ if (!function_exists('formatDateNameMonth')) {
     }
 }
 
+if (!function_exists('formatDateNameMonthHour')) {
+    function formatDateNameMonthHour($date, $is_time = true)
+    {
+        $monhts = array('01' => 'Ene', '02' => 'Feb', '03' => 'Mar', '04' => 'Abr', '05' => 'May',
+                    '06' => 'Jun', '07' => 'Jul', '08' => 'Ago', '09' => 'Sep',
+                    '10' => 'Oct', '11' => 'Nov', '12' => 'Dic'
+                );
+        $format_date = date('d-m-y', strtotime($date));
+        $format_hour = date('h:i a', strtotime($date));
+        $day = substr($format_date, 0, 3);
+        $month  = $monhts[substr($format_date, 3, 2)];
+        $year_hour           = substr($format_date, 6);
+        $year           = substr($format_date, 6, 3);
+        
+        $new_date =$day.$month.'<br>'.$format_hour;
+
+        if ($is_time == false) {
+            $new_date =$day.$month.'-'.$year;
+        }
+        return $new_date;
+    }
+}
+
 
 if (!function_exists('deadline')) {
     function deadline($date_init, $max_hour, $percent, $color, $show_max_hour = false)
@@ -31,6 +57,8 @@ if (!function_exists('deadline')) {
         $intervalo = $fecha1->diff($fecha2);
         $hour = $intervalo->format('%h');
         $day = $intervalo->format('%d');
+        $total_hours = $intervalo->days * 24 + $intervalo->h; // Total de horas
+
 
         $lbl_hour   = '';
         $color      = 'success';
@@ -41,7 +69,7 @@ if (!function_exists('deadline')) {
             $lbl_hour = 'Concluido';
             $color      = 'success';
         } else {
-            if ($hour > $max_hour) { //*deadline end
+            if ($total_hours > $max_hour) { //*deadline end
                 $lbl_hour = 'Vencido';
                 $color      = 'danger';
             } elseif ($hour == 0 && $day == 0) {
@@ -108,11 +136,59 @@ if (!function_exists('format_price')) {
     }
 }
 
+
+if (!function_exists('format_priceWithoutDecimal')) {
+    function format_priceWithoutDecimal($price)
+    {
+        if (!$price || !is_numeric($price)) {
+            return 0;
+        }
+
+        $formattedPrice = number_format($price, 2, '.', ',');
+        $formattedPrice = explode('.', $formattedPrice)[0];
+    
+        return $formattedPrice;
+    }
+}
+
 if (!function_exists('reduceDecimal')) {
     function reduceDecimal($number, $max_decimal = 2)
     {
-        $extract = explode(".", $number);
-        $new_number = isset($extract[1])? $extract[0].'.'.substr($extract[0], 0, $max_decimal) : $number;
-        return $new_number;
+        // Primero, verificamos si el número contiene un punto decimal
+        if (strpos($number, '.') !== false) {
+            // Divide el número en la parte entera y la parte decimal
+            list($integerPart, $decimalPart) = explode('.', $number);
+            
+            // Asegurémonos de que la parte decimal no sea más larga de lo que se permite
+            $decimalPart = substr($decimalPart, 0, $max_decimal);
+            
+            // Combina la parte entera y la parte decimal con un punto
+            $newNumber = $integerPart . '.' . $decimalPart;
+        } else {
+            // Si no hay punto decimal, simplemente devolvemos el número original
+            $newNumber = $number;
+        }
+
+        return $newNumber;
     }
 }
+
+
+if (!function_exists('timeRest')) {
+    function timeRest($start_date, $start_time)
+    {
+        $now = Carbon::now();
+        // Combina la fecha y la hora en un solo objeto Carbon
+        $combinedDateTime = Carbon::parse($start_date . ' ' . $start_time);
+
+        // Calcula el tiempo restante
+        $diff = $combinedDateTime->diff($now);
+
+        // Obtiene el número de días, horas, minutos y segundos restantes
+        $dias = $diff->days;
+        $horas = $diff->h;
+
+        return "Faltan {$dias} días y {$horas} horas";
+    }
+}
+

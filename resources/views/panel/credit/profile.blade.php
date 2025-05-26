@@ -9,6 +9,8 @@
 @inject('m_survey', 'App\Models\Survey')
 @inject('m_kyc', 'App\Models\Kyc')
 @inject('m_financial_product', 'App\Models\FinancialProduct')
+@inject('m_financial', 'App\Models\Financial')
+
 
 @php
     
@@ -54,8 +56,14 @@
         $m_history_log::KC_AFTER_MARKET_ARCHIVE,
     );
     $current_archive = $m_history_log->getByStatusFirst($status_credit_archive, $credit->id, 1);
+    $credit_product = $m_financial_product::getById($credit->applied_financial_product);
+$financial = $m_financial::find($credit_product->financial_id);
 @endphp
 
+
+{{-- 
+    $m_history_log::$label_status[$current_module->status_id]
+    --}}
 @section('content')
     {{-- content --}}
     <div class="nk-content ">
@@ -101,7 +109,7 @@
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabHistorial">Historial</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                        href="#tabActions">Acciónes</a> </li>
+                                                        href="#tabActions">Tareas</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabRequest">Solicitud</a> </li>
                                                 <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
@@ -173,6 +181,14 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
+                                                               
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">ID Prospecto</span>
+                                                                        <span class="profile-ud-value"> {{ $credit->lead_id }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
 
                                                             </div><!-- .profile-ud-list -->
                                                         </div><!-- .nk-block -->
@@ -236,9 +252,7 @@
                                                             <div class="profile-ud-list">
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
-                                                                        @php
-                                                                            $credit_product = $m_financial_product::getById($credit->financial_product_id);
-                                                                        @endphp
+                                                                       
                                                                         <span class="profile-ud-label">Producto financiero</span>
                                                                         <span class="profile-ud-value"> {{ $credit_product!= null ? $credit_product->name : null}}
                                                                         </span>
@@ -270,7 +284,30 @@
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Consulta buró de crédito</span>
                                                                         <span class="profile-ud-value">
-                                                                            {{ $credit->consulta_buro == 1 ? 'Sí' : 'No' }}
+                                                                            @if ($credit->consulta_buro != null)
+                                                                                {{ $credit->consulta_buro == 1 ? 'Sí' : 'No' }}
+                                                                            @endif
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Aval o garantía</span>
+                                                                        <span class="profile-ud-value">
+                                                                            @if ($credit->aval_o_garantia != null)
+                                                                                {{ $credit->aval_o_garantia == 1 ? 'Sí' : 'No' }}
+                                                                            @endif
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Reporte visto</span>
+                                                                        <span class="profile-ud-value">
+                                                                            @if ($credit->date_open_report != null)
+                                                                               {{ formatDateNameMonth($credit->date_open_report) }}
+                                                                            @endif
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -346,11 +383,12 @@
                                                                 </span>
                                                             </div>
                                                         </div>
+                                                       
                                                         <div class="profile-ud-item">
                                                             <div class="profile-ud wider">
                                                                 <span class="profile-ud-label">Financiera</span>
                                                                 <span class="profile-ud-value">
-                                                                    {{ $financial_applied !== null ? $financial_applied->commercial_name : null }}
+                                                                    {{ $financial !== null ? $financial->commercial_name : null }}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -574,6 +612,7 @@
                                                         $enum_credit_delivery       = $get_survey != null && isset(config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']])? config('enum_survey.surevey_credit_delivery')[$get_survey['surevey_credit_delivery']] :  null;
                                                         $enum_kc_attention          = $get_survey != null && isset(config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']])? config('enum_survey.surevey_kc_attention')[$get_survey['surevey_kc_attention']] :  null;
                                                         $enum_financial_attention   = $get_survey != null && isset(config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']])? config('enum_survey.surevey_financial_attention')[$get_survey['surevey_financial_attention']] :  null;
+                                                        $enum_recomendacion_amigos   = $get_survey != null && isset(config('enum_survey.surevey_recomendacion_amigos')[$get_survey['surevey_recomendacion_amigos']])? config('enum_survey.surevey_recomendacion_amigos')[$get_survey['surevey_recomendacion_amigos']] :  null;
                                                         $comment                    = $get_survey != null && isset($get_survey['survey_note'])? $get_survey['survey_note'] :  null;
                                                     @endphp     
                                                     <div class="nk-block">
@@ -591,7 +630,7 @@
                                                             </div>
                                                             <div class="profile-ud-item">
                                                                 <div class="profile-ud wider">
-                                                                    <span class="profile-ud-label">¿Cómo calificarías la atención que recibiste en KaaxClub?</span>
+                                                                    <span class="profile-ud-label">Qué tan satisfecho está con la claridad y transparencia de la información que te proporcionamos?</span>
                                                                     <span class="profile-ud-value">
                                                                         @if ($enum_kc_attention != null)
                                                                             <img src="{{ asset($enum_kc_attention) }}" alt="">
@@ -606,6 +645,17 @@
                                                                     <span class="profile-ud-value">
                                                                         @if ($enum_financial_attention != null)
                                                                             <img src="{{ asset($enum_financial_attention) }}" alt="">
+                                                                        @endif
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">¿En una escala del 1 al 5 ¿Qué tan probable es que nos recomiendes con un conocido?</span>
+                                                                    <span class="profile-ud-value">
+                                                                        @if ($enum_recomendacion_amigos != null)
+                                                                            <img src="{{ asset($enum_recomendacion_amigos) }}" alt="">
                                                                         @endif
                                                                     </span>
                                                                 </div>
@@ -694,6 +744,7 @@
                                                     <span class="sub-text">Estatus:</span>
                                                     <span>
                                                         @if ($current_archive == null)
+                                                        
                                                             {{ isset($m_history_log::$label_status[$current_module->status_id]) ? $m_history_log::$label_status[$current_module->status_id] : null; }}
                                                         @endif
                                                     </span>

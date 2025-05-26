@@ -9,25 +9,47 @@ class FinancialAgreement extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'id',
         'agreement_id',
-        'financial_id',
+        'product_id',
     ];
     protected $primaryKey = 'agreement_id';
 
     public static function saveEdit($agreement_id, $request)
     {
-        $get_configuration = FinancialAgreement::find($agreement_id);
-        if ($get_configuration != null) {
-            $get_configuration->delete();
-        }
+        // Obtén los productos existentes para este acuerdo financiero
+        $existingProducts = FinancialAgreement::where('agreement_id', $agreement_id)->pluck('product_id')->toArray();
 
-        $financials = $request->financials;
-        foreach ($financials as $key => $financial) {
-            $data_financial = array(
-                'agreement_id' => $agreement_id,
-                'financial_id' => $financial ,
-            );
-            $n_financial = FinancialAgreement::create($data_financial);
+        // Obtén los productos del request
+        $products = $request->products;
+
+        // Identifica los productos a eliminar y eliminarlos de la lista existente
+        $productsToDelete = array_diff($existingProducts, $products);
+
+        // Elimina los productos que ya no están en la lista
+        FinancialAgreement::where('agreement_id', $agreement_id)->whereIn('product_id', $productsToDelete)->delete();
+
+        // Itera sobre los productos del request
+        foreach ($products as $key => $product) {
+            $existingProduct = FinancialProduct::find($product);
+
+            if ($existingProduct) {
+                // Verifica si el registro ya existe antes de crearlo
+                $existingConfiguration = FinancialAgreement::where('agreement_id', $agreement_id)
+                    ->where('product_id', $product)
+                    ->first();
+
+                if (!$existingConfiguration) {
+                    $maxId = FinancialAgreement::max('id') + 1;
+                    $data_financial = array(
+                        //'id' => $maxId,
+                        'agreement_id' => $agreement_id,
+                        'product_id' => $product,
+                    );
+
+                    FinancialAgreement::create($data_financial);
+                }
+            }
         }
     }
 
@@ -36,7 +58,7 @@ class FinancialAgreement extends Model
         $get_financials = FinancialAgreement::where('agreement_id', $agreement_id)->get();
         $financials = array();
         foreach ($get_financials as $get_financial) {
-            $financial = Financial::find($get_financial->financial_id);
+            $financial = FinancialProduct::find($get_financial->product_id);
             $financials[] = $financial;
         }
         return $financials;
@@ -49,6 +71,6 @@ class FinancialAgreement extends Model
     
     public function financial()
     {
-        return $this->belongsTo(Financial::class, 'financial_id');
+        return $this->belongsTo(FinancialProduct::class, 'product_id');
     }
 }

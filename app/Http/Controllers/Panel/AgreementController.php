@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Agreement;
 use App\Models\FinancialAgreement;
+use App\Models\FinancialProduct;
 use Illuminate\Http\Request;
 
 class AgreementController extends Controller
@@ -24,6 +25,19 @@ class AgreementController extends Controller
         $users = Agreement::listDatatable();
         
         return response()->json(['data' => $users]);
+    }
+
+    public function getFinancialProducts(Agreement $agreement)
+    {
+        $get_financials = FinancialAgreement::where('agreement_id', $agreement->id)->get();
+        $financials = array();
+        if ($get_financials != null) {
+            foreach ($get_financials as $financial) {
+                $getProduct = FinancialProduct::getbyIdFirst($financial->product_id);
+                $financials[$getProduct->id]= $getProduct->commercial_name.' - '.$getProduct->name;
+            }
+        }
+        return response()->json($financials);
     }
 
     /**
@@ -60,10 +74,15 @@ class AgreementController extends Controller
     public function show($id)
     {
         $agreement = Agreement::find($id);
-        $get_financials = $agreement->financialAgreement;
+        $get_financials = FinancialAgreement::where('agreement_id', $agreement->id)->get();
+        //$products = $get_financials->financial;
+        //dd($get_financials);
         $financials = array();
-        foreach ($get_financials as $financial) {
-            $financials[]= $financial->financial_id;
+        if ($get_financials != null) {
+            foreach ($get_financials as $financial) {
+                $product = FinancialProduct::getbyIdFirst($financial->product_id);
+                $financials[]= $product;
+            }
         }
         //$financials = trim($financials, ',');
         $data = array('agreement' => $agreement, 'financials' => $financials);

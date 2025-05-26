@@ -2,11 +2,17 @@
 
 namespace App\Strategies\Templates;
 
+use App\Lib\Manychat;
+use App\Models\Agreement;
+use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\CreditNotes;
+use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\Lead;
+use App\Models\Product;
 use App\Strategies\TemplateInterface;
 use App\Strategies\Values\SendNotificationsValues;
 use stdClass;
@@ -15,7 +21,12 @@ class LeadStrategyTemplate implements TemplateInterface
 {
     public function move($id, $is_report = false)
     {
-        $lead = Lead::find($id);
+        $get_lead = Lead::find($id);
+        self::setCustomFieldsManyChat($get_lead->id);
+
+        $lead = Lead::find($id);;
+        $history_id = null;
+        $history = null;
         if ($lead !== null) {
             $product = $lead->productLead;
             //* add clientslog archive conversion
@@ -33,17 +44,22 @@ class LeadStrategyTemplate implements TemplateInterface
                 'cellphone' => $lead->cellphone,
                 'email' => $lead->email,
                 'agreement_id' => $lead->agreement_id,
+                'rfc' => $lead->rfc,
             );
             // know if exist client person
-            if (ClientPerson::where('email', $lead->email)->count() == 0) {
+
+            if (ClientPerson::where('cellphone', $lead->cellphone)->count() == 0 && ClientPerson::where('rfc', $lead->rfc)->count() == 0) {
                 $client_person = ClientPerson::create($data_client_person);
             } else {
-                ClientPerson::where('email', $lead->email)
+                ClientPerson::where('rfc', $lead->rfc)
                             ->update($data_client_person);
-                $client_person = ClientPerson::where('email', $lead->email)->first();
+                $client_person = ClientPerson::where('rfc', $lead->rfc)->first();
             }
             
+            
 
+            //$client_person = ClientPerson::create($data_client_person);
+            
             //* create credit
             $data_lead = array(
                 'client_person_id' => $client_person->id,
@@ -59,31 +75,125 @@ class LeadStrategyTemplate implements TemplateInterface
                 'tipo_credito' => $lead->tipo_credito,
                 'consulta_buro' => $lead->consulta_buro,
                 'applied_financial_product' => $lead->financial_product_id,
+                'is_vincular_banco' => $lead->is_vincular_banco,
+                'status_si_no' => $lead->status_si_no,
+                'aval_o_garantia' => $lead->aval_o_garantia,
+                'consulta_buro' => $lead->consulta_buro,
+                'manychat_id' => $lead->manychat_id,
+                'lead_id' => $lead->id,
+                'income' => $lead->income,
+                'applied_financial_product' => $lead->applied_financial_product,
+                'applied_loan_type' => $lead->applied_loan_type,
             );
+
+            //validar que el credito no exista con los mismos datos
             $credit = Credit::create($data_lead);
+            //obtener las notas de los prospectos
+            $leadNotes = $lead->leadNotes;
+            foreach ($leadNotes as $leadNote) {
+                $dataCreditNote = array(
+                    'credit_id' => $credit->id,
+                    'note_id' => $leadNote->note_id
+                );
+                CreditNotes::create($dataCreditNote);
+            }
+
+            CurrentFinancialProduct::moveToLead($lead->id, $credit->id);
+            //*desactivar acciones prospectos
+            Lead::deleteActions($lead->id);
             //* create history in client person
-            HistoryLog::move($client_person->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
+            $history_id = HistoryLog::move($client_person->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
             //* create history in credit
             HistoryLog::move($credit->id, HistoryLog::CREATE_CLIENT_PERSON, HistoryLog::CREATE_CLIENT_PERSON);
             //*in progress
             HistoryLog::move($credit->id, HistoryLog::CREDIT_IN_PROGRESS, HistoryLog::CREDIT_IN_PROGRESS);
             
-            //*create account automatically
-            Lead::createClientPerson($lead->id, $is_report);
 
+            //* con el nuevo cambio todo pasara primero a control desk
+
+            $history = HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CONTROL_DESK);
+            $notification   = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
+            (new $notification)->send($credit->id);
+            
             //* enter module kc-checkup and list actions
-            if ($product->c_product_id = 1 && $product->c_service_id == 1) {
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
-                //* Execute notification in new credit
+            
+            /* if ($product->c_product_id = 1 && $product->c_service_id == 1) {
+                $history = HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP, HistoryLog::KC_CHECK_UP);
                 $notification   = SendNotificationsValues::STRATEGY['pushNewCreditKcCheckUp'];
                 (new $notification)->send($credit->id);
             } elseif ($product->c_product_id = 1 && $product->c_service_id == 2) {
-                HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
-                //* Execute notification in new credit
+                $history = HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION);
                 $notification   = SendNotificationsValues::STRATEGY['pushNewCreditKcCheckUp'];
                 (new $notification)->send($credit->id);
-            }
+            } */
+
+            //*create account automatically
+            Lead::createClientPerson($lead->id, $is_report, $history->id);
+
         }
+        return $history;
+    }
+
+    public function setCustomFieldsManyChat($lead_id)
+    {
+        $lead = Lead::find($lead_id);
+        $manychat_id = $lead->manychat_id;
+        $manychat = new Manychat();
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $status = $info->status;
+        $data_lead = array();
+        if ($status != 'error') {
+            $data = $info->data;
+            $custom_fields = $data->custom_fields;
+            foreach ($custom_fields as $key => $custom_field) {
+                
+                if ($lead->asesor_id == null && $custom_field->name == 'Asesor') {
+                    $data_lead['asesor_id'] = $custom_field->value;
+                }
+                
+                if ($lead->aval_o_garantia == null && $custom_field->name == 'Aval o garantía') {
+                    $data_lead['aval_o_garantia'] = $custom_field->value == true ? 1 : 0;
+                }
+                
+                if ($lead->bank_id == null && $custom_field->name == 'Banco') {
+                    $get_bank = Bank::where('name', $custom_field->value)->first();
+                    $data_lead['bank_id'] = $get_bank->id;
+                }
+                
+                if ($lead->channel_id == null && $custom_field->name == 'Canal') {
+                    $channel_id = config('enums.channel_asesor')[$custom_field->value];
+                    $data_lead['channel_id'] = $channel_id;
+                }
+                
+                if ($lead->consulta_buro == null && $custom_field->name == 'Consulta buró') {
+                    $channel_id = config('enums.channel_asesor')[$custom_field->value];
+                    $data_lead['consulta_buro'] = $custom_field->value == true ? 1 : 0;
+                }
+                
+                if ($lead->consulta_buro == null && $custom_field->name == 'Organización') {
+                    $agreement = Agreement::where('name', $custom_field->value)->first();
+                    $data_lead['agreement_id'] = $agreement->id;
+                }
+                
+                if ($lead->origin_id == null && $custom_field->name == 'Origen') {
+                    $data_lead['origin_id'] = 2;
+                }
+                
+                if ($lead->product_id == null && $custom_field->name == 'Servicio KC') {
+                    $get_product = Product::where('alias', $custom_field->value)->first();
+                    $data_lead['product_id'] = $get_product->id;
+                }
+                
+                
+                if ($lead->tipo_credito == null && $custom_field->name == 'Tipo de crédito') {
+                    $type_products = config('financial_enums.type_products')[$custom_field->value];
+                    $data_lead['tipo_credito'] = $type_products;
+                }
+
+            }
+            $lead->update($data_lead);
+        }
+
     }
 
     public function breadcrumb($history, $type = null)

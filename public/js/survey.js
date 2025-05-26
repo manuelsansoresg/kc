@@ -2319,7 +2319,9 @@ $(document).ready(function () {
 
   window.continueStepper = function () {
     count_steeper = count_steeper + 1;
-    console.log(count_steeper);
+    console.log(count_steeper); // Obtener el elemento con id 'btn-continuar'
+
+    var btnContinuar = document.getElementById('btn-continuar');
     $('#number_step_survey').val(count_steeper);
 
     if (count_steeper == 3) {
@@ -2328,6 +2330,10 @@ $(document).ready(function () {
     }
 
     if (count_steeper == 4) {
+      btnContinuar.textContent = 'Finalizar';
+    }
+
+    if (count_steeper == 5) {
       console.log('ejecutar guardado');
       var btnBack = document.getElementById("btnBack");
       btnBack.style.display = "none";
@@ -2338,6 +2344,9 @@ $(document).ready(function () {
   };
 
   window.backStepper = function () {
+    var btnContinuar = document.getElementById('btn-continuar'); // Cambiar el texto del botón a 'Finalizar'
+
+    btnContinuar.textContent = 'Continuar';
     count_steeper = count_steeper - 1;
     console.log(count_steeper);
     $('#number_step_survey').val(count_steeper);

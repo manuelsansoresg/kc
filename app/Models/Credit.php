@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Lib\Csendgrid;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -93,8 +94,109 @@ class Credit extends Model
         'tipo_credito',
         'consulta_buro',
         'financial_product_id',
+        'is_vincular_banco',
+        'aval_o_garantia',
+        'manychat_id',
+        'lead_id',
+        'date_open_report',
+        'income',
+        'investor_id',
+        'start_period_id',
+        's2_credit_id',
+        'opening_commission',
+        'sod_commission',
+        'refinance_adjustment',
+        'third_party_adjustment',
+        'net_amount',
+        
     ];
 
+
+    public static function setMontoEntregar($creditId)
+    {
+        $credit = Credit::find($creditId);
+        $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+        //actualizar
+        if ($credit!= null && $financialProduct != null) {
+            $openin_commission = $credit->applied_import * ($financialProduct->opening_commission_rate / 100);
+            $net_amount = $credit->applied_import - $openin_commission - $credit->refinance_adjustment - $credit->third_party_adjustment;
+            $sod_commission = $financialProduct->sod_commission_amount;
+            Credit::where('id', $credit->id)->update([
+                'opening_commission' => $openin_commission,
+                'sod_commission' => $sod_commission,
+                'net_amount' => $net_amount
+            ]);
+        }
+    }
+
+    /**
+     * actualizar applied_import , applied_term , applied_payment , applied_loan_total_amount 
+     */
+    public static function setAppliedImport($creditId)
+    {
+        Credit::where('id', $creditId)->update([
+            'applied_import ' => 0,
+            'applied_term' => 0,
+            'applied_payment  ' => 0,
+            'applied_loan_total_amount' => 0,
+        ]);
+    }
+
+    public static function setTotalCapitalAndMore($creditId)
+    {
+        Credit::setTotalCapital($creditId);
+        InvestorsCredit::setPlacedCapital($creditId);
+        Credit::setComissionRateAndAmount($creditId);
+    }
+
+    public static function setTotalCapital($creditId)
+    {
+        $totalAppliedImport = 0;
+        $getCredit = Credit::find($creditId);
+        // Filter distinct credits from history_logs excluding status_id = 16
+        
+        $distinctCredits = Credit::select('applied_import', 'id')
+        ->where('credits.applied_financial_product', $getCredit->applied_financial_product)
+        ->get(); // Use distinct to avoid duplicates
+        
+        // Calculate the sum of applied_import for distinct credits
+        foreach ($distinctCredits as $distinctCredit) {
+            
+            $isExistCancelled = HistoryLog::where([
+                                'status_id' => HistoryLog::CREDIT_CANCELED,
+                                'id_rel' => $distinctCredit->id,
+                                'is_credit' => 1
+                                ])->first();
+            
+            if ($isExistCancelled === null) {
+                $totalAppliedImport = $totalAppliedImport + $distinctCredit->applied_import;
+            }
+        }
+    
+        // Update the total_capital field for the current credit
+        $credit = Credit::find($creditId);
+        $totalCapitalPerInvestor = InvestorsCredit::selectRaw('SUM(import) as total_capital, investor_id')
+                                    ->join('investors', 'investors_credits.investor_id', '=', 'investors.id')
+                                    ->groupBy('investors_credits.investor_id')
+                                    ->get();
+        
+
+        foreach ($totalCapitalPerInvestor as $totalCapital) {
+            Investor::where('id', $totalCapital->investor_id)
+                ->update([
+                    'total_capital' => $totalCapital->total_capital
+                ]);
+        }
+
+
+        $getInvestors = InvestorProduct::where('financial_products_id', $credit->applied_financial_product)->get();
+
+        foreach ($getInvestors as $getInvestor) {
+            Transaction::setTotalCapital($getInvestor->investor_id);
+        }
+        
+    }
+    
     public static function listDatatable($status)
     {
        
@@ -122,7 +224,7 @@ class Credit extends Model
                 
                 $hour             = $data_deadline['lbl_hour'];
                 $status_id        = $history->status_id;
-                $option           = \View::make('panel.module.checkup.add_option_dt', ['id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
+                $option           = \View::make('panel.module.checkup.add_option_only_checkup_dt', ['query' => $query, 'id' => $history->id, 'client' => $client, 'percent_form' => $percent_form, 'credit_id' => $history->id_rel, 'route' => $route, 'status_id' => $status_id])->render();
 
                 if ($history->status_id === HistoryLog::KC_AFTER_MARKET || $history->status_id === HistoryLog::KC_CONTROL_DESK || $history->status_id === HistoryLog::KC_DELIVERY || $history->status_id === HistoryLog::KC_PAYMENT) {
                     $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
@@ -189,48 +291,75 @@ class Credit extends Model
         return $desition;
     }
 
+    public static function sendEmailDelivered($creditId)
+    {
+        $investorCredits = InvestorsCredit::where('credit_id', $creditId)->get();
+        $credit          = Credit::find($creditId);
+        $client          = ClientPerson::find($credit->client_person_id);
+        foreach ($investorCredits as $investorCredit) {
+            $investor           = Investor::find($investorCredit->investor_id);
+            $userInvestor       = User::find($investor->user_id);
+            $nombreBeneficiario = $client->name.' '.$client->last_name.''.$client->second_last_name;
+            $percentage         = $investorCredit->percentage * 100;
+            $importePrestado    = $investorCredit->import;
+
+            $dataParams = array(
+                'creditId' => $creditId,
+                'nombreBeneficiario' => $nombreBeneficiario,
+                'porcentajeParticipacion' => $percentage,
+                'importePrestado' => $importePrestado,
+            );
+            $send_grid = new Csendgrid($userInvestor->email, 'Inversionista - Aviso de nuevo crédito colocado');
+            $send_grid->setTemplate('d-210b5898a0fe41f9ad746ffa3c42a3f1');
+            $send_grid->setParams($dataParams);
+            $send_grid->send();
+            sleep(0.25);
+        }
+    }
+
     public static function listDatatableProduct($status)
     {
         $get_list    = HistoryLog::getByStatus([$status]);
-        
         $users        = array();
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);
-            $product          = $query->creditProduct;
-            $alias_product    = $product !== null ? $product->alias : null;
-            $client           = $query->creditClientPerson;
-            $advisor          = $query->creditAdvisor;
-            $menu_options   = self::menuOptionCredit($history);
-
-            $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive', 35 => 'pagado', 55 => 'delivered');
-            $reason = isset(config('enums.'.$reason_enums[$history->status_id])[$history->reason]) ? config('enums.'.$reason_enums[$history->status_id])[$history->reason] : null;
-
-            $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['archive']])->render();
-            $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
-            $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
-            
-            $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
-            $is_advisor     = Auth::user()->hasRole('Asesor');
-            if ($is_advisor === true && Auth::user()->id === $advisor->id) {
-                $users[] = array(
-                    'id' => $query->id,
-                    'product' => $content_product,
-                    'reason' => $reason,
-                    'date' => formatDateNameMonth($history->created_at),
-                    'client' => $content_client,
-                    'advisor' => $name_advisor,
-                    'options' => $option
-                );
-            } else {
-                $users[] = array(
-                    'id' => $query->id,
-                    'product' => $content_product,
-                    'reason' => $reason,
-                    'date' => formatDateNameMonth($history->created_at),
-                    'client' => $content_client,
-                    'advisor' => $name_advisor,
-                    'options' => $option
-                );
+            if ($query !== null) {
+                $product          = $query->creditProduct;
+                $alias_product    = $product !== null ? $product->alias : null;
+                $client           = @$query->creditClientPerson;
+                $advisor          = $query->creditAdvisor;
+                $menu_options   = self::menuOptionCredit($history);
+    
+                $reason_enums = array(17 => 'credit_reason_cancel', 18 => 'credit_reason_reject', 16 => 'credit_reason_archive', 35 => 'pagado', 55 => 'delivered');
+                $reason = isset(config('enums.'.$reason_enums[$history->status_id])[$history->reason]) ? config('enums.'.$reason_enums[$history->status_id])[$history->reason] : null;
+    
+                $option  = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['archive']])->render();
+                $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
+                $content_product  = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
+                
+                $name_advisor = $advisor !== null ? $advisor->name.' '.$advisor->last_name : null;
+                $is_advisor     = Auth::user()->hasRole('Asesor');
+                if ($is_advisor === true && Auth::user()->id === $advisor->id) {
+                    $users[] = array(
+                        'id' => $query->id,
+                        'product' => $content_product,
+                        'reason' => $reason,
+                        'date' => formatDateNameMonth($history->created_at),
+                        'client' => $content_client,
+                        'advisor' => $name_advisor,
+                        'options' => $option
+                    );
+                } else {
+                    $users[] = array(
+                        'id' => $query->id,
+                        'product' => $content_product,
+                        'reason' => $reason,
+                        'date' => formatDateNameMonth($history->created_at),
+                        'client' => $content_client,
+                        'advisor' => $name_advisor,
+                        'options' => $option
+                    );
+                }
             }
         }
         return $users;
@@ -371,6 +500,10 @@ class Credit extends Model
         return $routes;
     }
     
+    public function advisorCredit()
+    {
+        return $this->belongsTo(User::class, 'asesor_id');
+    }
 
     public function creditClientPerson()
     {
@@ -435,5 +568,10 @@ class Credit extends Model
     public function survey()
     {
         return $this->hasOne(Survey::class);
+    }
+
+    public function creditNotes()
+    {
+        return $this->hasMany(CreditNotes::class);
     }
 }

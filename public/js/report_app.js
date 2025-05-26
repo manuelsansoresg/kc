@@ -6394,26 +6394,83 @@ $(document).ready(function () {
   confetti();
 });
 
-window.desitionReport = function (credit_id, financial_id, type) {
-  var is_app = $('#is_app').val();
-  var url = "/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept";
-  axios.get(url).then(function (response) {
-    var reason = response.data;
-    window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app;
-  })["catch"](function (e) {});
-  /* 
-  Swal.fire({
-     title: '¿Estás seguro?',
-     icon: 'warning',
-     showCancelButton: true,
-     confirmButtonText: 'Sí',
-     cancelButtonText: 'Mejor no'
-  }).then(function (result) {
-  if (result.isConfirmed) {
-      
+window.showReportOtherBanks = function () {
+  $('#new_banks').show();
+};
+
+window.changeCreditBank = function (credit_id, id) {
+  var bank_id = id;
+
+  if (id == null) {
+    bank_id = $('#report-bank-id').val();
   }
-  }); */
-}; // Agregar un controlador de eventos a todos los enlaces dentro del iframe
+
+  axios.post('/panel/credit/storeBank', {
+    credit_id: credit_id,
+    bank_id: bank_id
+  }).then(function (response) {
+    var result = response.data;
+    window.location.reload();
+  })["catch"](function (e) {// Manejar errores
+  });
+};
+
+window.closeCreditBank = function (credit_id, id) {};
+
+window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
+  if (is_modal == true) {
+    sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        actionDeliveryFinish(id, statusid, urlredirect);
+      }
+    });
+  } else {
+    actionDeliveryFinish(id, statusid, urlredirect);
+  }
+};
+
+function actionDeliveryFinish(id, statusid, urlredirect) {
+  axios.get("/panel/action/" + id + "/" + statusid + "/finish").then(function (response) {
+    window.location = urlredirect;
+  })["catch"](function (e) {});
+}
+
+window.desitionReport = function (history_id, status_id, credit_id, financial_id, type, is_tramitar) {
+  verifificarTramitar(history_id, status_id, credit_id, financial_id, type, is_tramitar);
+};
+
+function verifificarTramitar(history_id, status_id, credit_id, financial_id, type, is_tramitar) {
+  $('#content-bank').html('');
+  $('#new_banks').hide();
+  axios.get('/panel/kc-check-up/' + credit_id + '/' + type + '/report/verify').then(function (response) {
+    var result = response.data;
+    var status = result.status;
+    var banks = result.banks;
+
+    if (status == 200) {
+      var is_app = $('#is_app').val();
+      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept").then(function (response) {
+        console.log(response.data);
+
+        if (is_tramitar == 1) {
+          window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&is_tramitar=true';
+        } else {
+          //window.location = '/reporte/'+credit_id+'/status/finish?is_app='+is_app+'&type=1';
+          deliveryFinish(history_id, status_id, '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&type=1', false);
+        }
+      })["catch"](function (e) {});
+    } else {
+      $('#content-bank').html(banks);
+      $('#modal-bank').modal('show');
+    }
+  })["catch"](function (e) {});
+} // Agregar un controlador de eventos a todos los enlaces dentro del iframe
 
 
 var iframeLinks = document.querySelectorAll('.iframe-link');
@@ -6426,6 +6483,111 @@ for (var i = 0; i < iframeLinks.length; i++) {
     window.top.location.href = this.href;
   });
 }
+
+window.changeFilterReport = function (status, tipo, id) {
+  console.log(status);
+  var titulo1 = ['Se mostrarán créditos que "SI" consultan buró de crédito', 'Se mostrarán créditos que "NO" consultan buró de crédito'];
+  var titulo2 = ['Se mostrarán créditos que "SI" soliciten aval', 'Se mostrarán créditos que "NO" soliciten aval'];
+  var titulo = titulo1[status];
+
+  if (tipo == 2) {
+    titulo = titulo2[status];
+  }
+
+  sweetalert2__WEBPACK_IMPORTED_MODULE_0___default().fire({
+    title: titulo,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar'
+  }).then(function (result) {
+    if (result.value) {
+      // Obtén referencia al formulario por su ID
+      var form = document.getElementById('frm-filter'); // Crea un objeto FormData con los datos del formulario
+
+      var formData = new FormData(form);
+      axios.post('/reporte/products/store', formData).then(function (response) {
+        var result = response.data; // Recargar la página
+
+        window.location.reload();
+      })["catch"](function (e) {// Manejar errores
+      });
+    } else {
+      //cancelar
+      $("#" + id).prop("checked", !$("#" + id).prop("checked"));
+    }
+  });
+};
+
+window.infoFinanciera = function (product_id, section) {
+  axios.get('/reporte/' + product_id + '/info?section=' + section).then(function (response) {
+    var result = response.data;
+    $('#content-info').html(result.caracteristicas);
+    $('#tabTramite').hide();
+    $('#modal-info').modal('show');
+  })["catch"](function (e) {// Manejar errores
+  });
+};
+
+$("#frm-report-email").submit(function (event) {
+  event.preventDefault(); // Obtén referencia al formulario por su ID
+
+  var form = document.getElementById('frm-report-email'); // Crea un objeto FormData con los datos del formulario
+
+  var formData = new FormData(form);
+  axios.post('/reporte/product/email/update', formData).then(function (response) {
+    var result = response.data;
+    var credit_id = $('#credit_id').val();
+    var is_app = $('#is_app').val();
+    var is_email_update = $('#is_email_update').val(); // Recargar la página
+
+    window.location = '/reporte/' + credit_id + '/status/finish?is_app=' + is_app + '&is_email_update=true';
+  })["catch"](function (e) {// Manejar errores
+  });
+});
+$(document).ready(function () {
+  $('.select2multiple').select2({
+    theme: "bootstrap-5",
+    placeholder: "Escribe para buscar.."
+  });
+
+  if (document.getElementById('is_validate_modal_product')) {
+    var is_validate_modal_product = $('#is_validate_modal_product').val();
+
+    if (is_validate_modal_product == '0') {//$('#modal-product').modal('show');
+    }
+  }
+
+  window.cancelModalProduct = function () {
+    axios.get('/reporte/product/credit/notFound').then(function (response) {
+      window.location.reload();
+    })["catch"](function (e) {// Manejar errores
+    });
+  };
+
+  window.continueModalProduct = function () {
+    // Obtén referencia al formulario por su ID
+    var form = document.getElementById('frm-modal-product'); // Crea un objeto FormData con los datos del formulario
+
+    var formData = new FormData(form);
+    axios.post('/reporte/product/credit/update', formData).then(function (response) {
+      window.location.reload();
+    })["catch"](function (e) {// Manejar errores
+    });
+  };
+
+  window.filterImporte = function () {
+    var importe = $('#importe').val();
+    var plazo = $('#plazo').val();
+    axios.post('/reporte/product/importePlazo', {
+      importe: importe,
+      plazo: plazo
+    }).then(function (response) {
+      window.location.reload();
+    })["catch"](function (e) {// Manejar errores
+    });
+  };
+});
 })();
 
 /******/ })()

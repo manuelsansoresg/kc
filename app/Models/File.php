@@ -27,6 +27,8 @@ class File extends Model
         'delivery' => 30,
         'swap' => 37,
         'payment' => 49,
+        'wallet' => 61,
+        'kc-down-wallet' => 65,
     ];
 
     public static function upload($model, $id_rel, $request, $template_config_id = null)
@@ -64,9 +66,11 @@ class File extends Model
             $files->whereIn('template_config_id', $template_id);
         }
         $files= $files->get();
+        //dd($files);
         $new_file = array();
         foreach ($files as $file) {
             $fileStrategy   = TemplateValues::STRATEGY[HistoryLog::$name_model[$file->model]];
+            echo 'documentos'.$file->template_config_id.'<br>';
             $get_file       = (new $fileStrategy)->getFile($file->template_config_id);
             if (isset( $get_file['name'])) {
                 $new_file[] = array('name_template' => $get_file['name'], 'name' => $file->name);

@@ -62,7 +62,7 @@
                                             <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                     href="#tabHistorial">Historial</a> </li>
                                             <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                    href="#tabAction">Acciones contacto</a> </li>
+                                                    href="#tabAction">Acciones</a> </li>
                                             <li class="nav-item nav-item-trigger d-xxl-none">
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
                                                     <a href="#" class="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
@@ -95,6 +95,13 @@
                                                                     <span class="profile-ud-label">Producto</span>
                                                                     <span class="profile-ud-value">
                                                                         {{ $product != null ? $product->alias : '' }} </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-ud-item">
+                                                                <div class="profile-ud wider">
+                                                                    <span class="profile-ud-label">Comentario</span>
+                                                                    <span class="profile-ud-value">
+                                                                        {{ $lead != null ? $lead->comment : '' }} </span>
                                                                 </div>
                                                             </div>
         
@@ -252,9 +259,7 @@
                                                                                     class="date">
                                                                                     {{ formatDateNameMonth($get_note->created_at) }}
                                                                                 </span> </span>
-                                                                            {{-- <span class="bq-note-sep sep">|</span>
-                                                                     <span class="bq-note-by">By <span>Softnio</span></span>
-                                                                    <a href="#" class="link link-sm link-danger">Delete Note</a> --}}
+                                                                            
                                                                         </div>
                                                                     </div><!-- .bq-note-item -->
                                                                 </div><!-- .bq-note -->
@@ -339,8 +344,8 @@
                                                     $actions = config('enums.type_actions');
                                                 @endphp
                                                 <div class="border-bottom text-center py-3">
-                                                    <a class="pointer" onclick="actionModal({{ $lead->id }}, false)">Haz clic
-                                                        para agregar acción contactar</a>
+                                                    <a class="pointer" onclick="actionModal({{ $lead->id }}, false, true)">Haz clic
+                                                        para agregar acción</a>
                                                 </div>
                                                 <input type="hidden" id="id-rel-action" value="{{ $lead->id }}">
                                                 <input type="hidden" id="model-action" value="{{ $model_action }}">
@@ -422,11 +427,19 @@
                                     <div class="card-inner">
                                         <h6 class="overline-title-alt mb-3">Etiquetas</h6>
                                         <ul class="g-1">
-                                            <li class="btn-group">
-                                                
-                                                <a class="btn btn-xs btn-light btn-dim" href="#"> {{ $temperatures[$lead->temperature_id] }} </a>
+                                           
+                                                @php
+                                                    $tags = $m_lead::tagLead($lead->id, $temperatures[$lead->temperature_id], true);
+                                                @endphp
+                                                @foreach ($tags as $tag)
+                                                <li class="btn-group">
+                                                <a class="btn btn-xs btn-light btn-dim" href="#"> {{ $tag }} </a>
                                                 <a class="btn btn-xs btn-icon btn-light btn-dim"><em class="icon ni ni-cross"></em></a>
                                             </li>
+                                                @endforeach
+                                               
+                                               
+                                            
                                            {{--  <li class="btn-group">
                                                 <a class="btn btn-xs btn-light btn-dim" href="#">support</a>
                                                 <a class="btn btn-xs btn-icon btn-light btn-dim" href="#"><em class="icon ni ni-cross"></em></a>
@@ -448,7 +461,8 @@
 </div>
 {{-- content --}}
     
-    <input type="hidden" id="refresh-dt" value="null">
+    <input type="hidden" id="refresh-dt" value="credit">
+    <input type="hidden" id="is_refresh" value="true">
     @include('panel.action.modal.form')
     @include('panel.modal.note')
     @include('panel.action.modal.register_action')

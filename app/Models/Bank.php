@@ -11,4 +11,9 @@ class Bank extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function lead()
+    {
+        return $this->hasOne(Lead::class);
+    }
 }

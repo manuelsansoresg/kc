@@ -17,7 +17,7 @@
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item active"><a href="/panel/kc-check-up">KC - Check up</a>
                                             <li class="breadcrumb-item active"><a href="/panel/template/steps/{{ Request::segment(4) }}/{{  $history->id }}/show">Etapas</a>
-                                            <li class="breadcrumb-item active"><a href="/panel/template/actions/{{ Request::segment(4) }}/{{  $history->id }}/show">Acciones</a>
+                                            <li class="breadcrumb-item active"><a href="/panel/template/actions/{{ Request::segment(4) }}/{{  $history->id }}/show">Tareas</a>
                                             <li class="breadcrumb-item active">Acción formulario </li>
                                         @else
                                         {!!  $breadcrumb !!}
@@ -61,6 +61,12 @@
                         </div>
                     </div><!-- .nk-block-head -->
                     <div class="nk-block nk-block-lg mt-n3">
+                        <div id="content-legend-kc-down-bank" class="py-2" style="display: none">
+                            <div class="alert alert-primary " role="alert">
+                                Nota: El dinero se depositará a la cuenta registrada en máximo un día habil
+                              </div>
+                        </div>
+                        <div id="content-legend"></div>
                         <p>* Campos obligatorios</p>
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">

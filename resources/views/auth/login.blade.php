@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="author" content="Softnio">
+    <meta name="author" content="KaaxClub">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+    <meta name="description" content="Tú mejor decisión. Fácil y rápido.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="/images_admin/favicon.png">
+    <link rel="shortcut icon" href="/images/favicon.ico">
     <!-- Page Title  -->
-    <title>Login | DashLite Admin Template</title>
+    <title>KaaxClub</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="nk-block-head">
                                     <div class="nk-block-head-content">
-                                        <h5 class="nk-block-title">Loging</h5>
+                                        <h5 class="nk-block-title">Login</h5>
                                         <div class="nk-block-des">
                                             <p>Accede al panel usando tu email y contraseña.</p>
                                         </div>

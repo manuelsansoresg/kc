@@ -49,6 +49,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $type_form    = HistoryLog::KC_AFTER_FORM;
         $credit       = Credit::find($id_rel);
         $client_person = $credit->creditClientPerson;
+        
 
         $elements = array(
             1 => [
@@ -63,7 +64,8 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => null,
-                'is_disabled' => null
+                'is_disabled' => null,
+                
             ],
             2 => [
                 'title_section' => null,
@@ -140,7 +142,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
             ],
             
         );
-        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
+        $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id,  'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
 
@@ -174,7 +176,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
     {
         $history        = HistoryLog::find($history_id);
         $credit         = $history->historyCredit;
-        $percent_form   = self::percentForm($history);
+        $percent_form   = reduceDecimal(self::percentForm($history));
         
         //$percent_form = $percent_form;
         $menu_options         = self::menuOptionsStep($history);
@@ -271,11 +273,12 @@ class AfterMarketStrategyTemplate implements TemplateInterface
 
         $data = array();
         $subject1 = HistoryLog::$label_subject[48];
+        $viewStatus1 = \View::make('panel.module.status', ['status' => $status_file])->render();
 
         $data[] = array(
             'name' => 'Encuesta',
             'subject' => $subject1,
-            'status' => $status_file,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option,
@@ -307,6 +310,13 @@ class AfterMarketStrategyTemplate implements TemplateInterface
         $menu = array(
             'options' => array(
                 [
+                    'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
+                    'onclick' => '',
+                    'name' => 'Ver etapas',
+                    'icon' => 'icon ni ni-list-thumb-fill',
+                    'class' => 'text-dark'
+                ],
+                [
                     'link' => '/panel/client/'.$client->id,
                     'onclick' => '',
                     'name' => 'Ver perfil cliente',
@@ -319,11 +329,13 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                     'icon' => 'icon ni ni-report-profit'
                 ],
                 [
-                    'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
+                    'link' => 'https://manychat.com/fb861553/chat/'.$credit->manychat_id,
+                    'target' => '_blank',
                     'onclick' => '',
-                    'name' => 'Ver etapas',
-                    'icon' => 'icon ni ni-list-thumb-fill'
-                ]
+                    'name' => 'ManyChat',
+                    'icon' => 'icon ni ni-chat-circle'
+                ],
+                
             ),
         );
 
@@ -402,7 +414,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=5',
                     'onclick' => '',
-                    'name' => 'Ver acción',
+                    'name' => 'Ver tareas',
                     'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
@@ -413,7 +425,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
 
     public function menuOptionsStep($history, $type_lbl = 1)
     {
-        $lbl_action = $type_lbl === 1 ? 'Lista de acciones' : 'Ver acción';
+        $lbl_action = $type_lbl === 1 ? 'Lista de tareas' : 'Ver tareas';
         $menu = array(
             'actionstep1' => array(
                 [
@@ -553,7 +565,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
                 'active' => true
             ),
             3 => array(
-                'title' => 'acciones',
+                'title' => 'tareas',
                 'link' => null,
                 'active' => true
                ),
@@ -582,7 +594,7 @@ class AfterMarketStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             3 => array(
-             'title' => 'acciones',
+             'title' => 'tareas',
              'link' => '/panel/template/steps/afterMarket/'.$history->id.'/show',
              'active' => null
             ),

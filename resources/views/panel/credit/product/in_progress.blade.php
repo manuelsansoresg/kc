@@ -30,7 +30,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Producto</th>
+                                            <th>Servicio KC</th>
                                             <th>Modulo</th>
                                             <th data-priority="1">Cliente</th>
                                             <th>Asesor</th>

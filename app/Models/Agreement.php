@@ -11,7 +11,8 @@ class Agreement extends Model
     protected $fillable = [
         'name',
         'description',
-        'status'
+        'status',
+        'loan_available'
     ];
 
 
@@ -81,8 +82,13 @@ class Agreement extends Model
         return $this->hasOne(Credit::class);
     }
 
-    public function financialAgreement()
+    public function user()
     {
-        return $this->hasMany(FinancialAgreement::class);
+        return $this->hasOne(User::class);
+    }
+
+    public function userAgreement()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

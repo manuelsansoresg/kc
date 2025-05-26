@@ -12,9 +12,9 @@ return [
     ),
     'origin' => array(
         1 => 'Asesor',
-        2 => 'WebPage',
+        2 => 'Web/RRSS',
         3 => 'WebApp',
-        4 => 'Referente',
+        4 => 'Publicidad',
     ),
     'temperatures' => array(
         '' => '',
@@ -26,6 +26,8 @@ return [
         1 => 'WhatsApp',
         2 => 'Llamada',
         3 => 'Webchat',
+        4 => 'Facebook',
+        5 => 'Instagram',
     ),
     'channel_web_page' => array(
         1 => 'Formulario',
@@ -36,11 +38,17 @@ return [
         1 => 'Creación de cuenta',
         2 => 'Formulario',
     ),
+    
+    'channel_rss' => array(
+        1 => 'Facebook',
+    ),
     'reason_archive' => array(
-        1 => 'No interesado',
-        2 => 'Sin convenio',
+        1 => 'Nunca contestó',
+        2 => 'No tramitable',
         3 => 'Otro',
         4 => 'Conversión',
+        5 => 'Asesoría',
+        6 => 'Dejó de contestar',
     ),
     
     'credit_reason_archive' => array(
@@ -49,14 +57,18 @@ return [
     ),
     
     'credit_reason_reject' => array(
-        1 => 'No viable',
-        2 => 'no sujeto de crédito',
+        1 => 'Sin capacidad de pago',
+        2 => 'Mal historial crediticio',
         3 => 'otro',
+        4 => 'Fraude',        
     ),
    
     'credit_reason_cancel' => array(
-        1 => 'Decisión cliente',
-        3 => 'otro',
+        1 => 'Pérdida de interés',
+        2 => 'Otro',
+        3 => 'Dejó de contestar',
+        4 => 'Optó por otro servicio',
+        5 => 'No tramitable',
     ),
 
     'pagado' => array(
@@ -76,12 +88,15 @@ return [
     //*actions
     "type_actions" => array(
         1 => 'Llamada',
+        10 => 'Cotización',
         2 => 'Chat',
         3 => 'Reunión',
         4 => 'Seguimiento',
         5 => 'Plazo',
-        6 => 'EMail',
-        7 => 'SMS'
+        6 => 'Enviar Email',
+        7 => 'SMS',
+        8 => 'Tarea',
+        9 => 'Recordatorio'
     ),
     "type_icon_actions" => array(
         1 => 'icon ni ni-call-fill',
@@ -90,7 +105,8 @@ return [
         4 => 'icon ni ni-clock-fill',
         5 => 'icon ni ni-flag-fill',
         6 => 'icon ni ni-mail-fill',
-        7 => 'icon ni ni-chat-fill'
+        7 => 'icon ni ni-chat-fill',
+        8 => 'icon ni ni-note-add',
     ),
     "status_actions" => array(
         1 => 'prospecto'
@@ -143,6 +159,16 @@ return [
         
     ),
     
+    'periodicity_comision' => array(
+        1 => 'Mensual',
+        2 => 'Quincenal',
+        3 => 'Catorcenal',
+        4 => 'Semanal',
+        5 => 'Por evento',
+        6 => 'Unica vez',
+        
+    ),
+    
     'sex' => array(
         1 => 'Hombre',
         2 => 'Mujer',
@@ -151,6 +177,7 @@ return [
     'interviewer' => array(
         1 => 'KaaxClub',
         2 => 'Financiera',
+        3 => 'No necesario',
     ),
     'marital_status' => array(
         1 => 'Soltero',
@@ -172,6 +199,57 @@ return [
         3 => 'Familiares',
         4 => 'Hipotecada',
         5 => 'Otro',
+    ),
+
+    'status_si_no' => array(
+        '' => 'Selecciona una opción',
+        1 => 'Sí',
+        0 => 'No',
+    ),
+
+    'fee_reference_percents' => array(
+        1 => 'Sobre monto',
+        2 => 'linea de crédito',
+    ),
+    
+    'custom_fields_many_chat' => array(
+        'Asesor' =>  10202836,
+        'Aval o garantía' =>  10202831,
+        'Banco' =>  10202826,
+        'Canal' =>  10202835,
+        'Consulta buró' =>  10202828,
+        'Importe solicitado' =>  10202821,
+        'Organización' =>  10202821,
+        'Origen' =>  10202833,
+        'Servicio KC' =>  10202817,
+        'Tipo de crédito' =>  10202818,
+        'URL Reporte' =>  10298820,
+        'URL Encuesta' =>  10357823,
+    ),
+
+    "funding_operation" => array(
+        1 => 'Mismo banco',
+        2 => 'SPEI'
+    ),
+    
+    "operation_status" => array(
+        0 => 'En revisión',
+        1 => 'Exitosa',
+        2 => 'Fallida'
+    ),
+    
+    "status_credit" => array(
+        230 => 'Activo',
+        231 => 'Baja',
+        232 => 'Defunción',
+        233 => 'Condonado',
+        234 => 'Liquidado',
+    ),
+    'pago' => array(
+        1 => 'Personal',
+        2 => 'Liquidación',
+        3 => 'Reembolso',
+        4 => 'Convenio',
     ),
     
 ];

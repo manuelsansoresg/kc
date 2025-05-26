@@ -20,6 +20,17 @@ class AdminController extends Controller
         return view('panel.user.list', ['title' => 'Administrador', 'route' => 'administrador']);
     }
 
+    public function searchView(Request $request)
+    {
+        return view('viewsearchuser');
+    }
+    
+    public function search(Request $request)
+    {
+        $users   = User::searchUser($request);
+        return response()->json(['data' => $users]);
+    }
+
     public function list()
     {
         $users = User::listDatatable();

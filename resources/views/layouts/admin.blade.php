@@ -1,6 +1,7 @@
 @inject('m_user', 'App\Models\User')
 @inject('m_history', 'App\Models\HistoryLog')
 @inject('m_notification', 'App\Models\Notification')
+@inject('Minvestor', 'App\Models\Investor')
 @php
     $notifications = $m_notification->getMyNotifications(6)['list'];
 @endphp
@@ -13,17 +14,31 @@
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description"
-        content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
+        content="Tú mejor decisión. Fácil y rápido.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="/assets_admin/images/favicon.png">
+    <link href="{{ asset('images/favicon.ico') }}" rel="icon">
     <!-- Page Title  -->
-    <title>@yield('title')</title>
+    <title>KaaxClub</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="/assets_admin/css/dashlite.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="/assets_admin/css/theme.css?ver=3.0.3">
     <link id="skin-default" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/tippy.js@6/animations/scale.css"
+        />
     
     <link rel="stylesheet" type="text/css" href="/css/app.css" />
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7L6QJC7RG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7L6QJC7RG');
+</script>
 </head>
 
 <body class="nk-body bg-lighter npc-general has-sidebar ">
@@ -96,10 +111,34 @@
                                     </li>
                                 @endhasrole
                                 @hasrole('Administrador|Asesor')
+                                    <li class="nk-menu-item has-sub">
+                                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-check-circle-cut"></em></span>
+                                            <span class="nk-menu-text">Acciones Módulos</span>
+                                        </a>
+                                        <ul class="nk-menu-sub">
+
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/action/in_progress/credit/view" class="nk-menu-link">
+                                                    <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
+                                                    <span class="nk-menu-text">En curso</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/action/completed/credit/view" class="nk-menu-link">
+                                                    <span class="nk-menu-icon"> <em class="icon ni ni-circle"></em></span>
+                                                    <span class="nk-menu-text">Concluidas</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                        </ul>
+
+                                    </li>
+                                @endhasrole
+                                @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-item has-sub">
                                     <a href="#" class="nk-menu-link nk-menu-toggle">
                                         <span class="nk-menu-icon"><em class="icon ni ni-check-circle-cut"></em></span>
-                                        <span class="nk-menu-text">Acciones Módulos</span>
+                                        <span class="nk-menu-text">Tareas Módulos</span>
                                     </a>
                                     <ul class="nk-menu-sub">
 
@@ -153,6 +192,11 @@
                                                             <a href="/panel/user/cliente-financiera"
                                                                 class="nk-menu-link"><span class="nk-menu-text">Cliente
                                                                     financiera</span></a>
+                                                        </li>
+                                                        <li class="nk-menu-item">
+                                                            <a href="/panel/user/cliente-inversionista"
+                                                                class="nk-menu-link"><span class="nk-menu-text">Cliente
+                                                                    inversionista</span></a>
                                                         </li>
 
                                                     </ul>
@@ -241,6 +285,58 @@
                                     <a href="/panel/kc-payments" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="fa-solid fa-money-check-dollar"></em></span>
                                         <span class="nk-menu-text">KC - Payments</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                @endhasrole
+                                {{-- modulo KC - WALLET --}}
+                                @hasrole('Administrador|Asesor|Cliente financiera|Cliente inversionista')
+                                <li class="nk-menu-heading">
+                                    <h6 class="overline-title text-primary-alt">KC - WALLET</h6>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    @php
+                                        $investor = $Minvestor::where('user_id',  Auth::user()->id)->first();
+                                        $investorId = $investor!= null ? $investor->id : null;
+                                    @endphp
+                                    @if ($investorId != null)
+                                        <a href="/panel/inversionista/{{ $investorId }}" class="nk-menu-link">
+                                            <span class="nk-menu-text"><em class="icon ni ni-invest"></em> Resumen</span>
+                                        </a>
+                                    @else
+                                        <a href="#" class="nk-menu-link">
+                                            <span class="nk-menu-text"><em class="icon ni ni-invest"></em> Resumen</span>
+                                        </a>
+                                    @endif
+                                    
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-wallet/mis-prestamos/show" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text"><em class="icon ni ni-coin-alt"></em> Mis préstamos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-wallet" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text"> <em class="icon ni ni-download"></em> Agregar fondos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-down-wallet" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text"><em class="icon ni ni-upload"></em> Retirar fondos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/kc-wallet/list/history" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text"><em class="icon ni ni-history"></em> Historial de movimientos</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                <li class="nk-menu-item">
+                                    <a href="/panel/ayuda" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Ayuda</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endhasrole
@@ -375,12 +471,22 @@
                             </div>
                             <div class="nk-header-brand d-xl-none">
                                 <a href="html/index.html" class="logo-link">
-                                    <img class="logo-light logo-img" src="/assets_admin/images/logo.png"
-                                        srcset="/assets_admin/images/logo2x.png 2x" alt="logo">
-                                    <img class="logo-dark logo-img" src="/assets_admin/images/logo-dark.png"
-                                        srcset="/assets_admin/images/logo-dark2x.png 2x" alt="logo-dark">
+                                    <img class="logo-light logo-img" src="/images/logo-dark.png"
+                                        srcset="/images/logo-dark.png" alt="logo">
+                                    <img class="logo-dark logo-img" src="/images/logo-dark.png"
+                                        srcset="/images/logo-dark.png" alt="logo-dark">
                                 </a>
                             </div><!-- .nk-header-brand -->
+
+                            @if ( Request::segment(2) != 'inversionista' &&  Request::segment(2) != 'kc-wallet' && Request::segment(2) != 'kc-down-wallet' && Request::segment(2) != 'ayuda' )
+                            <div class="nk-header-search ms-3 ms-xl-0">
+                                <em class="icon ni ni-search" id="icon-search"></em>
+                                <form action="/panel/user/search/view" method="GET">
+                                    <input type="text"  name="query" id="query" value="{{ old('query') }}"  class="form-control border-transparent form-focus-none" placeholder="Buscar ..">
+                                </form>
+                            </div><!-- .nk-header-news -->
+                            @endif
+
 
                             <div class="nk-header-tools">
                                 <ul class="nk-quick-nav">
@@ -450,7 +556,7 @@
                                                     <li><a href="/panel/user-profile/{{ Auth::user()->id }}"><em
                                                                 class="icon ni ni-user-alt"></em><span>Ver
                                                                 perfíl</span></a></li>
-                                                    <li><a href="html/user-profile-setting.html"><em
+                                                    <li><a href="/panel/config"><em
                                                                 class="icon ni ni-setting-alt"></em><span>Configuración
                                                             </span></a></li>
                                                     <li><a class="dark-switch" href="#"><em
@@ -524,44 +630,7 @@
                         <div class="nk-footer-wrap">
                             <div class="nk-footer-copyright"> &copy; KaaxClub
                             </div>
-                            <div class="nk-footer-links">
-                                <ul class="nav nav-sm">
-                                    <li class="nav-item dropup">
-                                        <a href="#"
-                                            class="dropdown-toggle dropdown-indicator has-indicator nav-link text-base"
-                                            data-bs-toggle="dropdown" data-offset="0,10"><span>English</span></a>
-                                        <div class="dropdown-menu dropdown-menu-sm dropdown-menu-end">
-                                            <ul class="language-list">
-                                                <li>
-                                                    <a href="#" class="language-item">
-                                                        <span class="language-name">English</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="language-item">
-                                                        <span class="language-name">Español</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="language-item">
-                                                        <span class="language-name">Français</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#" class="language-item">
-                                                        <span class="language-name">Türkçe</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a data-bs-toggle="modal" href="#region" class="nav-link"><em
-                                                class="icon ni ni-globe"></em><span class="ms-1">Select
-                                                Region</span></a>
-                                    </li>
-                                </ul>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -974,6 +1043,13 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
+    <script src="https://cdn.ckeditor.com/4.16.1/full-all/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.16.1/full-all/lang/es.js"></script>
+
+    {{-- tooltio --}}
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
 
     <script type="text/javascript" src="/js/app.js"></script>
 

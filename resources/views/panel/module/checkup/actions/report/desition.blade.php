@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Acciones')
+@section('title', 'Tareas')
 @inject('financial', 'App\Models\Financial')
 @inject('m_financial_product', 'App\Models\FinancialProduct')
 @section('content')
@@ -10,14 +10,14 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Acciones/ Decisión</h3>
+                                <h3 class="nk-block-title page-title">Tareas/ Decisión</h3>
                                 <div class="nk-block-des text-soft">
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item active"><a href="/panel/kc-check-up">KC - Check up</a>
                                             <li class="breadcrumb-item active"><a href="/panel/template/steps/{{ $model }}/{{  $history->id }}/show">Etapas</a>
-                                            <li class="breadcrumb-item active"><a href="/panel/template/report/{{ $model }}/{{  $history->id }}/show">Acciones</a>
+                                            <li class="breadcrumb-item active"><a href="/panel/template/report/{{ $model }}/{{  $history->id }}/show">Tareas</a>
                                             <li class="breadcrumb-item active"><a
                                                     href="/panel/kc-check-up">{{ $credit->id }} - REPORTE</a>
                                             </li>
@@ -73,26 +73,32 @@
                                     @endphp
                                     @foreach ($financials as $index => $financial_product)
                                     <div class="col-12 col-md-3">
-                                        <a class="pointer  mt-3" onclick="desition({{ $credit->id }}, {{ $financial_product->financial_id }}, {{ $type }})" target="_blank">
+                                        <a class="pointer  mt-3" onclick="desition({{$history->id}}, {{ $credit->id }}, {{ $financial_product->id }}, {{ $type }}, {{ $history->status_id}}, {{ $financial_product->is_tramitar }})" target="_blank">
                                             <div class="card card-bordered pricing">
-                                                @if ($credit->financial_product_id == $financial_product->id)
+                                                @if ($credit->applied_financial_product == $financial_product->id)
                                                     <span class="pricing-badge badge bg-primary">Mi financiera</span>
-                                                    
                                                 @endif
                                                 <div class="pricing-head">
                                                     <div class="pricing-title">
-                                                        <h4 class="card-title title">{{ $financial_product->commercial_name }}</h4>
+                                                        <h4 class="card-title title">  {{ $financial_product->commercial_name }}</h4>
                                                     </div>
                                                    
                                                 </div>
                                                 <div class="pricing-body">
                                                     <ul class="pricing-features">
                                                         <div class="col-12">
-                                                            <li><span class="w-50"> {{ $financial_product->name }}</span> - <span class="ms-auto"><i class="fa-solid fa-star"></i> {{ $financial_product->rate_kc }}</span></li>
+                                                            <li><span class="w-60 fw-bold"> {{ $financial_product->alias }}</span> - <span class="ms-auto"><i class="fa-solid fa-star"></i> {{ $financial_product->rate_kc }}</span></li>
+                                                            <li><span class="w-60"> Aval o garantía</span> - <span class="ms-auto"> {{ $financial_product->aval_o_garantia == 1 ? 'Sí' : 'No' }}  </span></li>
+                                                            <li><span class="w-60"> Consulta buró de crédito</span> - <span class="ms-auto"> {{ $financial_product->consulta_buro == 1 ? 'Sí' : 'No' }}  </span></li>
                                                         </div>
                                                     </ul>
                                                     <div class="pricing-action">
-                                                        <button class="btn btn-outline-light">Elegir</button>
+                                                        @if ($financial_product->is_tramitar == 0)
+                                                            <button class="btn btn-outline-light">Elegir</button>
+                                                            @else
+                                                            <button class="btn btn-outline-light">Tramitar</button>
+                                                        @endif
+                                                        
                                                     </div>
                                                 </div>
                                             </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Action;
 use App\Models\Credit;
+use App\Models\CurrentFinancialProduct;
 use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\RegisterAction;
@@ -26,6 +27,12 @@ class ActionController extends Controller
     {
         //
     }
+
+    public function listProductFinancial($id, $type)
+    {
+        $financials = CurrentFinancialProduct::getList($id, $type);
+        return response()->json(['financials' => $financials]);
+    }
     
     public function move($id_rel, $status_id, $old_status_id, Request $request)
     {
@@ -37,6 +44,7 @@ class ActionController extends Controller
     {
         $credit = Credit::find($history->id_rel);
         $credit_id = $credit->id;
+        //*agregar que cuando viene de control desk haga lo mismo si viniera de delivery
         
         if ($status_id == HistoryLog::KC_DELIVERY_FORM_STEP_3) {
             HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit_id, 1);
@@ -63,6 +71,17 @@ class ActionController extends Controller
             //desactivate delivery
             HistoryLog::where(['id_rel' => $credit_id, 'status_id' => HistoryLog::KC_DELIVERY, 'status' => 1])
                         ->update(['status' => 0]);
+        } elseif ($status_id == HistoryLog::KC_CONTROL_DESK || $status_id == HistoryLog::KC_SWAP || $status_id == HistoryLog::KC_CHECK_UP || $status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($credit_id, HistoryLog::KC_PAYMENT, HistoryLog::KC_PAYMENT, null, false);
+            // send push
+            $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcPayment'];
+            (new $notification_add)->send($credit->id);
+            $credit->delivered = 1;
+
+            HistoryLog::where(['id_rel' => $credit_id, 'status_id' => $history->status_id, 'status' => 1])
+                        ->update(['status' => 0]);
+
         }
         $credit->update();
     }
@@ -149,7 +168,41 @@ class ActionController extends Controller
 
     public function storeFilesDateTemplate(Request $request)
     {
+        $models = File::MODEL;
         TemplateFile::saveTemplate($request);
+        $step = $request->step;
+        if ($request->model == 'controlDesk' && $step == '5_3') {
+            $actionStrategy   = TemplateValues::STRATEGY[$request->model];
+            $finish       = (new $actionStrategy)->finish($request->id_rel, $step);
+        }
+        //terminar archivo agregar fondos etapa 1
+        if ($request->model == 'wallet'  && $step == '1_2') {
+            //*inicializar las acciones de la siguiente etapa en curso
+            HistoryLog::move($request->id_rel, HistoryLog::KC_WALLET_ADD_FORM_STEP_2, HistoryLog::KC_WALLET_ADD_FORM_STEP_2, null, false);
+            HistoryLog::move($request->id_rel, HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, null, false);
+
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $request->id_rel, 0);
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM_STEP_2, $request->id_rel, 0);
+        
+        }
+
+        if ($request->model == 'wallet'  && $step == '2') {
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $request->id_rel, 1);
+        }
+        //terminar archivo retirar fondos etapa 1
+        if ($request->model == 'kc-down-wallet' && $step == '2') {
+            HistoryLog::move($request->id_rel, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, null, false);
+            $actionStrategy   = TemplateValues::STRATEGY[$request->model];
+            $finish       = (new $actionStrategy)->finish($request->id_rel, $step);
+        }
+        
+        
+       /*  $data_where = array(
+            'model' => $models[$request->model],
+            'id_rel' => $request->id_rel
+        );
+        $files = File::where($data_where)->count(); */
+        
     }
 
     public function showFiles($model, Request $request)
@@ -193,10 +246,10 @@ class ActionController extends Controller
         return view('panel.action.list', compact('title', 'status'));
     }
    
-    public function viewActionLead($status)
+    public function viewActionDt($status, $model)
     {
         $title = ($status == 'in_progress')? 'En curso': 'Concluidas';
-        return view('panel.action.list_lead', compact('title', 'status'));
+        return view('panel.action.list_action_dt', compact('title', 'status', 'model'));
     }
     
     /**
@@ -210,7 +263,7 @@ class ActionController extends Controller
     public function listAction($id, $model, $status)
     {
         $leadStrategy   = ActionValues::STRATEGY[$model];
-        $list       = (new $leadStrategy)->list($id, $model, $status);
+        $list       = (new $leadStrategy)->listAction($id, $model, $status);
         return response()->json($list);
     }
 
@@ -235,9 +288,10 @@ class ActionController extends Controller
      * @param [type] $status
      * @return void
      */
-    public function list($status)
+    public function list($status, $model)
     {
-        $list = Action::listDt($status);
+        $model = $model == 'lead' ? 1 : 2;
+        $list = Action::listDt($status, $model);
         return response()->json(['data' => $list]);
     }
 

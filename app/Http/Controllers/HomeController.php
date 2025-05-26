@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Lib\Manychat;
+use App\Models\Action;
 use App\Models\Agreement;
+use App\Models\ApiLead;
+use App\Models\Bank;
 use App\Models\ClientPerson;
 use App\Models\Credit;
+use App\Models\CurrentFinancialProduct;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Lead;
@@ -14,6 +19,8 @@ use App\Models\TokenForms;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -36,9 +43,25 @@ class HomeController extends Controller
         return view('home');
     }
 
+    
+    
     public function surveyHola()
     {
         return view('quiz.survey_lead');
+    }
+
+    public function whatsapp()
+    {
+        $whatsappUrl = 'https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%20información';
+
+        // Redireccionar a la URL de WhatsApp
+        return Redirect::to($whatsappUrl);
+    }
+
+    function slackNotification()
+    {
+    
+        Action::accionesVencidas();
     }
 
     public function surveyForm(Request $request)
@@ -55,8 +78,11 @@ class HomeController extends Controller
 
     public function report($history_id, $credit_id = null)
     {
+        
+        session(['report_history_id' => $history_id]);
+        
+        $history    = HistoryLog::find($history_id);
         if ($credit_id == null) {
-            $history    = HistoryLog::find($history_id);
             $credit     = $history->historyCredit;
         } else {
             $get_action   = HistoryLog::getByStatusFirst([HistoryLog::KC_CHECK_UP], $credit_id);
@@ -64,10 +90,13 @@ class HomeController extends Controller
             $credit       = Credit::find($credit_id);
         }
 
+        session(['credit_id' => $credit->id]);
+        $plazo   = Session::get('plazo');
+
         
-       /*  if ($credit->applied_financial != '') {
+        if ($credit->applied_financial != '') {
             return view('content_expiration_report');
-        } */
+        }
         
         $financial            = $credit->creditFinancial; //financiera transferente
         $client               = $credit->creditClientPerson;
@@ -75,11 +104,24 @@ class HomeController extends Controller
         $status_id            = $history->status_id;
         $agreement            = $credit->creditAgreement;
         $financials           = $agreement != null ? $agreement->financialAgreement : null;
-        $financial_products   = FinancialProduct::getByRate();
+        $financial_products   = FinancialProduct::getByRate($credit);
+        //dd($financial_products);
         $new_financials       = FinancialProduct::customSortFinancials($financial_products);
-        $final_financials     = FinancialProduct::customSortFinancials($financial_products, true);
+        $existing_ids = $new_financials->pluck('id')->toArray();
+        $final_financials = FinancialProduct::customSortFinancials($financial_products->whereNotIn('id', $existing_ids), true);
+        //dd($final_financials);
+        $banks = Bank::all();
         $my_product_financial = null;
         $my_product           = null;
+        
+        if ($credit->date_open_report == null) {
+            $many_chat = new Manychat();
+            $many_chat->addTag('ReporteVisto', $credit->manychat_id);
+        }
+
+        Credit::where('id', $credit->id)
+                ->where('date_open_report', '=' , null)
+                ->update(['date_open_report'=> date('Y-m-d H:i:s')]);
 
         if ($history->status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             $is_best = false;
@@ -108,29 +150,138 @@ class HomeController extends Controller
                 'interes' => 8500,
                 'comision_apertura' => 0
             );
-            $get_chart = isset($chart[$financial->commercial_name])? $chart[$financial->commercial_name]: $chart['Financiera 1'];
             $data_report = array(
                 'client' => $client,
                 'credit' => $credit,
                 'financial' => $financial,
-                'get_chart' => $get_chart,
                 'option' => $option,
                 'history_id' => $history_id,
                 'is_best' => $is_best,
                 'status_id' => $status_id,
             );
 
-            $my_product_financial   = FinancialProduct::existMyFinancial($new_financials, $final_financials, $credit->financial_product_id);
-            $my_product             = FinancialProduct::getById($credit->financial_product_id);
-            
-            return view('content_report_debt', compact('client', 'credit', 'financial', 'get_chart', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'final_financials', 'my_product_financial', 'my_product'));
+            $my_product_financial   = FinancialProduct::existMyFinancial($new_financials, $credit->id);
+            $my_products            = CurrentFinancialProduct::getList($credit->id, 2);
+            $total_product          = count($my_products);
+            $financial_products     = FinancialProduct::getAllByTemplate();
+
+            return view('content_report_debt', compact('banks', 'plazo', 'client', 'credit', 'financial', 'option', 'history_id', 'is_best', 'status_id', 'new_financials', 'financial_products', 'final_financials', 'my_product_financial', 'my_products', 'total_product'));
         }
-        return view('content_report', compact('client', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial', 'my_product'));
+        return view('content_report', compact('banks', 'client', 'plazo', 'history_id', 'status_id', 'credit', 'new_financials', 'final_financials', 'my_product_financial'));
+    }
+
+    public function infoProduct(FinancialProduct $product)
+    {
+        $info = FinancialProduct::returnInfo($product);
+        return response()->json($info);
+    }
+    
+   
+
+    public function storeReportProduct(Request $request)
+    {
+        $new_data = array(
+            'consulta_buro'  => isset($request->consulta_buro)? $request->consulta_buro : 0, 
+            'aval_o_garantia' => isset($request->aval_o_garantia)? $request->aval_o_garantia : 0, 
+        );
+
+        $report_history_id    = session('report_history_id');
+        $history              = HistoryLog::find($report_history_id);
+        $get_credit           = Credit::find($history->id_rel);
+        $get_credit->fill($new_data); 
+        $get_credit->update();
+    }
+
+    public function productsShow()
+    {
+        $history_id           = session('report_history_id');
+        $history              = HistoryLog::find($history_id);
+        $credit               = $history->historyCredit;
+        $financial_products   = FinancialProduct::getByRate($credit);
+        $new_financials       = FinancialProduct::customSortFinancials($financial_products);
+        $existing_ids         = $new_financials->pluck('id')->toArray();
+        $final_financials     = FinancialProduct::customSortFinancials($financial_products->whereNotIn('id', $existing_ids), true);
+        $my_product_financial = FinancialProduct::existMyFinancial($new_financials, $credit->id);
+        $view                 = \View::make('content_report_products', ['new_financials' => $new_financials, 'credit' => $credit, 'final_financials' => $final_financials])->render();
+
+        $chart1 = isset($new_financials[1]) ? $new_financials[1] : null;
+        $chart2 = isset($new_financials[0]) ? $new_financials[0] : null;
+        $chart3 = isset($new_financials[2]) ? $new_financials[2] : null;
+        $chart4 = $my_product_financial;
+
+        return response()->json([
+            'view' => $view,
+            'chart1' => $chart1,
+            'chart2' => $chart2,
+            'chart3' => $chart3,
+            'chart4' => $chart4,
+        ]);
+        
     }
 
     public function exitReport(Credit $credit)
     {
-        return view('content_exit_report');
+        $product        = FinancialProduct::find($credit->financial_product_id);
+        $status_email   = true;
+        $view_info      = null;
+
+        if ($product!= null && $product->is_tramitar == 1 && $product->is_vincular_banco == 1 && ($credit != null && $credit->bank_id === null)) {
+            $status_email = true; //*no 
+        }
+        if ($product != null) {
+            FinancialProduct::returnInfo($product, $credit, true);
+            $view_info = FinancialProduct::returnInfo($product);
+        }
+        $client           = ClientPerson::find($credit->client_person_id);
+        $manychat_id = $credit->manychat_id;
+        if ($manychat_id  != null) {
+            $many_chat = new Manychat();
+            $many_chat->addTag('ReporteElegido', $manychat_id);
+        }
+        
+        return view('content_exit_report', compact('product', 'status_email',  'view_info', 'credit', 'client'));
+    }
+
+    public function updateAndSendEmail(Request $request)
+    {
+        $data             = $request->data;
+        $credit           = Credit::find($request->credit_id);
+        $client           = ClientPerson::find($credit->client_person_id);
+        $client->email    = $data['email'];
+        $client->update();
+        $product          = FinancialProduct::find($request->product_id);
+        
+        
+        FinancialProduct::returnInfo($product, $credit, true);
+       
+    }
+    
+    public function updateProduct(Request $request)
+    {
+        $creditId = session('credit_id');
+        CurrentFinancialProduct::saveEdit($creditId, $request, 2);
+       
+    }
+    
+    public function ProductNotFound()
+    {
+        $creditId = session('credit_id');
+        CurrentFinancialProduct::setOtherProduct($creditId);
+    }
+
+    public function importePlazo(Request $request)
+    {
+         // Obtener los valores de importe y plazo de la solicitud POST
+        $importe    = $request->input('importe');
+        $plazo      = $request->input('plazo');
+        $creditId   = Session::get('credit_id');
+        
+        if ($importe != null) {
+            Credit::where('id', $creditId)->update(['importe_solicitado' => $importe]);
+        }
+                // Almacenar los valores en variables de sesión
+        Session::put('importe', $importe);
+        Session::put('plazo', $plazo);
     }
 
     public function method($history_id)
@@ -174,7 +325,7 @@ class HomeController extends Controller
     public function leadStore(Request  $request)
     {
         $lead = Lead::saveLeadSurvey($request);
-        return response()->json(['lead' => $lead]);
+        return response()->json(['lead' => $lead['lead'], 'history' => $lead['history']]);
     }
 
     public function leadFormStore(Request  $request)

@@ -531,8 +531,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $name_form = 'frm-template_swap_step2-3';
         $type_form = HistoryLog::KC_SWAP_FORM_STEP_2_3;
         $client_name = $client_person->last_name.' '.$client_person->second_last_name.' '.$client_person->name;
-        $financial_t = $credit->creditAppliedFinancial;
-        $name_financial_t = $financial_t->email;
+        $get_credit_financial = FinancialProduct::find($credit->financial_product_id);
+        $financial = Financial::find($get_credit_financial->financial_id);
+        $name_financial_t = isset($financial->email)? $financial->email : null;
         $id_number = $credit->id_number;
         $rfc = $client_person->rfc;
         $current_credit_number = $credit->current_credit_number;
@@ -661,6 +662,24 @@ class SwapStrategyTemplate implements TemplateInterface
                 'value' => '/panel/template/steps/swap/'.$history_id.'/show',
                 'col' => 'col-12'
             ],
+            9 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'send_email',
+                'id_field' => 'send_email',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 1,
+                'col' => 'col-12'
+            ],
+            
+            
         );
         $list = \View::make('panel.module.form', ['elements' => $elements, 'name_button' => $name_button, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
@@ -996,7 +1015,9 @@ class SwapStrategyTemplate implements TemplateInterface
             if (isset($data_credit['termination_email_sent']) && $data_credit['termination_email_sent'] == 1) {
                 $credit   = Credit::find($id_rel);
                 $client         = $credit->creditClientPerson;
-                $financial_t = $credit->creditAppliedFinancial;
+                $get_financial_product = FinancialProduct::find($credit->financial_product_id);
+                $financial_t = Financial::find($get_financial_product->financial_id);
+
                 $name_financial_t = $financial_t->email;
                 if ($credit->signed == 1) { //* equal percent_form_2_4
                     HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM_STEP_2_3, $credit->id, 1);
@@ -1004,23 +1025,25 @@ class SwapStrategyTemplate implements TemplateInterface
                     HistoryLog::move($credit->id, HistoryLog::KC_SWAP_UPLOAD_STEP_3, HistoryLog::KC_SWAP_UPLOAD_STEP_3, null, false);
                     HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_STEP_3, $credit->id, 0);
 
-                    $send_grid_create_sender = new Csendgrid();
-                    $sender = $send_grid_create_sender->createEmail($credit->id);
-
-                    $get_files_attach = File::getFilesBySwap($credit->id);
-                    $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', $sender, '', $get_files_attach);
-                    $send_grid->setTemplate('d-944f2768988a43dca2e0ad689954fd20');
-                    $data_params = array(
-                        'name' => $client->name,
-                        'last_name' => $client->last_name,
-                        'second_last_name' => $client->second_last_name,
-                        'if_number' => $credit->id_number,
-                        'client_rfc' => $client->rfc,
-                        'current_credit_number' => $credit->current_credit_number,
-                        'current_loan' => $credit->current_loan,
-                     );
-                    $send_grid->setParams($data_params);
-                    $send_grid->send();
+                    if ($request->send_email == 1) {
+                        $send_grid_create_sender = new Csendgrid();
+                        $sender = $send_grid_create_sender->createEmail($credit->id);
+    
+                        $get_files_attach = File::getFilesBySwap($credit->id);
+                        $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta', ' ', $sender, '', $get_files_attach);
+                        $send_grid->setTemplate('d-944f2768988a43dca2e0ad689954fd20');
+                        $data_params = array(
+                            'name' => $client->name,
+                            'last_name' => $client->last_name,
+                            'second_last_name' => $client->second_last_name,
+                            'if_number' => $credit->id_number,
+                            'client_rfc' => $client->rfc,
+                            'current_credit_number' => $credit->current_credit_number,
+                            'current_loan' => $credit->current_loan,
+                         );
+                        $send_grid->setParams($data_params);
+                        $send_grid->send();
+                    }
                 }
             }
         }
@@ -1043,9 +1066,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $status_step8               = 'En espera';
 
         //percent step 1
-        $percent_file               = self::percentFile($credit->id);
-        $percent_form               = self::percentForm($history);
-        $percent_file_1_2           = self::percentFile($credit->id, '1_2');
+        $percent_file               = reduceDecimal(self::percentFile($credit->id));
+        $percent_form               = reduceDecimal(self::percentForm($history));
+        $percent_file_1_2           = reduceDecimal(self::percentFile($credit->id, '1_2'));
         
         $new_percent_file           = $percent_file == 100 ? 1 : 0;
         $new_percent_file2          = $percent_file_1_2 == 100 ? 1 : 0;
@@ -1056,10 +1079,10 @@ class SwapStrategyTemplate implements TemplateInterface
 
 
         //percent step 2
-        $percent_form_2         = self::percentFormStep2($history);
-        $percent_form_2_2       = self::percentFormStep2_2($history);
-        $percent_form_2_3       = self::percentFile($credit->id, '2');
-        $percent_form_2_4       = self::percentFormStep2_3($history);
+        $percent_form_2         = reduceDecimal(self::percentFormStep2($history));
+        $percent_form_2_2       = reduceDecimal(self::percentFormStep2_2($history));
+        $percent_form_2_3       = reduceDecimal(self::percentFile($credit->id, '2'));
+        $percent_form_2_4       = reduceDecimal(self::percentFormStep2_3($history));
 
         $new_percent_form_2         = $percent_form_2  == 100 ? 25 : $percent_form_2;
         $new_percent_form_2_2       = $percent_form_2_2  == 100 ? 25 : $percent_form_2_2;
@@ -1067,9 +1090,9 @@ class SwapStrategyTemplate implements TemplateInterface
         $new_percent_file_2_4       = $percent_form_2_4  == 100 ? 25 : $percent_form_2_4;
         $total_percent2             = $new_percent_form_2 + $new_percent_form_2_2 + $new_percent_file_2_3 + $new_percent_file_2_4;
 
-        $percent_file_step3         = self::percentFile($credit->id, '3');
-        $percent_form_step3         = self::percentFormStep3($history);
-        $percent_form_2_step3       = self::percentFormStep3_2($history);
+        $percent_file_step3         = reduceDecimal(self::percentFile($credit->id, '3'));
+        $percent_form_step3         = reduceDecimal(self::percentFormStep3($history));
+        $percent_form_2_step3       = reduceDecimal(self::percentFormStep3_2($history));
         $new_percent_form_step3_1   = $percent_file_step3  == 100 ? 33 : $percent_file_step3;
         $new_percent_form_step3_2   = $percent_form_step3  == 100 ? 33 : $percent_form_step3;
         $new_percent_file_step3_3   = $percent_form_2_step3  == 100 ? 34 : $percent_form_2_step3;
@@ -1450,11 +1473,16 @@ class SwapStrategyTemplate implements TemplateInterface
         $subject2 = HistoryLog::$label_subject[39];
         $subject3 = HistoryLog::$label_subject[46];
 
+
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
+        $viewStatus2= \View::make('panel.module.status', ['status' => $status_form])->render();
+        $viewStatus3= \View::make('panel.module.status', ['status' => $status_file_2])->render();
+
         $data = array();
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject1,
-            'status' => $status_file,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option1,
@@ -1463,7 +1491,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject2,
-            'status' => $status_form,
+            'status' => $viewStatus2,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $option2,
@@ -1472,7 +1500,7 @@ class SwapStrategyTemplate implements TemplateInterface
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject3,
-            'status' => $status_file_2,
+            'status' => $viewStatus3,
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
             'options' => $option3,
@@ -1495,7 +1523,6 @@ class SwapStrategyTemplate implements TemplateInterface
         $percent_form_2_2       = self::percentFormStep2_2($history);
         $percent_form_2_3       = self::percentFile($credit->id, '2');
         $percent_form_2_4       = self::percentFormStep2_3($history);
-        
 
         $name_advisor = null;
         try {
@@ -1541,11 +1568,16 @@ class SwapStrategyTemplate implements TemplateInterface
         $subject3 = HistoryLog::$label_subject[42];
         $subject4 = HistoryLog::$label_subject[43];
 
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_step2])->render();
+        $viewStatus2= \View::make('panel.module.status', ['status' => $status_step2_2])->render();
+        $viewStatus3= \View::make('panel.module.status', ['status' => $status_step2_3])->render();
+        $viewStatus4= \View::make('panel.module.status', ['status' => $status_step2_4])->render();
+
         $data[] = array(
             'name' => 'Firma',
             'subject' => $subject1,
             'description' => 'Preparar documento',
-            'status' => $status_step2,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option1,
@@ -1555,7 +1587,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Firma',
             'subject' => $subject2,
             'description' => 'Confirmar',
-            'status' => $status_step2_2,
+            'status' => $viewStatus2,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $option2,
@@ -1565,7 +1597,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Carga',
             'subject' => $subject3,
             'description' => 'Documento firmado',
-            'status' => $status_step2_3,
+            'status' => $viewStatus3,
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
             'options' => $option3,
@@ -1576,7 +1608,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Email',
             'subject' => $subject4,
             'description' => 'Enviar solicitud',
-            'status' => $status_step2_4,
+            'status' => $viewStatus4,
             'deadline' => $view_dead_line_step4,
             'advisor' => $name_advisor,
             'options' => $option4,
@@ -1639,11 +1671,15 @@ class SwapStrategyTemplate implements TemplateInterface
         $subject2 = HistoryLog::$label_subject[45];
         $subject3 = HistoryLog::$label_subject[47];
 
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
+        $viewStatus2= \View::make('panel.module.status', ['status' => $status_form])->render();
+        $viewStatus3= \View::make('panel.module.status', ['status' => $status_form_2])->render();
+
         $data[] = array(
             'name' => 'Carga',
             'subject' => $subject1,
             'description' => 'Preparar documento',
-            'status' => $status_file,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_step1,
             'advisor' => $name_advisor,
             'options' => $option1,
@@ -1653,7 +1689,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Formulario',
             'subject' => $subject2,
             'description' => 'Solicitar firma',
-            'status' => $status_form,
+            'status' => $viewStatus2,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $option2,
@@ -1663,7 +1699,7 @@ class SwapStrategyTemplate implements TemplateInterface
             'name' => 'Decisión',
             'subject' => $subject3,
             'description' => 'Documento firmado',
-            'status' => $status_form_2,
+            'status' => $viewStatus3,
             'deadline' => $view_dead_line_step3,
             'advisor' => $name_advisor,
             'options' => $option3,
@@ -1880,9 +1916,17 @@ class SwapStrategyTemplate implements TemplateInterface
         $status_reject    = HistoryLog::CREDIT_REJECTED;
         $status_archive   = HistoryLog::CREDIT_ARCHIVE;
         $old_status       = $history->old_status_id;
+        $url_finish       = "panel/kc-control-desk";
 
         $menu = array(
             'options' => array(
+                [
+                    'link' => '/panel/template/steps/swap/'.$history->id.'/show',
+                    'onclick' => '',
+                    'name' => 'Ver etapas',
+                    'icon' => 'icon ni ni-list-thumb-fill',
+                    'class' => 'text-dark'
+                ],
                 [
                     'link' => '/panel/client/'.$client->id,
                     'onclick' => '',
@@ -1896,11 +1940,13 @@ class SwapStrategyTemplate implements TemplateInterface
                     'icon' => 'icon ni ni-report-profit'
                 ],
                 [
-                    'link' => '/panel/template/steps/swap/'.$history->id.'/show',
+                    'link' => 'https://manychat.com/fb861553/chat/'.$credit->manychat_id,
+                    'target' => '_blank',
                     'onclick' => '',
-                    'name' => 'Ver etapas',
-                    'icon' => 'icon ni ni-list-thumb-fill'
+                    'name' => 'ManyChat',
+                    'icon' => 'icon ni ni-chat-circle'
                 ],
+                
                 [
                     'link' => null,
                     'onclick' => 'moveModal("Cancelar",' . $credit->id . ',' . $status_cancel . ',' . $old_status . ',"dt-kc-swap")',
@@ -1918,6 +1964,12 @@ class SwapStrategyTemplate implements TemplateInterface
                     'onclick' => 'moveModal("Archivar",' . $credit->id . ',' . $status_archive . ',' . $old_status . ',"dt-kc-swap")',
                     'name' => 'Archivar',
                     'icon' => 'icon ni ni-archive-fill'
+                ],
+                [
+                    'link' => null,
+                    'onclick' => "deliveryFinish({$history->id}, {$history->status_id}, '{$url_finish}', true)",
+                    'name' => 'Concluir',
+                    'icon' => 'icon ni ni-stop-circle-fill'
                 ]
             ),
         );
@@ -2059,7 +2111,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/action-form/controlDesk/' . $history->id . '/form?step=5',
                     'onclick' => '',
-                    'name' => 'Ver acción',
+                    'name' => 'Ver tareas',
                     'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
@@ -2070,7 +2122,7 @@ class SwapStrategyTemplate implements TemplateInterface
 
     public function menuOptionsStep($history, $type_lbl = 1)
     {
-        $lbl_action = $type_lbl === 1 ? 'Lista de acciones' : 'Ver acción';
+        $lbl_action = $type_lbl === 1 ? 'Lista de tareas' : 'Ver tareas';
         $menu = array(
             'actionstep1' => array(
                 [
@@ -2465,7 +2517,7 @@ class SwapStrategyTemplate implements TemplateInterface
                 'active' => true
             ),
             3 => array(
-                'title' => 'acciones',
+                'title' => 'tareas',
                 'link' => null,
                 'active' => true
                ),
@@ -2494,7 +2546,7 @@ class SwapStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             3 => array(
-             'title' => 'acciones',
+             'title' => 'tareas',
              'link' => '/panel/template/steps/swap/'.$history->id.'/show',
              'active' => null
             ),

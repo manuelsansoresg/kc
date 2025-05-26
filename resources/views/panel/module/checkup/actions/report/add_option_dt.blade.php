@@ -12,12 +12,12 @@
         @if ($is_report === false)
         <li>
             <a class="pointer" href="/panel/kc-check-up-actions/{{ $id }}">
-                <em class="icon ni ni-card-view"></em><span>Ver acciones</span></a>
+                <em class="icon ni ni-card-view"></em><span>Ver tareas</span></a>
         </li>
         @else
         <li>
             <a class="pointer" href="/panel/kc-check-up/report/{{ $id }}">
-                <em class="icon ni ni-card-view"></em><span>Ver acciones</span></a>
+                <em class="icon ni ni-card-view"></em><span>Ver tareas</span></a>
         </li>
         @endif
        

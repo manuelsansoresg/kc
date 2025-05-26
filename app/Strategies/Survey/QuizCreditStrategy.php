@@ -2,6 +2,8 @@
 
 namespace App\Strategies\Survey;
 
+use App\Lib\Manychat;
+use App\Models\Credit;
 use App\Models\HistoryLog;
 use App\Models\Survey;
 use App\Strategies\SurveyInterface;
@@ -15,6 +17,7 @@ class QuizCreditStrategy implements SurveyInterface
             'surevey_credit_delivery' => $request->surevey_credit_delivery,
             'surevey_kc_attention' => $request->surevey_kc_attention,
             'surevey_financial_attention' => $request->surevey_financial_attention,
+            'surevey_recomendacion_amigos' => $request->surevey_recomendacion_amigos,
             'survey_note' => $request->survey_note,
         );
     }
@@ -28,7 +31,6 @@ class QuizCreditStrategy implements SurveyInterface
             'id_survey' => 1,
             'origin' => 1,
         );
-        
         $get_survey = Survey::where($data_survey)->count();
         if ($get_survey == 0) {
             $survey = new Survey($data_survey);
@@ -37,6 +39,14 @@ class QuizCreditStrategy implements SurveyInterface
             HistoryLog::where(['id_rel' => $request->credit_id, 'status_id' => HistoryLog::KC_AFTER_MARKET, 'status' => 1])
                         ->update(['status' => 0]);
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $request->credit_id, 1);
+
+            $credit             = Credit::find($request->credit_id);
+            $manychat_id = $credit->manychat_id;
+            if ($manychat_id  != null) {
+                $many_chat = new Manychat();
+                $many_chat->addTag('EncuestaRespondida', $manychat_id);
+            }
+            
         }
     }
 
@@ -54,6 +64,7 @@ class QuizCreditStrategy implements SurveyInterface
                 'surevey_credit_delivery' => $answer->surevey_credit_delivery,
                 'surevey_kc_attention' => $answer->surevey_kc_attention,
                 'surevey_financial_attention' => $answer->surevey_financial_attention,
+                'surevey_recomendacion_amigos' => $answer->surevey_recomendacion_amigos,
                 'survey_note' => $answer->survey_note,
             );
         }

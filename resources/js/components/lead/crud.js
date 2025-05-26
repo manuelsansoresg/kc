@@ -10,13 +10,13 @@ $('.select2multiple').select2({
     placeholder: "Escribe para buscar..",
 });
 //onchangeOrganization
-window.organizationChange = function(lead_agreement_id, financial_id, other){
+window.organizationChange = function(lead_agreement_id, financial_id, other, applied_financial_product){
     
     if (other != null) {
         lead_agreement_id = 0;
         $('#new_agreement').val(other);
     }
-
+    //alert(lead_agreement_id);
     if (lead_agreement_id != null) {
         $('#lead-agreement').val(lead_agreement_id).trigger("change");
     }
@@ -31,39 +31,79 @@ window.organizationChange = function(lead_agreement_id, financial_id, other){
         $('#lead-content-agreement').hide();
     } else {
         getFinancial(lead_agreement, financial_id);
+        getFinancialByAgreement(lead_agreement, applied_financial_product);
     }
 }
 
 window.productChange = function(lead_product_id){
     $('#content-importe-solicitado').hide();
-    $('#content-banco_nomina').hide();
-    $('#content-tipo-credito').hide();
+    /* $('#content-banco_nomina').hide(); */
+    //$('#content-tipo-credito').hide();
     $('#content-consulta-buro-credito').hide();
     $('#content-financial_product_id').hide();
+    $('#content-aval-o-garantia').hide();
+    $('#content-comment').hide();
 
     $('#lead-financial_id').val(null).trigger('change');
     if (lead_product_id != null) {
         $('#lead-product-id').val(lead_product_id).trigger("change");
     }
     let product_id = $("#lead-product-id").val();
-    $('#content-financial').hide();
-    if (product_id == 2) {
-        $('#content-financial').show();
+    
+    if (product_id == 2) { //portabilidad
         $('#content-financial_product_id').show();
         $('#content-importe-solicitado').show();
-        $('#content-banco_nomina').show();
-        $('#content-tipo-credito').show();
-        $('#content-consulta-buro-credito').show();
+        /* $('#content-banco_nomina').hide(); */
+        $('#content-producto-financiero').show();
+        $('#content-consulta-buro-credito').hide();
+        $('#content-aval-o-garantia').hide();
+        $('#content-ingreso-mensual').show();
     }
     
-    if (product_id == 1) {
+    if (product_id == 1) { // credito nomina
+        /* $('#content-banco_nomina').hide(); */
         $('#content-importe-solicitado').show();
-        $('#content-banco_nomina').show();
+        $('#content-producto-financiero').show();
+        $('#content-tipo_tramite').show();
         $('#content-tipo-credito').show();
-        $('#content-consulta-buro-credito').show();
+        $('#content-consulta-buro-credito').hide();
+        $('#content-aval-o-garantia').hide();
+        $('#content-ingreso-mensual').show();
+    }
+    if (product_id == 4) { // on-demand
+        $('#content-producto-financiero').show();
+        $('#content-ingreso-mensual').hide();
+    }
+    if (product_id == 3) { //Asesoria
+        
+        $('#content-comment').show();
+        $('#content-aval-o-garantia').hide();
     }
 }
 
+function getFinancialByAgreement(agreementId, applied_financial_product)
+{
+    const selectElement = document.getElementById('applied_financial_product');
+    selectElement.options.length = 0; // Limpiar el select
+
+    axios
+        .get("/panel/agreement/" + agreementId + "/financial-product/show")
+        .then(function (response) {
+            let financialProducts = response.data;
+            Object.keys(financialProducts).forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = financialProducts[key];
+                selectElement.appendChild(option);
+            });
+            
+            if (applied_financial_product != 'null') {
+                $('#applied_financial_product').val(applied_financial_product).trigger("change");
+            }
+        })
+        .catch(e => {
+        });
+}
 
 
 function getFinancial(lead_id, financial_id) {
@@ -97,33 +137,18 @@ function getFinancial(lead_id, financial_id) {
         });
 }
 
-window.getFinancialProduct = function(product_id) {
-    $('#lead-financial-product-id').empty();
-    let financial_id = $('#lead-financial_id').val();
+window.getFinancialProduct = function(id, type) {
     axios
-        .get("/panel/lead/financial/product/" + financial_id + "/show")
+        .get("/panel/action/financial/product/" + id + "/"+type+'/show')
         .then(function (response) {
-            let result = response.data;
-            $('#lead-financial-product-id').empty();
-            if (result != null) {
-                var lead_financial = $('#lead-financial-product-id');
-
-                for (const key in result) {
-                    const element = result[key];
-                    var option = new Option(element.name, element.id, true, true);
-                    lead_financial.append(option).trigger('change');
-
-                }
-                console.log('aqui'+product_id);
-                if (product_id == null) {
-                    $('#lead-financial-product-id').val(null).trigger('change');
-                } else {
-                     // Esperar 2 segundos antes de ejecutar el trigger 'change'
-                     setTimeout(function() {
-                        $('#lead-financial-product-id').val(product_id).trigger('change');
-                    }, 2000);
-                }
-            }
+            let result    = response.data;
+            let financials   = result.financials;
+            console.log(financials);
+            let financialValues = financials.map(item => item.product_id);
+             // Limpia las selecciones actuales en el select múltiple
+             $('#lead-financial-product-id').val(null).trigger('change');
+             // Seleccionar los valores correspondientes en los selects
+            $('#lead-financial-product-id').val(financialValues).trigger('change');
         })
         .catch(e => {
           
@@ -211,11 +236,15 @@ function setData(is_change_origen, is_change_organization) {
             let financials    = result.financials;
             let product_id    = lead.product_id;
             let other         = lead.other;
+            let is_viability  = lead.is_viability;
+            let is_viability_credit = lead.is_viability_credit;
 
             console.log(product_id);
             productChange(product_id);
-            organizationChange(lead.agreement_id, lead.financial_id, other);
-            getFinancialProduct(lead.financial_product_id);
+            organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
+            
+            getFinancialProduct(lead.id, 1);
+
             if (is_change_origen == true) {
                 $('#lead-origin').val(lead.origin_id);
                 $('#lead-origin').trigger("change");
@@ -225,33 +254,91 @@ function setData(is_change_origen, is_change_organization) {
             $('#lead-asesor-id').trigger("change");
 
 
-            $('#lead-type_id').val(lead.type_id);
-            $('#lead-type_id').trigger("change");
+            /* $('#lead-type_id').val(lead.type_id);
+            $('#lead-type_id').trigger("change"); */
 
             $('#lead-name').val(lead.name);
             $('#lead-last_name').val(lead.last_name);
             $('#lead-second_last_name').val(lead.second_last_name);
+            
             $('#lead-cellphone').val(lead.cellphone);
+            
             $('#lead-email').val(lead.email);
             
-            $('#content-financial').hide();
+
+            $('#lead-rfc').val(lead.rfc);
             
-            if (product_id == 2) {
-                $('#content-financial').show();
-                
+
+
+            if (document.getElementById('lead-manychat_id')) {
+                $('#lead-manychat_id').val(lead.manychat_id);
             }
+            $('#lead-comment').val(lead.comment);
+            
+            
+           
             changeOrigen(lead.channel_id);
             
             $('#lead-temperature-id').val(lead.financial_id).trigger("change");
             
             $('#importe_solicitado').val(lead.importe_solicitado);
+            $('#income').val(lead.income);
             $('#bank_id').val(lead.bank_id).trigger("change");
             $('#tipo_credito').val(lead.tipo_credito).trigger("change");
             $('#consulta_buro').val(lead.consulta_buro).trigger("change");
+
+            checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
+            checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+            checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+            
+            $('#applied_loan_type').val(lead.applied_loan_type).trigger("change");
+
+            // Get the checkbox elements
+            let checkboxViability = document.getElementById('is_viability');
+            let checkboxViabilityCredit = document.getElementById('is_viability_credit');
+
+            // Set the checked property based on the variables
+            checkboxViability.checked = is_viability === 1;
+            checkboxViabilityCredit.checked = is_viability_credit === 1;
+
+
         })
         .catch(e => {
             $('#admin_email-error-exist').show();
         });
+}
+
+window.checkDataLeadExist = function (valInput, id)
+{
+    let getValue = valInput.value;
+    let messageElement = document.getElementById(id+'-msg');
+    if (valInput != '') {
+        messageElement.textContent = "";
+        axios
+        .get("/panel/lead/"+getValue+"/"+id+"/check")
+        .then(function (response) {
+            let result = response.data;
+            let isExist = result.exist;
+            if (isExist > 0) {
+                
+                if (id != 'rfc') {
+                    messageElement.textContent = "Ya está en uso";
+                } else { 
+                    messageElement.textContent = "Recurrente";
+                    $('.text-viabilidad').html('Recurrente');
+                }
+            } else {
+                if (id == 'rfc') {
+                    messageElement.innerHTML  = "<b>Nuevo</b>";
+                    $('.text-viabilidad').html('Nuevo');
+                }
+            }
+
+        })
+        .catch(e => {
+    
+        });
+    }
 }
 
 window.deleteLead = function (lead_id) {
@@ -361,22 +448,20 @@ $().ready(function () {
                 required: true,
             },
             'data[last_name]': {
-                required: true,
+                required: false,
             },
             'data[cellphone]': {
                 number: true,
                 minlength: 10
             },
             'data[email]': {
-                required: true,
+                required: false,
                 email: true
             },
             'data[origin_id]': {
                 required: true,
             },
-            'data[channel_id]': {
-                required: true,
-            },
+            
             'new_agreement': {
                 required: function (element) {
                     let lead_agreement = $("#lead-agreement").val();
@@ -394,22 +479,72 @@ $().ready(function () {
 
             const new_form = document.getElementById("frm-lead");
             const data = new FormData(new_form);
+            let isExport = $('#isExport').val();
 
             axios
                 .post("/panel/lead", data)
                 .then(function (response) {
-                    let result = response.data;
-                    window.location = '/panel/lead';
+                    let getResult = response.data;
+                    let result = getResult.lead;
+                    if (isExport == 'true') {
+                        $('#lead_id').val(result.id);
+                        
+                        //exportar
+                        exportLead(result.id);
+                        
+                    } else {
+                        window.location = '/panel/lead';
+
+                    }
                 })
                 .catch(e => {
                 });
 
         }
     });
-
-
+    
+    async function exportLead(leadId) {
+        const fileName = 'KC - Datos exportados'+leadId+'.csv'; // Replace with your logic
+        const formData = new FormData();
+        formData.append('lead_id', leadId);
+      
+        const response = await axios.post("/panel/lead/"+leadId+"/data/export", formData, { responseType: 'blob' });
+      
+        const blob = new Blob(["\ufeff", response.data], { type: 'text/csv;charset=utf-8' });
+      
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(blob, fileName);
+        } else {
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = fileName;
+          link.click();
+        }
+        $('#isExport').val(false);
+      }
 
 });
+
+window.saveAndExportLead = function ()
+{
+    $('#isExport').val(true);
+    document.getElementById('btnSave').click();
+}
+
+/* modal vista previa perfil */
+window.modalPreviewProfile =  function(lead_id)
+{
+    $('content-preview-profile').html('');
+    axios
+    .get("/panel/lead/"+lead_id+"/preview/profile")
+    .then(function (response) {
+        let result = response.data;
+        $('#content-preview-profile').html(result);
+        $('#modal-preview-profile').modal('show');
+    })
+    .catch(e => {
+    });
+}
 
 window.modalPasswod = function (user_id) {
     $('#password_user_id').val(user_id);

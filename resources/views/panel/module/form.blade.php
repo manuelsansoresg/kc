@@ -13,7 +13,9 @@
                 
             @endphp
             @if ($element['title_section'] != '')
-                <span class="preview-title-lg overline-title">{{ $element['title_section'] }}</span>
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}" id="{{ isset($element['id_field'])? $element['id_field'] : null  }}">
+                    <span class="preview-title-lg overline-title {{ isset($element['class'])? $element['class'] :null  }} "> {!! $element['title_section'] !!} </span>
+                </div>
             @endif
             @if ($element['type'] == 'text')
             @php
@@ -104,6 +106,8 @@
                     </div>
                 </div>
             @endif
+            
+            
            
             @if ($element['type'] == 'div')
                <div  class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}" id="{{ isset($element['id_field'])? $element['id_field'] : ''  }}">
@@ -135,9 +139,13 @@
                         <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
                         <div class="form-control-wrap">
                             <input type="number" class="form-control" {{ $element['is_disabled'] }}
-                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}">
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" value="{{ $value }}"
+                                @if (isset($element['negativeNumber']) && $element['negativeNumber'] == true)
+                                data-negative-number
+                                @endif
+                                >
                             @if ($element['comment_admin'] != null)
-                                <small>{{ $element['comment_admin'] }}</small>
+                                <small>{!!  $element['comment_admin'] !!}</small>
                             @endif
                             @if ($element['comment_webApp'] != null)
                                 <small>{{ $element['comment_webApp'] }}</small>
@@ -199,6 +207,29 @@
                 </div>
             @endif
 
+            @if ($element['type'] == 'select2multiple')
+            @php
+                $options = $element['options'];
+            @endphp
+                <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
+                    <div class="form-group">
+                        <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                        
+                        <div class="form-control-wrap">
+                            <select class="form-select select2multiple" name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" multiple="multiple"  data-search="on">
+                                <option value="">Escribe para buscar</option>
+                                @if ($options != null)
+                                    @foreach ($options as $option)
+                                        <option value="{{ $option->id }}">{{$option->full_name }}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <p class="small">{{ $element['comment_admin'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             @if ($element['type'] == 'select2')
                 @php
                     $options = $element['options'];
@@ -253,9 +284,46 @@
                             </div>
                         </div>
                     @endif
+                    
+                    @if (isset($element['childs']))
+                        @foreach ($element['childs'] as $child)
+                            @if ( $child['type'] == 'href')
+                                <div class="form-group mb-0">
+                                    <label class="form-label"> </label>
+                                    <div class="form-control-wrap">
+                                        <a 
+                                        @if (isset($child['link']))
+                                            href="{{ $child['link'] }}"
+                                        @endif
+                                        @if (isset($child['onclick']))
+                                            onclick="{{ $child['onclick'] }}"
+                                        @endif
+                                        @if (isset($child['target']))
+                                            target="{{ $child['target'] }}"
+                                        @endif
+                                        class="{{ $child['class'] }}">{!! $child['name_field'] !!} </a>
+                                    </div>
+                                </div>
+                            @endif
+                            @if ( $child['type'] == 'text')
+                            <div class="form-group mb-0">
+                                <label class="form-label"> </label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" 
+                                        name="{{ $child['name_field'] }}" placeholder="{{ $child['placeholder'] }}"
+                                        id="{{ $child['id_field'] }}" value="">
+                                </div>
+                            </div>
+                            @endif
+                           
+                            @if ($child['type'] == 'div')
+                                <div  class="{{ isset($child['col'])? $child['col'] : 'col-md-6'  }}" id="{{ isset($child['id_field'])? $child['id_field'] : ''  }}">
+                                    {!! $child['name_field'] !!}
+                                </div>
+                            @endif
+                        @endforeach
 
-
-
+                    @endif
                 </div>
             @endif
             @if ($element['title_section'] == 'Referencias')
@@ -291,16 +359,24 @@
 
        
         @if ($type_form != 31)
-        @if (!isset($show_btn))
+        
             <div class="col-12">
                 <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                     <li>
                         {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
+                        @if (!isset($show_btn))
                         <button class="btn btn-primary">{{ $name_button }}</button>
+                        @endif
+                        @if ($type_form == 43) {{-- swap --}}
+                            <a  onclick="saltarSwap()" class="btn btn-primary">Saltar</a>
+                        @endif
+                        @if (isset($buttonLinkExtraFinish) && $buttonLinkExtraFinish != null)
+                            <button class="{{ $buttonLinkExtraFinish['class'] }}" data-redirect="{{ $buttonLinkExtraFinish['data-redirect'] }}" id="{{ $buttonLinkExtraFinish['id'] }}"> {{ $buttonLinkExtraFinish['name'] }} </button>
+                        @endif
                     </li>
                 </ul>
             </div>
-        @endif
+       
             
         @endif
     </div>

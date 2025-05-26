@@ -10,16 +10,18 @@
 </a>
 <div class="dropdown-menu dropdown-menu-end">
     <ul class="link-list-opt no-bdr">
+        <li>
+            <a class="pointer" href="/panel/template/steps/{{ $route }}/{{ $id }}/show">
+                <em class="icon ni ni-list-thumb-fill"></em><span class="text-dark">Ver etapas</span></a>
+        </li>
         @if ($percent_form == 100)
             <li>
-                <a class="pointer" href="/reporte/{{ $id }}">
+                <a class="pointer" target="_blank" href="/reporte/{{ $id }}">
                     <em class="icon ni ni-reports"></em><span>Ver reporte</span></a>
             </li>
         @endif
-        <li>
-            <a class="pointer" href="/panel/template/steps/{{ $route }}/{{ $id }}/show">
-                <em class="icon ni ni-list-thumb-fill"></em><span>Ver etapas</span></a>
-        </li>
+      
+        
         <li>
             <a class="pointer" href="/panel/client/{{ $client->id }}">
                 <em class="icon ni ni-user-fill"></em><span>Ver perfil cliente</span></a>
@@ -27,6 +29,10 @@
         <li>
             <a class="pointer" href="/panel/credit/{{ $credit_id }}">
                 <em class="icon ni ni-report-profit"></em><span>Ver perfil crédito</span></a>
+        </li>
+        <li>
+            <a class="pointer" href="https://web.whatsapp.com/send/?phone={{ $client->cellphone }}&text&type=phone_number&app_absent=0" target="_blank">
+                <em class="icon ni ni-whatsapp"></em><span>Whatsapp</span></a>
         </li>
         <li>
             <a onclick="moveModal('Cancelar', {{ $credit_id }}, '{{ $m_history::CREDIT_CANCELED }}', '{{ $status_id }}', 'dt-check-up')" class="pointer">

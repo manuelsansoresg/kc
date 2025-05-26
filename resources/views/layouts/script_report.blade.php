@@ -9,104 +9,14 @@
             'Consupago (Mejor opción)',
         ];
 
-        const data_options = {
-            labels: labels_options,
-            datasets: [{
-                    label: 'Prestamo',
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 0.5)',
-                    data: [{{ $get_chart['prestamo'] }},20000],
-                    borderWidth: 1,
-
-                },
-                {
-                    label: 'Interés',
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                    borderColor: 'rgba(255, 99, 132, 0.5)', 
-                    data: [{{ $get_chart['interes'] }}, 1000],
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Comisión por apertura',
-                    backgroundColor: 'rgba(255, 205, 86, 0.5)',
-                    borderColor:'rgba(255, 205, 86, 0.5)',
-                    data: [{{ $get_chart['comision_apertura'] }}, 0],
-                    borderWidth: 1,
-                },
-            ] 
-        };
-         /* option */
        
-       
-
-         const config_options = {
-            type: 'bar',
-            data: data_options,
-            options: {
-                responsive: true,
-                animation: {
-                    delay: (context) => {
-                        let delay = 0;
-                        if (context.type === 'data') {
-                            delay = context.dataIndex * 300 + context.datasetIndex * 100;
-                        }
-                        return delay;
-                    },
-                },
-                indexAxis: 'y',
-                plugins: {
-                    legend: {
-                            display: true,
-                            labels: {
-                                color: "white",
-                                font: {
-                                    weight: 'bold',
-                                    size: '13'
-                                },
-                            }
-                        },
-                        title: {
-                            display: false,
-                        },
-                        datalabels: {
-                            display: false,
-                            
-                        },
-                },
-                scales: {
-                    x: {
-            stacked: true,
-            ticks: {
-                color: 'white',
-                
-                font: {
-                    weight: 'bold',
-                },
-                display: true
-            }
-        },
-        y: {
-            stacked: true,
-            ticks: {
-                color: [color_financiera1, color_financiera2],
-                
-                font: {
-                    weight: 'bold',
-                    size: '13'
-                },
-                
-            }
-        }
-                }
-            },
-        };
         /* option */
     </script>
     @endif
     @php
-        $color_financiera2 = ($my_product_financial!= null && $my_product_financial->id == $chart2->id) || ($credit->financial_product_id == $chart2->id) ? '#644EF3' : 'white';
-        $color_financiera3 = ($my_product_financial!= null && $my_product_financial->id == $chart3->id) || ($credit->financial_product_id == $chart3->id) ? '#644EF3' : 'white';
-        $color_financiera4 = $my_product_financial!= null && $my_product_financial->id == $chart4->id ? '#644EF3' : 'white';
+        $color_financiera2 = ($my_product_financial!= null && $chart2 != null && $my_product_financial->id == $chart2->id) || ($chart2 != null &&$credit->financial_product_id == $chart2->id) ? '#644EF3' : 'white';
+        $color_financiera3 = ($my_product_financial!= null && $chart3 != null  && $my_product_financial->id == $chart3->id) || ($chart3 != null && $credit->financial_product_id == $chart3->id ) ? '#644EF3' : 'white';
+        $color_financiera4 = $my_product_financial!= null && $chart4 != null && $my_product_financial->id == $chart4->id ? '#644EF3' : 'white';
     @endphp
     {{-- {{ dd($my_product_financial,$chart1, $chart2, $chart3, $chart4 ) }} --}}
     <script>
@@ -158,16 +68,16 @@
     <script>
          <?php if($chart4 == null){ ?>
             const labels = [
-            '{{ $chart1->commercial_name }}',
-            '{{ $chart2->commercial_name }}',
-            '{{ $chart3->commercial_name }}',
+            '{{ isset($chart1->commercial_name) ? $chart1->commercial_name : null }}',
+            '{{ isset($chart2->commercial_name) ? $chart2->commercial_name : null }}',
+            '{{ isset($chart3->commercial_name) ? $chart3->commercial_name : null }}',
         ];
         <?php } else { ?>
             const labels = [
-            '{{ $chart1->commercial_name }}',
-            '{{ $chart2->commercial_name }}',
-            '{{ $chart3->commercial_name }}',
-            '{{ $chart4->commercial_name }}',
+            '{{ isset($chart1->commercial_name)? $chart1->commercial_name : null }}',
+            '{{ isset($chart2->commercial_name)? $chart2->commercial_name : null }}',
+            '{{ isset($chart3->commercial_name)? $chart3->commercial_name : null }}',
+            '{{ isset($chart4->commercial_name)? $chart4->commercial_name : null }}',
         ];
         <?php } ?>
         
@@ -177,9 +87,9 @@
             datasets: [{
                     label: 'Financiera1',
                     <?php if($chart4 == null){ ?>
-                        data: [{{ $chart1->chart_costo_anual_total == null ? 0 : $chart1->chart_costo_anual_total }}, {{ $chart2->chart_costo_anual_total == null ? 0 : $chart2->chart_costo_anual_total }}, {{ $chart3->chart_costo_anual_total == null ? 0 : $chart3->chart_costo_anual_total }}],
+                        data: [{{ !isset($chart1->chart_costo_anual_total) ? 0 : $chart1->chart_costo_anual_total }}, {{ !isset($chart2->chart_costo_anual_total) ? 0 : $chart2->chart_costo_anual_total }}, {{ !isset( $chart3->chart_costo_anual_total) ? 0 : $chart3->chart_costo_anual_total }}],
                         <?php } else { ?>
-                            data: [{{ $chart4->chart_costo_anual_total == null ? 0 : $chart4->chart_costo_anual_total }},{{ $chart1->chart_costo_anual_total == null ? 0 : $chart1->chart_costo_anual_total }}, {{ $chart2->chart_costo_anual_total == null ? 0 : $chart2->chart_costo_anual_total }}, {{ $chart3->chart_costo_anual_total == null ? 0 : $chart3->chart_costo_anual_total }}],
+                            data: [{{ !isset($chart4->chart_costo_anual_total) ? 0 : $chart4->chart_costo_anual_total }},{{ !isset($chart1->chart_costo_anual_total) ? 0 : $chart1->chart_costo_anual_total }}, {{ !isset($chart2->chart_costo_anual_total) ? 0 : $chart2->chart_costo_anual_total }}, {{ !isset($chart3->chart_costo_anual_total) ? 0 : $chart3->chart_costo_anual_total }}],
                         <?php } ?>
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.5)', //rojo
@@ -269,16 +179,16 @@
         /*  intereses */
         <?php if($chart4 == null){ ?>
             const labels_interes = [
-            '{{ $chart1->commercial_name }}',
-            '{{ $chart2->commercial_name }}',
-            '{{ $chart3->commercial_name }}',
+            '{{ isset($chart1->commercial_name)? $chart1->commercial_name : null }}',
+            '{{ isset($chart2->commercial_name)? $chart2->commercial_name : null }}',
+            '{{ isset($chart3->commercial_name)? $chart3->commercial_name : null }}',
             ];
         <?php } else { ?>
             const labels_interes = [
-            '{{ $chart1->commercial_name }}',
-            '{{ $chart2->commercial_name }}',
-            '{{ $chart3->commercial_name }}',
-            '{{ $chart4->commercial_name }}',
+           '{{ isset($chart1->commercial_name)? $chart1->commercial_name : null }}',
+            '{{ isset($chart2->commercial_name)? $chart2->commercial_name : null }}',
+            '{{ isset($chart3->commercial_name)? $chart3->commercial_name : null }}',
+            '{{ isset($chart4->commercial_name)? $chart4->commercial_name : null }}',
             ];
         <?php } ?>
        
@@ -290,26 +200,26 @@
                     label: 'Capital',
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 0.5)',
-                    data: [{{ $chart1->chart_capital == null ? 0 : $chart1->chart_capital }},{{ $chart2->chart_capital == null ? 0 : $chart2->chart_capital }}, {{ $chart3->chart_capital == null ? 0 : $chart3->chart_capital }}],
+                    data: [{{ !isset($chart1->chart_capital) ? 0 : $chart1->chart_capital }},{{ !isset($chart2->chart_capital) ? 0 : $chart2->chart_capital }}, {{ !isset($chart3->chart_capital) ? 0 : $chart3->chart_capital }}],
 
                 },
                 {
                     label: 'Interés',
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
                     borderColor: 'rgba(255, 99, 132, 0.5)',
-                    data: [{{ $chart1->chart_interes == null ? 0 : $chart1->chart_interes }}, {{ $chart2->chart_interes == null ? 0 : $chart2->chart_interes }} , {{ $chart3->chart_interes == null ? 0 : $chart3->chart_interes }}],
+                    data: [{{ !isset($chart1->chart_interes) ? 0 : $chart1->chart_interes }}, {{ !isset($chart2->chart_interes) ? 0 : $chart2->chart_interes }} , {{ !isset($chart3->chart_interes) ? 0 : $chart3->chart_interes }}],
                 },
                 {
                     label: 'Comisiónes',
                     backgroundColor: 'rgba(255, 205, 86, 0.5)',
                     borderColor: 'rgba(255, 205, 86, 0.5)',
-                    data: [{{ $chart1->chart_comision == null ? 0 : $chart1->chart_comision }}, {{ $chart2->chart_comision == null ? 0 : $chart2->chart_comision }} , {{ $chart3->chart_comision == null ? 0 : $chart3->chart_comision }}],
+                    data: [{{ !isset($chart1->chart_comision)  ? 0 : $chart1->chart_comision }}, {{ !isset($chart2->chart_comision)  ? 0 : $chart2->chart_comision }} , {{ !isset($chart3->chart_comision)  ? 0 : $chart3->chart_comision }}],
                 },
                 {
                     label: 'IVA',
                     backgroundColor: 'rgb(45,99, 141)',
                     borderColor: 'rgb(45,99, 141)',
-                    data: [{{ $chart1->chart_iva == null ? 0 : $chart1->chart_iva }}, {{ $chart2->chart_iva == null ? 0 : $chart2->chart_iva }} , {{ $chart3->chart_iva == null ? 0 : $chart3->chart_iva }}],
+                    data: [{{ !isset($chart1->chart_iva) ? 0 : $chart1->chart_iva }}, {{ !isset($chart2->chart_iva) ? 0 : $chart2->chart_iva }} , {{ !isset($chart3->chart_iva) ? 0 : $chart3->chart_iva }}],
                 },
             ] 
                 <?php } else { ?>
@@ -317,26 +227,26 @@
                     label: 'Capital',
                     backgroundColor: 'rgba(75, 192, 192, 0.5)',
                     borderColor: 'rgba(75, 192, 192, 0.5)',
-                    data: [{{ $chart4->chart_capital == null ? 0 : $chart4->chart_capital }}, {{ $chart1->chart_capital == null ? 0 : $chart1->chart_capital }},{{ $chart2->chart_capital == null ? 0 : $chart2->chart_capital }}, {{ $chart3->chart_capital == null ? 0 : $chart3->chart_capital }}],
+                    data: [{{ !isset($chart4->chart_capital) ? 0 : $chart4->chart_capital }}, {{ !isset($chart1->chart_capital) ? 0 : $chart1->chart_capital }},{{ !isset($chart2->chart_capital) ? 0 : $chart2->chart_capital }}, {{ !isset($chart3->chart_capital) ? 0 : $chart3->chart_capital }}],
 
                 },
                 {
                     label: 'Interés',
                     backgroundColor: 'rgba(255, 99, 132, 0.5)',
                     borderColor: 'rgba(255, 99, 132, 0.5)',
-                    data: [{{ $chart4->chart_interes == null ? 0 : $chart4->chart_interes }},{{ $chart1->chart_interes == null ? 0 : $chart1->chart_interes }}, {{ $chart2->chart_interes == null ? 0 : $chart2->chart_interes }} , {{ $chart3->chart_interes == null ? 0 : $chart3->chart_interes }}],
+                    data: [{{ !isset($chart4->chart_interes) ? 0 : $chart4->chart_interes }},{{ !isset($chart1->chart_interes) ? 0 : $chart1->chart_interes }}, {{ !isset($chart2->chart_interes) ? 0 : $chart2->chart_interes }} , {{ !isset($chart3->chart_interes) ? 0 : $chart3->chart_interes }}],
                 },
                 {
                     label: 'Comisiónes',
                     backgroundColor: 'rgba(255, 205, 86, 0.5)',
                     borderColor: 'rgba(255, 205, 86, 0.5)',
-                    data: [{{ $chart4->chart_comision == null ? 0 : $chart4->chart_comision }},{{ $chart1->chart_comision == null ? 0 : $chart1->chart_comision }}, {{ $chart2->chart_comision == null ? 0 : $chart2->chart_comision }} , {{ $chart3->chart_comision == null ? 0 : $chart3->chart_comision }}],
+                    data: [{{ !isset($chart4->chart_comision) ? 0 : $chart4->chart_comision }},{{ !isset($chart1->chart_comision) ? 0 : $chart1->chart_comision }}, {{ !isset($chart2->chart_comision) ? 0 : $chart2->chart_comision }} , {{ !isset($chart3->chart_comision) ? 0 : $chart3->chart_comision }}],
                 },
                 {
                     label: 'IVA',
                     backgroundColor: 'rgb(45,99, 141)',
                     borderColor: 'rgb(45,99, 141)',
-                    data: [{{ $chart4->chart_iva == null ? 0 : $chart4->chart_iva }},{{ $chart1->chart_iva == null ? 0 : $chart1->chart_iva }}, {{ $chart2->chart_iva == null ? 0 : $chart2->chart_iva }} , {{ $chart3->chart_iva == null ? 0 : $chart3->chart_iva }}],
+                    data: [{{ !isset($chart4->chart_iva) ? 0 : $chart4->chart_iva }},{{ !isset($chart1->chart_iva) ? 0 : $chart1->chart_iva }}, {{ !isset($chart2->chart_iva) ? 0 : $chart2->chart_iva }} , {{ !isset($chart3->chart_iva) ? 0 : $chart3->chart_iva }}],
                 },
             ] 
                     <?php } ?>
@@ -405,16 +315,16 @@
         /* plazo */
         <?php if($chart4 == null){ ?>
             const labels_plazo = [
-            '{{ $chart1->commercial_name }}',
-            '{{ $chart2->commercial_name }}',
-            '{{ $chart3->commercial_name }}',
+            '{{ isset($chart1->commercial_name)? $chart1->commercial_name : null }}',
+            '{{ isset($chart2->commercial_name)? $chart2->commercial_name : null }}',
+            '{{ isset($chart3->commercial_name)? $chart3->commercial_name : null }}',
         ];
         <?php } else { ?>
             const labels_plazo = [
-            '{{ $chart1->commercial_name }}',
-            '{{ $chart2->commercial_name }}',
-            '{{ $chart3->commercial_name }}',
-            '{{ $chart4->commercial_name }}',
+            '{{ isset($chart1->commercial_name)? $chart1->commercial_name : null }}',
+            '{{ isset($chart2->commercial_name)? $chart2->commercial_name : null }}',
+            '{{ isset($chart3->commercial_name)? $chart3->commercial_name : null }}',
+            '{{ isset($chart4->commercial_name)? $chart4->commercial_name : null }}',
         ];
         <?php } ?>
         
@@ -462,7 +372,7 @@
                         },
                         datalabels: {
                             formatter: function(value, context) {
-                                return value + ' años';
+                                return value + ' meses';
                             }
                         },
                 },
@@ -539,7 +449,7 @@
             }
             
             
-            if (isScrolledIntoView('#chartOption')) {
+            /* if (isScrolledIntoView('#chartOption')) {
                 if (inView) { return; }
                 inViewOption = true;
                 const myChart_option = new Chart(
@@ -548,10 +458,11 @@
                 );
             } else {
                 inViewOption = false;  
-            }
+            } */
         });
 
         window.showFinalFinancial = function() {
+            $('#leyend-opciones').hide();
             $('#final-financials').show('slow');
         }
     </script>

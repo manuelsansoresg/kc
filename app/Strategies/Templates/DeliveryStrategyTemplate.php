@@ -176,7 +176,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'placeholder' => '',
                 'type' => 'href',
                 'link' => null,
-                'onclick' => 'deliveryFinish('.$history_id.', '.$status_id.',"'.$url_finish.'")',
+                'onclick' => 'deliveryFinish('.$history_id.', '.$status_id.',"'.$url_finish.'", false)',
                 'class' => 'btn btn-primary',
                 'target' => '_blank',
                 'is_option_array' => false,
@@ -270,7 +270,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'placeholder' => '',
                 'type' => 'href',
                 'link' => null,
-                'onclick' => 'deliveryFinish('.$history_id.', '.$status_id.',"'.$url_finish.'")',
+                'onclick' => 'deliveryFinish('.$history_id.', '.$status_id.',"'.$url_finish.'", false)',
                 'class' => 'btn btn-primary',
                 'target' => '_blank',
                 'is_option_array' => false,
@@ -363,7 +363,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'placeholder' => '',
                 'type' => 'href',
                 'link' => null,
-                'onclick' => 'deliveryFinish('.$history_id.', '.$status_id.',"'.$url_finish.'")',
+                'onclick' => 'deliveryFinish('.$history_id.', '.$status_id.',"'.$url_finish.'", false)',
                 'class' => 'btn btn-primary',
                 'target' => '_blank',
                 'is_option_array' => false,
@@ -470,11 +470,11 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $max_hour             = 12;
         $hour                 = $credit->created_at;
         
-        $percent_form_step1   = self::percentForm($history);
+        $percent_form_step1   = reduceDecimal(self::percentForm($history));
         
-        $percentStep2         = self::percentStep2($credit->id);
-        $percent_form_step3   = self::percentFormStep3($credit->id);
-        $percent_form_step4   = self::percentFormStep4($credit->id);
+        $percentStep2         = reduceDecimal(self::percentStep2($credit->id));
+        $percent_form_step3   = reduceDecimal(self::percentFormStep3($credit->id));
+        $percent_form_step4   = reduceDecimal(self::percentFormStep4($credit->id));
 
         $color_inf_credit     = 'success';
         $option_step2         = null;
@@ -527,7 +527,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data = array();
         $data[] = array(
             'name' => $view_count_inf_credit,
-            'step' => 'Entrega info',
+            'step' => 'Enviar info',
             'status' => $status_step1,
             'progress' => $view_percent_step1,
             'deadline' =>'',
@@ -536,13 +536,13 @@ class DeliveryStrategyTemplate implements TemplateInterface
         
         $data[] = array(
             'name' => $view_count_step2,
-            'step' => 'Firma de docs',
+            'step' => 'Activar crédito',
             'status' => $status_step2,
             'progress' => $view_percent_step2,
             'deadline' =>'',
             'options' => $option_step2,
         );
-        $data[] = array(
+        /* $data[] = array(
             'name' => $view_count_step3,
             'step' => 'Analisis',
             'status' => $status_step3,
@@ -557,7 +557,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
             'progress' => $view_percent_step4,
             'deadline' =>'',
             'options' => $option_step4,
-        );
+        ); */
         
        
         return $data;
@@ -667,11 +667,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data = array();
 
         $subject1 = HistoryLog::$label_subject[31];
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
 
         $data[] = array(
-            'name' => 'Email',
+            'name' => 'API',
             'subject' => $subject1,
-            'status' => $status_file,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line,
             'advisor' => $name_advisor,
             'options' => $file_option,
@@ -739,11 +740,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data = array();
 
         $subject1 = HistoryLog::$label_subject[32];
-        
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_file])->render();
+
         $data[] = array(
-            'name' => 'Formulario',
+            'name' => 'API',
             'subject' => $subject1,
-            'status' =>  $status_file,
+            'status' =>  $viewStatus1,
             'deadline' => $view_dead_line_step2,
             'advisor' => $name_advisor,
             'options' => $form_option_2,
@@ -799,11 +801,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
         $data = array();
         $subject1 = HistoryLog::$label_subject[34];
-        
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_form])->render();
+
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' => $status_form,
+            'status' => $viewStatus1,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -863,10 +866,11 @@ class DeliveryStrategyTemplate implements TemplateInterface
         
         $subject1 = HistoryLog::$label_subject[33];
 
+        $viewStatus1= \View::make('panel.module.status', ['status' => $status_form])->render();
         $data[] = array(
             'name' => 'Formulario',
             'subject' => $subject1,
-            'status' =>  $status_form,
+            'status' =>  $viewStatus1,
             'deadline' => $view_dead_line_inf_credit,
             'advisor' => $name_advisor,
             'options' => $form_option,
@@ -1033,7 +1037,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/action-form/delivery/' . $history->id . '/form?step=5',
                     'onclick' => '',
-                    'name' => 'Ver acción',
+                    'name' => 'Ver tareas',
                     'icon' => 'icon ni ni-check-circle-cut'
                 ]
             ),
@@ -1044,7 +1048,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
 
     public function menuOptionsStep($history, $type_lbl = 1)
     {
-        $lbl_action = $type_lbl === 1 ? 'Lista de acciones' : 'Ver acción';
+        $lbl_action = $type_lbl === 1 ? 'Lista de tareas' : 'Ver tareas';
         $menu = array(
             'actionstep1' => array(
                 [
@@ -1175,8 +1179,8 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $data_actions = array(
             HistoryLog::KC_DELIVERY_FORM,
             HistoryLog::KC_DELIVERY_FORM_STEP_2,
-            HistoryLog::KC_DELIVERY_FORM_STEP_3,
-            HistoryLog::KC_DELIVERY_FORM_STEP_4,
+           /*  HistoryLog::KC_DELIVERY_FORM_STEP_3,
+            HistoryLog::KC_DELIVERY_FORM_STEP_4, */
         );
         
         $get_actions = HistoryLog::getByStatus($data_actions, $credit->id);
@@ -1189,16 +1193,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
         }
         
         if ($status_progress == 0) {
-            $current_show = 'Entrega info';
-        } elseif ($status_progress == 1) {
-            $current_show = 'Firma de docs';
-        } elseif ($status_progress == 2) {
-            $current_show = 'Analisis';
-        } elseif ($status_progress > 2) {
-            $current_show = 'Entrega crédito';
+            $current_show = 'Enviar info a s2';
+        }  elseif ($status_progress > 1) {
+            $current_show = 'Activar crédito';
         }
         //dd($status_progress, $current_show);
-        $percent =  (($status_progress) / 4) * 100;
+        $percent =  (($status_progress) / 2) * 100;
 
         if ($show_current_show == true) {
             return $current_show;
@@ -1305,6 +1305,13 @@ class DeliveryStrategyTemplate implements TemplateInterface
             $menu = array(
                 'options' => array(
                     [
+                        'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+                        'onclick' => '',
+                        'name' => 'Ver etapas',
+                        'icon' => 'icon ni ni-list-thumb-fill',
+                        'class' => 'text-dark'
+                    ],
+                    [
                         'link' => '/panel/client/'.$client->id,
                         'onclick' => '',
                         'name' => 'Ver perfil cliente',
@@ -1316,12 +1323,15 @@ class DeliveryStrategyTemplate implements TemplateInterface
                         'name' => 'Ver perfil crédito',
                         'icon' => 'icon ni ni-report-profit'
                     ],
+
                     [
-                        'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
+                        'link' => 'https://manychat.com/fb861553/chat/'.$credit->manychat_id,
+                        'target' => '_blank',
                         'onclick' => '',
-                        'name' => 'Ver etapas',
-                        'icon' => 'icon ni ni-list-thumb-fill'
+                        'name' => 'ManyChat',
+                        'icon' => 'icon ni ni-chat-circle'
                     ],
+                    
                     [
                         'link' => null,
                         'onclick' => 'moveModal("Cancelar",'.$credit->id.','.$status_cancel.','.$old_status.',"dt-delivery")',
@@ -1401,7 +1411,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                 'active' => true
             ),
             3 => array(
-                'title' => 'acciones',
+                'title' => 'tareas',
                 'link' => null,
                 'active' => true
                ),
@@ -1430,7 +1440,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
              'active' => null
             ),
             3 => array(
-             'title' => 'acciones',
+             'title' => 'tareas',
              'link' => '/panel/template/steps/delivery/'.$history->id.'/show',
              'active' => null
             ),

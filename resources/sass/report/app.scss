@@ -273,6 +273,15 @@
 
 /* animation confeti */
 
+.bg-dark2{
+   --bs-bg-opacity: 1;
+   background-color: rgb(52, 54, 58) !important;
+}
+
+.select2-container {
+   width: 100% !important;
+}
+
 /* mediaquery */
 @media (max-width: 576px) {
     .animated-title {
@@ -282,7 +291,13 @@
     }
 
     .animated-title  .h4 {
-        font-size: 14px !important;
+      font-family: var(--bs-body-font-family) !important;
+      font-size: 1rem !important;
+      font-weight: var(--bs-body-font-weight) !important;
+    }
+
+    .text-calificacion h1{
+      font-size: calc(1.3rem + .6vw) !important;
     }
 
     #hero-img{
@@ -316,4 +331,36 @@
 
 .text-sm{
   font-size: 12px !important;
+}
+
+#margin-filter{
+   margin-left: 359px;
+}
+
+body.dark-mode .form-control {
+   background-color: black !important;
+}
+
+.text-bank{
+   font-size: 1.1rem;
+}
+
+.btn-block-bank{
+   width: 55%;
+}
+
+
+
+
+@media only screen and (max-width: 767px) {
+   #margin-filter {
+       margin-left: 0; /* Quítale el margen en dispositivos móviles */
+   }
+   .text-small {
+      font-size: 11px !important; /* Tamaño de fuente para versiones móviles */
+    }
+    .calificacion { 
+      display: none !important;
+    }
+    
 }

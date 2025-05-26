@@ -31,6 +31,33 @@ $().ready(function () {
         }
     });
 
+    if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null') {
+
+        let product_id = $('#product_id').val();
+        
+        
+         // Limpia las selecciones actuales en el select múltiple
+         $('#product_periodicity_id').val(null).trigger('change');
+         $('#product-principal_pay').val(null).trigger('change');
+        axios
+            .get("/panel/financial-product/" + product_id+'/getPeriodicityAndPaymentMethod')
+            .then(function (response) {
+                let result    = response.data;
+                let periodicities = result.periodicities;
+                let payments   = result.payments;
+
+                // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+                let periodicityValues = periodicities.map(item => item.periodicity_id);
+                let paymentValues = payments.map(item => item.payment_method_id);
+
+                // Seleccionar los valores correspondientes en los selects
+                $('#product_periodicity_id').val(periodicityValues).trigger('change');
+                $('#product-principal_pay').val(paymentValues).trigger('change');
+            })
+            .catch(e => {
+            });
+
+    }
  
 
 });
@@ -51,6 +78,14 @@ $( "#frm-financial-buro" ).submit(function( event ) {
             
         });
   });
+
+  window.showBank = function(is_show)
+  {
+    $('#content-bank').hide();
+    if (is_show == true) {
+        $('#content-bank').show();
+    }
+  }
 
   $( "#frm-financial-comision" ).submit(function( event ) {
     event.preventDefault();
@@ -79,6 +114,23 @@ $( "#frm-financial-buro" ).submit(function( event ) {
         .then(function (response) {
             let result = response.data;
             showToast('Producto', 'Datos guardados', 'success');
+            
+        })
+        .catch(e => {
+            
+        });
+  });
+
+  $( "#frm-financial-requisitos" ).submit(function( event ) {
+    event.preventDefault();
+    const new_form = document.getElementById("frm-financial-requisitos");
+    const data = new FormData(new_form);
+
+    axios
+        .post("/panel/financial-product", data)
+        .then(function (response) {
+            let result = response.data;
+            showToast('Financiera', 'Datos guardados', 'success');
             
         })
         .catch(e => {
@@ -143,6 +195,70 @@ $( "#frm-financial-chart" ).submit(function( event ) {
         });
   });
 
+  if (document.getElementById('tramite-proceso_tramite')) {
+    let ckeditor = CKEDITOR.replace('tramite-proceso_tramite', {
+        toolbar: [
+           { name: 'basicstyles', items: ['Bold', 'Italic', 'Font', 'FontSize', 'TextColor', 'BGColor', 'RemoveFormat'] },
+           { name: 'paragraph', items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+           { name: 'insert', items: [ 'Table'] }
+       ],
+       language: 'es-mx',
+   });
+
+   //*axios que devuelva el valor proceso_tramite
+   
+   let product_id = $('#product_id').val();
+   setTimeout(function () {
+    axios
+        .get("/panel/financial-product/" + product_id + "/getTramite")
+        .then(function (response) {
+            let result = response.data;
+            CKEDITOR.instances['tramite-proceso_tramite'].setData(result.proceso_tramite);
+        })
+        .catch(e => {
+            // Manejar errores aquí
+        });
+}, 2000); // 2000 milisegundos = 2 segundos
+
+  }
+
+  $( "#frm-financial-tramite" ).submit(function( event ) {
+    event.preventDefault();
+    var desc = CKEDITOR.instances['tramite-proceso_tramite'].getData();
+    $('#tramite-proceso_tramite').val(desc);
+
+    const new_form = document.getElementById("frm-financial-tramite");
+    const data = new FormData(new_form);
+
+    axios
+        .post("/panel/financial-product", data)
+        .then(function (response) {
+            let result = response.data;
+            showToast('Producto', 'Datos guardados', 'success');
+            
+        })
+        .catch(e => {
+            
+        });
+  });
+
+
+  $( "#frm-comisioneskc" ).submit(function( event ) {
+    event.preventDefault();
+    const new_form = document.getElementById("frm-comisioneskc");
+    const data = new FormData(new_form);
+
+    axios
+        .post("/panel/financial-product", data)
+        .then(function (response) {
+            let result = response.data;
+            showToast('Producto', 'Datos guardados', 'success');
+            
+        })
+        .catch(e => {
+            
+        });
+  });
 
 window.deleteFinancialProduct = function (id) {
     axios
@@ -164,7 +280,7 @@ window.alerDeleteFinancialProduct = function (id) {
         cancelButtonText: 'Mejor no'
     }).then(function (result) {
         if (result.value) {
-            deleteProduct(id);
+            deleteFinancialProduct(id);
         }
     });
 }

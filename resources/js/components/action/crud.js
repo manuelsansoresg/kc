@@ -1,14 +1,35 @@
 import { showInfo, addEmptySelectSearch } from '../utilities';
 
 
-window.actionModal = function (id, is_new) {
-   /*  if (document.getElementById('modal-action-id-rel-lead')) {
-        getPerson(id);
+window.actionModal = function (id, is_new, is_lead) {
+    let model = is_lead == true ? 'lead' : 'credit';
+    let section = is_lead == true ?  1 : 2;
 
-    } */
     resetAction();
-    getAdvisorLead(id);
+    getAdvisorLead(model, id);
+   
     $('#modal-action-id-rel').val(id);
+    $('#modal-action-id-section').val(section);
+    if (is_new == 'true') {
+        $('#modal-action-id-action').val(null);
+    }
+   
+    $('#modal-action').modal('show');
+
+}
+
+window.addActionIntoActions = function(id, is_new, is_lead)
+{
+    $('#modal-list-actions').modal('hide');
+
+    let model = is_lead == true ? 'lead' : 'credit';
+    let section = is_lead == true ?  1 : 2;
+
+    resetAction();
+    getAdvisorLead(model, id);
+   
+    $('#modal-action-id-rel').val(id);
+    $('#modal-action-id-section').val(section);
     if (is_new == 'true') {
         $('#modal-action-id-action').val(null);
     }
@@ -27,12 +48,11 @@ if (document.getElementById('frm-action')) {
    
 }
 
-function getAdvisorLead(lead_id) {
+function getAdvisorLead(model, id_rel) {
     axios
-        .get("/panel/lead/" + lead_id)
+        .get("/panel/"+model+"/" + id_rel+'/advisor/show')
         .then(function (response) {
             let result              = response.data;
-            let lead                = result.lead;
             let advisor             = result.advisor;
 
             if (advisor != null) {
@@ -74,6 +94,9 @@ $().ready(function () {
             'data[advisor_id]': {
                 required: true,
             },
+            'data[start_time]': {
+                required: true,
+            },
         },
         submitHandler: function (form, event) {
             event.preventDefault();
@@ -98,6 +121,9 @@ $().ready(function () {
                         }
                     } else {
                         $('#modal-action').modal('hide');
+                        if (document.getElementById('is_refresh')) {
+                            location.reload(); // Recargar la página
+                        }
                         if (refresh_dt != 'null') {
                             showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
                         } else {
@@ -122,7 +148,8 @@ function resetAction() {
     $('#modal-action-end_date').val('');
     $('#modal-action-description').val('');
     $('#modal-action-id-action').val('null');
-    $('#modal-action-complete-active').prop("checked", true);
+    $('#modal-action-complete-pending').prop("checked", true);
+    
     $("#lead-asesor-id").val('').trigger('change');
     $("#lead-asesor-id").prop("disabled", false);
     
@@ -189,7 +216,9 @@ $().ready(function () {
                     let result = response.data;
                     $('#modal-register-action').modal('hide');
                     if (refresh_dt != 'null') {
-                        showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+                        /* showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+                        refreshListActions(); */
+                        location.reload();
                     } else {
                         refreshListActions();
                     }
@@ -236,6 +265,7 @@ window.deleteRegisterAction = function(action_id) {
     .then(function (response) {
         if (refresh_dt != 'null') {
             showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+            refreshListActions();
         } else {
             refreshListActions();
         }
@@ -264,6 +294,11 @@ window.deleteAction = function (id) {
     axios
     .delete("/panel/action/"+id)
     .then(function (response) {
+
+        if (document.getElementById('modal-list-actions')) {
+            location.reload(); // Recargar la página
+        }
+
         if (refresh_dt != 'null') {
             showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
         } else {
@@ -280,7 +315,7 @@ window.deleteAction = function (id) {
     $('#modal-action').modal('show');
 } */
 
-window.setModalAction = function (action_id, disabled) {
+window.setModalAction = function (action_id, disabled, section) {
     
     if (disabled == true) {
         $('#frm-action input, textarea, select').attr('disabled', 'disabled');
@@ -310,11 +345,10 @@ window.setModalAction = function (action_id, disabled) {
             $("#modal-action-end_date").val(action.end_date);
             $("#modal-action-description").val(action.description);
             $("#modal-action-id-rel").val(action.id_rel);
-            //$("#lead-asesor-id").val(advisor.id).trigger('change');
-            /* if (lead != null) {
-                $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
-            }  */
+            
             $('#modal-action').modal('show');
+
+            $('#lead-asesor-id').val(action.advisor_id).trigger("change");
             
             if (action.status == 1) {
                 $('#modal-action-complete-active').prop("checked", true);

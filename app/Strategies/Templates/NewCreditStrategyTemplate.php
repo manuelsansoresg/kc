@@ -206,8 +206,8 @@ class NewCreditStrategyTemplate implements TemplateInterface
         $credit               = $history->historyCredit;
         $max_hour             = 12;
         $hour                 = $credit->created_at;
-        $percent_form         = self::percentForm($history);
-        $percent_form_step2   = self::percentDesition($history);
+        $percent_form         = reduceDecimal(self::percentForm($history));
+        $percent_form_step2   = reduceDecimal(self::percentDesition($history));
         $percent_file         = 100;
         $color_inf_credit     = 'success';
         $color_report         = 'success';
@@ -289,18 +289,19 @@ class NewCreditStrategyTemplate implements TemplateInterface
 
     public function listAction($history_id)
     {
-        $history        = HistoryLog::find($history_id);
-        $credit         = $history->historyCredit;
-        $advisor        = $credit->creditAdvisor;
-        $percent_file   = 100;
-        $percent_form   = self::percentForm($history);
-        $status[]       = 'Opcional';
-        $status[]       = $percent_form == 100 ? 'Concluido' : 'En curso';
-        $max_hour       = 12;
+        $history                = HistoryLog::find($history_id);
+        $credit                 = $history->historyCredit;
+        $advisor                = $credit->creditAdvisor;
+        $percent_file           = 100;
+        $percent_form           = self::percentForm($history);
+        $status_percent_form    = $percent_form == 100 ? 'Concluido' : 'En curso';
+        $status[]               = \View::make('panel.module.status', ['status' => 'Opcional'])->render();
+        $status[]               = \View::make('panel.module.status', ['status' => $status_percent_form])->render();
+        $max_hour               = 12;
         
-        $in_progress    = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_ACTION_FORM], $credit->id)[0];
-        $hour           = $in_progress->date_status_progress;
-        $name_advisor = null;
+        $in_progress            = HistoryLog::getByStatus([HistoryLog::KC_CHECK_UP_ACTION_FORM], $credit->id)[0];
+        $hour                   = $in_progress->date_status_progress;
+        $name_advisor           = null;
 
         try {
             $user = User::find($advisor->id);
@@ -353,7 +354,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'deadline' => $deadline[$key],
                 'advisor' => $name_advisor,
                 'options' => $option[$key],
-                'link' => $link[$key]
+                'link' => $link[$key],
             );
         }
         return $data;
@@ -396,12 +397,15 @@ class NewCreditStrategyTemplate implements TemplateInterface
             $option1     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['progress']])->render();
             $option2     = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['desition']])->render();
             
-            
+            $status2 = $percent_desition == 100 ? 'Concluido' : 'En curso';
+
+            $viewStatus1= \View::make('panel.module.status', ['status' => 'Concluida'])->render();
+            $viewStatus2= \View::make('panel.module.status', ['status' => $status2])->render();
     
             $data[] = array(
                 'name' =>  'Respuesta de módulo',
                 'subject' =>  HistoryLog::$label_subject[9],
-                'status' => 'Concluida',
+                'status' => $viewStatus1,
                 'deadline' =>$deadline1,
                 'advisor' => $name_advisor,
                 'options' => $option1,
@@ -410,7 +414,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
             $data[] = array(
                 'name' =>  'Decisión',
                 'subject' =>  HistoryLog::$label_subject[14],
-                'status' => $percent_desition == 100 ? 'Concluido' : 'En curso',
+                'status' => $viewStatus2,
                 'deadline' => $deadline2,
                 'advisor' => $name_advisor,
                 'options' => $option2,
@@ -473,7 +477,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/actions/newCredit/'.$history->id.'/show',
                     'onclick' => '',
-                    'name' => 'Lista de acciones',
+                    'name' => 'Lista de tareas',
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
@@ -481,7 +485,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 [
                     'link' => '/panel/template/report/newCredit/'.$history->id.'/show',
                     'onclick' => '',
-                    'name' => 'Lista de acciones',
+                    'name' => 'Lista de tareas',
                     'icon' => 'icon ni ni-view-list-wd',
                 ]
             ),
@@ -648,7 +652,7 @@ class NewCreditStrategyTemplate implements TemplateInterface
                 'active' => true
             ),
             3 => array(
-                'title' => 'acciones',
+                'title' => 'tareas',
                 'link' => '/panel/template/actions/newCredit/'.$history->id.'/show?step=1',
                 'active' => null
                ),

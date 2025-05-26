@@ -11,7 +11,7 @@
     <ul class="link-list-opt no-bdr">
         @for ($i_option = 0; $i_option < count($options); $i_option++)
              <li>
-                <a class="pointer" {{ $options[$i_option]['link'] != '' ? 'href='.$options[$i_option]['link'].'' : '' }}>
+                <a class="pointer {{ isset($options[$i_option]['class']) ? isset($options[$i_option]['class']) : null }}" {{ $options[$i_option]['link'] != '' ? 'href='.$options[$i_option]['link'].'' : '' }}>
                     <em class="icon ni ni-card-view"></em><span>{{ $options[$i_option]['name']}}</span></a>
             </li>
             

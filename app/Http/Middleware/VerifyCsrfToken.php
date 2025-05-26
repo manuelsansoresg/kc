@@ -21,5 +21,14 @@ class VerifyCsrfToken extends Middleware
         '/lead/store',
         '/lead/form/store',
         '/survey',
+        '/api/lead',
+        '/slack/notification',
+        '/reporte/*',
+        '/action/manychat/{section}',
+        '/action/manychat/lead/store',
+        '/panel/user/search',
+        '/action/manychat/wa-complete/lead/store',
+        '/api/credit/{credit}/{s2_credit_id}/{tipo}/set',
+        '/api/investor/{financial_product_id}/setTotalCapital',
     ];
 }

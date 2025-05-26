@@ -28,3 +28,15 @@ Route::resource('rrss', '\App\Http\Controllers\Api\RssController');
 Route::group(['prefix' => 'appkax'], function () {
     Route::get('{history}/{model}/steps', ['\App\Http\Controllers\Api\AppKaxController', 'steps']);
 });
+
+Route::post('lead', ['\App\Http\Controllers\Api\Campaign\LeadController', 'store']);
+Route::post('action/manychat/{section}', ['\App\Http\Controllers\Api\ActionManychatController', 'store']);
+Route::post('action/manychat/lead/store', ['\App\Http\Controllers\Api\ActionManychatController', 'storeLead']);
+
+Route::post('action/manychat/wa-complete/lead/store', ['\App\Http\Controllers\Api\ActionManychatController', 'storeLeadWaComplete']);
+
+Route::get('credit/{credit}/{s2_credit_id}/{tipo}/set', ['\App\Http\Controllers\Api\CreditController', 'activar']);
+
+Route::get('credit/{credit}/{s2_credit_id}/{tipo}/set', ['\App\Http\Controllers\Api\CreditController', 'activar']);
+
+Route::get('investor/{financial_product_id}/setTotalCapital', ['\App\Http\Controllers\Api\CreditController', 'apiSetTotalCapital']);

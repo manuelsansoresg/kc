@@ -6,6 +6,8 @@ require('./components/datatable');
 require('./components/user/crud');
 require('./components/user/datatable_admin');
 require('./components/user/datatable_financiera');
+require('./components/user/datatable_inversionista');
+require('./components/user/datatable_user');
 require('./components/product/datatable_product');
 require('./components/product/crud');
 require('./components/agreement/datatable');
@@ -27,6 +29,7 @@ require('./components/general');
 
 require('./components/module/datatable');
 require('./components/module/template');
+require('./components/module/resumen');
 require('./components/module/kc_check_up/datatable');
 require('./components/module/kc_check_up/action/datatable');
 require('./components/module/kc_check_up/action/datatable_report');
@@ -40,6 +43,10 @@ require('./components/credit/datatable_in_progress');
 
 
 window.moveElement = function (section, id, idDatatable) {
+     // Deshabilita el botón para evitar clics múltiples
+     const button = document.querySelector('.moveElement');
+     button.disabled = true;
+
     axios
     .get("/panel/"+section+"/"+id+"/move")
     .then(function (response) {
@@ -50,7 +57,12 @@ window.moveElement = function (section, id, idDatatable) {
         }
     })
     .catch(e => {
+    })
+    .finally(() => {
+        // Habilita el botón nuevamente después de que se complete la solicitud Axios
+        button.disabled = false;
     });
+    
 }
 
 window.msgProfile = function () {
@@ -120,4 +132,14 @@ $().ready(function () {
 });
 
  */
+
+tippy(document.querySelectorAll('.active-tooltip'), {
+    content(reference) {
+      const id = reference.getAttribute('data-template');
+      const template = document.getElementById(id);
+      return template.innerHTML;
+    },
+    allowHTML: true,
+  });
+
 require('./components/websocket');

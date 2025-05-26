@@ -47,7 +47,7 @@ class LeadStrategy implements ActionInterface
     {
         return $this->lead;
     }
-    public function list($id, $model, $status)
+    public function listAction($id, $model, $status)
     {
         $status   = Action::STATUS[$status];
         $model    = Action::MODEL[$model];
@@ -68,17 +68,18 @@ class LeadStrategy implements ActionInterface
         $type_actions   = config('enums.type_actions');
         $data_option = array(
             'status' => $status,
-            'model' => $model_action
+            'model' => $model_action,
+            'lead' => $lead,
         );
         $option         = \View::make('panel.action.add_option_dt', $data_option)->render();
         $name_lead = $lead !== null ? $lead->name.' '.$lead->last_name : null;
-
+        $date = ($model_action->start_date != null) ? formatDateNameMonth(date('Y-m-d H:i:s', strtotime($model_action->start_date.' '. $model_action->start_time))): null;
         $data = array(
             'type' => $type_actions[$model_action->type],
             'subject' => $model_action->subject,
             'section' => Action::NAME_MODEL[$model_action->section],
             'name' => $name_lead,
-            'date_in' => formatDateNameMonth($model_action->start_date),
+            'date_in' => $date,
             'date_fin' => formatDateNameMonth($model_action->end_date),
             'advisor' => ($advisor!= null)?$advisor->name. ' '. $advisor->last_name : '',
             'options' => $option

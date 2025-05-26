@@ -54,13 +54,13 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">*Nombres</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="data[name]" id="lead-name">
+                                                                    <input type="text" class="form-control" name="data[name]" id="lead-name" required>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">*Primer apellido</label>
+                                                                <label class="form-label">Primer apellido</label>
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" name="data[last_name]"  id="lead-last_name">
                                                                 </div>
@@ -78,18 +78,42 @@
                                                             <div class="form-group">
                                                                 <label class="form-label">Celular</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="data[cellphone]"  id="lead-cellphone">
+                                                                    <input type="text" class="form-control" name="data[cellphone]"  id="lead-cellphone" onchange="checkDataLeadExist(this, 'cellphone')">
+                                                                    <label id="cellphone-msg" class="text-danger"></label>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label class="form-label">*Email</label>
+                                                                <label class="form-label">Email</label>
                                                                 <div class="form-control-wrap">
-                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email">
+                                                                    <input type="email" class="form-control" name="data[email]" id="lead-email" onchange="checkDataLeadExist(this, 'email')">
+                                                                    <label id="email-msg" class="text-danger"></label>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">*RFC</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="data[rfc]" minlength="10" id="lead-rfc" onchange="checkDataLeadExist(this, 'rfc')" required>
+                                                                    <label id="rfc-msg" class="text-danger"></label>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        @if ($lead_id != null)
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="form-label">ID Manychat</label>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="data[manychat_id]" id="lead-manychat_id">
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        @endif
                 
                                                         <hr class="preview-hr">
 
@@ -112,6 +136,24 @@
                                                             </div>
                                                         </div>
 
+                                                        {{-- <div class="col-md-6" id="content-tipo-credito" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Tipo de crédito que desea el prospecto</label>
+                                                                <p class="small">Categoría de crédito</p>
+                                                                <div class="form-control-wrap">
+                                                                    @php
+                                                                        $type_products = config('financial_enums.type_products');
+                                                                    @endphp
+                                                                    <select name="data[tipo_credito]" id="tipo_credito" class="form-control">
+                                                                        @foreach ($type_products as $key => $type_product)
+                                                                            <option value="{{$key}}">{{ $type_product }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div> --}}
+
                                                        
 
                                                         <div class="col-md-6">
@@ -120,15 +162,14 @@
                                                                 <p class="small">Institución o empresa donde labora el prospecto</p>
                                                                 <div class="form-control-wrap">
                                                                    
-                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null)"  data-search="on">
-                                                                        @if ($lead_id == null)
-                                                                            <option></option>
-                                                                        @endif
+                                                                    <select class="form-select js-select2" name="data[agreement_id]" id="lead-agreement" onchange="organizationChange(null, null, null, null)"  data-search="on">
+                                                                        <option></option>
+                                                                      
                 
                                                                         @foreach ($agreements as $agreement)
                                                                             <option value="{{ $agreement->id }}">{{ $agreement->name }}</option>
                                                                         @endforeach
-                                                                    <option value="0">Otro</option>
+                                                                        <option value="0">Otro</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -140,25 +181,43 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-md-6" id="content-financial" style="display: none">
+                                                        <div class="col-md-6" id="content-producto-financiero" style="display: none">
                                                             <div class="form-group">
-                                                                <label class="form-label">Financiera</label>
-                                                                <p class="small">Financiera con la que el prospecto tiene un crédito</p>
+                                                                <label class="form-label">Producto financiero</label>
+                                                                <p class="small">Elige el producto financiero que desea el prospecto</p>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[financial_id]" id="lead-financial_id" onchange="getFinancialProduct(null)"   data-search="on">
-                                                                        <option value="">Escribe para buscar</option>
+                                                                    <select class="form-select js-select2" name="data[applied_financial_product]" id="applied_financial_product">
+                                                                        
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         
+                                                        <div class="col-md-6" id="content-tipo_tramite" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Tipo de trámite</label>
+                                                                <p class="small">Elige el tipo de trámite que desea el prospecto</p>
+                                                                <div class="form-control-wrap">
+                                                                   <select class="form-control" name="data[applied_loan_type]" id="applied_loan_type">
+                                                                    @foreach ($loan_type as $key=> $loan_type)
+                                                                        <option value="{{ $key }}"> {{ $loan_type }} </option>
+                                                                    @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                        
                                                         <div class="col-md-6" id="content-financial_product_id" style="display: none">
                                                             <div class="form-group">
-                                                                <label class="form-label">Producto financiero</label>
-                                                                <p class="small">Producto financiero que tiene el prospecto</p>
+                                                                <label class="form-label">Productos financieros actuales</label>
+                                                                <p class="small">Elige el producto financiero que desea el prospecto</p>
                                                                 <div class="form-control-wrap">
-                                                                    <select class="form-select js-select2" name="data[financial_product_id]" id="lead-financial-product-id"  data-search="on">
+                                                                    <select class="form-select select2multiple" name="products[]" id="lead-financial-product-id" multiple="multiple"  data-search="on">
                                                                         <option value="">Escribe para buscar</option>
+                                                                        @foreach ($financial_products as $financial_product)
+                                                                            <option value="{{ $financial_product->id }}">{{ $financial_product->commercial_name}} - {{ $financial_product->alias }}</option>
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -173,12 +232,20 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                         
-                                                       
-                                                        <div class="col-md-6" id="content-banco_nomina" style="display: none">
+                                                        <div class="col-md-6" id="content-ingreso-mensual" >
                                                             <div class="form-group">
-                                                                <label class="form-label">Banco nómina</label>
+                                                                <label class="form-label">Ingreso mensual</label>
+                                                                <p class="small">Neto aproximado</p>
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="data[income]" id="income">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6" id="content-banco_nomina" >
+                                                            <div class="form-group">
+                                                                <label class="form-label">Banco nómina </label>
                                                                 <p class="small">Banco en el que recibe su nómina</p>
                                                                 <div class="form-control-wrap">
                                                                     <select name="data[bank_id]" id="bank_id" class="form-control">
@@ -191,23 +258,7 @@
                                                             </div>
                                                         </div>
                                                         
-                                                        <div class="col-md-6" id="content-tipo-credito" style="display: none">
-                                                            <div class="form-group">
-                                                                <label class="form-label">Tipo de crédito</label>
-                                                                <p class="small">Categoría de  crédito</p>
-                                                                <div class="form-control-wrap">
-                                                                    @php
-                                                                        $type_products = config('financial_enums.type_products');
-                                                                    @endphp
-                                                                    <select name="data[tipo_credito]" id="tipo_credito" class="form-control">
-                                                                        @foreach ($type_products as $key => $type_product)
-                                                                            <option value="{{$key}}">{{ $type_product }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            
-                                                        </div>
+                                                        
                                                         <div class="col-md-6" id="content-consulta-buro-credito" style="display: none">
                                                             <div class="form-group">
                                                                 <label class="form-label">Consulta buró de crédito</label>
@@ -218,6 +269,55 @@
                                                                         <option value="1">Sí</option>
                                                                         <option value="0">No</option>
                                                                     </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @php
+                                                            $status_si_no = config('enums.status_si_no');
+                                                        @endphp
+                                                        <div class="col-md-6" id="content-aval-o-garantia" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Aval o garantía</label>
+                                                                <p class="small">Selecciona si el prospecto proporcionaría aval o garantía</p>
+                                                                <div class="form-control-wrap">
+                                                                    <select name="data[aval_o_garantia]" id="aval_o_garantia" class="form-control">
+                                                                        @foreach ($status_si_no as $key_aval_garantia => $aval_garantia)
+                                                                            <option value="{{ $key_aval_garantia }}">{{ $aval_garantia }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <hr class="preview-hr">
+                                                        <span class="preview-title-lg overline-title">Viabilidad</span>
+                                                        <p class="text-primary">Este prospecto es <span class="text-viabilidad"></span>  </p>
+                                                        <div class="col-md-12">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" name="data[is_viability]" type="checkbox" value="1" id="is_viability">
+                                                                <label class="" for="is_viability">Viabilidad como <span class="text-viabilidad"></span> </label>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" name="data[is_viability_credit]" type="checkbox" value="1" id="is_viability_credit">
+                                                                <label class="" for="is_viability_credit">Viabilidad de crédito </label>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="isExport" name="isExport" value="false">
+                                                        <div class="col-12">
+                                                            <button type="button" class="btn btn-primary" onclick="saveAndExportLead()">Guardar y exportar datos</button>
+                                                        </div>
+                                                        
+                                                        
+                                                        <div class="col-md-6" id="content-comment" style="display: none">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Comentario</label>
+                                                                <p class="small">Describe la asesoría proporcionada al prospecto</p>
+                                                                <div class="form-control-wrap">
+                                                                    <textarea name="data[comment]" id="lead-comment" cols="5" rows="3" class="form-control"></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -236,7 +336,7 @@
                                                                         <option value="">Escribe para buscar</option>
                                                                         @endif
                                                                         @foreach ($origins as $key=>$origin)
-                                                                            <option value="{{ $key }}" {{ $key == 1 ? 'selected' : null }}>{{ $origin }}
+                                                                            <option value="{{ $key }}" {{ $lead === null && $key == 1  ? 'selected' : null }} {{ $lead != null && $lead->origin_id == $key ? 'selected' : null  }} >{{ $origin }}
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
@@ -281,7 +381,7 @@
                                                         </div>
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Atención</span>
-                                                        <div class="col-md-6">
+                                                       {{--  <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="form-label">Atención</label>
                                                                 <p class="small"> Tipo de atención que desea el prospecto</p>
@@ -297,7 +397,7 @@
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> --}}
                 
                                                         <hr class="preview-hr">
                                                         <span class="preview-title-lg overline-title">Etiquetas</span>
@@ -321,7 +421,7 @@
                                                             <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                                 <li>
                                                                     {{-- <a href="#" data-bs-dismiss="modal" class="btn btn-primary"></a> --}}
-                                                                    <button class="btn btn-primary">Guardar</button>
+                                                                    <button class="btn btn-primary" id="btnSave">Guardar</button>
                                                                 </li>
                                                             </ul>
                                                         </div>

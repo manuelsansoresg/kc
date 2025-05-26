@@ -16,6 +16,16 @@
     <link rel="stylesheet" href="/assets/css/style.css?ver=100">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/app.css?ver=100">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F7L6QJC7RG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-F7L6QJC7RG');
+</script>
+
     <!-- Hotjar Tracking Code for https://www.kaaxclub.com -->
 <script>
     (function(h,o,t,j,a,r){
@@ -120,12 +130,12 @@
                                     <a href="/" class="footer-logo-link logo-link">
                                         <img class="logo-img" src="{{ asset('images/logo-dark.png ')}}" alt="logo">
                                     </a>
-                                    <p class="my-4 footer-para">Tu mejor desición. Facíl y rápido</p>
+                                    <p class="my-4 footer-para">Tu mejor desición. Fácil y rápido.</p>
                                     <ul class="styled-icon">
-                                        <li><a href="#"><em class="icon ni ni-twitter"></em></a></li>
-                                        <li><a href="#"><em class="icon ni ni-facebook-f"></em></a></li>
-                                        <li><a href="#"><em class="icon ni ni-instagram"></em></a></li>
-                                        <li><a href="#"><em class="icon ni ni-pinterest"></em></a></li>
+                                        {{-- <li><a href="#"><em class="icon ni ni-twitter"></em></a></li> --}}
+                                        <li><a href="https://facebook.com/kaaxclub/" target="_blank"><em class="icon ni ni-facebook-f"></em></a></li>
+                                        <li><a href="https://instagram.com/kaaxclub" target="_blank"><em class="icon ni ni-instagram"></em></a></li>
+                                        {{-- <li><a href="#"><em class="icon ni ni-pinterest"></em></a></li> --}}
                                     </ul>
                                 </div><!-- end footer-item -->
                             </div><!-- end col-lg-3 -->
@@ -148,6 +158,7 @@
                                             <ul class="list-item list-item-s1">
                                                 <li><a href="/nosotros">Nosotros</a></li>
                                                 <li><a href="/aviso-de-privacidad">Aviso de privacidad</a></li>
+                                                <li><a href="/terminos-y-condiciones">Términos y condiciones</a></li>
                                             </ul>
                                         </div><!-- end footer-item -->
                                     </div><!-- end col-lg-3 -->

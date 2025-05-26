@@ -31,21 +31,23 @@ class KcDeliveryController extends Controller
     {
         $history    = HistoryLog::find($history_id);
         $credit     = $history->historyCredit;
-        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM, $credit->id, 1);
-        //*inicializar las acciones de la siguiente etapa en curso
-        HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY_FORM_STEP_2, HistoryLog::KC_DELIVERY_FORM_STEP_2, null, false);
-        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_FORM_STEP_2, $credit->id, 0);
+       
 
         //*send email
-        $financial_t = $credit->creditAppliedFinancial;
-        $name_financial_t = $financial_t->email;
-        $send_grid = new Csendgrid($name_financial_t, 'creacion cuenta');
-        $send_grid->setTemplate('d-208896a6a91043619f40ba61cbebf5c7');
-        $data_params = array(
-            'link_account' => asset('credit-resume/'.$credit->id),
-         );
-        $send_grid->setParams($data_params);
-        $send_grid->send();
+        try {
+            $user_financial = $credit->financial_user_assigned;
+            $user_email_financial = $user_financial->email;
+            $send_grid = new Csendgrid($user_email_financial, 'creacion cuenta');
+            $send_grid->setTemplate('d-208896a6a91043619f40ba61cbebf5c7');
+            $data_params = array(
+                'link_account' => asset('credit-resume/'.$credit->id),
+            );
+            $send_grid->setParams($data_params);
+            $send_grid->send();
+        } catch (\Exception $th) {
+            //throw $th;
+        }
+        
     }
 
     /**

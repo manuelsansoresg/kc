@@ -33,11 +33,9 @@
                                             <th>ID</th>
                                             <th data-priority="1">Nombre</th>
                                             <th>Fecha</th>
-                                            <th>Producto</th>
-                                            <th>Origen</th>
+                                            <th>Servicio KC</th>
+                                            {{-- <th>Organización</th> --}}
                                             <th>Etiqueta</th>
-                                            <th>Asesor</th>
-                                            <th>Estatus</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -52,10 +50,13 @@
     </div>
     <input type="hidden" id="refresh-dt" value="dt-lead">
     @include('panel.modal.note')
+    @include('panel.modal.list_notes')
+    @include('panel.modal.list_actions')
     @include('panel.lead.modal.advisor')
     @include('panel.modal.archive')
     @include('panel.modal.tags')
     @include('panel.modal.validate')
     @include('panel.action.modal.form')
     @include('panel.action.modal.register_action')
+    @include('panel.modal.preview_profile')
 @endsection
