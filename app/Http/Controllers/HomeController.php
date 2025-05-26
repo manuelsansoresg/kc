@@ -165,7 +165,7 @@ class HomeController extends Controller
             $isFirma = $client->cm_agreement == null ? true : false;
         }
 
-        
+        //$isFirma = true;
         $agreement = Agreement::find($credit->agreement_id);
         return view('contrato_cliente', compact('client', 'history', 'isFirma', 'credit', 'firma', 'token', 'ip', 'agreement'));
     }
@@ -256,6 +256,7 @@ class HomeController extends Controller
         } else {
             $isFirma = $credit->sod_agreement == null ? true : false;
         }
+        $isFirma = true;
         return view('contrato_sod', compact('client', 'credit', 'agreement', 'history', 'isFirma', 'firma', 'token'));
     }
 
@@ -268,7 +269,7 @@ class HomeController extends Controller
         $ip = $request->ip(); // Esto te dará la IP del cliente
         $hostname = gethostbyaddr($ip);
         $dateTime = Carbon::now()->format('d-m-Y h:i:s a');
-        $isFirma = $credit->sod_agreement == null ? true : false;
+        $isFirma = false;
         $agreement = Agreement::find($credit->agreement_id);
         
 
@@ -286,9 +287,6 @@ class HomeController extends Controller
         Credit::where('id', $credit->id)->update([
             'sod_agreement' => 1
         ]);
-       
-
-        
         
         
         $pdf = Pdf::loadView('contrato_sod', $data);
