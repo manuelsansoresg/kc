@@ -49,7 +49,7 @@
                                     <div class="cta-box text-center">
                                         <h1 class="cta-title mb-3">Atención  personal</h1>
                                         <p class="cta-text mb-4">Haz aclaraciones, preguntas, sugerencias o quejas</p>
-                                        <a href="https://wa.me/5219999208020?text=Contacto%20o%20ayuda%20Kaaxclub" target="_blank" class="btn btn-lg btn-dark">Ir al chat &nbsp; <em class="icon ni ni-whatsapp"></em></a>
+                                        <a href="https://kaaxclub.com/panel/ayuda" target="_blank" class="btn btn-lg btn-dark">Ir al centro de ayuda</a>
                                     </div><!-- end cta-box -->
                                 </div><!-- .container -->
                             </section><!-- end cta-section -->
