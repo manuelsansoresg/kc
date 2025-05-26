@@ -256,7 +256,6 @@ class HomeController extends Controller
         } else {
             $isFirma = $credit->sod_agreement == null ? true : false;
         }
-        $isFirma = true;
         return view('contrato_sod', compact('client', 'credit', 'agreement', 'history', 'isFirma', 'firma', 'token'));
     }
 
