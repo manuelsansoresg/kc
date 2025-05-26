@@ -39,13 +39,13 @@
 
     footer {
         position: fixed;
-        bottom: -10px;
+        bottom: -20px;
         left: 0;
         right: 0;
         background-color: #f8f9fa;
         border-top: 1px solid #dee2e6;
         text-align: center;
-        font-size: 12px;
+        font-size: 10px;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         padding: 10px 0;
     }
