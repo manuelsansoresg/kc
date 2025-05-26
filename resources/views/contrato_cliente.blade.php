@@ -47,6 +47,7 @@
         text-align: center;
         font-size: 12px;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
     }
 
     footer button {
@@ -1731,7 +1732,7 @@
     </div>
     
     @if ($isFirma === true && $token == null)
-        <footer style="text-align: right">
+        <footer style="text-align: center">
             <div style="padding:10px 0px; margin-right: 20px;">
                 <a  href="/client/contratocm/{{ $client->id}}/2/exit" class="btn btn-outline-danger">Cancelar</a> &nbsp;
                 <a href="/client/contratocm/{{ $client->id}}/{{ $credit->id }}/firmar" class="btn btn-success ">Aceptar</a>
