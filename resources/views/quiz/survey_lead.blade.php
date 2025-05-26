@@ -479,7 +479,7 @@
                     $('#lead_id').val(lead.id);
                     if (history != null) {
                         //*cambiar URL a produccion
-                        let resultReport = 'https://test.kaaxclub.com/reporte/' + history.id;
+                        let resultReport = 'https://kaaxclub.com/reporte/' + history.id;
                         document.getElementById('url_report').setAttribute('href', resultReport);
                         
                     }
