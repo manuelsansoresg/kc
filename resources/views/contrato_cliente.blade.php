@@ -47,7 +47,7 @@
         text-align: center;
         font-size: 10px;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-        padding: 20px 0;
+        padding: 30px 0;
     }
 
     footer button {
