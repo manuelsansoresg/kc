@@ -847,6 +847,12 @@
     <p class="c0 c8"><span class="c2"><br></span></p>
 
     @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
     
     @endif 
     
