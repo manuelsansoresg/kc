@@ -847,7 +847,7 @@
     <p class="c0 c8"><span class="c2"><br></span></p>
     
     <div style="page-break-after: always;"></div>
-    
+
     <p class="c10"><span class="c9 c3">CARTA INSTRUCCI&Oacute;N IRREVOCABLE:</span></p>
     <p class="c17"><span
             class="c2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
@@ -869,12 +869,12 @@
             siguiente:</span></p>
     <p class="c5"><span class="c2 c9"></span></p>
     @if ($token != null && $isFirma === false)
-    <div class="firma-contrato" style="font-weight: normal">
+    {{-- <div class="firma-contrato" style="font-weight: normal">
         Firma: {{ $firma}}
         La IP es: {{ $ip}}
         Fecha: {{ $dateTime }}
         Hostname: {{ $hostname}}
-    </div>
+    </div> --}}
     @endif
 
 
