@@ -1244,10 +1244,11 @@
                             @if ($token != null && $isFirma === false)
                             <div class="firma-contrato" style="font-weight: normal !important;">
                                 <p style="font-weight: normal; margin: 0;">
-                                  Firma: <span style="font-weight: normal;">{{ $firma }}</span><br>
-                                  La IP es: {{ $ip }}<br>
-                                  Fecha: {{ $dateTime }}<br>
+                                    <span style="font-weight: normal;">Firma:{{ $firma }}
+                                  La IP es: {{ $ip }}
+                                  Fecha: {{ $dateTime }}
                                   Hostname: {{ $hostname }}
+                                </span>
                                 </p>
                               </div>
                             @endif
@@ -1756,10 +1757,11 @@
     <br>
     <div class="firma-contrato" style="font-weight: normal !important;">
         <p style="font-weight: normal; margin: 0;">
-          Firma: <span style="font-weight: normal;">{{ $firma }}</span><br>
-          La IP es: {{ $ip }}<br>
-          Fecha: {{ $dateTime }}<br>
+            <span style="font-weight: normal;"> Firma: {{ $firma }}
+          La IP es: {{ $ip }}
+          Fecha: {{ $dateTime }}
           Hostname: {{ $hostname }}
+        </span>
         </p>
       </div>
     @endif
