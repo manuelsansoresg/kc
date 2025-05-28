@@ -6,6 +6,20 @@
     <title>Solicitud descuento SOD - Firma App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #f8f9fa;
+            z-index: 1000;
+        }
+        
+        .content {
+            margin-top: 100px; /* Add margin to prevent content from going under the fixed header */
+            text-align: justify;
+            margin-bottom: 100px; /* Add margin to prevent content from being hidden behind the fixed footer */
+        }
         
         h1, h2, h3, h4 {
             color: #333;
@@ -49,13 +63,14 @@
 
     .firma-contrato {
         position: fixed;
-        bottom: -20px;
+        bottom: 0;
         left: 0;
         right: 0;
         text-align: center;
         font-size: 10px;
         padding: 10px 0;
         font-weight: normal !important;
+        z-index: 1000;
     }
 
     footer button {
@@ -869,12 +884,12 @@
             siguiente:</span></p>
     <p class="c5"><span class="c2 c9"></span></p>
     @if ($token != null && $isFirma === false)
-    {{-- <div class="firma-contrato" style="font-weight: normal">
+    <div class="firma-contrato" style="font-weight: normal">
         Firma: {{ $firma}}
         La IP es: {{ $ip}}
         Fecha: {{ $dateTime }}
         Hostname: {{ $hostname}}
-    </div> --}}
+    </div>
     @endif
 
 
