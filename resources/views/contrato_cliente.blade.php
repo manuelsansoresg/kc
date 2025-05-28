@@ -1242,15 +1242,12 @@
                                     celebrados con los Acreditantes Potenciales.</span></p>
                             <p class="c3 c4"><span class="c1"></span></p>
                             @if ($token != null && $isFirma === false)
-                            <div class="firma-contrato" style="font-weight: normal !important;">
-                                <p style="font-weight: normal; margin: 0;">
-                                    <span style="font-weight: normal;">Firma:{{ $firma }}
-                                  La IP es: {{ $ip }}
-                                  Fecha: {{ $dateTime }}
-                                  Hostname: {{ $hostname }}
-                                </span>
-                                </p>
-                              </div>
+                                <div class="firma-contrato" style="font-weight: normal">
+                                    Firma: {{ $firma}}
+                                    La IP es: {{ $ip}}
+                                    Fecha: {{ $dateTime }}
+                                    Hostname: {{ $hostname}}
+                                </div>
                             @endif
                             <p class="c3"><span class="c0">I.6.-</span><span class="c6">&nbsp;Reconoce que ninguno de los actos materia de este
                                     contrato y/o los documentos que de ellos se generen, son susceptibles de circular y por ende, ninguno de los
@@ -1755,15 +1752,12 @@
     @endif
     @if ($token != null && $isFirma === false)
     <br>
-    <div class="firma-contrato" style="font-weight: normal !important;">
-        <p style="font-weight: normal; margin: 0;">
-            <span style="font-weight: normal;"> Firma: {{ $firma }}
-          La IP es: {{ $ip }}
-          Fecha: {{ $dateTime }}
-          Hostname: {{ $hostname }}
-        </span>
-        </p>
-      </div>
+        <div class="firma-contrato" style="font-weight: normal">
+            Firma: {{ $firma}}
+            La IP es: {{ $ip}}
+            Fecha: {{ $dateTime }}
+            Hostname: {{ $hostname}}
+        </div>
     @endif
     
     
