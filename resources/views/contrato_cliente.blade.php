@@ -57,7 +57,6 @@
         right: 0;
         text-align: center;
         font-size: 10px;
-        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         padding: 10px 0;
     }
 
@@ -1242,12 +1241,12 @@
                                     celebrados con los Acreditantes Potenciales.</span></p>
                             <p class="c3 c4"><span class="c1"></span></p>
                             @if ($token != null && $isFirma === false)
-                                <footer>
+                                <div class="firma-contrato">
                                     Firma: {{ $firma}}
                                     La IP es: {{ $ip}}
                                     Fecha: {{ $dateTime }}
                                     Hostname: {{ $hostname}}
-                                </footer>
+                                </div>
                             @endif
                             <p class="c3"><span class="c0">I.6.-</span><span class="c6">&nbsp;Reconoce que ninguno de los actos materia de este
                                     contrato y/o los documentos que de ellos se generen, son susceptibles de circular y por ende, ninguno de los
