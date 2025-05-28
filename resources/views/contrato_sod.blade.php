@@ -845,6 +845,169 @@
     <p class="c5"><span class="c9 c2"></span></p>
     <p class="c5"><span class="c9 c2"></span></p>
     <p class="c0 c8"><span class="c2"><br></span></p>
+
+    @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+    @endif @if ($token != null && $isFirma === false)
+    <div class="firma-contrato" style="font-weight: normal">
+        Firma: {{ $firma}}
+        La IP es: {{ $ip}}
+        Fecha: {{ $dateTime }}
+        Hostname: {{ $hostname}}
+    </div>
+        @endif @if ($token != null && $isFirma === false)
+        <div class="firma-contrato" style="font-weight: normal">
+            Firma: {{ $firma}}
+            La IP es: {{ $ip}}
+            Fecha: {{ $dateTime }}
+            Hostname: {{ $hostname}}
+        </div>
+        @endif
     
     <div style="page-break-after: always;"></div>
 
@@ -868,14 +1031,7 @@
             me permito solicitar a </span><span class="c3">{{ $agreement!= null ? $agreement->razon_social : null}}</span><span class="c9 c2">&nbsp;lo
             siguiente:</span></p>
     <p class="c5"><span class="c2 c9"></span></p>
-    @if ($token != null && $isFirma === false)
-    <div class="firma-contrato" style="font-weight: normal">
-        Firma: {{ $firma}}
-        La IP es: {{ $ip}}
-        Fecha: {{ $dateTime }}
-        Hostname: {{ $hostname}}
-    </div>
-    @endif
+   
 
 
     <ol class="c20 lst-kix_lablrcn5fwyv-0 start" start="1">
