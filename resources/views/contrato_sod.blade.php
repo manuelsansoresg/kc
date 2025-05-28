@@ -6,20 +6,6 @@
     <title>Solicitud descuento SOD - Firma App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <style>
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background-color: #f8f9fa;
-            z-index: 1000;
-        }
-        
-        .content {
-            margin-top: 100px; /* Add margin to prevent content from going under the fixed header */
-            text-align: justify;
-            margin-bottom: 100px; /* Add margin to prevent content from being hidden behind the fixed footer */
-        }
         
         h1, h2, h3, h4 {
             color: #333;
@@ -63,14 +49,13 @@
 
     .firma-contrato {
         position: fixed;
-        bottom: 0;
+        bottom: -20px;
         left: 0;
         right: 0;
         text-align: center;
         font-size: 10px;
         padding: 10px 0;
         font-weight: normal !important;
-        z-index: 1000;
     }
 
     footer button {
@@ -898,9 +883,9 @@
                 retenci&oacute;n nominal autom&aacute;tica del sueldo que recibo como contraprestaci&oacute;n por la
                 relaci&oacute;n laboral existente entre el suscrito y </span><span class="c3">{{ $agreement!= null ? $agreement->razon_social : null}}</span><span
                 class="c2">&nbsp; a partir del pr&oacute;ximo pago de sueldo inmediato a la fecha de firma del presente
-                documento; y por efecto del Convenio de Colaboraci&oacute;n firmado entre </span><span class="c3">YALKU
+                documento; y por efecto del Convenio de Colaboraci&oacute;n firmado entre </span><span cla{{-- ss="c3">YALKU
                 SERVICIOS, SAPI DE CV</span><span class="c2">&nbsp;y </span><span class="c3">{{ $agreement!= null ? $agreement->razon_social : null}}</span><span
-                class="c9 c2">, con la finalidad de cubrir los pagos a los que he quedado obligado y del cual este
+               --}}  class="c9 c2">, con la finalidad de cubrir los pagos a los que he quedado obligado y del cual este
                 instrumento es parte integrante del mismo; lo anterior, se llevar&aacute; a cabo respetando los tiempos
                 y forma de pago de las retenciones citadas y que quedaron pactadas en el Convenio de
                 Colaboraci&oacute;n.</span></li>
