@@ -47,6 +47,17 @@
         padding: 20px 0;
     }
 
+    .firma-contrato {
+        position: fixed;
+        bottom: -20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 10px;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+    }
+
     footer button {
       padding: 10px 20px;
       border: none;
@@ -925,7 +936,7 @@
     
     @if ($token != null && $isFirma === false)
     <br>
-    <footer>
+    <div class="firma-contrato">
         Firma: {{ $firma}}
         La IP es: {{ $ip}}
         Fecha: {{ $dateTime }}
