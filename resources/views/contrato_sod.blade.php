@@ -48,7 +48,7 @@
     }
 
     .firma-contrato {
-        position: fixed;
+        
         bottom: -20px;
         left: 0;
         right: 0;
