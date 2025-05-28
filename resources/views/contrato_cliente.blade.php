@@ -1242,7 +1242,7 @@
                                     celebrados con los Acreditantes Potenciales.</span></p>
                             <p class="c3 c4"><span class="c1"></span></p>
                             @if ($token != null && $isFirma === false)
-                                <div class="firma-contrato">
+                                <div class="firma-contrato" style="font-weight: normal">
                                     Firma: {{ $firma}}
                                     La IP es: {{ $ip}}
                                     Fecha: {{ $dateTime }}
@@ -1752,7 +1752,7 @@
     @endif
     @if ($token != null && $isFirma === false)
     <br>
-        <div class="firma-contrato">
+        <div class="firma-contrato" style="font-weight: normal">
             Firma: {{ $firma}}
             La IP es: {{ $ip}}
             Fecha: {{ $dateTime }}

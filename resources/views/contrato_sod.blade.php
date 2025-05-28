@@ -866,7 +866,7 @@
             siguiente:</span></p>
     <p class="c5"><span class="c2 c9"></span></p>
     @if ($token != null && $isFirma === false)
-    <div class="firma-contrato">
+    <div class="firma-contrato" style="font-weight: normal">
         Firma: {{ $firma}}
         La IP es: {{ $ip}}
         Fecha: {{ $dateTime }}
@@ -936,12 +936,12 @@
     
     @if ($token != null && $isFirma === false)
     <br>
-    <div class="firma-contrato">
+    <div class="firma-contrato" style="font-weight: normal">
         Firma: {{ $firma}}
         La IP es: {{ $ip}}
         Fecha: {{ $dateTime }}
         Hostname: {{ $hostname}}
-    </footer>
+    </div>
     @endif
 </body>
 </html>
