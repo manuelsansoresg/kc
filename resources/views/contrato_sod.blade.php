@@ -55,6 +55,7 @@
         text-align: center;
         font-size: 10px;
         padding: 10px 0;
+        font-weight: normal !important;
     }
 
     footer button {
