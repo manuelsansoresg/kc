@@ -8,6 +8,7 @@ use App\Lib\CalculadoraCredito;
 use App\Lib\CNubarium;
 use App\Lib\Csendgrid;
 use App\Lib\Manychat;
+use App\Lib\pear\Finance;
 use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\Bank;
@@ -765,7 +766,10 @@ class LeadController extends Controller
         }
         
         $periodicidad = config('financial_enums.periodicity_products')[$financialProduct->periodicity_id];
+
+        $finance = new Finance;
         $getCalc = new CalculadoraCredito();
+        
         $pagoPeriodico = $getCalc->getPayment($financialProduct, $monto, $plazo);
         $pagoTotal = $plazo * $pagoPeriodico;
         $tasaAnual = $financialProduct->annual_interest_rate;
@@ -781,6 +785,24 @@ class LeadController extends Controller
             ->where('kc_credit_id_payed_off', '!=', null)
             ->sum('ammount');
         }
+
+        $diasPorPeriodo = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
+        $periodosPorAño = 360 / $diasPorPeriodo;
+
+        $montoEntrega = $monto - $comision;
+
+        $tasaNominalPeriodica = $finance->rate(
+            $plazo,
+            -$pagoPeriodico,
+            $montoEntrega,
+            0,
+            0,
+            0.1
+        );
+    
+        $tasaNominalAnual = $tasaNominalPeriodica * (360 / $diasPorPeriodo);
+        $cat = round($finance->effectiveRate($tasaNominalAnual, $periodosPorAño) * 100, 2);
+
 
         $data = array(
             'montoSolicitado' => format_price($monto),
