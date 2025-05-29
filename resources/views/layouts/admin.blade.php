@@ -345,12 +345,7 @@
                                             <span class="nk-menu-text"><em class="icon ni ni-history"></em> Historial de movimientos</span>
                                         </a>
                                     </li> --}}
-                                    <li class="nk-menu-item">
-                                        <a href="/panel/ayuda" class="nk-menu-link">
-                                            {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                            <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Ayuda</span>
-                                        </a>
-                                    </li><!-- .nk-menu-item -->
+                                    
                                     @endcan
                                     @endhasrole
                                     @hasrole('Cliente inversionista')
@@ -364,7 +359,12 @@
                                     @endif
                                     
                                     @endhasrole
-                                
+                                <li class="nk-menu-item">
+                                    <a href="/panel/ayuda" class="nk-menu-link">
+                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                        <span class="nk-menu-text"> <em class="icon ni ni-help"></em> Ayuda</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
                                 
                                 @hasrole('Administrador|Asesor')
                                 <li class="nk-menu-heading">
