@@ -28,7 +28,7 @@
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Valor de cuenta</div>
-                                                    <div class="amount">{{ format_price($valorCuenta) }}</div>
+                                                    <div class="amount">${{ format_price($valorCuenta) }}</div>
                                                     <div class="change up">
                                                         <a href="#"  data-bs-toggle="modal"
                                                         data-bs-target="#modalDetalle">Ver detalle</a>
