@@ -953,8 +953,28 @@ document.addEventListener('DOMContentLoaded', function () {
 $().ready(function () {
   $("#frm-client").validate({
     rules: {
+      'data[last_name]': {
+        required: true
+      },
+      'data[second_last_name]': {
+        required: true
+      },
       'data[name]': {
         required: true
+      },
+      'data[rfc]': {
+        required: true,
+        minlength: 13,
+        maxlength: 13
+      },
+      'data[bank_name]': {
+        required: true
+      },
+      'data[bank_clabe]': {
+        required: true,
+        number: true,
+        minlength: 9,
+        maxlength: 9
       }
     },
     submitHandler: function submitHandler(form, event) {
@@ -970,7 +990,7 @@ $().ready(function () {
         }
       })["catch"](function (e) {});
     }
-  });
+  }); //funcion  estatus
 
   function setData() {
     var client_id = $('#client_id').val();
@@ -1004,6 +1024,27 @@ $().ready(function () {
 
   if (document.getElementById('client_id')) {
     setData();
+  } //funcion  estatus
+
+
+  function updateStatusLabel() {
+    var statusCheckbox = document.getElementById('client-status');
+    var statusLabel = document.querySelector('label[for="client-status"]');
+
+    if (statusCheckbox.checked) {
+      statusLabel.textContent = 'Activo';
+    } else {
+      statusLabel.textContent = 'Inactivo';
+    }
+  } // Add event listener to the status checkbox
+
+
+  var statusCheckbox = document.getElementById('client-status');
+
+  if (statusCheckbox) {
+    statusCheckbox.addEventListener('change', updateStatusLabel); // Initial call to set the correct label
+
+    updateStatusLabel();
   }
 });
 
