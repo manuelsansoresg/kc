@@ -3440,7 +3440,6 @@ window.getResumen = function () {
 
   var totalRefinanciable = $('#total-refinanciable').val();
   var tramit_type = $('#tramit_type').val();
-  var isControlDesk = $('#isControlDesk').val();
   var typeProductId = $('#typeProductId').val();
   $('#go_ahead').val(0);
   axios.get("/panel/lead/" + productId + "/" + plazo + '/' + (monto || 0) + '/' + (totalRefinanciable || 0) + '/' + tramit_type + '/getResumen' + adicional).then(function (response) {

@@ -766,25 +766,11 @@ class LeadController extends Controller
         }
         
         $periodicidad = config('financial_enums.periodicity_products')[$financialProduct->periodicity_id];
-
-        $finance = new Finance;
         $getCalc = new CalculadoraCredito();
-        
+        $finance = new Finance;
         $pagoPeriodico = $getCalc->getPayment($financialProduct, $monto, $plazo);
         $pagoTotal = $plazo * $pagoPeriodico;
         $tasaAnual = $financialProduct->annual_interest_rate;
-        $cat = $financialProduct->real_cat;
-        
-        $kcInteres = $pagoTotal - $monto;
-        $kcPagoTotal = $pagoTotal;
-
-        if (isset($_GET['credit_id'])) {
-            $creditId = $_GET['credit_id'];
-            $total =   CreditPayOff::select('ammount')
-            ->where('credit_pay_off.new_kc_credit_id', $creditId)
-            ->where('kc_credit_id_payed_off', '!=', null)
-            ->sum('ammount');
-        }
 
         $diasPorPeriodo = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
         $periodosPorAño = 360 / $diasPorPeriodo;
@@ -802,7 +788,17 @@ class LeadController extends Controller
     
         $tasaNominalAnual = $tasaNominalPeriodica * (360 / $diasPorPeriodo);
         $cat = round($finance->effectiveRate($tasaNominalAnual, $periodosPorAño) * 100, 2);
+        
+        $kcInteres = $pagoTotal - $monto;
+        $kcPagoTotal = $pagoTotal;
 
+        if (isset($_GET['credit_id'])) {
+            $creditId = $_GET['credit_id'];
+            $total =   CreditPayOff::select('ammount')
+            ->where('credit_pay_off.new_kc_credit_id', $creditId)
+            ->where('kc_credit_id_payed_off', '!=', null)
+            ->sum('ammount');
+        }
 
         $data = array(
             'montoSolicitado' => format_price($monto),

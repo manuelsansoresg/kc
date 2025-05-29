@@ -274,27 +274,28 @@ class Finance
     */
     function rate($nper, $pmt, $pv, $fv = 0, $type = 0, $guess = 0.1)
     {
-        // To solve the equation
-        require_once 'Math/Numerical/RootFinding/NewtonRaphson.php';
-        // To preserve some variables in the Newton-Raphson callback functions
-        require_once 'Math/Finance_FunctionParameters.php';
+        $maxIter = 100;
+        $precision = 1E-6;
+        $rate = $guess;
 
-        if ($type != FINANCE_PAY_END && $type != FINANCE_PAY_BEGIN) {
-            return PEAR::raiseError('Payment type must be FINANCE_PAY_END or FINANCE_PAY_BEGIN');
+        for ($i = 0; $i < $maxIter; $i++) {
+            // Función objetivo (igual que _tvm)
+            $f = $pv * pow(1 + $rate, $nper) + $pmt * (1 + $rate * $type) * (pow(1 + $rate, $nper) - 1) / $rate + $fv;
+            // Derivada (igual que _dtvm)
+            $df = $nper * $pv * pow(1 + $rate, $nper - 1)
+                + $pmt * (
+                    $type * (pow(1 + $rate, $nper) - 1) / $rate
+                    + (1 + $rate * $type) * ($nper * $rate * pow(1 + $rate, $nper - 1) - pow(1 + $rate, $nper) + 1) / pow($rate, 2)
+                );
+            if ($df == 0) break;
+            $newRate = $rate - $f / $df;
+            if (abs($newRate - $rate) < $precision) {
+                return $newRate;
+            }
+            $rate = $newRate;
         }
-
-        // Utilization of a Singleton class to preserve given values of other variables in the callback functions
-        $parameters = array(
-            'nper'  => $nper,
-            'pmt'   => $pmt,
-            'pv'    => $pv,
-            'fv'    => $fv,
-            'type'  => $type,
-        );
-		$parameters_class =& Math_Finance_FunctionParameters::getInstance($parameters, True);
-
-        $newtonRaphson = new Math_Numerical_RootFinding_Newtonraphson(array('err_tolerance' => FINANCE_PRECISION));
-        return $newtonRaphson->compute(array('Math_Finance', '_tvm'), array('Math_Finance', '_dtvm'), $guess);
+        // Si no converge, regresa null o lanza excepción
+        return null;
     }
 
     /**

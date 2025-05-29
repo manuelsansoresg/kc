@@ -1117,7 +1117,6 @@ window.getResumen = function()
 
     let totalRefinanciable = $('#total-refinanciable').val();
     let tramit_type = $('#tramit_type').val();
-    let isControlDesk = $('#isControlDesk').val();
     let typeProductId = $('#typeProductId').val();
     
     $('#go_ahead').val(0);
