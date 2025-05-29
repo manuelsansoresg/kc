@@ -140,6 +140,35 @@ class Transaction extends Model
         return array('transaction' => $transaction, 'getTransaction' => $getTransaction);
     }
 
+    public static function listTransactions()
+    {
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
+        $transactions =  $is_investor ? Transaction::where('investor_id', $getInvestor->id)->get() : Transaction::all();
+        
+        foreach ($transactions as $transaction) {
+            $investor = Investor::find($transaction->investor_id);
+            $getOrdenante = $investor != null ? User::find($investor->user_id) : null;
+            $ordenante =  $getOrdenante != null ?  $getOrdenante->name.' '. $getOrdenante->last_name.' '. $getOrdenante->second_last_name : null;
+            $templateStrategy = TemplateValues::STRATEGY['wallet'];
+            $dead_line        = (new $templateStrategy)->moduleDeadline($transaction->id);
+            $menu_options          = (new $templateStrategy)->menuPrincipalOptions($transaction->id);
+            $option = null;
+            if (!$is_investor) {
+                $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+            }
+
+            $transactions[] = array(
+                'id' => $transaction->id,
+                'date' => date('d-m-Y', strtotime($transaction->created_at)),
+                'ordenante' => $ordenante,
+                'importe' => '$'.format_price($transaction->amount),
+                'deadline' => $dead_line,
+                'options' => $option
+            );
+        }
+    }
+
     public static function listDatatable($status)
     {
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
