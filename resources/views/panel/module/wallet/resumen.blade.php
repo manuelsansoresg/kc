@@ -59,33 +59,44 @@
                                         </div>
                                         <div class="d-block d-md-none">
                                             <div class="row">
-                                                <div class="col-6">
-                                                    <div class="title">Valor de cuenta</div>
-                                                    <div class="amount">
-                                                        <br> {{ format_price($valorCuenta) }}</div>
-                                                    <div class="change up">
-                                                        <a href="#"  data-bs-toggle="modal"
-                                                        data-bs-target="#modalDetalle">Ver detalle</a>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="title">Disponible para prestar o retirar </div>
-                                                    <div class="amount">${{ format_price($disponiblePrestar) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-disponible"></em></div>
-                                                    <div class="change up">
-                                                    </div>
-                                                </div>
-                                                <div class="col-12"> &nbsp; </div>
-                                                <div class="col-6">
-                                                    <div class="title">En proceso de ser prestado &nbsp; </div>
-                                                    <div class="amount"><br>${{ format_price($investor->loan_available) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></div>
-                                                    <div class="change down"><a href="#"  data-bs-toggle="modal"
-                                                        data-bs-target="#modalPrestar">Editar</a></div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="title">Préstamos en créditos activos</div>
-                                                    <div class="amount">${{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
-                                                    <div class="change down"></div>
-                                                </div>
+                                                <table class="table table-borderless">
+                                                    <tr>
+                                                        <td>Valor de cuenta</td>
+                                                        <td><b>${{ format_price($valorCuenta) }}</b>
+                                                            <br>
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalDetalle">Ver detalle</a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Disponible para prestar o retirar <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-disponible"></em></td>
+                                                        <td><b>${{ format_price($disponiblePrestar) }}</b>
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2"><hr></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Apartado para ser prestado   <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></td>
+                                                        <td class="text-start">
+                                                            <b>${{ format_price($investor->loan_available) }}</b>
+                                                            <br>
+                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#modalPrestar">Editar</a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Préstamos en créditos activos <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></td>
+                                                        <td>
+                                                            <b>${{ format_price($investor->placed_capital) }}</b>
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </div>
                                             
                                         </div>
