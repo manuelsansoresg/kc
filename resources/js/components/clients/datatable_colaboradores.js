@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let table_lead = NioApp.DataTable('#dt-colaboradores', {
         processing: true,
+        searching: false,
         responsive: {
             details: {
                 type: 'column',

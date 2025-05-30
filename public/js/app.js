@@ -1130,6 +1130,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
   var table_lead = NioApp.DataTable('#dt-colaboradores', {
     processing: true,
+    searching: false,
     responsive: {
       details: {
         type: 'column',
@@ -4713,6 +4714,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-mis-prestamos', {
     processing: true,
     isShowing: false,
+    searching: false,
     responsive: {
       details: {
         type: 'column',

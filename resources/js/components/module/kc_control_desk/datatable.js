@@ -436,6 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let table = NioApp.DataTable('#dt-mis-prestamos', {
         processing: true,
         isShowing: false,
+        searching: false,
         responsive: {
             details: {
                 type: 'column',
