@@ -121,7 +121,19 @@ class FinancialProduct extends Model
     ];
 
     
-
+    public static function getAll($isTramitar = null)
+    {
+        $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
+        )
+            ->join('financials', 'financials.id', 'financial_products.financial_id');
+            if ($isTramitar != null) {
+                $sql->where('is_tramitar', '!=', 1);
+            }
+            
+            $sql = $sql->orderBy('financial_products.id', 'DESC')->get();
+        return $sql;
+    }
+    
 
     public static function returnInfo($product, $credit = null, $is_email = false)
     {
