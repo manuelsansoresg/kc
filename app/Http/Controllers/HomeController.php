@@ -41,9 +41,7 @@ class HomeController extends Controller
 
     public function getHour()
     {
-        $hour =  date('Y-m-d H:i:s');
-        $zone = date_default_timezone_get();
-        return response()->json(['hour' => $hour, 'zone' => $zone]);
+        phpinfo();
     }
 
     /**
