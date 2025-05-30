@@ -59,7 +59,6 @@ class FinancialProduct extends Model
         'abusive_clause13',
         'bank_ids', //este campo se renombro antes era bank_id
         'consulta_buro',
-        'rate_kc',
         'rate_cat',
         'rate_comision',
         'rate_deadline',
@@ -121,47 +120,8 @@ class FinancialProduct extends Model
 
     ];
 
-    public static function getbyIdFirst($product_id)
-    {
-        $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
-            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
-        )
-            ->join('financials', 'financials.id', 'financial_products.financial_id')
-            ->where('financial_products.id', $product_id)
-            ->orderBy('rate_kc', 'DESC')->first();
-        return $sql;
-    }
     
-    public static function getAll($isTramitar = null)
-    {
-        $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
-            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
-        )
-            ->join('financials', 'financials.id', 'financial_products.financial_id');
-            if ($isTramitar != null) {
-                $sql->where('is_tramitar', '!=', 1);
-            }
-            
-            $sql = $sql->orderBy('rate_kc', 'DESC')->get();
-        return $sql;
-    }
-    
-    public static function getAllByTemplate()
-    {
-        $sql = FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
-            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro',
-            DB::raw('CONCAT(commercial_name, " - ", alias) as full_name')
-        )
-            ->join('financials', 'financials.id', 'financial_products.financial_id')
-            ->orderBy('commercial_name', 'ASC')->get();
-        return $sql;
-    }
+
 
     public static function returnInfo($product, $credit = null, $is_email = false)
     {
@@ -302,101 +262,6 @@ class FinancialProduct extends Model
        
      }
 
-    public static function getByRate($credit, $request = null)
-    {
-        $importe   = Session::get('importe');
-        $plazo   = Session::get('plazo');
-
-        DB::connection()->enableQueryLog();
-        $agreement_id           = $credit->agreement_id;
-        $type_product_id        = $credit->tipo_credito;
-
-        $financial_agreements   = FinancialAgreement::where('agreement_id', $agreement_id)->get();
-        $financial_ids          = array();
-        $financial_product_ids  = array();
-        $products = CurrentFinancialProduct::where(['id_rel' => $credit->id , 'type' => 2])->get();
-
-        foreach ($financial_agreements as $financial_agreement) {
-            $financial_ids[] = $financial_agreement->product_id;
-        }
-        
-        
-        //dd($type_product_id);
-        
-        $sql = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-            'rate_comision', 'rate_deadline', 'rate_contract', 'delivery_time_hours', 'rate_privacity', 'bank_ids', 'is_vincular_banco',
-            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
-        )
-            ->join('financials', 'financials.id', 'financial_products.financial_id')
-            
-            ->whereIn('financial_products.id', $financial_ids)
-            ->where('financial_products.type_product_id', $type_product_id)
-            ->where('financial_products.status', 1)
-            ->orderBy('rate_kc', 'DESC')->get();
-        $consulta_buro          = $credit->consulta_buro;
-        $bank_id                = $credit->bank_id;
-        $aval_o_garantia        = $credit->aval_o_garantia;
-        $queries = DB::getQueryLog();
-        //dd($queries);
-        //dd($financial_ids, $type_product_id);
-        
-        $financial_product_ids = [];
-
-        
-
-        foreach ($sql as $sql_query) {
-            $product_aval_o_garantia = $sql_query->aval_o_garantia;
-            $product_is_vincular_banco = $sql_query->is_vincular_banco;
-            $product_consulta_buro = $sql_query->consulta_buro;
-            $bank_ids = $sql_query->bank_ids;
-
-            $is_aval = true;
-            $is_buro = true;
-            $is_bank = true;
-
-            if ($aval_o_garantia === 0 && $product_aval_o_garantia !== 0) {
-                $is_aval = false;
-            }
-            
-            if ($consulta_buro === 0 && $product_consulta_buro !== 0) {
-                $is_buro = false;
-            }
-
-            if ($bank_id > 0 && $bank_ids !== null ) {
-                // Divide la cadena de $bank_ids en un arreglo
-                $bank_ids_array = explode(',', $bank_ids);
-                if (!in_array($bank_id, $bank_ids_array)) {
-                    $is_bank = false;
-                }
-            }
-           
-
-            if ($is_aval == true && $is_buro == true && $is_bank == true) {
-                $financial_product_ids[] = $sql_query->id;
-            }
-           
-        }
-        foreach ($products as $product) {
-            // Itera a través de los productos y compara con $financial_product_ids
-            if (!in_array($product->product_id, $financial_product_ids)) {
-                $financial_product_ids[] = $product->product_id;
-            }
-        }
-        //dd($consulta_buro,  $bank_id, $aval_o_garantia, $financial_product_ids);
-
-        $result = FinancialProduct::select('commercial_name', 'is_tramitar', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-            'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
-            'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'delivery_time_hours', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-            'financial_products.id as id', 'aval_o_garantia', 'consulta_buro', 'fp_simulation_rate'
-        )
-            ->join('financials', 'financials.id', 'financial_products.financial_id')
-            ->whereIn('financial_products.id', $financial_product_ids)
-            ->orderBy('rate_kc', 'DESC')->get();
-        
-        
-        return $result;
-    }
     
     public function pagoProducto($tasa_referencia)
     {
@@ -533,64 +398,6 @@ class FinancialProduct extends Model
         return $new_value;
     }
     
-
-    public static function customSortFinancials($financial_products, $is_limit = false)
-    {
-        // Ordenar $financial_products en función del rate_kc en orden descendente
-        $sortedFinancials = $financial_products->sortByDesc('rate_kc')->values();
-
-        if ($is_limit == false) {
-            $sortedFinancials = $sortedFinancials->take(3);
-        } else {
-            if ($is_limit && $sortedFinancials->count() >= 4) {
-                // Obtener los elementos después del tercero
-                $sortedFinancials = $sortedFinancials->slice(3);
-            }
-        }
-
-        return $sortedFinancials;
-    }
-
-    public static function getById($id)
-    {
-        return FinancialProduct::select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-                                'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
-                                'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-                                'financial_products.id as id'
-                                )
-                        ->join('financials', 'financials.id', 'financial_products.financial_id')
-                        ->where('financial_products.id', $id)
-                        ->first();
-    }
-
-    public static function existMyFinancial($financial_products, $credit_id)
-    {
-
-        $my_product_financials = CurrentFinancialProduct::
-                                select('commercial_name', 'company_name', 'financials.id as financial_id', 'name', 'alias', 'rate_kc', 'rate_cat',
-                                    'rate_comision', 'rate_deadline', 'rate_contract', 'rate_privacity',
-                                    'chart_costo_anual_total', 'chart_comision_apertura', 'chart_plazo_maximo', 'chart_capital', 'chart_interes', 'chart_comision', 'chart_iva',
-                                    'financial_products.id as id', 'aval_o_garantia', 'consulta_buro'
-                                )
-                                ->join('financial_products', 'financial_products.id', 'current_financial_products.product_id')
-                                ->join('financials', 'financials.id', 'financial_products.financial_id')
-                                ->where(['id_rel' => $credit_id, 'type' =>2])
-                                ->orderBy('rate_kc', 'ASC')
-                                ->first();
-        //dd($financial_products);
-        /* foreach ($financial_products as $financial_products) {
-            foreach ($my_product_financials as $my_product_financial) {
-                if ($my_product_financial != null && $my_product_financial->id == $financial_products->id) {
-                    $is_financial = false;
-                }
-            }
-            
-        } */
-        
-        
-        //return $is_financial == true ? $my_product_financial : null;
-        return $my_product_financials;
-    }
 
 
 
