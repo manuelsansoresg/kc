@@ -43,7 +43,7 @@ class HomeController extends Controller
     {
         $hour =  date('Y-m-d H:i:s');
         $zone = date_default_timezone_get();
-        return response()->json(['hour' => $hour, 'zone' => $zone, 'cambio' => 1]);
+        return response()->json(['hour' => $hour, 'zone' => $zone, 'cambio' => 2]);
     }
 
     /**
