@@ -262,25 +262,31 @@
             <div class="modal-content"> <a href="#" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <em class="icon ni ni-cross"></em> </a>
                 <div class="modal-header">
-                    <h5 class="modal-title">Asignar dinero para ser prestado</h5>
+                    <h5 class="modal-title">Apartar dinero para ser prestado</h5>
                 </div>
                 <div class="modal-body">
                    <form action="">
                         <p>
                             Es la cantidad de dinero que está disponible para ser prestada. Esta cantidad irá disminuyendo conforme se vayan entregando créditos.
-                            El total de esta cantidad podrá verse en "En proceso de ser prestado"
-                            <br>
-                            Disponible: ${{ format_price($totalAvailable) }}
+                            El total de esta cantidad podrá verse en "Apartado para ser prestado"
+                            <br> <br>
+                            <b>Disponible: {!! $totalAvailable > 0 ? '$'.format_price($totalAvailable) : '$0.00 <a href="/panel/kc-wallet" class="link-primary" style="font-weight: normal; text-decoration: underline"> Agrega fondos </a>' !!}</b>
                         </p>
                         <input type="number" min="201" name="lendable" id="lendable" max="{{ $totalAvailable }}" class="form-control" value="{{ $investor->lendable }}">
                         <div class="col-12 mt-3">
                             
-                            <p>
+                            <p style="color: #526484 !important;">
                                 Advertencias:
-                                <br>
-                                El importe no debe ser mayor al dinero disponible
-                                <br>
-                                El importe debe ser mayor a 200 pesos
+                                <ul style="list-style: none; padding-left: 0;">
+                                    <li style="position: relative; padding-left: 1.5em; line-height: 1.4;">
+                                      <i class="fas fa-circle" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 0.6em; color: #526484;"></i>
+                                      El importe no debe ser mayor al dinero disponible
+                                    </li>
+                                    <li style="position: relative; padding-left: 1.5em; line-height: 1.4;">
+                                      <i class="fas fa-circle" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 0.6em; color: #526484;"></i>
+                                      El importe debe ser mayor a $200.00 pesos
+                                    </li>
+                                  </ul>
                             </p>
                         </div>
                         <input type="hidden" id="totalAvailable" value="{{ $totalAvailable }}">
