@@ -86,36 +86,36 @@
                                             @endphp
                                             <div id="accordion" class="accordion mt-2">
                                                 <div class="accordion-item">
-                                                    <a href="#" class="accordion-head" data-bs-toggle="collapse" data-bs-target="#accordion-item-documentos-{{ $key }}">
-                                                        <div class="row text-secondary">
-                                                            <div class="col-12 col-md-2 text-primary fw-bold fs-6 d-flex align-items-center">
-                                                                {{ $nameStep }} 
+                                                    <a href="#" class="accordion-head d-flex justify-content-between align-items-center text-secondary" data-bs-toggle="collapse" data-bs-target="#accordion-item-documentos-{{ $key }}">
+                                                        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center flex-grow-1 me-4">
+                                                          <div class="text-primary fw-bold fs-6 me-md-3">
+                                                            {{ $nameStep }}
+                                                          </div>
+                                                          <div id="content-progress-steps" class="w-100 w-md-auto mt-2 mt-md-0">
+                                                            <div class="progress progress-pill progress-md bg-light">
+                                                              <div class="progress-bar" style="width: {{ $percent }}%;"></div>
                                                             </div>
-                                                            <div class="col-12 col-md-3 d-flex align-items-center" id="content-progress-steps">
-                                                                <div class="project-list-progress">
-                                                                    <div class="progress progress-pill progress-md bg-light">
-                                                                        <div class="progress-bar" style="width: {{ $percent }}%;"></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-12 col-md-1"></div>
+                                                          </div>
                                                         </div>
-                                                        <span class="accordion-icon"></span>
-                                                    </a>
+                                                        <span class="accordion-icon" style="flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-left: 20px;">
+                                                          <!-- Ícono aquí -->
+                                                        </span>
+                                                      </a>
                                                     <div class="accordion-body collapse show" id="accordion-item-documentos-{{ $key }}" data-bs-parent="#accordion">
                                                         <div class="accordion-inner">
                                                             @php
                                                                 $indice = $key + 1;
                                                                 $list_actions = $indice > 0 ? (new $actionStrategy())->listActionByStep($history_id, $indice) : null;
                                                             @endphp
-                                                            <table class="table table-borderless" style="width: 60%;">
+                                                            <table class="table table-borderless" >
                                                                 @if ($list_actions != null)
                                                                     @foreach ($list_actions as $list_action)
                                                                         @if (($key == 0 && $percent != 100) || $previousPercent == 100)
                                                                             <tr>
-                                                                                <td>{!! $list_action['name'] !!} </td>
-                                                                                <td class="align-bottom">{!! $list_action['statusBadge'] !!}</td>
-                                                                                <td>
+                                                                                <td class="col-8">{!! $list_action['name'] !!} </td>
+                                                                                
+                                                                                <td class="col-4 text-end">
+                                                                                    {!! $list_action['statusBadge'] !!}
                                                                                     @if ($list_action['status'] == 'En curso')
                                                                                         <a href="{{ $list_action['link'] }}" class="btn btn-outline-primary btn-sm">Abrir</a>
                                                                                     @endif
