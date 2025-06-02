@@ -233,7 +233,7 @@
                            </div>
                             
                            <div class="row mt-5">
-                            <div class="col-6">
+                            <div class="col-12 col-md-6">
                                 
                                 <div class="card">
                                     <div class="card-body">
