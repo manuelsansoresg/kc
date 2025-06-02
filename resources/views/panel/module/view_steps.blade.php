@@ -172,6 +172,7 @@
                                         @endif
                                     @endif
                                 </div>
+                                {{ dd($credit) }}
                                 @if ($credit != null)
                                 <!-- Columna secundaria: Card info cliente -->
                                 <div class="col-md-3 d-none d-md-block offset-md-1">
