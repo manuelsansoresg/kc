@@ -1,8 +1,29 @@
 $().ready(function () {
     $("#frm-client").validate({
         rules: {
+            'data[last_name]': {
+                required: true,
+            },
+            'data[second_last_name]': {
+                required: true,
+            },
             'data[name]': {
                 required: true,
+            },
+            
+            'data[rfc]': {
+                required: true,
+                minlength: 13,
+                maxlength: 13
+            },
+            'data[bank_name]': {
+                required: true,
+            },
+            'data[bank_clabe]': {
+                required: true,
+                number: true,
+                minlength: 9,
+                maxlength: 9
             },
             
 
@@ -27,6 +48,7 @@ $().ready(function () {
 
         }
     });
+    //funcion  estatus
     
     function setData() {
         let client_id = $('#client_id').val();
@@ -69,4 +91,23 @@ $().ready(function () {
         setData();
     }
 
+    //funcion  estatus
+    function updateStatusLabel() {
+        const statusCheckbox = document.getElementById('client-status');
+        const statusLabel = document.querySelector('label[for="client-status"]');
+        
+        if (statusCheckbox.checked) {
+            statusLabel.textContent = 'Activo';
+        } else {
+            statusLabel.textContent = 'Inactivo';
+        }
+    }
+
+    // Add event listener to the status checkbox
+    const statusCheckbox = document.getElementById('client-status');
+    if (statusCheckbox) {
+        statusCheckbox.addEventListener('change', updateStatusLabel);
+        // Initial call to set the correct label
+        updateStatusLabel();
+    }
 });

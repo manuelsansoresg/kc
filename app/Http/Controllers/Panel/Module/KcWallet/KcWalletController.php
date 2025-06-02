@@ -34,7 +34,7 @@ class KcWalletController extends Controller
 
     public function list()
     {
-        $users = Transaction::listTransactions();
+        $users = Transaction::listDatatable([HistoryLog::KC_WALLET_ADD_FORM]);
         return response()->json(['data' => $users]);
     }
     

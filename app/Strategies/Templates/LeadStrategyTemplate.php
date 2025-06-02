@@ -82,18 +82,13 @@ class LeadStrategyTemplate implements TemplateInterface
                 'asesor_id' => $lead->asesor_id,
                 'importe_solicitado' => $lead->importe_solicitado,
                 'applied_import' => $lead->selected_loan,
-                'bank_id' => $lead->bank_id,
-                'tipo_credito' => $lead->tipo_credito,
                 'consulta_buro' => $lead->consulta_buro,
                 'applied_financial_product' => $lead->financial_product_id,
-                'is_vincular_banco' => $lead->is_vincular_banco,
-                'status_si_no' => $lead->status_si_no,
                 'aval_o_garantia' => $lead->aval_o_garantia,
                 'consulta_buro' => $lead->consulta_buro,
                 'manychat_id' => $lead->manychat_id,
                 'lead_id' => $lead->id,
                 'income' => $lead->income,
-                'applied_loan_type' => $lead->applied_loan_type,
                 'tramit_type' => $lead->tramit_type,
             );
 

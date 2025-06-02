@@ -67,6 +67,7 @@ class CreditKaaxSidecc extends Model
             'descuento' => $credit->applied_payment,
             'total' => $credit->applied_loan_total_amount,
             'kc_client_id' => $client->id,
+            'kc_product_id' => $credit->product_id,            
         ];
         $creditKaax = CreditKaaxSidecc::updateOrCreate(['kc_credit_id' => $credit->id], $data_credit);
 

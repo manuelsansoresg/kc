@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Investor extends Model
 {
@@ -152,10 +153,11 @@ class Investor extends Model
         $investor = Investor::find($investorId);
 
         if (!$investor) {
+            Log::warning("Investor ID $investorId not found.");
             return null;
         }
 
-        // ✅ Obtener todas las transacciones en una sola consulta
+        // ✅ Paso 1: Obtener todas las transacciones con sumatorias por tipo y estatus
         $transactions = Transaction::where('investor_id', $investorId)
             ->whereIn('transaction_type', [1, 2])
             ->selectRaw("
@@ -166,7 +168,7 @@ class Investor extends Model
             ")
             ->first();
 
-        // ✅ Obtener inversiones en una sola consulta, incluyendo placed_capital
+        // ✅ Paso 2: Obtener inversiones y capital colocado
         $investments = InvestorsCredit::where('investor_id', $investorId)
             ->where('status', '>=', 1)
             ->selectRaw("
@@ -176,42 +178,46 @@ class Investor extends Model
             ")
             ->first();
 
-        // ✅ Definir valores con null-safe
+        // ✅ Paso 3: Valores con fallback
         $fundedCapital = $transactions->funded_capital ?? 0;
         $pendingFundedCapital = $transactions->pending_funded_capital ?? 0;
         $withdrawnMoney = $transactions->withdrawn_money ?? 0;
         $pendingWithdrawnMoney = $transactions->pending_withdrawn_money ?? 0;
-        
+
         $totalCapital = $investments->total_capital ?? 0;
         $loansInProcess = $investments->loans_in_process ?? 0;
-        $placedCapital = $investments->placed_capital ?? 0; // Nuevo campo
+        $placedCapital = $investments->placed_capital ?? 0;
 
-        // ✅ Calcular total_available
-        $totalAvailable = $fundedCapital - $totalCapital - $loansInProcess 
-            + $investor->total_collected - $investor->collection_commission 
-            - $withdrawnMoney - $pendingWithdrawnMoney;
+        // ✅ Paso 4: Cálculo de disponibilidad
+        $totalAvailable = $fundedCapital
+            - $totalCapital
+            - $loansInProcess
+            + $investor->total_collected
+            - $investor->collection_commission
+            - $investor->iva_commission
+            - $withdrawnMoney
+            - $pendingWithdrawnMoney;
 
-        // ✅ Calcular loanUsed (dinero prestado después de lendable_updated_time)
-        $loanUsed = ($investor->lendable_updated_time !== null) 
+        // ✅ Paso 5: Calcular monto prestado desde última actualización
+        $loanUsed = ($investor->lendable_updated_time !== null)
             ? InvestorsCredit::where('investor_id', $investorId)
                 ->where('status', '!=', 0)
                 ->where('created_at', '>', $investor->lendable_updated_time)
                 ->sum('import')
             : 0;
 
-        // ✅ Calcular loan_available
         $loanAvailable = $investor->lendable - $loanUsed;
 
-        // ✅ Calcular loan_active
-        $loanActive = $loanAvailable > 999 ? 1 : 0;
+        // ✅ Paso 6: Activación
+        $loanActive = $loanAvailable >= 200 ? 1 : 0;
 
-        // ✅ Evitar valores negativos en withdraw_available
+        // ✅ Paso 7: Disponible para retiro (sin duplicar resta de pendingWithdrawnMoney)
         $withdrawAvailable = max(0, $totalAvailable - $loanAvailable);
 
-        // ✅ Calcular account_value
-        $accountValue = $totalAvailable + $loansInProcess + $pendingWithdrawnMoney - $placedCapital;
+        // ✅ Paso 8: Valor total de la cuenta
+        $accountValue = $totalAvailable + $loansInProcess + $pendingWithdrawnMoney + $placedCapital;
 
-        // ✅ Actualizar en la base de datos
+        // ✅ Paso 9: Actualizar campos del inversionista
         $investor->update([
             'funded_capital' => $fundedCapital,
             'pending_funded_capital' => $pendingFundedCapital,
@@ -224,7 +230,7 @@ class Investor extends Model
             'loan_active' => $loanActive,
             'withdraw_available' => $withdrawAvailable,
             'account_value' => $accountValue,
-            'placed_capital' => $placedCapital // Nuevo campo agregado
+            'placed_capital' => $placedCapital,
         ]);
 
         return $investor;

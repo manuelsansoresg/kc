@@ -953,8 +953,28 @@ document.addEventListener('DOMContentLoaded', function () {
 $().ready(function () {
   $("#frm-client").validate({
     rules: {
+      'data[last_name]': {
+        required: true
+      },
+      'data[second_last_name]': {
+        required: true
+      },
       'data[name]': {
         required: true
+      },
+      'data[rfc]': {
+        required: true,
+        minlength: 13,
+        maxlength: 13
+      },
+      'data[bank_name]': {
+        required: true
+      },
+      'data[bank_clabe]': {
+        required: true,
+        number: true,
+        minlength: 9,
+        maxlength: 9
       }
     },
     submitHandler: function submitHandler(form, event) {
@@ -970,7 +990,7 @@ $().ready(function () {
         }
       })["catch"](function (e) {});
     }
-  });
+  }); //funcion  estatus
 
   function setData() {
     var client_id = $('#client_id').val();
@@ -1004,6 +1024,27 @@ $().ready(function () {
 
   if (document.getElementById('client_id')) {
     setData();
+  } //funcion  estatus
+
+
+  function updateStatusLabel() {
+    var statusCheckbox = document.getElementById('client-status');
+    var statusLabel = document.querySelector('label[for="client-status"]');
+
+    if (statusCheckbox.checked) {
+      statusLabel.textContent = 'Activo';
+    } else {
+      statusLabel.textContent = 'Inactivo';
+    }
+  } // Add event listener to the status checkbox
+
+
+  var statusCheckbox = document.getElementById('client-status');
+
+  if (statusCheckbox) {
+    statusCheckbox.addEventListener('change', updateStatusLabel); // Initial call to set the correct label
+
+    updateStatusLabel();
   }
 });
 
@@ -1089,6 +1130,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
   var table_lead = NioApp.DataTable('#dt-colaboradores', {
     processing: true,
+    searching: false,
     responsive: {
       details: {
         type: 'column',
@@ -2162,73 +2204,7 @@ window.showBank = function (is_show) {
   }
 };
 
-$("#frm-financial-comision").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-financial-comision");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial-product", data).then(function (response) {
-    var result = response.data;
-    showToast('Producto', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
-$("#frm-financial-contact").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-financial-contact");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial-product", data).then(function (response) {
-    var result = response.data;
-    showToast('Producto', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
-$("#frm-financial-requisitos").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-financial-requisitos");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial-product", data).then(function (response) {
-    var result = response.data;
-    showToast('Financiera', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
-$("#frm-financial-rate").submit(function (event) {
-  event.preventDefault(); // Obtener los valores de los campos, si se ingresaron
 
-  var rate_kc = $("#rate_kc").val() !== '' ? parseFloat($("#rate_kc").val()) : null;
-  var rate_cat = $("#rate_cat").val() !== '' ? parseFloat($("#rate_cat").val()) : null;
-  var rate_comision = $("#rate_comision").val() !== '' ? parseFloat($("#rate_comision").val()) : null;
-  var rate_deadline = $("#rate_deadline").val() !== '' ? parseFloat($("#rate_deadline").val()) : null;
-  var rate_contract = $("#rate_contract").val() !== '' ? parseFloat($("#rate_contract").val()) : null;
-  var rate_privacity = $("#rate_privacity").val() !== '' ? parseFloat($("#rate_privacity").val()) : null; // Función para validar que un valor esté dentro del rango de 0 a 5
-
-  function isValidValue(value) {
-    return value === null || !isNaN(value) && value >= 0 && value <= 5;
-  } // Validar que los valores estén dentro del rango permitido
-
-
-  if (!isValidValue(rate_kc) || !isValidValue(rate_cat) || !isValidValue(rate_comision) || !isValidValue(rate_deadline) || !isValidValue(rate_contract) || !isValidValue(rate_privacity)) {
-    Swal.fire({
-      title: 'Por favor, ingrese valores numéricos entre 0 y 5',
-      icon: 'warning',
-      showCancelButton: true
-    });
-  } else {
-    var new_form = document.getElementById("frm-financial-rate");
-    var data = new FormData(new_form);
-    axios.post("/panel/financial-product", data).then(function (response) {
-      var result = response.data;
-      showToast('Producto', 'Datos guardados', 'success');
-    })["catch"](function (e) {// Manejar errores si es necesario
-    });
-  }
-});
-$("#frm-financial-chart").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-financial-chart");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial-product", data).then(function (response) {
-    var result = response.data;
-    showToast('Producto', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
 
 if (document.getElementById('tramite-proceso_tramite')) {
   var ckeditor = CKEDITOR.replace('tramite-proceso_tramite', {
@@ -4672,6 +4648,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var table = NioApp.DataTable('#dt-mis-prestamos', {
     processing: true,
     isShowing: false,
+    searching: false,
     responsive: {
       details: {
         type: 'column',

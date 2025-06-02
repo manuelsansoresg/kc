@@ -226,8 +226,8 @@ function generarID() {
                 <h2 class="fw-bold">
                     Ahorra <span class="text-primary">$${formatoMoneda(ahorro)}</span> (${porcentajeAhorro}%)
                 </h2>
-                <p class="text-secondary">al transferir tu deuda de tarjetas a Kaaxclub 😊
-                <br> Calculando para $${formatoMoneda(capital)} a ${plazoMaximo} ${namePeriodicity}      
+                <p class="text-secondary">al transferir tu deuda a Kaaxclub 😊
+                <br>Calculado para $${formatoMoneda(capital)} a ${plazoMaximo} ${namePeriodicity}      
                 </p>
             `;
             
@@ -271,7 +271,7 @@ function generarID() {
                             "
                         >
                             <div class="h-100 d-flex align-items-center justify-content-center text-white">
-                                <p class="fw-bold small m-0">${nombreBanco}</p>
+                                <p class="fw-bold small m-0">Tu deuda <br> actual</p>
                             </div>
                         </div>
                     </div>

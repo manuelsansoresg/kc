@@ -55,10 +55,37 @@
                                                     </div>
                                                     <div class="col-6 text-end">
                                                         @if ($client_id != null)
-                                                            <a href="/client-person/{{ $client_id }}/history" data-bs-dismiss="modal" class="btn btn-outline-primary">Historial de cambios</a>
+                                                            <a href="/client-person/{{ $client_id }}/history" class="btn btn-outline-primary">Historial de cambios</a>
                                                         @endif
                                                     </div>
-                                                    
+                                                    <div class = "col-md-6">
+                                                        <div class = "form-group">
+                                                            <label class = "form-label">*Primer apellido</label>
+                                                            <div class = "form-control-wrap">
+                                                                <input type  = "text" class = "form-control"
+                                                                    name = "data[last_name]" id = "client-last_name">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class = "col-md-6">
+                                                        <div class = "form-group">
+                                                            <label class = "form-label">*Segundo apellido</label>
+                                                            <div class = "form-control-wrap">
+                                                                <input type  = "text" class = "form-control"
+                                                                    name = "data[second_last_name]"
+                                                                    id = "client-second_last_name">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class = "col-md-6">
+                                                        <div class = "form-group">
+                                                            <label class = "form-label">*Nombres</label>
+                                                            <div class = "form-control-wrap">
+                                                                <input type  = "text" class = "form-control"
+                                                                    name = "data[name]" id = "client-name" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                     <div class = "col-md-6">
                                                         <div class = "form-group">
@@ -71,35 +98,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div class = "col-md-6">
-                                                        <div class = "form-group">
-                                                            <label class = "form-label">*Nombres</label>
-                                                            <div class = "form-control-wrap">
-                                                                <input type  = "text" class = "form-control"
-                                                                    name = "data[name]" id = "client-name" required>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class = "col-md-6">
-                                                        <div class = "form-group">
-                                                            <label class = "form-label">Primer apellido</label>
-                                                            <div class = "form-control-wrap">
-                                                                <input type  = "text" class = "form-control"
-                                                                    name = "data[last_name]" id = "client-last_name">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class = "col-md-6">
-                                                        <div class = "form-group">
-                                                            <label class = "form-label">Segundo apellido</label>
-                                                            <div class = "form-control-wrap">
-                                                                <input type  = "text" class = "form-control"
-                                                                    name = "data[second_last_name]"
-                                                                    id = "client-second_last_name">
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    
+                                                    
                                                     <div class = "col-md-6">
                                                         <div class = "form-group">
                                                             <label class = "form-label">Fecha de nacimiento</label>
@@ -113,7 +113,7 @@
 
                                                     <div class = "col-md-6">
                                                         <div class = "form-group">
-                                                            <label class = "form-label">RFC</label>
+                                                            <label class = "form-label">*RFC</label>
                                                             <div class = "form-control-wrap">
                                                                 <input type  = "text" class    = "form-control"
                                                                     name = "data[rfc]" minlength = "10" id = "client-rfc">
@@ -125,7 +125,7 @@
 
                                                     <div class = "col-md-6">
                                                         <div class = "form-group">
-                                                            <label class = "form-label">Banco</label>
+                                                            <label class = "form-label">*Banco</label>
                                                             <div class = "form-control-wrap">
                                                                 <input type  = "text" class    = "form-control"
                                                                     name = "data[bank_name]" id = "bank_name">
@@ -189,13 +189,7 @@
                                                     </div>
                                                   
 
-                                                    <div class = "col-md-6">
-                                                        <div class="custom-control custom-switch" id="content-custom-switch"> 
-                                                            <input type="checkbox"
-                                                            class="custom-control-input" id="client-status" name="data[active]" value="1"> <label
-                                                            class="custom-control-label"
-                                                            for="client-status">Estatus</label></div>
-                                                    </div>
+                                                  
 
                                                     <div class = "col-md-6">
                                                         <div class = "form-group">
@@ -209,6 +203,20 @@
 
                                                     </div>
 
+                                                    <div class = "col-md-6">
+                                                        <div class = "form-group">
+                                                            <label class = "form-label">Estatus</label>
+                                                            <div class = "form-control-wrap">
+                                                                <div class="custom-control custom-switch" id="content-custom-switch"> 
+                                                                    <input type="checkbox"
+                                                                    class="custom-control-input" id="client-status" name="data[active]" value="1"> <label
+                                                                    class="custom-control-label"
+                                                                    for="client-status">Activo</label></div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                  
                                                    
                                                     @php
                                                         $origin = request()->get('origin');
