@@ -150,15 +150,15 @@
                                             <table class="table table-borderless">
                                                 <tr>
                                                     <td>Intereses cobrados</td>
-                                                    <td>${{ format_price($interesesCobrados) }}</td>
+                                                    <td><b>${{ format_price($interesesCobrados) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>IVA de intereses cobrados</td>
-                                                    <td>${{ format_price($IvainteresesCobrados) }}</td>
+                                                    <td><b>${{ format_price($IvainteresesCobrados) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Recuperación de cartera vencida</td>
-                                                    <td>${{ format_price($recuperacionCarteraVencida) }}</td>
+                                                    <td><b>${{ format_price($recuperacionCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
@@ -167,15 +167,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Comisiones pagadas a KaaxClub</td>
-                                                    <td>${{ format_price($comisionesPagadasKaax) }}</td>
+                                                    <td><b>${{ format_price($comisionesPagadasKaax) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Pérdidas por cartera vencida</td>
-                                                    <td>${{ format_price($perdidasCarteraVencida) }}</td>
+                                                    <td><b>${{ format_price($perdidasCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>IVA de comisiones</td>
-                                                    <td>${{ format_price($ivaComisiones) }}</td>
+                                                    <td><b>${{ format_price($ivaComisiones) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
