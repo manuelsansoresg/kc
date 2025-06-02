@@ -172,6 +172,7 @@
                                         @endif
                                     @endif
                                 </div>
+                                @if ($credit != null)
                                 <!-- Columna secundaria: Card info cliente -->
                                 <div class="col-md-3 d-none d-md-block offset-md-1">
                                     <div class="card">
@@ -206,6 +207,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div> <!-- cierre row -->
                         </div>
                     </div>
