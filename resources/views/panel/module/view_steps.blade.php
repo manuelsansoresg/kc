@@ -172,7 +172,7 @@
                                         @endif
                                     @endif
                                 </div>
-                                @if ($model != 'wallet')
+                                @if ($model != 'wallet' && $model != 'kc-down-wallet')
                                 <!-- Columna secundaria: Card info cliente -->
                                 <div class="col-md-3 d-none d-md-block offset-md-1">
                                     <div class="card">
