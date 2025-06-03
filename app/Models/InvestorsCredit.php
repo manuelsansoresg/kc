@@ -34,112 +34,120 @@ class InvestorsCredit extends Model
     public static function saveEdit($creditId)
     {
         $getCredit = Credit::find($creditId);
-        if ($getCredit != null) {
-            $applied_financial_product = $getCredit->applied_financial_product;
-            $applied_import = $getCredit->applied_import != null ? $getCredit->applied_import : 0;
-            $applied_loan_total_amount = $getCredit->applied_loan_total_amount != null ? $getCredit->applied_loan_total_amount : 0;
 
-            $getFinancialProduct = FinancialProduct::find($applied_financial_product);
-            $loanAvailable = $getFinancialProduct ? $getFinancialProduct->loan_available : 0;
+        if (!$getCredit || $getCredit->funding_locked == 1) {
+            return; // Salir si no existe o ya está fondeado y bloqueado
+        }
 
-            $getInvestors = InvestorProduct::where('financial_products_id', $applied_financial_product)->get();
+        $applied_financial_product = $getCredit->applied_financial_product;
+        $applied_import = $getCredit->applied_import ?? 0;
+        $applied_loan_total_amount = $getCredit->applied_loan_total_amount ?? 0;
 
-            $totalAssigned = 0;
-            $hasActiveInvestor = false;
+        $getFinancialProduct = FinancialProduct::find($applied_financial_product);
+        $loanAvailable = $getFinancialProduct ? $getFinancialProduct->loan_available : 0;
 
-            foreach ($getInvestors as $investorProduct) {
-                $getInvestor = Investor::find($investorProduct->investor_id);
+        $getInvestors = InvestorProduct::where('financial_products_id', $applied_financial_product)->get();
 
-                if ($getInvestor && $getInvestor->loan_active == 1) {
-                    $hasActiveInvestor = true;
-                    $maxAmount = max($loanAvailable, $applied_import);
-                    $percent = $loanAvailable > 0 ? ($getInvestor->loan_available / $maxAmount) * 100 : 0;
-                    $percent = min($percent, 100);
+        $totalAssigned = 0;
+        $hasActiveInvestor = false;
 
-                    $import = ($percent * $applied_import) / 100;
-                    $total_credit = ($percent * $applied_loan_total_amount) / 100;
+        foreach ($getInvestors as $investorProduct) {
+            $getInvestor = Investor::find($investorProduct->investor_id);
 
-                    $dataInvestorCredit = [
-                        'credit_id' => $creditId,
-                        'investor_id' => $getInvestor->id,
-                        'percentage' => $percent,
-                        'import' => $import,
-                        'total_credit' => $total_credit,
-                        'commission_rate' => $getFinancialProduct->collection_commission_rate,
-                        'status' => 1
-                    ];
+            if ($getInvestor && $getInvestor->loan_active == 1) {
+                $hasActiveInvestor = true;
+                $maxAmount = max($loanAvailable, $applied_import);
+                $percent = $loanAvailable > 0 ? ($getInvestor->loan_available / $maxAmount) * 100 : 0;
+                $percent = min($percent, 100);
 
-                    $existInvestorCredit = InvestorsCredit::where('credit_id', $creditId)
-                        ->where('investor_id', $getInvestor->id)
-                        ->first();
+                $import = ($percent * $applied_import) / 100;
+                $total_credit = ($percent * $applied_loan_total_amount) / 100;
 
-                    if ($existInvestorCredit) {
-                        // Solo actualizar si el status actual es 1
-                        if ($existInvestorCredit->status == 1) {
-                            $existInvestorCredit->update($dataInvestorCredit);
-                        }
-                    } else {
-                        InvestorsCredit::create($dataInvestorCredit);
-                    }
+                $dataInvestorCredit = [
+                    'credit_id' => $creditId,
+                    'investor_id' => $getInvestor->id,
+                    'percentage' => $percent,
+                    'import' => $import,
+                    'total_credit' => $total_credit,
+                    'commission_rate' => $getFinancialProduct->collection_commission_rate,
+                    'status' => 1
+                ];
 
-                    $totalAssigned += $import;
-                }
-            }
-
-            // Si no hay inversionistas activos, crear solo si no existe o su status es 1
-            if (!$hasActiveInvestor) {
-                $existing = InvestorsCredit::where('credit_id', $creditId)
-                    ->whereNull('investor_id')
+                $existInvestorCredit = InvestorsCredit::where('credit_id', $creditId)
+                    ->where('investor_id', $getInvestor->id)
                     ->first();
 
-                if ($existing) {
-                    if ($existing->status == 1) {
-                        $existing->update([
-                            'percentage' => 0,
-                            'import' => $applied_import,
-                            'total_credit' => $applied_loan_total_amount,
-                            'commission_rate' => $getFinancialProduct->collection_commission_rate,
-                            'status' => 1
-                        ]);
-                    }
-                } else {
-                    InvestorsCredit::create([
-                        'credit_id' => $creditId,
-                        'investor_id' => null,
-                        'percentage' => 0,
-                        'import' => $applied_import,
-                        'total_credit' => $applied_loan_total_amount,
-                        'commission_rate' => $getFinancialProduct->collection_commission_rate,
-                        'status' => 1
-                    ]);
+                if ($existInvestorCredit && $existInvestorCredit->status == 1) {
+                    $existInvestorCredit->update($dataInvestorCredit);
+                } elseif (!$existInvestorCredit) {
+                    InvestorsCredit::create($dataInvestorCredit);
                 }
+
+                $totalAssigned += $import;
+            }
+        }
+
+        if (!$hasActiveInvestor) {
+            $existing = InvestorsCredit::where('credit_id', $creditId)
+                ->whereNull('investor_id')
+                ->first();
+
+            if ($existing && $existing->status == 1) {
+                $existing->update([
+                    'percentage' => 0,
+                    'import' => $applied_import,
+                    'total_credit' => $applied_loan_total_amount,
+                    'commission_rate' => $getFinancialProduct->collection_commission_rate,
+                    'status' => 1
+                ]);
+            } elseif (!$existing) {
+                InvestorsCredit::create([
+                    'credit_id' => $creditId,
+                    'investor_id' => null,
+                    'percentage' => 0,
+                    'import' => $applied_import,
+                    'total_credit' => $applied_loan_total_amount,
+                    'commission_rate' => $getFinancialProduct->collection_commission_rate,
+                    'status' => 1
+                ]);
             }
 
-            // Actualizar credit_active y sod_active en client_person
-            $clientPersonId = $getCredit->client_person_id;
-
-            $hasActiveCredit = InvestorsCredit::whereIn('credit_id', Credit::where('client_person_id', $clientPersonId)
-                ->where('product_id', '!=', 3)->pluck('id'))
-                ->whereNotIn('status', [0, 3])
-                ->exists();
-
-            $hasActiveSod = InvestorsCredit::whereIn('credit_id', Credit::where('client_person_id', $clientPersonId)
-                ->where('product_id', '=', 3)->pluck('id'))
-                ->whereNotIn('status', [0, 3])
-                ->exists();
-
-            ClientPerson::where('id', $clientPersonId)->update([
-                'credit_active' => $hasActiveCredit ? 1 : 0,
-                'sod_active' => $hasActiveSod ? 1 : 0
-            ]);
-
-            // Validación SOD
-            $statusSOD = $applied_import > $loanAvailable ? 0 : 1;
-
-            $request = new \stdClass();
-            $request->{'fondos-suficientes'} = $statusSOD;
-            CreditsControlDesk::saveEdit($creditId, $request, 'Fondos suficientes');
+            $totalAssigned += $applied_import;
         }
+
+        // ✅ Actualizar estado del crédito
+        $getCredit->funding_capital = $totalAssigned;
+
+        if ($totalAssigned >= $applied_import) {
+            $getCredit->funding_locked = 1; // Bloquear si ya se fondeó 100%
+        }
+
+        $getCredit->save();
+
+        // ✅ Actualizar credit_active y sod_active en client_person
+        $clientPersonId = $getCredit->client_person_id;
+
+        $hasActiveCredit = InvestorsCredit::whereIn('credit_id', Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '!=', 3)->pluck('id'))
+            ->whereNotIn('status', [0, 3])
+            ->exists();
+
+        $hasActiveSod = InvestorsCredit::whereIn('credit_id', Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '=', 3)->pluck('id'))
+            ->whereNotIn('status', [0, 3])
+            ->exists();
+
+        ClientPerson::where('id', $clientPersonId)->update([
+            'credit_active' => $hasActiveCredit ? 1 : 0,
+            'sod_active' => $hasActiveSod ? 1 : 0
+        ]);
+
+        // ✅ Validación mesa de control: Fondos suficientes
+        $statusSOD = $applied_import > $loanAvailable ? 0 : 1;
+        $request = new \stdClass();
+        $request->{'fondos-suficientes'} = $statusSOD;
+
+        CreditsControlDesk::saveEdit($creditId, $request, 'Fondos suficientes');
         
         
     }
