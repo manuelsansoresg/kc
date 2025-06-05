@@ -122,6 +122,7 @@ class KcWalletController extends Controller
             
 
             foreach ($getInvestorCredits as $getInvestorCredit) {
+                $status = config('enums.investorsCreditsStatus')[$getInvestorCredit->status];
                 $getCollection   = Collection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
                 $creditId        = $getInvestorCredit->credit_id;
                 
@@ -144,7 +145,7 @@ class KcWalletController extends Controller
                 $data[] = array(
                     'id' => "{$creditId}",
                     'action' => '<a href="/panel/credit/'.$getInvestorCredit->credit_id.'?tab=pagos" target="_blank"> &nbsp; <span class="badge bg-primary">Ver</span> </a>',
-                    'status' => $valorStatus,
+                    'status' => $status,
                     'importe' => $valorImporte,
                     'pagado' => $valorPagado,
                     'capital_recuperado' => format_price($getInvestorCredit->recovered_capital),
