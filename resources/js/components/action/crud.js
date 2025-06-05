@@ -366,14 +366,19 @@ window.setModalAction = function (action_id, disabled, section) {
 }
 
 window.refreshAction = function(id, model, status, content) {
-    $('#'+content+'').html();
+    if (!id || !model || !status || !content) {
+        // Si falta algún valor, no hacer nada
+        return;
+    }
+    $('#' + content).html('');
     axios
-    .get("/panel/action/list/"+id+"/"+model+"/"+status)
-    .then(function (response) {
-        $('#'+content+'').html(response.data);
-    })
-    .catch(e => {
-    });
+        .get("/panel/action/list/" + id + "/" + model + "/" + status)
+        .then(function(response) {
+            $('#' + content).html(response.data);
+        })
+        .catch(e => {
+            // Manejo de error opcional
+        });
 }
 window.refreshListActions = function() {
     let id_rel    = $('#id-rel-action').val();

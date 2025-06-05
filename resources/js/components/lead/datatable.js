@@ -63,11 +63,20 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Expand table rows on click
     $('#dt-lead tbody').on('click', 'td', function () {
+        if (typeof table_lead === 'undefined') {
+            console.warn('table_lead no está definido');
+            return;
+        }
+    
         var row = table_lead.row($(this).closest('tr'));
+        if (!row) {
+            console.warn('No se pudo obtener la fila');
+            return;
+        }
+    
         if (row.child.isShown()) {
             row.child.hide();
-        }
-        else {
+        } else {
             row.child.show();
         }
     });
