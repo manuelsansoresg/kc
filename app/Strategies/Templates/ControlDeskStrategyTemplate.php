@@ -4312,7 +4312,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, $credit->id, 0);
-                            
+                            InvestorsCredit::lockFundingIfComplete($credit->id);
                         }
                     }
 

@@ -479,6 +479,7 @@ class HistoryLog extends Model
         if ($status_id == HistoryLog::KC_DELIVERY) {
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_TASK1_STEP1, HistoryLog::KC_DELIVERY_TASK1_STEP1);
             //CreditKaaxSidecc::sendCreditKaaxSidecc($id_rel);
+            InvestorsCredit::lockFundingIfComplete($id_rel);
 
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Delivery');
             $notification_slack->sendMessage();
