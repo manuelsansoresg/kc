@@ -49,9 +49,11 @@
                                                 
                                                
                                                 <div class="analytic-data analytic-ov-data">
-                                                    <div class="title">Préstamos en créditos activos</div>
+                                                    <div class="title">Dinero en créditos activos</div>
                                                     <div class="amount">${{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
-                                                    <div class="change down"></div>
+                                                    <div class="change down">
+                                                        <span class="text-primary">En trámites: {{ $tramites != null ? format_price($tramites->import) : 0 }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -117,10 +119,12 @@
                                             </div>
                                             
                                             <div id="tooltip-prestamo">
-                                                <b>Préstamos en créditos activos.
+                                                <b>Dinero en créditos activos.
                                                 </b>
                                                 <br><br>
                                                 Es la suma de todos los préstamos que has realizado y cuyo principal o capital está pendiente de pago. Ej. Si has prestado $10,000 en total, pero ya se amortizaron o pagaron $2,000 de capital, este valor será de $8,000. Los intereses pagados no disminuyen este valor.	
+                                                <br>
+                                                También incluye créditos que están en trámite.
                                             </div>
                                         </div>
                                     </div>
