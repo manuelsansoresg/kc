@@ -186,6 +186,47 @@ class InvestorsCredit extends Model
         }
     }
 
+    public static function fundPendingCredits($financialProductId)
+    {
+        // Obtener producto financiero y su disponibilidad
+        $financialProduct = FinancialProduct::find($financialProductId);
+        if (!$financialProduct || $financialProduct->loan_available <= 0) {
+            return;
+        }
+
+        // Obtener créditos pendientes que:
+        // - Pertenecen al producto financiero
+        // - No tienen fondeo activo (inversionistas con status diferente a 1)
+        // - funding_locked = 0 (no están bloqueados para fondeo)
+        $pendingCredits = Credit::where('applied_financial_product', $financialProductId)
+            ->where('funding_locked', 0)
+            ->whereDoesntHave('investorsCredits', function ($query) {
+                $query->where('status', '!=', 1);
+            })
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        foreach ($pendingCredits as $credit) {
+            $amountRequired = $credit->applied_import;
+
+            // Verificar si hay suficiente capital disponible
+            if ($financialProduct->loan_available < $amountRequired) {
+                continue;
+            }
+
+            // Fondear el crédito usando la función central
+            self::saveEdit($credit->id);
+
+            
+
+            // Actualizar disponibilidad tras fondeo
+            $financialProduct->refresh();
+            if ($financialProduct->loan_available <= 0) {
+                break;
+            }
+        }
+    }
+
     public static function setPlacedCapital($creditId)
     {
         /* $investors = InvestorsCredit::where('credit_id', $creditId)->get();
