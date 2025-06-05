@@ -147,7 +147,7 @@ class Investor extends Model
                  ->update(['loan_available' => $investorLoan]);
  
              // 🚀 Fondear créditos pendientes de este producto
-             Credit::fundPendingCredits($financialProductId);
+             InvestorsCredit::fundPendingCredits($financialProductId);
          }
     }
 
