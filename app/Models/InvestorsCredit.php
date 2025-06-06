@@ -31,123 +31,88 @@ class InvestorsCredit extends Model
         'refinanciable',
     ];
 
-    public static function saveEdit($creditId)
+    public static function saveEdit(int $creditId, int $financialProductId)
     {
-        $getCredit = Credit::find($creditId);
-        if (!$getCredit || $getCredit->funding_locked == 1) {
-            return; // Si no existe o ya está bloqueado, salimos
-        }
-    
-        $applied_financial_product = $getCredit->applied_financial_product;
-        $applied_import            = $getCredit->applied_import ?? 0;
-        $applied_loan_total_amount = $getCredit->applied_loan_total_amount ?? 0;
-    
-        // 1) Cargar el producto financiero (ya su loan_available incluye reservas antiguas)
-        $getFinancialProduct = FinancialProduct::find($applied_financial_product);
-        $loanAvailable = $getFinancialProduct ? $getFinancialProduct->loan_available : 0;
-    
-        // 2) ELIMINAR cualquier reserva ANTERIOR para este crédito
-        //    (todos los registros donde credit_id = $creditId y status = 1)
-        InvestorsCredit::where('credit_id', $creditId)
-            ->where('status', 1)
-            ->delete();
-    
-        // 3) Repartir de nuevo entre inversores activos en ese producto financiero
-        $getInvestors = InvestorProduct::where('financial_products_id', $applied_financial_product)
+        $credit = Credit::find($creditId);
+        if (!$credit) return;
+
+        $montoReq         = $credit->applied_import  ?? 0;
+        $totalLoanAmt     = $credit->applied_loan_total_amount ?? 0;
+        $fp               = FinancialProduct::find($financialProductId);
+        if (!$fp) return;
+
+        // 1) Obtener inversores activos del producto
+        $inversiones = InvestorProduct::where('financial_products_id', $financialProductId)
+            ->pluck('investor_id');
+
+        $invActivos = Investor::whereIn('id', $inversiones)
+            ->where('loan_active', 1)
             ->get();
-    
-        $totalAssigned = 0;
-        $hasActiveInvestor = false;
-        $involvedInvestorIds = [];
-    
-        foreach ($getInvestors as $invProd) {
-            $inv = Investor::find($invProd->investor_id);
-            if (!$inv || $inv->loan_active != 1) {
-                continue;
-            }
-    
-            $hasActiveInvestor = true;
-            $involvedInvestorIds[] = $inv->id;
-    
-            // 3.a) Calcular porcentaje en base a max(loanAvailable, applied_import)
-            $maxAmount = max($loanAvailable, $applied_import);
-            $percent = ($maxAmount > 0)
-                ? ($inv->loan_available / $maxAmount) * 100
+
+        $sumLoanAvail = $invActivos->sum('loan_available');
+        if ($sumLoanAvail <= 0) {
+            return;
+        }
+
+        // 2) Repartir proporcionalmente entre cada inversor activo
+        foreach ($invActivos as $inv) {
+            $pct = $sumLoanAvail > 0
+                ? ($inv->loan_available / $sumLoanAvail) * 100
                 : 0;
-            $percent = min($percent, 100);
-    
-            // 3.b) Calcular cuánto aporta este inversionista
-            $import = ($percent * $applied_import) / 100;
-            $total_credit = ($percent * $applied_loan_total_amount) / 100;
-    
-            // 3.c) Crear el nuevo registro en investors_credits (status = 1)
-            InvestorsCredit::create([
+            $pct = min($pct, 100);
+
+            $parteImport    = ($pct * $montoReq) / 100;
+            $parteTotalLoan = ($pct * $totalLoanAmt) / 100;
+
+            self::create([
                 'credit_id'       => $creditId,
                 'investor_id'     => $inv->id,
-                'percentage'      => $percent,
-                'import'          => $import,
-                'total_credit'    => $total_credit,
-                'commission_rate' => $getFinancialProduct->collection_commission_rate,
-                'status'          => 1,
-            ]);
-    
-            $totalAssigned += $import;
-        }
-    
-        // 4) Si NO hay ningún inversor activo, dejamos un “registro genérico” con investor_id = NULL
-        if (!$hasActiveInvestor) {
-            InvestorsCredit::create([
-                'credit_id'       => $creditId,
-                'investor_id'     => null,
-                'percentage'      => 0,
-                'import'          => 0,
-                'total_credit'    => 0,
-                'commission_rate' => $getFinancialProduct->collection_commission_rate,
+                'percentage'      => $pct,
+                'import'          => $parteImport,
+                'total_credit'    => $parteTotalLoan,
+                'commission_rate' => $fp->collection_commission_rate,
                 'status'          => 1,
             ]);
         }
-    
-        // 5) Actualizar sólo funding_capital (no bloqueamos aún)
-        $getCredit->funding_capital = $totalAssigned;
-        if ($totalAssigned >= $applied_import) {
-            // 6) Si cubrimos TODO el applied_import, marcamos funding_locked = 1
-            $getCredit->funding_locked = 1;
-        }
-        $getCredit->save();
-    
-        // 7) Actualizar credit_active / sod_active en client_person
-        $clientPersonId = $getCredit->client_person_id;
-        $hasActiveCredit = InvestorsCredit::whereIn('credit_id',
-                Credit::where('client_person_id', $clientPersonId)
-                      ->where('product_id', '!=', 3)
-                      ->pluck('id')
-            )
-            ->where('status', 1)
-            ->exists();
-        $hasActiveSod = InvestorsCredit::whereIn('credit_id',
-                Credit::where('client_person_id', $clientPersonId)
-                      ->where('product_id', 3)
-                      ->pluck('id')
-            )
-            ->where('status', 1)
-            ->exists();
-        ClientPerson::where('id', $clientPersonId)->update([
+
+        // 3) Bloquear el crédito y restar applied_import del producto
+        $credit->funding_locked = 1;
+        $credit->save();
+
+        $fp->loan_available = max(0, ($fp->loan_available ?? 0) - $montoReq);
+        $fp->save();
+
+        // 4) Actualizar credit_active / sod_active en ClientPerson
+        $cpId = $credit->client_person_id;
+        $hasActiveCredit = self::whereIn('credit_id',
+            Credit::where('client_person_id', $cpId)
+                  ->where('product_id', '!=', 3)
+                  ->pluck('id')
+        )->whereNotIn('status', [0, 3])->exists();
+
+        $hasActiveSod = self::whereIn('credit_id',
+            Credit::where('client_person_id', $cpId)
+                  ->where('product_id', 3)
+                  ->pluck('id')
+        )->whereNotIn('status', [0, 3])->exists();
+
+        ClientPerson::where('id', $cpId)->update([
             'credit_active' => $hasActiveCredit ? 1 : 0,
-            'sod_active'    => $hasActiveSod ? 1 : 0,
+            'sod_active'   => $hasActiveSod   ? 1 : 0,
         ]);
-    
-        // 8) Enviar validación “Fondos suficientes” a mesa de control
-        $statusSOD = ($applied_import > $loanAvailable) ? 0 : 1;
+
+        // 5) Mesa de control: Fondos suficientes
+        $statusSOD = ($montoReq > ($sumLoanAvail)) ? 0 : 1;
         $req = new \stdClass();
         $req->{'fondos-suficientes'} = $statusSOD;
         CreditsControlDesk::saveEdit($creditId, $req, 'Fondos suficientes');
-    
-        // 9) Finalmente, recálculo en cascada: actualizar balances de cada inversor involucrado
-        $involvedInvestorIds = array_unique($involvedInvestorIds);
-        foreach ($involvedInvestorIds as $invId) {
-            Investor::updateInvestorData($invId);
+
+        // 6) Notificar a cada inversor involucrado para que recalcule balances
+        foreach ($invActivos as $inv) {
+            Investor::updateInvestorData($inv->id);
         }
-    }   
+    }
+
 
     public static function lockFundingIfComplete($creditId)
     {
@@ -180,68 +145,86 @@ class InvestorsCredit extends Model
         }
     }
 
-    public static function fundPendingCredits($financialProductId)
+    public static function fundPendingCredits(int $financialProductId)
     {
-        // 1) Cargar el producto financiero y su pool neto
-        $financialProduct = FinancialProduct::find($financialProductId);
-        if (!$financialProduct || $financialProduct->loan_available <= 0) {
-            return;
-        }
-    
-        // 2) Obtener créditos “pendientes” (funding_locked = 0 y sin ningún status≠1)
-        $pendingCredits = Credit::where('applied_financial_product', $financialProductId)
+        // 1.a) Cargar el producto
+        $fp = FinancialProduct::find($financialProductId);
+        if (!$fp) return;
+
+        // 1.b) Obtener todos los créditos “pendientes” de ese producto
+        //     “Pendientes” = funding_locked = 0
+        $pendientes = Credit::where('applied_financial_product', $financialProductId)
             ->where('funding_locked', 0)
-            ->whereDoesntHave('investorsCredits', function ($q) {
-                $q->where('status', '!=', 1);
-            })
             ->orderBy('created_at', 'asc')
             ->get();
-    
-        // 3) PRIMER PASO: borrar TODAS las reservas antiguas (status=1) de esos créditos
-        $creditIds = $pendingCredits->pluck('id');
-        InvestorsCredit::whereIn('credit_id', $creditIds)
+
+        if ($pendientes->isEmpty()) {
+            return;
+        }
+
+        $creditIds = $pendientes->pluck('id')->all();
+
+        // 2) ¿Cuánto estaba “reservado” en esas filas antiguas status=1?
+        $sumaReservada = self::whereIn('credit_id', $creditIds)
+            ->where('status', 1)
+            ->sum('import');
+
+        // 3) Borrar TODAS las filas antiguas de investors_credits con status=1
+        self::whereIn('credit_id', $creditIds)
             ->where('status', 1)
             ->delete();
-    
-        // 4) Para cada crédito “pendiente”, intentar fondear. Si no alcanza, crear registro con investor_id=null
-        foreach ($pendingCredits as $credit) {
-            $amountRequired = $credit->applied_import;
-    
-            // 4.a) Si aún hay fondos suficientes en el producto, lo fondeamos
-            if ($financialProduct->loan_available >= $amountRequired) {
-                // Esto internamente va a volver a crear las reservas apropiadas (saveEdit borra antiguas,
-                // vuelve a repartir entre inversores y bloquea si llega al 100 %)
-                self::saveEdit($credit->id);
-    
-                // Refrescar disponibilidad para el siguiente crédito
-                $financialProduct->refresh();
-                if ($financialProduct->loan_available <= 0) {
-                    // Si ya no queda nada, los que falten quedarán en el else
+
+        // 4) Pool inicial: loan_available del producto + reservas anteriores
+        $available = ($fp->loan_available ?? 0) + $sumaReservada;
+
+        // 5) Reparto FIFO:
+        foreach ($pendientes as $credit) {
+            $montoReq = $credit->applied_import;
+
+            // 5.a) Si el pool alcanza para cubrir este crédito:
+            if ($available >= $montoReq) {
+                // – Reparte entre inversores activos
+                self::saveEdit($credit->id, $financialProductId);
+
+                // – Refrescar y recalcular “available”
+                $fp->refresh();
+                $available = $fp->loan_available ?? 0;
+
+                // Si ya no queda nada, los siguientes entrarán en el caso “no alcanza”
+                if ($available <= 0) {
                     continue;
                 }
             }
-            else {
-                // 4.b) Si NO alcanza el pool para cubrir este crédito,
-                // crear el registro “inversor nulo” con status=1:
-    
-                InvestorsCredit::updateOrCreate(
-                    [
-                        'credit_id'   => $credit->id,
-                        'investor_id' => null,
-                    ],
-                    [
-                        'percentage'      => 0,
-                        'import'          => 0,
-                        'total_credit'    => 0,
-                        'commission_rate' => $financialProduct->collection_commission_rate,
-                        'status'          => 1,
-                    ]
-                );
-    
-                // IMPORTANTE: No bloqueamos funding_locked aquí; 
-                // si quieres bloquearlos de inmediato, descomenta la siguiente línea:
-                // $credit->update(['funding_locked' => 1]);
-            }
+
+            // 5.b) Si NO alcanza para cubrir este crédito (o el pool ya es < 0):
+            self::create([
+                'credit_id'       => $credit->id,
+                'investor_id'     => null,
+                'percentage'      => 0,
+                'import'          => $credit->applied_import,
+                'total_credit'    => $credit->applied_loan_total_amount,
+                'commission_rate' => $fp->collection_commission_rate,
+                'status'          => 1,
+            ]);
+            $credit->update(['funding_locked' => 1]);
+        }
+
+        // 6) Finalmente, bloquear cualquier crédito que aún esté en funding_locked=0
+        $restantes = Credit::where('applied_financial_product', $financialProductId)
+            ->where('funding_locked', 0)
+            ->pluck('id');
+
+        foreach ($restantes as $credId) {
+            self::create([
+                'credit_id'       => $credId,
+                'investor_id'     => null,
+                'percentage'      => 0,
+                'import'          => Credit::find($credId)->applied_import,
+                'total_credit'    => Credit::find($credId)->applied_loan_total_amount,
+                'commission_rate' => $fp->collection_commission_rate,
+                'status'          => 1,
+            ]);
+            Credit::where('id', $credId)->update(['funding_locked' => 1]);
         }
     }
     
