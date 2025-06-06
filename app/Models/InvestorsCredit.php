@@ -232,8 +232,8 @@ class InvestorsCredit extends Model
                     ],
                     [
                         'percentage'      => 0,
-                        'import'          => $credit->applied_import,
-                        'total_credit'    => $credit->applied_loan_total_amount,
+                        'import'          => 0,
+                        'total_credit'    => 0,
                         'commission_rate' => $financialProduct->collection_commission_rate,
                         'status'          => 1,
                     ]
