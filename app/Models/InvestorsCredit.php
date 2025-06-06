@@ -241,7 +241,7 @@ class InvestorsCredit extends Model
     
                 // IMPORTANTE: No bloqueamos funding_locked aquí; 
                 // si quieres bloquearlos de inmediato, descomenta la siguiente línea:
-                // $credit->update(['funding_locked' => 1]);
+                $credit->update(['funding_locked' => 1]);
             }
         }
     }
