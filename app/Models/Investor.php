@@ -127,28 +127,41 @@ class Investor extends Model
 
     public static function updateFinancialProductsLoanAvailable($investorId)
     {
-         // Obtener los productos financieros asociados al inversionista
-         $financialProductInvestorsIds = InvestorProduct::where('investor_id', $investorId)
-         ->pluck('financial_products_id')
-         ->unique();
- 
-         foreach ($financialProductInvestorsIds as $financialProductId) {
-             // Obtener todos los inversionistas activos del producto financiero
-             $investorIds = InvestorProduct::where('financial_products_id', $financialProductId)
-                 ->pluck('investor_id');
- 
-             // Sumar solo loan_available de inversionistas activos
-             $investorLoan = Investor::whereIn('id', $investorIds)
-                 ->where('loan_active', 1)
-                 ->sum('loan_available');
- 
-             // Actualizar el loan_available total en el producto financiero
-             FinancialProduct::where('id', $financialProductId)
-                 ->update(['loan_available' => $investorLoan]);
- 
-             // 🚀 Fondear créditos pendientes de este producto
-             InvestorsCredit::fundPendingCredits($financialProductId);
-         }
+    // 1) Obtener todos los productos financieros en los que participa este inversionista
+    $financialProductIds = InvestorProduct::where('investor_id', $investorId)
+        ->pluck('financial_products_id')
+        ->unique();
+
+        foreach ($financialProductIds as $financialProductId) {
+        // 2) Sumar loan_available de todos los inversores activos en este producto financiero
+        $investorIds = InvestorProduct::where('financial_products_id', $financialProductId)
+            ->pluck('investor_id');
+
+        $sumLoanAvailable = Investor::whereIn('id', $investorIds)
+            ->where('loan_active', 1)
+            ->sum('loan_available');
+        // Este es el total bruto de fondos realmente “depositados” (loan_available) por inversores
+
+        // 3) Sumar reservas antiguas para créditos que aún no están “bloqueados” ni completos:
+        //    todos los credits con funding_locked=0 y estado=1 en investors_credits
+        //    pertenecientes a este producto financiero
+        $reserved = InvestorsCredit::join('credits', 'investors_credits.credit_id', '=', 'credits.id')
+            ->where('credits.applied_financial_product', $financialProductId)
+            ->where('credits.funding_locked', 0)
+            ->where('investors_credits.status', 1)
+            ->sum('investors_credits.import');
+        // “import” representa la cantidad que ya se había reservado para cada crédito pendiente
+
+        // 4) NUEVO pool neto (en lugar de restar, sumamos):
+        $netAvailable = $sumLoanAvailable + $reserved;
+
+        // 5) Actualizar loan_available en la tabla financial_products
+        FinancialProduct::where('id', $financialProductId)
+            ->update(['loan_available' => $netAvailable]);
+
+        // 6) Intentar fondear créditos pendientes de este producto
+        InvestorsCredit::fundPendingCredits($financialProductId);
+        }   
     }
 
     public static function updateInvestorBalances($investorId)
