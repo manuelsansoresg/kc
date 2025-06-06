@@ -100,12 +100,11 @@ class InvestorsCredit extends Model
                 'credit_id'       => $creditId,
                 'investor_id'     => null,
                 'percentage'      => 0,
-                'import'          => $applied_import,
-                'total_credit'    => $applied_loan_total_amount,
+                'import'          => 0,
+                'total_credit'    => 0,
                 'commission_rate' => $getFinancialProduct->collection_commission_rate,
                 'status'          => 1,
             ]);
-            $totalAssigned += $applied_import;
         }
     
         // 5) Actualizar sólo funding_capital (no bloqueamos aún)
