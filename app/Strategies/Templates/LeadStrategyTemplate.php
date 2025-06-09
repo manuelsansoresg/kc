@@ -28,18 +28,15 @@ class LeadStrategyTemplate implements TemplateInterface
     {
         $get_lead = Lead::find($id);
         self::setCustomFieldsManyChat($get_lead->id);
-    
         $lead = Lead::find($id);
         $history_id = null;
         $history = null;
         if ($lead !== null) {
             $product = $lead->productLead;
-    
             // Registrar historial de conversión de prospecto
             $request = new stdClass();
             $request->data = ['reason' => 4]; // enums reason_archive
             HistoryLog::move($lead->id, HistoryLog::LEAD_ARCHIVE, HistoryLog::CREATE_PROSPECT, $request);
-    
             // Crear o actualizar client_person
             $data_client_person = [
                 'name'               => $lead->name,
@@ -50,7 +47,6 @@ class LeadStrategyTemplate implements TemplateInterface
                 'agreement_id'       => $lead->agreement_id,
                 'rfc'                => $lead->rfc,
             ];
-    
             if (
                 ClientPerson::where('cellphone', $lead->cellphone)->count() == 0 &&
                 ClientPerson::where('rfc', $lead->rfc)->count() == 0
@@ -60,16 +56,13 @@ class LeadStrategyTemplate implements TemplateInterface
                 ClientPerson::where('rfc', $lead->rfc)->update($data_client_person);
                 $client_person = ClientPerson::where('rfc', $lead->rfc)->first();
             }
-    
             if ($is_origin_api === true) {
                 Lead::where('id', $lead->id)->update([
                     'client_person_id' => $client_person->id,
                 ]);
             }
-    
             $financialProduct = FinancialProduct::find($lead->financial_product_id);
             $productTypeId    = $financialProduct ? $financialProduct->type_product_id : null;
-    
             // Crear el crédito
             $data_lead = [
                 'client_person_id'           => $client_person->id,
@@ -91,27 +84,21 @@ class LeadStrategyTemplate implements TemplateInterface
                 'income'                     => $lead->income,
                 'tramit_type'                => $lead->tramit_type,
             ];
-    
             // Si el producto es SOD (product_id = 3)
             if ($lead->product_id == 3) {
                 $sod_schedule = Agreement::where('sod_schedule_id', $lead->agreement_id)->first();
-    
                 if ($sod_schedule) {
                     $scheduleColumn = 'schedule_' . $sod_schedule->sod_schedule_id;
                     $today          = date('Y-m-d');
-    
                     $getSchedule = SodScheduleDate::whereDate('fecha', '>=', $today)
                         ->where($scheduleColumn, 2)
                         ->orderBy('fecha', 'asc')
                         ->first();
-    
                     if ($getSchedule) {
                         $data_lead['collection_date'] = $getSchedule->fecha;
                     }
                 }
-    
                 $getFinancial = FinancialProduct::find($lead->financial_product_id);
-    
                 $data_lead['product_id']                = $lead->product_id;
                 $data_lead['applied_financial_product'] = $lead->financial_product_id;
                 $data_lead['applied_import']            = $lead->sod_withdraw_amount;
@@ -126,15 +113,12 @@ class LeadStrategyTemplate implements TemplateInterface
                 $data_lead['sod_commission']            = $lead->sod_commision_amount;
                 $data_lead['opening_commission']        = 0;
             }
-    
             // Insertar el nuevo crédito en la tabla credits
             $credit = Credit::create($data_lead);
-    
             // Actualizar relación en CreditPayOff
             CreditPayOff::where('lead_id', $lead->id)->update([
                 'new_kc_credit_id' => $credit->id
             ]);
-    
             // Migrar notas del lead al crédito
             $leadNotes = $lead->leadNotes;
             foreach ($leadNotes as $leadNote) {
@@ -143,32 +127,24 @@ class LeadStrategyTemplate implements TemplateInterface
                     'note_id'   => $leadNote->note_id
                 ]);
             }
-    
             // Actualizar el producto financiero actual
             CurrentFinancialProduct::moveToLead($lead->id, $credit->id);
-    
             // Eliminar acciones pendientes del prospecto
             Lead::deleteActions($lead->id);
-    
             // Historial de creación de client_person
             $history_id = HistoryLog::move($client_person->id, HistoryLog::LEAD_CONVERT, HistoryLog::LEAD_CONVERT);
-    
             // Historial de creación de crédito y avance a “en progreso”
             HistoryLog::move($credit->id, HistoryLog::CREATE_CLIENT_PERSON, HistoryLog::CREATE_CLIENT_PERSON);
             HistoryLog::move($credit->id, HistoryLog::CREDIT_IN_PROGRESS, HistoryLog::CREDIT_IN_PROGRESS);
-    
             // Avanzar a mesa de control y notificar
             $history = HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK, HistoryLog::KC_CONTROL_DESK);
             $notification = SendNotificationsValues::STRATEGY['pushCreditKcControlDesk'];
             (new $notification)->send($credit->id);
-    
             // Crear cuenta de cliente en ManyChat
             Lead::createClientPerson($lead->id, $is_report, $history->id);
-    
             // Iniciar proceso de fondeo FIFO
             InvestorsCredit::fundPendingCredits($credit->id);
         }
-    
         return $history;
     }
     
