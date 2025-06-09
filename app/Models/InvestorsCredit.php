@@ -33,6 +33,37 @@ class InvestorsCredit extends Model
     ];
 
     
+    public static function createUnfundedCredits(array $creditIds)
+    {
+        $credits = Credit::whereIn('id', $creditIds)->get();
+
+        foreach ($credits as $credit) {
+            // Verificar si ya existe un registro con investor_id NULL para este crédito
+            $exists = self::where('credit_id', $credit->id)
+                ->whereNull('investor_id')
+                ->exists();
+
+            if ($exists) {
+                continue;
+            }
+
+            $financialProduct = FinancialProduct::find($credit->applied_financial_product);
+            if (!$financialProduct) {
+                continue;
+            }
+
+            // Crear el registro de reserva sin inversor asignado
+            self::create([
+                'credit_id'       => $credit->id,
+                'investor_id'     => null,
+                'percentage'      => 0,
+                'import'          => 0,
+                'total_credit'    => 0,
+                'commission_rate' => $financialProduct->collection_commission_rate,
+                'status'          => 1,
+            ]);
+        }
+    }
 
     public static function lockFundingIfComplete($creditId)
     {

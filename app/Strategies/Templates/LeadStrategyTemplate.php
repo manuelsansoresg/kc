@@ -115,6 +115,7 @@ class LeadStrategyTemplate implements TemplateInterface
             }
             // Insertar el nuevo crédito en la tabla credits
             $credit = Credit::create($data_lead);
+            InvestorsCredit::createUnfundedCredits([$credit->id]);
             // Actualizar relación en CreditPayOff
             CreditPayOff::where('lead_id', $lead->id)->update([
                 'new_kc_credit_id' => $credit->id
@@ -144,6 +145,7 @@ class LeadStrategyTemplate implements TemplateInterface
             Lead::createClientPerson($lead->id, $is_report, $history->id);
             // Iniciar proceso de fondeo FIFO
             InvestorsCredit::fundPendingCredits($credit->id);
+            
         }
         return $history;
     }
