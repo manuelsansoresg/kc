@@ -151,6 +151,7 @@ class Investor extends Model
          }
     }
 
+
     public static function updateInvestorBalances($investorId)
     {
         $investor = Investor::find($investorId);
