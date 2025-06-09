@@ -168,7 +168,7 @@ class InvestorsCredit extends Model
         }
     }   
 
-    public static function updateInvestorCredits($investorId)
+    /* public static function updateInvestorCredits($investorId)
     {
         // Obtener los productos financieros relacionados con el inversionista
         $financialProductIds = InvestorProduct::where('investor_id', $investorId)->pluck('financial_products_id');
@@ -184,7 +184,7 @@ class InvestorsCredit extends Model
         foreach ($creditIds as $creditId) {
             self::saveEdit($creditId); // Asegúrate de ajustar la clase si saveEdit no está en la misma
         }
-    }
+    } */
 
     public static function fundPendingCredits($financialProductId)
     {

@@ -139,6 +139,8 @@
                                         @endforeach
                                     @endif
 
+                                    
+
                                     @if ($model == 'controlDesk')
                                         @php
                                             $isFinish = (new $templateStrategy)->isFinish($history);
