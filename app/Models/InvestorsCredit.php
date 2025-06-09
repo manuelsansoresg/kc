@@ -45,7 +45,7 @@ class InvestorsCredit extends Model
             $credit->funding_locked = 1;
             $credit->save();
         }
-    }   
+    } 
 
     /* public static function updateInvestorCredits($investorId)
     {
@@ -317,6 +317,8 @@ class InvestorsCredit extends Model
         $financialProduct->loan_available = $newPool;
         $financialProduct->save();
     }
+
+    
 
     
     public static function setPlacedCapital($creditId)
