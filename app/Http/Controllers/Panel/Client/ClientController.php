@@ -7,6 +7,7 @@ use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\ClientPerson;
 use App\Models\Investor;
+use App\Models\InvestorProduct;
 use App\Models\InvestorsCredit;
 use Illuminate\Http\Request;
 
