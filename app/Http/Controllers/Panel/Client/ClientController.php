@@ -49,22 +49,20 @@ class ClientController extends Controller
 
     public function savePrestar(Request $request)
     {
-        // 1) Primero actualizamos el capital prestable y loan_available del inversionista:
+        // 1) Actualizar el capital prestable del inversionista (lendable y loan_available)
         Investor::setLendableAndLoanAvailable($request->investorId, $request->lendable);
     
-        // 2) Luego recalculamos todo en cascada (balance de inversor, loan_available en productos, 
-        //    fondeo de créditos pendientes, etc.):
+        // 2) Recalcular balances del inversionista y loan_available de sus productos financieros
         Investor::updateInvestorData($request->investorId);
     
-        // 3) Ya no usamos updateInvestorCredits. En su lugar, obtenemos 
-        //    todos los financial_products asociados a ese inversionista y 
-        //    llamamos a fundPendingCredits para cada uno:
+        // 3) Obtener todos los productos financieros asociados al inversionista
         $financialProductIds = InvestorProduct::where('investor_id', $request->investorId)
             ->pluck('financial_products_id')
             ->unique();
     
-        foreach ($financialProductIds as $fpId) {
-            InvestorsCredit::fundPendingCredits($fpId);
+        // 4) Intentar fondear créditos pendientes en cada producto financiero
+        foreach ($financialProductIds as $financialProductId) {
+            InvestorsCredit::fundCredits($financialProductId);
         }
     }
 

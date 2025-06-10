@@ -56,7 +56,7 @@ class Investor extends Model
         
         //Transaction::setTotalCapital($investorId);
         
-        
+
     }
 
     public static function setFundedCapital($investorId)
@@ -123,32 +123,6 @@ class Investor extends Model
         } */
         Investor::where('id', $investorId)->update($data);
         //Transaction::setTotalCapital($investorId);
-    }
-
-    public static function updateFinancialProductsLoanAvailable($investorId)
-    {
-         // Obtener los productos financieros asociados al inversionista
-         $financialProductInvestorsIds = InvestorProduct::where('investor_id', $investorId)
-         ->pluck('financial_products_id')
-         ->unique();
- 
-         foreach ($financialProductInvestorsIds as $financialProductId) {
-             // Obtener todos los inversionistas activos del producto financiero
-             $investorIds = InvestorProduct::where('financial_products_id', $financialProductId)
-                 ->pluck('investor_id');
- 
-             // Sumar solo loan_available de inversionistas activos
-             $investorLoan = Investor::whereIn('id', $investorIds)
-                 ->where('loan_active', 1)
-                 ->sum('loan_available');
- 
-             // Actualizar el loan_available total en el producto financiero
-             FinancialProduct::where('id', $financialProductId)
-                 ->update(['loan_available' => $investorLoan]);
- 
-             // 🚀 Fondear créditos pendientes de este producto
-             InvestorsCredit::fundPendingCredits($financialProductId);
-         }
     }
 
 
@@ -238,6 +212,31 @@ class Investor extends Model
         ]);
 
         return $investor;
+    }
+
+
+    public static function updateFinancialProductsLoanAvailable($investorId)
+    {
+         // Obtener los productos financieros asociados al inversionista
+         $financialProductInvestorsIds = InvestorProduct::where('investor_id', $investorId)
+         ->pluck('financial_products_id')
+         ->unique();
+ 
+         foreach ($financialProductInvestorsIds as $financialProductId) {
+             // Obtener todos los inversionistas activos del producto financiero
+             $investorIds = InvestorProduct::where('financial_products_id', $financialProductId)
+                 ->pluck('investor_id');
+ 
+             // Sumar solo loan_available de inversionistas activos
+             $investorLoan = Investor::whereIn('id', $investorIds)
+                 ->where('loan_active', 1)
+                 ->sum('loan_available');
+ 
+             // Actualizar el loan_available total en el producto financiero
+             FinancialProduct::where('id', $financialProductId)
+                 ->update(['loan_available' => $investorLoan]);
+ 
+         }
     }
 
     public static function updateInvestorData($investorId)
