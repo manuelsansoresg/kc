@@ -33,34 +33,27 @@ class InvestorsCredit extends Model
     ];
 
 
-    public static function removeInvestorsCreditsByProduct($createdCreditId)
+    public static function removeInvestorsCreditsByProduct($financialProductId)
     {
-        // 1. Obtener el crédito recién creado
-        $createdCredit = Credit::find($createdCreditId);
-        if (!$createdCredit) {
-            return false;
-        }
-    
-        $financialProductId = $createdCredit->applied_financial_product;
-    
-        // 2. Buscar todos los créditos con el mismo producto financiero y que no estén bloqueados
+        // 1. Buscar todos los créditos con el mismo producto financiero y que no estén bloqueados
         $relatedCreditIds = Credit::where('applied_financial_product', $financialProductId)
             ->where('funding_locked', 0)
             ->pluck('id');
     
-        // 3. Eliminar los registros pendientes (status = 1) de esos créditos
+        // 2. Eliminar los registros pendientes (status = 1) de esos créditos
         if ($relatedCreditIds->isNotEmpty()) {
             self::whereIn('credit_id', $relatedCreditIds)
                 ->where('status', 1)
                 ->delete();
         }
     
-        // 4. Obtener los inversionistas relacionados a este producto financiero
+        // 3. Obtener los inversionistas relacionados a este producto financiero
         $investorIds = InvestorProduct::where('financial_products_id', $financialProductId)
             ->pluck('investor_id')
             ->unique();
     
-        // 5. Actualizar los datos de cada inversionista (balances y disponibilidad)
+    
+        // 4. Actualizar los datos de cada inversionista (balances y disponibilidad)
         foreach ($investorIds as $investorId) {
             Investor::updateInvestorData($investorId);
             InvestorsCredit::fundCredits($financialProductId); 
@@ -79,18 +72,17 @@ class InvestorsCredit extends Model
     
         $availablePool = $financialProduct->loan_available;
     
-        // Obtener créditos pendientes (sin fondeo y no bloqueados)
+        // Obtener créditos pendientes no fondeados y no bloqueados
         $credits = Credit::where('applied_financial_product', $financialProductId)
             ->where('funding_locked', 0)
             ->orderBy('created_at', 'asc')
             ->get();
     
-        // Obtener inversionistas activos del producto
         $investorProducts = InvestorProduct::where('financial_products_id', $financialProductId)->get();
     
         foreach ($credits as $credit) {
-            $amountRequired   = $credit->applied_import;
-            $loanTotalAmount  = $credit->applied_loan_total_amount;
+            $amountRequired = $credit->applied_import;
+            $loanTotalAmount = $credit->applied_loan_total_amount;
     
             if ($availablePool >= $amountRequired) {
                 $assignedSum = 0;
@@ -102,13 +94,11 @@ class InvestorsCredit extends Model
                     }
     
                     $maxAmount = max($availablePool, $amountRequired);
-                    $percent   = $availablePool > 0
-                        ? ($investor->loan_available / $maxAmount) * 100
-                        : 0;
+                    $percent = $availablePool > 0 ? ($investor->loan_available / $maxAmount) * 100 : 0;
                     $percent = min($percent, 100);
     
-                    $import       = ($percent * $amountRequired) / 100;
-                    $totalCredit  = ($percent * $loanTotalAmount) / 100;
+                    $import = ($percent * $amountRequired) / 100;
+                    $totalCredit = ($percent * $loanTotalAmount) / 100;
     
                     InvestorsCredit::create([
                         'credit_id'       => $credit->id,
@@ -123,28 +113,36 @@ class InvestorsCredit extends Model
                     $assignedSum += $import;
                 }
     
-                // Marcar el crédito como fondeado
+                // Actualizar pool y marcar crédito como fondeado
+                $availablePool -= $assignedSum;
                 $credit->funding_locked = 1;
                 $credit->save();
     
-                // Actualizar el pool
-                $availablePool -= $assignedSum;
-    
                 if ($availablePool <= 0) {
-                    break;
+                    break; // Ya no hay más dinero
                 }
             } else {
-                // Ya no alcanza para este crédito, se detiene el proceso
-                break;
+                // No alcanza: marcar crédito con inversión nula
+                InvestorsCredit::create([
+                    'credit_id'       => $credit->id,
+                    'investor_id'     => null,
+                    'percentage'      => 0,
+                    'import'          => 0,
+                    'total_credit'    => 0,
+                    'commission_rate' => $financialProduct->collection_commission_rate,
+                    'status'          => 1,
+                ]);
             }
         }
     
-        // ✅ Recalcular balances después del fondeo
+        // ✅ Recalcular balances finales tras fondeo
         $investorIds = $investorProducts->pluck('investor_id')->unique();
         foreach ($investorIds as $invId) {
             Investor::updateInvestorData($invId);
         }
-    }    
+    }          
+
+
 
     public static function lockFundingIfComplete($creditId)
     {

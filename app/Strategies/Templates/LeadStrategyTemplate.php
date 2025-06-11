@@ -115,6 +115,7 @@ class LeadStrategyTemplate implements TemplateInterface
             }
             // Insertar el nuevo crédito en la tabla credits
             $credit = Credit::create($data_lead);
+            //InvestorsCredit::fundCredits($credit->applied_financial_product);
             InvestorsCredit::removeInvestorsCreditsByProduct($credit->applied_financial_product);
             // Actualizar relación en CreditPayOff
             CreditPayOff::where('lead_id', $lead->id)->update([

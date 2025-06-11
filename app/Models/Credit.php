@@ -143,6 +143,36 @@ class Credit extends Model
         }
     }
 
+
+    public static function unlockPendingCredits($financialProductId)
+    {
+        // 1. Obtener los créditos que pertenecen al producto financiero
+        $creditIds = Credit::where('applied_financial_product', $financialProductId)
+            ->pluck('id');
+    
+        if ($creditIds->isEmpty()) {
+            return;
+        }
+    
+        // 2. Filtrar los créditos con al menos un registro pendiente (status = 1) en investors_credits
+        $pendingCreditIds = InvestorsCredit::whereIn('credit_id', $creditIds)
+            ->where('status', 1)
+            ->pluck('credit_id')
+            ->unique();
+    
+        if ($pendingCreditIds->isEmpty()) {
+            return;
+        }
+    
+        // 3. Actualizar funding_locked a 0 para esos créditos
+        Credit::whereIn('id', $pendingCreditIds)->update(['funding_locked' => 0]);
+    
+        // 4. Limpiar registros previos y recalcular fondeo y balances
+        InvestorsCredit::removeInvestorsCreditsByProduct($financialProductId);
+    }
+    
+    
+
     /**
      * actualizar applied_import , applied_term , applied_payment , applied_loan_total_amount 
      */
