@@ -122,6 +122,8 @@ class Credit extends Model
         'credit_s2_active',
         'credit_status',
         'collection_date',
+        'canceled',
+        'status',
         
     ];
 
