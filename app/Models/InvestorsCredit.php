@@ -66,8 +66,8 @@ class InvestorsCredit extends Model
     public static function fundCredits(int $financialProductId): void
     {
         $financialProduct = FinancialProduct::find($financialProductId);
-        if (!$financialProduct || $financialProduct->loan_available <= 0) {
-            return;
+        if (!$financialProduct) {
+            return; // Solo cancelamos si el producto no existe
         }
     
         $availablePool = $financialProduct->loan_available;
