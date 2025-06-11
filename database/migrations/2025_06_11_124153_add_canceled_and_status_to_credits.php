@@ -14,7 +14,7 @@ class AddCanceledAndStatusToCredits extends Migration
     public function up()
     {
         Schema::table('credits', function (Blueprint $table) {
-            $table->smallInteger('canceled')->nullable()->after('credit_status');
+            $table->smallInteger('canceled')->nullable()->after('credit_status')->default(0);
             $table->smallInteger('status')->nullable()->after('canceled');
         });
     }
