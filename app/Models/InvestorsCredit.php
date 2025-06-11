@@ -71,20 +71,19 @@ class InvestorsCredit extends Model
         }
     
         $availablePool = $financialProduct->loan_available;
-    
-        // Obtener créditos pendientes no fondeados y no bloqueados
         $credits = Credit::where('applied_financial_product', $financialProductId)
             ->where('funding_locked', 0)
             ->orderBy('created_at', 'asc')
             ->get();
     
         $investorProducts = InvestorProduct::where('financial_products_id', $financialProductId)->get();
+        $canFund = true; // ✅ Bandera de control
     
         foreach ($credits as $credit) {
             $amountRequired = $credit->applied_import;
             $loanTotalAmount = $credit->applied_loan_total_amount;
     
-            if ($availablePool >= $amountRequired) {
+            if ($canFund && $availablePool >= $amountRequired) {
                 $assignedSum = 0;
     
                 foreach ($investorProducts as $invProd) {
@@ -113,16 +112,14 @@ class InvestorsCredit extends Model
                     $assignedSum += $import;
                 }
     
-                // Actualizar pool y marcar crédito como fondeado
                 $availablePool -= $assignedSum;
-                $credit->funding_locked = 1;
+                //$credit->funding_locked = 1;
+                $credit->funding_capital = $amountRequired;
                 $credit->save();
-    
-                if ($availablePool <= 0) {
-                    break; // Ya no hay más dinero
-                }
             } else {
-                // No alcanza: marcar crédito con inversión nula
+                // 👇 Desde aquí ya no fondeamos ningún crédito, solo insertamos registros nulos
+                $canFund = false;
+    
                 InvestorsCredit::create([
                     'credit_id'       => $credit->id,
                     'investor_id'     => null,
@@ -132,6 +129,10 @@ class InvestorsCredit extends Model
                     'commission_rate' => $financialProduct->collection_commission_rate,
                     'status'          => 1,
                 ]);
+    
+                //$credit->funding_locked = 0;
+                $credit->funding_capital = 0;
+                $credit->save();
             }
         }
     

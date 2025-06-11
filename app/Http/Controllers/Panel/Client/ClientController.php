@@ -50,20 +50,31 @@ class ClientController extends Controller
 
     public function savePrestar(Request $request)
     {
-        // 1) Actualizar el capital prestable del inversionista (lendable y loan_available)
-        Investor::setLendableAndLoanAvailable($request->investorId, $request->lendable);
+        $investorId = $request->investorId;
+        $inputLendable = $request->lendable;
     
-        // 2) Recalcular balances del inversionista y loan_available de sus productos financieros
-        Investor::updateInvestorData($request->investorId);
+        // 1) Obtener loans_in_process actuales del inversionista
+        $investor = Investor::find($investorId);
+        $loansInProcess = $investor ? $investor->loans_in_process : 0;
     
-        // 3) Obtener todos los productos financieros asociados al inversionista
-        $financialProductIds = InvestorProduct::where('investor_id', $request->investorId)
+        // 2) Sumar loans_in_process al nuevo lendable solicitado
+        $totalLendable = $inputLendable + $loansInProcess;
+    
+        // 3) Establecer lendable y loan_available considerando lo anterior
+        Investor::setLendableAndLoanAvailable($investorId, $totalLendable);
+    
+        // ✅ 4) Recalcular balances y loan_available del inversionista y sus productos financieros
+        Investor::updateInvestorData($investorId);
+    
+        // 5) Obtener todos los productos financieros del inversionista
+        $financialProductIds = InvestorProduct::where('investor_id', $investorId)
             ->pluck('financial_products_id')
             ->unique();
     
-        // 4) Intentar fondear créditos pendientes en cada producto financiero
+        // 6) Eliminar e intentar refondear créditos pendientes de cada producto
         foreach ($financialProductIds as $financialProductId) {
-            InvestorsCredit::fundCredits($financialProductId);
+            //Credit::unlockPendingCredits($financialProductId);
+            InvestorsCredit::removeInvestorsCreditsByProduct($financialProductId);
         }
     }
 

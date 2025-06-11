@@ -4303,7 +4303,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         
                         if ($percentTask4Step3 == 100) {
                             //InvestorsCredit::saveEdit($credit->id);
-                            Credit::unlockPendingCredits($credit->applied_financial_product);
+                            //Credit::unlockPendingCredits($credit->applied_financial_product);
+                            InvestorsCredit::removeInvestorsCreditsByProduct($credit->applied_financial_product);
                             //InvestorsCredit::lockFundingIfComplete($credit->id);
                             //$getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
                             //foreach ($getInvestors as $getInvestor) {
