@@ -287,7 +287,7 @@
                             <br> <br>
                             <b>Disponible: {!! $totalAvailable > 0 ? '$'.format_price($totalAvailable) : '$0.00 <a href="/panel/kc-wallet" class="link-primary" style="font-weight: normal; text-decoration: underline"> Agrega fondos </a>' !!}</b>
                         </p>
-                        <input type="number" min="201" name="lendable" id="lendable" max="{{ $totalAvailable }}" class="form-control" value="{{ $investor->lendable }}">
+                        <input type="number" min="201" name="lendable" id="lendable" max="{{ $totalAvailable }}" class="form-control" value="{{ $totalAvailable }}">
                         <div class="col-12 mt-3">
                             
                             <p style="color: #526484 !important;">
@@ -297,7 +297,7 @@
                                       <i class="fas fa-circle" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 0.6em; color: #526484;"></i>
                                       El importe no debe ser mayor al dinero disponible
                                     </li>
-                                    <li style="position: relative; padding-left: 1.5em; line-height: 1.4;">
+                                    <li class="d-none" style="position: relative; padding-left: 1.5em; line-height: 1.4;">
                                       <i class="fas fa-circle" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 0.6em; color: #526484;"></i>
                                       El importe debe ser mayor a $200.00 pesos
                                     </li>

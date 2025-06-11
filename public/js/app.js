@@ -7361,9 +7361,9 @@ window.prestarInversionista = function () {
   var investorId = $('#investorId').val();
   var error = true;
 
-  if (importe < 200) {
+  if (importe < 0) {
     Swal.fire({
-      title: 'El importe debe ser mayor o igual a 200 pesos.',
+      title: 'El importe debe ser mayor o igual a 0 pesos.',
       icon: 'warning',
       showCancelButton: true,
       showConfirmButton: false,
