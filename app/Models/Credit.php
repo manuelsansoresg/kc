@@ -124,6 +124,7 @@ class Credit extends Model
         'collection_date',
         'canceled',
         'status',
+        'refinanciable',
         
     ];
 
