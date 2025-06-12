@@ -35,6 +35,7 @@ class Investor extends Model
         'iva_commission',
         'pending_funded_capital',
         'pending_withdrawn_money',
+        'pending_funding_amount',
     ];
 
     public static function setLendableAndLoanAvailable($investorId, $lendable)
