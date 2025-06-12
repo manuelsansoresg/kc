@@ -43,7 +43,7 @@ class InvestorsCredit extends Model
         // 2. Eliminar los registros pendientes (status = 1) de esos créditos
         if ($relatedCreditIds->isNotEmpty()) {
             self::whereIn('credit_id', $relatedCreditIds)
-                ->where('status', 1)
+                ->whereIn('status', [0, 1]) // Incluir status 0 y 1
                 ->delete();
         }
     
@@ -73,6 +73,7 @@ class InvestorsCredit extends Model
         $availablePool = $financialProduct->loan_available;
         $credits = Credit::where('applied_financial_product', $financialProductId)
             ->where('funding_locked', 0)
+            ->where('canceled', 0) // Excluir créditos cancelados
             ->orderBy('created_at', 'asc')
             ->get();
     
@@ -115,6 +116,7 @@ class InvestorsCredit extends Model
                 $availablePool -= $assignedSum;
                 //$credit->funding_locked = 1;
                 $credit->funding_capital = $amountRequired;
+                $credit->status = 1;
                 $credit->save();
             } else {
                 // 👇 Desde aquí ya no fondeamos ningún crédito, solo insertamos registros nulos
@@ -127,11 +129,12 @@ class InvestorsCredit extends Model
                     'import'          => 0,
                     'total_credit'    => 0,
                     'commission_rate' => $financialProduct->collection_commission_rate,
-                    'status'          => 1,
+                    'status'          => 0,
                 ]);
     
                 //$credit->funding_locked = 0;
                 $credit->funding_capital = 0;
+                $credit->status = 0;
                 $credit->save();
             }
         }

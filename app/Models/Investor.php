@@ -156,6 +156,16 @@ class Investor extends Model
             ")
             ->first();
 
+        // ✅ Paso 2.1: Calcular pending_funding_amount
+        $pendingFundingAmount = Credit::whereIn('applied_financial_product', function ($query) use ($investorId) {
+                $query->select('financial_products_id')
+                    ->from('investor_products')
+                    ->where('investor_id', $investorId);
+            })
+            ->where('status', 0)
+            ->where('canceled', 0)
+            ->sum('applied_import');
+
         // ✅ Paso 3: Valores con fallback
         $fundedCapital = $transactions->funded_capital ?? 0;
         $pendingFundedCapital = $transactions->pending_funded_capital ?? 0;
@@ -209,6 +219,7 @@ class Investor extends Model
             'withdraw_available' => $withdrawAvailable,
             'account_value' => $accountValue,
             'placed_capital' => $placedCapital,
+            'pending_funding_amount' => $pendingFundingAmount,
         ]);
 
         return $investor;

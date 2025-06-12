@@ -156,9 +156,9 @@ class Credit extends Model
             return;
         }
     
-        // 2. Filtrar los créditos con al menos un registro pendiente (status = 1) en investors_credits
+        // 2. Filtrar los créditos con al menos un registro pendiente (status = 1 y 0) en investors_credits
         $pendingCreditIds = InvestorsCredit::whereIn('credit_id', $creditIds)
-            ->where('status', 1)
+            ->whereIn('status', [0, 1]) // Incluir status 0 y 1
             ->pluck('credit_id')
             ->unique();
     
