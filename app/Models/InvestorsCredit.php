@@ -116,6 +116,7 @@ class InvestorsCredit extends Model
                 //$credit->funding_locked = 1;
                 $credit->funding_capital = $amountRequired;
                 $credit->save();
+                $statusSOD = 1;
             } else {
                 // 👇 Desde aquí ya no fondeamos ningún crédito, solo insertamos registros nulos
                 $canFund = false;
@@ -133,8 +134,15 @@ class InvestorsCredit extends Model
                 //$credit->funding_locked = 0;
                 $credit->funding_capital = 0;
                 $credit->save();
+                $statusSOD = 0;
             }
+
+            $request = new \stdClass();
+            $request->{'fondos-suficientes'} = $statusSOD;
+            CreditsControlDesk::saveEdit($credit->id, $request, 'Fondos suficientes');
         }
+
+        
     
         // ✅ Recalcular balances finales tras fondeo
         $investorIds = $investorProducts->pluck('investor_id')->unique();
