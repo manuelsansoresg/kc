@@ -86,9 +86,33 @@ class KcControlDeskController extends Controller
 
     public function finish(HistoryLog $history)
     {
-        HistoryLog::move($history->id_rel, HistoryLog::KC_DELIVERY, $history->old_status_id, null);
+        $creditId = $history->id_rel;
+    
+        // Obtener el crédito
+        $credit = Credit::find($creditId);
+    
+        // Solo continuar si el crédito existe y está en estado 1
+        if ($credit && $credit->status == 1) {
+            // 1) Actualiza los investors_credits relacionados
+            InvestorsCredit::where('credit_id', $creditId)
+                ->update(['status' => 2]);
+    
+            // 2) Actualiza el propio crédito
+            $credit->update(['status' => 2]);
+    
+            // ✅ 3) Actualiza los flags del client_person relacionado
+            Credit::updateClientPersonCreditFlags($creditId);
+    
+            // 4) Avanza el historial SOLO si el crédito fue actualizado
+            HistoryLog::move(
+                $creditId,
+                HistoryLog::KC_DELIVERY,
+                $history->old_status_id,
+                null
+            );
+        }
     }
-
+    
     public function showStep(Credit $credit)
     {
         

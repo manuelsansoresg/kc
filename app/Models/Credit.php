@@ -172,7 +172,106 @@ class Credit extends Model
         // 4. Limpiar registros previos y recalcular fondeo y balances
         InvestorsCredit::removeInvestorsCreditsByProduct($financialProductId);
     }
-    
+
+
+    public static function updateClientPersonCreditFlags($creditId)
+    {
+        $getCredit = Credit::find($creditId);
+
+        if (!$getCredit) {
+           return;
+        }
+
+        $clientPersonId = $getCredit->client_person_id;
+
+        // 1. FLAGS DE ACTIVIDAD
+        $hasActiveCredit = Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '!=', 3)
+            ->whereIn('status', [2, 3, 4])
+            ->where('canceled', 0)
+            ->exists();
+
+        $hasActiveSod = Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '=', 3)
+            ->whereIn('status', [2, 3, 4])
+            ->where('canceled', 0)
+            ->exists();
+
+        // 2. IMPORTES ACTIVOS
+        $activeDiscount = Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '!=', 3)
+            ->whereIn('status', [2, 3, 4])
+            ->where('canceled', 0)
+            ->sum('applied_payment');
+
+        $activeSodAmount = Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '=', 3)
+            ->whereIn('status', [2, 3, 4])
+            ->where('canceled', 0)
+            ->sum('applied_payment');
+
+        // 3. FLAG DE TRÁMITES PENDIENTES
+        $hasPendingTramit = Credit::where('client_person_id', $clientPersonId)
+            ->whereIn('status', [0, 1])
+            ->where('canceled', 0)
+            ->exists();
+
+        // 4. TRÁMITES PERMITIDOS
+        $client = ClientPerson::find($clientPersonId);
+
+        $newTramitAllowed = 0;
+        $additionalTramitAllowed = 0;
+        $refTramitAllowed = 0;
+
+        if ($client->credit_active == 0) {
+            // No tiene crédito activo
+            $newTramitAllowed = 1;
+        } else {
+            // Tiene crédito activo
+            $activeCredits = Credit::where('client_person_id', $clientPersonId)
+                ->where('product_id', '!=', 3)
+                ->whereIn('status', [2, 3, 4])
+                ->where('canceled', 0)
+                ->get();
+
+            foreach ($activeCredits as $credit) {
+                $product = FinancialProduct::where('id', $credit->applied_financial_product)
+                    ->where('status', 1) // SOLO productos activos
+                    ->first();
+
+                if (!$product) {
+                    continue;
+                }
+
+                if ($credit->refinanciable == 1 && $product->refinancing_allowed == 1) {
+                    $refTramitAllowed = 1;
+                }
+
+                if ($product->additional_allowed == 1) {
+                    $additionalTramitAllowed = 1;
+                }
+            }
+        }
+
+        if ($client->active == 0) {
+            $newTramitAllowed = 0;
+            $additionalTramitAllowed = 0;
+            $refTramitAllowed = 0;
+        }
+
+        // 5. ACTUALIZAR CAMPOS EN client_person
+        $client->update([
+            'credit_active'            => $hasActiveCredit ? 1 : 0,
+            'sod_active'               => $hasActiveSod ? 1 : 0,
+            'active_discount'          => $activeDiscount,
+            'sod_active_amount'        => $activeSodAmount,
+            'pending_tramit'           => $hasPendingTramit ? 1 : 0,
+            'new_tramit_allowed'       => $newTramitAllowed,
+            'additional_tramit_allowed'=> $additionalTramitAllowed,
+            'ref_tramit_allowed'       => $refTramitAllowed,
+        ]);
+    }
+
     
 
     /**
