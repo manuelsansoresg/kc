@@ -111,6 +111,7 @@ class ClientPerson extends Model
         'additional_tramit_allowed',
         'ref_tramit_allowed',
         'sod_active_amount',	
+        'pending_tramit',
     ];
 
     public static function listDatatable($isAdmin = true, $origin = null)
