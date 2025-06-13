@@ -67,18 +67,19 @@ class InvestorsCredit extends Model
     {
         $financialProduct = FinancialProduct::find($financialProductId);
         if (!$financialProduct) {
-            return; // Solo cancelamos si el producto no existe
+            return;
         }
     
         $availablePool = $financialProduct->loan_available;
+    
         $credits = Credit::where('applied_financial_product', $financialProductId)
             ->where('funding_locked', 0)
-            ->where('canceled', 0) // Excluir créditos cancelados
+            ->where('canceled', 0)
             ->orderBy('created_at', 'asc')
             ->get();
     
         $investorProducts = InvestorProduct::where('financial_products_id', $financialProductId)->get();
-        $canFund = true; // ✅ Bandera de control
+        $canFund = true;
     
         foreach ($credits as $credit) {
             $amountRequired = $credit->applied_import;
@@ -114,13 +115,11 @@ class InvestorsCredit extends Model
                 }
     
                 $availablePool -= $assignedSum;
-                //$credit->funding_locked = 1;
                 $credit->funding_capital = $amountRequired;
                 $credit->status = 1;
                 $credit->save();
                 $statusSOD = 1;
             } else {
-                // 👇 Desde aquí ya no fondeamos ningún crédito, solo insertamos registros nulos
                 $canFund = false;
     
                 InvestorsCredit::create([
@@ -133,27 +132,27 @@ class InvestorsCredit extends Model
                     'status'          => 0,
                 ]);
     
-                //$credit->funding_locked = 0;
                 $credit->funding_capital = 0;
                 $credit->status = 0;
                 $credit->save();
                 $statusSOD = 0;
             }
-
+    
+            // Actualizar validación en control desk
             $request = new \stdClass();
             $request->{'fondos-suficientes'} = $statusSOD;
             CreditsControlDesk::saveEdit($credit->id, $request, 'Fondos suficientes');
+    
+            // ✅ ACTUALIZAR FLAGS DEL CLIENT_PERSON RELACIONADO
+            Credit::updateClientPersonCreditFlags($credit->id);
         }
-
-        
     
         // ✅ Recalcular balances finales tras fondeo
         $investorIds = $investorProducts->pluck('investor_id')->unique();
         foreach ($investorIds as $invId) {
             Investor::updateInvestorData($invId);
         }
-    }          
-
+    }             
 
 
     public static function lockFundingIfComplete($creditId)

@@ -206,33 +206,37 @@ class ClientPerson extends Model
 
     public function getAllowedTramitsForManyChat($leadId)
     {
-
         // Obtener el lead
         $lead = Lead::find($leadId);
         if (!$lead) {
             return response()->json(['error' => 'Lead not found'], 404);
         }
-
+    
         // Obtener el cliente relacionado
         $clientPerson = ClientPerson::find($lead->client_person_id);
         if (!$clientPerson) {
             return response()->json(['error' => 'Client not found'], 404);
         }
-
-        // Obtener valores originales
-        $newTramit = $clientPerson->new_tramit_allowed ?? 0;
-        $additionalTramit = $clientPerson->additional_tramit_allowed ?? 0;
-        $refTramit = $clientPerson->ref_tramit_allowed ?? 0;
-
-        // Si el producto es SOD (product_id = 3), solo se permite nuevo
+    
+        // Si el producto es SOD (product_id = 3), aplicar lógica especial
         if ($lead->product_id == 3) {
-            $allowed = '100';
+            if ($clientPerson->sod_active == 0) {
+                $allowed = '100'; // Solo nuevo
+            } else {
+                $allowed = '010'; // Solo adicional
+            }
         } else {
+            // Créditos normales, usar flags de la BD
+            $newTramit        = $clientPerson->new_tramit_allowed ?? 0;
+            $additionalTramit = $clientPerson->additional_tramit_allowed ?? 0;
+            $refTramit        = $clientPerson->ref_tramit_allowed ?? 0;
+    
             $allowed = "{$newTramit}{$additionalTramit}{$refTramit}";
         }
-
+    
         return $allowed;
     }
+    
 
     public function credit()
     {

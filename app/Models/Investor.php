@@ -151,9 +151,9 @@ class Investor extends Model
         $investments = InvestorsCredit::where('investor_id', $investorId)
             ->where('status', '>=', 1)
             ->selectRaw("
-                SUM(CASE WHEN status > 1 THEN import ELSE 0 END) AS total_capital,
-                SUM(CASE WHEN status = 1 THEN import ELSE 0 END) AS loans_in_process,
-                SUM(CASE WHEN status > 1 THEN placed_capital ELSE 0 END) AS placed_capital
+                SUM(CASE WHEN status > 2 THEN import ELSE 0 END) AS total_capital,
+                SUM(CASE WHEN status < 3 THEN import ELSE 0 END) AS loans_in_process,
+                SUM(CASE WHEN status > 2 THEN placed_capital ELSE 0 END) AS placed_capital
             ")
             ->first();
 

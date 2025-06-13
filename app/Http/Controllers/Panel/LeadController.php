@@ -651,6 +651,8 @@ class LeadController extends Controller
                 // Salario On Demand
                 if ($clientPerson->sod_active == 0) {
                     $tramites[1] = config('enums.tipo_tramite')[1]; // Crédito nuevo
+                } elseif ($clientPerson->sod_active == 1) {
+                    $tramites[2] = config('enums.tipo_tramite')[2]; // Crédito adicional
                 }
             }
         }
