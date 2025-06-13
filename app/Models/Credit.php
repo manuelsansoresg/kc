@@ -188,32 +188,32 @@ class Credit extends Model
         // 1. FLAGS DE ACTIVIDAD
         $hasActiveCredit = Credit::where('client_person_id', $clientPersonId)
             ->where('product_id', '!=', 3)
-            ->whereIn('status', [2, 3, 4])
+            ->whereIn('status', [3])
             ->where('canceled', 0)
             ->exists();
 
         $hasActiveSod = Credit::where('client_person_id', $clientPersonId)
             ->where('product_id', '=', 3)
-            ->whereIn('status', [2, 3, 4])
+            ->whereIn('status', [3])
             ->where('canceled', 0)
             ->exists();
 
         // 2. IMPORTES ACTIVOS
         $activeDiscount = Credit::where('client_person_id', $clientPersonId)
             ->where('product_id', '!=', 3)
-            ->whereIn('status', [2, 3, 4])
+            ->whereIn('status', [3])
             ->where('canceled', 0)
             ->sum('applied_payment');
 
         $activeSodAmount = Credit::where('client_person_id', $clientPersonId)
             ->where('product_id', '=', 3)
-            ->whereIn('status', [2, 3, 4])
+            ->whereIn('status', [3])
             ->where('canceled', 0)
             ->sum('applied_payment');
 
         // 3. FLAG DE TRÁMITES PENDIENTES
         $hasPendingTramit = Credit::where('client_person_id', $clientPersonId)
-            ->whereIn('status', [0, 1])
+            ->whereIn('status', [0, 1, 2])
             ->where('canceled', 0)
             ->exists();
 
@@ -224,7 +224,7 @@ class Credit extends Model
         $additionalTramitAllowed = 0;
         $refTramitAllowed = 0;
 
-        if ($client->credit_active == 0) {
+        if ($hasActiveCredit == false) {
             // No tiene crédito activo
             $newTramitAllowed = 1;
         } else {
@@ -254,7 +254,8 @@ class Credit extends Model
             }
         }
 
-        if ($client->active == 0) {
+        // ❗ Bloqueo si está inactivo o tiene trámite pendiente
+        if ($client->active == 0 || $hasPendingTramit) {
             $newTramitAllowed = 0;
             $additionalTramitAllowed = 0;
             $refTramitAllowed = 0;

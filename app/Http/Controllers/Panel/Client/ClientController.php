@@ -54,8 +54,13 @@ class ClientController extends Controller
         $inputLendable = $request->lendable;
     
         // 1) Obtener loans_in_process actuales del inversionista
-        $investor = Investor::find($investorId);
-        $loansInProcess = $investor ? $investor->loans_in_process : 0;
+        //$investor = Investor::find($investorId);
+        //$loansInProcess = $investor ? $investor->loans_in_process : 0;
+
+        // 1) Obtener suma actual de créditos en proceso (status = 1)
+        $loansInProcess = InvestorsCredit::where('investor_id', $investorId)
+        ->where('status', 1)
+        ->sum('import');
     
         // 2) Sumar loans_in_process al nuevo lendable solicitado
         $totalLendable = $inputLendable + $loansInProcess;

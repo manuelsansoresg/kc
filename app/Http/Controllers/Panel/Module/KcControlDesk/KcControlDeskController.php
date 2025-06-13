@@ -103,7 +103,16 @@ class KcControlDeskController extends Controller
             // ✅ 3) Actualiza los flags del client_person relacionado
             Credit::updateClientPersonCreditFlags($creditId);
     
-            // 4) Avanza el historial SOLO si el crédito fue actualizado
+            // ✅ 4) Recalcula balances de todos los inversionistas asociados al producto
+            $investorIds = \App\Models\InvestorProduct::where('financial_products_id', $credit->applied_financial_product)
+                ->pluck('investor_id')
+                ->unique();
+    
+            foreach ($investorIds as $investorId) {
+                \App\Models\Investor::updateInvestorData($investorId);
+            }
+    
+            // 5) Avanza el historial SOLO si el crédito fue actualizado
             HistoryLog::move(
                 $creditId,
                 HistoryLog::KC_DELIVERY,
@@ -112,6 +121,7 @@ class KcControlDeskController extends Controller
             );
         }
     }
+    
     
     public function showStep(Credit $credit)
     {

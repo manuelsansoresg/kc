@@ -320,10 +320,11 @@ return [
         1 => 'Validada',
     ],
     'investorsCreditsStatus' => [
-        0 => 'Cancelado',
+        0 => 'En fondeo',
         1 => 'En trámite',
-        2 => 'Activo',
-        3 => 'Liquidado',
+        2 => 'En entrega',
+        3 => 'Activo',
+        4 => 'Liquidado',
     ],
     
 ];
