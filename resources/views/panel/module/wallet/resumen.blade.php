@@ -52,7 +52,7 @@
                                                     <div class="title">Dinero en créditos activos</div>
                                                     <div class="amount">${{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
                                                     <div class="change down">
-                                                        <span class="text-primary">En trámites: {{ $tramites != null ? format_price($tramites->import) : 0 }}</span>
+                                                        <span class="text-primary">En trámites: {{ $tramites != null ? format_price($investor->loans_in_process) : 0 }}</span>
                                                     </div>
                                                 </div>
                                             </div>
