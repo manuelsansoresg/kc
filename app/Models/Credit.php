@@ -147,32 +147,28 @@ class Credit extends Model
     }
 
 
-    public static function unlockPendingCredits($financialProductId)
+    public static function unlockPendingCredit($creditId)
     {
-        // 1. Obtener los créditos que pertenecen al producto financiero
-        $creditIds = Credit::where('applied_financial_product', $financialProductId)
-            ->pluck('id');
-    
-        if ($creditIds->isEmpty()) {
+        // 1. Verificar que el crédito exista
+        $credit = Credit::find($creditId);
+        if (!$credit) {
             return;
         }
     
-        // 2. Filtrar los créditos con al menos un registro pendiente (status = 1 y 0) en investors_credits
-        $pendingCreditIds = InvestorsCredit::whereIn('credit_id', $creditIds)
-            ->whereIn('status', [0, 1]) // Incluir status 0 y 1
-            ->pluck('credit_id')
-            ->unique();
+        // 2. Actualizar funding_locked y status del crédito
+        $credit->update([
+            'funding_locked' => 0,
+            'status' => 0,
+        ]);
     
-        if ($pendingCreditIds->isEmpty()) {
-            return;
-        }
+        // 3. Actualizar todos los investors_credits relacionados
+        InvestorsCredit::where('credit_id', $creditId)->update([
+            'status' => 0,
+        ]);
     
-        // 3. Actualizar funding_locked a 0 para esos créditos
-        Credit::whereIn('id', $pendingCreditIds)->update(['funding_locked' => 0]);
-    
-        // 4. Limpiar registros previos y recalcular fondeo y balances
-        InvestorsCredit::removeInvestorsCreditsByProduct($financialProductId);
-    }
+        // 4. Llamar limpieza de fondeo previo para el producto financiero correspondiente
+        InvestorsCredit::removeInvestorsCreditsByProduct($credit->applied_financial_product);
+    }    
 
 
     public static function updateClientPersonCreditFlags($creditId)
@@ -188,32 +184,32 @@ class Credit extends Model
         // 1. FLAGS DE ACTIVIDAD
         $hasActiveCredit = Credit::where('client_person_id', $clientPersonId)
             ->where('product_id', '!=', 3)
-            ->whereIn('status', [3])
+            ->whereIn('status', [4])
             ->where('canceled', 0)
             ->exists();
 
         $hasActiveSod = Credit::where('client_person_id', $clientPersonId)
             ->where('product_id', '=', 3)
-            ->whereIn('status', [3])
+            ->whereIn('status', [4])
             ->where('canceled', 0)
             ->exists();
 
         // 2. IMPORTES ACTIVOS
         $activeDiscount = Credit::where('client_person_id', $clientPersonId)
             ->where('product_id', '!=', 3)
-            ->whereIn('status', [3])
+            ->whereIn('status', [4])
             ->where('canceled', 0)
             ->sum('applied_payment');
 
         $activeSodAmount = Credit::where('client_person_id', $clientPersonId)
             ->where('product_id', '=', 3)
-            ->whereIn('status', [3])
+            ->whereIn('status', [4])
             ->where('canceled', 0)
             ->sum('applied_payment');
 
         // 3. FLAG DE TRÁMITES PENDIENTES
         $hasPendingTramit = Credit::where('client_person_id', $clientPersonId)
-            ->whereIn('status', [0, 1, 2])
+            ->whereIn('status', [1, 2, 3])
             ->where('canceled', 0)
             ->exists();
 
@@ -231,7 +227,7 @@ class Credit extends Model
             // Tiene crédito activo
             $activeCredits = Credit::where('client_person_id', $clientPersonId)
                 ->where('product_id', '!=', 3)
-                ->whereIn('status', [2, 3, 4])
+                ->whereIn('status', [4])
                 ->where('canceled', 0)
                 ->get();
 

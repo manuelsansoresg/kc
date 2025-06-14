@@ -78,7 +78,7 @@ class CreditController extends Controller
             $comRateNoIva     = $ic->commission_rate / 1.16;
             $commissionAmount = $totalCollected * $comRateNoIva;
             $ivaCommission    = $commissionAmount * 0.16;
-            $newStatus        = $placedCapital > 1 ? 3 : ($recoveredCapital > 0 ? 4 : $ic->status);
+            $newStatus        = $placedCapital > 1 ? 4 : ($recoveredCapital > 0 ? 5 : $ic->status);
 
             $ic->update([
                 'total_collected'  => $totalCollected,

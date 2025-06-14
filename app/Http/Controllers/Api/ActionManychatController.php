@@ -303,6 +303,49 @@ class ActionManychatController extends Controller
         $manychat_id = $data['id'];
         $cellphone = $data['whatsapp_phone'];    
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
+
+        $clientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $rfc = null;
+        $manychat = new Manychat();
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+
+        if ($info && $info->status != 'error') {
+            foreach ($info->data->custom_fields ?? [] as $custom_field) {
+                if ($custom_field->name === 'Prospecto - RFC') {
+                    $rfc = $custom_field->value;
+                    break;
+                }
+            }
+        }
+
+        if (!$clientPerson && $rfc) {
+            $clientPerson = ClientPerson::where('rfc', $rfc)->first();
+        }
+
+        $hasPending = $clientPerson && $clientPerson->pending_tramit == 1;
+
+        // Guardar validación
+        LeadValidation::saveEdit(
+            $lead?->id,
+            'Crédito preautorizado - Trámite pendiente',
+            $hasPending ? 0 : 1,
+            $hasPending ? 'Tiene trámites pendientes' : 'Sin trámites pendientes'
+        );
+
+        // Actualizar custom field en Manychat
+        $manychat->setCustomFields([
+            'Prospecto - Validar trámite pendiente' => !$hasPending,
+        ], $manychat_id);
+
+        return response()->json(['validate' => !$hasPending]);
+    }
+
+/*     {
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone = $data['whatsapp_phone'];    
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $rfc = null;
         $manychat = new Manychat();
@@ -344,7 +387,7 @@ class ActionManychatController extends Controller
         $manychat->setCustomFields($dataField, $manychat_id);
         return response()->json(['validate' => $validacionTramitePendiente]);
         
-    }
+    } */
 
     public function validateIdentity(Request $request)
     {

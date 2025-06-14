@@ -391,7 +391,6 @@ class HistoryLog extends Model
 
     public function subHistories($id_rel, $status_id, $history)
     {
-
         if ($status_id == HistoryLog::LEAD_ARCHIVE) {
             $get_lead = Lead::find($id_rel);
             //*remover etiqueta manychat
@@ -406,17 +405,17 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_ACTION_FORM, HistoryLog::KC_CHECK_UP_ACTION_FORM);
 
             //* revisar porcentaje formulario para activar o no la etapa
-            $templateStrategy   = TemplateValues::STRATEGY['newCredit'];
-            $percent            = (new $templateStrategy)->percentForm($history);
-            $credit             = Credit::find($id_rel);
+            $templateStrategy = TemplateValues::STRATEGY['newCredit'];
+            $percent = (new $templateStrategy)->percentForm($history);
+            $credit = Credit::find($id_rel);
 
             if ($percent == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_UPLOAD, $id_rel, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $id_rel, 1);
-                
+
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_REPORT, HistoryLog::KC_CHECK_UP_ACTION_REPORT);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_ACTION_DESITION, HistoryLog::KC_CHECK_UP_ACTION_DESITION);
-                
+
                 //*inicializar las acciones de la siguiente etapa en curso
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_REPORT, $credit->id, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_DESITION, $credit->id, 0);
@@ -428,22 +427,22 @@ class HistoryLog extends Model
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Check up');
             $notification_slack->sendMessage();
         }
-        
+
         if ($status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM);
             //* revisar porcentaje formulario para activar o no la etapa
-            $templateStrategy   = TemplateValues::STRATEGY['debtCredit'];
-            $percent            = (new $templateStrategy)->percentForm($history);
-            $credit             = Credit::find($id_rel);
+            $templateStrategy = TemplateValues::STRATEGY['debtCredit'];
+            $percent = (new $templateStrategy)->percentForm($history);
+            $credit = Credit::find($id_rel);
 
             if ($percent == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_UPLOAD, $id_rel, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_FORM, $id_rel, 1);
-                
+
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT);
                 HistoryLog::move($credit->id, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION);
-                
+
                 //*inicializar las acciones de la siguiente etapa en curso
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_REPORT, $credit->id, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_DEBT_REDUCTION_DESITION, $credit->id, 0);
@@ -457,28 +456,25 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK1_STEP1, HistoryLog::KC_CONTROL_DESK_TASK1_STEP1);
             HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK2_STEP1, HistoryLog::KC_CONTROL_DESK_TASK2_STEP1);
 
-            $credit             = Credit::find($id_rel);
+            $credit = Credit::find($id_rel);
             $financialProduct = FinancialProduct::find($credit->applied_financial_product);
-            
 
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP1, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP1, $id_rel, 0);
             //*Cuando es crédito nuevo y viene de KC-Checkup
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
-            
+
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Control desk');
             $notification_slack->sendMessage();
 
             if ($financialProduct != null && $financialProduct->type_product_id == 3) {
                 HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $id_rel, 0);
-            
             }
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_TASK1_STEP1, HistoryLog::KC_DELIVERY_TASK1_STEP1);
-            //CreditKaaxSidecc::sendCreditKaaxSidecc($id_rel);
             InvestorsCredit::lockFundingIfComplete($id_rel);
 
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Delivery');
@@ -489,7 +485,7 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_SWAP_UPLOAD, HistoryLog::KC_SWAP_UPLOAD);
             HistoryLog::move($id_rel, HistoryLog::KC_SWAP_FORM, HistoryLog::KC_SWAP_FORM);
             HistoryLog::move($id_rel, HistoryLog::KC_SWAP_UPLOAD_2, HistoryLog::KC_SWAP_UPLOAD_2);
-            
+
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_FORM, $id_rel, 0);
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_2, $id_rel, 0);
@@ -498,17 +494,14 @@ class HistoryLog extends Model
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Swap');
             $notification_slack->sendMessage();
         }
-        
-        if ($status_id == HistoryLog::KC_PAYMENT) { // finish delivery and enter kcpayment
-            
 
-            //copy to after market
+        if ($status_id == HistoryLog::KC_PAYMENT) {
             HistoryLog::move($id_rel, HistoryLog::KC_AFTER_MARKET, HistoryLog::KC_AFTER_MARKET);
             HistoryLog::where(['id_rel' => $id_rel, 'status_id' => HistoryLog::CREDIT_IN_PROGRESS, 'status' => 1])
-                        ->update(['status' => 0]);
+                ->update(['status' => 0]);
 
             HistoryLog::move($id_rel, HistoryLog::CREDITS_DELIVERED, HistoryLog::CREDITS_DELIVERED);
-            
+
             HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_FORM_STEP_1, HistoryLog::KC_PAYMENT_FORM_STEP_1);
             HistoryLog::move($id_rel, HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, HistoryLog::KC_PAYMENT_FORM_STEP_1);
             //*inicializar las acciones
@@ -519,111 +512,109 @@ class HistoryLog extends Model
             $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Payments');
             $notification_slack->sendMessage();
         }
-        
+
         if ($status_id == HistoryLog::KC_WALLET) {
-            
             HistoryLog::move($id_rel, HistoryLog::KC_WALLET_ADD_UPLOAD, HistoryLog::KC_WALLET_ADD_UPLOAD);
-            
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD, $id_rel, 0);
 
             $notification_slack = new Slack('kaaxClub', 'KC Wallet - Solicitud de agregar fondos');
             $notification_slack->sendMessage();
         }
+
         if ($status_id == HistoryLog::KC_DOWN_WALLET) {
             $notification_slack = new Slack('kaaxClub', 'KC Wallet - Solicitud de retiro de fondos');
             $notification_slack->sendMessage();
         }
 
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
-            $credit             = Credit::find($id_rel);
+            $credit = Credit::find($id_rel);
 
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $id_rel, 0);
-            //*inicializar las acciones
             HistoryLog::move($id_rel, HistoryLog::KC_AFTER_FORM, HistoryLog::KC_AFTER_FORM);
             HistoryLog::updateStatusProgress(HistoryLog::KC_AFTER_FORM, $id_rel, 0);
-            
+
             $manychat_id = $credit->manychat_id;
-            if ($manychat_id  != null) {
+            if ($manychat_id != null) {
                 $many_chat = new Manychat();
                 $many_chat->addTag('EncuestaLista', $manychat_id);
 
                 $data = array(
-                    'URL Encuesta' => 'https://kaaxclub.com/survey/'.$credit->id,
-    
+                    'URL Encuesta' => 'https://kaaxclub.com/survey/' . $credit->id,
                 );
                 $many_chat->setCustomFields($data, $manychat_id);
             }
-        
         }
+
         if ($status_id == HistoryLog::CREDITS_PAID) {
             self::updateReason($history, 'pagado');
         }
-        
-        if ($status_id == HistoryLog::CREDIT_ARCHIVE) {
-            Credit::setAppliedImport($id_rel);
-            Credit::setTotalCapitalAndMore($id_rel);
-            
-        }
 
-        if ($status_id == HistoryLog::CREDIT_CANCELED) {
-            Credit::setAppliedImport($id_rel);
-            Credit::setTotalCapitalAndMore($id_rel);
-        }
-        if ($status_id == HistoryLog::CREDIT_REJECTED) {
-            Credit::setAppliedImport($id_rel);
-            Credit::setTotalCapitalAndMore($id_rel);
-        }
-        //credito entregado
-        if ($status_id == HistoryLog::CREDITS_DELIVERED) {
-            $credit             = Credit::find($id_rel);
-            Credit::sendEmailDelivered($credit->id);
-        }
-        $isChange = false;
-        //si permitir trámites
-        if ($status_id == HistoryLog::CREDIT_ARCHIVE || $status_id == HistoryLog::CREDIT_CANCELED || $status_id == HistoryLog::CREDIT_REJECTED || $status_id == HistoryLog::CREDITS_PAID || $status_id == HistoryLog::KC_AFTER_FORM || $status_id == HistoryLog::CREDITS_DELIVERED ) {
-            $statusOnline = $status_id;
-            $isChange = true;
-        }
-        // no permitir trámites
-        if ($status_id == HistoryLog::KC_CHECK_UP || $status_id == HistoryLog::CREDIT_IN_PROGRESS || $status_id == HistoryLog::NEW_CREDIT_KC_CHECK_UP || $status_id == HistoryLog::KC_CONTROL_DESK || $status_id == HistoryLog::KC_DELIVERY || $status_id == HistoryLog::KC_SWAP || $status_id == HistoryLog::KC_PAYMENT) {
-            $statusOnline = $status_id;
-            $isChange = true;
-        }
+        //if ($status_id == HistoryLog::CREDITS_DELIVERED) {
+        //   InvestorsCredit::where('credit_id', $id_rel)->update([
+        //        'status' => 2
+        //    ]);
+        //}
+
+        // ✅ Cancelación de crédito: marca como cancelado y limpia registros
+        if (
+            in_array($status_id, [
+                HistoryLog::CREDIT_ARCHIVE,
+                HistoryLog::CREDIT_CANCELED,
+                HistoryLog::CREDIT_REJECTED
+            ])
+        ) {
+            $credit = Credit::find($id_rel);
         
-        //validar el campo status en investorsCredits
-        if ($status_id == HistoryLog::CREDIT_ARCHIVE || $status_id == HistoryLog::CREDIT_CANCELED || $status_id == HistoryLog::CREDIT_REJECTED ) {
-            InvestorsCredit::where('credit_id', $id_rel)->update([
-                'status' => 0
-            ]);
-            $getInvestors = InvestorsCredit::where('credit_id', $id_rel)->get();
-            foreach ($getInvestors as $getInvestor) {
-                Investor::updateInvestorData($getInvestor->investor_id);
+            if ($credit) {
+                $credit->update(['canceled' => 1]);
+
+                // Si necesitas conservar los cálculos antiguos, descomenta esto:
+                // Credit::setAppliedImport($credit->id);
+                // Credit::setTotalCapitalAndMore($credit->id);
+        
+                // ✅ Ahora llamamos a la nueva función completa
+                Credit::unlockPendingCredit($credit->id);
             }
         }
-        
-        
-
-
-
-        if ($status_id ==HistoryLog::CREDIT_ARCHIVE || $status_id ==HistoryLog::CREDIT_CANCELED || $status_id ==HistoryLog::CREDIT_REJECTED) {
-            InvestorsCredit::where('credit_id', $id_rel)->update([
-                'status' => 0
-            ]);
-        }
 
         if ($status_id == HistoryLog::CREDITS_DELIVERED) {
-            InvestorsCredit::where('credit_id', $id_rel)->update([
-                'status' => 2
-            ]);
+            $credit = Credit::find($id_rel);
+            Credit::sendEmailDelivered($credit->id);
         }
-        
+
+        $isChange = false;
+        if (in_array($status_id, [
+            HistoryLog::CREDIT_ARCHIVE,
+            HistoryLog::CREDIT_CANCELED,
+            HistoryLog::CREDIT_REJECTED,
+            HistoryLog::CREDITS_PAID,
+            HistoryLog::KC_AFTER_FORM,
+            HistoryLog::CREDITS_DELIVERED
+        ])) {
+            $statusOnline = $status_id;
+            $isChange = true;
+        }
+        if (in_array($status_id, [
+            HistoryLog::KC_CHECK_UP,
+            HistoryLog::CREDIT_IN_PROGRESS,
+            HistoryLog::NEW_CREDIT_KC_CHECK_UP,
+            HistoryLog::KC_CONTROL_DESK,
+            HistoryLog::KC_DELIVERY,
+            HistoryLog::KC_SWAP,
+            HistoryLog::KC_PAYMENT
+        ])) {
+            $statusOnline = $status_id;
+            $isChange = true;
+        }
+
         if ($isChange === true) {
-            $credit             = Credit::find($id_rel);
+            $credit = Credit::find($id_rel);
             Credit::where('id', $credit->id)->update([
                 'credit_status' => $statusOnline
             ]);
         }
     }
+
 
     public function removeInProgress($id_rel, $status_id)
     {
