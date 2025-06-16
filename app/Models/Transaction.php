@@ -172,6 +172,7 @@ class Transaction extends Model
     public static function listDatatable($status)
     {
         $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        $is_admin = Auth::user()->hasRole('Administrador');
         $userIdInvestor = null;
         if ($is_investor === true) {
             $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
@@ -195,7 +196,7 @@ class Transaction extends Model
                 $dead_line        = (new $templateStrategy)->moduleDeadline($history);
                 $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
                 $option = null;
-                if (!$is_investor) {
+                if ($is_admin || $is_investor) {
                     $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
                 }
     
