@@ -765,24 +765,46 @@ class DeliveryStrategyTemplate implements TemplateInterface
                     $percentTask1Step1  = self::percentTask1Step1($history);
                     
                     if ($percentTask1Step1 == 100) {
-                        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_TASK1_STEP1, $credit->id, 1); //terminar tarea1
-                        //iniciar tarea 2 etapa 1
-                        HistoryLog::move($credit->id, HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2, HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2, null, false);
+                        // ✅ Marcar tarea 1 como finalizada
+                        HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY_TASK1_STEP1, $credit->id, 1);
+                    
+                        // ✅ Iniciar tarea dinámica etapa 2
+                        HistoryLog::move(
+                            $credit->id,
+                            HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2,
+                            HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2,
+                            null,
+                            false
+                        );
                         HistoryLog::updateStatusProgress(HistoryLog::KC_DELIVERY__DYNAMIC_TASK_STEP2, $credit->id, 0);
-                        
+                    
+                        // ✅ Enviar crédito a Sidecc
                         CreditKaaxSidecc::sendCreditKaaxSidecc($credit->id);
+                    
+                        // ✅ Actualizar registros de inversión como colocados
                         InvestorsCredit::where('credit_id', $credit->id)->update([
-                            'status' => 3,
+                            'status' => 4,
                             'placed_capital' => \DB::raw('import')
                         ]);
+                    
+                        // ✅ Actualizar el estado del crédito a colocado
+                        Credit::where('id', $credit->id)->update([
+                            'status' => 4
+                        ]);
+                    
+                        // ✅ Recalcular flags del client_person correspondiente
+                        Credit::updateClientPersonCreditFlags($credit->id);
+                    
+                        // ✅ Recalcular balances de inversionistas
                         $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
                         foreach ($getInvestors as $getInvestor) {
-                            //Transaction::setTotalCapital($getInvestor->investor_id);
                             Investor::updateInvestorData($getInvestor->investor_id);
                         }
-
-                       /*  $notification_add   = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
-                        (new $notification_add)->send($credit->id); */
+                    
+                        /* Notificación (si se requiere)
+                        $notification_add = SendNotificationsValues::STRATEGY['pushCreditKcDelivery'];
+                        (new $notification_add)->send($credit->id);
+                        */
                     }
                 }
                 if ($task > 1) {

@@ -132,7 +132,7 @@ class Credit extends Model
     public static function setDataPago($creditId)
     {
         // 1) obtengo colección
-        $col = agreementCollection::where('credit_id', $creditId)->first();
+        $col = AgreementCollection::where('credit_id', $creditId)->first();
         if (!$col) return;
 
         // 2) obtengo todos los investors_credits de este crédito KAAX
