@@ -505,9 +505,8 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
     {
         $transaction = Transaction::find($history->id_rel);
         $percent = 0;
-        //dd($transaction);
         $total_valid = 0;
-        if ($transaction != null && ($transaction->operation_status === 0 || $transaction->operation_status != null )) {
+        if ($transaction != null && ($transaction->operation_status != null || $transaction->operation_status === 1 || $transaction->operation_status === 2 )) {
             $total_valid = 100;
         }
         
@@ -843,6 +842,9 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $status_step1         = 'En curso';
         $status_step2         = 'En espera';
 
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        $is_admin = Auth::user()->hasRole('Administrador');
+
         $percent_upload   = self::percentFile($history->id_rel);
         
         $percent_step1   = reduceDecimal((self::percentForm($history) + self::percentFile($history->id_rel) ) / 2);
@@ -866,7 +868,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $data = array();
 
         $data[] = array(
-            'nameStep' => 'Información transferencia',
+            'nameStep' => 'Información transferencia', 
             'step' => 'Información transferencia',
             'status' => $status_step1,
             'progress' => $view_percent_step1,
@@ -874,16 +876,18 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             'options' => $option_step1,
             'link' => '',
         );
-        
-        $data[] = array(
-            'nameStep' => 'Verificar transferencia',
-            'step' => 'Verificar transferencia',
-            'status' => $status_step2,
-            'progress' => $view_percent_step2,
-            'deadline' => '',
-            'options' => $option_step2,
-            'link' => '',
-        );
+
+        if (!$is_investor) {
+            $data[] = array(
+                'nameStep' => 'Verificar transferencia',
+                'step' => 'Verificar transferencia', 
+                'status' => $status_step2,
+                'progress' => $view_percent_step2,
+                'deadline' => '',
+                'options' => $option_step2,
+                'link' => '',
+            );
+        }
         return $data;
     }
     public function move($id)
