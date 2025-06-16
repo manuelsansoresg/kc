@@ -91,14 +91,14 @@ class KcControlDeskController extends Controller
         // Obtener el crédito
         $credit = Credit::find($creditId);
     
-        // Solo continuar si el crédito existe y está en estado 1
-        if ($credit && $credit->status == 1) {
+        // Solo continuar si el crédito existe y está en estado 2
+        if ($credit && $credit->status == 2) {
             // 1) Actualiza los investors_credits relacionados
             InvestorsCredit::where('credit_id', $creditId)
-                ->update(['status' => 2]);
+                ->update(['status' => 3]);
     
             // 2) Actualiza el propio crédito
-            $credit->update(['status' => 2]);
+            $credit->update(['status' => 3]);
     
             // ✅ 3) Actualiza los flags del client_person relacionado
             Credit::updateClientPersonCreditFlags($creditId);

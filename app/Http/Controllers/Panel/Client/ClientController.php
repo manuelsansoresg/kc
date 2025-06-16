@@ -59,7 +59,8 @@ class ClientController extends Controller
 
         // 1) Obtener suma actual de créditos en proceso (status = 1)
         $loansInProcess = InvestorsCredit::where('investor_id', $investorId)
-        ->where('status', 1)
+        //->where('status', 2)
+        ->whereIn('status', [0, 1, 2])
         ->sum('import');
     
         // 2) Sumar loans_in_process al nuevo lendable solicitado

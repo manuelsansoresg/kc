@@ -40,10 +40,10 @@ class InvestorsCredit extends Model
             ->where('funding_locked', 0)
             ->pluck('id');
     
-        // 2. Eliminar los registros pendientes (status = 1) de esos créditos
+        // 2. Eliminar los registros pendientes (status 0, 1 y 2) de esos créditos
         if ($relatedCreditIds->isNotEmpty()) {
             self::whereIn('credit_id', $relatedCreditIds)
-                ->whereIn('status', [0, 1]) // Incluir status 0 y 1
+                ->whereIn('status', [0, 1, 2]) // Incluir status 0, 1 y 2
                 ->delete();
         }
     
@@ -108,7 +108,7 @@ class InvestorsCredit extends Model
                         'import'          => $import,
                         'total_credit'    => $totalCredit,
                         'commission_rate' => $financialProduct->collection_commission_rate,
-                        'status'          => 1,
+                        'status'          => 2,
                     ]);
     
                     $assignedSum += $import;
@@ -116,7 +116,7 @@ class InvestorsCredit extends Model
     
                 $availablePool -= $assignedSum;
                 $credit->funding_capital = $amountRequired;
-                $credit->status = 1;
+                $credit->status = 2;
                 $credit->save();
                 $statusSOD = 1;
             } else {
@@ -129,11 +129,11 @@ class InvestorsCredit extends Model
                     'import'          => 0,
                     'total_credit'    => 0,
                     'commission_rate' => $financialProduct->collection_commission_rate,
-                    'status'          => 0,
+                    'status'          => 1,
                 ]);
     
                 $credit->funding_capital = 0;
-                $credit->status = 0;
+                $credit->status = 1;
                 $credit->save();
                 $statusSOD = 0;
             }

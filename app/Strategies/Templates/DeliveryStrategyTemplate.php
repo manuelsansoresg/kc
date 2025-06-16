@@ -704,11 +704,6 @@ class DeliveryStrategyTemplate implements TemplateInterface
         $list = \View::make('panel.module.form', ['elements' => $elements, 'history_id' => $history_id, 'name_form' => $name_form, 'id_rel' => $id_rel, 'type_form' => $type_form])->render();
         return $list;
     }
-
-    
-    
-    
-    
     
 
     public function saveForm($request)
@@ -777,7 +772,7 @@ class DeliveryStrategyTemplate implements TemplateInterface
                         
                         CreditKaaxSidecc::sendCreditKaaxSidecc($credit->id);
                         InvestorsCredit::where('credit_id', $credit->id)->update([
-                            'status' => 2,
+                            'status' => 3,
                             'placed_capital' => \DB::raw('import')
                         ]);
                         $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
