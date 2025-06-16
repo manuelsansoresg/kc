@@ -81,29 +81,36 @@ class CreditController extends Controller
             $newStatus        = $placedCapital > 1 ? 4 : ($recoveredCapital > 0 ? 5 : $ic->status);
 
             $ic->update([
-                'total_collected'  => $totalCollected,
-                'recovered_capital'=> $recoveredCapital,
-                'profit_collected' => $profitCollected,
-                'iva_collected'    => $ivaCollected,
-                'placed_capital'   => $placedCapital,
-                'commission_amount'=> $commissionAmount,
-                'iva_commission'   => $ivaCommission,
-                'total_balance'    => $col->saldo_total_real * $p,
-                'credit_status'    => $col->status,
-                'refinanciable'    => $col->refinanciable,
-                'status'           => $newStatus,
+                'total_collected'   => $totalCollected,
+                'recovered_capital' => $recoveredCapital,
+                'profit_collected'  => $profitCollected,
+                'iva_collected'     => $ivaCollected,
+                'placed_capital'    => $placedCapital,
+                'commission_amount' => $commissionAmount,
+                'iva_commission'    => $ivaCommission,
+                'total_balance'     => $col->saldo_total_real * $p,
+                'credit_status'     => $col->status,
+                'refinanciable'     => $col->refinanciable,
+                'status'            => $newStatus,
             ]);
         });
 
-        // 4 Llamar flags por cada crédito afectado (sin repetir)
+        // ✅ 3.1 Actualizar credits.status con el status máximo de cada crédito
+        $ics->groupBy('credit_id')->each(function ($group, $creditId) {
+            $maxStatus = $group->max('status');
+            Credit::where('id', $creditId)->update(['status' => $maxStatus]);
+        });
+
+        // 4) Llamar flags por cada crédito afectado (sin repetir)
         $ics->pluck('credit_id')->unique()->each(function ($creditId) {
             Credit::updateClientPersonCreditFlags($creditId);
         });
 
-        // 5) vuelvo a recalcular balances de todos los inversionistas
+        // 5) Recalcular balances de todos los inversionistas
         $ics->pluck('investor_id')->filter()->unique()
             ->each(fn($invId) => Investor::updateInvestorData($invId));
-    }  
+    }
+  
 
 /*     {
         $getCollection = AgreementCollection::where('credit_id', $creditId)->first();
