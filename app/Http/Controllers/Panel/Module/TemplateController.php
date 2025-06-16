@@ -41,6 +41,7 @@ class TemplateController extends Controller
         $tags               = null;
         $lastComment        = null;
         $files              = null;
+        $path               = File::PATH;
 
         if ($model != 'wallet' && $model != 'kc-down-wallet') {
             $credit             = $history->historyCredit;
@@ -84,7 +85,7 @@ class TemplateController extends Controller
         
         if ($model == 'controlDesk' || $model == 'newCredit' || $model == 'debtCredit' || $model == 'swap' || $model == 'delivery'  || $model == 'afterMarket' || $model == 'payment' || $model == 'wallet' || $model == 'kc-down-wallet' ) {
             $list_steps       = (new $actionStrategy)->listStep($history_id);
-            return view('panel.module.view_steps', compact('history_id', 'getAsesor', 'files', 'tags', 'lastComment', 'history', 'origin', 'getCompracartera', 'tipoCredito', 'periodicity', 'creditsControldesk', 'product', 'credit', 'client', 'model', 'breadcrumb', 'list_steps', 'actionStrategy'));
+            return view('panel.module.view_steps', compact('history_id', 'path', 'getAsesor', 'files', 'tags', 'lastComment', 'history', 'origin', 'getCompracartera', 'tipoCredito', 'periodicity', 'creditsControldesk', 'product', 'credit', 'client', 'model', 'breadcrumb', 'list_steps', 'actionStrategy'));
         }
         //return view('panel.module.checkup.steps.list', compact('history_id', 'product', 'credit', 'client', 'model', 'breadcrumb'));
     }
