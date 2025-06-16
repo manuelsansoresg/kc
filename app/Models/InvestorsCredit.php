@@ -39,26 +39,37 @@ class InvestorsCredit extends Model
         $relatedCreditIds = Credit::where('applied_financial_product', $financialProductId)
             ->where('funding_locked', 0)
             ->pluck('id');
-    
-        // 2. Eliminar los registros pendientes (status 0, 1 y 2) de esos créditos
-        if ($relatedCreditIds->isNotEmpty()) {
-            self::whereIn('credit_id', $relatedCreditIds)
-                ->whereIn('status', [0, 1, 2]) // Incluir status 0, 1 y 2
-                ->delete();
+
+        if ($relatedCreditIds->isEmpty()) {
+            return true;
         }
-    
-        // 3. Obtener los inversionistas relacionados a este producto financiero
+
+        // ✅ 2. Obtener client_person_id de los créditos afectados
+        $clientPersonIds = Credit::whereIn('id', $relatedCreditIds)
+            ->pluck('client_person_id')
+            ->unique();
+
+        // ✅ 3. Eliminar los registros pending de esos créditos (status 0, 1, 2)
+        self::whereIn('credit_id', $relatedCreditIds)
+            ->whereIn('status', [0, 1, 2])
+            ->delete();
+
+        // ✅ 4. Actualizar banderas por cada crédito afectado
+        foreach ($relatedCreditIds as $creditId) {
+            Credit::updateClientPersonCreditFlags($creditId);
+        }
+
+        // ✅ 5. Obtener inversionistas relacionados
         $investorIds = InvestorProduct::where('financial_products_id', $financialProductId)
             ->pluck('investor_id')
             ->unique();
-    
-    
-        // 4. Actualizar los datos de cada inversionista (balances y disponibilidad)
+
+        // ✅ 6. Actualizar balances y reintentar fondeo por inversionista
         foreach ($investorIds as $investorId) {
             Investor::updateInvestorData($investorId);
-            InvestorsCredit::fundCredits($financialProductId); 
+            InvestorsCredit::fundCredits($financialProductId);
         }
-    
+
         return true;
     }
     

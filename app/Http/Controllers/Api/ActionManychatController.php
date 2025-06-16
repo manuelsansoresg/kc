@@ -327,7 +327,7 @@ class ActionManychatController extends Controller
 
         // Guardar validación
         LeadValidation::saveEdit(
-            $lead?->id,
+            $lead ? $lead->id : null,
             'Crédito preautorizado - Trámite pendiente',
             $hasPending ? 0 : 1,
             $hasPending ? 'Tiene trámites pendientes' : 'Sin trámites pendientes'

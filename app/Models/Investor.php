@@ -149,9 +149,9 @@ class Investor extends Model
         $investments = InvestorsCredit::where('investor_id', $investorId)
             ->where('status', '>=', 1)
             ->selectRaw("
-                SUM(CASE WHEN status > 2 THEN import ELSE 0 END) AS total_capital,
-                SUM(CASE WHEN status < 3 THEN import ELSE 0 END) AS loans_in_process,
-                SUM(CASE WHEN status > 2 THEN placed_capital ELSE 0 END) AS placed_capital,
+                SUM(CASE WHEN status > 3 THEN import ELSE 0 END) AS total_capital,
+                SUM(CASE WHEN status < 4 THEN import ELSE 0 END) AS loans_in_process,
+                SUM(CASE WHEN status > 3 THEN placed_capital ELSE 0 END) AS placed_capital,
                 SUM(total_collected) AS total_collected,
                 SUM(recovered_capital) AS recovered_capital,
                 SUM(profit_collected) AS profit_collected,
@@ -168,7 +168,7 @@ class Investor extends Model
                     ->from('investor_products')
                     ->where('investor_id', $investorId);
             })
-            ->where('status', 0)
+            ->where('status', 1)
             ->where('canceled', 0)
             ->sum('applied_import');
 
