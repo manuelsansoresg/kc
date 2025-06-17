@@ -108,7 +108,11 @@ class Credit extends Model
         'refinance_adjustment',
         'third_party_adjustment',
         'net_amount',
-        
+        'iva',
+        'ret_iva',
+        'ret_isr',
+        'ret_iva_2',
+        'ret_isr_2',
     ];
 
 
