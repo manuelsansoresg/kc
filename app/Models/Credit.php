@@ -126,7 +126,11 @@ class Credit extends Model
         'canceled',
         'status',
         'refinanciable',
-        
+        'iva',
+        'ret_iva',
+        'ret_isr',
+        'ret_iva_2',
+        'ret_isr_2',
     ];
 
     public static function setDataPago($creditId)
