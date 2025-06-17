@@ -107,6 +107,7 @@ class Transaction extends Model
 
     }
 
+    
     public static function saveEdit($request, $is_down = false)
     {
         $data = $request->transaction;

@@ -1,4 +1,6 @@
 import { showInfo } from '../../utilities';
+let isLoaded = false;
+
 
 $().ready(function () {
     $("#frm-product-info").validate({
@@ -31,36 +33,88 @@ $().ready(function () {
         }
     });
 
-    if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null') {
+    if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null' ) {
+
 
         let product_id = $('#product_id').val();
         
+        // Limpia las selecciones actuales en los selects
+        $('#product_periodicity_id').val(null).trigger('change');
+        $('#product-principal_pay').val(null).trigger('change');
         
-         // Limpia las selecciones actuales en el select múltiple
-         $('#product_periodicity_id').val(null).trigger('change');
-         $('#product-principal_pay').val(null).trigger('change');
+
         axios
-            .get("/panel/financial-product/" + product_id+'/getPeriodicityAndPaymentMethod')
-            .then(function (response) {
-                let result    = response.data;
+            .get("/panel/financial-product/" + product_id + '/getPeriodicityAndPaymentMethod')
+            .then(async function (response) {  // Usa async/await aquí
+                let result = response.data;
                 let periodicities = result.periodicities;
-                let payments   = result.payments;
+                let payments = result.payments;
+                
 
                 // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
                 let periodicityValues = periodicities.map(item => item.periodicity_id);
                 let paymentValues = payments.map(item => item.payment_method_id);
+                
 
                 // Seleccionar los valores correspondientes en los selects
                 $('#product_periodicity_id').val(periodicityValues).trigger('change');
                 $('#product-principal_pay').val(paymentValues).trigger('change');
+               
             })
             .catch(e => {
+                console.error(e);
             });
 
     }
  
 
 });
+let previouslyLoadedTerms = []; // Almacena los términos previamente cargados
+
+window.setFPTerms = function()
+{
+    let product_id = $('#product_id').val();
+
+    $('#fp_terms').val(null).trigger('change');
+    // Realiza la solicitud AJAX para obtener los términos
+
+    let periodicityId = $('#product_periodicity_id').val();
+    let select = document.getElementById("fp_terms");
+
+    // Limpia el select antes de agregar opciones
+    select.innerHTML = "";
+
+    // Realiza la solicitud AJAX para obtener los términos
+    return axios
+        .get("/panel/financial-product/" + periodicityId + '/'+product_id+ '/terms/get')
+        .then(function (response) {
+            let result = response.data;
+            let terms = result.terms;
+            let getTerms = result.getTerms;
+            // Llena el select con las opciones de terms
+            terms.forEach(function (term) {
+                let option = document.createElement("option");
+                option.value = term.id;  // El valor será el id
+                option.text = term.term; // El texto será el term
+                select.appendChild(option);
+            });
+
+            // Si se pasaron términos seleccionados, se seleccionan aquí
+            if (getTerms != null) {
+                let termValues = getTerms.map(item => item.id);
+                $('#fp_terms').val(termValues).trigger('change');
+            }
+            
+        })
+        .catch(e => {
+            console.error(e);
+        });
+
+
+    
+
+
+}
 
 $( "#frm-financial-buro" ).submit(function( event ) {
     event.preventDefault();

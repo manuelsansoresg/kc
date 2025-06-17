@@ -57,11 +57,14 @@
                                                     href="#tabHistorial">Historial</a> </li>
                                             <li class="nav-item"> <a class="nav-link {{ $tab == 'credits' ? 'active' : null}}" data-bs-toggle="tab"
                                                     href="#tabCredits">Créditos</a> </li>
+                                            <li class="nav-item"> <a class="nav-link {{ $tab == 'documents' ? 'active' : null}}" data-bs-toggle="tab"
+                                                    href="#tabDocuments">Documentos</a> </li>
                                             <li class="nav-item nav-item-trigger d-xxl-none">
                                                 <div class="nk-block-head-content align-self-start d-lg-none">
                                                     <a href="#" class="toggle btn btn-icon btn-trigger mt-n1" data-target="userAside"><em class="icon ni ni-menu-alt-r"></em></a>
                                                 </div>
                                             </li>
+                                          
                                             
                                         </ul>
                                         <div class="tab-content">
@@ -253,7 +256,15 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                          
+                                            <div class="tab-pane {{ $tab == 'documents' ? 'active' : null}}" id="tabDocuments">
+                                                @if ($client->cm_agreement != null)
+                                                @php
+                                                    $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato CM.pdf';
+                                                @endphp
+                                                    <a href="{{ asset('firma_contratos/'.$nombre) }}" target="_blank">{{ $nombre }}</a>
+                                                @endif
+                                            </div>
+                                            
                                         </div>
                                        
                                     </div><!-- data-list -->

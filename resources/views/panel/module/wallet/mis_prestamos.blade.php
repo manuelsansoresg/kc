@@ -28,80 +28,26 @@
                     </div>
 
                     <div class="card card-bordered card-preview">
-                        <table class="table table-tranx">
+                        
+                        <table id="dt-mis-prestamos" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                             <thead>
-                                <tr class="tb-tnx-head">
-                                    <th class="tb-tnx-id"><span class="">Crédito</span></th>
-                                    <th class="tb-tnx-info"><span class="tb-tnx-desc d-none d-sm-inline-block"><span>Estatus</span></span>
-                                        <span class="tb-tnx-date d-md-inline-block d-none"><span
-                                                class="d-md-none"></span>
-                                                <span class="d-none d-md-block"><span>Importe prestado</span></span></span></th>
-                                    <th>
-                                        <span>Pagado</span>
-                                    </th>
-                                    <th>
-                                        <span class="tb-tnx-total">Capital pendiente</span>
-                                    </th>
-                                                <th class="tb-tnx-amount"><span
-                                            class="tb-tnx-status d-none d-md-inline-block">Comisiones</span></th>
+                                <tr>
+                                    <th>Crédito</th>
+                                    <th>Estatus</th>
+                                    <th>Importe Prestado</th>
+                                    <th>Pagado</th>
+                                    <th>Capital pendiente</th>
+                                    <th>Capital recuperado</th>
+                                    <th>Interés proyectado</th>
+                                    <th>Interés cobrado</th>
+                                    <th>Comisión KC</th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @if ($getInvestorCredits != null)
-                                    @foreach ($getInvestorCredits as $getInvestorCredit)
-                                        @php
-                                            $getCollection   = $MCollection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
-                                            $creditId        = $getInvestorCredit->id;
-                                            $valorStatus     = 'Pendiente';
-                                            $importe         = $getInvestorCredit->import ;
-                                            $pagado          = $getInvestorCredit->total_collected;
-                                            $porPagar        = $getInvestorCredit->placed_capital;
-                                            $comisiones      = $getInvestorCredit->commission_amount;
-                                            
-                                            $valorImporte    = format_price($importe);
-                                            $valorPagado     = format_price($pagado);
-                                            $valorPorPagar   = format_price($porPagar);
-                                            $valorComisiones = format_price($comisiones);
-                                            if ($getCollection != null) {
-                                                $percentage      = $getInvestorCredit->percentage / 100;
-                                                $getStatus       = $MCrmStatusListKaaxSidecc::getStatus($getCollection->status);
-                                                $getInvestor     = $MInvestor::find($getInvestorCredit->investor_id);
-                                                $getCredit       = $MCredit::find($getInvestorCredit->credit_id);
-                                                $valorStatus     = $getStatus->name;
-                                            }
-                                        @endphp
-                                        
-                                        <tr class="tb-tnx-item">
-                                            <td class="tb-tnx-id"><a href="#"><span> {{ $creditId }} </span></a></td>
-                                            <td class="tb-tnx-info">
-                                                <div class="tb-tnx-desc">
-                                                    {{ $valorStatus }}
-                                                    </span>
-                                                </div>
-                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorImporte }}  </span>
-                                                   </div>
-                                            </td>
-                                            <td>
-                                                <span
-                                                class="amount">{{ $valorPagado }} </span>
-                                            </td>
-                                            <td class="tb-tnx-info">
-                                                <div class="tb-tnx-desc"><span class="amount"> {{ $valorPorPagar  }}  </span></div>
-                                               
-                                            </td>
-                                            <td>
-                                                <div class="tb-tnx-status">
-                                                
-                                                    <span class="amount"> {{ $valorComisiones }}  </span>
-                                                    
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                                
-                            </tbody>
+                           
                         </table>
+
+                        
                     </div>
                 </div>
             </div>

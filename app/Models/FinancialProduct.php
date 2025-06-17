@@ -22,7 +22,7 @@ class FinancialProduct extends Model
 
         'collateral_id',
         'periodicity_id',
-        'max_credit_amount',
+        'max_loan_ammount',
         'min_deadline_month',
         'max_deadline_month',
         'type_interest',
@@ -112,7 +112,13 @@ class FinancialProduct extends Model
         'collection_commission_rate',
         'annual_interest_rate',
         'daily_interest_rate',
-        'loan_available'
+        'loan_available',
+        'product_id',
+        'refinancing_allowed',
+        'additional_allowed',
+        'min_payment',
+        'max_term',
+
     ];
 
     public static function getbyIdFirst($product_id)
@@ -187,7 +193,7 @@ class FinancialProduct extends Model
         $caracteristicas = array(
             'colateral' => $colateral,
             'periodicidad' => $periodicity,
-            'max_credit_amount' => format_price($product->max_credit_amount),
+            'max_loan_ammount' => format_price($product->max_loan_ammount),
             'min_loan_amount' => format_price($product->min_loan_amount),
             'min_deadline_month' => $product->min_deadline_month,
             'max_deadline_month' => $product->max_deadline_month,
@@ -409,7 +415,7 @@ class FinancialProduct extends Model
     public static function saveEdit($request)
     {
         // Elementos a excluir del arreglo $request
-        $excludeKeys = ['_token', 'product_id', 'is_required', 'principal_pay', 'periodicity_id'];
+        $excludeKeys = ['_token', 'product_id', 'is_required', 'principal_pay', 'periodicity_id', 'fp_terms'];
 
         // Crea un nuevo arreglo que excluye los elementos especificados
         $filteredRequest = $request->except($excludeKeys);
@@ -437,6 +443,8 @@ class FinancialProduct extends Model
             $filteredRequest['bank_ids'] =  self::formatInfoCredit($request->bank_ids);
         }
 
+        $filteredRequest['product_id'] = $request->financial_product_product_id;
+
         if ($request->product_id == null) {
             $financial_product = FinancialProduct::create($filteredRequest);
         } else {
@@ -446,11 +454,14 @@ class FinancialProduct extends Model
         }
         //*guardar las opciones multiples
         if (isset($request->periodicity_id)) {
-            $perodicities = $request->periodicity_id;
-            $principal_pays = $request->principal_pay;
+            $perodicities   = $request->periodicity_id;
+            $principal_pays = isset($request->principal_pay)? $request->principal_pay : null;
+            $fp_terms       = isset($request->fp_terms)? $request->fp_terms : null;
             
             $get_periodicities = ProductPeriodicity::where('product_id', $financial_product->id)->get();
-            $get_payments = ProductPaymentMethod::where('product_id', $financial_product->id)->get();
+            $get_payments      = ProductPaymentMethod::where('product_id', $financial_product->id)->get();
+            $getFPTerms        = FpTerm::where('financial_product_id', $financial_product->id)->get();
+
             foreach ($get_periodicities as $get_periodicity) {
                 ProductPeriodicity::where([
                                         'product_id'=> $get_periodicity->product_id,
@@ -462,6 +473,10 @@ class FinancialProduct extends Model
                                         'product_id'=> $get_payment->product_id,
                                         ])->delete();
             }
+            
+            FpTerm::where([
+                    'financial_product_id'=> $financial_product->id,
+                    ])->delete();
            
            
     
@@ -474,13 +489,26 @@ class FinancialProduct extends Model
                 );
             }
            
-            foreach ($principal_pays as $principal_pay) {
-                ProductPaymentMethod::create(
-                    [
-                        'payment_method_id' => $principal_pay,
-                        'product_id' => $financial_product->id,
-                    ]
-                );
+            if ($principal_pays != null) {
+                foreach ($principal_pays as $principal_pay) {
+                    ProductPaymentMethod::create(
+                        [
+                            'payment_method_id' => $principal_pay,
+                            'product_id' => $financial_product->id,
+                        ]
+                    );
+                }
+            }
+            
+            if ($fp_terms != null) {
+                foreach ($fp_terms as $fp_term) {
+                    FpTerm::create(
+                        [
+                            'financial_product_id' => $financial_product->id,
+                            'term_id' => $fp_term,
+                        ]
+                    );
+                }
             }
         }
 

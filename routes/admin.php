@@ -67,6 +67,7 @@ Route::get('agreement/{agreement}/financial-product/show', ['\App\Http\Controlle
 Route::resource('lead', '\App\Http\Controllers\Panel\LeadController')->middleware('auth');
 Route::group(['prefix' => 'lead'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\LeadController', 'list'])->middleware('auth');
+    Route::get('{lead}/chart/show', ['\App\Http\Controllers\Panel\LeadController', 'chartShow'])->middleware('auth');
     
     
     Route::get('{lead}/actions/list', ['\App\Http\Controllers\Panel\LeadController', 'listActions'])->middleware('auth');
@@ -76,6 +77,17 @@ Route::group(['prefix' => 'lead'], function () {
     
     Route::get('{lead_id}/profile', ['\App\Http\Controllers\Panel\LeadController', 'profile'])->middleware('auth');
     
+    Route::get('{clientPerson}/{agreement}/{financialProduct}/soad/get', ['\App\Http\Controllers\Panel\LeadController', 'getSoad'])->middleware('auth');
+    Route::get('{lead}/validate/get', ['\App\Http\Controllers\Panel\LeadController', 'getValidates'])->middleware('auth');
+
+    Route::get('{clientPerson}/{financialProduct}/{tramitType}/refinanciamiento/get', ['\App\Http\Controllers\Panel\LeadController', 'getRefinanciamiento'])->middleware('auth');
+    Route::post('{clientPerson}/{financialProduct}/{tramitType}/montoMaximo/get', ['\App\Http\Controllers\Panel\LeadController', 'getMontoMaximo'])->middleware('auth');
+    Route::get('{financialProduct}/{plazo}/{monto}/{total}/{tramitType}/getResumen', ['\App\Http\Controllers\Panel\LeadController', 'getResumen'])->middleware('auth');
+    
+    Route::get('{financialProduct}/{lead}/{plazo}/{monto}/getChart', ['\App\Http\Controllers\Panel\LeadController', 'getChart'])->middleware('auth');
+
+    Route::get('{clientPerson}/{financialProduct}/tramite/get', ['\App\Http\Controllers\Panel\LeadController', 'getTramite'])->middleware('auth');
+    
     Route::post('{lead_id}/advisor/store', ['\App\Http\Controllers\Panel\LeadController', 'advisorStore'])->middleware('auth');
     Route::post('{lead_id}/client-person/store', ['\App\Http\Controllers\Panel\LeadController', 'storeClientPerson'])->middleware('auth');
     Route::post('{lead}/tag/update', ['\App\Http\Controllers\Panel\LeadController', 'updateTag'])->middleware('auth');
@@ -84,14 +96,28 @@ Route::group(['prefix' => 'lead'], function () {
 
     Route::get('{value}/{id}/check', ['\App\Http\Controllers\Panel\LeadController', 'checkData'])->middleware('auth');
     
+    Route::get('{cellphone}/{rfc}/{lead}/get/validate', ['\App\Http\Controllers\Panel\LeadController', 'validateCellphoneAndRfc'])->middleware('auth');
+    
+    Route::get('{agreementId}/getProducts', ['\App\Http\Controllers\Panel\LeadController', 'getProducts'])->middleware('auth');
+    
     Route::post('{leadId}/data/export', ['\App\Http\Controllers\Panel\LeadController', 'exportLead'])->middleware('auth');
 
     //* mover del lugar
     
     Route::get('financial/{lead_id}/show', ['\App\Http\Controllers\Panel\LeadController', 'listFinancial'])->middleware('auth');
     
+    Route::resource('credit-pay-off', '\App\Http\Controllers\CreditPayOffController')->middleware('auth');
+    Route::get('credit-pay-off/{creditPayOffId}/data/get', ['\App\Http\Controllers\CreditPayOffController', 'getDataModal'])->middleware('auth');
+    
 });
 
+
+Route::resource('clients', '\App\Http\Controllers\Panel\Client\ClientController')->middleware('auth');
+Route::group(['prefix' => 'clients'], function () {
+    Route::get('list/show', ['\App\Http\Controllers\Panel\Client\ClientController', 'list'])->middleware('auth');
+    Route::get('colaboradores/show', ['\App\Http\Controllers\Panel\Client\ClientController', 'showColaboradores'])->middleware('auth');
+    Route::get('list/ListColaboradores', ['\App\Http\Controllers\Panel\Client\ClientController', 'ListColaboradores'])->middleware('auth');
+});
 
 Route::get('{id}/{model}/validate/show', ['\App\Http\Controllers\Panel\PanelController', 'showValidate'])->middleware('auth');
 Route::post('{model}/note', ['\App\Http\Controllers\Panel\PanelController', 'noteStore'])->middleware('auth');
@@ -177,6 +203,8 @@ Route::group(['prefix' => 'financial-product'], function () {
     Route::get('{financial_id}/create', ['\App\Http\Controllers\Panel\Financial\FinancialProductController', 'create'])->middleware('auth');
     Route::get('{product_id}/getPeriodicityAndPaymentMethod', ['\App\Http\Controllers\Panel\Financial\FinancialProductController', 'getPeriodicityAndPaymentMethod'])->middleware('auth');
     Route::get('{product}/getTramite', ['\App\Http\Controllers\Panel\Financial\FinancialProductController', 'getTramite'])->middleware('auth');
+    
+    Route::get('{periodicityId}/{productId}/terms/get', ['\App\Http\Controllers\Panel\Financial\FinancialProductController', 'getTerms'])->middleware('auth');
 });
 
 Route::get('{section}/{id}/move', ['\App\Http\Controllers\Panel\PanelController', 'move'])->middleware('auth');
@@ -201,6 +229,7 @@ Route::group(['prefix' => 'kc-check-up'], function () {
 Route::resource('kc-control-desk', '\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController')->middleware('auth');
 Route::group(['prefix' => 'kc-control-desk'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'list'])->middleware('auth');
+    Route::get('{credit}/step/show', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'showStep'])->middleware('auth');
     Route::get('kc/{history_id}/{param}/{param2}/{type}/validate', ['\App\Http\Controllers\Panel\Module\KcControlDesk\KcControlDeskController', 'validateKyc'])->middleware('auth');
 });
 
@@ -246,6 +275,7 @@ Route::resource('kc-wallet', '\App\Http\Controllers\Panel\Module\KcWallet\KcWall
 
 Route::group(['prefix' => 'kc-wallet'], function () {
     Route::get('list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'list'])->middleware('auth');
+    Route::get('mis-restamos/list/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'listMisPrestamos'])->middleware('auth');
     Route::get('list/history', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'listHistory'])->middleware('auth');
     Route::get('list/history/show', ['\App\Http\Controllers\Panel\Module\KcWallet\KcWalletController', 'listHistoryShow'])->middleware('auth');
 
@@ -284,7 +314,10 @@ Route::group(['prefix' => 'credit'], function () {
     
     //*actualizar banco
     Route::post('storeBank', ['\App\Http\Controllers\Panel\Credit\CreditController', 'storeBank'])->middleware('auth');
+    
+    Route::get('export/{credit}/contrato', ['\App\Http\Controllers\Panel\Credit\CreditController', 'contractExport'])->middleware('auth');
 
+    
     
 });
 
@@ -321,6 +354,8 @@ Route::group(['prefix' => 'template'], function () {
     
     Route::get('action-document/{model}/{history_id}', ['\App\Http\Controllers\Panel\Credit\DocumentController', 'index'])->middleware('auth');
     Route::get('actions/list/{model}/{history_id}/show', ['\App\Http\Controllers\Panel\Module\ActionController', 'list'])->middleware('auth');
+
+    Route::get('validate/{creditId}/controlDesk', ['\App\Http\Controllers\Panel\Module\TemplateController', 'validateControlDesk'])->middleware('auth');
 });
 
 Route::get('reason/{type}/list', ['\App\Http\Controllers\HomeController', 'reason'])->middleware('auth');

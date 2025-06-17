@@ -80,58 +80,91 @@ window.deleteTag = function (tag_id) {
 }
 
 $(document).ready(function () {
+
+
+
 if (document.getElementById('action-model')) {
 
     let model   = $('#action-model').val();
     let id_rel  = $('#action-id_rel').val();
     let step    = $('#step').val();
-
+    console.log('model'+ model);
     if (model == '') {
         model = null;
     }
     //*get configuration in template
-    axios
-        .get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step='+step)
-        .then(function (response) {
-            let result = response.data;
-            let config_files = result.config_files;
-
-            for (const key in config_files) {
-                if (config_files.hasOwnProperty.call(config_files, key)) {
-                    const element = config_files[key];
-                    //create dinamic dropzone element
-                    NioApp.Dropzone('#' + key + '-dropzone-action', {
-                        url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
-                        init: function () {
-                            this.on("sending", function (file, xhr, formData) {
-                                let date_file = null;
-                                if (document.getElementById(key + '-date_file')) {
-                                    date_file = $('#' + key + '-date_file').val();
-                                }
-                                formData.append("date_file", date_file);
-                            });
-
-                            this.on("success", function (file, message) {
-                                
-                                getData();
-                            });
-                            this.on("complete", function (file) {
-                                this.removeAllFiles(true);
-                            })
-                        }
+    if (model ==  'controlDesk' || model == 'delivery') {
+    
+        $('.myDropzone').each(function () {
+            // Obtener el ID del elemento actual
+            let key = $(this).attr('id');
+            console.log(key);
+            if (key) {
+                // Crear dinámicamente una instancia de Dropzone
+                NioApp.Dropzone('#' + key, {
+                    url: "/panel/files/images/" + model + '/' + id_rel + '/' + key+'?step='+step,
+                    init: function () {
+                        this.on("sending", function (file, xhr, formData) {
+                            
+                            
+                        });
+        
+                        this.on("success", function (file, message) {
+                            getData();
+                        });
+        
+                        this.on("complete", function (file) {
+                            this.removeAllFiles(true);
+                        });
                     }
-                    );
-
-                }
+                });
             }
-            //
-        })
-        .catch(e => {
-
         });
+    }
+    if (model != 'controlDesk') {
+        
+        axios
+            .get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step='+step)
+            .then(function (response) {
+                let result = response.data;
+                let config_files = result.config_files;
+    
+                for (const key in config_files) {
+                    if (config_files.hasOwnProperty.call(config_files, key)) {
+                        const element = config_files[key];
+                        //create dinamic dropzone element
+                        NioApp.Dropzone('#' + key + '-dropzone-action', {
+                            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+                            init: function () {
+                                this.on("sending", function (file, xhr, formData) {
+                                    let date_file = null;
+                                    if (document.getElementById(key + '-date_file')) {
+                                        date_file = $('#' + key + '-date_file').val();
+                                    }
+                                    formData.append("date_file", date_file);
+                                });
+    
+                                this.on("success", function (file, message) {
+                                    
+                                    getData();
+                                });
+                                this.on("complete", function (file) {
+                                    this.removeAllFiles(true);
+                                })
+                            }
+                        }
+                        );
+    
+                    }
+                }
+                //
+            })
+            .catch(e => {
+    
+            });
+    }
 
     
-
     window.deleteFileTemplate = function (model, id) {
         $('#frm-register-action-preview').html('');
         axios
@@ -139,16 +172,19 @@ if (document.getElementById('action-model')) {
             .then(function (response) {
                 getData();
                 showToast('Archivos', 'Archivo borrado', 'success');
-
+    
             })
             .catch(e => {
             });
     }
-
+    
     //* get data saved 
-    function getData() {
+    window.getData = function () {
+        let model   = $('#action-model').val();
+        let id_rel  = $('#action-id_rel').val();
         clearPreviewFiles().then(() => {
             let step = $('#step').val();
+            
             axios
                 .get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step)
                 .then(function (response) {
@@ -159,7 +195,7 @@ if (document.getElementById('action-model')) {
                     for (const key in file_dates) {
                         if (file_dates.hasOwnProperty.call(file_dates, key)) {
                             const element_date_file = file_dates[key];
-                            console.log(element_date_file.template_config_id);
+                            //console.log(element_date_file.template_config_id);
                             $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
                         }
                     }
@@ -180,6 +216,8 @@ if (document.getElementById('action-model')) {
     }
     
     function clearPreviewFiles() {
+        let model   = $('#action-model').val();
+        let id_rel  = $('#action-id_rel').val();
         return new Promise((resolve, reject) => {
             let step = $('#step').val();
             axios
@@ -201,44 +239,71 @@ if (document.getElementById('action-model')) {
                 });
         });
     }
+    
+  
+}
 
-    $().ready(function () {
-        
-        getData();
-        $("#frm-action-files").validate({
-            rules: {
-                'date_file[]': {
-                    required: true,
-                },
+
+
+$().ready(function () {
+    
+    getData();
+    $("#frm-action-files").validate({
+        rules: {
+            'date_file[]': {
+                required: true,
             },
-            submitHandler: function (form, event) {
-                event.preventDefault();
-  
-                const new_form = document.getElementById("frm-action-files");
-                const data = new FormData(new_form);
-  
-                // Extract the step value from the URL
-                const urlParams = new URLSearchParams(window.location.search);
-                const step = urlParams.get('step');
-  
-                // Add the step value to the FormData
-                data.append('step', step);
-  
-                axios
-                    .post("/panel/files/template/date", data)
-                    .then(function (response) {
-                        let result = response.data;
-                        let url_redirect = null;
-  
-                        url_redirect = $('#url_redirect').val();
-                        window.location = url_redirect;
-                    })
-                    .catch(e => {
-                    });
-            }
-        });
+        },
+        submitHandler: function (form, event) {
+            event.preventDefault();
+
+            const new_form = document.getElementById("frm-action-files");
+            const data = new FormData(new_form);
+
+            // Extract the step value from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const step = urlParams.get('step');
+
+            // Add the step value to the FormData
+            data.append('step', step);
+
+            axios
+                .post("/panel/files/template/date", data)
+                .then(function (response) {
+                    let result = response.data;
+                    let url_redirect = null;
+
+                    url_redirect = $('#url_redirect').val();
+                    window.location = url_redirect;
+                })
+                .catch(e => {
+                });
+        }
     });
-  
+});
+
+if (document.getElementById('pruebaDropZone')) {
+    let model = 'prueba';
+    let id_rel = 1;
+    let key = 1;
+    NioApp.Dropzone('#pruebaDropZone', {
+        url: "/panel/files/images/" + model + '/' + id_rel + '/' + key,
+        init: function () {
+            this.on("sending", function (file, xhr, formData) {
+                
+            });
+
+            this.on("success", function (file, message) {
+                
+                
+            });
+            this.on("complete", function (file) {
+                
+            })
+        }
+    }
+    );
+    
 }
 
 });

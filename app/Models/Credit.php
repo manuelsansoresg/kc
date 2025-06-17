@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Lib\Csendgrid;
 use App\Strategies\Values\TemplateValues;
+use Facade\FlareClient\Http\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -88,6 +89,7 @@ class Credit extends Model
         'credit_signed',
         'approved',
         'delivered',
+        'delivered_date',
         'interviewer',
         'importe_solicitado',
         'bank_id',
@@ -108,11 +110,7 @@ class Credit extends Model
         'refinance_adjustment',
         'third_party_adjustment',
         'net_amount',
-        'iva',
-        'ret_iva',
-        'ret_isr',
-        'ret_iva_2',
-        'ret_isr_2',
+        
     ];
 
 
@@ -251,6 +249,7 @@ class Credit extends Model
                 if ($is_advisor === true && Auth::user()->id === $advisor->id) {
                     $users[] = array(
                         'id' => $query->id_rel,
+                        'fecha' => formatDateNameMonthHour($history->created_at),
                         'product' => $content_product,
                         'client' => $content_client,
                         'advisor' => $name_advisor,
@@ -262,6 +261,7 @@ class Credit extends Model
                 } elseif ($is_user_financial === true && $query->financial_user_assigned === Auth::user()->id) {
                     $users[] = array(
                         'id' => $query->id_rel,
+                        'fecha' => formatDateNameMonthHour($history->created_at),
                         'product' => $content_product,
                         'client' => $content_client,
                         'advisor' => $name_advisor,
@@ -273,6 +273,7 @@ class Credit extends Model
                 } else {
                     $users[] = array(
                         'id' => $history->id_rel,
+                        'fecha' => formatDateNameMonthHour($history->created_at),
                         'product' => $content_product,
                         'client' => $content_client,
                         'advisor' => $name_advisor,
@@ -572,6 +573,11 @@ class Credit extends Model
     public function survey()
     {
         return $this->hasOne(Survey::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(ClientPerson::class, 'client_person_id');
     }
 
     public function creditNotes()

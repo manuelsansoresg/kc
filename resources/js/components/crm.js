@@ -21,6 +21,19 @@ function move(id, form, modal, datatable, title, msg){
     });
 }
 
+window.moveCrm = function (creditId, statusid, old_status_id, redirect){
+
+
+    axios
+    .post("/panel/action/"+creditId+"/"+statusid+"/"+old_status_id+"/move")
+    .then(function (response) {
+        window.location = redirect;
+    })
+    .catch(e => {
+        
+    });
+}
+
 window.deliveryFinish = function(id, statusid, urlredirect,  is_modal) 
 {
     if (is_modal == true) {

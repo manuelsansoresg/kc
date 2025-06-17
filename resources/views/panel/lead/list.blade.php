@@ -27,6 +27,8 @@
                     <div class="nk-block nk-block-lg">
                         <div class="card card-bordered card-preview">
                             <div class="card-inner">
+                                <div id="charts-container" class="charts-container"></div>
+                                  
                                 <table id="dt-lead" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
                                     <thead>
                                         <tr>

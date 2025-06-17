@@ -51,6 +51,7 @@ $().ready(function () {
                 let financials   = result.financials;
                 $('#agreement-name').val(agreement.name);
                 $('#agreement-description').val(agreement.description);
+                $('#agreement_term').val(agreement.agreement_term);
                 
                  // Limpia las selecciones actuales en el select múltiple
                 $('#agreement-financials').val(null).trigger('change');

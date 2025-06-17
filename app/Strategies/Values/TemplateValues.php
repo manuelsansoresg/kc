@@ -12,6 +12,7 @@ use App\Strategies\Templates\LeadStrategyTemplate;
 use App\Strategies\Templates\NewCreditStrategyTemplate;
 use App\Strategies\Templates\PaymentStrategyTemplate;
 use App\Strategies\Templates\SwapStrategyTemplate;
+use App\Strategies\Templates\TaskStrategyTemplate;
 
 final class TemplateValues
 {
@@ -26,5 +27,6 @@ final class TemplateValues
         'payment' => PaymentStrategyTemplate::class,
         'wallet' => KCWalletAddStregegyTemplate::class,
         'kc-down-wallet' => KCWalletDownAddStregegyTemplate::class,
+        'task-strategy' => TaskStrategyTemplate::class,
     ];
 }

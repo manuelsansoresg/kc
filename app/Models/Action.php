@@ -36,15 +36,18 @@ class Action extends Model
     const MODEL = [
         'lead' => 1,
         'credit' => 2,
+        'client' => 3,
     ];
     
     const KEY_MODEL = [
         1 => 'lead',
         2 => 'credit',
+        3 => 'client',
     ];
     const NAME_MODEL = [
         1 => 'Prospectos',
         2 => 'Creditos',
+        3 => 'Clientes',
     ];
 
     public static function saveEdit($request)

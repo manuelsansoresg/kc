@@ -252,4 +252,36 @@ return [
         4 => 'Convenio',
     ),
     
+    'periodicidad_valores' => array(
+        1 => 7,
+        2 => 14,
+        3 => 15,
+        4 => 30
+    ),
+    'periodicidad_names' => array(
+        1 => 'Semanal',
+        2 => 'Catorcenal',
+        3 => 'Quincenal',
+        4 => 'Mensual'
+    ),
+    'tipo_tramite' => array(
+        1 => 'Crédito nuevo',
+        2 => 'Crédito adicional',
+        3 => 'Refinanciamiento',
+        4 => 'Soluciona tu deuda',
+        5 => 'Salario On-Demand',
+    ),
+
+    'estatus_statement' => [
+        '' => '-',
+        0 => 'Pendiente',
+        1 => 'Pagado',
+    ],
+    
+    'pertenencia_clabe' => [
+        '' => 'no determinada',
+        0 => 'Inválida',
+        1 => 'Validada',
+    ],
+    
 ];

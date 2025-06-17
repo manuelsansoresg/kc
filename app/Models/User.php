@@ -126,8 +126,10 @@ class User extends Authenticatable
     {
         $is_save                  = false;
         $financial_products_ids   = $request->financial_products_id;
+        $agreement_ids            = $request->agreements;
         $financial_products_id    = null;
         $arrayFinancialProductsId = array();
+        $arrayAgreements          = array();
 
         if (isset($request->financial_products_id)) {
             foreach ($financial_products_ids as $financial_products_ids) {
@@ -137,6 +139,15 @@ class User extends Authenticatable
             $financial_products_id = trim($financial_products_id, ',');
             $request->merge(['financial_products_id' => $financial_products_id]);
         }
+        
+        /* if (isset($request->agreements)) {
+            foreach ($agreement_ids as $agreement_ids) {
+                $financial_products_id.= $financial_products_ids.',';
+                $arrayAgreements[] = $financial_products_ids;
+            }
+            $financial_products_id = trim($financial_products_id, ',');
+            $request->merge(['financial_products_id' => $financial_products_id]);
+        } */
 
         if ($request->user_id == null) {
             $user = new User($request->except(['_token', 'pass_confirm', 'password', 'user_id', 'type_user']));
@@ -182,7 +193,14 @@ class User extends Authenticatable
                 ]);
             }
 
-            
+            InvestorsAgreement::where('investor_id', $investor->id)->delete();
+
+            foreach ($agreement_ids as $agreement_ids) {
+                InvestorsAgreement::create([
+                    'investor_id' => $investor->id,
+                    'agreement_id' => $agreement_ids
+                ]);
+            }
             
         }
         $user->assignRole(ucfirst($role));
@@ -474,4 +492,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(Credit::class);
     }
+
+    
 }
