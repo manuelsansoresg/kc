@@ -783,8 +783,12 @@ class DeliveryStrategyTemplate implements TemplateInterface
                     
                         // ✅ Actualizar registros de inversión como colocados
                         InvestorsCredit::where('credit_id', $credit->id)->update([
-                            'status' => 4,
-                            'placed_capital' => \DB::raw('import')
+                            'status'             => 4,
+                            'placed_capital'     => \DB::raw('import'),
+                            'total_collected'    => 0,
+                            'profit_collected'   => 0,
+                            'recovered_capital'  => 0,
+                            'total_balance'      => \DB::raw('total_credit'),
                         ]);
                     
                         // ✅ Actualizar el estado del crédito a colocado

@@ -147,7 +147,7 @@ class Credit extends Model
             $profitCollected  = ($totalCollected - $recoveredCapital) / 1.16;
             $ivaCollected     = $profitCollected * 0.16;
             $placedCapital    = $col->saldo_insoluto_real * $p;
-            $comRateNoIva     = $ic->commission_rate / 1.16;
+            $comRateNoIva     = $ic->commission_rate / 100 / 1.16 ;
             $commissionAmount = $totalCollected * $comRateNoIva;
             $ivaCommission    = $commissionAmount * 0.16;
             $newStatus        = $placedCapital > 1 ? 4 : ($recoveredCapital > 0 ? 5 : $ic->status);
@@ -254,7 +254,7 @@ class Credit extends Model
             ->where('product_id', '=', 3)
             ->whereIn('status', [4])
             ->where('canceled', 0)
-            ->sum('applied_payment');
+            ->sum('applied_import');
 
         // 3. FLAG DE TRÁMITES PENDIENTES
         $hasPendingTramit = Credit::where('client_person_id', $clientPersonId)
