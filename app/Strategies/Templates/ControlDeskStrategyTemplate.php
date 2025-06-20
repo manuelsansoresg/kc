@@ -4302,17 +4302,20 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         $percentTask4Step3  = self::DynamicPercentStep3($credit->id, $labelValidate);
                         
                         if ($percentTask4Step3 == 100) {
-                            InvestorsCredit::saveEdit($credit->id);
-                            $getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
-                            foreach ($getInvestors as $getInvestor) {
+                            //InvestorsCredit::saveEdit($credit->id);
+                            //Credit::unlockPendingCredits($credit->applied_financial_product);
+                            InvestorsCredit::removeInvestorsCreditsByProduct($credit->applied_financial_product);
+                            //InvestorsCredit::lockFundingIfComplete($credit->id);
+                            //$getInvestors = InvestorsCredit::where('credit_id', $credit->id)->get();
+                            //foreach ($getInvestors as $getInvestor) {
                                 //Transaction::setTotalCapital($getInvestor->investor_id);
-                                Investor::updateInvestorData($getInvestor->investor_id);
-                            }
+                                //Investor::updateInvestorData($getInvestor->investor_id);
+                            //}
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, $credit->id, 1); //terminar tarea
 
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, $credit->id, 0);
-                            
+                            //InvestorsCredit::lockFundingIfComplete($credit->id);
                         }
                     }
 

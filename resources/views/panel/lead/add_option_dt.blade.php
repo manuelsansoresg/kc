@@ -54,7 +54,7 @@ $user = Auth::user();
                             </li>
                         @else
                             <li>
-                                <a class="pointer moveElement"  onclick="moveElement('lead', {{ $id }})">
+                                <a class="pointer moveElement"  onclick="moveElement('lead', {{ $id }}, 'dt-lead')">
                                     <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
                             </li>
                         @endif

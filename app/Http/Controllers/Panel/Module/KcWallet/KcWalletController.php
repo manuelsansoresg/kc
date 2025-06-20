@@ -112,8 +112,53 @@ class KcWalletController extends Controller
         //dd(Auth::user()->id);
         $collections = null;
         $getInvestorCredits = null;
+
+        $getInvestor       = Investor::where('user_id', Auth::user()->id)->first();
+        $collections = null;
+        $getInvestorCredits = null;
+        $data = array();
+        if ($getInvestor != null) {
+            $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->get();
+            
+
+            foreach ($getInvestorCredits as $getInvestorCredit) {
+                $status = config('enums.investorsCreditsStatus')[$getInvestorCredit->status];
+                $getCollection   = Collection::where('kc_credit_id',  $getInvestorCredit->credit_id)->first();
+                $creditId        = $getInvestorCredit->credit_id;
+                
+                $importe         = $getInvestorCredit->import ;
+                $pagado          = $getInvestorCredit->total_collected;
+                $porPagar        = $getInvestorCredit->placed_capital;
+                
+                $valorImporte    = format_price($importe);
+                $valorPagado     = format_price($pagado);
+                $valorPorPagar   = format_price($porPagar);
+
+                $interesProyectado = format_price($getInvestorCredit->total_credit  - $getInvestorCredit->import);
+                if ($getCollection != null) {
+                    $percentage      = $getInvestorCredit->percentage / 100;
+                    $getInvestor     = Investor::find($getInvestorCredit->investor_id);
+                }
+                $getCredit       = Credit::find($getInvestorCredit->credit_id);
+                $valorStatus     = HistoryLog::$label_status[$getCredit->credit_status];
+
+                $data[] = array(
+                    'id' => "{$creditId}",
+                    'action' => '<a href="/panel/credit/'.$getInvestorCredit->credit_id.'?tab=pagos" target="_blank"> &nbsp; <span class="badge bg-primary">Ver</span> </a>',
+                    'status' => $status,
+                    'importe' => $valorImporte,
+                    'pagado' => $valorPagado,
+                    'capital_recuperado' => format_price($getInvestorCredit->recovered_capital),
+                    'interes_proyectado' => $interesProyectado,
+                    'capital_pendiente' => $valorPorPagar,
+                    'interes_cobrado' => format_price($getInvestorCredit->profit_collected),
+                    'comision_kc' => format_price($getInvestorCredit->commission_amount),
+                );
+            }
+        }
+
        
-        return view('panel.module.wallet.mis_prestamos', compact('getInvestorCredits'));
+        return view('panel.module.wallet.mis_prestamos', compact('getInvestorCredits', 'data'));
     }
 
     /**

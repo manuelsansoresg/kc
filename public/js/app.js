@@ -556,10 +556,16 @@ window.setModalAction = function (action_id, disabled, section) {
 };
 
 window.refreshAction = function (id, model, status, content) {
-  $('#' + content + '').html();
+  if (!id || !model || !status || !content) {
+    // Si falta algún valor, no hacer nada
+    return;
+  }
+
+  $('#' + content).html('');
   axios.get("/panel/action/list/" + id + "/" + model + "/" + status).then(function (response) {
-    $('#' + content + '').html(response.data);
-  })["catch"](function (e) {});
+    $('#' + content).html(response.data);
+  })["catch"](function (e) {// Manejo de error opcional
+  });
 };
 
 window.refreshListActions = function () {
@@ -2186,25 +2192,15 @@ window.setFPTerms = function () {
   });
 };
 
-$("#frm-financial-buro").submit(function (event) {
+$("#frm-financial-chart").submit(function (event) {
   event.preventDefault();
-  var new_form = document.getElementById("frm-financial-buro");
+  var new_form = document.getElementById("frm-financial-chart");
   var data = new FormData(new_form);
   axios.post("/panel/financial-product", data).then(function (response) {
     var result = response.data;
     showToast('Producto', 'Datos guardados', 'success');
   })["catch"](function (e) {});
 });
-
-window.showBank = function (is_show) {
-  $('#content-bank').hide();
-
-  if (is_show == true) {
-    $('#content-bank').show();
-  }
-};
-
-
 
 if (document.getElementById('tramite-proceso_tramite')) {
   var ckeditor = CKEDITOR.replace('tramite-proceso_tramite', {
@@ -3912,7 +3908,17 @@ document.addEventListener('DOMContentLoaded', function () {
   }); // Expand table rows on click
 
   $('#dt-lead tbody').on('click', 'td', function () {
+    if (typeof table_lead === 'undefined') {
+      console.warn('table_lead no está definido');
+      return;
+    }
+
     var row = table_lead.row($(this).closest('tr'));
+
+    if (!row) {
+      console.warn('No se pudo obtener la fila');
+      return;
+    }
 
     if (row.child.isShown()) {
       row.child.hide();
@@ -7355,9 +7361,9 @@ window.prestarInversionista = function () {
   var investorId = $('#investorId').val();
   var error = true;
 
-  if (importe < 200) {
+  if (importe < 0) {
     Swal.fire({
-      title: 'El importe debe ser mayor o igual a 200 pesos.',
+      title: 'El importe debe ser mayor o igual a 0 pesos.',
       icon: 'warning',
       showCancelButton: true,
       showConfirmButton: false,
@@ -9719,6 +9725,8 @@ window.moveElement = function (section, id, idDatatable) {
   var button = document.querySelector('.moveElement');
   button.disabled = true;
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {
+    console.log(idDatatable);
+
     if (idDatatable == null) {
       location.reload();
     } else {

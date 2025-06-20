@@ -49,9 +49,11 @@
                                                 
                                                
                                                 <div class="analytic-data analytic-ov-data">
-                                                    <div class="title">Préstamos en créditos activos</div>
+                                                    <div class="title">Dinero en créditos activos</div>
                                                     <div class="amount">${{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
-                                                    <div class="change down"></div>
+                                                    <div class="change down">
+                                                        <span class="text-primary">En trámites: {{ $tramites != null ? format_price($investor->loans_in_process) : 0 }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -117,10 +119,12 @@
                                             </div>
                                             
                                             <div id="tooltip-prestamo">
-                                                <b>Préstamos en créditos activos.
+                                                <b>Dinero en créditos activos.
                                                 </b>
                                                 <br><br>
                                                 Es la suma de todos los préstamos que has realizado y cuyo principal o capital está pendiente de pago. Ej. Si has prestado $10,000 en total, pero ya se amortizaron o pagaron $2,000 de capital, este valor será de $8,000. Los intereses pagados no disminuyen este valor.	
+                                                <br>
+                                                También incluye créditos que están en trámite.
                                             </div>
                                         </div>
                                     </div>
@@ -233,7 +237,7 @@
                            </div>
                             
                            <div class="row mt-5">
-                            <div class="col-6">
+                            <div class="col-12 col-md-6">
                                 
                                 <div class="card">
                                     <div class="card-body">
@@ -283,7 +287,7 @@
                             <br> <br>
                             <b>Disponible: {!! $totalAvailable > 0 ? '$'.format_price($totalAvailable) : '$0.00 <a href="/panel/kc-wallet" class="link-primary" style="font-weight: normal; text-decoration: underline"> Agrega fondos </a>' !!}</b>
                         </p>
-                        <input type="number" min="201" name="lendable" id="lendable" max="{{ $totalAvailable }}" class="form-control" value="{{ $investor->lendable }}">
+                        <input type="number" min="201" name="lendable" id="lendable" max="{{ $totalAvailable }}" class="form-control" value="{{ $totalAvailable }}">
                         <div class="col-12 mt-3">
                             
                             <p style="color: #526484 !important;">
@@ -293,7 +297,7 @@
                                       <i class="fas fa-circle" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 0.6em; color: #526484;"></i>
                                       El importe no debe ser mayor al dinero disponible
                                     </li>
-                                    <li style="position: relative; padding-left: 1.5em; line-height: 1.4;">
+                                    <li class="d-none" style="position: relative; padding-left: 1.5em; line-height: 1.4;">
                                       <i class="fas fa-circle" style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); font-size: 0.6em; color: #526484;"></i>
                                       El importe debe ser mayor a $200.00 pesos
                                     </li>

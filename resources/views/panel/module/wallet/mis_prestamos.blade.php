@@ -28,12 +28,13 @@
                         </div>
                     </div>
 
-                    <div class="card card-bordered card-preview">
+                    <div class="card card-bordered card-preview py-3 px-3">
                         
-                        <table id="dt-mis-prestamos" class="nowrap nk-tb-list nk-tb-ulist" style="width:100%">
+                        <table class="datatable-init nowrap table">
                             <thead>
                                 <tr>
                                     <th>Crédito</th>
+                                    <th></th>
                                     <th>Estatus</th>
                                     <th data-priority="1">Prestado</th>
                                     <th>Total cobrado</th>
@@ -45,6 +46,24 @@
                                     <th></th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                @foreach ($data as $item)
+                                <tr>
+                                    <td>{{ $item['id'] }}</td>
+                                    <td>{!! $item['action'] !!}</td>
+                                    <td>{{ $item['status'] }}</td>
+                                    <td>{{ $item['importe'] }}</td>
+                                    <td>{{ $item['pagado'] }}</td>
+                                    <td>{{ $item['capital_recuperado'] }}</td>
+                                    <td>{{ $item['interes_cobrado'] }}</td>
+                                    <td>{{ $item['capital_pendiente'] }}</td>
+                                    <td>{{ $item['interes_proyectado'] }}</td>
+                                    <td>{{ $item['comision_kc'] }}</td>
+                                    <td></td>
+                                </tr>
+                                @endforeach
+
+                            </tbody>
                            
                         </table>
 

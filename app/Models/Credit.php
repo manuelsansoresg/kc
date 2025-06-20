@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Lib\Csendgrid;
+use App\Models\kaaxSidecc\agreementCollection;
 use App\Strategies\Values\TemplateValues;
 use Facade\FlareClient\Http\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -122,8 +123,63 @@ class Credit extends Model
         'credit_s2_active',
         'credit_status',
         'collection_date',
-        
+        'canceled',
+        'status',
+        'refinanciable',
+        'iva',
+        'ret_iva',
+        'ret_isr',
+        'ret_iva_2',
+        'ret_isr_2',
     ];
+
+    public static function setDataPago($creditId)
+    {
+        // 1) obtengo colección
+        $col = AgreementCollection::where('credit_id', $creditId)->first();
+        if (!$col) return;
+
+        // 2) obtengo todos los investors_credits de este crédito KAAX
+        $ics = InvestorsCredit::where('credit_id', $col->kc_credit_id)->get();
+        if ($ics->isEmpty()) return;
+
+        // 3) recálculo en lote
+        $ics->each(function($ic) use ($col) {
+            $p  = $ic->percentage / 100;
+            $totalCollected = $col->pago_acumulado_real * $p;
+            $recoveredCapital = $col->abono_acumulado_real * $p;
+            $profitCollected  = ($totalCollected - $recoveredCapital) / 1.16;
+            $ivaCollected     = $profitCollected * 0.16;
+            $placedCapital    = $col->saldo_insoluto_real * $p;
+            $comRateNoIva     = $ic->commission_rate / 100 / 1.16 ;
+            $commissionAmount = $totalCollected * $comRateNoIva;
+            $ivaCommission    = $commissionAmount * 0.16;
+            $newStatus        = $placedCapital > 1 ? 4 : ($recoveredCapital > 0 ? 5 : $ic->status);
+
+            $ic->update([
+                'total_collected'  => $totalCollected,
+                'recovered_capital'=> $recoveredCapital,
+                'profit_collected' => $profitCollected,
+                'iva_collected'    => $ivaCollected,
+                'placed_capital'   => $placedCapital,
+                'commission_amount'=> $commissionAmount,
+                'iva_commission'   => $ivaCommission,
+                'total_balance'    => $col->saldo_total_real * $p,
+                'credit_status'    => $col->status,
+                'refinanciable'    => $col->refinanciable,
+                'status'           => $newStatus,
+            ]);
+        });
+
+        // 4 Llamar flags por cada crédito afectado (sin repetir)
+        $ics->pluck('credit_id')->unique()->each(function ($creditId) {
+            Credit::updateClientPersonCreditFlags($creditId);
+        });
+
+        // 5) vuelvo a recalcular balances de todos los inversionistas
+        $ics->pluck('investor_id')->filter()->unique()
+            ->each(fn($invId) => Investor::updateInvestorData($invId));
+    }
 
 
     public static function setMontoEntregar($creditId)
@@ -142,6 +198,132 @@ class Credit extends Model
             ]);
         }
     }
+
+
+    public static function unlockPendingCredit($creditId)
+    {
+        // 1. Verificar que el crédito exista
+        $credit = Credit::find($creditId);
+        if (!$credit) {
+            return;
+        }
+    
+        // 2. Actualizar funding_locked y status del crédito
+        $credit->update([
+            'funding_locked' => 0,
+            'status' => 0,
+        ]);
+    
+        // 3. Actualizar todos los investors_credits relacionados
+        InvestorsCredit::where('credit_id', $creditId)->update([
+            'status' => 0,
+        ]);
+    
+        // 4. Llamar limpieza de fondeo previo para el producto financiero correspondiente
+        InvestorsCredit::removeInvestorsCreditsByProduct($credit->applied_financial_product);
+    }    
+
+
+    public static function updateClientPersonCreditFlags($creditId)
+    {
+        $getCredit = Credit::find($creditId);
+
+        if (!$getCredit) {
+           return;
+        }
+
+        $clientPersonId = $getCredit->client_person_id;
+
+        // 1. FLAGS DE ACTIVIDAD
+        $hasActiveCredit = Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '!=', 3)
+            ->whereIn('status', [4])
+            ->where('canceled', 0)
+            ->exists();
+
+        $hasActiveSod = Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '=', 3)
+            ->whereIn('status', [4])
+            ->where('canceled', 0)
+            ->exists();
+
+        // 2. IMPORTES ACTIVOS
+        $activeDiscount = Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '!=', 3)
+            ->whereIn('status', [4])
+            ->where('canceled', 0)
+            ->sum('applied_payment');
+
+        $activeSodAmount = Credit::where('client_person_id', $clientPersonId)
+            ->where('product_id', '=', 3)
+            ->whereIn('status', [4])
+            ->where('canceled', 0)
+            ->sum('applied_import');
+
+        // 3. FLAG DE TRÁMITES PENDIENTES
+        $hasPendingTramit = Credit::where('client_person_id', $clientPersonId)
+            ->whereIn('status', [1, 2, 3])
+            ->where('canceled', 0)
+            ->exists();
+
+        // 4. TRÁMITES PERMITIDOS
+        $client = ClientPerson::find($clientPersonId);
+
+        $newTramitAllowed = 0;
+        $additionalTramitAllowed = 0;
+        $refTramitAllowed = 0;
+
+        if ($hasActiveCredit == false) {
+            // No tiene crédito activo
+            $newTramitAllowed = 1;
+        } else {
+            // Tiene crédito activo
+            $activeCredits = Credit::where('client_person_id', $clientPersonId)
+                ->where('product_id', '!=', 3)
+                ->whereIn('status', [4])
+                ->where('canceled', 0)
+                ->get();
+
+            foreach ($activeCredits as $credit) {
+                $product = FinancialProduct::where('id', $credit->applied_financial_product)
+                    ->where('status', 1) // SOLO productos activos
+                    ->first();
+
+                if (!$product) {
+                    continue;
+                }
+
+                if ($credit->refinanciable == 1 && $product->refinancing_allowed == 1) {
+                    $refTramitAllowed = 1;
+                }
+
+                if ($product->additional_allowed == 1) {
+                    $additionalTramitAllowed = 1;
+                }
+            }
+        }
+
+        // ❗ Bloqueo si está inactivo o tiene trámite pendiente
+        if ($client->active == 0 || $hasPendingTramit) {
+            $newTramitAllowed = 0;
+            $additionalTramitAllowed = 0;
+            $refTramitAllowed = 0;
+        }
+
+        // 5. ACTUALIZAR CAMPOS EN client_person
+        $client->update([
+            'credit_active'            => $hasActiveCredit ? 1 : 0,
+            'sod_active'               => $hasActiveSod ? 1 : 0,
+            'active_discount'          => $activeDiscount,
+            'sod_active_amount'        => $activeSodAmount,
+            'pending_tramit'           => $hasPendingTramit ? 1 : 0,
+            'new_tramit_allowed'       => $newTramitAllowed,
+            'additional_tramit_allowed'=> $additionalTramitAllowed,
+            'ref_tramit_allowed'       => $refTramitAllowed,
+        ]);
+    }
+
+    
 
     /**
      * actualizar applied_import , applied_term , applied_payment , applied_loan_total_amount 
@@ -518,6 +700,14 @@ class Credit extends Model
 
         );
         return $routes;
+    }
+
+    
+
+
+    public function investorsCredits()
+    {
+        return $this->hasMany(InvestorsCredit::class, 'credit_id');
     }
     
     public function advisorCredit()

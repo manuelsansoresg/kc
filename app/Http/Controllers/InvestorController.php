@@ -60,8 +60,10 @@ class InvestorController extends Controller
             abort(404);
         }
         $getTotal = InvestorsCredit::selectRaw('SUM(total_credit) as total_credit')->where('investor_id', $id)->first();
+        $tramites = InvestorsCredit::selectRaw('SUM(import) as import')->where('investor_id', $id)->where('status',  '1')->first();
+        
         $totalCredit = $getTotal != null ? $getTotal->total_credit : 0;      
-        return view('panel.module.wallet.resumen', compact('investor', 'totalCredit'));
+        return view('panel.module.wallet.resumen', compact('investor', 'totalCredit', 'tramites'));
     }
 
     /**

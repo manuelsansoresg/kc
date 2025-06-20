@@ -139,6 +139,8 @@
                                         @endforeach
                                     @endif
 
+                                    
+
                                     @if ($model == 'controlDesk')
                                         @php
                                             $isFinish = (new $templateStrategy)->isFinish($history);
@@ -172,40 +174,16 @@
                                         @endif
                                     @endif
                                 </div>
+                                @if ($model != 'wallet' && $model != 'kc-down-wallet')
                                 <!-- Columna secundaria: Card info cliente -->
                                 <div class="col-md-3 d-none d-md-block offset-md-1">
                                     <div class="card">
                                         <div class="card-body">
-                                            <span>
-                                                <span class="fw-bold">NOMBRE :</span> {{ $credit->client->id }} - {{ $credit->client->name }} {{ $credit->client->last_name }} {{ $credit->client->second_last_name }}
-                                                <br> <span class="fw-bold">RFC :</span>  {{ $credit->client->rfc }}
-                                                <br><span class="fw-bold">Organización :</span>  {{ $credit->client->agreement->name }}
-                                                <br><span class="fw-bold">Tel :</span> : {{ $credit->client->cellphone }}
-                                                <br><br>
-                                                <span class="fw-bold">Producto :</span> SOD
-                                                <br><span class="fw-bold">Monto :</span> SOD
-                                                <br><span class="fw-bold">Plazo :</span> SOD
-                                                <br><span class="fw-bold">Pago :</span> SOD
-                                                <br><span class="fw-bold">Periodicidad :</span> SOD
-                                                <br><span class="fw-bold">Tipo de crédito :</span> SOD
-                                                <br><span class="fw-bold">Compra cartera :</span> SOD
-                                                <br><span class="fw-bold">Promotor :</span> SOD
-                                                <br><span class="fw-bold">Origen :</span> SOD
-                                                <br><span class="fw-bold">Etiquetas :</span> SOD
-                                                <br><span class="fw-bold">Ultimo comentario :</span> SOD
-                                                <hr>
-                                                <span class="fw-bold"> Documentos:</span>
-                                                <br><a href="">- INE <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                                <br><a href="">- Nómina <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                                <hr>
-                                                <br>
-                                                <br><a href="">Ver crédito <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                                <br><a href="">Ver cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                                <br><a href="">Chatear con cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                            </span>
+                                            @include('panel.credit.right_bar')
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                             </div> <!-- cierre row -->
                         </div>
                     </div>

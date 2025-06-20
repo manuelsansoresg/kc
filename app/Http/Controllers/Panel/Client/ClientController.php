@@ -7,6 +7,7 @@ use App\Models\Action;
 use App\Models\Agreement;
 use App\Models\ClientPerson;
 use App\Models\Investor;
+use App\Models\InvestorProduct;
 use App\Models\InvestorsCredit;
 use Illuminate\Http\Request;
 
@@ -49,9 +50,38 @@ class ClientController extends Controller
 
     public function savePrestar(Request $request)
     {
-       Investor::setLendableAndLoanAvailable($request->investorId, $request->lendable);
-       Investor::updateInvestorData($request->investorId);
-       InvestorsCredit::updateInvestorCredits($request->investorId);
+        $investorId = $request->investorId;
+        $inputLendable = $request->lendable;
+    
+        // 1) Obtener loans_in_process actuales del inversionista
+        //$investor = Investor::find($investorId);
+        //$loansInProcess = $investor ? $investor->loans_in_process : 0;
+
+        // 1) Obtener suma actual de créditos en proceso (status = 1)
+        $loansInProcess = InvestorsCredit::where('investor_id', $investorId)
+        //->where('status', 2)
+        ->whereIn('status', [0, 1, 2])
+        ->sum('import');
+    
+        // 2) Sumar loans_in_process al nuevo lendable solicitado
+        $totalLendable = $inputLendable + $loansInProcess;
+    
+        // 3) Establecer lendable y loan_available considerando lo anterior
+        Investor::setLendableAndLoanAvailable($investorId, $totalLendable);
+    
+        // ✅ 4) Recalcular balances y loan_available del inversionista y sus productos financieros
+        Investor::updateInvestorData($investorId);
+    
+        // 5) Obtener todos los productos financieros del inversionista
+        $financialProductIds = InvestorProduct::where('investor_id', $investorId)
+            ->pluck('financial_products_id')
+            ->unique();
+    
+        // 6) Eliminar e intentar refondear créditos pendientes de cada producto
+        foreach ($financialProductIds as $financialProductId) {
+            //Credit::unlockPendingCredits($financialProductId);
+            InvestorsCredit::removeInvestorsCreditsByProduct($financialProductId);
+        }
     }
 
     /**

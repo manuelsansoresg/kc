@@ -32,6 +32,7 @@ class CreditController extends Controller
             ]);
         }
 
+        Credit::setDataPago($credit_id);
 
         /* $statusMove = HistoryLog::CREDITS_DELIVERED;
         $credit_id = $credit->id;
@@ -59,6 +60,10 @@ class CreditController extends Controller
 
     public function setDataPago($creditId)
     {
+        Credit::setDataPago($creditId);
+    }  
+
+/*     {
         $getCollection = AgreementCollection::where('credit_id', $creditId)->first();
 
         if (!$getCollection) {
@@ -116,38 +121,43 @@ class CreditController extends Controller
 
         foreach ($clientPersonIds as $clientPersonId) {
             $credits = Credit::where('client_person_id', $clientPersonId)->get();
-
+        
             $hasActiveCredits = $credits->where('product_id', '!=', 3)
                 ->whereIn('id', $investorsCreditActive)
                 ->isNotEmpty();
-
+        
             $hasActiveSodCredits = $credits->where('product_id', 3)
                 ->whereIn('id', $investorsCreditActive)
                 ->isNotEmpty();
-
-            // Calcular sod_active_amount y active_discount
+        
             $sodAmount = AgreementCollection::where('kc_client_id', $clientPersonId)
                 ->where('kc_product_id', 3)
                 ->sum('saldo_total_real');
-
+        
             $activeDiscount = AgreementCollection::where('kc_client_id', $clientPersonId)
                 ->where('kc_product_id', '!=', 3)
                 ->where('pagado', '>', 0)
                 ->sum('pagado');
-
+        
             ClientPerson::where('id', $clientPersonId)->update([
-                'credit_active' => $hasActiveCredits ? 1 : 0,
-                'sod_active' => $hasActiveSodCredits ? 1 : 0,
-                'sod_active_amount' => $sodAmount,
-                'active_discount' => $activeDiscount,
+                'credit_active'    => $hasActiveCredits ? 1 : 0,
+                'sod_active'       => $hasActiveSodCredits ? 1 : 0,
+                'sod_active_amount'=> $sodAmount,
+                'active_discount'  => $activeDiscount,
             ]);
-
-            $latestFinancialProductId = optional($credits->last())->applied_financial_product;
-
-            if ($latestFinancialProductId) {
-                self::updateTramitAllowed($clientPersonId, $latestFinancialProductId);
+        
+            // ✅ Llamar flags por cada crédito
+            foreach ($credits as $credit) {
+                Credit::updateClientPersonCreditFlags($credit->id);
             }
-        }
+        }            
+        
+        //$latestFinancialProductId = optional($credits->last())->applied_financial_product;
+
+        //    if ($latestFinancialProductId) {
+        //        self::updateTramitAllowed($clientPersonId, $latestFinancialProductId);
+        //    }
+        //}
 
         $getSums = InvestorsCredit::whereIn('investor_id', $investorsIds)
             ->groupBy('investor_id')
@@ -178,7 +188,7 @@ class CreditController extends Controller
 
             Investor::updateInvestorData($getSum->investor_id);
         }
-    }
+    } */
 
     public function updateTramitAllowed($clientPersonId, $financialProductId)
     {

@@ -196,7 +196,7 @@ class ActionController extends Controller
         if ($request->model == 'wallet'  && $step == '2') {
             $getTransaction = Transaction::find($request->id_rel);
             Investor::updateInvestorData($getTransaction->investor_id);
-            Investor::updateInvestorBalances($getTransaction->investor_id);
+            //Investor::updateInvestorBalances($getTransaction->investor_id);
 
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $request->id_rel, 1);
             /* $getInvestors = InvestorsCredit::where('credit_id', $request->id_rel)->get();

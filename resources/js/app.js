@@ -56,6 +56,7 @@ window.moveElement = function (section, id, idDatatable) {
     axios
     .get("/panel/"+section+"/"+id+"/move")
     .then(function (response) {
+      console.log(idDatatable);
         if (idDatatable == null) {
             location.reload();
         } else {
