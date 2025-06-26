@@ -117,9 +117,9 @@ class KcWalletController extends Controller
         $collections = null;
         $getInvestorCredits = null;
         $data = array();
+        
         if ($getInvestor != null) {
             $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->get();
-            
 
             foreach ($getInvestorCredits as $getInvestorCredit) {
                 $status = config('enums.investorsCreditsStatus')[$getInvestorCredit->status];

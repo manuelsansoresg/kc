@@ -78,7 +78,7 @@
         $m_history_log::KC_AFTER_MARKET_ARCHIVE,
     );
     $current_archive = $m_history_log->getByStatusFirst($status_credit_archive, $credit->id, 1);
-    $credit_product = $m_financial_product::getById($credit->applied_financial_product);
+    $credit_product = $credit->applied_financial_product != null ? $m_financial_product::where('id', $credit->applied_financial_product)->first() : null;
     $financial = $credit_product != null ? $m_financial::find($credit_product->financial_id) : null;
 @endphp
 
