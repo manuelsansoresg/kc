@@ -133,6 +133,24 @@ class Credit extends Model
         'ret_isr_2',
     ];
 
+
+    public static function getTramitePendiente($clientPersonId)
+    {
+        $getClientPerson = ClientPerson::find($clientPersonId);
+        $statusTramites = array(
+            HistoryLog::KC_CHECK_UP ,
+            HistoryLog::CREDIT_IN_PROGRESS ,
+            HistoryLog::NEW_CREDIT_KC_CHECK_UP ,
+            HistoryLog::KC_CONTROL_DESK ,
+            HistoryLog::KC_DELIVERY ,
+            HistoryLog::KC_SWAP ,
+            HistoryLog::KC_PAYMENT
+        );
+        $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
+        $creditStatus =  $getStatus > 0 ? false : true; //*true = no tiene trámite pendiente
+        return $creditStatus;
+    }
+
     public static function setDataPago($creditId)
     {
         // 1) obtengo colección

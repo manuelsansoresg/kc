@@ -3538,6 +3538,7 @@ window.validateSoad = function () {
       getLeadValidations();
       var result = response.data;
       var typeProductId = result.type_product_id;
+      var tramitePendiente = result.tramitePendiente;
       $('#typeProductId').val(typeProductId);
       $('#loan_available-msg').html(result.loan_available);
 
@@ -3574,7 +3575,7 @@ window.validateSoad = function () {
         $('#sod_min').val(result.minimoRedondeado);
         $('#content-validaciones-soad-date').html(isSoadDate);
 
-        if (isSodOnDate == true) {
+        if (isSodOnDate == true && tramitePendiente == true) {
           document.getElementById('slider').disabled = false;
           $('#content-product').html(result.contentProductSod);
           $('#go_ahead').val(1); //valores slider

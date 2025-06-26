@@ -67,20 +67,19 @@ class LeadValidation extends Model
         
         // Check phone or RFC validation (at least one should be valid)
         $phoneOrRfcValid = false;
+        $validateMonto = false;
+        $validateTramite = false;
+        
         foreach ($validations as $validation) {
-           /*  if ($validation->validation == 'Prospecto - Celular' || $validation->validation == 'Prospecto - RFC') {
-                if ($validation->status == 1) {
-                    $phoneOrRfcValid = true;
-                    break;
-                }
-            } */
-            if ($validation->validation == 'Crédito seleccionado - Importe seleccionado') {
-                if ($validation->status == 1) {
-                    $validateMonto = true;
-                    break;
-                }
+            if ($validation->validation == 'Crédito seleccionado - Importe seleccionado' && $validation->status == 1) {
+                $validateMonto = true;
+            }
+            if ($validation->validation == 'Crédito preautorizado - Trámite pendiente' && $validation->status == 1) {
+                $validateTramite = true;
             }
         }
+        
+        $validateMonto = $validateMonto && $validateTramite;
 
         // Check that all existing validations have status = 1
         $allValid = true;
