@@ -785,15 +785,15 @@
         </tr>
         <tr class="c11">
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
-                <p class="c6"><span class="c3">Monto Retirado:</span><span class="c9 c2">&nbsp;${{ format_price($credit->applied_import) }}</span></p>
+                <p class="c6"><span class="c3">Monto Retirado:</span><span class="c9 c2">&nbsp;{{ format_price($credit->applied_import) }}</span></p>
             </td>
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
-                <p class="c6"><span class="c3">Comisi&oacute;n:</span><span class="c9 c2">&nbsp;${{ format_price($credit->sod_commission) }}</span></p>
+                <p class="c6"><span class="c3">Comisi&oacute;n:</span><span class="c9 c2">&nbsp;{{ format_price($credit->sod_commission) }}</span></p>
             </td>
         </tr>
         <tr class="c11">
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
-                <p class="c6"><span class="c3">Monto total a pagar:</span><span class="c9 c2">&nbsp;${{ format_price($credit->applied_loan_total_amount) }}</span></p>
+                <p class="c6"><span class="c3">Monto total a pagar:</span><span class="c9 c2">&nbsp;{{ format_price($credit->applied_loan_total_amount) }}</span></p>
             </td>
             <td class="{{ $token == null ? 'c7' : null }}" colspan="1" rowspan="1">
                 <p class="c6"><span class="c3">N&uacute;mero de pagos parciales:</span><span

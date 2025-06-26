@@ -128,12 +128,11 @@ if (!function_exists('deadlineKc')) {
 if (!function_exists('format_price')) {
     function format_price($price)
     {
-        if ($price == null || $price == 0) {
-            return '00.00';
+        if ($price === null || $price == 0) {
+            return '$0.00';
         }
 
-
-        return number_format($price, 2, '.', ',');
+        return '$' . number_format($price, 2, '.', ',');
     }
 }
 
