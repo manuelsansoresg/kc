@@ -34,7 +34,7 @@
                 @endphp
                 <tr>
                     <td>{{ $creditPay->alias }}</td>
-                    <td>${{ format_price($creditPay->ammount) }}</td>
+                    <td>{{ format_price($creditPay->ammount) }}</td>
                     <td> {{ $creditPay->deadline_date }} </td>
                     <td> {{ $creditPay->annual_int_rate_iva }} </td>
                     <td><a class="pointer" onclick="editCompraCarteraControlDesk({{$creditPay->id}})"><i class="fa-solid fa-pen"></i></a></td>
@@ -70,7 +70,7 @@
                 @endphp
                 <tr>
                     <td>{{ $creditRefinanced->alias }}</td>
-                    <td>${{ format_price($creditRefinanced->ammount) }}</td>
+                    <td>{{ format_price($creditRefinanced->ammount) }}</td>
                     <td> {{ $creditRefinanced->deadline_date }} </td>
                     <td> {{ $creditRefinanced->annual_int_rate_iva }} </td>
                     <td><a class="pointer" onclick="editCompraCarteraControlDesk({{$creditRefinanced->id}})"><i class="fa-solid fa-pen"></i></a></td>

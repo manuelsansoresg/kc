@@ -18,7 +18,7 @@
         @endphp
         <tr>
             <td>{{ $creditPay->alias }}</td>
-            <td>${{ format_price($creditPay->ammount) }}</td>
+            <td>{{ format_price($creditPay->ammount) }}</td>
             <td>
                 <a class="pointer" onclick="editCompraCartera({{ $creditPay->id }})"><i class="fa-solid fa-pen"></i></a>
                 <a class="pointer" onclick="deleteCompraCartera({{ $creditPay->id }})"><i class="fa-solid fa-trash"></i></a>

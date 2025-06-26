@@ -114,7 +114,7 @@
                             <div class="col-12 mt-3">
                                 @foreach ($fees_comision as $key => $fees)
                                     @if ($fees->type == 1)
-                                        <p class="mt-1">{{ $fees->concepto }} - ${{ format_price($fees->valor) }} {{ isset(config('enums.periodicity_comision')[$fees->periodicidad]) ? config('enums.periodicity_comision')[$fees->periodicidad] : null }}</p>
+                                        <p class="mt-1">{{ $fees->concepto }} - {{ format_price($fees->valor) }} {{ isset(config('enums.periodicity_comision')[$fees->periodicidad]) ? config('enums.periodicity_comision')[$fees->periodicidad] : null }}</p>
                                     @else
                                         <p class="mt-1">{{ $fees->concepto }} - {{ $fees->porcentaje }}% {{ $fees->referencia }} {{ isset(config('enums.periodicity_comision')[$fees->periodicidad]) ? config('enums.periodicity_comision')[$fees->periodicidad] : null }}</p>
                                     @endif
@@ -128,7 +128,7 @@
                                
                                 @foreach ($fees_result as $key_comision => $fees_comision)
                                     @if ($fees_comision->type == 1)
-                                        <p class="mt-1">{{ $fees_comision->concepto }} - ${{ format_price($fees_comision->valor) }} {{ isset(config('enums.periodicity_comision')[$fees_comision->periodicidad]) ? config('enums.periodicity_comision')[$fees_comision->periodicidad] : null }}</p>
+                                        <p class="mt-1">{{ $fees_comision->concepto }} - {{ format_price($fees_comision->valor) }} {{ isset(config('enums.periodicity_comision')[$fees_comision->periodicidad]) ? config('enums.periodicity_comision')[$fees_comision->periodicidad] : null }}</p>
                                     @else
                                         <p class="mt-1">{{ $fees_comision->concepto }} - {{ $fees_comision->porcentaje }}% {{ $fees_comision->referencia }} {{ isset(config('enums.periodicity_comision')[$fees_comision->periodicidad]) ? config('enums.periodicity_comision')[$fees_comision->periodicidad] : null }}</p>
                                     @endif   
