@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Lib\Csendgrid;
+use App\Models\Investor;
+use App\Models\InvestorsCredit;
 use App\Models\kaaxSidecc\agreementCollection;
 use App\Strategies\Values\TemplateValues;
 use Facade\FlareClient\Http\Client;
@@ -720,8 +722,45 @@ class Credit extends Model
         return $routes;
     }
 
-    
+    public function getInvestor()
+    {
+        try {
+            // Verificar que el usuario esté autenticado
+            if (!Auth::check()) {
+                return null;
+            }
 
+            $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
+            if ($getInvestor != null) {
+                $investorsCredit = InvestorsCredit::where('investor_id', $getInvestor->id)
+                    ->where('credit_id', $this->id)                
+                    ->first();
+                if ($investorsCredit != null) {
+                    return $investorsCredit;
+                }
+            }
+            return null;
+        } catch (\Exception $e) {
+            // Log del error para debug
+            \Log::error('Error en getInvestor(): ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Obtiene el importe del inversor de forma segura
+     * @return string|null
+     */
+    public function getInvestorImport()
+    {
+        try {
+            $investorCredit = $this->getInvestor();
+            return $investorCredit && isset($investorCredit->import) ? $investorCredit->import : null;
+        } catch (\Exception $e) {
+            \Log::error('Error en getInvestorImport(): ' . $e->getMessage());
+            return null;
+        }
+    }
 
     public function investorsCredits()
     {
