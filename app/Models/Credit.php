@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Lib\Csendgrid;
+use App\Models\Investor;
+use App\Models\InvestorsCredit;
 use App\Models\kaaxSidecc\agreementCollection;
 use App\Strategies\Values\TemplateValues;
 use Facade\FlareClient\Http\Client;
@@ -132,6 +134,24 @@ class Credit extends Model
         'ret_iva_2',
         'ret_isr_2',
     ];
+
+
+    public static function getTramitePendiente($clientPersonId)
+    {
+        $getClientPerson = ClientPerson::find($clientPersonId);
+        $statusTramites = array(
+            HistoryLog::KC_CHECK_UP ,
+            HistoryLog::CREDIT_IN_PROGRESS ,
+            HistoryLog::NEW_CREDIT_KC_CHECK_UP ,
+            HistoryLog::KC_CONTROL_DESK ,
+            HistoryLog::KC_DELIVERY ,
+            HistoryLog::KC_SWAP ,
+            HistoryLog::KC_PAYMENT
+        );
+        $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
+        $creditStatus =  $getStatus > 0 ? false : true; //*true = no tiene trámite pendiente
+        return $creditStatus;
+    }
 
     public static function setDataPago($creditId)
     {
@@ -702,8 +722,45 @@ class Credit extends Model
         return $routes;
     }
 
-    
+    public function getInvestor()
+    {
+        try {
+            // Verificar que el usuario esté autenticado
+            if (!Auth::check()) {
+                return null;
+            }
 
+            $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
+            if ($getInvestor != null) {
+                $investorsCredit = InvestorsCredit::where('investor_id', $getInvestor->id)
+                    ->where('credit_id', $this->id)                
+                    ->first();
+                if ($investorsCredit != null) {
+                    return $investorsCredit;
+                }
+            }
+            return null;
+        } catch (\Exception $e) {
+            // Log del error para debug
+            \Log::error('Error en getInvestor(): ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Obtiene el importe del inversor de forma segura
+     * @return string|null
+     */
+    public function getInvestorImport()
+    {
+        try {
+            $investorCredit = $this->getInvestor();
+            return $investorCredit && isset($investorCredit->import) ? $investorCredit->import : null;
+        } catch (\Exception $e) {
+            \Log::error('Error en getInvestorImport(): ' . $e->getMessage());
+            return null;
+        }
+    }
 
     public function investorsCredits()
     {

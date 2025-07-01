@@ -162,7 +162,7 @@ class Transaction extends Model
                 'id' => $transaction->id,
                 'date' => date('d-m-Y', strtotime($transaction->created_at)),
                 'ordenante' => $ordenante,
-                'importe' => '$'.format_price($transaction->amount),
+                'importe' => format_price($transaction->amount),
                 'deadline' => $dead_line,
                 'options' => $option
             );
@@ -204,7 +204,7 @@ class Transaction extends Model
                     'id' => $transaction->id,
                     'date' => date('d-m-Y', strtotime($transaction->created_at)),
                     'ordenante' => $ordenante,
-                    'importe' => '$'.format_price($transaction->amount),
+                    'importe' => format_price($transaction->amount),
                     'progress' => $progress_bar,
                     'deadline' => $dead_line,
                     'options' => $option

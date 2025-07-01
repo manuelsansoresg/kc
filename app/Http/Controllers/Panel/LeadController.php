@@ -488,7 +488,7 @@ class LeadController extends Controller
 
         if ($financialProduct->type_product_id == 3) {
             $textSoad = 'Tiene un Salario On-Demand activo';
-            $statusPreautorizado = 0;
+            $statusPreautorizado = 1;
             if ($clientPerson->sod_active == 0) {
                 $textSoad = 'No tiene un Salario On-Demand activo';
                 $statusPreautorizado = 1;
@@ -572,12 +572,14 @@ class LeadController extends Controller
         }
 
         $validateSod = Lead::validateSod($clientPerson, $financialProduct);
+
+        $tramitePendiente = Credit::getTramitePendiente($clientPerson->id);
         
         $dataReturn = array(
                     'TextSoad' => $textSoad, 'soadActive' => $clientPerson->sod_active, 'isSoadDate' => $isSoadDate, 'isSodOnDate' => $is_sod_on_date_allowed, 
                     'maximoRedondeado' => $maximoRedondeado, 'minimoRedondeado' => $minimoRedondeado, 'contentProductSod' => $contentProductSod,
                     'financialProduct' => $financialProduct->name, 'comision' => $financialProduct->sod_commission_amount, 'bank_name' => $clientPerson->bank_name,
-                    'cuenta' => $maskedClabe, 'type_product_id' => $financialProduct->type_product_id, 'sodTramites' => $tramites, 'loan_available' => format_price($financialProduct->loan_available)
+                    'cuenta' => $maskedClabe, 'tramitePendiente' => $tramitePendiente, 'type_product_id' => $financialProduct->type_product_id, 'sodTramites' => $tramites, 'loan_available' => format_price($financialProduct->loan_available)
         );
         return response()->json($dataReturn);
     }

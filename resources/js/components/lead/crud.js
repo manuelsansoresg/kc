@@ -1291,6 +1291,8 @@ window.validateSoad = function()
             getLeadValidations();
             let result = response.data;
             let typeProductId = result.type_product_id;
+            let tramitePendiente = result.tramitePendiente;
+
             $('#typeProductId').val(typeProductId);
             
             $('#loan_available-msg').html(result.loan_available);
@@ -1338,7 +1340,7 @@ window.validateSoad = function()
         
                 $('#content-validaciones-soad-date').html(isSoadDate);
                 
-                if (isSodOnDate == true) {
+                if (isSodOnDate == true && tramitePendiente == true) {
                     document.getElementById('slider').disabled = false;
                     $('#content-product').html(result.contentProductSod);
                     $('#go_ahead').val(1);

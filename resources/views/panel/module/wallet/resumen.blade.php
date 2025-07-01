@@ -28,7 +28,7 @@
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Valor de cuenta</div>
-                                                    <div class="amount">${{ format_price($valorCuenta) }}</div>
+                                                    <div class="amount">{{ format_price($valorCuenta) }}</div>
                                                     <div class="change up">
                                                         <a href="#"  data-bs-toggle="modal"
                                                         data-bs-target="#modalDetalle">Ver detalle</a>
@@ -36,13 +36,13 @@
                                                 </div>
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Disponible para prestar o retirar </div>
-                                                    <div class="amount">${{ format_price($disponiblePrestar) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-disponible"></em></div>
+                                                    <div class="amount">{{ format_price($disponiblePrestar) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-disponible"></em></div>
                                                     <div class="change up">
                                                     </div>
                                                 </div>
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Apartado para ser prestado &nbsp; </div>
-                                                    <div class="amount">${{ format_price($investor->loan_available) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></div>
+                                                    <div class="amount">{{ format_price($investor->loan_available) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></div>
                                                     <div class="change down"><a href="#"  data-bs-toggle="modal"
                                                         data-bs-target="#modalPrestar">Editar</a></div>
                                                 </div>
@@ -50,7 +50,7 @@
                                                
                                                 <div class="analytic-data analytic-ov-data">
                                                     <div class="title">Dinero en créditos activos</div>
-                                                    <div class="amount">${{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
+                                                    <div class="amount">{{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
                                                     <div class="change down">
                                                         <span class="text-primary">En trámites: {{ $tramites != null ? format_price($investor->loans_in_process) : 0 }}</span>
                                                     </div>
@@ -64,14 +64,14 @@
                                                 <table class="table table-borderless">
                                                     <tr>
                                                         <td>Valor de cuenta</td>
-                                                        <td><b>${{ format_price($valorCuenta) }}</b>
+                                                        <td><b>{{ format_price($valorCuenta) }}</b>
                                                             <br>
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDetalle">Ver detalle</a>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td>Disponible para prestar o retirar <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-disponible"></em></td>
-                                                        <td><b>${{ format_price($disponiblePrestar) }}</b>
+                                                        <td><b>{{ format_price($disponiblePrestar) }}</b>
                                                             
                                                         </td>
                                                     </tr>
@@ -81,7 +81,7 @@
                                                     <tr>
                                                         <td>Apartado para ser prestado   <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-proceso"></em></td>
                                                         <td class="text-start">
-                                                            <b>${{ format_price($investor->loan_available) }}</b>
+                                                            <b>{{ format_price($investor->loan_available) }}</b>
                                                             <br>
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalPrestar">Editar</a>
                                                         </td>
@@ -89,7 +89,7 @@
                                                     <tr>
                                                         <td>Préstamos en créditos activos <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></td>
                                                         <td>
-                                                            <b>${{ format_price($investor->placed_capital) }}</b>
+                                                            <b>{{ format_price($investor->placed_capital) }}</b>
                                                             
                                                         </td>
                                                     </tr>
@@ -154,15 +154,15 @@
                                             <table class="table table-borderless">
                                                 <tr>
                                                     <td>Intereses cobrados</td>
-                                                    <td><b>${{ format_price($interesesCobrados) }}</b></td>
+                                                    <td><b>{{ format_price($interesesCobrados) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>IVA de intereses cobrados</td>
-                                                    <td><b>${{ format_price($IvainteresesCobrados) }}</b></td>
+                                                    <td><b>{{ format_price($IvainteresesCobrados) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Recuperación de cartera vencida</td>
-                                                    <td><b>${{ format_price($recuperacionCarteraVencida) }}</b></td>
+                                                    <td><b>{{ format_price($recuperacionCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
@@ -171,15 +171,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Comisiones pagadas a KaaxClub</td>
-                                                    <td><b>${{ format_price($comisionesPagadasKaax) }}</b></td>
+                                                    <td><b>{{ format_price($comisionesPagadasKaax) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Pérdidas por cartera vencida</td>
-                                                    <td><b>${{ format_price($perdidasCarteraVencida) }}</b></td>
+                                                    <td><b>{{ format_price($perdidasCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td>IVA de comisiones</td>
-                                                    <td><b>${{ format_price($ivaComisiones) }}</b></td>
+                                                    <td><b>{{ format_price($ivaComisiones) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
@@ -188,7 +188,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td><span class="h5 text-primary">Resultados netos totales</span></td>
-                                                    <td><span class="h5 text-primary">${{ format_price($resultadosNetosTotales) }}</span></td>
+                                                    <td><span class="h5 text-primary">{{ format_price($resultadosNetosTotales) }}</span></td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -285,7 +285,7 @@
                             Es la cantidad de dinero que está disponible para ser prestada. Esta cantidad irá disminuyendo conforme se vayan entregando créditos.
                             El total de esta cantidad podrá verse en "Apartado para ser prestado"
                             <br> <br>
-                            <b>Disponible: {!! $totalAvailable > 0 ? '$'.format_price($totalAvailable) : '$0.00 <a href="/panel/kc-wallet" class="link-primary" style="font-weight: normal; text-decoration: underline"> Agrega fondos </a>' !!}</b>
+                            <b>Disponible: {!! $totalAvailable > 0 ? format_price($totalAvailable) : '$0.00 <a href="/panel/kc-wallet" class="link-primary" style="font-weight: normal; text-decoration: underline"> Agrega fondos </a>' !!}</b>
                         </p>
                         <input type="number" min="201" name="lendable" id="lendable" max="{{ $totalAvailable }}" class="form-control" value="{{ $totalAvailable }}">
                         <div class="col-12 mt-3">
@@ -343,15 +343,15 @@
                             @endphp
                             <tr>
                                 <td>Recursos fondeados</td>
-                                <td>{{  '$'.format_price($recursosFondeados) }}</td>
+                                <td>{{  format_price($recursosFondeados) }}</td>
                             </tr>
                             <tr>
                                 <td>Pagos recibidos</td>
-                                <td>{{ '$'.format_price($totalCollected)  }}</td>
+                                <td>{{ format_price($totalCollected)  }}</td>
                             </tr>
                             <tr>
                                 <td> <span class="h5 text-success">Total Ingresos</span> </td>
-                                <td> <span class="h5 text-success"> {{ '$'.format_price($totalIngresos) }} </span> </td>
+                                <td> <span class="h5 text-success"> {{ format_price($totalIngresos) }} </span> </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
@@ -360,23 +360,23 @@
                             </tr>
                             <tr>
                                 <td>Préstamos realizados</td>
-                                <td>{{ '$'.format_price($prestamosRealizados) }}</td>
+                                <td>{{ format_price($prestamosRealizados) }}</td>
                             </tr>
                             <tr>
                                 <td>Comisiones pagadas</td>
-                                <td>{{ '$'.format_price($comisionesPagadas) }}</td>
+                                <td>{{ format_price($comisionesPagadas) }}</td>
                             </tr>
                             <tr>
                                 <td>Recursos retirados de tu cuenta</td>
-                                <td>{{ '$'.format_price($recursosRetirados) }}</td>
+                                <td>{{ format_price($recursosRetirados) }}</td>
                             </tr>
                             <tr>
                                 <td>Pérdidas por cartera vencida</td>
-                                <td>{{ '$'.format_price($perdidasporCarteraVencida) }}</td>
+                                <td>{{ format_price($perdidasporCarteraVencida) }}</td>
                             </tr>
                             <tr>
                                 <td> <span class="h5 text-danger">Total Egresos</span> </td>
-                                <td> <span class="h5 text-danger">{{ '$'.format_price($totalEgresos) }}</span> </td>
+                                <td> <span class="h5 text-danger">{{ format_price($totalEgresos) }}</span> </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
@@ -385,15 +385,15 @@
                             </tr>
                             <tr>
                                 <td>Ingresos -  Egreso</td>
-                                <td>{{ '$'.format_price($ingresoEgreso) }}</td>
+                                <td>{{ format_price($ingresoEgreso) }}</td>
                             </tr>
                             <tr>
                                 <td>Capital prestado pendiente de pago</td>
-                                <td>{{ '$'.format_price($capitalPrestadoPendientePago) }}</td>
+                                <td>{{ format_price($capitalPrestadoPendientePago) }}</td>
                             </tr>
                             <tr>
                                 <td> <span class="h5 text-primary">Valor de tu cuenta</span> </td>
-                                <td> <span class="h5 text-primary">{{ '$'.format_price($valorCuenta) }}</span> </td>
+                                <td> <span class="h5 text-primary">{{ format_price($valorCuenta) }}</span> </td>
                             </tr>
                         </table>
                       
