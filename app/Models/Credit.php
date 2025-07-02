@@ -11,6 +11,7 @@ use Facade\FlareClient\Http\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use App\Models\FinancialProduct;
 
 class Credit extends Model
 {
@@ -829,10 +830,10 @@ class Credit extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
-    
+
     public function creditAppliedProduct()
     {
-        return $this->belongsTo(Product::class, 'applied_financial_product');
+        return $this->belongsTo(FinancialProduct::class, 'applied_financial_product');
     }
    
     public function creditUserFinancial()

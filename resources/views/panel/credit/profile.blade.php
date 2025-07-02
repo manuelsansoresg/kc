@@ -168,6 +168,7 @@
                                                                 <span
                                                                     class="preview-title-lg overline-title text-primary ">Crédito</span>
                                                             </div><!-- .nk-block-head -->
+                                                            
                                                             <div class="profile-ud-list">
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
