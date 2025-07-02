@@ -139,6 +139,19 @@ class Credit extends Model
     public static function getTramitePendiente($clientPersonId)
     {
         $getClientPerson = ClientPerson::find($clientPersonId);
+        
+        // Si no existe, asumimos que no tiene trámite pendiente
+        if (!$getClientPerson) {
+            return true;
+        }
+    
+        // pending_tramit: 0 = no tiene trámite pendiente, 1 = sí tiene
+        return $getClientPerson->pending_tramit == 0;
+    }
+
+    /*
+    {
+        $getClientPerson = ClientPerson::find($clientPersonId);
         $statusTramites = array(
             HistoryLog::KC_CHECK_UP ,
             HistoryLog::CREDIT_IN_PROGRESS ,
@@ -151,7 +164,7 @@ class Credit extends Model
         $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
         $creditStatus =  $getStatus > 0 ? false : true; //*true = no tiene trámite pendiente
         return $creditStatus;
-    }
+    }*/
 
     public static function setDataPago($creditId)
     {
