@@ -693,6 +693,7 @@ class LeadController extends Controller
         }
 
         $tramites = $typeSod ? [1 => config('enums.tipo_tramite')[1]] : [];
+        $tramitePendiente = Credit::getTramitePendiente($clientPerson->id);
 
         return response()->json([
             'TextSoad' => $textSoad,
@@ -709,6 +710,7 @@ class LeadController extends Controller
             'type_product_id' => $financialProduct->type_product_id,
             'sodTramites' => $tramites,
             'loan_available' => format_price($financialProduct->loan_available),
+            'tramitePendiente' => $tramitePendiente,
         ]);
     }
         
