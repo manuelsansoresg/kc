@@ -130,21 +130,23 @@
                                             <ul class="nav nav-tabs">
                                                 <li class="nav-item"> <a class="nav-link {{ $tab == null ? 'active' : null}}" data-bs-toggle="tab"
                                                         href="#tabGeneral">General</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                @hasrole('Administrador|Asesor')
+                                                    <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
                                                         href="#tabHistorial">Historial</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                        href="#tabActions">Tareas</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                        href="#tabRequest">Solicitud</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                        href="#tabComision">Comisión</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                        href="#tabDocs">Docs</a> </li>
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                        href="#tabKyc">KYC</a> </li>
+                                                    <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                            href="#tabActions">Tareas</a> </li>
+                                                    <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                            href="#tabRequest">Solicitud</a> </li>
+                                                    <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                            href="#tabComision">Comisión</a> </li>
+                                                    <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                            href="#tabDocs">Docs</a> </li>
+                                                    <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                            href="#tabKyc">KYC</a> </li>
 
-                                                <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
-                                                        href="#survey">Encuesta</a> </li>
+                                                    <li class="nav-item"> <a class="nav-link" data-bs-toggle="tab"
+                                                            href="#survey">Encuesta</a> </li>
+                                                @endhasrole
                                                
                                                 <li class="nav-item"> <a class="nav-link {{ $tab == 'pagos'? 'active' : null}}" data-bs-toggle="tab"
                                                 href="#pagos">Pagos</a> </li>
@@ -169,18 +171,32 @@
                                                             <div class="profile-ud-list">
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Financiera</span>
+                                                                        <span class="profile-ud-label">Fecha de entrega</span>
                                                                         <span class="profile-ud-value">
-                                                                            {{ $financial !== null ? $financial->commercial_name : null }}
+                                                                            {{ $credit !== null ? $credit->delivered_date : null }}
                                                                         </span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Financiera
-                                                                            tipo</span>
+                                                                        <span class="profile-ud-label">Importe prestado</span>
                                                                         <span class="profile-ud-value">
-                                                                            {{ isset($types[$credit->type_id]) ? $types[$credit->type_id] : null }}
+                                                                            @php
+                                                                                $investorImport = $credit->getInvestorImport();
+                                                                            @endphp
+                                                                            @if ($investorImport !== null)
+                                                                                {{ $investorImport }}
+                                                                            @else
+                                                                                <span class="text-muted">No disponible</span>
+                                                                            @endif
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Servicio</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ $credit->creditProduct != null ? $credit->creditProduct->alias : null }}
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -188,161 +204,105 @@
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Organización</span>
                                                                         <span class="profile-ud-value">
-                                                                            {{ $agreement !== null ? $agreement->name : null }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Producto</span>
-                                                                        <span class="profile-ud-value">
-                                                                            {{ $product !== null ? $product->alias : null }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-
-
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Email</span>
-                                                                        <span class="profile-ud-value"> {{ $client->email }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                               
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">ID Prospecto</span>
-                                                                        <span class="profile-ud-value"> {{ $credit->lead_id }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div><!-- .profile-ud-list -->
-                                                        </div><!-- .nk-block -->
-                                                        <div class="nk-divider divider md"></div>
-
-                                                        <div class="nk-block">
-                                                            <div class="nk-block-head nk-block-head-line">
-                                                                <span
-                                                                    class="preview-title-lg overline-title text-primary ">Cliente</span>
-                                                            </div><!-- .nk-block-head -->
-                                                            <div class="profile-ud-list">
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Nombres</span>
-                                                                        <span class="profile-ud-value"> {{ $client->name }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Primer
-                                                                            apellido</span>
-                                                                        <span class="profile-ud-value">
-                                                                            {{ $client->last_name }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Segundo
-                                                                            apellido</span>
-                                                                        <span class="profile-ud-value">
-                                                                            {{ $client->second_last_name }} </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Celular</span>
-                                                                        <span class="profile-ud-value">
-                                                                            {{ $client->cellphone }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Email</span>
-                                                                        <span class="profile-ud-value">
-                                                                            {{ $client->email }} </span>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div><!-- .profile-ud-list -->
-                                                        </div><!-- .nk-block -->
-                                                        <div class="nk-divider divider md"></div>
-
-                                                        <div class="nk-block">
-                                                            <div class="nk-block-head nk-block-head-line">
-                                                                <span
-                                                                    class="preview-title-lg overline-title text-primary ">Servicio KC</span>
-                                                            </div><!-- .nk-block-head -->
-                                                            <div class="profile-ud-list">
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                       
-                                                                        <span class="profile-ud-label">Producto financiero</span>
-                                                                        <span class="profile-ud-value"> {{ $credit_product!= null ? $credit_product->name : null}}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Importe solicitado</span>
-                                                                        <span class="profile-ud-value"> {{ $credit->importe_solicitado }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Banco nómina</span>
-                                                                        <span class="profile-ud-value">
-                                                                            {{ $bank != null ? $bank->name : null }}
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Tipo de crédito</span>
-                                                                        <span class="profile-ud-value">
-                                                                            {{ $tipo_credito }} </span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="profile-ud-item">
-                                                                    <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Consulta buró de crédito</span>
-                                                                        <span class="profile-ud-value">
-                                                                            @if ($credit->consulta_buro != null)
-                                                                                {{ $credit->consulta_buro == 1 ? 'Sí' : 'No' }}
-                                                                            @endif
+                                                                            {{ $credit->creditAgreement != null ? $credit->creditAgreement->name : null }}
                                                                         </span>
                                                                     </div>
                                                                 </div>
                                                                 
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Aval o garantía</span>
+                                                                        <span class="profile-ud-label">Tipo de trámite</span>
                                                                         <span class="profile-ud-value">
-                                                                            @if ($credit->aval_o_garantia != null)
-                                                                                {{ $credit->aval_o_garantia == 1 ? 'Sí' : 'No' }}
-                                                                            @endif
+                                                                            {{ $credit->tramit_type  != null && isset(config('enums.tipo_tramite')[$credit->tramit_type]) ? config('enums.tipo_tramite')[$credit->tramit_type] : null }}
                                                                         </span>
                                                                     </div>
                                                                 </div>
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
-                                                                        <span class="profile-ud-label">Reporte visto</span>
+                                                                        <span class="profile-ud-label">Estatus</span>
                                                                         <span class="profile-ud-value">
-                                                                            @if ($credit->date_open_report != null)
-                                                                               {{ formatDateNameMonth($credit->date_open_report) }}
-                                                                            @endif
+                                                                            {{ $credit->status != null && isset(config('enums.investorsCreditsStatus')[$credit->status]) ? config('enums.investorsCreditsStatus')[$credit->status] : null }}
                                                                         </span>
                                                                     </div>
                                                                 </div>
                                                                
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Producto</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ $credit->creditAppliedProduct != null ? $credit->creditAppliedProduct->alias : null }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                              
+
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Periodicidad</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ $credit->status != null && isset(config('enums.periodicidad_names')[$credit->applied_periodicity ]) ? config('enums.periodicidad_names')[$credit->applied_periodicity ] : null }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Capital</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ format_price($credit->applied_import)   }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Plazo</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ ($credit->applied_term)   }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Parcialidad</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ format_price($credit->applied_payment)   }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                              
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Total</span>
+                                                                        <span class="profile-ud-value">
+                                                                            {{ format_price($credit->applied_loan_total_amount)   }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                               
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">Tasa de interés anual</span>
+                                                                        <span class="profile-ud-value">
+                                                                            %{{ ($credit->applied_interest_rate)   }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                              
+                                                                <div class="profile-ud-item">
+                                                                    <div class="profile-ud wider">
+                                                                        <span class="profile-ud-label">CAT</span>
+                                                                        <span class="profile-ud-value">
+                                                                            %{{ ($credit->applied_CAT)   }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
 
                                                             </div><!-- .profile-ud-list -->
                                                         </div><!-- .nk-block -->
+
+                                                        
+
+                                                        
                                                         <div class="nk-divider divider md"></div>
                                                         <div class="nk-block">
                                                             <div class="nk-block-head nk-block-head-sm nk-block-between">
@@ -364,7 +324,7 @@
                                                             <div class="user-info">
                                                                 <span class="tb-lead"> <em
                                                                         class="icon ni ni ni-clock"></em>
-                                                                    {{ $leyend_status[$history->status_id] }} <span
+                                                                    {{ $leyend_status != null && isset($leyend_status[$history->status_id]) ? $leyend_status[$history->status_id] : 'Estado no definido' }} <span
                                                                         class="dot dot-success d-md-none ms-1"></span>
                                                                     <p class="ms-1">
                                                                         {{ formatDateNameMonth($history->created_at) }}</p>
@@ -432,7 +392,7 @@
                                                             <div class="profile-ud wider">
                                                                 <span class="profile-ud-label">Tipo de trámite</span>
                                                                 <span class="profile-ud-value">
-                                                                    {{ isset($loan_type[$credit->applied_loan_type]) ? $loan_type[$credit->applied_loan_type] : null }}
+                                                                    {{ $loan_type != null && $credit->applied_loan_type != null && isset($loan_type[$credit->applied_loan_type]) ? $loan_type[$credit->applied_loan_type] : null }}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -450,7 +410,7 @@
                                                             <div class="profile-ud wider">
                                                                 <span class="profile-ud-label">Tipo de firma</span>
                                                                 <span class="profile-ud-value">
-                                                                    {{ isset($sign_type[$credit->applied_sign_type]) ? $sign_type[$credit->applied_sign_type] : null }}
+                                                                    {{ $sign_type != null && $credit->applied_sign_type != null && isset($sign_type[$credit->applied_sign_type]) ? $sign_type[$credit->applied_sign_type] : null }}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -476,7 +436,7 @@
                                                             <div class="profile-ud wider">
                                                                 <span class="profile-ud-label">Periodicidad solicitada</span>
                                                                 <span class="profile-ud-value">
-                                                                    {{ isset($periodicity[$credit->applied_periodicity]) ? $periodicity[$credit->applied_periodicity] : null }}
+                                                                    {{ $periodicity != null && $credit->applied_periodicity != null && isset($periodicity[$credit->applied_periodicity]) ? $periodicity[$credit->applied_periodicity] : null }}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -746,17 +706,17 @@
                                                                         <tr>
                                                                             <td> {{ $payment->numero_de_pago }} </td>
                                                                             <td>{{ $payment->fecha_pago != '' ? date('d-m-Y', strtotime($payment->fecha_pago)) : null }}</td>
-                                                                            <td> {{ format_price(($payment->pagado * $investorsCredit->percentage) / 100) }} </td>
-                                                                            <td> {{ format_price(($payment->abono * $investorsCredit->percentag) / 100) }} </td>
-                                                                            <td> {{ format_price(($payment->interes * $investorsCredit->percentage) / 100) }} </td>
-                                                                            <td> {{ format_price(($payment->iva * $investorsCredit->percentage) / 100) }} </td>
+                                                                            <td> {{ $investorsCredit != null ? format_price(($payment->pagado * $investorsCredit->percentage) / 100) : null }} </td>
+                                                                            <td> {{ $investorsCredit != null ? format_price(($payment->abono * $investorsCredit->percentage) / 100) : null }} </td>
+                                                                            <td> {{ $investorsCredit != null ? format_price(($payment->interes * $investorsCredit->percentage) / 100) : null }} </td>
+                                                                            <td> {{ $investorsCredit != null ? format_price(($payment->iva * $investorsCredit->percentage) / 100) : null }} </td>
                                                                             
-                                                                            <td> {{ isset(config('enums.estatus_statement')[$payment->estatus_pago]) ? config('enums.estatus_statement')[$payment->estatus_pago] : null }}
+                                                                            <td> {{ $payment->estatus_pago != null && isset(config('enums.estatus_statement')[$payment->estatus_pago]) ? config('enums.estatus_statement')[$payment->estatus_pago] : null }}
                                                                             </td>
                                                                             <td> 
                                                                                 {{ $fecha_retencion }}
                                                                             </td>
-                                                                            <td> {{ format_price(($payment->collection_commission_amount * $investorsCredit->percentage)/ 100) }} </td>
+                                                                            <td> {{ $investorsCredit != null ? format_price(($payment->collection_commission_amount * $investorsCredit->percentage)/ 100) : null }} </td>
                                                                         </tr>
                                                                     @endforeach
                                                                 @endif
@@ -792,26 +752,13 @@
                                                 </div>
                                             </div>
                                         </div><!-- .card-inner -->
-                                        <div class="card-inner card-inner-sm">
-                                            <ul class="btn-toolbar justify-center gx-1">
-                                                <li><a href="/credit-resume/{{ $credit->id }}" class="btn btn-trigger btn-icon"><em
-                                                            class="icon ni ni-list-round"></em></a></li>
-                                                <li><a href="#" class="btn btn-trigger btn-icon"><em
-                                                            class="icon ni ni-mail"></em></a></li>
-                                                <li><a href="#" class="btn btn-trigger btn-icon"><em
-                                                            class="icon ni ni-download-cloud"></em></a></li>
-                                                <li><a href="#" class="btn btn-trigger btn-icon"><em
-                                                            class="icon ni ni-bookmark"></em></a></li>
-                                                <li><a href="#" class="btn btn-trigger btn-icon text-danger"><em
-                                                            class="icon ni ni-na"></em></a></li>
-                                            </ul>
-                                        </div><!-- .card-inner -->
+                                        
                                         <div class="card-inner">
                                             <h6 class="overline-title-alt mb-2 text-primary ">Otros</h6>
                                             <div class="row g-3">
                                                 <div class="col-6">
                                                     <span class="sub-text">Origen:</span>
-                                                    <span>{{ $origins[$credit->origin_id] }}</span>
+                                                    <span>{{ $origins != null && $credit->origin_id != null && isset($origins[$credit->origin_id]) ? $origins[$credit->origin_id] : null }}</span>
                                                 </div>
                                                 {{-- <div class="col-6">
                                                 <span class="sub-text">Canal:</span>
@@ -836,7 +783,7 @@
                                                     <span>
                                                         @if ($current_archive == null)
                                                         
-                                                            {{ isset($m_history_log::$label_status[$current_module->status_id]) ? $m_history_log::$label_status[$current_module->status_id] : null; }}
+                                                            {{ $current_module != null && $current_module->status_id != null && isset($m_history_log::$label_status[$current_module->status_id]) ? $m_history_log::$label_status[$current_module->status_id] : null }}
                                                         @endif
                                                     </span>
                                                 </div>
