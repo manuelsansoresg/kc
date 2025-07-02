@@ -39,10 +39,10 @@
                                     <th data-priority="1">Prestado</th>
                                     <th>Total cobrado</th>
                                     <th>Capital recuperado</th>
-                                    <th>Interés cobrado*</th>
+                                    <th>Interés cobrado</th>
                                     <th>Capital pendiente</th>
-                                    <th>Interés proyectado*</th>
-                                    {{-- <th>Comisión KC</th> --}}
+                                    <th>Interés proyectado</th>
+                                    <th>Comisión KC</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -58,7 +58,7 @@
                                     <td>{{ $item['interes_cobrado'] }}</td>
                                     <td>{{ $item['capital_pendiente'] }}</td>
                                     <td>{{ $item['interes_proyectado'] }}</td>
-                                    {{-- <td>{{ $item['comision_kc'] }}</td> --}}
+                                    <td>{{ $item['comision_kc'] }}</td>
                                     <td></td>
                                 </tr>
                                 @endforeach

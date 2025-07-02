@@ -177,6 +177,7 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Importe prestado</span>
@@ -185,13 +186,14 @@
                                                                                 $investorImport = $credit->getInvestorImport();
                                                                             @endphp
                                                                             @if ($investorImport !== null)
-                                                                                {{ $investorImport }}
+                                                                                {{ format_price($investorImport) }}
                                                                             @else
                                                                                 <span class="text-muted">No disponible</span>
                                                                             @endif
                                                                         </span>
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Servicio</span>
@@ -200,6 +202,7 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Organización</span>
@@ -217,6 +220,7 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Estatus</span>
@@ -253,6 +257,7 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Plazo</span>
@@ -261,6 +266,7 @@
                                                                         </span>
                                                                     </div>
                                                                 </div>
+
                                                                 <div class="profile-ud-item">
                                                                     <div class="profile-ud wider">
                                                                         <span class="profile-ud-label">Parcialidad</span>
@@ -716,7 +722,7 @@
                                                                             <td> 
                                                                                 {{ $fecha_retencion }}
                                                                             </td>
-                                                                            <td> {{ $investorsCredit != null ? format_price(($payment->collection_commission_amount * $investorsCredit->percentage)/ 100) : null }} </td>
+                                                                            <td> {{ $investorsCredit != null ? format_price(($payment->pagado * $investorsCredit->commission_rate * $investorsCredit->percentage)/ 10000) : null }} </td>
                                                                         </tr>
                                                                     @endforeach
                                                                 @endif
