@@ -158,45 +158,55 @@ class Credit extends Model
         // 1) obtengo colección
         $col = AgreementCollection::where('credit_id', $creditId)->first();
         if (!$col) return;
-
+    
         // 2) obtengo todos los investors_credits de este crédito KAAX
         $ics = InvestorsCredit::where('credit_id', $col->kc_credit_id)->get();
         if ($ics->isEmpty()) return;
-
+    
+        $creditStatuses = [];
+    
         // 3) recálculo en lote
-        $ics->each(function($ic) use ($col) {
+        $ics->each(function($ic) use ($col, &$creditStatuses) {
             $p  = $ic->percentage / 100;
             $totalCollected = $col->pago_acumulado_real * $p;
             $recoveredCapital = $col->abono_acumulado_real * $p;
             $profitCollected  = ($totalCollected - $recoveredCapital) / 1.16;
             $ivaCollected     = $profitCollected * 0.16;
             $placedCapital    = $col->saldo_insoluto_real * $p;
-            $comRateNoIva     = $ic->commission_rate / 100 / 1.16 ;
+            $comRateNoIva     = $ic->commission_rate / 100 / 1.16;
             $commissionAmount = $totalCollected * $comRateNoIva;
             $ivaCommission    = $commissionAmount * 0.16;
             $newStatus        = $placedCapital > 1 ? 4 : ($recoveredCapital > 0 ? 5 : $ic->status);
-
+    
             $ic->update([
-                'total_collected'  => $totalCollected,
-                'recovered_capital'=> $recoveredCapital,
-                'profit_collected' => $profitCollected,
-                'iva_collected'    => $ivaCollected,
-                'placed_capital'   => $placedCapital,
-                'commission_amount'=> $commissionAmount,
-                'iva_commission'   => $ivaCommission,
-                'total_balance'    => $col->saldo_total_real * $p,
-                'credit_status'    => $col->status,
-                'refinanciable'    => $col->refinanciable,
-                'status'           => $newStatus,
+                'total_collected'   => $totalCollected,
+                'recovered_capital' => $recoveredCapital,
+                'profit_collected'  => $profitCollected,
+                'iva_collected'     => $ivaCollected,
+                'placed_capital'    => $placedCapital,
+                'commission_amount' => $commissionAmount,
+                'iva_commission'    => $ivaCommission,
+                'total_balance'     => $col->saldo_total_real * $p,
+                'credit_status'     => $col->status,
+                'refinanciable'     => $col->refinanciable,
+                'status'            => $newStatus,
             ]);
+    
+            // Guardamos el status por credit_id para actualizarlo después
+            $creditStatuses[$ic->credit_id] = $newStatus;
         });
-
-        // 4 Llamar flags por cada crédito afectado (sin repetir)
-        $ics->pluck('credit_id')->unique()->each(function ($creditId) {
+    
+        // 4) actualizar status en la tabla credits antes de los flags
+        foreach ($creditStatuses as $creditId => $status) {
+            Credit::where('id', $creditId)->update(['status' => $status]);
+        }
+    
+        // 5) actualizar flags por cada crédito afectado
+        collect(array_keys($creditStatuses))->each(function ($creditId) {
             Credit::updateClientPersonCreditFlags($creditId);
         });
-
-        // 5) vuelvo a recalcular balances de todos los inversionistas
+    
+        // 6) actualizar balances de todos los inversionistas
         $ics->pluck('investor_id')->filter()->unique()
             ->each(fn($invId) => Investor::updateInvestorData($invId));
     }
