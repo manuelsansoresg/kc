@@ -712,7 +712,6 @@ class LeadController extends Controller
         ]);
     }
         
-
     /*{
 
         if ($financialProduct->type_product_id == 3) {
@@ -811,7 +810,7 @@ class LeadController extends Controller
                     'cuenta' => $maskedClabe, 'tramitePendiente' => $tramitePendiente, 'type_product_id' => $financialProduct->type_product_id, 'sodTramites' => $tramites, 'loan_available' => format_price($financialProduct->loan_available)
         );
         return response()->json($dataReturn);
-    }
+    }*/
 
     public function getLeadValidations($leadId)
     {
