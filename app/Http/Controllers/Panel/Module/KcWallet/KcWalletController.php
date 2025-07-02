@@ -52,6 +52,12 @@ class KcWalletController extends Controller
                 $getCollection = Collection::where('kc_credit_id', $getInvestorCredit->credit_id)->first();
                 $creditId = $getInvestorCredit->credit_id;
 
+                // Obtener fecha de entrega
+                $credit = Credit::find($creditId);
+                $fechaEntrega = $credit && $credit->delivered_date
+                    ? date('Y-m-d', strtotime($credit->delivered_date))
+                    : null;
+
                 // Datos crudos
                 $importe = $getInvestorCredit->import;
                 $pagado = $getInvestorCredit->total_collected;
@@ -70,7 +76,7 @@ class KcWalletController extends Controller
                 $status = config('enums.investorsCreditsStatus')[$getInvestorCredit->status];
 
                 $data[] = array(
-                    'id' => "{$creditId}" . '<a href="/panel/credit/' . $getInvestorCredit->credit_id . '?tab=pagos" target="_blank"> &nbsp; <span class="badge bg-primary">Ver</span> </a>',
+                    'id' => "{$creditId}" . '<a href="/panel/credit/' . $creditId . '?tab=pagos" target="_blank"> &nbsp; <span class="badge bg-primary">Ver</span> </a>',
                     'status' => $status,
                     'importe' => $valorImporte,
                     'pagado' => $valorPagado,
@@ -79,12 +85,14 @@ class KcWalletController extends Controller
                     'capital_pendiente' => $valorPorPagar,
                     'interes_cobrado' => $valorInteresCobrado,
                     'comision_kc' => format_price($getInvestorCredit->commission_amount),
+                    'fecha_entrega' => $fechaEntrega,
                 );
             }
         }
 
         return response()->json(['data' => $data]);
     }
+
    public function listHistory()
    {
     return view('panel.module.wallet.history');
@@ -123,6 +131,12 @@ class KcWalletController extends Controller
                 $getCollection = Collection::where('kc_credit_id', $getInvestorCredit->credit_id)->first();
                 $creditId = $getInvestorCredit->credit_id;
 
+                // Obtener crédito para la fecha de entrega
+                $credit = Credit::find($creditId);
+                $fechaEntrega = $credit && $credit->delivered_date
+                    ? date('Y-m-d', strtotime($credit->delivered_date))
+                    : null;
+
                 // Datos crudos
                 $importe = $getInvestorCredit->import;
                 $pagado = $getInvestorCredit->total_collected;
@@ -153,12 +167,14 @@ class KcWalletController extends Controller
                     'capital_pendiente' => $valorPorPagar,
                     'interes_cobrado' => $valorInteresCobrado,
                     'comision_kc' => $valorComision,
+                    'fecha_entrega' => $fechaEntrega,
                 );
             }
         }
 
         return view('panel.module.wallet.mis_prestamos', compact('getInvestorCredits', 'data'));
     }
+
 
     /**
      * Show the form for creating a new resource.

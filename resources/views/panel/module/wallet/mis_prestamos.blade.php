@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Mis prestamos')
+@section('title', 'Mis préstamos')
 
 @inject('MCrmStatusListKaaxSidecc', 'App\Models\kaaxSidecc\CrmStatusListKaaxSidecc')
 @inject('MCollection', 'App\Models\kaaxSidecc\Collection')
@@ -14,13 +14,13 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Mis prestamos</h3>
+                                <h3 class="nk-block-title page-title">Mis préstamos</h3>
                                 <div class="nk-block-des text-soft">
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item ">KC - Wallet</li>
-                                            <li class="breadcrumb-item active">Mis prestamos</li>
+                                            <li class="breadcrumb-item active">Mis préstamos</li>
                                         </ul>
                                     </nav>
                                 </div>
@@ -43,6 +43,7 @@
                                     <th>Capital pendiente</th>
                                     <th>Interés proyectado</th>
                                     <th>Comisión KC</th>
+                                    <th>Fecha entrega</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -59,6 +60,7 @@
                                     <td>{{ $item['capital_pendiente'] }}</td>
                                     <td>{{ $item['interes_proyectado'] }}</td>
                                     <td>{{ $item['comision_kc'] }}</td>
+                                    <td>{{ $item['fecha_entrega'] }}</td>
                                     <td></td>
                                 </tr>
                                 @endforeach
