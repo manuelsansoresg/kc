@@ -300,6 +300,50 @@ class ActionManychatController extends Controller
     public function validateTramitePendiente(Request $request)
     {
         $data = $request->all();
+        $manychat_id = $data['id'] ?? null;
+        $cellphone = $data['whatsapp_phone'] ?? null;
+
+        if (!$manychat_id || !$cellphone) {
+            return response()->json(['error' => 'Datos incompletos'], 400);
+        }
+
+        $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
+        $clientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+
+        $rfc = null;
+        $manychat = new Manychat();
+        $info = json_decode($manychat->getInfoUser($manychat_id));
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+
+        if ($info && $info->status !== 'error') {
+            $rfcField = collect($info->data->custom_fields ?? [])
+                ->firstWhere('name', 'Prospecto - RFC');
+            $rfc = $rfcField->value ?? null;
+        }
+
+        if (!$clientPerson && $rfc) {
+            $clientPerson = ClientPerson::where('rfc', $rfc)->first();
+        }
+
+        $hasPending = $clientPerson && $clientPerson->pending_tramit == 1;
+        $isValid = !$hasPending;
+
+        LeadValidation::saveEdit(
+            $lead->id ?? null,
+            'Crédito preautorizado - Trámite pendiente',
+            $isValid ? 1 : 0,
+            $isValid ? 'Sin trámites pendientes' : 'Tiene trámites pendientes'
+        );
+
+        $manychat->setCustomFields([
+            'Prospecto - Validar trámite pendiente' => $isValid,
+        ], $manychat_id);
+
+        return response()->json(['validate' => $isValid]);
+    }
+    
+/*  {
+        $data = $request->all();
         $manychat_id = $data['id'];
         $cellphone = $data['whatsapp_phone'];    
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
@@ -341,7 +385,7 @@ class ActionManychatController extends Controller
         return response()->json(['validate' => !$hasPending]);
     }
 
-/*     {
+    {
         $data = $request->all();
         $manychat_id = $data['id'];
         $cellphone = $data['whatsapp_phone'];    
