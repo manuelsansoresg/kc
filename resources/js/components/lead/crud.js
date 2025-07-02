@@ -1296,7 +1296,7 @@ window.validateSoad = function()
             $('#typeProductId').val(typeProductId);
             
             $('#loan_available-msg').html(result.loan_available);
-
+            document.getElementById('tramit_type').disabled = false;
             if (typeProductId == 3) {
                 console.log('typeProductId-'+typeProductId);
                 $('#producto-deseado').show();

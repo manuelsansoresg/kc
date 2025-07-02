@@ -84,7 +84,102 @@ class LeadController extends Controller
 
     }
 
-    public function checkData($valInput , $id, $leadId)
+    public function checkData($valInput, $id, $leadId)
+    {
+        $field = $id === 'cellphone' ? 'cellphone' : 'rfc';
+        $getClientPerson = ClientPerson::where($field, $valInput)->first();
+        $agreement = $getClientPerson ? Agreement::find($getClientPerson->agreement_id) : null;
+        $validateAgreement = $agreement && $agreement->status == 1;
+
+        // Crear o actualizar Lead
+        if ($leadId !== 'null') {
+            $lead = Lead::find($leadId);
+            if ($getClientPerson) {
+                $lead->update([
+                    'name' => $getClientPerson->name,
+                    'last_name' => $getClientPerson->last_name,
+                    'second_last_name' => $getClientPerson->second_last_name,
+                    'birth_date' => $getClientPerson->birth_date,
+                    'rfc' => $getClientPerson->rfc,
+                    'email' => $getClientPerson->email,
+                    'agreement_id' => $getClientPerson->agreement_id,
+                ]);
+            } else {
+                $lead->update([$field => $valInput]);
+            }
+        } else {
+            $leadData = $getClientPerson ? [
+                'name' => $getClientPerson->name,
+                'last_name' => $getClientPerson->last_name,
+                'second_last_name' => $getClientPerson->second_last_name,
+                'birth_date' => $getClientPerson->birth_date,
+                'rfc' => $getClientPerson->rfc,
+                'email' => $getClientPerson->email,
+                'agreement_id' => $getClientPerson->agreement_id,
+            ] : [$field => $valInput];
+
+            $lead = Lead::create($leadData);
+
+            $notification = SendNotificationsValues::STRATEGY['leadNewProspect'];
+            (new $notification)->send($lead->id);
+            HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+        }
+
+        // Validación: Cliente activo
+        $isActive = $getClientPerson && $getClientPerson->active == 1;
+        LeadValidation::saveEdit($lead->id, 'Prospecto - Cliente activo', $isActive ? 1 : 0, $isActive ? 'Cliente activo' : 'Cliente inactivo');
+
+        // Validación: celular o RFC
+        $isValidateCellphone = false;
+        $isValidateRFC = false;
+
+        if ($id === 'cellphone') {
+            $isValidateCellphone = $getClientPerson && $valInput === $getClientPerson->cellphone && $validateAgreement;
+            LeadValidation::saveEdit(
+                $lead->id,
+                'Prospecto - Celular',
+                $isValidateCellphone ? 1 : 0,
+                $isValidateCellphone ? 'Coincidencia encontrada' : 'Sin coincidencias'
+            );
+        }
+
+        if ($id === 'rfc') {
+            $isValidateRFC = $getClientPerson && $valInput === $getClientPerson->rfc && $validateAgreement;
+            LeadValidation::saveEdit(
+                $lead->id,
+                'Prospecto - RFC',
+                $isValidateRFC ? 1 : 0,
+                $isValidateRFC ? 'Coincidencia encontrada' : 'Sin coincidencias'
+            );
+        }
+
+        $isValidate = $isValidateCellphone || $isValidateRFC;
+
+        // Validación de trámite pendiente (simplificada)
+        $hasPendingTramite = $getClientPerson && $getClientPerson->pending_tramit == 1;
+        $contentTramite = $hasPendingTramite
+            ? '<p><span class="text-danger">Tiene trámites pendientes</span></p>'
+            : '<p><span class="text-primary">Sin trámites pendientes</span></p>';
+
+        LeadValidation::saveEdit(
+            $lead->id,
+            'Crédito preautorizado - Trámite pendiente',
+            $hasPendingTramite ? 0 : 1,
+            $hasPendingTramite ? 'Tiene trámites pendientes' : 'Sin trámites pendientes'
+        );
+
+        return response()->json([
+            'exist' => ClientPerson::checkDataModel($valInput, $id),
+            'clientPerson' => $getClientPerson,
+            'lead' => $lead,
+            'contentValidaciones' => $contentTramite,
+            'isValidate' => $isValidate,
+            'creditStatus' => !$hasPendingTramite
+        ]);
+    }
+
+
+    /*
     {
         $getLead           = ClientPerson::checkDataModel($valInput,$id);
         $field             = $id == 'cellphone' ? 'cellphone' : 'rfc';
@@ -204,7 +299,8 @@ class LeadController extends Controller
         
         return response()->json(['exist' => $getLead, 'clientPerson' => $getClientPerson, 'lead' => $lead, 'contentValidaciones' => $contentValidaciones, 'isValidate' => $isValidate, 'creditStatus' => $creditStatus]);
     }
-
+    */
+    
     public function validateCellphoneAndRfc($cellphone , $rfc, Lead $lead)
     {
         $getClientPersonCellphone   = ClientPerson::where('cellphone', $cellphone)->first();
@@ -483,8 +579,142 @@ class LeadController extends Controller
         
     }
 
-    public function getSoad(ClientPerson $clientPerson, Agreement $agreement, FinancialProduct $financialProduct, $leadId)
+    public function getSod(ClientPerson $clientPerson, Agreement $agreement, FinancialProduct $financialProduct, $leadId)
+
     {
+        $typeSod = $financialProduct->type_product_id == 3;
+        $today = date('Y-m-d');
+        $maskedClabe = strlen($clientPerson->Bank_clabe) > 4
+            ? str_repeat('*', strlen($clientPerson->Bank_clabe) - 4) . substr($clientPerson->Bank_clabe, -4)
+            : $clientPerson->Bank_clabe;
+
+        $maximoRedondeado = 0;
+        $minimoRedondeado = 100;
+        $contentProductSod = null;
+        $textSoad = null;
+        $isSodOnDateAllowed = false;
+        $comision = 0;
+
+        // 1. Validar si tiene un SOD activo
+        if ($typeSod) {
+            $hasSod = $clientPerson->sod_active == 1;
+            $textSoad = $hasSod ? 'Tiene un Salario On-Demand activo' : 'No tiene un Salario On-Demand activo';
+            $statusPreautorizado = $hasSod ? 0 : 1;
+
+            LeadValidation::saveEdit(
+                $leadId,
+                'Crédito preautorizado - SOD activo',
+                $statusPreautorizado,
+                $textSoad
+            );
+        }
+
+        // 2. Validar si hoy está dentro del rango permitido
+        $getSodName = SodScheduleName::find($agreement->id);
+
+        if ($getSodName) {
+            $nameField = "schedule_{$getSodName->id}";
+            $getDate = SodScheduleDate::select("{$nameField} as schedule")
+                ->where('fecha', $today)
+                ->first();
+
+            $isInRange = $getDate && $getDate->schedule == 1;
+            $isSodOnDateAllowed = $isInRange;
+            $statusRangoFechas = $isInRange ? 1 : 0;
+            $isSoadDateText = $isInRange ? 'Solicitud dentro del rango de fechas' : 'Solicitud fuera del rango de fechas';
+
+            if ($typeSod) {
+                LeadValidation::saveEdit(
+                    $leadId,
+                    'Crédito preautorizado - SOD en rango de fechas permitidas',
+                    $statusRangoFechas,
+                    $isSoadDateText
+                );
+            }
+
+            // 3. Si la fecha es válida, calcular máximos y mínimos
+            if ($isInRange) {
+                $dailyIncome = $clientPerson->daily_income_adjusted;
+                $activeAmount = $clientPerson->sod_active_amount;
+
+                // Obtener días entre hoy y última fecha con schedule_1 = 2
+                $schedule = SodScheduleDate::selectRaw("
+                    CASE
+                        WHEN schedule_1 = 2 AND fecha = ? THEN 1
+                        ELSE DATEDIFF(fecha, (
+                            SELECT MAX(fecha) FROM sod_schedule_dates WHERE schedule_1 = 2 AND fecha < ?
+                        ))
+                    END as dias
+                ", [$today, $today])->where('fecha', $today)->first();
+
+                $dias = $schedule ? $schedule->dias : 0;
+                $maximo = ($dailyIncome * $dias) - $activeAmount;
+                $maximoRedondeado = floor($maximo / 100) * 100;
+                
+                $puedeTramitar = $maximoRedondeado >= $minimoRedondeado;
+
+                if ($puedeTramitar) {
+                    $comision = $financialProduct->sod_commission_amount;
+
+                    $contentProductSod = view('panel.lead.product_sod', [
+                        'minimo' => $minimoRedondeado,
+                        'maximo' => $maximoRedondeado
+                    ])->render();
+
+                    if ($typeSod) {
+                        LeadValidation::saveEdit(
+                            $leadId,
+                            'Crédito preautorizado - Trámite SOD autorizado',
+                            1,
+                            'Prospecto puede tramitar un Salario On-Demand'
+                        );
+                    }
+                } else {
+                    if ($typeSod) {
+                        LeadValidation::saveEdit(
+                            $leadId,
+                            'Crédito preautorizado - Trámite SOD autorizado',
+                            0,
+                            'Prospecto no puede tramitar un Salario On-Demand: el monto máximo disponible es menor al mínimo permitido'
+                        );
+                    }
+
+                    $contentProductSod = null;
+                    $comision = 0;
+                }
+            } elseif ($typeSod) {
+                LeadValidation::saveEdit(
+                    $leadId,
+                    'Crédito preautorizado - Trámite SOD autorizado',
+                    0,
+                    'Prospecto no puede tramitar un Salario On-Demand: fuera del rango de fechas'
+                );
+            }
+        }
+
+        $tramites = $typeSod ? [1 => config('enums.tipo_tramite')[1]] : [];
+        $tramitePendiente = Credit::getTramitePendiente($clientPerson->id);
+
+        return response()->json([
+            'TextSoad' => $textSoad,
+            'soadActive' => $clientPerson->sod_active,
+            'isSoadDate' => $isInRange ?? false,
+            'isSodOnDate' => $isSodOnDateAllowed,
+            'maximoRedondeado' => $maximoRedondeado,
+            'minimoRedondeado' => $minimoRedondeado,
+            'contentProductSod' => $contentProductSod,
+            'financialProduct' => $financialProduct->name,
+            'comision' => $comision,
+            'bank_name' => $clientPerson->bank_name,
+            'cuenta' => $maskedClabe,
+            'type_product_id' => $financialProduct->type_product_id,
+            'sodTramites' => $tramites,
+            'loan_available' => format_price($financialProduct->loan_available),
+            'tramitePendiente' => $tramitePendiente,
+        ]);
+    }
+        
+    /*{
 
         if ($financialProduct->type_product_id == 3) {
             $textSoad = 'Tiene un Salario On-Demand activo';
@@ -492,7 +722,7 @@ class LeadController extends Controller
             if ($clientPerson->sod_active == 0) {
                 $textSoad = 'No tiene un Salario On-Demand activo';
                 $statusPreautorizado = 1;
-            }
+            }* `
             LeadValidation::saveEdit($leadId, 'Crédito preautorizado - SOD activo', $statusPreautorizado, $textSoad);
         }
         
@@ -582,7 +812,7 @@ class LeadController extends Controller
                     'cuenta' => $maskedClabe, 'tramitePendiente' => $tramitePendiente, 'type_product_id' => $financialProduct->type_product_id, 'sodTramites' => $tramites, 'loan_available' => format_price($financialProduct->loan_available)
         );
         return response()->json($dataReturn);
-    }
+    }*/
 
     public function getLeadValidations($leadId)
     {
