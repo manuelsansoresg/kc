@@ -199,9 +199,9 @@
                                         <div class="card-body">
                                             <h6 class="title">Valor de cuenta </h6>
                                             @php
-                                                $disponiblePrestaroRetirar = $investor != null ? $investor->total_available  + $investor->loan_available : 0;
+                                                $disponiblePrestaroRetirar = $investor != null ? $investor->withdraw_available : 0;
                                                 $procesoPrestado = $investor != null ? $investor->loan_available : 0;
-                                                $prestamoCreditosActivos = $investor != null ? $investor->placed_capital : 0;
+                                                $prestamoCreditosActivos = $investor != null ? $investor->placed_capital + $investor->loans_in_process : 0;
                                                 $totalAvailable = $investor != null ? $investor->total_available : 0;
                                             @endphp
                                             <input type="hidden" id="disponiblePrestaroRetirar" value="{{ $disponiblePrestaroRetirar }}">
