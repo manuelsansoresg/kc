@@ -19,11 +19,12 @@
                                 <div class="card card-bordered  vh-50">
                                     <div class="card-inner">
                                         @php
-                                            $valorCuenta = $investor->account_value;
-                                            $disponiblePrestar = $investor->withdraw_available;
+                                            $valorCuenta = $investor != null ? $investor->account_value : 0;
+                                            $disponiblePrestar = $investor != null ? $investor->withdraw_available : 0;
+                                            $totalAvailable = $investor != null ? $investor->total_available : 0;
                                         @endphp
-                                        <input type="hidden" id="iValorCuenta" value="{{ $valorCuenta}}">
-                                        <input type="hidden" id="iTotalCredit" value="{{ $valorCuenta + $investor->total_balance}}">
+                                        <input type="hidden" id="iValorCuenta" value="{{ $totalAvailable }}">
+                                        <input type="hidden" id="iTotalCredit" value="{{ $valorCuenta + $investor->total_balance - $investor->placed_capital }}">
                                         <div class="analytic-ov d-none d-md-block">
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
@@ -174,12 +175,12 @@
                                                     <td><b>{{ format_price($comisionesPagadasKaax) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Pérdidas por cartera vencida</td>
-                                                    <td><b>{{ format_price($perdidasCarteraVencida) }}</b></td>
-                                                </tr>
-                                                <tr>
                                                     <td>IVA de comisiones</td>
                                                     <td><b>{{ format_price($ivaComisiones) }}</b></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Pérdidas por cartera vencida</td>
+                                                    <td><b>{{ format_price($perdidasCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">

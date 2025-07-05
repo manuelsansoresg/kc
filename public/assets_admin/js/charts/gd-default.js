@@ -586,7 +586,7 @@
     let iTotalCredit = $('#iTotalCredit').val();
     var salesOverview = {
       labels: ["Hoy", "Último cobro"],
-      dataUnit: 'BTC',
+      dataUnit: '$',
       lineTension: 0.1,
       datasets: [{
         label: "Sales Overview",
