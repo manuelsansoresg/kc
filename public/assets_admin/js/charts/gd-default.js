@@ -585,7 +585,7 @@
     let iValorCuenta = $('#iValorCuenta').val();
     let iTotalCredit = $('#iTotalCredit').val();
     var salesOverview = {
-      labels: ["Hoy", "Último cobro"],
+      labels: ["Disponible hoy", "Último cobro"],
       dataUnit: '$',
       lineTension: 0.1,
       datasets: [{
