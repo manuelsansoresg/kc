@@ -41,7 +41,7 @@ class CalculadoraCredito
             $dias             = config('enums.periodicidad_valores')[$financialProduct->periodicity_id];
             $rate             = $financialProduct->daily_interest_rate/ 10000  * ($dias);
             $per              = $financialProduct->max_term;
-            $pmt = $clientPerson->payment_capacity + $clientPerson->active_discount;
+            $pmt = $clientPerson->payment_capacity;
             $max_loan_ammount = $financialProduct->max_loan_ammount;
             
             $finance = new Finance;
