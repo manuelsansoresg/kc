@@ -9,11 +9,7 @@ function getMonthLabels() {
     let labels = [];
     for (let i = 5; i >= 0; i--) {
         let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        if (i === 0) {
-            labels.push('Mes actual');
-        } else {
-            labels.push(`Mes -${i}`);
-        }
+        labels.push(months[d.getMonth()]);
     }
     return labels;
 }
@@ -35,39 +31,56 @@ async function renderBarChartIngresos() {
     const labels = getMonthLabels();
     const data = await fetchIngresosData(investorId);
     const ctx = chartEl.getContext('2d');
-    new Chart(ctx, {
+    if (window.barChartIngresosInstance) {
+        window.barChartIngresosInstance.destroy();
+    }
+    window.barChartIngresosInstance = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
             datasets: [{
-                label: 'Ingresos',
+                label: '', // vacío para evitar leyenda
                 data: data,
-                backgroundColor: 'rgba(255,0,0,0)',
-                borderColor: '#d11a1a',
+                backgroundColor: '#9cabff', // igual que example-chart.js
                 borderWidth: 2,
-                hoverBackgroundColor: 'rgba(255,0,0,0.1)',
+                borderColor: 'transparent',
+                hoverBorderColor: 'transparent',
+                borderSkipped: 'bottom',
+                barPercentage: 0.6,
+                categoryPercentage: 0.7
             }]
         },
         options: {
             plugins: {
-                legend: { display: false },
+                legend: { display: false }, // Chart.js v3+
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return `$${context.parsed.y}`;
+                            return context.parsed.y;
                         }
-                    }
+                    },
+                    backgroundColor: '#eff6ff',
+                    titleFont: { size: 13 },
+                    titleColor: '#6783b8',
+                    titleMarginBottom: 6,
+                    bodyColor: '#9eaecf',
+                    bodyFont: { size: 12 },
+                    bodySpacing: 4,
+                    padding: 10,
+                    footerMarginTop: 0,
+                    displayColors: false
                 }
             },
+            maintainAspectRatio: false,
             scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: { color: '#d11a1a' }
-                },
                 y: {
                     beginAtZero: true,
-                    grid: { color: '#f2dede' },
-                    ticks: { color: '#d11a1a' }
+                    ticks: { color: '#9eaecf', font: { size: 12 }, padding: 5 },
+                    grid: { color: 'rgba(82,100,132,0.2)', tickLength: 0, drawTicks: false }
+                },
+                x: {
+                    ticks: { color: '#9eaecf', font: { size: 12 }, padding: 5 },
+                    grid: { color: 'transparent', tickLength: 10, drawTicks: false }
                 }
             }
         }

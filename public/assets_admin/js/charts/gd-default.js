@@ -635,13 +635,8 @@
             datasets: chart_data
           },
           options: {
-            legend: {
-              display: _get_data.legend ? _get_data.legend : false,
-              labels: {
-                boxWidth: 30,
-                padding: 20,
-                fontColor: '#6783b8'
-              }
+            plugins: {
+              legend: { display: false },
             },
             maintainAspectRatio: false,
             tooltips: {

@@ -230,11 +230,11 @@
                                                     <td><b>{{ format_price($comisionesPagadasKaax) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>IVA de comisiones</td>
+                                                    <td>IVA de comisiones <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-iva-comisiones"></em></td>
                                                     <td><b>{{ format_price($ivaComisiones) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Pérdidas por cartera vencida</td>
+                                                    <td>Pérdidas por cartera vencida <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-perdidas"></em></td>
                                                     <td><b>{{ format_price($perdidasCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
@@ -293,10 +293,9 @@
                            </div>
                             
                            <div class="row mt-5">
-                            <div class="col-12 col-md-6">
-                                
-                                <div class="card">
-                                    <div class="card-body">
+                            <div class="col-12 col-md-6 d-flex align-items-stretch">
+                                <div class="card w-100">
+                                    <div class="card-body d-flex flex-column">
                                         <div class="nk-block-head nk-block-head-sm">
                                             <div class="nk-block-between">
                                                 <div class="nk-block-head-content">
@@ -306,29 +305,26 @@
                                                 
                                             </div><!-- .nk-block-between -->
                                         </div><!-- .nk-block-head -->
-                                        <div class="col-12 ">
-                                            <div class="nk-sales-ck large pt-4">
-                                                <canvas class="sales-overview-chart" id="salesOverview"></canvas>
-                                            </div>
+                                        <div class="col-12 flex-grow-1 d-flex align-items-center">
+                                            <canvas class="sales-overview-chart chart-fixed" id="salesOverview"></canvas>
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
-                            <div class="col-12 col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
+                            <div class="col-12 col-md-6 d-flex align-items-stretch">
+                                <div class="card w-100">
+                                    <div class="card-body d-flex flex-column">
                                         <div class="nk-block-head nk-block-head-sm">
                                             <div class="nk-block-between">
                                                 <div class="nk-block-head-content">
-                                                    <h6 class="title">Ingresos proyectados </h6>
-                                                    <p>Ingresos en los próximos meses</p>
+                                                    <h6 class="title">Colocación mensual </h6>
+                                                    <p>Préstamos realizados en los últimos 6 meses</p>
                                                 </div><!-- .nk-block-head-content -->
                                                 
                                             </div><!-- .nk-block-between -->
                                         </div><!-- .nk-block-head -->
-                                        <div class="col-12">
-                                            <canvas class="bar-chart" id="barChartIngresos"></canvas>
+                                        <div class="col-12 flex-grow-1 d-flex align-items-center">
+                                            <canvas class="bar-chart chart-fixed" id="barChartIngresos"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -485,4 +481,16 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/js/components/resumen.js"></script>
+@endpush
+
+@push('styles')
+<style>
+.chart-fixed {
+    width: 100% !important;
+    max-width: 100%;
+    height: 350px !important;
+    max-height: 350px;
+    display: block;
+}
+</style>
 @endpush
