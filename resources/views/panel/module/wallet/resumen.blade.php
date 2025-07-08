@@ -11,9 +11,17 @@
                     <div class="nk-block nk-block-lg">
                         <div class="container">
                           <div class="row">
-                            <div class="col-12 text-end">
-                                <a href="#" class="btn btn-xl btn-primary"  data-bs-toggle="modal"
-                                data-bs-target="#modalPrestar">Prestar</a>
+                            <div class="col-6 d-flex align-items-center">
+                                @if ($investor->pending_funding_amount > 0)
+                                    <div class="d-flex align-items-center h-100">
+                                        <span>Importe de créditos en espera de fondeo: {{ format_price($investor->pending_funding_amount) }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="col-6 d-flex align-items-center justify-content-end">
+                                <div class="d-flex align-items-center h-100">
+                                    <a href="#" class="btn btn-xl btn-primary" data-bs-toggle="modal" data-bs-target="#modalPrestar">Prestar</a>
+                                </div>
                             </div>
                             <div class="col-12 mt-5">
                                 <div class="card card-bordered  vh-50">
