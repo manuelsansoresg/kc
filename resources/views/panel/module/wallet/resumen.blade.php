@@ -27,8 +27,8 @@
                                         <div class="analytic-ov d-none d-md-block">
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
-                                                    <div class="title">Valor de cuenta</div>
-                                                    <div class="amount">{{ format_price($valorCuenta) }}</div>
+                                                    <div class="title">Valor de cuenta </div>
+                                                    <div class="amount">{{ format_price($valorCuenta) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-valor-cuenta"></em></div>
                                                     <div class="change up">
                                                         <a href="#"  data-bs-toggle="modal"
                                                         data-bs-target="#modalDetalle">Ver detalle</a>
@@ -52,7 +52,7 @@
                                                     <div class="title">Dinero en créditos activos</div>
                                                     <div class="amount">{{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
                                                     <div class="change down">
-                                                        <span class="text-primary">En trámites: {{ $tramites != null ? format_price($investor->loans_in_process) : 0 }}</span>
+                                                        <span class="text-primary">En trámites: {{ $tramites != null ? format_price($investor->loans_in_process) : 0 }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-tramites"></em></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -63,7 +63,7 @@
                                             <div class="row">
                                                 <table class="table table-borderless">
                                                     <tr>
-                                                        <td>Valor de cuenta</td>
+                                                        <td>Valor de cuenta  <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-valor-cuenta"></em></td>
                                                         <td><b>{{ format_price($valorCuenta) }}</b>
                                                             <br>
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDetalle">Ver detalle</a>
@@ -103,6 +103,11 @@
                                             
                                         </div>
                                         <div style="display: none;">
+                                            <div id="tooltip-valor-cuenta">
+                                                <b>Valor de cuenta</b>
+                                                <br><br>
+                                                Es el valor total de tu cuenta.
+                                            </div>
                                            
                                             <div id="tooltip-disponible">
                                                 <b>Disponible para prestar o retirar</b>
@@ -117,7 +122,10 @@
                                                 Dinero destinado para préstamos. Este dinero no está disponible para retirar a tu cuenta a menos que modifiques la cantidad de dinero asignada para ser prestada.
 
                                             </div>
-                                            
+                                            <div id="tooltip-tramites">
+                                                Dinero de créditos que están en trámite.
+                                            </div>
+
                                             <div id="tooltip-prestamo">
                                                 <b>Dinero en créditos activos.
                                                 </b>
@@ -126,6 +134,45 @@
                                                 <br>
                                                 También incluye créditos que están en trámite.
                                             </div>
+                                            <div id="tooltip-intereses">
+                                                <b>Intereses cobrados</b>
+                                                <br><br>
+                                                Son los intereses que has cobrado.
+                                            </div>
+                                            <div id="tooltip-iva-intereses">
+                                                <b>IVA de intereses cobrados</b>
+                                                <br><br>
+                                                IVA de los intereses que has cobrado.
+                                            </div>
+                                            <div id="tooltip-recuperacion">
+                                                <b>Recuperación de cartera vencida</b>
+                                                <br><br>
+                                                Dinero recuperado de la cartera vencida.
+                                            </div>
+                                            <div id="tooltip-comisiones">
+                                                <b>Comisiones pagadas a KaaxClub</b>
+                                                <br><br>
+                                                Comisiones que has pagado a KaaxClub.
+                                            </div>
+
+
+                                            <div id="tooltip-perdidas">
+                                                <b>Pérdidas por cartera vencida</b>
+                                                <br><br>
+                                                Dinero perdido en cartera vencida.
+                                            </div>
+                                            <div id="tooltip-iva-comisiones">
+                                                <b>IVA de comisiones</b>
+                                                <br><br>
+                                                IVA de las comisiones que has pagado a KaaxClub.
+                                            </div>
+                                            <div id="tooltip-resultados">
+                                                <b>Resultados netos totales</b>
+                                                <br><br>
+                                                Son tus ganancias que has obtenido.
+                                            </div>
+                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -153,15 +200,15 @@
                                             @endphp
                                             <table class="table table-borderless">
                                                 <tr>
-                                                    <td>Intereses cobrados</td>
+                                                    <td>Intereses cobrados <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-intereses"></em></td>
                                                     <td><b>{{ format_price($interesesCobrados) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>IVA de intereses cobrados</td>
+                                                    <td>IVA de intereses cobrados <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-iva-intereses"></em></td>
                                                     <td><b>{{ format_price($IvainteresesCobrados) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Recuperación de cartera vencida</td>
+                                                    <td>Recuperación de cartera vencida <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-recuperacion"></em></td>
                                                     <td><b>{{ format_price($recuperacionCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
@@ -170,15 +217,15 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Comisiones pagadas a KaaxClub</td>
+                                                    <td>Comisiones pagadas a KaaxClub <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-comisiones"></em></td>
                                                     <td><b>{{ format_price($comisionesPagadasKaax) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Pérdidas por cartera vencida</td>
+                                                    <td>Pérdidas por cartera vencida <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-perdidas"></em></td>
                                                     <td><b>{{ format_price($perdidasCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>IVA de comisiones</td>
+                                                    <td>IVA de comisiones <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-iva-comisiones"></em> </td>
                                                     <td><b>{{ format_price($ivaComisiones) }}</b></td>
                                                 </tr>
                                                 <tr>
@@ -187,7 +234,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><span class="h5 text-primary">Resultados netos totales</span></td>
+                                                    <td><span class="h5 text-primary">Resultados netos totales <em class="icon ni ni-info active-tooltip text-primary" data-template="tooltip-resultados"></em></span></td>
                                                     <td><span class="h5 text-primary">{{ format_price($resultadosNetosTotales) }}</span></td>
                                                 </tr>
                                             </table>
@@ -371,7 +418,7 @@
                                 <td>{{ format_price($recursosRetirados) }}</td>
                             </tr>
                             <tr>
-                                <td>Pérdidas por cartera vencida</td>
+                                <td>Pérdidas por cartera vencida <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-perdidas"></em></td>
                                 <td>{{ format_price($perdidasporCarteraVencida) }}</td>
                             </tr>
                             <tr>
