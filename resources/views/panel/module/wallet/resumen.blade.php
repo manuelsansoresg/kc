@@ -315,6 +315,24 @@
                                 </div>
                                 
                             </div>
+                            <div class="col-12 col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="nk-block-head nk-block-head-sm">
+                                            <div class="nk-block-between">
+                                                <div class="nk-block-head-content">
+                                                    <h6 class="title">Ingresos proyectados </h6>
+                                                    <p>Ingresos en los próximos meses</p>
+                                                </div><!-- .nk-block-head-content -->
+                                                
+                                            </div><!-- .nk-block-between -->
+                                        </div><!-- .nk-block-head -->
+                                        <div class="col-12">
+                                            <canvas class="bar-chart" id="barChartIngresos"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                            </div>
                         </div>
                     </div>
@@ -462,3 +480,9 @@
     </div>
 
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/components/resumen.js"></script>
+@endpush

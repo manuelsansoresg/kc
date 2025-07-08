@@ -99,4 +99,23 @@ class InvestorController extends Controller
     {
         //
     }
+
+    public function ingresosMensuales($investorId)
+    {
+        $now = now();
+        $importes = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = $now->copy()->subMonths($i);
+            $year = $date->year;
+            $month = $date->month;
+            $importe = \App\Models\InvestorsCredit::where('investor_id', $investorId)
+                ->whereHas('credit', function($q) use ($year, $month) {
+                    $q->whereYear('delivered_date', $year)
+                      ->whereMonth('delivered_date', $month);
+                })
+                ->sum('import');
+            $importes[] = round($importe, 2);
+        }
+        return response()->json($importes);
+    }
 }

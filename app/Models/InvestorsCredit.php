@@ -32,6 +32,11 @@ class InvestorsCredit extends Model
         'refinanciable',
     ];
 
+    public function credit()
+    {
+        return $this->belongsTo(Credit::class, 'credit_id');
+    }
+
 
     public static function removeInvestorsCreditsByProduct($financialProductId)
     {
