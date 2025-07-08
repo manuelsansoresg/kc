@@ -11,6 +11,7 @@ use Facade\FlareClient\Http\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use App\Models\FinancialProduct;
 
 class Credit extends Model
 {
@@ -139,6 +140,19 @@ class Credit extends Model
     public static function getTramitePendiente($clientPersonId)
     {
         $getClientPerson = ClientPerson::find($clientPersonId);
+        
+        // Si no existe, asumimos que no tiene trámite pendiente
+        if (!$getClientPerson) {
+            return true;
+        }
+    
+        // pending_tramit: 0 = no tiene trámite pendiente, 1 = sí tiene
+        return $getClientPerson->pending_tramit == 0;
+    }
+
+    /*
+    {
+        $getClientPerson = ClientPerson::find($clientPersonId);
         $statusTramites = array(
             HistoryLog::KC_CHECK_UP ,
             HistoryLog::CREDIT_IN_PROGRESS ,
@@ -151,7 +165,7 @@ class Credit extends Model
         $getStatus = $getClientPerson != null ? Credit::where('client_person_id', $getClientPerson->id)->whereIn('credit_status', $statusTramites)->count() : 0;
         $creditStatus =  $getStatus > 0 ? false : true; //*true = no tiene trámite pendiente
         return $creditStatus;
-    }
+    }*/
 
     public static function setDataPago($creditId)
     {
@@ -259,10 +273,18 @@ class Credit extends Model
         $getCredit = Credit::find($creditId);
 
         if (!$getCredit) {
-           return;
+            return;
         }
 
         $clientPersonId = $getCredit->client_person_id;
+
+        // Enum local
+        $periodicidad_valores = [
+            1 => 7,
+            2 => 14,
+            3 => 15,
+            4 => 30
+        ];
 
         // 1. FLAGS DE ACTIVIDAD
         $hasActiveCredit = Credit::where('client_person_id', $clientPersonId)
@@ -304,10 +326,8 @@ class Credit extends Model
         $refTramitAllowed = 0;
 
         if ($hasActiveCredit == false) {
-            // No tiene crédito activo
             $newTramitAllowed = 1;
         } else {
-            // Tiene crédito activo
             $activeCredits = Credit::where('client_person_id', $clientPersonId)
                 ->where('product_id', '!=', 3)
                 ->whereIn('status', [4])
@@ -316,7 +336,7 @@ class Credit extends Model
 
             foreach ($activeCredits as $credit) {
                 $product = FinancialProduct::where('id', $credit->applied_financial_product)
-                    ->where('status', 1) // SOLO productos activos
+                    ->where('status', 1)
                     ->first();
 
                 if (!$product) {
@@ -340,20 +360,27 @@ class Credit extends Model
             $refTramitAllowed = 0;
         }
 
-        // 5. ACTUALIZAR CAMPOS EN client_person
+        // 5. CÁLCULOS NUEVOS
+        $diasPeriodo = $periodicidad_valores[$client->periodicity_id] ?? 1;
+
+        $dailyIncomeAdjusted = $client->daily_income - ($diasPeriodo > 0 ? ($activeDiscount / $diasPeriodo) : 0);
+        $paymentCapacity = $dailyIncomeAdjusted * $diasPeriodo * $client->pc_percentage;
+
+        // 6. ACTUALIZAR CAMPOS EN client_person
         $client->update([
-            'credit_active'            => $hasActiveCredit ? 1 : 0,
-            'sod_active'               => $hasActiveSod ? 1 : 0,
-            'active_discount'          => $activeDiscount,
-            'sod_active_amount'        => $activeSodAmount,
-            'pending_tramit'           => $hasPendingTramit ? 1 : 0,
-            'new_tramit_allowed'       => $newTramitAllowed,
-            'additional_tramit_allowed'=> $additionalTramitAllowed,
-            'ref_tramit_allowed'       => $refTramitAllowed,
+            'credit_active'             => $hasActiveCredit ? 1 : 0,
+            'sod_active'                => $hasActiveSod ? 1 : 0,
+            'active_discount'           => $activeDiscount,
+            'sod_active_amount'         => $activeSodAmount,
+            'pending_tramit'            => $hasPendingTramit ? 1 : 0,
+            'new_tramit_allowed'        => $newTramitAllowed,
+            'additional_tramit_allowed' => $additionalTramitAllowed,
+            'ref_tramit_allowed'        => $refTramitAllowed,
+            'daily_income_adjusted'     => round($dailyIncomeAdjusted, 2),
+            'payment_capacity'          => round($paymentCapacity, 2),
         ]);
     }
 
-    
 
     /**
      * actualizar applied_import , applied_term , applied_payment , applied_loan_total_amount 
@@ -816,10 +843,10 @@ class Credit extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
-    
+
     public function creditAppliedProduct()
     {
-        return $this->belongsTo(Product::class, 'applied_financial_product');
+        return $this->belongsTo(FinancialProduct::class, 'applied_financial_product');
     }
    
     public function creditUserFinancial()
