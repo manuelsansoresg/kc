@@ -8,7 +8,7 @@
     dataUnit: 'BTC',
     lineTension: 0.1,
     datasets: [{
-      label: "Sales Overview",
+      label: "",
       color: "#798bff",
       background: NioApp.hexRGB('#798bff', .3),
       data: [8200, 7800, 9500, 5500, 9200, 9690, 8200, 7800, 9500, 5500, 9200, 9690, 8200, 7800, 9500, 5500, 9200, 9690, 8200, 7800, 9500, 5500, 9200, 9690, 8200, 7800, 9500, 5500, 9200, 9690]

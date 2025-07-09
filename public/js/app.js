@@ -12361,7 +12361,7 @@ if (document.getElementById('TrafficChannelDoughnutData')) {
   var prestamoCreditosActivos = $('#prestamoCreditosActivos').val();
   var TrafficChannelDoughnutData = {
     labels: ["Disponible para prestar o retirar", "En proceso de ser prestado", "Préstamos en créditos activos"],
-    dataUnit: 'People',
+    dataUnit: '$',
     legend: false,
     datasets: [{
       borderColor: "#fff",

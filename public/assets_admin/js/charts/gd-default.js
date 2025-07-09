@@ -589,7 +589,7 @@
       dataUnit: '$',
       lineTension: 0.1,
       datasets: [{
-        label: "Sales Overview",
+        label: "",
         color: "#798bff",
         background: NioApp.hexRGB('#798bff', .3),
         data: [iValorCuenta, iTotalCredit]
