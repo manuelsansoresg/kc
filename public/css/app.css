@@ -398,3 +398,6 @@ ul.ul-primary li::before {
     width: 70%;
   }
 }
+#barChartIngresos + div, #barChartIngresos ~ .chartjs-legend, #barChartIngresos ~ div {
+  display: none !important;
+}

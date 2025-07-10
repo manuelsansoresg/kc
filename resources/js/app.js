@@ -46,6 +46,7 @@ require('./components/action/datatablemodule');
 require('./components/credit/profile/datatable');
 require('./components/credit/product/datatable');
 require('./components/credit/datatable_in_progress');
+require('./components/resumen');
 
 
 window.moveElement = function (section, id, idDatatable) {

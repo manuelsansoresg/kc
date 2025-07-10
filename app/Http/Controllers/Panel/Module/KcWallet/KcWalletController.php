@@ -52,7 +52,7 @@ class KcWalletController extends Controller
                 $getCollection = Collection::where('kc_credit_id', $getInvestorCredit->credit_id)->first();
                 $creditId = $getInvestorCredit->credit_id;
 
-                // Obtener fecha de entrega
+                // Obtener crédito para la fecha de entrega
                 $credit = Credit::find($creditId);
                 $fechaEntrega = $credit && $credit->delivered_date
                     ? date('Y-m-d', strtotime($credit->delivered_date))
@@ -71,12 +71,13 @@ class KcWalletController extends Controller
                 $valorPorPagar = format_price($porPagar);
                 $valorInteresProyectado = format_price($interesProyectado);
                 $valorInteresCobrado = format_price($interesCobrado);
+                $valorComision = format_price($getInvestorCredit->commission_amount + $getInvestorCredit->iva_commission);
 
                 // Status desde config
                 $status = config('enums.investorsCreditsStatus')[$getInvestorCredit->status];
 
                 $data[] = array(
-                    'id' => "{$creditId}" . '<a href="/panel/credit/' . $creditId . '?tab=pagos" target="_blank"> &nbsp; <span class="badge bg-primary">Ver</span> </a>',
+                    'id' => "{$creditId}" . '<a href="/panel/credit/' . $getInvestorCredit->credit_id . '?tab=pagos" target="_blank"> &nbsp; <span class="badge bg-primary">Ver</span> </a>',
                     'status' => $status,
                     'importe' => $valorImporte,
                     'pagado' => $valorPagado,
@@ -84,7 +85,7 @@ class KcWalletController extends Controller
                     'interes_proyectado' => $valorInteresProyectado,
                     'capital_pendiente' => $valorPorPagar,
                     'interes_cobrado' => $valorInteresCobrado,
-                    'comision_kc' => format_price($getInvestorCredit->commission_amount),
+                    'comision_kc' => $valorComision,
                     'fecha_entrega' => $fechaEntrega,
                 );
             }
@@ -92,6 +93,7 @@ class KcWalletController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
 
    public function listHistory()
    {
@@ -151,7 +153,7 @@ class KcWalletController extends Controller
                 $valorInteresProyectado = format_price($interesProyectado);
                 $valorInteresCobrado = format_price($interesCobrado);
                 $valorCapitalRecuperado = format_price($getInvestorCredit->recovered_capital);
-                $valorComision = format_price($getInvestorCredit->commission_amount);
+                $valorComision = format_price($getInvestorCredit->commission_amount + $getInvestorCredit->iva_commission);
 
                 // Status desde config
                 $status = config('enums.investorsCreditsStatus')[$getInvestorCredit->status];

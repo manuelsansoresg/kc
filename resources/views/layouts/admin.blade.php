@@ -1061,6 +1061,7 @@
     <script src="/assets_admin/js/bundle.js?ver=3.0.3"></script>
     <script src="/assets_admin/js/scripts.js?ver=3.0.3"></script>
     <script src="/assets_admin/js/charts/gd-default.js?ver=3.0.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {{-- <script type="text/javascript" src="/vendor/jquery-validation/dist/jquery.validate.js"></script> --}}
     <script type="text/javascript" src="/vendor/jquery-validation/dist/localization/messages_es.min.js"></script>
     <script type="text/javascript" src="/vendor/toastr/build/toastr.min.js"></script>

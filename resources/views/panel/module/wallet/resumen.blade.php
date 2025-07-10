@@ -11,24 +11,33 @@
                     <div class="nk-block nk-block-lg">
                         <div class="container">
                           <div class="row">
-                            <div class="col-12 text-end">
-                                <a href="#" class="btn btn-xl btn-primary"  data-bs-toggle="modal"
-                                data-bs-target="#modalPrestar">Prestar</a>
+                            <div class="col-6 d-flex align-items-center">
+                                @if ($investor->pending_funding_amount > 0)
+                                    <div class="d-flex align-items-center h-100">
+                                        <span>Importe de créditos en espera de fondeo: {{ format_price($investor->pending_funding_amount) }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="col-6 d-flex align-items-center justify-content-end">
+                                <div class="d-flex align-items-center h-100">
+                                    <a href="#" class="btn btn-xl btn-primary" data-bs-toggle="modal" data-bs-target="#modalPrestar">Prestar</a>
+                                </div>
                             </div>
                             <div class="col-12 mt-5">
                                 <div class="card card-bordered  vh-50">
                                     <div class="card-inner">
                                         @php
-                                            $valorCuenta = $investor->account_value;
-                                            $disponiblePrestar = $investor->withdraw_available;
+                                            $valorCuenta = $investor != null ? $investor->account_value : 0;
+                                            $disponiblePrestar = $investor != null ? $investor->withdraw_available : 0;
+                                            $totalAvailable = $investor != null ? $investor->total_available : 0;
                                         @endphp
-                                        <input type="hidden" id="iValorCuenta" value="{{ $valorCuenta}}">
-                                        <input type="hidden" id="iTotalCredit" value="{{ $valorCuenta + $investor->total_balance}}">
+                                        <input type="hidden" id="iValorCuenta" value="{{ $totalAvailable }}">
+                                        <input type="hidden" id="iTotalCredit" value="{{ $valorCuenta + $investor->total_balance - $investor->placed_capital }}">
                                         <div class="analytic-ov d-none d-md-block">
                                             <div class="analytic-data-group analytic-ov-group g-3">
                                                 <div class="analytic-data analytic-ov-data">
-                                                    <div class="title">Valor de cuenta</div>
-                                                    <div class="amount">{{ format_price($valorCuenta) }}</div>
+                                                    <div class="title">Valor de cuenta </div>
+                                                    <div class="amount">{{ format_price($valorCuenta) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-valor-cuenta"></em></div>
                                                     <div class="change up">
                                                         <a href="#"  data-bs-toggle="modal"
                                                         data-bs-target="#modalDetalle">Ver detalle</a>
@@ -52,7 +61,7 @@
                                                     <div class="title">Dinero en créditos activos</div>
                                                     <div class="amount">{{ format_price($investor->placed_capital) }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-prestamo"></em></div>
                                                     <div class="change down">
-                                                        <span class="text-primary">En trámites: {{ $tramites != null ? format_price($investor->loans_in_process) : 0 }}</span>
+                                                        <span class="text-primary">En trámites: {{ $tramites != null ? format_price($investor->loans_in_process) : 0 }} <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-tramites"></em></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -63,7 +72,7 @@
                                             <div class="row">
                                                 <table class="table table-borderless">
                                                     <tr>
-                                                        <td>Valor de cuenta</td>
+                                                        <td>Valor de cuenta  <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-valor-cuenta"></em></td>
                                                         <td><b>{{ format_price($valorCuenta) }}</b>
                                                             <br>
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#modalDetalle">Ver detalle</a>
@@ -103,6 +112,11 @@
                                             
                                         </div>
                                         <div style="display: none;">
+                                            <div id="tooltip-valor-cuenta">
+                                                <b>Valor de cuenta</b>
+                                                <br><br>
+                                                Es el valor total de tu cuenta.
+                                            </div>
                                            
                                             <div id="tooltip-disponible">
                                                 <b>Disponible para prestar o retirar</b>
@@ -117,7 +131,10 @@
                                                 Dinero destinado para préstamos. Este dinero no está disponible para retirar a tu cuenta a menos que modifiques la cantidad de dinero asignada para ser prestada.
 
                                             </div>
-                                            
+                                            <div id="tooltip-tramites">
+                                                Dinero de créditos que están en trámite.
+                                            </div>
+
                                             <div id="tooltip-prestamo">
                                                 <b>Dinero en créditos activos.
                                                 </b>
@@ -126,6 +143,45 @@
                                                 <br>
                                                 También incluye créditos que están en trámite.
                                             </div>
+                                            <div id="tooltip-intereses">
+                                                <b>Intereses cobrados</b>
+                                                <br><br>
+                                                Son los intereses que has cobrado.
+                                            </div>
+                                            <div id="tooltip-iva-intereses">
+                                                <b>IVA de intereses cobrados</b>
+                                                <br><br>
+                                                IVA de los intereses que has cobrado.
+                                            </div>
+                                            <div id="tooltip-recuperacion">
+                                                <b>Recuperación de cartera vencida</b>
+                                                <br><br>
+                                                Dinero recuperado de la cartera vencida.
+                                            </div>
+                                            <div id="tooltip-comisiones">
+                                                <b>Comisiones pagadas a KaaxClub</b>
+                                                <br><br>
+                                                Comisiones que has pagado a KaaxClub.
+                                            </div>
+
+
+                                            <div id="tooltip-perdidas">
+                                                <b>Pérdidas por cartera vencida</b>
+                                                <br><br>
+                                                Dinero perdido en cartera vencida.
+                                            </div>
+                                            <div id="tooltip-iva-comisiones">
+                                                <b>IVA de comisiones</b>
+                                                <br><br>
+                                                IVA de las comisiones que has pagado a KaaxClub.
+                                            </div>
+                                            <div id="tooltip-resultados">
+                                                <b>Resultados netos totales</b>
+                                                <br><br>
+                                                Son tus ganancias que has obtenido.
+                                            </div>
+                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -153,15 +209,15 @@
                                             @endphp
                                             <table class="table table-borderless">
                                                 <tr>
-                                                    <td>Intereses cobrados</td>
+                                                    <td>Intereses cobrados <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-intereses"></em></td>
                                                     <td><b>{{ format_price($interesesCobrados) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>IVA de intereses cobrados</td>
+                                                    <td>IVA de intereses cobrados <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-iva-intereses"></em></td>
                                                     <td><b>{{ format_price($IvainteresesCobrados) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Recuperación de cartera vencida</td>
+                                                    <td>Recuperación de cartera vencida <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-recuperacion"></em></td>
                                                     <td><b>{{ format_price($recuperacionCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
@@ -170,16 +226,16 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Comisiones pagadas a KaaxClub</td>
+                                                    <td>Comisiones pagadas a KaaxClub <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-comisiones"></em></td>
                                                     <td><b>{{ format_price($comisionesPagadasKaax) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Pérdidas por cartera vencida</td>
-                                                    <td><b>{{ format_price($perdidasCarteraVencida) }}</b></td>
+                                                    <td>IVA de comisiones <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-iva-comisiones"></em></td>
+                                                    <td><b>{{ format_price($ivaComisiones) }}</b></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>IVA de comisiones</td>
-                                                    <td><b>{{ format_price($ivaComisiones) }}</b></td>
+                                                    <td>Pérdidas por cartera vencida <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-perdidas"></em></td>
+                                                    <td><b>{{ format_price($perdidasCarteraVencida) }}</b></td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2">
@@ -187,7 +243,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><span class="h5 text-primary">Resultados netos totales</span></td>
+                                                    <td><span class="h5 text-primary">Resultados netos totales <em class="icon ni ni-info active-tooltip text-primary" data-template="tooltip-resultados"></em></span></td>
                                                     <td><span class="h5 text-primary">{{ format_price($resultadosNetosTotales) }}</span></td>
                                                 </tr>
                                             </table>
@@ -199,9 +255,9 @@
                                         <div class="card-body">
                                             <h6 class="title">Valor de cuenta </h6>
                                             @php
-                                                $disponiblePrestaroRetirar = $investor != null ? $investor->total_available  + $investor->loan_available : 0;
+                                                $disponiblePrestaroRetirar = $investor != null ? $investor->withdraw_available : 0;
                                                 $procesoPrestado = $investor != null ? $investor->loan_available : 0;
-                                                $prestamoCreditosActivos = $investor != null ? $investor->placed_capital : 0;
+                                                $prestamoCreditosActivos = $investor != null ? $investor->placed_capital + $investor->loans_in_process : 0;
                                                 $totalAvailable = $investor != null ? $investor->total_available : 0;
                                             @endphp
                                             <input type="hidden" id="disponiblePrestaroRetirar" value="{{ $disponiblePrestaroRetirar }}">
@@ -237,10 +293,9 @@
                            </div>
                             
                            <div class="row mt-5">
-                            <div class="col-12 col-md-6">
-                                
-                                <div class="card">
-                                    <div class="card-body">
+                            <div class="col-12 col-md-6 d-flex align-items-stretch">
+                                <div class="card w-100">
+                                    <div class="card-body d-flex flex-column">
                                         <div class="nk-block-head nk-block-head-sm">
                                             <div class="nk-block-between">
                                                 <div class="nk-block-head-content">
@@ -250,14 +305,29 @@
                                                 
                                             </div><!-- .nk-block-between -->
                                         </div><!-- .nk-block-head -->
-                                        <div class="col-12 ">
-                                            <div class="nk-sales-ck large pt-4">
-                                                <canvas class="sales-overview-chart" id="salesOverview"></canvas>
-                                            </div>
+                                        <div class="col-12 flex-grow-1 d-flex align-items-center">
+                                            <canvas class="sales-overview-chart chart-fixed" id="salesOverview"></canvas>
                                         </div>
                                     </div>
                                 </div>
-                                
+                            </div>
+                            <div class="col-12 col-md-6 d-flex align-items-stretch">
+                                <div class="card w-100">
+                                    <div class="card-body d-flex flex-column">
+                                        <div class="nk-block-head nk-block-head-sm">
+                                            <div class="nk-block-between">
+                                                <div class="nk-block-head-content">
+                                                    <h6 class="title">Colocación mensual </h6>
+                                                    <p>Préstamos realizados en los últimos 6 meses</p>
+                                                </div><!-- .nk-block-head-content -->
+                                                
+                                            </div><!-- .nk-block-between -->
+                                        </div><!-- .nk-block-head -->
+                                        <div class="col-12 flex-grow-1 d-flex align-items-center">
+                                            <canvas class="bar-chart chart-fixed" id="barChartIngresos"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                            </div>
                         </div>
@@ -371,7 +441,7 @@
                                 <td>{{ format_price($recursosRetirados) }}</td>
                             </tr>
                             <tr>
-                                <td>Pérdidas por cartera vencida</td>
+                                <td>Pérdidas por cartera vencida <em class="icon ni ni-info active-tooltip text-gray" data-template="tooltip-perdidas"></em></td>
                                 <td>{{ format_price($perdidasporCarteraVencida) }}</td>
                             </tr>
                             <tr>
@@ -406,3 +476,21 @@
     </div>
 
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/js/components/resumen.js"></script>
+@endpush
+
+@push('styles')
+<style>
+.chart-fixed {
+    width: 100% !important;
+    max-width: 100%;
+    height: 350px !important;
+    max-height: 350px;
+    display: block;
+}
+</style>
+@endpush

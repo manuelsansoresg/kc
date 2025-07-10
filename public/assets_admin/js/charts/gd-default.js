@@ -585,11 +585,11 @@
     let iValorCuenta = $('#iValorCuenta').val();
     let iTotalCredit = $('#iTotalCredit').val();
     var salesOverview = {
-      labels: ["Hoy", "Último cobro"],
-      dataUnit: 'BTC',
+      labels: ["Disponible hoy", "Último cobro"],
+      dataUnit: '$',
       lineTension: 0.1,
       datasets: [{
-        label: "Sales Overview",
+        label: "",
         color: "#798bff",
         background: NioApp.hexRGB('#798bff', .3),
         data: [iValorCuenta, iTotalCredit]
@@ -635,13 +635,8 @@
             datasets: chart_data
           },
           options: {
-            legend: {
-              display: _get_data.legend ? _get_data.legend : false,
-              labels: {
-                boxWidth: 30,
-                padding: 20,
-                fontColor: '#6783b8'
-              }
+            plugins: {
+              legend: { display: false },
             },
             maintainAspectRatio: false,
             tooltips: {
