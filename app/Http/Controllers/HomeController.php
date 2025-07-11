@@ -215,6 +215,15 @@ class HomeController extends Controller
         $directory = public_path('firma_contratos');
         $filePath = $directory . '/' . $nombre;
 
+        File::create([
+            'name' => $nombre,
+            'model' => 21,
+            'id_rel' => $credit->id,
+            'client_id' => $client->id,
+            'template_config_id' => 4,
+            'step' => '4_1',
+        ]);
+
         if ($client->cm_agreement == null) {
         }
         if (!File::exists($filePath)) {

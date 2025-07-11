@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Strategies\Values\TemplateValues;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class File extends Model
 {
@@ -13,6 +14,7 @@ class File extends Model
         'name',
         'model',
         'id_rel',
+        'client_id',
         'step',
         'template_config_id', //*id array config in templatestrategy
         'dynamic_status_id',
@@ -34,8 +36,65 @@ class File extends Model
         'kc-down-wallet' => 65,
     ];
 
+    /**
+     * Genera una cadena aleatoria de la longitud especificada.
+     *
+     * @param int $length La longitud de la cadena aleatoria.
+     * @return string
+     */
+    private static function generateRandomString($length = 3)
+    {
+        return Str::random($length);
+    }
+
+
+    public static function saveCep($request, $creditId)
+    {
+        $getCredit = Credit::where('id', $creditId)->first();
+        $client = ClientPerson::where('id', $getCredit->client_person_id)->first();
+        $client_id = $client->id;
+
+        $model = 21;
+        $id_rel = $creditId;
+        $template_config_id = 4;
+
+        if ($request->hasFile('cep') != false) {
+            $document   = $request->file('cep');
+            $originalExtension = $document->getClientOriginalExtension();
+            // Genera una cadena aleatoria de 3 caracteres
+            $randomString = self::generateRandomString(3);
+            // Construye el nombre completo del archivo con la cadena aleatoria
+            $name_full = $id_rel . '-' . $client->name . $client->last_name . $client->second_last_name . ' CEP_' . $randomString . '.' . $originalExtension;
+
+            $path       = File::PATH;
+            
+            if ($document->move($path, $name_full)) {
+                $data = array(
+                    'name' => $name_full,
+                    'model' => $model,
+                    'id_rel' => $id_rel,
+                    'template_config_id' => $template_config_id,
+                    'step' => '3_5',
+                    'client_id' => $client_id,
+                );
+                
+                File::create($data);
+            }
+        }
+    }
+
+    public static function isExistCep($creditId)
+    {
+        $getCredit = Credit::where('id', $creditId)->first();
+        $client = ClientPerson::where('id', $getCredit->client_person_id)->first();
+        $client_id = $client->id;
+        return File::where('id_rel', $creditId)->where('template_config_id', 4)->where('step', '3_5')->where('client_id', $client_id)->count() > 0 ? true : false;
+
+    }
+
     public static function upload($model, $id_rel, $request, $template_config_id = null)
     {
+        $step = isset($request->step)? $request->step : null;
         if ($request->hasFile('file') != false) {
             $document   = $request->file('file');
             
@@ -46,7 +105,7 @@ class File extends Model
             }
             $path       = File::PATH;
             $date_file = ($request->date_file != null)? $request->date_file : null;
-            $step = isset($request->step)? $request->step : null;
+            
             if ($document->move($path, $name_full)) {
                 $data = array(
                     'name' => $name_full,
@@ -68,10 +127,17 @@ class File extends Model
         return $view_files;
     }
     
+
+    public static function getFileClients($clientId)
+    {
+        $files = File::where('client_id', $clientId)->get();
+        return $files;
+    }
+    
     public static function getByIdRelandModel($id_rel, $models, $template_id = null)
     {
         //dd($models);
-        $files = File::where(['id_rel' => $id_rel])->whereIn('model', $models);
+        $files = File::where(['id_rel' => $id_rel])->whereIn('model', $models)->where('client_id', null);
         if ($template_id != null) {
             $files->whereIn('template_config_id', $template_id);
         }

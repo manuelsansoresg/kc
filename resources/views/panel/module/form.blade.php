@@ -39,6 +39,29 @@
                     <div  id="{{ isset($element['id_field'])? $element['id_field'] : null  }}-files-action-preview" class=""></div>
                 </div>
             @endif
+            @if ($element['type'] == 'file')
+            <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">
+                <div class="form-group">
+                    <label class="form-label">{{ $indicator_required }} {{ $element['title'] }}</label>
+                    <p class="text-muted">{{ isset($element['subtitle'])? $element['subtitle'] : null  }} </p>
+                    <div class="form-control-wrap">
+                        <input type="file" class="form-control" {{ $element['is_disabled'] }}
+                                name="{{ $element['name_field'] }}" id="{{ $element['id_field'] }}" 
+                                @if (isset($element['is_required']) && $element['is_required'] == true)
+                                    required
+                                @endif
+                                >
+                            @if ($element['comment_admin'] != null)
+                                <small>{{ $element['comment_admin'] }}</small>
+                            @endif
+                            
+                            @if ($element['comment_webApp'] != null)
+                                <small>{{ $element['comment_webApp'] }}</small>
+                            @endif
+                    </div>
+                </div>
+            </div>
+            @endif
             @if ($element['type'] == 'text')
             @php
                 $class_form_group  = isset($element['class_form_group'])? $element['class_form_group'] : ''               

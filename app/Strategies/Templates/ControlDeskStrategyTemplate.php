@@ -45,18 +45,26 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function configUpload($set_step = null)
     {
         $step = isset($_GET['step']) ? $_GET['step'] : null;
-
+       
         if ($set_step != null) {
             $step = $set_step;
         }
 
+        if ($step == '3_5') {
+            return self::uploadstep3_5();
+        }
         if ($step == 3) {
             return self::uploadStep3();
         }
         
+       
+        
         if ($step == '5_3') {
             return self::uploadStep5();
         }
+
+        
+        
         return self::uploadStep1();
     }
 
@@ -140,6 +148,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $elements = array(
             6 => [
                 'name' => 'Contrato firmado',
+                'comment' => null,
+                'is_required' => true,
+                'is_date' => false,
+                'max_size' => 2, //* size in MB
+                'max_file' => 2,
+                'type' => 'image/*, .pdf',
+                'comment_date' => null
+            ],
+
+        );
+        return $elements;
+    }
+    
+    public function uploadstep3_5()
+    {
+        $elements = array(
+           1 => [
+                'name' => 'CEP',
                 'comment' => null,
                 'is_required' => true,
                 'is_date' => false,
@@ -1285,81 +1311,155 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null,
             ],
-            
-            
-            2 => [
-                'title_section' => null,
-                'title' => '*Pertenencia de cuenta',
-                'subtitle' => 'Indica si la clabe pertenece al cliente',
-                'name_field' => null,
-                'id_field' => 'ammount',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'radio',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => null,
-                'col' => 'col-6',
-                'childs' => array(
-                    0 => array(
-                        'link' => null,
-                        'name' => 'Valida',
-                        'name_field' =>  $task['nameField'],
-                        'class' => null,
-                        'onclick' => null,
-                        'value' => 1,
-                        'is_required' => true,
-                    ),
-                    1 => array(
-                        'link' => null,
-                        'name' => 'Invalida',
-                        'name_field' => $task['nameField'],
-                        'class' => null,
-                        'onclick' => null,
-                        'value' => 0,
-                        'is_required' => true,
-                        
-                    ),
-                )
-            ],
-            
-           
-            3 => [
-                'title_section' => null,
-                'title' => null,
-                'name_field' => 'url_redirect',
-                'id_field' => 'url_redirect',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'hidden',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => $urlRedirect,
-                'col' => 'col-12'
-            ],
-            4 => [
-                'title_section' => null,
-                'title' => null,
-                'name_field' => 'url_redirect_next',
-                'id_field' => 'url_redirect_next',
-                'comment_admin' => '',
-                'comment_webApp' =>  null,
-                'placeholder' => '',
-                'type' => 'hidden',
-                'is_option_array' => false,
-                'options' => 'null',
-                'is_required' => false,
-                'is_disabled' => null,
-                'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=3_'.$stepRedirect.'&step_origin=',
-                'col' => 'col-12'
-            ],
         );
+
+        // Add conditional elements based on clabe_ownership
+        if ($client->clabe_ownership == 1) {
+            $elements[2] = [
+                'title_section' => null,
+                'title' => 'CEP',
+                'subtitle' => 'Adjunta el comprobante electrónico de pago',
+                'name_field' => 'cep',
+                'id_field' => '1',
+                'is_required' => true,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'file',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ];
+        }
+
+        $elements[3] = [
+            'title_section' => null,
+            'title' => '*Pertenencia de cuenta',
+            'subtitle' => 'Indica si la clabe pertenece al cliente',
+            'name_field' => null,
+            'id_field' => 'ammount',
+            'comment_admin' => '',
+            'comment_webApp' =>  null,
+            'placeholder' => '',
+            'type' => 'radio',
+            'is_option_array' => false,
+            'options' => 'null',
+            'is_required' => false,
+            'is_disabled' => null,
+            'value' => null,
+            'col' => 'col-6',
+            'childs' => array(
+                0 => array(
+                    'link' => null,
+                    'name' => 'Valida',
+                    'name_field' =>  $task['nameField'],
+                    'class' => null,
+                    'onclick' => null,
+                    'value' => 1,
+                    'is_required' => true,
+                ),
+                1 => array(
+                    'link' => null,
+                    'name' => 'Invalida',
+                    'name_field' => $task['nameField'],
+                    'class' => null,
+                    'onclick' => null,
+                    'value' => 0,
+                    'is_required' => true,
+                    
+                ),
+            )
+        ];
+        
+       
+        $elements[4] = [
+            'title_section' => null,
+            'title' => null,
+            'name_field' => 'url_redirect',
+            'id_field' => 'url_redirect',
+            'comment_admin' => '',
+            'comment_webApp' =>  null,
+            'placeholder' => '',
+            'type' => 'hidden',
+            'is_option_array' => false,
+            'options' => 'null',
+            'is_required' => false,
+            'is_disabled' => null,
+            'value' => $urlRedirect,
+            'col' => 'col-12'
+        ];
+        $elements[5] = [
+            'title_section' => null,
+            'title' => null,
+            'name_field' => 'url_redirect_next',
+            'id_field' => 'url_redirect_next',
+            'comment_admin' => '',
+            'comment_webApp' =>  null,
+            'placeholder' => '',
+            'type' => 'hidden',
+            'is_option_array' => false,
+            'options' => 'null',
+            'is_required' => false,
+            'is_disabled' => null,
+            'value' => '/panel/action-form/controlDesk/'.$history_id.'/form?step=3_'.$stepRedirect.'&step_origin=',
+            'col' => 'col-12'
+        ];
+
+        // Add conditional element 6 based on clabe_ownership
+        if ($client->clabe_ownership == 1) {
+            $elements[6] = [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'action-model',
+                'id_field' => 'action-model',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 'controlDesk',
+                'col' => 'col-12'
+            ];
+            $elements[7] = [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'step',
+                'id_field' => 'step',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => '3_5',
+                'col' => 'col-12'
+            ];
+
+            $elements[8] = [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'action-id_rel',
+                'id_field' => 'action-id_rel',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => $id_rel,
+                'col' => 'col-12'
+            ];
+        }
+
+        
         return $elements;
     }
     
@@ -4332,6 +4432,9 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             'validated_clabe' => $validated_clabe,
                         ]);
 
+                        //guardar cep
+                        File::saveCep($request, $credit->id);
+
                         if ($percentTask5Step3 == 100) {
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK5_STEP3, $credit->id, 1); //terminar tarea
 
@@ -6204,14 +6307,29 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             }
             /* $dynamicIndex = 4;
             'name' => "{$dynamicIndex}- Capturar {$creditPayOff->name}", */
+        } elseif ($step == '3_5') {
+            $elements = array(
+               4 => [
+                    'name' => 'CEP',
+                ],
+            );
         } else {
             $elements = array(
-                4 => [
+                1 => [
                     'name' => 'Contrato firmado',
                 ],
             );
         }
-        $config = $elements[$template_config_id];
+
+        $config = null;
+        //dd($elements, $template_config_id);
+        try {
+            //code...
+            $config = $elements[$template_config_id];
+        } catch (\Exception $th) {
+        
+            dd($elements, $template_config_id, $step);
+        }
        
 
         return $config;
@@ -6280,6 +6398,10 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     public function DynamicPercentStep3($creditId, $validation, $elements = 0, $validate = null)
     {
         $percent = 0;
+        
+        // Check if CEP exists first
+        $cepExists = File::isExistCep($creditId);
+        
         if ($validation == CreditsControlDesk::$labelValidate[1] || $validation == CreditsControlDesk::$labelValidate[2] || $validation == CreditsControlDesk::$labelValidate[4] || $validation == CreditsControlDesk::$labelValidate[5] || $validation == CreditsControlDesk::$labelValidate[6]) {
             if ($validation == CreditsControlDesk::$labelValidate[6]) {
                               
@@ -6294,12 +6416,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
     
             $total = $credits->count();
 
-            $percent = $total > $elements ? 100 : 0;
+            $percent = ($total > $elements && $cepExists) ? 100 : 0;
         
             return $percent;
         } elseif ($validation == CreditsControlDesk::$labelValidate[3]) {
             $credit = Credit::find($creditId);
-            $percent = $credit->payroll_payment_capacity != null ? 100 : 0 ;
+            $percent = ($credit->payroll_payment_capacity != null && $cepExists) ? 100 : 0 ;
         }
         return $percent;
         
