@@ -75,34 +75,48 @@ class Lead extends Model
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         $manychat = new Manychat();
-        
-       
-        //calcular minimo
-        $minimo = $getClientPerson->daily_income_adjusted * 1;
-        $minimoRedondeado = floor($minimo / 100) * 100;
-        //calcular maximo
+
+        // Definir mínimo fijo
+        $minimoRedondeado = 100;
+
+        // Calcular días transcurridos
         $currentDate = Carbon::now()->toDateString();
         $schedule = SodScheduleDate::selectRaw("
-                    CASE
-                        WHEN schedule_1 = 2 AND fecha = ? THEN 1
-                        ELSE DATEDIFF(fecha, (SELECT MAX(fecha) 
-                                            FROM sod_schedule_dates 
-                                            WHERE schedule_1 = 2 
-                                            AND fecha < ?))
-                    END as dias
-                ", [$currentDate, $currentDate])
-                ->where('fecha', $currentDate)
-                ->first();
-        $dailyIncomeAdjusted  = $getClientPerson->daily_income_adjusted;
-        $maximo = $dailyIncomeAdjusted * $schedule->dias;
-        // Redondear hacia abajo al múltiplo de 100
-        $maximoRedondeado = floor($maximo / 100) * 100;
+            CASE
+                WHEN schedule_1 = 2 AND fecha = ? THEN 1
+                ELSE DATEDIFF(fecha, (SELECT MAX(fecha) 
+                                    FROM sod_schedule_dates 
+                                    WHERE schedule_1 = 2 
+                                    AND fecha < ?))
+            END as dias
+        ", [$currentDate, $currentDate])
+        ->where('fecha', $currentDate)
+        ->first();
+
+        $dailyIncomeAdjusted = $getClientPerson->daily_income_adjusted;
+        $sodActiveAmount = $getClientPerson->sod_active_amount ?? 0;
+
+        // Calcular máximo redondeado hacia abajo al múltiplo de 100
+        $maximoBruto = $dailyIncomeAdjusted * $schedule->dias;
+        $maximoRedondeado = floor($maximoBruto / 100) * 100 - $sodActiveAmount;
+
+        // Si el máximo queda menor que el mínimo, se asigna 0 a ambos
+        if ($maximoRedondeado < $minimoRedondeado) {
+            $minimoRedondeado = 0;
+            $maximoRedondeado = 0;
+        }
+
+        // Enviar datos a ManyChat
         $dataField = array(
             'SOD - Monto Máximo disponible' => $maximoRedondeado,
             'SOD - Monto Mínimo disponible' => $minimoRedondeado,
         );
         $manychat->setCustomFields($dataField, $manychat_id);
-        return array('monto_minimo' => $minimoRedondeado, 'monto_maximo' => $maximoRedondeado);
+
+        return array(
+            'monto_minimo' => $minimoRedondeado,
+            'monto_maximo' => $maximoRedondeado
+        );
     }
 
     public static function validateSod($clientPerson, $financialProduct)
