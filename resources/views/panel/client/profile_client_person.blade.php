@@ -263,7 +263,10 @@
                                                     $files = $m_file->getFileClients($client->id);
                                                 @endphp
                                                 @foreach ($files as $file)
-                                                    <a href="{{ asset('files_upload/'.$file->name) }}" target="_blank">{{ $file->name }}</a>
+                                                @php
+                                                    $path = $file->step == '3_5' ? 'files_upload/' : 'firma_contratos/';
+                                                @endphp
+                                                    <a href="{{ asset($path.$file->name) }}" target="_blank">{{ $file->name }}</a>
                                                 @endforeach
                                                 {{-- @if ($client->cm_agreement != null)
                                                 @php
