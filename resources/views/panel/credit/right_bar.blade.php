@@ -18,22 +18,16 @@
     <hr>
     <span class="fw-bold"> Documentos:</span>
 
-    <table class="table table-borderless">
-        @foreach ($files as $file)
-        <tr class="">
-            <td class="">
-                <a href="{{ asset($path.'/'.$file['name']) }}" target="_blank">{{ $file['name_template'] }}</a>
-            </td>
-
-        </tr>
-        @endforeach
-    </table>
+    @foreach ($files as $file)
+    <a href="{{ asset($path.'/'.$file['name']) }}" target="_blank">{{ $file['name_template'] }}</a>
+        </td>
+    @endforeach
 
     <hr>
     <br>
 
-    <br><a href="/panel/credit/{{ $credit->id }}">Ver crédito <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-    <br><a href="/panel/client/{{ $client->id }}">Ver cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-    <br><a href="/https://manychat.com/fb861553/chat/">Chatear con cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+    <br><a href="/panel/credit/{{ $credit->id }}" target="_blank">Ver crédito <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+    <br><a href="/panel/client/{{ $client->id }}" target="_blank">Ver cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+    <br><a href="/https://manychat.com/fb861553/chat/" target="_blank">Chatear con cliente <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
     
 </span>

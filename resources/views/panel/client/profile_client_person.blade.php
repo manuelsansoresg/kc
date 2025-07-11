@@ -5,6 +5,7 @@
 @inject('m_client', 'App\Models\ClientPerson')
 @inject('m_history_log', 'App\Models\HistoryLog')
 @inject('m_action', 'App\Models\Action')
+@inject('m_file', 'App\Models\File')
 
 @php
     use App\Strategies\Values\ValidateStagesValues;
@@ -257,12 +258,19 @@
                                                 </table>
                                             </div>
                                             <div class="tab-pane {{ $tab == 'documents' ? 'active' : null}}" id="tabDocuments">
-                                                @if ($client->cm_agreement != null)
+
+                                                @php
+                                                    $files = $m_file->getFileClients($client->id);
+                                                @endphp
+                                                @foreach ($files as $file)
+                                                    <a href="{{ asset('files_upload/'.$file->name) }}" target="_blank">{{ $file->name }}</a>
+                                                @endforeach
+                                                {{-- @if ($client->cm_agreement != null)
                                                 @php
                                                     $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato CM.pdf';
                                                 @endphp
                                                     <a href="{{ asset('firma_contratos/'.$nombre) }}" target="_blank">{{ $nombre }}</a>
-                                                @endif
+                                                @endif --}}
                                             </div>
                                             
                                         </div>

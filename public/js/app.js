@@ -2249,6 +2249,7 @@ $(document).ready(function () {
           for (var key_file in files) {
             if (files.hasOwnProperty.call(files, key_file)) {
               var element_file = files[key_file];
+              console.log(element_file.template_config_id);
               $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
             }
           }
@@ -12361,7 +12362,7 @@ if (document.getElementById('TrafficChannelDoughnutData')) {
   var prestamoCreditosActivos = $('#prestamoCreditosActivos').val();
   var TrafficChannelDoughnutData = {
     labels: ["Disponible para prestar o retirar", "En proceso de ser prestado", "Préstamos en créditos activos"],
-    dataUnit: '$',
+    dataUnit: 'People',
     legend: false,
     datasets: [{
       borderColor: "#fff",
