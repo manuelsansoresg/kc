@@ -465,7 +465,7 @@
                         </h4>
                         <div id="collapseEight" class="accordion-collapse collapse" data-bs-parent="#sapp-accordion">
                             <div class="accordion-body">
-                                En KaaxClub, no es indispensable la consulta en buró en buró de crédito. Puedes solicitar cualquier servicio sin preocupaciones. 
+                                En KaaxClub, no es indispensable la consulta en buró de crédito. Puedes solicitar cualquier servicio sin preocupaciones. 
 
                             </div>
                         </div>
