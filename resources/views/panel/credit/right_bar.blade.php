@@ -19,7 +19,7 @@
     <span class="fw-bold"> Documentos:</span>
 
     @foreach ($files as $file)
-    <a href="{{ asset($path.'/'.$file['name']) }}" target="_blank">{{ $file['name_template'] }}</a>
+    <a href="{{ asset($path.'/'.$file['name']) }}" target="_blank">{{ $file['name_template'] }} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
         </td>
     @endforeach
 
