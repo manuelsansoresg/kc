@@ -65,10 +65,10 @@ return [
 
         'kaax_sidecc' => [
 			'driver' => 'mysql',
-			'host' =>'ls-b3c0a489394b99c30c0731cb5016005ea4b669e2.cvjjctjlogpe.us-east-1.rds.amazonaws.com',
-			'port' =>'3306',
+			'host' => env('DB_HOST_KC_SIDECC'),
+			'port' => env('DB_PORT_KC_SIDECC'),
 			'database' => env('DB_DATABASE_KC_SIDECC'),
-			'username' => 'dbmasteruser',
+			'username' => env('DB_USERNAME_KC_SIDECC'),
 			'password' => env('DB_PASSWORD_KC_SIDECC'),
 			'charset' => 'utf8',
 			'collation' => 'utf8_unicode_ci',
