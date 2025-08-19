@@ -140,7 +140,7 @@
                                 <li><i class="bi bi-check-circle-fill me-2"></i> Accede a tu salario antes del día de pago</li>
                                 <li><i class="bi bi-check-circle-fill me-2"></i> Obtén crédito justo y transparente</li>
                             </ul>
-							<a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola,%20quiero%un%servicio%de%KaaxClub" class="btn btn-bordered-white swap-icon">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
+							<a href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola, KaaxClub" class="btn btn-bordered-white swap-icon">Iniciar<i class="icon bi bi-arrow-right-short"></i></a>
                             <br><br>
                             <small class="small  text-white mt-3">KaaxClub es un servicio exclusivo para colaboradores de empresas afiliadas</small>
 						</div>
