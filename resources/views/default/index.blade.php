@@ -63,9 +63,9 @@
                                 </div>
                             </div> --}}
                            {{--  <div class="d-flex col-12 text-center text-md-start">
-                             <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block">Quiero reducir mi deuda</a>
+                             <a href="{{ env('APP_URL') }}/hola"  class="btn col-8 col-md-6  btn-dark btn-block">Quiero reducir mi deuda</a>
                              
-                             <a href="https://kaaxclub.com/hola"  class="btn col-8 col-md-6  btn-dark btn-block ml-2">Quiero un crédito nuevo</a>
+                             <a href="{{ env('APP_URL') }}/hola"  class="btn col-8 col-md-6  btn-dark btn-block ml-2">Quiero un crédito nuevo</a>
                             </div> --}}
                         </div>
                         <div class="row justify-content-center mt-4">

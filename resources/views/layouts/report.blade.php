@@ -79,13 +79,13 @@
               {{--   <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
                         <li><a href="/reporte/{{ @$history_id }}/metodologia">Metodología</a></li>
-                        <li><a href="https://kaaxclub.com/ayuda">Ayuda</a></li>
+                        <li><a href="{{ env('APP_URL') }}/ayuda">Ayuda</a></li>
                     </ul>
                 </div>
                 <div class="col-md-3 mx-auto col-lg-2 mb-5">
                     <ul class="list-unstyled">
-                        <li><a href="https://app.kaaxclub.com/">App</a></li>
-                        <li><a href="https://kaaxclub.com/contacto">Contacto</a></li>
+                        <li><a href="{{ env('APP_URL') }}/">App</a></li>
+                        <li><a href="{{ env('APP_URL') }}/contacto">Contacto</a></li>
                     </ul>
                 </div> --}}
                 <div class="col-lg-4 mb-5">

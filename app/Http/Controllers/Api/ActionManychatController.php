@@ -68,7 +68,7 @@ class ActionManychatController extends Controller
             $history_id = (new $template)->move($lead->id);
             $manychat = new Manychat();
             $data = array(
-                'URL Reporte' => 'https://kaaxclub.com/reporte/'.$history_id->id,
+                'URL Reporte' => env('APP_URL').'/reporte/'.$history_id->id,
 
             );
             $manychat->setCustomFields($data, $manychat_id);

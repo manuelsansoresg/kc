@@ -274,7 +274,7 @@ class User extends Authenticatable
                 $lead_client = new LeadClient($data_lead_client);
                 $lead_client->save();
                 //* send email new account
-                $domain = 'https://kaaxclub.com/reporte/' . $history_id;
+                $domain = env('APP_URL').'/reporte/' . $history_id;
                 //* 235b3d5c43c14184b365def8c1d1e160 link cuando se tenga la webapp
                 $body = 'Usuario: ' . $user->mail . '<br> Contraseña: ' . $password;
                 
