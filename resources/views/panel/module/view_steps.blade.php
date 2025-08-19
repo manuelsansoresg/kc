@@ -179,7 +179,7 @@
                                 <div class="col-md-3 d-none d-md-block offset-md-1">
                                     <div class="card">
                                         <div class="card-body">
-                                            @include('panel.credit.right_bar')
+                                            @include('panel.credit.right_bar', ['path' => $path])
                                         </div>
                                     </div>
                                 </div>
