@@ -1197,8 +1197,8 @@
                                     web, sitio web o p&aacute;gina de internet, as&iacute; como cualquier subdominio o p&aacute;gina
                                     referenciada propiedad de </span><span class="c0">KAAX CLUB</span><span class="c1">, cuyo nombre de dominio
                                     es www.kaaxclub.com, (conjuntamente el Sitio) y por ende reconoce que ha revisado, conoce y acepta todos los
-                                    t&eacute;rminos y condiciones ubicado en https://kaaxclub.com/terminos-y-condiciones, aviso de privacidad
-                                    ubicado en https://kaaxclub.com/aviso-de-privacidad, avisos legales y cualquier otra cl&aacute;usula,
+                                    t&eacute;rminos y condiciones ubicado en {{ env('APP_URL') }}/terminos-y-condiciones, aviso de privacidad
+                                    ubicado en {{ env('APP_URL') }}/aviso-de-privacidad, avisos legales y cualquier otra cl&aacute;usula,
                                     declaraci&oacute;n, derecho y/u obligaci&oacute;n que se contiene en el Sitio y/o que le haya sido revelada
                                     al momento de registrarse como usuario del Sitio, las cuales se tendr&aacute;n por insertadas literalmente
                                     al presente acto jur&iacute;dico.</span></p>
@@ -1666,7 +1666,7 @@
                             <p class="c3 c4"><span class="c5 c0"></span></p>
                             <p class="c3"><span class="c0 c5">D&Eacute;CIMA: AVISO DE PRIVACIDAD. </span></p>
                             <p class="c3"><span class="c6">EL USUARIO ratifica haber aceptado el Aviso de Privacidad de KAAX CLUB el cual
-                                    podr&aacute; ser consultado en https://kaaxclub.com/aviso-de-privacidad</span><span class="c5 c0">.</span>
+                                    podr&aacute; ser consultado en {{ env('APP_URL') }}/aviso-de-privacidad</span><span class="c5 c0">.</span>
                             </p>
                             <p class="c3 c4"><span class="c5 c0"></span></p>
                             <p class="c3"><span class="c5 c0">D&Eacute;CIMA PRIMERA: RENUNCIA. </span></p>

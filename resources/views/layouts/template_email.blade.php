@@ -99,7 +99,7 @@
                                         <li style="display: inline-block; list-style: none; padding: 4px;"><a style="display: inline-block; height: 30px; width:30px;border-radius: 50%; background-color: #ffffff" href="#"><img style="width: 30px" src="http://cdn.mcauto-images-production.sendgrid.net/0eff3d57d1785d0a/c2f0cffd-98c6-46da-80b0-02da50a1f499/60x60.png" alt="brand"></a></li>
                                         <li style="display: inline-block; list-style: none; padding: 4px;"><a style="display: inline-block; height: 30px; width:30px;border-radius: 50%; background-color: #ffffff" href="#"><img style="width: 30px" src="http://cdn.mcauto-images-production.sendgrid.net/0eff3d57d1785d0a/315ceb06-ed35-42b8-9258-ab2f6dfa727e/60x60.png" alt="brand"></a></li>
                                     </ul>
-                                   <p style="padding-top: 15px; font-size: 12px;">Este correo fue enviado por haberte registrado a  <a style="color: #6576ff; text-decoration:none;" href="https://kaaxclub.com/">kaaxclub.com</a>.</p>
+                                   <p style="padding-top: 15px; font-size: 12px;">Este correo fue enviado por haberte registrado a  <a style="color: #6576ff; text-decoration:none;" href="{{ env('APP_URL') }}">{{ env('APP_URL') }}</a>.</p>
                                 </td>
                             </tr>
                         </tbody>

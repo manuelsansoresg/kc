@@ -186,7 +186,7 @@
                                                 </a>
                                             </div>
                                             <div class="col-6 text-center">
-                                                <a href="https://kaaxclub.com/" class="btn btn-primary hover-lift me-3 mt-2 btn-block col-12">
+                                                <a href="{{ env('APP_URL') }}" class="btn btn-primary hover-lift me-3 mt-2 btn-block col-12">
                                                     <div class="d-flex align-items-center justify-content-center">
                                                         Salir 
                                                     </div>
@@ -199,7 +199,7 @@
                                         @else
                                         <div class="d-flex flex-wrap justify-content-center">
                                             <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                                <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://kaaxclub.com" style="text-transform: inherit">OK 
+                                                <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="{{ env('APP_URL') }}" style="text-transform: inherit">OK 
                                                 </a>
                                                 <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
                                                     >Contacto 
@@ -220,7 +220,7 @@
                                             </a>
                                         </div>
                                         <div class="col-6 col-md-3 text-center">
-                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://kaaxclub.com" style="text-transform: inherit">OK 
+                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="{{ env('APP_URL') }}" style="text-transform: inherit">OK 
                                             </a>
                                         </div>
                                     </div>

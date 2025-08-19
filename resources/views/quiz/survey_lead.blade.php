@@ -281,7 +281,7 @@
                                                 
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a href="https://kaaxclub.com/"
+                                                        <a href="{{ env('APP_URL') }}"
                                                             class="btn btn-primary btn-lg btn-block pointer btn-block"
                                                                 >Salir</a>
                                                     </div>
@@ -290,7 +290,7 @@
                                                 @endif
                                                 <div class="row justify-content-center mt-3">
                                                     <div class="col-12 col-md-6">
-                                                        <a href="https://kaaxclub.com/ayuda" id="btn-next-init"
+                                                        <a href="{{ env('APP_URL') }}/ayuda" id="btn-next-init"
                                                             class="btn btn-primary btn-lg btn-block pointer btn-block"
                                                             data-aos="fade-up" data-aos-duration="5000">Ayuda
                                                         </a>
@@ -479,7 +479,7 @@
                     $('#lead_id').val(lead.id);
                     if (history != null) {
                         //*cambiar URL a produccion
-                        let resultReport = 'https://kaaxclub.com/reporte/' + history.id;
+                        let resultReport = '{{ url('/reporte') }}/' + history.id;
                         document.getElementById('url_report').setAttribute('href', resultReport);
                         
                     }
@@ -488,7 +488,7 @@
                     }) */
                     
                     if (is_redirect == true) {
-                        window.location = 'https://kaaxclub.com';
+                        window.location = '{{ env('APP_URL') }}';
                     }
                 })
                 .catch(function(error) {

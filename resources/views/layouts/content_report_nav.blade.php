@@ -19,20 +19,20 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav ms-xl-auto">
-                    <li class="mt-4 mt-lg-0 nav-item d-flex align-items-center justify-content-lg-center flex-lg-column h-100 ms-0 ms-xl-3"><a class="dropdown-item" href="https://kaaxclub.com/ayuda">Ayuda</a>
+                    <li class="mt-4 mt-lg-0 nav-item d-flex align-items-center justify-content-lg-center flex-lg-column h-100 ms-0 ms-xl-3"><a class="dropdown-item" href="{{ env('APP_URL') }}/ayuda">Ayuda</a>
                     </li>
                     <li class="mt-4 mt-lg-0 nav-item d-flex align-items-center justify-content-lg-center flex-lg-column h-100 ms-0 ms-xl-3"><a class="dropdown-item" href="/reporte/{{ $history_id }}/metodologia">Metodología</a>
                     </li>
-                    <li class="mt-4 mt-lg-0 nav-item d-flex align-items-center justify-content-lg-center flex-lg-column h-100 ms-0 ms-xl-3"> <a class="dropdown-item" href="https://kaaxclub.com">Salir</a>
+                    <li class="mt-4 mt-lg-0 nav-item d-flex align-items-center justify-content-lg-center flex-lg-column h-100 ms-0 ms-xl-3"> <a class="dropdown-item" href="{{ env('APP_URL') }}">Salir</a>
                     </li>
 
                    {{--  <li class="nav-item dropdown"><a class="nav-link dropdown-arrow" href="#"
                             data-bs-toggle="dropdown">Opciones<span
                                 class="material-symbols-rounded align-middle lh-1 dropdown-arrow-icon">expand_more</span></a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="https://kaaxclub.com/ayuda">Ayuda</a>
+                            <a class="dropdown-item" href="{{ env('APP_URL') }}/ayuda">Ayuda</a>
                             <a class="dropdown-item" href="/reporte/{{ $history_id }}/metodologia">Metodología</a>
-                            <a class="dropdown-item" href="https://kaaxclub.com">Salir</a>
+                            <a class="dropdown-item" href="{{ env('APP_URL') }}">Salir</a>
                         </div>
                     </li>
  --}}

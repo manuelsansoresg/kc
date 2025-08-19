@@ -394,7 +394,7 @@
 
                     $('#lead_id').val(lead.id);
                     if (is_redirect == true) {
-                        window.location = 'https://kaaxclub.com';
+                        window.location = '{{ env('APP_URL') }}';
                     }
                 })
                 .catch(function(error) {

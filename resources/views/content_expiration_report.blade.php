@@ -43,7 +43,7 @@
                                     </p>
                                     <div class="d-flex flex-wrap justify-content-center">
                                         <div data-aos="fade-up" data-aos-delay="150" class="aos-init aos-animate">
-                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="https://kaaxclub.com" style="text-transform: inherit">OK 
+                                            <a class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12  iframe-link" href="{{ env('APP_URL') }}" style="text-transform: inherit">OK 
                                             </a>
                                             <a target="_blank" href="https://api.whatsapp.com/send?phone=+529999208020&text=Hola" class="btn btn-primary hover-lift me-3 btn-block mt-2 col-12"
                                                     >Contacto 
