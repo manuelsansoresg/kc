@@ -6328,7 +6328,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             $config = $elements[$template_config_id];
         } catch (\Exception $th) {
         
-            dd($elements, $template_config_id, $step);
+            //dd($elements, $template_config_id, $step);
         }
        
 
