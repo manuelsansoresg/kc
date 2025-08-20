@@ -5625,7 +5625,50 @@ document.addEventListener('DOMContentLoaded', function () {
   \*****************************************************/
 /***/ (() => {
 
-
+window.modalSolicitud = function (history_id, credit_id) {
+  axios.get("/panel/solicitud/" + history_id + '/modal/show').then(function (response) {
+    // Actualizar el href del enlace con el credit_id
+    $('#link-detalle-solicitud').attr('href', '/panel/credit/' + credit_id);
+    $('#content-modal-solicitud').html(response.data);
+    $('#modalSolicitud').modal('show');
+  })["catch"](function (e) {});
+};
+window.denegarSolicitud = function () {
+  var client_name = $('#solicitud_client_name').val();
+  var history_id = $('#solicitud_history_id').val();
+  Swal.fire({
+    title: 'Denegar Vo.Bo a:',
+    text: client_name,
+    icon: 'error',
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar',
+    showCancelButton: true
+  }).then(function (result) {
+    if (result.isConfirmed) {
+      axios.get("/panel/solicitud/" + history_id + '/status/deny').then(function (response) {
+        window.location.reload();
+      })["catch"](function (e) {});
+    }
+  });
+};
+window.otorgarSolicitud = function () {
+  var client_name = $('#solicitud_client_name').val();
+  var history_id = $('#solicitud_history_id').val();
+  Swal.fire({
+    title: 'Otorgar Vo.Bo a:',
+    text: client_name,
+    icon: 'success',
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar',
+    showCancelButton: true
+  }).then(function (result) {
+    if (result.isConfirmed) {
+      axios.get("/panel/solicitud/" + history_id + '/status/approve').then(function (response) {
+        window.location.reload();
+      })["catch"](function (e) {});
+    }
+  });
+};
 
 /***/ }),
 

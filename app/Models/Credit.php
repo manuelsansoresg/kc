@@ -467,6 +467,7 @@ class Credit extends Model
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);
             $client           = $query->creditClientPerson;
+
             $financialProduct = FinancialProduct::find($query->applied_financial_product);
             $tipoCredito      = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
             $alias_product    = $tipoCredito      != null ? $tipoCredito->alias : null;
@@ -488,7 +489,8 @@ class Credit extends Model
                 'client' => $content_client,
                 'vobo' => config('enums.go_ahead')[$query->go_ahead],
                 'progress' => $progress_bar,
-                'options' => '<a onclick="modalSolicitud()"> Ver</a'
+                'options' => '<a class="pointer btn btn-outline-primary" onclick="modalSolicitud('.$history->id.', '.$history->id_rel.')"> Ver</a>'
+
             );
         }
         return $users;

@@ -333,6 +333,12 @@ Route::group(['prefix' => 'credit'], function () {
 });
 
 Route::resource('solicitud', '\App\Http\Controllers\Panel\Credit\SolicitudController')->middleware('auth');
+Route::get('solicitud/{history_id}/modal/show', ['\App\Http\Controllers\Panel\Credit\SolicitudController', 'modalShow'])->middleware('auth');
+Route::get('solicitud/{history_id}/status/deny', ['\App\Http\Controllers\Panel\Credit\SolicitudController', 'statusDeny'])->middleware('auth');
+Route::get('solicitud/{history_id}/status/approve', ['\App\Http\Controllers\Panel\Credit\SolicitudController', 'statusApprove'])->middleware('auth');
+
+
+
 
 //* actions template
 Route::resource('action-form', '\App\Http\Controllers\Panel\Module\FormController')->middleware('auth');
