@@ -45,6 +45,7 @@ require('./components/module/kc_control_desk/reference');
 require('./components/action/datatablemodule');
 require('./components/credit/profile/datatable');
 require('./components/credit/product/datatable');
+require('./components/credit/solicitud');
 require('./components/credit/datatable_in_progress');
 require('./components/resumen');
 

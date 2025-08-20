@@ -488,7 +488,7 @@ class Credit extends Model
                 'client' => $content_client,
                 'vobo' => config('enums.go_ahead')[$query->go_ahead],
                 'progress' => $progress_bar,
-                'options' => $option
+                'options' => '<a onclick="modalSolicitud()"> Ver</a'
             );
         }
         return $users;

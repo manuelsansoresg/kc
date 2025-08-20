@@ -5619,6 +5619,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /***/ }),
 
+/***/ "./resources/js/components/credit/solicitud.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/credit/solicitud.js ***!
+  \*****************************************************/
+/***/ (() => {
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/crm.js":
 /*!****************************************!*\
   !*** ./resources/js/components/crm.js ***!
@@ -11856,6 +11866,7 @@ __webpack_require__(/*! ./components/module/kc_control_desk/reference */ "./reso
 __webpack_require__(/*! ./components/action/datatablemodule */ "./resources/js/components/action/datatablemodule.js");
 __webpack_require__(/*! ./components/credit/profile/datatable */ "./resources/js/components/credit/profile/datatable.js");
 __webpack_require__(/*! ./components/credit/product/datatable */ "./resources/js/components/credit/product/datatable.js");
+__webpack_require__(/*! ./components/credit/solicitud */ "./resources/js/components/credit/solicitud.js");
 __webpack_require__(/*! ./components/credit/datatable_in_progress */ "./resources/js/components/credit/datatable_in_progress.js");
 __webpack_require__(/*! ./components/resumen */ "./resources/js/components/resumen.js");
 window.moveElement = function (section, id, idDatatable) {

@@ -50,11 +50,5 @@
         </div>
     </div>
     <input type="hidden" id="refresh-dt" value="dt-lead">
-    @include('panel.modal.note')
-    @include('panel.lead.modal.advisor')
-    @include('panel.modal.archive')
-    @include('panel.modal.tags')
-    @include('panel.modal.validate')
-    @include('panel.action.modal.form')
-    @include('panel.action.modal.register_action')
+   
 @endsection
