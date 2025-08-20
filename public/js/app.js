@@ -2054,7737 +2054,14 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./resources/js/components/action/credit.js":
-/*!**************************************************!*\
-  !*** ./resources/js/components/action/credit.js ***!
-  \**************************************************/
-/***/ (() => {
-
-window.modalCreditTag = function (credit_id) {
-  $('#modal-credit-tag-tag').val(null).trigger('change');
-  $('#lead-financial_id').val('').trigger('change');
-  $('#modal-credit-credit_id').val(credit_id);
-  $('#modal-credit-tag').modal('show');
-};
-
-$("#frm-credit-tag").submit(function (event) {
-  event.preventDefault();
-  var lead_id = $('#modal-tag-lead_id').val();
-  var new_form = document.getElementById("frm-credit-tag");
-  var data = new FormData(new_form);
-  axios.post("/panel/credit/tag/store", data).then(function (response) {
-    $('#modal-credit-tag').modal('hide');
-    creditRefresh(creditRefresh);
-  })["catch"](function (e) {});
-});
-
-if (document.getElementById('frm-credit-tag')) {
-  getTags();
-  getNotes();
-}
-
-function getTags() {
-  $('#content-tag').html('');
-  var credit_id = $('#credit-profile-credit_id').val();
-  axios.get("/panel/credit/tag/" + credit_id + "/get-all").then(function (response) {
-    var result = response.data;
-    $('#content-tag').html(result.tags);
-  })["catch"](function (e) {});
-}
-
-function getNotes() {
-  $('#content-note').html('');
-  var credit_id = $('#credit-profile-credit_id').val();
-  axios.get("/panel/credit/note/" + credit_id + "/get-all").then(function (response) {
-    var result = response.data;
-    $('#content-note').html(result.tags);
-  })["catch"](function (e) {});
-}
-
-window.creditRefresh = function () {
-  $('#modal-note').modal('hide');
-  getTags();
-  getNotes();
-};
-
-window.deleteTag = function (tag_id) {
-  axios.get("/panel/credit/tag/" + tag_id + "/drop").then(function (response) {
-    var result = response.data;
-    getTags();
-  })["catch"](function (e) {});
-};
-
-$(document).ready(function () {
-  if (document.getElementById('action-model')) {
-    var clearPreviewFiles = function clearPreviewFiles() {
-      var model = $('#action-model').val();
-      var id_rel = $('#action-id_rel').val();
-      return new Promise(function (resolve, reject) {
-        var step = $('#step').val();
-        axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
-          var result = response.data;
-          var config_files = result.config_files;
-
-          for (var key in config_files) {
-            if (config_files.hasOwnProperty.call(config_files, key)) {
-              var element = config_files[key];
-              $('#' + key + '-files-action-preview').html('');
-            }
-          }
-
-          resolve();
-        })["catch"](function (e) {
-          reject(e);
-        });
-      });
-    };
-
-    var model = $('#action-model').val();
-    var id_rel = $('#action-id_rel').val();
-    var step = $('#step').val();
-    console.log('model' + model);
-
-    if (model == '') {
-      model = null;
-    } //*get configuration in template
-
-
-    if (model == 'controlDesk' || model == 'delivery') {
-      $('.myDropzone').each(function () {
-        // Obtener el ID del elemento actual
-        var key = $(this).attr('id');
-        console.log(key);
-
-        if (key) {
-          // Crear dinámicamente una instancia de Dropzone
-          var nameField = null;
-
-          if (document.getElementById('name_field_' + key)) {
-            nameField = $('#name_field_' + key).val();
-          }
-
-          NioApp.Dropzone('#' + key, {
-            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key + '?step=' + step + '&nameField=' + nameField,
-            init: function init() {
-              this.on("sending", function (file, xhr, formData) {});
-              this.on("success", function (file, message) {
-                getData();
-              });
-              this.on("complete", function (file) {
-                this.removeAllFiles(true);
-              });
-            }
-          });
-        }
-      });
-    }
-
-    if (model != 'controlDesk') {
-      axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
-        var result = response.data;
-        var config_files = result.config_files;
-        var step = $('#step').val();
-
-        var _loop = function _loop(key) {
-          if (config_files.hasOwnProperty.call(config_files, key)) {
-            var element = config_files[key]; //create dinamic dropzone element
-
-            NioApp.Dropzone('#' + key + '-dropzone-action', {
-              url: "/panel/files/images/" + model + '/' + id_rel + '/' + key + '?step=' + step,
-              init: function init() {
-                this.on("sending", function (file, xhr, formData) {
-                  var date_file = null;
-
-                  if (document.getElementById(key + '-date_file')) {
-                    date_file = $('#' + key + '-date_file').val();
-                  }
-
-                  formData.append("date_file", date_file);
-                });
-                this.on("success", function (file, message) {
-                  getData();
-                });
-                this.on("complete", function (file) {
-                  this.removeAllFiles(true);
-                });
-              }
-            });
-          }
-        };
-
-        for (var key in config_files) {
-          _loop(key);
-        } //
-
-      })["catch"](function (e) {});
-    }
-
-    window.deleteFileTemplate = function (model, id) {
-      $('#frm-register-action-preview').html('');
-      axios.get("/panel/temp/images/" + id + "/delete").then(function (response) {
-        getData();
-        showToast('Archivos', 'Archivo borrado', 'success');
-      })["catch"](function (e) {});
-    }; //* get data saved 
-
-
-    window.getData = function () {
-      var model = $('#action-model').val();
-      var id_rel = $('#action-id_rel').val();
-      clearPreviewFiles().then(function () {
-        var step = $('#step').val();
-        axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
-          var result = response.data;
-          var files = result.files;
-          var file_dates = result.file_date;
-
-          for (var key in file_dates) {
-            if (file_dates.hasOwnProperty.call(file_dates, key)) {
-              var element_date_file = file_dates[key]; //console.log(element_date_file.template_config_id);
-
-              $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
-            }
-          }
-
-          for (var key_file in files) {
-            if (files.hasOwnProperty.call(files, key_file)) {
-              var element_file = files[key_file];
-              console.log(element_file.template_config_id);
-              $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
-            }
-          }
-        })["catch"](function (e) {
-          console.error(e);
-        });
-      })["catch"](function (e) {
-        console.error(e);
-      });
-    };
-  }
-
-  $().ready(function () {
-    if (document.getElementById('action-id_rel')) {
-      getData();
-    }
-
-    $("#frm-action-files").validate({
-      rules: {
-        'date_file[]': {
-          required: true
-        }
-      },
-      submitHandler: function submitHandler(form, event) {
-        event.preventDefault();
-        var new_form = document.getElementById("frm-action-files");
-        var data = new FormData(new_form); // Extract the step value from the URL
-
-        var urlParams = new URLSearchParams(window.location.search);
-        var step = urlParams.get('step'); // Add the step value to the FormData
-
-        data.append('step', step);
-        axios.post("/panel/files/template/date", data).then(function (response) {
-          var result = response.data;
-          var url_redirect = null;
-          url_redirect = $('#url_redirect').val();
-          window.location = url_redirect;
-        })["catch"](function (e) {});
-      }
-    });
-  });
-
-  if (document.getElementById('pruebaDropZone')) {
-    var _model = 'prueba';
-    var _id_rel = 1;
-    var key = 1;
-    NioApp.Dropzone('#pruebaDropZone', {
-      url: "/panel/files/images/" + _model + '/' + _id_rel + '/' + key,
-      init: function init() {
-        this.on("sending", function (file, xhr, formData) {});
-        this.on("success", function (file, message) {});
-        this.on("complete", function (file) {});
-      }
-    });
-  }
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/action/crud.js":
-/*!************************************************!*\
-  !*** ./resources/js/components/action/crud.js ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ "./node_modules/axios/package.json":
+/*!*****************************************!*\
+  !*** ./node_modules/axios/package.json ***!
+  \*****************************************/
+/***/ ((module) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
-
-
-window.actionModal = function (id, is_new, is_lead) {
-  var model = is_lead == true ? 'lead' : 'credit';
-  var section = is_lead == true ? 1 : 2;
-  resetAction();
-  getAdvisorLead(model, id);
-  $('#modal-action-id-rel').val(id);
-  $('#modal-action-id-section').val(section);
-
-  if (is_new == 'true') {
-    $('#modal-action-id-action').val(null);
-  }
-
-  $('#modal-action').modal('show');
-};
-
-window.addActionIntoActions = function (id, is_new, is_lead) {
-  $('#modal-list-actions').modal('hide');
-  var model = is_lead == true ? 'lead' : 'credit';
-  var section = is_lead == true ? 1 : 2;
-  resetAction();
-  getAdvisorLead(model, id);
-  $('#modal-action-id-rel').val(id);
-  $('#modal-action-id-section').val(section);
-
-  if (is_new == 'true') {
-    $('#modal-action-id-action').val(null);
-  }
-
-  $('#modal-action').modal('show');
-};
-
-if (document.getElementById('frm-action')) {
-  $('#modal-action-type').select2({
-    dropdownParent: $('#modal-action'),
-    placeholder: "Escribe para buscar..",
-    allowClear: true
-  });
-}
-
-function getAdvisorLead(model, id_rel) {
-  axios.get("/panel/" + model + "/" + id_rel + '/advisor/show').then(function (response) {
-    var result = response.data;
-    var advisor = result.advisor;
-
-    if (advisor != null) {
-      var name_advisor = advisor.name + ' ' + advisor.last_name;
-      $("#lead-asesor-id").prepend("<option value='" + advisor.id + "' selected='selected'> " + name_advisor + "</option>");
-      $("#lead-asesor-id").prop("disabled", true);
-    }
-  })["catch"](function (e) {});
-}
-/* function getPerson(lead_id) {
-    axios
-        .get("/panel/lead/" + lead_id)
-        .then(function (response) {
-            let result = response.data;
-            let lead = result.lead;
-            let lead_name = lead.name + ' ' + lead.last_name;
-            $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
-        })
-        .catch(e => {
-
-        });
-} */
-
-
-$().ready(function () {
-  $("#frm-action").validate({
-    rules: {
-      'data[type]': {
-        required: true
-      },
-      'data[start_date]': {
-        required: true
-      },
-      'data[advisor_id]': {
-        required: true
-      },
-      'data[start_time]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var new_form = document.getElementById("frm-action");
-      var data = new FormData(new_form);
-      var refresh_dt = $('#refresh-dt').val();
-      axios.post("/panel/action", data).then(function (response) {
-        var result = response.data;
-        var status = $('#modal-action-status').val();
-        var id_action = $('#modal-action-id-action').val();
-        console.log(status);
-
-        if (status == 1 && result != null) {
-          //*se marco como completada
-          $('#register-action-id-rel').val(result.id);
-          $('#modal-action').modal('hide');
-          resetRegisterAction();
-
-          if (id_action == 'null') {
-            $('#modal-register-action').modal('show');
-          }
-        } else {
-          $('#modal-action').modal('hide');
-
-          if (document.getElementById('is_refresh')) {
-            location.reload(); // Recargar la página
-          }
-
-          if (refresh_dt != 'null') {
-            (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
-          } else {
-            refreshListActions();
-          }
-        } //refreshListActions();
-
-      })["catch"](function (e) {});
-    }
-  });
-});
-
-function resetAction() {
-  $('#frm-action input, textarea, select').removeAttr('disabled');
-  $('#modal-action-save').show();
-  $("#modal-action-type").val('').trigger('change');
-  $('#modal-action-subject').val('');
-  $('#modal-action-start_date').val('');
-  $('#modal-action-end_date').val('');
-  $('#modal-action-description').val('');
-  $('#modal-action-id-action').val('null');
-  $('#modal-action-complete-pending').prop("checked", true);
-  $("#lead-asesor-id").val('').trigger('change');
-  $("#lead-asesor-id").prop("disabled", false);
-}
-
-function resetRegisterAction() {
-  $("#frm-register-action-state").val('').trigger('change');
-  $('#frm-register-action-comment').val('');
-  $('#frm-register-action-preview').html(''); //myDropzone.removeAllFiles(true); 
-}
-
-window.deleteFile = function (model, id) {
-  $('#frm-register-action-preview').html('');
-  axios.get("/panel/temp/images/" + id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Archivos', 'Archivo borrado');
-    reloadFile(model);
-  })["catch"](function (e) {});
-};
-
-function reloadFile(model) {
-  axios.get("/panel/temp/images/" + model + '/show').then(function (response) {
-    $('#frm-register-action-preview').html(response.data);
-  })["catch"](function (e) {});
-}
-
-$('#frm-action input').on('change', function () {
-  var status = $('input[name=status]:checked', '#frm-action').val();
-  $('#modal-action-status').val(status);
-}); //*form register action
-
-$().ready(function () {
-  $("#frm-register-action").validate({
-    rules: {
-      'data[state]': {
-        required: true
-      },
-      'data[comment]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var new_form = document.getElementById("frm-register-action");
-      var data = new FormData(new_form);
-      var refresh_dt = $('#refresh-dt').val();
-      axios.post("/panel/register-action", data).then(function (response) {
-        var result = response.data;
-        $('#modal-register-action').modal('hide');
-
-        if (refresh_dt != 'null') {
-          /* showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
-          refreshListActions(); */
-          location.reload();
-        } else {
-          refreshListActions();
-        }
-      })["catch"](function (e) {});
-    }
-  });
-});
-
-window.modalRegisterAction = function (model, id) {
-  resetRegisterAction();
-  axios.get("/panel/register-action/set-id/" + id + '/set').then(function (response) {})["catch"](function (e) {});
-  axios.get("/panel/register-action/set-model/" + model + '/set').then(function (response) {})["catch"](function (e) {});
-  $('#register-action-model').val(model);
-  $('#register-action-id-rel').val(id);
-  $('#modal-register-action').modal('show');
-};
-
-window.setIdRel = function () {};
-
-window.deleteRegisterAction = function (action_id) {
-  var refresh_dt = $('#refresh-dt').val();
-  axios["delete"]("/panel/register-action/" + action_id).then(function (response) {
-    if (refresh_dt != 'null') {
-      (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
-      refreshListActions();
-    } else {
-      refreshListActions();
-    }
-  })["catch"](function (e) {});
-};
-
-window.alerDeleteAction = function (id) {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, elimina',
-    cancelButtonText: 'Mejor no'
-  }).then(function (result) {
-    if (result.value) {
-      deleteAction(id);
-    }
-  });
-};
-
-window.deleteAction = function (id) {
-  var refresh_dt = $('#refresh-dt').val();
-  axios["delete"]("/panel/action/" + id).then(function (response) {
-    if (document.getElementById('modal-list-actions')) {
-      location.reload(); // Recargar la página
-    }
-
-    if (refresh_dt != 'null') {
-      (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
-    } else {
-      refreshListActions();
-    }
-  })["catch"](function (e) {});
-};
-/* window.editModalAction = function(action_id, disabled) {
-    setModalAction(action_id, disabled);
-    $('#modal-action').modal('show');
-} */
-
-
-window.setModalAction = function (action_id, disabled, section) {
-  if (disabled == true) {
-    $('#frm-action input, textarea, select').attr('disabled', 'disabled');
-    $('#modal-action-save').hide();
-  }
-
-  axios.get("/panel/action/" + action_id).then(function (response) {
-    var result = response.data;
-    var action = result.action;
-    var advisor = result.advisor;
-    var lead = result.lead; //*set value form action
-
-    if (result != null) {
-      var lead_name = lead != null ? lead.name + ' ' + lead.last_name : null;
-      $("#modal-action-type").val(action.type).trigger('change');
-      $("#modal-action-subject").val(action.subject);
-      $("#modal-action-id-action").val(action_id);
-      $("#modal-action-subject").val(action.subject);
-      $("#modal-action-id-section").val(action.section);
-      $("#modal-action-status").val(action.status);
-      $("#modal-action-start_date").val(action.start_date);
-      $("#modal-action-start_time").val(action.start_time);
-      $("#modal-action-end_date").val(action.end_date);
-      $("#modal-action-description").val(action.description);
-      $("#modal-action-id-rel").val(action.id_rel);
-      $('#modal-action').modal('show');
-      $('#lead-asesor-id').val(action.advisor_id).trigger("change");
-
-      if (action.status == 1) {
-        $('#modal-action-complete-active').prop("checked", true);
-        $('#modal-action-complete-pending').prop("checked", false);
-      } else {
-        $('#modal-action-complete-active').prop("checked", false);
-        $('#modal-action-complete-pending').prop("checked", true);
-      }
-
-      $('#modal-action').modal('show');
-    }
-  })["catch"](function (e) {});
-};
-
-window.refreshAction = function (id, model, status, content) {
-  if (!id || !model || !status || !content) {
-    // Si falta algún valor, no hacer nada
-    return;
-  }
-
-  $('#' + content).html('');
-  axios.get("/panel/action/list/" + id + "/" + model + "/" + status).then(function (response) {
-    $('#' + content).html(response.data);
-  })["catch"](function (e) {// Manejo de error opcional
-  });
-};
-
-window.refreshListActions = function () {
-  var id_rel = $('#id-rel-action').val();
-  var model = $('#model-action').val();
-  refreshAction(id_rel, model, 'in_progress', 'content-profile-in_progress');
-  refreshAction(id_rel, model, 'completed', 'content-profile-completed');
-};
-
-if (document.getElementById('content-profile-in_progress')) {
-  refreshListActions();
-}
-
-/***/ }),
-
-/***/ "./resources/js/components/action/datatable.js":
-/*!*****************************************************!*\
-  !*** ./resources/js/components/action/datatable.js ***!
-  \*****************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var status = $('#dt-action-status').val();
-  var table = NioApp.DataTable('#dt-acctions', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/action/' + status + '/dt/show',
-    columns: [{
-      data: 'type'
-    }, {
-      data: 'subject'
-    },
-    /* { data: 'section' }, */
-    {
-      data: 'name'
-    }, {
-      data: 'date_in'
-    }, {
-      data: 'date_fin'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'options',
-      className: 'nk-tb-col-tools text-end'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item odd");
-    }
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  var status = $('#dt-action-status').val();
-  var model = $('#model').val();
-  var table = NioApp.DataTable('#dt-actions', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/action/' + status + '/' + model + '/dt/show',
-    columns: [{
-      data: 'type'
-    },
-    /* { data: 'section' }, */
-    {
-      data: 'name'
-    }, {
-      data: 'date_in'
-    }, {
-      data: 'options',
-      className: 'nk-tb-col-tools text-end'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item odd");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/action/datatablemodule.js":
-/*!***********************************************************!*\
-  !*** ./resources/js/components/action/datatablemodule.js ***!
-  \***********************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var name_status = $('#name_status').val();
-  var table = NioApp.DataTable('#dt-acctions-module', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/action/module/' + name_status + '/list',
-    columns: [{
-      data: 'action'
-    }, {
-      data: 'subject'
-    }, {
-      data: 'module'
-    }, {
-      data: 'name'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'responsable'
-    }, {
-      data: 'options',
-      className: 'nk-tb-col-tools text-end'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item odd");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/agreement/crud.js":
-/*!***************************************************!*\
-  !*** ./resources/js/components/agreement/crud.js ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
-
-
-window.deleteAgreement = function (agreement) {
-  axios.get("panel/agreement/" + agreement + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Datos actualizados', 'Información actualizada correctamente');
-  })["catch"](function (e) {});
-};
-
-$().ready(function () {
-  $("#frm-agreement").validate({
-    rules: {
-      'data[name]': {
-        required: true
-      },
-      'data[status]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var new_form = document.getElementById("frm-agreement");
-      var data = new FormData(new_form);
-      axios.post("/panel/agreement", data).then(function (response) {
-        var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Datos actualizados', 'Información actualizada correctamente');
-        window.location = '/panel/agreement';
-      })["catch"](function (e) {});
-    }
-  });
-
-  if (document.getElementById('frm-agreement') && $('#agreement_id').val() != 'null') {
-    var agreement_id = $('#agreement_id').val();
-    axios.get("/panel/agreement/" + agreement_id).then(function (response) {
-      var result = response.data;
-      var agreement = result.agreement;
-      var financials = result.financials;
-      $('#agreement-name').val(agreement.name);
-      $('#razon_social').val(agreement.razon_social);
-      $('#agreement-description').val(agreement.description);
-      $('#agreement_term').val(agreement.agreement_term); // Limpia las selecciones actuales en el select múltiple
-
-      $('#agreement-financials').val(null).trigger('change');
-      $('#agreement-status').val(agreement.status).trigger("change"); // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
-
-      var financialValues = financials.map(function (item) {
-        return item.id;
-      }); // Seleccionar los valores correspondientes en los selects
-
-      $('#agreement-financials').val(financialValues).trigger('change'); //$('#agreement-status option[value="' + agreement.status + '"]').trigger("change");
-    })["catch"](function (e) {
-      $('#admin_email-error-exist').show();
-    });
-  }
-
-  function getProductComision(product_id) {
-    $('#content-costo-contratacion').html('');
-    $('#comisiones').html('');
-    axios.get("/panel/product-fee/" + product_id).then(function (response) {
-      var result = response.data;
-      $('#content-costo-contratacion').html(result.costoContratacion);
-      $('#comisiones').html(result.comisiones);
-    })["catch"](function (e) {
-      $('#admin_email-error-exist').show();
-    });
-  }
-
-  window.editProductFee = function (productFee, product_id, type) {
-    $('#frm-product-fees')[0].reset();
-    $('#product_fee').val(productFee);
-    $('#financial_product_id').val(product_id);
-    $('#comision_type').val(type);
-    axios.get("/panel/product-fee/" + productFee + '/showproductFee').then(function (response) {
-      var result = response.data;
-
-      if (result != null) {
-        $('#concepto').val(result.concepto);
-        $('#periodicidad').val(result.periodicidad);
-        $('#moneda').val(result.moneda);
-
-        if (result.is_valor_fijo == 1) {
-          $('#type_active').prop('checked', true).click();
-        } else {
-          $('#type_pending').prop('checked', true).click();
-        }
-
-        $('#valor').val(result.valor);
-        $('#porcentaje').val(result.porcentaje);
-        $('#referencia').val(result.referencia);
-        $('#modal-product-fees').modal('show');
-      }
-    })["catch"](function (e) {});
-  };
-  /* borrar comisiones */
-
-
-  window.deleteProductFee = function (product_fee_id) {
-    var product_id = $('#product_id').val();
-    Swal.fire({
-      title: '¿Estás seguro?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, elimina',
-      cancelButtonText: 'Mejor no'
-    }).then(function (result) {
-      if (result.value) {
-        axios["delete"]("/panel/product-fee/" + product_fee_id).then(function (response) {
-          getProductComision(product_id);
-        })["catch"](function (e) {});
-      }
-    });
-  };
-  /* borrar comisiones */
-
-
-  if (document.getElementById('financial_product_id')) {
-    var product_id = $('#product_id').val();
-    getProductComision(product_id);
-  }
-
-  $("#frm-product-fees").validate({
-    rules: {
-      'data[concepto]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var product_id = $('#financial_product_id').val();
-      var new_form = document.getElementById("frm-product-fees");
-      var data = new FormData(new_form);
-      axios.post("/panel/product-fee", data).then(function (response) {
-        getProductComision(product_id);
-        $('#modal-product-fees').modal('hide');
-        new_form.reset();
-      })["catch"](function (e) {});
-    }
-  }); //modal productfee
-
-  window.modalProductComision = function (product_fee, product_id, type) {
-    $('#product_fee').val(product_fee);
-    $('#financial_product_id').val(product_id);
-    $('#comision_type').val(type);
-    $('#modal-product-fees').modal('show');
-  };
-
-  window.showValorFijo = function (show_fijo) {
-    $('#content-valor-fijo').hide();
-    $('#content-no-valor-fijo').hide();
-
-    if (show_fijo) {
-      $('#content-valor-fijo').show();
-    } else {
-      $('#content-no-valor-fijo').show();
-    }
-  };
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/agreement/datatable.js":
-/*!********************************************************!*\
-  !*** ./resources/js/components/agreement/datatable.js ***!
-  \********************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var route = $('#route_datatable').val();
-  var table = NioApp.DataTable('#dt-agreement', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/agreement/list/show',
-    columns: [{
-      data: 'name'
-    }, {
-      data: 'description'
-    }, {
-      data: 'status'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/clients/crud.js":
-/*!*************************************************!*\
-  !*** ./resources/js/components/clients/crud.js ***!
-  \*************************************************/
-/***/ (() => {
-
-$().ready(function () {
-  $("#frm-client").validate({
-    rules: {
-      'data[last_name]': {
-        required: true
-      },
-      'data[second_last_name]': {
-        required: true
-      },
-      'data[name]': {
-        required: true
-      },
-      'data[rfc]': {
-        required: true,
-        minlength: 13,
-        maxlength: 13
-      },
-      'data[bank_name]': {
-        required: true
-      },
-      'data[bank_clabe]': {
-        required: true,
-        number: true,
-        minlength: 9,
-        maxlength: 9
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var origin = $('#origin').val();
-      var new_form = document.getElementById("frm-client");
-      var data = new FormData(new_form);
-      axios.post("/panel/clients", data).then(function (response) {
-        if (origin == 'colaboradores') {
-          window.location = '/panel/clients/colaboradores/show';
-        } else {
-          window.location = '/panel/clients';
-        }
-      })["catch"](function (e) {});
-    }
-  }); //funcion  estatus
-
-  function setData() {
-    var client_id = $('#client_id').val();
-
-    if (client_id != '') {
-      console.log(client_id);
-      axios.get("/panel/clients/" + client_id).then(function (response) {
-        var result = response.data;
-        var client = result.client;
-        $('#client-name').val(client.name);
-        $('#client-last_name').val(client.last_name);
-        $('#client-second_last_name').val(client.second_last_name);
-        $('#client-cellphone').val(client.cellphone);
-        $('#client-email').val(client.email);
-        $('#client-rfc').val(client.rfc);
-        $('#lead-email').val(client.email);
-        $('#client-daily_income').val(client.daily_income);
-        $('#client-agreement').val(client.agreement_id).trigger("change");
-        var clientStatusElement = document.getElementById("client-status");
-
-        if (client.active == 1 && clientStatusElement) {
-          clientStatusElement.click();
-        }
-
-        $('#client-status').val(client.active);
-      })["catch"](function (e) {
-        $('#admin_email-error-exist').show();
-      });
-    }
-  }
-
-  if (document.getElementById('client_id')) {
-    setData();
-  } //funcion  estatus
-
-
-  function updateStatusLabel() {
-    var statusCheckbox = document.getElementById('client-status');
-    var statusLabel = document.querySelector('label[for="client-status"]');
-
-    if (statusCheckbox.checked) {
-      statusLabel.textContent = 'Activo';
-    } else {
-      statusLabel.textContent = 'Inactivo';
-    }
-  } // Add event listener to the status checkbox
-
-
-  var statusCheckbox = document.getElementById('client-status');
-
-  if (statusCheckbox) {
-    statusCheckbox.addEventListener('change', updateStatusLabel); // Initial call to set the correct label
-
-    updateStatusLabel();
-  }
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/clients/datatable.js":
-/*!******************************************************!*\
-  !*** ./resources/js/components/clients/datatable.js ***!
-  \******************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var route = $('#route_datatable').val();
-  var module_id = null;
-
-  if (document.getElementById('module_id')) {
-    module_id = $('#module_id').val();
-  }
-
-  var table_lead = NioApp.DataTable('#dt-clients', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/clients/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'name'
-    }, {
-      data: 'agreement'
-    }, {
-      data: 'cellphone'
-    },
-    /* { data: 'organizacion' }, */
-    {
-      data: 'rfc'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-clients tbody').on('click', 'td', function () {
-    var row = table_lead.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/clients/datatable_colaboradores.js":
-/*!********************************************************************!*\
-  !*** ./resources/js/components/clients/datatable_colaboradores.js ***!
-  \********************************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var table_lead = NioApp.DataTable('#dt-colaboradores', {
-    processing: true,
-    searching: false,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/clients/list/ListColaboradores',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'name'
-    }, {
-      data: 'agreement'
-    }, {
-      data: 'cellphone'
-    },
-    /* { data: 'organizacion' }, */
-    {
-      data: 'rfc'
-    }, {
-      data: 'estatus'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-colaboradores tbody').on('click', 'td', function () {
-    var row = table_lead.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/credit/datatable_in_progress.js":
-/*!*****************************************************************!*\
-  !*** ./resources/js/components/credit/datatable_in_progress.js ***!
-  \*****************************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var status = $('#status').val();
-  var table = NioApp.DataTable('#dt-in_progress', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/credit/product/' + status + '/list',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'product'
-    }, {
-      data: 'module'
-    }, {
-      data: 'client'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'progress'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item odd");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-in_progress tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/credit/product/datatable.js":
-/*!*************************************************************!*\
-  !*** ./resources/js/components/credit/product/datatable.js ***!
-  \*************************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var status = $('#status').val();
-  var table = NioApp.DataTable('#dt-product-credit', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/credit/product/' + status + '/list',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'product'
-    }, {
-      data: 'reason'
-    }, {
-      data: 'date'
-    }, {
-      data: 'client'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item odd");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-product-credit tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/credit/profile/datatable.js":
-/*!*************************************************************!*\
-  !*** ./resources/js/components/credit/profile/datatable.js ***!
-  \*************************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var credit_id = $('#credit-profile-credit_id').val();
-  var table = NioApp.DataTable('#dt-acctions-profile', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/credit/action/' + credit_id + '/list',
-    columns: [{
-      data: 'action'
-    }, {
-      data: 'subject'
-    }, {
-      data: 'module'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'status',
-      orderData: 'desc'
-    }, {
-      data: 'options',
-      className: 'nk-tb-col-tools text-end'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item odd");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/crm.js":
-/*!****************************************!*\
-  !*** ./resources/js/components/crm.js ***!
-  \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utilities */ "./resources/js/components/utilities.js");
-
-
-function move(id, form, modal, datatable, title, msg) {
-  var new_form = document.getElementById(form);
-  var data = new FormData(new_form);
-  var statusid = $('#statusid').val();
-  var old_status_id = $('#old_status_id').val();
-  axios.post("/panel/action/" + id + "/" + statusid + "/" + old_status_id + "/move", data).then(function (response) {
-    $('#' + modal).modal('hide');
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, datatable, title, msg);
-  })["catch"](function (e) {});
-}
-
-window.moveCrm = function (creditId, statusid, old_status_id, redirect) {
-  axios.post("/panel/action/" + creditId + "/" + statusid + "/" + old_status_id + "/move").then(function (response) {
-    window.location = redirect;
-  })["catch"](function (e) {});
-};
-
-window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
-  if (is_modal == true) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'Mejor no'
-    }).then(function (result) {
-      if (result.value) {
-        actionDeliveryFinish(id, statusid, urlredirect);
-      }
-    });
-  } else {
-    actionDeliveryFinish(id, statusid, urlredirect);
-  }
-};
-
-function actionDeliveryFinish(id, statusid, urlredirect) {
-  axios.get("/panel/action/" + id + "/" + statusid + "/finish").then(function (response) {
-    window.location = urlredirect;
-  })["catch"](function (e) {});
-}
-
-window.moveModal = function (title, id, statusid, old_status_id, dt) {
-  $('#frm-archive').trigger("reset");
-  $('#modal_archive_id_rel').val(id);
-  $('#statusid').val(statusid);
-  $('#title').val('Crédito');
-  $('#old_status_id').val(old_status_id);
-  $('#dt').val(dt);
-  $('#modal-archive-title').html(title);
-  getReason(title);
-
-  if (title == 'Archivar' || title == 'Cancelar') {
-    $('#content-lead').show();
-  }
-
-  $('#modal-archive').modal('show');
-};
-
-window.moveModalLead = function (title, id, statusid, old_status_id, dt) {
-  $('#frm-archive').trigger("reset");
-  $('#modal_archive_id_rel').val(id);
-  $('#statusid').val(statusid);
-  $('#title').val('Prospecto');
-  $('#old_status_id').val(old_status_id);
-  $('#dt').val(dt);
-  $('#modal-archive-title').html(title);
-  getReason('ArchivarLead');
-  $('#content-lead').show();
-  $('#modal-archive').modal('show');
-};
-
-if (document.getElementById('frm-archive')) {
-  NioApp.Select2('#modal-reason-id', {
-    dropdownParent: $('#modal-archive')
-  });
-}
-
-window.concluir = function (history_id) {
-  axios.get('/panel/action/' + history_id + '/complete').then(function (response) {
-    var result = response.data;
-    window.location = result.url;
-  })["catch"](function (e) {});
-};
-
-$("#frm-archive").submit(function (event) {
-  event.preventDefault();
-  var id_rel = $('#modal_archive_id_rel').val();
-  var dt = $('#dt').val();
-  var msg = 'Cambios aplicados correctamente';
-  var title = $('#title').val();
-  move(id_rel, 'frm-archive', 'modal-archive', dt, title, msg);
-});
-
-window.modalValidate = function (id, model) {
-  $('#modal-validate-content').html('');
-  axios.get('/panel/' + id + '/' + model + '/validate/show').then(function (response) {
-    var html = response.data.table;
-    $('#modal-validate-content').html(html);
-    $('#modal-validate').modal('show');
-  })["catch"](function (e) {});
-};
-
-window.desition = function (history_id, credit_id, financial_id, type, status_id, is_elegir) {
-  var url_redirect = type == 1 ? '/panel/kc-check-up' : '/panel/kc-swap';
-  var param_get = is_elegir == 0 ? '?is_notify=true' : '?is_notify=false';
-  Swal.fire({
-    title: '¿Estás seguro?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí',
-    cancelButtonText: 'Mejor no'
-  }).then(function (result) {
-    if (result.value) {
-      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept" + param_get).then(function (response) {
-        var reason = response.data;
-
-        if (is_elegir == 0) {
-          deliveryFinish(history_id, status_id, url_redirect, false);
-        } else {
-          window.location = url_redirect;
-        }
-      })["catch"](function (e) {});
-    }
-  });
-};
-
-function getReason(type) {
-  $('#modal-reason-id').empty();
-  axios.get("/panel/reason/" + type + "/list").then(function (response) {
-    var reason = response.data;
-    var modal_reason_id = $('#modal-reason-id');
-
-    for (var key in reason) {
-      var element = reason[key];
-      var option = new Option(element, key, true, true);
-      modal_reason_id.append(option).trigger('change');
-    }
-
-    $('#modal-reason-id').val('').trigger('change');
-
-    if (financials != null) {}
-  })["catch"](function (e) {});
-}
-
-$(document).ready(function () {
-  var pathArray = window.location;
-  var params = new URLSearchParams(pathArray.search);
-  var param_cancel = params.get("swap_cancel");
-
-  if (param_cancel != null) {
-    moveModal('Cancelar', param_cancel, 17, 37, 'dt-product-credit');
-  }
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/datatable.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/datatable.js ***!
-  \**********************************************/
-/***/ (() => {
-
-/* $(document).ready(function () {
-    $('.datatable').DataTable(
-        {
-            "language": 
-            {
-                "processing": "Procesando...",
-                "lengthMenu": "Mostrar _MENU_ registros",
-                "zeroRecords": "No se encontraron resultados",
-                "emptyTable": "Ningún dato disponible en esta tabla",
-                "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-                "search": "Buscar:",
-                "infoThousands": ",",
-                "loadingRecords": "Cargando...",
-                "paginate": {
-                    "first": "Primero",
-                    "last": "Último",
-                    "next": "Siguiente",
-                    "previous": "Anterior"
-                },
-                "aria": {
-                    "sortAscending": ": Activar para ordenar la columna de manera ascendente",
-                    "sortDescending": ": Activar para ordenar la columna de manera descendente"
-                },
-                "buttons": {
-                    "copy": "Copiar",
-                    "colvis": "Visibilidad",
-                    "collection": "Colección",
-                    "colvisRestore": "Restaurar visibilidad",
-                    "copyKeys": "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br \/> <br \/> Para cancelar, haga clic en este mensaje o presione escape.",
-                    "copySuccess": {
-                        "1": "Copiada 1 fila al portapapeles",
-                        "_": "Copiadas %ds fila al portapapeles"
-                    },
-                    "copyTitle": "Copiar al portapapeles",
-                    "csv": "CSV",
-                    "excel": "Excel",
-                    "pageLength": {
-                        "-1": "Mostrar todas las filas",
-                        "_": "Mostrar %d filas"
-                    },
-                    "pdf": "PDF",
-                    "print": "Imprimir",
-                    "renameState": "Cambiar nombre",
-                    "updateState": "Actualizar",
-                    "createState": "Crear Estado",
-                    "removeAllStates": "Remover Estados",
-                    "removeState": "Remover",
-                    "savedStates": "Estados Guardados",
-                    "stateRestore": "Estado %d"
-                },
-                "autoFill": {
-                    "cancel": "Cancelar",
-                    "fill": "Rellene todas las celdas con <i>%d<\/i>",
-                    "fillHorizontal": "Rellenar celdas horizontalmente",
-                    "fillVertical": "Rellenar celdas verticalmentemente"
-                },
-                "decimal": ",",
-                "searchBuilder": {
-                    "add": "Añadir condición",
-                    "button": {
-                        "0": "Constructor de búsqueda",
-                        "_": "Constructor de búsqueda (%d)"
-                    },
-                    "clearAll": "Borrar todo",
-                    "condition": "Condición",
-                    "conditions": {
-                        "date": {
-                            "after": "Despues",
-                            "before": "Antes",
-                            "between": "Entre",
-                            "empty": "Vacío",
-                            "equals": "Igual a",
-                            "notBetween": "No entre",
-                            "notEmpty": "No Vacio",
-                            "not": "Diferente de"
-                        },
-                        "number": {
-                            "between": "Entre",
-                            "empty": "Vacio",
-                            "equals": "Igual a",
-                            "gt": "Mayor a",
-                            "gte": "Mayor o igual a",
-                            "lt": "Menor que",
-                            "lte": "Menor o igual que",
-                            "notBetween": "No entre",
-                            "notEmpty": "No vacío",
-                            "not": "Diferente de"
-                        },
-                        "string": {
-                            "contains": "Contiene",
-                            "empty": "Vacío",
-                            "endsWith": "Termina en",
-                            "equals": "Igual a",
-                            "notEmpty": "No Vacio",
-                            "startsWith": "Empieza con",
-                            "not": "Diferente de",
-                            "notContains": "No Contiene",
-                            "notStarts": "No empieza con",
-                            "notEnds": "No termina con"
-                        },
-                        "array": {
-                            "not": "Diferente de",
-                            "equals": "Igual",
-                            "empty": "Vacío",
-                            "contains": "Contiene",
-                            "notEmpty": "No Vacío",
-                            "without": "Sin"
-                        }
-                    },
-                    "data": "Data",
-                    "deleteTitle": "Eliminar regla de filtrado",
-                    "leftTitle": "Criterios anulados",
-                    "logicAnd": "Y",
-                    "logicOr": "O",
-                    "rightTitle": "Criterios de sangría",
-                    "title": {
-                        "0": "Constructor de búsqueda",
-                        "_": "Constructor de búsqueda (%d)"
-                    },
-                    "value": "Valor"
-                },
-                "searchPanes": {
-                    "clearMessage": "Borrar todo",
-                    "collapse": {
-                        "0": "Paneles de búsqueda",
-                        "_": "Paneles de búsqueda (%d)"
-                    },
-                    "count": "{total}",
-                    "countFiltered": "{shown} ({total})",
-                    "emptyPanes": "Sin paneles de búsqueda",
-                    "loadMessage": "Cargando paneles de búsqueda",
-                    "title": "Filtros Activos - %d",
-                    "showMessage": "Mostrar Todo",
-                    "collapseMessage": "Colapsar Todo"
-                },
-                "select": {
-                    "cells": {
-                        "1": "1 celda seleccionada",
-                        "_": "%d celdas seleccionadas"
-                    },
-                    "columns": {
-                        "1": "1 columna seleccionada",
-                        "_": "%d columnas seleccionadas"
-                    },
-                    "rows": {
-                        "1": "1 fila seleccionada",
-                        "_": "%d filas seleccionadas"
-                    }
-                },
-                "thousands": ".",
-                "datetime": {
-                    "previous": "Anterior",
-                    "next": "Proximo",
-                    "hours": "Horas",
-                    "minutes": "Minutos",
-                    "seconds": "Segundos",
-                    "unknown": "-",
-                    "amPm": [
-                        "AM",
-                        "PM"
-                    ],
-                    "months": {
-                        "0": "Enero",
-                        "1": "Febrero",
-                        "10": "Noviembre",
-                        "11": "Diciembre",
-                        "2": "Marzo",
-                        "3": "Abril",
-                        "4": "Mayo",
-                        "5": "Junio",
-                        "6": "Julio",
-                        "7": "Agosto",
-                        "8": "Septiembre",
-                        "9": "Octubre"
-                    },
-                    "weekdays": [
-                        "Dom",
-                        "Lun",
-                        "Mar",
-                        "Mie",
-                        "Jue",
-                        "Vie",
-                        "Sab"
-                    ]
-                },
-                "editor": {
-                    "close": "Cerrar",
-                    "create": {
-                        "button": "Nuevo",
-                        "title": "Crear Nuevo Registro",
-                        "submit": "Crear"
-                    },
-                    "edit": {
-                        "button": "Editar",
-                        "title": "Editar Registro",
-                        "submit": "Actualizar"
-                    },
-                    "remove": {
-                        "button": "Eliminar",
-                        "title": "Eliminar Registro",
-                        "submit": "Eliminar",
-                        "confirm": {
-                            "_": "¿Está seguro que desea eliminar %d filas?",
-                            "1": "¿Está seguro que desea eliminar 1 fila?"
-                        }
-                    },
-                    "error": {
-                        "system": "Ha ocurrido un error en el sistema (<a target=\"\\\" rel=\"\\ nofollow\" href=\"\\\">Más información&lt;\\\/a&gt;).<\/a>"
-                    },
-                    "multi": {
-                        "title": "Múltiples Valores",
-                        "info": "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
-                        "restore": "Deshacer Cambios",
-                        "noMulti": "Este registro puede ser editado individualmente, pero no como parte de un grupo."
-                    }
-                },
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                "stateRestore": {
-                    "creationModal": {
-                        "button": "Crear",
-                        "name": "Nombre:",
-                        "order": "Clasificación",
-                        "paging": "Paginación",
-                        "search": "Busqueda",
-                        "select": "Seleccionar",
-                        "columns": {
-                            "search": "Búsqueda de Columna",
-                            "visible": "Visibilidad de Columna"
-                        },
-                        "title": "Crear Nuevo Estado",
-                        "toggleLabel": "Incluir:"
-                    },
-                    "emptyError": "El nombre no puede estar vacio",
-                    "removeConfirm": "¿Seguro que quiere eliminar este %s?",
-                    "removeError": "Error al eliminar el registro",
-                    "removeJoiner": "y",
-                    "removeSubmit": "Eliminar",
-                    "renameButton": "Cambiar Nombre",
-                    "renameLabel": "Nuevo nombre para %s",
-                    "duplicateError": "Ya existe un Estado con este nombre.",
-                    "emptyStates": "No hay Estados guardados",
-                    "removeTitle": "Remover Estado",
-                    "renameTitle": "Cambiar Nombre Estado"
-                }
-            }  
-        }
-    );
-}); */
-
-/***/ }),
-
-/***/ "./resources/js/components/financial/crud.js":
-/*!***************************************************!*\
-  !*** ./resources/js/components/financial/crud.js ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
-
-$().ready(function () {
-  $("#frm-financial").validate({
-    rules: {
-      'commercial_name': {
-        required: true
-      },
-      'company_name': {
-        required: true
-      },
-      'email': {
-        email: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      $('#financial-commercial_name-unique-error').html('');
-      $('#financial-commercial_name-unique-error').hide();
-      var new_form = document.getElementById("frm-financial");
-      var data = new FormData(new_form);
-      axios.post("/panel/financial", data).then(function (response) {
-        var result = response.data;
-        window.location = '/panel/financial/' + result.id + '/edit';
-      })["catch"](function (e) {
-        var response = e.response;
-        var data_errors = response.data.errors;
-        $('#financial-commercial_name-unique-error').html('Este campo ya se encuentra registrado.');
-        $('#financial-commercial_name-unique-error').show();
-      });
-    }
-  });
-});
-$("#frm-financial-data-pricacy").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-financial-data-pricacy");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial", data).then(function (response) {
-    var result = response.data;
-    showToast('Financiera', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
-$("#frm-financial-buro").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-financial-buro");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial", data).then(function (response) {
-    var result = response.data;
-    showToast('Financiera', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
-
-if (document.getElementById('alcance_beneficios')) {
-  refreshListComplementary();
-}
-
-function refreshListComplementary() {
-  var product_id = $('#product_id').val();
-  axios.get("/panel/product-complementary/list/" + product_id + "/refresh").then(function (response) {
-    var result = response.data; // Asignar valores al select de alcance_beneficios
-
-    var alcanceSelect = document.getElementById('alcance_beneficios');
-    alcanceSelect.innerHTML = ''; // Limpia el select actual
-
-    result.complementary_alcance.forEach(function (alcance) {
-      var option = document.createElement('option');
-      option.value = alcance.description;
-      option.text = alcance.description;
-      alcanceSelect.appendChild(option);
-    });
-    var alcanceBeneficiosArray = result.my_product.alcance_beneficios.split(',');
-    $('#alcance_beneficios').val(alcanceBeneficiosArray).trigger('change'); // Repite el mismo proceso para los otros selects (restriccion_exclusion, programa_educacion_financiera, referencia_comparativa)
-    // Asignar valores al select de restriccion_exclusion
-
-    var restriccionSelect = document.getElementById('restriccion_exclusion');
-    restriccionSelect.innerHTML = '';
-    result.complementary_restricciones.forEach(function (restriccion) {
-      var option = document.createElement('option');
-      option.value = restriccion.description;
-      option.text = restriccion.description;
-      restriccionSelect.appendChild(option);
-    });
-    var alcanceRestriccionArray = result.my_product.restriccion_exclusion.split(',');
-    $('#restriccion_exclusion').val(alcanceRestriccionArray).trigger('change'); // Asignar valores al select de programa_educacion_financiera
-
-    var programaSelect = document.getElementById('programa_educacion_financiera');
-    programaSelect.innerHTML = '';
-    result.complementary_programas.forEach(function (programa) {
-      var option = document.createElement('option');
-      option.value = programa.description;
-      option.text = programa.description;
-      programaSelect.appendChild(option);
-    });
-    var alcanceProgramaArray = result.my_product.programa_educacion_financiera.split(',');
-    $('#programa_educacion_financiera').val(alcanceProgramaArray).trigger('change'); // Asignar valores al select de referencia_comparativa
-
-    var referenciaSelect = document.getElementById('referencia_comparativa');
-    referenciaSelect.innerHTML = '';
-    result.complementary_referencias.forEach(function (referencia) {
-      var option = document.createElement('option');
-      option.value = referencia.description;
-      option.text = referencia.description;
-      referenciaSelect.appendChild(option);
-    });
-    var ReferenciaArray = result.my_product.referencia_comparativa.split(',');
-    $('#referencia_comparativa').val(ReferenciaArray).trigger('change');
-    var bankIdsArray = result.my_product.bank_ids.split(',');
-    $('#bank_ids').val(bankIdsArray).trigger('change');
-  })["catch"](function (e) {});
-}
-/*  alcance_beneficios
-restriccion_exclusion
-programa_educacion_financiera
-referencia_comparativa */
-
-
-window.modalComplementary = function (type) {
-  // Definir un arreglo con los títulos correspondientes a cada tipo
-  var titles = ['ALCANCE O BENEFICIOS', 'RESTRICCIONES O EXCLUSIONES', 'PROGRAMAS DE EDUCACIÓN FINANCIERA', 'REFERENCIAS CORPORATIVAS'];
-  var product_id = $('#product_id').val(); // Verificar que el tipo esté dentro del rango válido
-
-  if (type >= 1 && type <= titles.length) {
-    // Asignar el valor del título al elemento con ID 'title-complementary'
-    document.getElementById('title-complementary').textContent = titles[type - 1];
-    $('#type-complementary-service').val(type);
-    $('#product-complementary-service').val(product_id);
-    showContentComplementary();
-  } else {
-    // Tratamiento para tipos fuera del rango válido
-    document.getElementById('title-complementary').textContent = 'Título no válido';
-  }
-
-  $('#modal-complementary').modal('show');
-};
-
-$("#frm-complementary").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-complementary");
-  var data = new FormData(new_form);
-  axios.post("/panel/product-complementary", data).then(function (response) {
-    // Resetea el formulario
-    $('#product-complementary-description').val('');
-    $('#product-complementary-id').val('');
-    refreshListComplementary();
-    showContentComplementary();
-  })["catch"](function (e) {});
-});
-
-function showContentComplementary() {
-  var product_id = $('#product_id').val();
-  var type = $('#type-complementary-service').val();
-  axios.get("/panel/product-complementary/" + product_id + '/' + type).then(function (response) {
-    var result = response.data;
-    $('#content-complementary').html(result);
-  })["catch"](function (e) {});
-}
-
-window.deleteComplementary = function (complementary_id) {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, elimina',
-    cancelButtonText: 'Mejor no'
-  }).then(function (result) {
-    if (result.value) {
-      axios["delete"]("/panel/product-complementary/" + complementary_id).then(function (response) {
-        showContentComplementary();
-      })["catch"](function (e) {});
-    }
-  });
-};
-
-window.editComplementary = function (complementary_id, description) {
-  $('#product-complementary-description').val(description);
-  $('#product-complementary-id').val(complementary_id);
-  var type = $('#type-complementary-service').val();
-  modalComplementary(type);
-};
-
-$("#frm-financial-billing").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-financial-billing");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial", data).then(function (response) {
-    var result = response.data;
-    showToast('Financiera', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
-
-window.deleteFinancial = function (id) {
-  axios["delete"]("/panel/financial/" + id).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financial', 'Datos actualizados', 'Registro borrado');
-  })["catch"](function (e) {});
-};
-
-window.alerFinancialDelete = function (id) {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, elimina',
-    cancelButtonText: 'Mejor no'
-  }).then(function (result) {
-    if (result.value) {
-      deleteFinancial(id);
-    }
-  });
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/financial/datatable.js":
-/*!********************************************************!*\
-  !*** ./resources/js/components/financial/datatable.js ***!
-  \********************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-financial', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/financial/list/show',
-    columns: [{
-      data: 'commercial_name'
-    }, {
-      data: 'company_name'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/financial/product/crud.js":
-/*!***********************************************************!*\
-  !*** ./resources/js/components/financial/product/crud.js ***!
-  \***********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utilities */ "./resources/js/components/utilities.js");
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-
-var isLoaded = false;
-$().ready(function () {
-  $("#frm-product-info").validate({
-    rules: {
-      'name': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      $('#product-name-unique-error').html('');
-      $('#product-name-unique-error').hide();
-      var new_form = document.getElementById("frm-product-info");
-      var data = new FormData(new_form);
-      axios.post("/panel/financial-product", data).then(function (response) {
-        var result = response.data; //window.location = '/panel/financial/'+result.id+'/edit';
-
-        showToast('Producto', 'Datos guardados', 'success');
-      })["catch"](function (e) {
-        var response = e.response;
-        var data_errors = response.data.errors;
-        $('#product-name-unique-error').html('Este campo ya se encuentra registrado.');
-        $('#product-name-unique-error').show();
-      });
-    }
-  });
-
-  if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null') {
-    var product_id = $('#product_id').val(); // Limpia las selecciones actuales en los selects
-
-    $('#product_periodicity_id').val(null).trigger('change');
-    $('#product-principal_pay').val(null).trigger('change');
-    axios.get("/panel/financial-product/" + product_id + '/getPeriodicityAndPaymentMethod').then( /*#__PURE__*/function () {
-      var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(response) {
-        var result, periodicities, payments, periodicityValues, paymentValues;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                // Usa async/await aquí
-                result = response.data;
-                periodicities = result.periodicities;
-                payments = result.payments; // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
-
-                periodicityValues = periodicities.map(function (item) {
-                  return item.periodicity_id;
-                });
-                paymentValues = payments.map(function (item) {
-                  return item.payment_method_id;
-                }); // Seleccionar los valores correspondientes en los selects
-
-                $('#product_periodicity_id').val(periodicityValues).trigger('change');
-                $('#product-principal_pay').val(paymentValues).trigger('change');
-
-              case 7:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      return function (_x) {
-        return _ref.apply(this, arguments);
-      };
-    }())["catch"](function (e) {
-      console.error(e);
-    });
-  }
-});
-var previouslyLoadedTerms = []; // Almacena los términos previamente cargados
-
-window.setFPTerms = function () {
-  var product_id = $('#product_id').val();
-  $('#fp_terms').val(null).trigger('change'); // Realiza la solicitud AJAX para obtener los términos
-
-  var periodicityId = $('#product_periodicity_id').val();
-  var select = document.getElementById("fp_terms"); // Limpia el select antes de agregar opciones
-
-  select.innerHTML = ""; // Realiza la solicitud AJAX para obtener los términos
-
-  return axios.get("/panel/financial-product/" + periodicityId + '/' + product_id + '/terms/get').then(function (response) {
-    var result = response.data;
-    var terms = result.terms;
-    var getTerms = result.getTerms; // Llena el select con las opciones de terms
-
-    terms.forEach(function (term) {
-      var option = document.createElement("option");
-      option.value = term.id; // El valor será el id
-
-      option.text = term.term; // El texto será el term
-
-      select.appendChild(option);
-    }); // Si se pasaron términos seleccionados, se seleccionan aquí
-
-    if (getTerms != null) {
-      var termValues = getTerms.map(function (item) {
-        return item.id;
-      });
-      $('#fp_terms').val(termValues).trigger('change');
-    }
-  })["catch"](function (e) {
-    console.error(e);
-  });
-};
-
-$("#frm-financial-chart").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-financial-chart");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial-product", data).then(function (response) {
-    var result = response.data;
-    showToast('Producto', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
-
-if (document.getElementById('tramite-proceso_tramite')) {
-  var ckeditor = CKEDITOR.replace('tramite-proceso_tramite', {
-    toolbar: [{
-      name: 'basicstyles',
-      items: ['Bold', 'Italic', 'Font', 'FontSize', 'TextColor', 'BGColor', 'RemoveFormat']
-    }, {
-      name: 'paragraph',
-      items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
-    }, {
-      name: 'insert',
-      items: ['Table']
-    }],
-    language: 'es-mx'
-  }); //*axios que devuelva el valor proceso_tramite
-
-  var product_id = $('#product_id').val();
-  setTimeout(function () {
-    axios.get("/panel/financial-product/" + product_id + "/getTramite").then(function (response) {
-      var result = response.data;
-      CKEDITOR.instances['tramite-proceso_tramite'].setData(result.proceso_tramite);
-    })["catch"](function (e) {// Manejar errores aquí
-    });
-  }, 2000); // 2000 milisegundos = 2 segundos
-}
-
-$("#frm-financial-tramite").submit(function (event) {
-  event.preventDefault();
-  var desc = CKEDITOR.instances['tramite-proceso_tramite'].getData();
-  $('#tramite-proceso_tramite').val(desc);
-  var new_form = document.getElementById("frm-financial-tramite");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial-product", data).then(function (response) {
-    var result = response.data;
-    showToast('Producto', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
-$("#frm-comisioneskc").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-comisioneskc");
-  var data = new FormData(new_form);
-  axios.post("/panel/financial-product", data).then(function (response) {
-    var result = response.data;
-    showToast('Producto', 'Datos guardados', 'success');
-  })["catch"](function (e) {});
-});
-
-window.deleteFinancialProduct = function (id) {
-  axios["delete"]("/panel/financial-product/" + id).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financial-product', 'Producto', 'Registro borrado');
-  })["catch"](function (e) {});
-};
-
-window.alerDeleteFinancialProduct = function (id) {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, elimina',
-    cancelButtonText: 'Mejor no'
-  }).then(function (result) {
-    if (result.value) {
-      deleteFinancialProduct(id);
-    }
-  });
-};
-
-if (document.getElementById('is_tramitar_active')) {
-  document.addEventListener('DOMContentLoaded', function () {
-    // Obtener referencias a los radio buttons
-    var radioSi = document.getElementById('is_tramitar_active');
-    var radioNo = document.getElementById('is_tramitar_pending'); // Obtener todos los elementos con la clase 'tramitable'
-
-    var tramitables = document.querySelectorAll('.tramitable'); // Función para mostrar u ocultar elementos tramitables
-
-    function toggleTramitables() {
-      // Si el radio "Sí" está seleccionado, mostrar todos los elementos tramitables
-      if (radioSi.checked) {
-        tramitables.forEach(function (element) {
-          element.style.display = ''; // Muestra el elemento (valor por defecto)
-        });
-      } // Si el radio "No" está seleccionado, ocultar todos los elementos tramitables
-      else if (radioNo.checked) {
-        tramitables.forEach(function (element) {
-          element.style.display = 'none'; // Oculta el elemento
-        });
-      }
-    } // Añadir event listeners a los radio buttons
-
-
-    radioSi.addEventListener('change', toggleTramitables);
-    radioNo.addEventListener('change', toggleTramitables); // Ejecutar la función al cargar la página para establecer el estado inicial
-
-    toggleTramitables();
-  });
-}
-
-/***/ }),
-
-/***/ "./resources/js/components/financial/product/datatable.js":
-/*!****************************************************************!*\
-  !*** ./resources/js/components/financial/product/datatable.js ***!
-  \****************************************************************/
-/***/ (() => {
-
-/* DT PRODUCT */
-if (document.getElementById('dt-financial-product')) {
-  var financial_id = $('#financial_id').val();
-
-  if (financial_id != '') {
-    document.addEventListener('DOMContentLoaded', function () {
-      var table = NioApp.DataTable('#dt-financial-product', {
-        processing: true,
-        responsive: {
-          details: {
-            renderer: function renderer(api, rowIdx, columns) {
-              var total = columns.length - 1;
-              var data = $.map(columns, function (col, i) {
-                if (total == i) {
-                  return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-                } else {
-                  return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-                }
-              }).join('');
-              return data ? $('<table/>').append(data) : false;
-            }
-          }
-        },
-        ajax: '/panel/financial/product/' + financial_id + '/list/show',
-        columns: [{
-          data: 'id'
-        }, {
-          data: 'name'
-        }, {
-          data: 'status'
-        }, {
-          data: 'options'
-        }],
-        columnDefs: [{
-          className: "nk-tb-col",
-          targets: "_all"
-        }],
-        createdRow: function createdRow(row, data, dataIndex) {
-          $(row).addClass("nk-tb-item");
-        }
-      });
-    });
-  }
-}
-
-/***/ }),
-
-/***/ "./resources/js/components/general.js":
-/*!********************************************!*\
-  !*** ./resources/js/components/general.js ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utilities */ "./resources/js/components/utilities.js");
-
-
-window.modalNote = function (note_id, model_note) {
-  $('#id_rel').val(note_id);
-  $('#model_note').val(model_note);
-  $('#modal-lead-description').val('');
-  $('#modal-note').modal('show');
-};
-
-var refresh = {
-  'credit': creditRefresh
-};
-$("#frm-note").submit(function (event) {
-  event.preventDefault();
-  var model_note = $('#model_note').val();
-  var refresh_dt = $('#refresh-dt').val();
-  var new_form = document.getElementById("frm-note");
-  var data = new FormData(new_form);
-  axios.post("/panel/" + model_note + "/note", data).then(function (response) {
-    if (refresh_dt != 'null') {
-      (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
-      $('#modal-note').modal('hide');
-    } else {
-      refresh[model_note]();
-    }
-  })["catch"](function (e) {});
-});
-
-window.copyToClipBoardReport = function () {
-  var content = document.getElementById('url_report').value; // Intentar usar la API del Portapapeles (navigator.clipboard) si está disponible
-
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(content).then(function () {
-      showToast('', 'URL copiada en el portapapeles', 'success');
-    })["catch"](function (err) {
-      console.log('No se pudo copiar al portapapeles con la API del Portapapeles', err);
-    });
-  } else {
-    // Si la API del Portapapeles no está disponible, usar métodos alternativos
-    var textarea = document.createElement('textarea');
-    textarea.value = content;
-    textarea.style.position = 'fixed'; // Para asegurarse de que sea visible
-
-    document.body.appendChild(textarea);
-    textarea.select();
-
-    try {
-      var successful = document.execCommand('copy');
-      var msg = successful ? 'URL copiada en el portapapeles' : 'No se pudo copiar al portapapeles';
-      showToast('', msg, successful ? 'success' : 'error');
-    } catch (err) {
-      console.log('No se pudo copiar al portapapeles con el método alternativo', err);
-    } finally {
-      document.body.removeChild(textarea);
-    }
-  }
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/lead/crud.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/lead/crud.js ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
-/* harmony import */ var rfc_facil__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rfc-facil */ "./node_modules/rfc-facil/dist/rfc-facil.es5.js");
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-window.setRfc = function () {
-  var nacimiento = $('#lead-birth_date').val();
-  var my_lastname = $('#lead-last_name').val();
-  var my_secondlastname = $('#lead-second_last_name').val();
-  var my_name = $('#lead-name').val();
-
-  var _nacimiento$split = nacimiento.split('-'),
-      _nacimiento$split2 = _slicedToArray(_nacimiento$split, 3),
-      my_year = _nacimiento$split2[0],
-      my_month = _nacimiento$split2[1],
-      my_day = _nacimiento$split2[2];
-
-  var rfc = rfc_facil__WEBPACK_IMPORTED_MODULE_1__["default"].forNaturalPerson({
-    name: my_name,
-    firstLastName: my_lastname,
-    secondLastName: my_secondlastname,
-    day: my_day,
-    month: my_month,
-    year: my_year
-  });
-  return rfc;
-};
-
-window.createRfc = function () {
-  var rfc = setRfc();
-  $('#lead-rfc').val(rfc);
-  checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
-};
-
-$('.js-select2').select2({
-  placeholder: "Escribe para buscar..",
-  allowClear: true
-});
-$('.select2multiple').select2({
-  placeholder: "Escribe para buscar.."
-}); //onchangeOrganization
-
-window.organizationChange = function (lead_agreement_id, financial_id, other, applied_financial_product) {
-  if (other != null) {
-    lead_agreement_id = 0;
-    $('#new_agreement').val(other);
-  } //alert(lead_agreement_id);
-
-
-  if (lead_agreement_id != null) {
-    $('#lead-agreement').val(lead_agreement_id).trigger("change");
-  }
-
-  var lead_agreement = $("#lead-agreement").val();
-  $('#lead-content-agreement').hide();
-
-  if (lead_agreement == 0) {
-    $('#lead-content-agreement').show('slow');
-  }
-
-  if (typeof lead_agreement === 'string' && lead_agreement.trim().length == 0) {
-    $('#lead-content-agreement').hide();
-  } else {
-    getFinancial(lead_agreement, financial_id);
-    getFinancialByAgreement(lead_agreement, applied_financial_product);
-  }
-};
-
-window.productChange = function (lead_product_id) {
-  $('#content-importe-solicitado').hide();
-  /* $('#content-banco_nomina').hide(); */
-  //$('#content-tipo-credito').hide();
-
-  $('#content-consulta-buro-credito').hide();
-  $('#content-financial_product_id').hide();
-  $('#content-aval-o-garantia').hide();
-  $('#content-comment').hide();
-  $('#lead-financial_id').val(null).trigger('change');
-
-  if (lead_product_id != null) {
-    $('#lead-product-id').val(lead_product_id).trigger("change");
-  }
-
-  var product_id = $("#lead-product-id").val();
-
-  if (product_id == 2) {
-    //portabilidad
-    $('#content-financial_product_id').show();
-    $('#content-importe-solicitado').show();
-    /* $('#content-banco_nomina').hide(); */
-
-    $('#content-producto-financiero').show();
-    $('#content-consulta-buro-credito').hide();
-    $('#content-aval-o-garantia').hide();
-    $('#content-ingreso-mensual').show();
-  }
-
-  if (product_id == 1) {
-    // credito nomina
-
-    /* $('#content-banco_nomina').hide(); */
-    $('#content-importe-solicitado').show();
-    $('#content-producto-financiero').show();
-    $('#content-tipo_tramite').show();
-    $('#content-tipo-credito').show();
-    $('#content-consulta-buro-credito').hide();
-    $('#content-aval-o-garantia').hide();
-    $('#content-ingreso-mensual').show();
-  }
-
-  if (product_id == 4) {
-    // on-demand
-    $('#content-producto-financiero').show();
-    $('#content-ingreso-mensual').hide();
-  }
-
-  if (product_id == 3) {
-    //Asesoria
-    $('#content-comment').show();
-    $('#content-aval-o-garantia').hide();
-  }
-};
-
-function getFinancialByAgreement(agreementId, applied_financial_product) {
-  var selectElement = document.getElementById('applied_financial_product');
-  selectElement.options.length = 0; // Limpiar el select
-
-  axios.get("/panel/agreement/" + agreementId + "/financial-product/show").then(function (response) {
-    var financialProducts = response.data;
-    Object.keys(financialProducts).forEach(function (key) {
-      var option = document.createElement('option');
-      option.value = key;
-      option.textContent = financialProducts[key];
-      selectElement.appendChild(option);
-    });
-
-    if (applied_financial_product != 'null') {
-      $('#applied_financial_product').val(applied_financial_product).trigger("change");
-    }
-  })["catch"](function (e) {});
-}
-
-function getFinancial(lead_id, financial_id) {
-  $('#lead-financial_id').empty();
-  axios.get("/panel/lead/financial/" + lead_id + "/show").then(function (response) {
-    var result = response.data;
-    $('#lead-financial_id').empty();
-
-    if (result != null) {
-      var lead_financial = $('#lead-financial_id');
-
-      for (var key in result) {
-        var element = result[key];
-        var option = new Option(element.commercial_name, element.id, true, true);
-        lead_financial.append(option).trigger('change');
-      }
-
-      var _lead_id = $("#lead_id").val();
-
-      var history_id = $("#history_id").val();
-
-      if (financial_id == null) {
-        $('#lead-financial_id').val(null).trigger('change');
-      } else {
-        $('#lead-financial_id').val(financial_id).trigger('change');
-      }
-    }
-  })["catch"](function (e) {
-    $('#admin_email-error-exist').show();
-  });
-}
-
-window.getFinancialProduct = function (id, type) {
-  axios.get("/panel/action/financial/product/" + id + "/" + type + '/show').then(function (response) {
-    var result = response.data;
-    var financials = result.financials;
-    var financialValues = financials.map(function (item) {
-      return item.product_id;
-    }); // Limpia las selecciones actuales en el select múltiple
-
-    $('#lead-financial-product-id').val(null).trigger('change'); // Seleccionar los valores correspondientes en los selects
-
-    $('#lead-financial-product-id').val(financialValues).trigger('change');
-  })["catch"](function (e) {});
-};
-
-window.setChannel = function (origin_id) {
-  $('#lead-channel').empty();
-  var lead_channel = $('#lead-channel');
-  axios.get("/panel/lead/" + origin_id + "/origin/").then(function (response) {
-    var result = response.data;
-
-    if (result != null) {
-      for (var key in result) {
-        var element = result[key];
-
-        if (element != 'Selecciona una opción') {
-          var option = new Option(element, key, true, true);
-          lead_channel.append(option).trigger('change');
-        }
-      }
-    }
-
-    $('#lead-channel').val(null).trigger('change');
-    $('#lead-channel').val(change_channel).trigger("change");
-  })["catch"](function (e) {
-    $('#admin_email-error-exist').show();
-  });
-};
-
-if (document.getElementById('lead-origin-admin')) {
-  setChannel(1);
-}
-
-window.changeOrigen = function (change_channel) {
-  var origin_id = $("#lead-origin").val();
-  var lead_id = $("#lead_id").val();
-  $('#lead-channel').empty();
-  var lead_channel = $('#lead-channel');
-  axios.get("/panel/lead/" + origin_id + "/origin/").then(function (response) {
-    var result = response.data;
-
-    if (result != null) {
-      for (var key in result) {
-        var element = result[key];
-
-        if (element != 'Selecciona una opción') {
-          var option = new Option(element, key, true, true);
-          lead_channel.append(option).trigger('change');
-        }
-      }
-    }
-
-    $('#lead-channel').val(null).trigger('change');
-
-    if (change_channel != null) {
-      $('#lead-channel').val(change_channel).trigger("change");
-    }
-  })["catch"](function (e) {
-    $('#admin_email-error-exist').show();
-  });
-};
-/* $("#lead-origin" ).change(function() {
-  
-}); */
-
-
-window.validateLeadEdit = function (lead_id) {
-  var cellphone = $('#lead-cellphone').val();
-  var rfc = $('#lead-rfc').val();
-  axios.get("/panel/lead/" + cellphone + "/" + rfc + "/" + lead_id + "/get/validate").then(function (response) {
-    var result = response.data;
-    var isValidate = result.isValidate;
-    var contentValidaciones = result.msg;
-    var client_person_id = $('#client_person_id').val();
-
-    if (isValidate == true) {
-      $('#is_viability').val(1);
-      $('#content-servicio-kc').show();
-      $('#prospecto-valido').val('Prospecto válido');
-      $('#content-validaciones').show();
-      $('#content-validaciones').html(contentValidaciones);
-    } else {
-      $('#content-validaciones').html(contentValidaciones);
-      $('#is_viability').val(0);
-      $('#content-servicio-kc').hide();
-      $('#prospecto-valido').val('');
-    }
-
-    showContentIsValidate();
-  })["catch"](function (e) {});
-};
-
-window.showContentIsValidate = function () {
-  var is_viability = $('#is_viability').val();
-  var clientPersonId = $('#client_person_id').val(); //perfil-cliente
-
-  if (is_viability == 1) {
-    $('.perfil-cliente').each(function () {
-      $(this).attr('href', '/panel/client/' + clientPersonId);
-    });
-  }
-};
-
-function setData(is_change_origen, isChange, isChangeBirthDay) {
-  var lead_id = $('#lead_id').val();
-  axios.get("/panel/lead/" + lead_id).then(function (response) {
-    var result = response.data;
-    var lead = result.lead;
-    var is_viability = lead.is_viability;
-    var is_viability_credit = lead.is_viability_credit;
-    $('#tramit_type').prop('disabled', true);
-    setTimeout(function () {
-      console.log('finish');
-      $('#tramit_type').prop('disabled', false);
-      $('#tramit_type').val(lead.tramit_type).trigger("change");
-    }, 7000); //productChange(product_id);
-    //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
-
-    $('#lead-origin-agreement').val(lead.agreement_id);
-    getProductsByAgreementId(lead.agreement_id, lead.financial_product_id); //getFinancialProduct(lead.id, 1);
-
-    if (is_change_origen == true) {
-      $('#lead-origin').val(lead.origin_id);
-      $('#lead-origin').trigger("change");
-    }
-
-    $('#lead-asesor-id').val(lead.asesor_id);
-    $('#lead-asesor-id').trigger("change");
-    /* $('#lead-type_id').val(lead.type_id);
-    $('#lead-type_id').trigger("change"); */
-
-    $('#lead-name').val(lead.name);
-
-    if (isChangeBirthDay == true) {
-      $('#lead-birth_date').val(lead.birth_date);
-    }
-
-    $('#lead-last_name').val(lead.last_name);
-    $('#lead-second_last_name').val(lead.second_last_name);
-    $('#lead-cellphone').val(lead.cellphone);
-    $('#lead-email').val(lead.email);
-    $('#lead-rfc').val(lead.rfc);
-
-    if (document.getElementById('lead-manychat_id')) {
-      $('#lead-manychat_id').val(lead.manychat_id);
-    }
-
-    $('#lead-comment').val(lead.comment);
-    $('#client_person_id').val(lead.client_person_id);
-    validateLeadEdit(lead_id); // Luego ejecuta validateLeadEdit
-    //changeOrigen(lead.channel_id);
-
-    $('#lead-temperature-id').val(lead.financial_id).trigger("change");
-    $('#importe_solicitado').val(lead.importe_solicitado);
-    $('#income').val(lead.income);
-    $('#bank_id').val(lead.bank_id).trigger("change");
-    $('#tipo_credito').val(lead.tipo_credito).trigger("change");
-    $('#consulta_buro').val(lead.consulta_buro).trigger("change");
-    $('#lead-agreement').val(lead.agreement_id).trigger("change");
-
-    if (isChange == true) {
-      checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
-
-      checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
-
-      checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
-    }
-
-    $('#applied_loan_type').val(lead.applied_loan_type).trigger("change"); // Get the checkbox elements
-
-    var checkboxViability = document.getElementById('is_viability');
-    var checkboxViabilityCredit = document.getElementById('is_viability_credit'); // Set the checked property based on the variables
-
-    checkboxViability.checked = is_viability === 1;
-    checkboxViabilityCredit.checked = is_viability_credit === 1;
-  })["catch"](function (e) {
-    $('#admin_email-error-exist').show();
-  });
-}
-
-window.checkDataLeadExist = function (valInput, id) {
-  var getValue = valInput.value;
-  var messageElement = document.getElementById(id + '-msg');
-  var lead_id = $('#lead_id').val() || null;
-  $('#content-validaciones').html('');
-
-  if (getValue != '') {
-    messageElement.textContent = "";
-    axios.get("/panel/lead/" + getValue + "/" + id + "/" + lead_id + "/check").then(function (response) {
-      var result = response.data;
-      var isExist = result.exist;
-      var clientPerson = result.clientPerson;
-      var isValidate = result.isValidate;
-      var creditStatus = result.creditStatus;
-      $('#lead_id').val(result.lead.id);
-      getLeadValidations();
-      $('#isNew').val(0);
-
-      if (id == 'cellphone') {
-        $('#content-validaciones-phone').html(result.contentValidaciones);
-      } else {
-        $('#content-validaciones-rfc').html(result.contentValidaciones);
-      } //$('#content-validaciones').html(result.contentValidaciones);
-
-
-      if (typeof clientPerson !== 'undefined' && clientPerson && clientPerson.id) {
-        $('.perfil-cliente').each(function () {
-          $(this).attr('href', '/panel/client/' + clientPerson.id);
-        });
-      }
-
-      if (isExist > 0 && isValidate == true) {
-        $('#client_person_id').val(clientPerson.id);
-        $('#content-servicio-kc').show();
-        getProductsByAgreementId(clientPerson.agreement_id, null);
-        messageElement.classList.remove("text-danger");
-        messageElement.classList.add("text-primary");
-        messageElement.textContent = "Validación exitosa";
-        $('#is_viability').val(1); //$('#lead_id').val(clientPerson.id);
-
-        $('#prospecto-valido').val('Prospecto válido');
-        $('#lead-origin-agreement').val(clientPerson.agreement_id);
-
-        if (id == 'cellphone') {
-          $('#isValidateCellphone').val(result.isValidate);
-          $('#cellphone_validated').val(1);
-          $('#rfc_validated').val(0);
-        }
-
-        if (id == 'rfc') {
-          $('#cellphone_validated').val(0);
-          $('#rfc_validated').val(1);
-        }
-
-        $('#lead-name').val(clientPerson.name);
-        $('#lead-last_name').val(clientPerson.last_name);
-        $('#lead-second_last_name').val(clientPerson.second_last_name);
-        $('#lead-birth_date').val(clientPerson.birth_date);
-        $('#lead-rfc').val(clientPerson.rfc);
-        $('#lead-email').val(clientPerson.email);
-        $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
-
-        if (id == 'cellphone') {
-          $('#content-validaciones-phone').html('');
-        } else {
-          $('#content-validaciones-rfc').html('');
-        }
-      } else {
-        messageElement.classList.remove("text-primary");
-        messageElement.classList.add("text-danger");
-        messageElement.textContent = "Validación fallida";
-        $('#content-servicio-kc').hide();
-        $('#prospecto-valido').val('');
-        $('#is_viability').val(0);
-      }
-    })["catch"](function (e) {});
-  }
-};
-
-window.showModalCompraCartera = function () {
-  var lead_id = $('#lead_id').val();
-  var client_person_id = $('#client_person_id').val();
-  $('#lead_id_compra_cartera').val(lead_id);
-  $('#client_person_id_compra_cartera').val(client_person_id);
-  $('#creditPayOffId').val('');
-  document.getElementById("frm-modal-compra-cartera").reset();
-  $('#frm-modal-compra-cartera .js-select2').val(null).trigger('change');
-  $('#modal-compra-cartera').modal('show');
-};
-
-window.showTableCompraCartera = function (leadId) {
-  $('#content-table-compra-cartera').html('');
-  $('#resumen-deuda-capital').val('');
-  console.log('inicio compracartera');
-  axios.get("/panel/lead/credit-pay-off/" + leadId).then(function (response) {
-    var result = response.data;
-    var table = result.table;
-    var total = result.total;
-    var montoEntregar = $('#hmonto-entregar').val();
-    console.log('axios');
-    $('#content-monto-compra-cartera').html(total.toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }));
-    $('#resumen-deuda-capital').val(total);
-    $('#content-monto-entregar').html(total - montoEntregar);
-    $('#content-table-compra-cartera').html(table);
-    var leadIdValue = document.getElementById('lead_id').value;
-    var verGraficaLink = document.getElementById('ver-grafica');
-    verGraficaLink.setAttribute('href', '/grafica/' + leadIdValue);
-  })["catch"](function (e) {
-    console.log('error elementos compra de cartera');
-  });
-};
-
-$("#frm-modal-compra-cartera").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-modal-compra-cartera");
-  var data = new FormData(new_form);
-  var leadId = $('#lead_id_compra_cartera').val();
-  console.log(leadId);
-  axios.post("/panel/lead/credit-pay-off", data).then(function (response) {
-    var result = response.data;
-    $('#modal-compra-cartera').modal('hide');
-    showTableCompraCartera(leadId);
-  })["catch"](function (e) {});
-});
-
-window.deleteCompraCartera = function (creditPayOffId) {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, elimina',
-    cancelButtonText: 'Mejor no'
-  }).then(function (result) {
-    if (result.value) {
-      axios["delete"]("/panel/lead/credit-pay-off/" + creditPayOffId).then(function (response) {
-        var leadId = document.getElementById("lead_id").value;
-        showTableCompraCartera(leadId);
-      })["catch"](function (e) {});
-    }
-  });
-};
-
-window.editCompraCartera = function (creditPayOffId) {
-  axios.get("/panel/lead/credit-pay-off/" + creditPayOffId + '/data/get').then(function (response) {
-    var result = response.data;
-    $('#compra-cartera-financial_product_id').val(result.financial_product_id).trigger("change");
-    $('#compra-cartera-ammount').val(result.ammount);
-    $('#creditPayOffId').val(creditPayOffId);
-    $('#modal-compra-cartera').modal('show');
-  })["catch"](function (e) {});
-};
-
-window.getProductsByAgreementId = function (leadId, productId) {
-  var clientPersonId = $('#client_person_id').val();
-  var selectElement = document.getElementById('financial_product_id');
-  selectElement.options.length = 0; // Limpiar el select
-
-  axios.get("/panel/lead/" + leadId + '/' + clientPersonId + "/getProducts").then(function (response) {
-    var products = response.data;
-    Object.keys(products).forEach(function (key) {
-      var option = document.createElement('option');
-      option.value = key;
-      option.textContent = products[key];
-      selectElement.appendChild(option);
-    });
-
-    if (productId != 'null') {
-      $('#financial_product_id').val(productId).trigger("change");
-    }
-  })["catch"](function (e) {});
-};
-
-window.deleteLead = function (lead_id) {
-  axios.get("panel/lead/" + lead_id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
-  })["catch"](function (e) {});
-};
-
-window.modalAdvisor = function (lead_id) {
-  $('#lead_advisor_id').val(lead_id);
-  $('#type_id').val(1);
-  $('#modal-advisor').modal('show');
-};
-
-window.modalAdvisorCredit = function (credit_id) {
-  $('#credit_id').val(credit_id);
-  $('#type_id').val(2);
-  $('#modal-advisor').modal('show');
-};
-
-$("#frm-advisor").submit(function (event) {
-  event.preventDefault();
-  var asesor_id = $('#modal-advisor-id').val();
-  var lead_id = $('#lead_advisor_id').val();
-  var credit_id = $('#credit_id').val();
-  var type_id = $('#type_id').val();
-  var url = "panel/lead/" + lead_id + "/advisor/store";
-  var dt = 'dt-lead';
-
-  if (type_id == 2) {
-    url = "panel/credit/" + credit_id + "/advisor/store";
-    dt = 'dt-check-up';
-  }
-
-  axios.post(url, {
-    asesor_id: asesor_id
-  }).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, dt, 'Datos actualizados', 'Prospecto asignado');
-    $('#modal-advisor').modal('hide');
-  })["catch"](function (e) {});
-});
-
-window.createClientPerson = function (lead_id) {
-  axios.post("panel/lead/" + lead_id + "/client-person/store").then(function (response) {
-    var result = response.data;
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Cuenta creada');
-  })["catch"](function (e) {
-    showToast('prospecto', 'Este email ya está registrado', 'warning');
-  });
-};
-
-window.modalTags = function (lead_id) {
-  $('#modal-tag-lead_id').val(lead_id);
-  $('#modal-tags').modal('show');
-};
-
-if (document.getElementById('frm-advisor')) {
-  $('#modal-advisor-id').select2({
-    dropdownParent: $('#modal-advisor'),
-    placeholder: "Escribe para buscar..",
-    allowClear: true
-  });
-}
-
-if (document.getElementById('frm-tags')) {
-  $('#modal-tags-tag').select2({
-    dropdownParent: $('#modal-tags'),
-    placeholder: "Escribe para buscar..",
-    allowClear: true
-  });
-}
-
-$("#frm-tags").submit(function (event) {
-  event.preventDefault();
-  var lead_id = $('#modal-tag-lead_id').val();
-  var new_form = document.getElementById("frm-tags");
-  var data = new FormData(new_form);
-  axios.post("panel/lead/" + lead_id + "/tag/update", data).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Etiqueta actualizada');
-    $('#modal-tags').modal('hide');
-  })["catch"](function (e) {});
-});
-
-function getAllValidate() {
-  var clientPersonId = $('#client_person_id').val();
-  var agreement = $('#lead-origin-agreement').val();
-  var productId = $('#financial_product_id').val();
-  var lead_id = $('#lead_id').val(result.id);
-  axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + '/' + lead_id + "/soad/get").then(function (response) {})["catch"](function (e) {});
-}
-
-window.saveLead = function (isFullSave) {
-  var new_form = document.getElementById("frm-lead");
-  var data = new FormData(new_form);
-  data.append('isFullSave', isFullSave);
-  axios.post("/panel/lead", data).then(function (response) {
-    var getResult = response.data;
-    var result = getResult.lead;
-    $('#lead_id').val(result.id);
-    $('#isNew').val(0);
-    getLeadValidations();
-  })["catch"](function (e) {});
-};
-
-$().ready(function () {
-  $("#frm-lead").validate({
-    rules: {
-      'data[name]': {
-        required: true
-      },
-      'data[last_name]': {
-        required: false
-      },
-      'data[cellphone]': {
-        number: true,
-        minlength: 10
-      },
-      'data[email]': {
-        required: false,
-        email: true
-      },
-      'data[origin_id]': {
-        required: true
-      },
-      'new_agreement': {
-        required: function required(element) {
-          var lead_agreement = $("#lead-agreement").val();
-
-          if (lead_agreement == 0) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var new_form = document.getElementById("frm-lead");
-      var data = new FormData(new_form);
-      data.append('isFullSave', 'true');
-      var isExport = $('#isExport').val();
-      axios.post("/panel/lead", data).then(function (response) {
-        var getResult = response.data;
-        var result = getResult.lead;
-
-        if (isExport == 'true') {
-          $('#lead_id').val(result.id); //exportar
-
-          exportLead(result.id);
-        } else {
-          window.location = '/panel/lead';
-        }
-      })["catch"](function (e) {});
-    }
-  });
-
-  function exportLead(_x) {
-    return _exportLead.apply(this, arguments);
-  }
-
-  function _exportLead() {
-    _exportLead = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(leadId) {
-      var fileName, formData, response, blob, link;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              fileName = 'KC - Datos exportados' + leadId + '.csv'; // Replace with your logic
-
-              formData = new FormData();
-              formData.append('lead_id', leadId);
-              _context.next = 5;
-              return axios.post("/panel/lead/" + leadId + "/data/export", formData, {
-                responseType: 'blob'
-              });
-
-            case 5:
-              response = _context.sent;
-              blob = new Blob(["\uFEFF", response.data], {
-                type: 'text/csv;charset=utf-8'
-              });
-
-              if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                window.navigator.msSaveOrOpenBlob(blob, fileName);
-              } else {
-                link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = fileName;
-                link.click();
-              }
-
-              $('#isExport').val(false);
-
-            case 9:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }));
-    return _exportLead.apply(this, arguments);
-  }
-});
-
-window.saveAndExportLead = function () {
-  $('#isExport').val(true);
-  document.getElementById('btnSave').click();
-};
-/* modal vista previa perfil */
-
-
-window.modalPreviewProfile = function (lead_id) {
-  $('content-preview-profile').html('');
-  axios.get("/panel/lead/" + lead_id + "/preview/profile").then(function (response) {
-    var result = response.data;
-    $('#content-preview-profile').html(result);
-    $('#modal-preview-profile').modal('show');
-  })["catch"](function (e) {});
-};
-
-window.modalPasswod = function (user_id) {
-  $('#password_user_id').val(user_id);
-  $('#modal-user-password').modal('show');
-}; //*id_rel is action_id
-
-
-window.modalRegisterAction = function (id_rel) {
-  $('#register-action-id-rel').val(id_rel);
-  $('#modal-register-action').modal('show');
-}; //llenar tipo de tramite
-
-
-function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
-  var selectElement = document.getElementById('tramit_type');
-  selectElement.options.length = 0; // Limpiar el select
-
-  $('#content-validaciones-soad-tramite').html('');
-  $('#content-error-producto-preautorizado').hide();
-  var typeProductId = $('#typeProductId').val();
-  var leadId = $('#lead_id').val();
-  var productId = $('#financial_product_id').val();
-  axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/" + leadId + "/tramite/get").then(function (response) {
-    var result = response.data;
-    var sodIsTramite = result.sodIsTramite;
-    var sodMessage = result.sodMessage;
-    var sodTramites = result.sodTramites;
-
-    if (sodIsTramite == true) {
-      $('#content-product-select').hide();
-      Object.keys(sodTramites).forEach(function (key) {
-        var option = document.createElement('option');
-        option.value = key;
-        option.textContent = sodTramites[key];
-        selectElement.appendChild(option);
-      });
-    } else {
-      $('#content-product-select').show();
-      $('#content-error-producto-preautorizado').show();
-    }
-
-    if (tipoTramiteId != 'null') {
-      $('#tramit_type').val(tipoTramiteId).trigger("change");
-    }
-
-    if (typeProductId != 3 && typeProductId != '') {
-      $('#content-validaciones-soad-tramite').html(sodMessage);
-    }
-  })["catch"](function (e) {});
-} //contenido tramite al cambiar el select si selecciona refinanciamiento
-
-
-window.changeTramite = function () {
-  var tramit_type = $('#tramit_type').val();
-  var clientPersonId = $('#client_person_id').val();
-  var productId = $('#financial_product_id').val();
-  var typeProductId = $('#typeProductId').val();
-  var leadId = document.getElementById("lead_id").value;
-  $('#content-product-select').hide();
-  $('#content-product').hide();
-  $('#content-refinanciado').hide();
-  $('#product-deseado-refinanciamiento').hide();
-  $('#content-product-deseado-refinanciamiento').html('');
-
-  if (typeProductId != 3 && typeProductId != '') {
-    $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
-    $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
-  } //
-
-
-  if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
-    axios.get("/panel/lead/" + clientPersonId + "/" + productId + "/" + tramit_type + "/refinanciamiento/get").then(function (response) {
-      var result = response.data;
-      var montoMaximo = result.montoMaximo;
-      var plazoMaximo = result.plazoMaximo;
-      var periodicidad = result.periodicidad;
-      var payment = result.payment;
-      var productoDeseado = result.productoDeseado;
-      var terms = result.terms;
-      $('#monto-maximo').val(montoMaximo);
-      $('#plazo-maximo').val(plazoMaximo);
-      $('#periodicidad').val(periodicidad);
-      $('#periodicidad-hidden').val(result.periodicidad_id);
-      $('#pago-periodico').val(payment);
-
-      if (typeProductId != 3) {
-        $('#content-product-select').show();
-        $('#content-refinanciado').show();
-      }
-
-      $('#product-deseado-refinanciamiento').show();
-      $('#content-product-deseado-refinanciamiento').html(productoDeseado);
-      var selectTramite = document.getElementById('ref-plazo');
-      selectTramite.options.length = 0; // Limpiar el select
-
-      var defaultOption = document.createElement('option');
-      defaultOption.value = ''; // Value vacío
-
-      defaultOption.textContent = 'Seleccione una opción'; // Texto de la opción
-
-      selectTramite.appendChild(defaultOption);
-      Object.keys(terms).forEach(function (key) {
-        var option = document.createElement('option');
-        option.value = key;
-        option.textContent = terms[key];
-        selectTramite.appendChild(option);
-      });
-
-      if (typeProductId == 2) {
-        showTableCompraCartera(leadId);
-      }
-
-      saveLead(false);
-    })["catch"](function (e) {});
-  }
-};
-
-window.graficaProspecto = function () {
-  getChart();
-  $('#modal-chart').modal('show');
-};
-
-window.getMontoSolicitado = function () {
-  var clientPersonId = $('#client_person_id').val();
-  var productId = $('#financial_product_id').val();
-  var plazo = $('#ref-plazo').val();
-  var creditElement = document.getElementById('controldesk-credit_id');
-  var creditId = creditElement ? creditElement.value : null;
-  var tramit_type = $('#tramit_type').val();
-  var typeProductId = $('#typeProductId').val(); // Obtiene todos los checkboxes con nombre 'credits[]'
-
-  var checkboxes = document.querySelectorAll('input[name="credits[]"]:checked'); // Inicializa un array para guardar los valores seleccionados
-
-  var credits = []; // Itera sobre los checkboxes seleccionados y almacena sus valores
-
-  checkboxes.forEach(function (checkbox) {
-    credits.push(checkbox.value);
-  });
-  var selectMontoMaximo = document.getElementById('ref-monto');
-  selectMontoMaximo.options.length = 0; // Limpiar el select
-
-  $('#total-refinanciable').val(0);
-  axios.post("/panel/lead" + '/' + clientPersonId + "/" + productId + "/" + tramit_type + "/" + creditId + "/montoMaximo/get", {
-    credits: credits,
-    plazo: plazo
-  }).then(function (response) {
-    var result = response.data;
-    var maximo = result.maximo;
-    var total = result.total;
-    var total_price = result.total_price;
-    var defaultOption = document.createElement('option');
-    defaultOption.value = ''; // Value vacío
-
-    defaultOption.textContent = 'Seleccione una opción'; // Texto de la opción
-
-    selectMontoMaximo.appendChild(defaultOption);
-    Object.keys(maximo).forEach(function (key) {
-      var option = document.createElement('option');
-      option.value = key;
-      option.textContent = maximo[key];
-      selectMontoMaximo.appendChild(option);
-    });
-    $('#table-refinanciamiento-total').html(total_price);
-    $('#total-refinanciable').val(total);
-
-    if (typeProductId != 3 && typeProductId != '') {
-      var plazosolicitado = $('#ref-plazo').val();
-
-      if (plazosolicitado != '') {
-        $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
-      }
-    }
-
-    getResumen();
-  })["catch"](function (e) {});
-};
-
-function parseCurrency(value) {
-  if (!value) return 0; // Si el valor es null, vacío o undefined, devolver 0
-
-  var cleanValue = value.replace(/[^\d.]/g, ''); // Elimina cualquier caracter que no sea número o punto decimal
-
-  return parseFloat(cleanValue) || 0; // Convierte a número, si falla devuelve 0
-}
-
-window.getResumen = function () {
-  var clientPersonId = $('#client_person_id').val();
-  var productId = $('#financial_product_id').val();
-  var plazo = $('#ref-plazo').val();
-  var monto = $('#ref-monto').val();
-  var adicional = '';
-
-  if (document.getElementById('ref-monto-new')) {
-    monto = $('#ref-monto-new').val();
-  }
-
-  if (document.getElementById('isControlDesk')) {
-    var creditId = $('#controldesk-credit_id').val();
-    adicional = '?credit_id=' + creditId;
-  }
-  /* if (document.getElementById('ref-monto-new')) {
-      let montoNuevo = $('#total-refinanciable').val();
-      const newMontoSolicitado = Math.min(compraCartera, montoSolicitado);
-  } */
-
-
-  var totalRefinanciable = $('#total-refinanciable').val();
-  var tramit_type = $('#tramit_type').val();
-  var typeProductId = $('#typeProductId').val();
-  $('#go_ahead').val(0);
-  axios.get("/panel/lead/" + productId + "/" + plazo + '/' + (monto || 0) + '/' + (totalRefinanciable || 0) + '/' + tramit_type + '/getResumen' + adicional).then(function (response) {
-    var result = response.data;
-    var montoSolicitado = result.montoSolicitado;
-    var montoRefinanciar = result.montoRefinanciar;
-    var comision = result.comision;
-    var monto_entregar = result.monto_entregar;
-    var montoEntregarDecimal = null;
-    var periodicidad = result.periodicidad;
-    var plazo = result.plazo;
-    var pagoPeriodico = result.pagoPeriodico;
-    var pagoPeriodicoSF = result.pagoPeriodico_sf;
-    var pagoTotal = result.pagoTotal;
-    var tasaAnual = result.tasaAnual;
-    var cat = result.cat;
-    var kcInteres = result.kcInteres;
-    var kcPagoTotal = result.kcPagoTotal;
-    var productoFinanciero = $('#financial_product_id').val();
-    $('#selected_term').val(plazo);
-    $('#selected_loan').val(result.montoSolicitado_sf);
-    $('#applied_financial_product').val(productoFinanciero);
-    $('#content-monto-solicitado').html(montoSolicitado);
-    $('#content-monto-refinanciar').html(montoRefinanciar);
-    $('#content-comision-apertura').html(comision);
-
-    if (document.getElementById('total-monto-solicitado')) {
-      $('#content-monto-compra-cartera').html('');
-      $('#content-monto-compra-cartera').html($('#total-monto-solicitado_format').val());
-    }
-
-    var cMontoSolicitado = result.montoSolicitado_sf;
-    var cMontoCompraCartera = $('#content-monto-compra-cartera').length && $('#content-monto-compra-cartera').text().trim() ? parseCurrency($('#content-monto-compra-cartera').text().trim()) : 0;
-    var cComisionApertura = $('#content-comision-apertura').length && $('#content-comision-apertura').text().trim() ? parseCurrency($('#content-comision-apertura').text().trim()) : 0;
-    var cMontoRefinanciar = $('#content-monto-refinanciar').length && $('#content-monto-refinanciar').text().trim() ? parseCurrency($('#content-monto-refinanciar').text().trim()) : 0; //console.log(cMontoSolicitado + '-' + cMontoCompraCartera + '-'+cComisionApertura);
-
-    montoEntregarDecimal = cMontoSolicitado - cMontoCompraCartera - cComisionApertura - cMontoRefinanciar;
-    monto_entregar = montoEntregarDecimal.toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
-    $('#content-monto-entregar').html(monto_entregar);
-    $('#content-plazo').html(periodicidad);
-    $('#content-monto').html(plazo);
-    $('#content-pago-periodico').html(pagoPeriodico);
-    $('#applied_payment').val(pagoPeriodicoSF);
-    $('#applied_loan_total_amount').val(result.pagoTotalSF);
-    $('#opening_commission').val(result.comisionSF);
-    $('#net_amount').val(montoEntregarDecimal);
-    $('#content-pago-total').html(pagoTotal);
-    $('#content-tasa-anual').html(tasaAnual);
-    $('#content-cat').html(cat);
-    $('#hmonto-entregar').val(montoEntregarDecimal);
-    getChart();
-    $('#go_ahead').val(1);
-
-    if (typeProductId != 3) {
-      $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
-      $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
-      var plazosolicitado = $('#ref-plazo').val();
-      var montosolicitado = $('#ref-monto').val();
-
-      if (plazosolicitado != '') {
-        $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
-      }
-
-      if (montosolicitado != '') {
-        $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
-      }
-    }
-
-    if (document.getElementById('validateBtnSave') && montoEntregarDecimal <= 0) {
-      $('#saveButton').hide();
-    } else {
-      $('#saveButton').show();
-    }
-
-    saveLead(false).then(function () {
-      getLeadValidations();
-    })["catch"](function (error) {
-      console.error('Error saving lead:', error);
-    });
-  })["catch"](function (e) {});
-};
-
-function getChart() {
-  var productId = $('#financial_product_id').val();
-  var leadId = $('#lead_id').val();
-  var plazo = $('#plazo-maximo').val();
-  var monto = $('#monto-maximo').val();
-  axios.get("/panel/lead/" + productId + "/" + leadId + "/" + plazo + '/getChart').then(function (response) {
-    var result = response.data;
-    $('#ahorro-interes-dinero').html(result.ahorroInteresDinerom);
-    $('#ahorro-interes-porcentaje').html(result.ahorroInteresPorcentaje);
-    $('#lbl-kc-pago-total').html(result.deudaPagoTotalm);
-    $('#lbl-kc-porcentaje-interes').html(result.deudaPorcentajeInteresm);
-    $('#lbl-deuda-pago-total').html(result.kcPagoTotal);
-    $('#lbl-deuda-porcentaje-interes').html(result.kcPorcentajeInteres); // Crear múltiples gráficas de ejemplo con alturas dinámicas
-
-    crearGraficaApilada(chartsContainer, result.deudaInteres, result.deudaCapital, '#a34444', '#757575', "Interés", "Deuda total <br> de tus créditos");
-    crearGraficaApilada(chartsContainer, result.kcInteres, result.kcCapital, '#7eb1a2', '#57409b', "Interés", "Kaax Club");
-  })["catch"](function (e) {});
-} //validar soad activo y si existe la fecha en bd
-
-
-window.validateSoad = function () {
-  $('#content-refinanciado').hide();
-  $('#content-validaciones-soad').html('');
-  $('#content-validaciones-soad-date').html('');
-  $('#content-product').html('');
-  $('#content_tramit_type').hide();
-  $('#content-validaciones-soad-tramite').html('');
-  $('#go_ahead').val(0);
-  $('#loan_available-msg').html('');
-  $('#producto-deseado').hide();
-
-  if ($('#financial_product_id').val() != null) {
-    var clientPersonId = $('#client_person_id').val();
-    var agreement = $('#lead-origin-agreement').val();
-    var productId = $('#financial_product_id').val();
-    var lead_id = $('#lead_id').val();
-    $('#content-error-producto-preautorizado').hide();
-    axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + "/" + lead_id + "/soad/get").then(function (response) {
-      getLeadValidations();
-      var result = response.data;
-      var typeProductId = result.type_product_id;
-      var tramitePendiente = result.tramitePendiente;
-      $('#typeProductId').val(typeProductId);
-      $('#loan_available-msg').html(result.loan_available);
-      document.getElementById('tramit_type').disabled = false;
-
-      if (typeProductId == 3) {
-        console.log('typeProductId-' + typeProductId);
-        $('#producto-deseado').show();
-        document.getElementById('slider').disabled = true;
-        document.getElementById('tramit_type').disabled = true;
-      }
-
-      if ($('#is_viability').val() == 1) {//getAllValidate();
-      }
-
-      $('#content_tramit_type').show(); //llenar el arreglo de tipo de trámite
-
-      setSelectTramite(clientPersonId, productId, null);
-
-      if (typeProductId == 3) {
-        var TextSoad = result.TextSoad;
-        var soadActive = result.soadActive;
-        var isSoadDate = result.isSoadDate;
-        var isSodOnDate = result.isSodOnDate;
-        $('#product_id').val(typeProductId);
-        $('#is_free_of_active_sod').val(0);
-        $('#is_sod_on_date_allowed').val(0);
-
-        if (soadActive != 0) {
-          $('#content-validaciones-soad').html(TextSoad);
-          $('#is_free_of_active_sod').val(1);
-        }
-
-        $('#is_sod_on_date_allowed').val(1);
-        $('#sod_max').val(result.maximoRedondeado);
-        $('#sod_min').val(result.minimoRedondeado);
-        $('#content-validaciones-soad-date').html(isSoadDate);
-
-        if (isSodOnDate == true && tramitePendiente == true) {
-          document.getElementById('slider').disabled = false;
-          $('#content-product').html(result.contentProductSod);
-          $('#go_ahead').val(1); //valores slider
-
-          var slider = document.getElementById('slider');
-          slider.min = result.minimoRedondeado;
-          slider.max = result.maximoRedondeado;
-          $('#valor-minimo').html(result.minimoRedondeado);
-          $('#valor-maximo').html(result.maximoRedondeado);
-          $('#valor-comision').html('$' + result.comision);
-          $('#sod_commision_amount').val(result.comision);
-          $('#valor-banco').html(result.bank_name);
-          $('#valor-cuenta').html(result.cuenta);
-          $('#content-product-select').show();
-          var selectElement = document.getElementById('tramit_type');
-          selectElement.options.length = 0; // Limpiar el select
-
-          var sodTramites = result.sodTramites;
-          Object.keys(sodTramites).forEach(function (key) {
-            var option = document.createElement('option');
-            option.value = key;
-            option.textContent = sodTramites[key];
-            selectElement.appendChild(option);
-          });
-          $('#content_tramit_type').show();
-        }
-      }
-    })["catch"](function (e) {});
-  }
-};
-
-if (document.getElementById('valor-slider')) {
-  var updateSliderValue = function updateSliderValue() {
-    var slider = document.getElementById('slider');
-    var displayValue = document.getElementById('valor-slider'); // Obtenemos el valor actual del slider
-
-    var sliderValue = parseFloat(slider.value); // Actualizamos el contenido del span con el valor actual del slider
-
-    displayValue.innerHTML = '$' + sliderValue;
-    $('#sod_withdraw_amount').val(sliderValue);
-    var comision = parseFloat($('#sod_commision_amount').val());
-    var total = sliderValue + comision;
-    console.log('slider-' + sliderValue);
-    console.log('comision-' + comision);
-
-    if (!isNaN(total)) {
-      $('#sod_total_payment').val(total);
-    } else {
-      $('#sod_total_payment').val(0); // O puedes asignar un valor por defecto si es NaN
-
-      total = 0;
-    }
-
-    $('#valor-total').html('$' + total);
-  }; // Agregar el listener al slider para detectar cambios
-
-
-  document.getElementById('slider').addEventListener('input', updateSliderValue); // Opcional: actualizar el valor del span al cargar la página
-
-  window.addEventListener('DOMContentLoaded', updateSliderValue);
-}
-
-$(document).ready( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-    while (1) {
-      switch (_context2.prev = _context2.next) {
-        case 0:
-          if (document.getElementById('lead-channel')) {
-            setData(true, false, true);
-          }
-
-        case 1:
-        case "end":
-          return _context2.stop();
-      }
-    }
-  }, _callee2);
-})));
-$(document).on("select2:open", function () {
-  document.querySelector(".select2-container--open .select2-search__field").focus();
-});
-/* graficas */
-
-function crearGraficaApilada(contenedor, valorInteres, valorDeuda) {
-  var colorInteres = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '#e57373';
-  var colorDeuda = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '#757575';
-  var etiquetaInteres = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : "Interés";
-  var etiquetaDeuda = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : "Deuda";
-  var chartContainer = document.createElement('div');
-  chartContainer.classList.add('chart-container'); // Cálculo del total y altura dinámica para cada gráfica
-
-  var total = valorInteres + valorDeuda;
-  var alturaMaxima = 400; // Altura máxima en píxeles para la gráfica con mayor valor
-
-  var alturaGrafica = total / 16000 * alturaMaxima; // Escalado en base a un total de 16000 como máximo
-  // Crear la barra de la gráfica
-
-  var bar = document.createElement('div');
-  bar.classList.add('bar');
-  bar.style.height = "".concat(alturaGrafica, "px"); // Crear segmento de deuda
-
-  var segmentoDeuda = document.createElement('div');
-  segmentoDeuda.classList.add('segment', 'segment2');
-  segmentoDeuda.style.backgroundColor = colorDeuda;
-  segmentoDeuda.style.height = "".concat(valorDeuda / total * 100, "%");
-  segmentoDeuda.innerHTML = "\n    <span style=\"font-size: 1.2em; \">$".concat(valorDeuda.toLocaleString(), "</span>\n    <span style=\"font-size: 1.2em;\">").concat(etiquetaDeuda, "</span>\n  "); // Crear segmento de interés
-
-  var segmentoInteres = document.createElement('div');
-  segmentoInteres.classList.add('segment', 'segment1');
-  segmentoInteres.style.backgroundColor = colorInteres;
-  segmentoInteres.style.height = "".concat(valorInteres / total * 100, "%");
-  segmentoInteres.innerHTML = "\n     <span style=\"font-size: 1.2em;\">".concat(etiquetaInteres, "</span>\n    <span style=\"font-size: 1.2em;\">$").concat(valorInteres.toLocaleString(), "</span>\n   \n  "); // Añadir los segmentos a la barra (interés arriba)
-
-  bar.appendChild(segmentoInteres);
-  bar.appendChild(segmentoDeuda); // Añadir la barra al contenedor de la gráfica
-
-  chartContainer.appendChild(bar);
-  contenedor.appendChild(chartContainer); // Animación de llenado
-
-  setTimeout(function () {
-    segmentoInteres.style.opacity = 1;
-    segmentoInteres.style.transform = 'scaleY(1)';
-    segmentoDeuda.style.opacity = 1;
-    segmentoDeuda.style.transform = 'scaleY(1)';
-  }, 100); // Retraso para activar la animación
-} // Selecciona el contenedor principal donde se añadirán las gráficas
-
-
-var chartsContainer = document.getElementById('charts-container');
-/* seccion para controldesk compra de cartera */
-
-document.addEventListener('DOMContentLoaded', function () {
-  // Obtener elementos del DOM
-  var sumaCompraCheck = document.getElementById('sumaCompraCheck');
-  var refPlazo = document.getElementById('ref-plazo');
-  var contentMontoSolicitado = document.getElementById('content-select-monto-solicitado');
-  var contentNewMontoSolicitado = document.getElementById('content-select-new-monto-solicitado'); // Inicializar select2 si no está inicializado
-
-  if ($.fn.select2) {
-    $('.js-select2').select2();
-  } // Escuchar cambios en el checkbox
-
-
-  if (document.getElementById('compra-cartera-plazo-solicitado')) {
-    sumaCompraCheck.addEventListener('change', function () {
-      if (this.checked) {
-        // Ocultar el contenedor original sin modificarlo
-        contentMontoSolicitado.style.display = 'none'; // Obtener el valor del plazo solicitado desde el campo oculto
-
-        var plazoSolicitadoInput = document.getElementById('compra-cartera-plazo-solicitado');
-
-        if (plazoSolicitadoInput && plazoSolicitadoInput.value) {
-          var plazoSolicitado = plazoSolicitadoInput.value; // Buscar si existe esa opción en el select de plazo y seleccionarla
-
-          Array.from(refPlazo.options).forEach(function (option) {
-            if (option.value == plazoSolicitado) {
-              refPlazo.value = option.value;
-              $(refPlazo).trigger('change'); // Trigger change para select2
-            }
-          });
-        } // 1. Llamar a axios para obtener los datos de compra de cartera
-
-
-        var creditId = $('#controldesk-credit_id').val();
-        var plazo = $('#ref-plazo').val();
-        var tramit_type = $('#tramit_type').val();
-        axios.get('/panel/kc-control-desk/' + creditId + '/' + tramit_type + '/' + plazo + '/compracartera/calculate').then(function (response) {
-          var data = response.data;
-          var compraCartera = data.compraCartera;
-          var montoSolicitado = data.montoSolicitado;
-          var montoRefinanciable = data.montoRefinanciable;
-          /* 
-          const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
-
-          var newMontoSolicitado = compraCartera; // Guardar el valor en un campo oculto para usarlo más tarde
-
-          document.getElementById('total-refinanciable').value = montoRefinanciable; // 2. Seleccionar el plazo correspondiente si existe
-          // Obtener el valor de monto solicitado correctamente usando DOM nativo
-
-          var montoSolicitadoText = '';
-          var tablas = document.querySelectorAll('table.table-striped'); // Buscar en todas las tablas la fila que contiene "Monto solicitado"
-
-          tablas.forEach(function (tabla) {
-            var filas = tabla.querySelectorAll('tr');
-            filas.forEach(function (fila) {
-              var celdas = fila.querySelectorAll('td');
-
-              if (celdas.length >= 2 && celdas[0].textContent.trim() === 'Monto solicitado') {
-                montoSolicitadoText = celdas[1].textContent.trim();
-              }
-            });
-          }); // 3. Crear elementos en el nuevo contenedor
-
-          agregarElementosNuevoContenedor(montoSolicitado);
-        })["catch"](function (error) {
-          console.error('Error al obtener datos de compra de cartera:', error);
-        });
-      } else {
-        // Mostrar el contenedor original sin modificarlo
-        contentMontoSolicitado.style.display = ''; // Limpiar el contenedor nuevo
-
-        contentNewMontoSolicitado.innerHTML = ''; // Vaciar el campo oculto de total refinanciable
-
-        document.getElementById('total-refinanciable').value = '';
-        getMontoSolicitado();
-      }
-    });
-  } // Función para agregar elementos al nuevo contenedor
-
-
-  function agregarElementosNuevoContenedor(monto) {
-    // Limpiar el contenedor nuevo
-    contentNewMontoSolicitado.innerHTML = ''; // Crear un input disabled visible
-
-    var disabledInput = document.createElement('input');
-    disabledInput.type = 'text';
-    disabledInput.className = 'form-control';
-    disabledInput.value = formatPrice(monto);
-    disabledInput.disabled = true; // Crear un input hidden con el valor real
-
-    var hiddenInput = document.createElement('input');
-    hiddenInput.type = 'hidden';
-    hiddenInput.name = 'credit[applied_import]';
-    hiddenInput.id = 'ref-monto-new'; // ID diferente para evitar conflicto
-
-    hiddenInput.value = monto; // Agregar los elementos al contenedor nuevo
-
-    contentNewMontoSolicitado.appendChild(disabledInput);
-    contentNewMontoSolicitado.appendChild(hiddenInput); // Disparar evento para cualquier otra función que dependa del cambio
-
-    var event = new Event('change');
-    hiddenInput.dispatchEvent(event); // Si getResumen es una función global, llamarla directamente
-
-    if (typeof getResumen === 'function') {
-      getResumen();
-    }
-  } // Función auxiliar para formatear precio similar a Laravel
-
-
-  function formatPrice(amount) {
-    return '$ ' + parseFloat(amount).toLocaleString('es-CO', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    });
-  }
-});
-
-function getLeadValidations() {
-  var leadId = $('#lead_id').val();
-  $('#content-validaciones-tabla').html('');
-  axios.get("/panel/lead/validations/".concat(leadId)).then(function (response) {
-    if (response.data.success) {
-      var html = response.data.table;
-      $('#content-validaciones-tabla').html(html);
-    } else {
-      $('#content-validaciones-tabla').html('No se encontraron validaciones');
-    }
-  })["catch"](function (error) {
-    console.error('Error:', error);
-    $('#content-validaciones-tabla').html('Error al obtener las validaciones');
-  });
-}
-
-function getLeadValidationsLoanTerm() {
-  var leadId = $('#lead_id').val();
-  axios.get("/panel/lead/validations/".concat(leadId, "/loan/term")).then(function (response) {
-    getLeadValidations();
-  })["catch"](function (error) {
-    console.error('Error:', error);
-  });
-}
-
-/***/ }),
-
-/***/ "./resources/js/components/lead/datatable.js":
-/*!***************************************************!*\
-  !*** ./resources/js/components/lead/datatable.js ***!
-  \***************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var route = $('#route_datatable').val();
-  var module_id = null;
-
-  if (document.getElementById('module_id')) {
-    module_id = $('#module_id').val();
-  }
-
-  var table_lead = NioApp.DataTable('#dt-lead', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/lead/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'name'
-    }, {
-      data: 'date'
-    }, {
-      data: 'product'
-    },
-    /* { data: 'organizacion' }, */
-    {
-      data: 'label'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-lead tbody').on('click', 'td', function () {
-    if (typeof table_lead === 'undefined') {
-      console.warn('table_lead no está definido');
-      return;
-    }
-
-    var row = table_lead.row($(this).closest('tr'));
-
-    if (!row) {
-      console.warn('No se pudo obtener la fila');
-      return;
-    }
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-  var table_archive = NioApp.DataTable('#dt-lead-archive', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/archive/lead/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'name'
-    }, {
-      data: 'date'
-    }, {
-      data: 'product'
-    }, {
-      data: 'origin'
-    }, {
-      data: 'reason'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-lead-archive tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-  var table__dinamic_archive = NioApp.DataTable('#dt-lead-dinamic-archive', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/archive/lead/list/' + module_id + '/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'name'
-    }, {
-      data: 'date'
-    }, {
-      data: 'product'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-lead-dinamic-archive tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/module/datatable.js":
-/*!*****************************************************!*\
-  !*** ./resources/js/components/module/datatable.js ***!
-  \*****************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-check-up', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-check-up/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'product'
-    }, {
-      data: 'client'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'progress'
-    }, {
-      data: 'in_progress'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-check-up tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/module/kc_check_up/action/datatable.js":
-/*!************************************************************************!*\
-  !*** ./resources/js/components/module/kc_check_up/action/datatable.js ***!
-  \************************************************************************/
-/***/ (() => {
-
-var history_id;
-var model;
-var step;
-
-if (document.getElementById('dt-check-up-actions')) {
-  history_id = $('#history_id').val();
-  model = $('#model').val();
-  step = $('#step').val();
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-check-up-actions', {
-    processing: true,
-    searching: false,
-    ordering: false,
-    paging: false,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/template/actions/list/' + model + '/' + history_id + '/show?step=' + step,
-    columns: [{
-      data: 'name'
-    }, {
-      data: 'subject'
-    }, {
-      data: 'status'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/module/kc_check_up/action/datatable_report.js":
-/*!*******************************************************************************!*\
-  !*** ./resources/js/components/module/kc_check_up/action/datatable_report.js ***!
-  \*******************************************************************************/
-/***/ (() => {
-
-var history_id;
-
-if (document.getElementById('dt-check-up-report-steps')) {
-  history_id = $('#history_id').val();
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-check-up-report-steps', {
-    processing: true,
-    searching: false,
-    ordering: false,
-    paging: false,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-check-up/report/list/' + history_id + '/show',
-    columns: [{
-      data: 'name'
-    }, {
-      data: 'subject'
-    }, {
-      data: 'status'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/module/kc_check_up/datatable.js":
-/*!*****************************************************************!*\
-  !*** ./resources/js/components/module/kc_check_up/datatable.js ***!
-  \*****************************************************************/
-/***/ (() => {
-
-var history_id;
-
-if (document.getElementById('dt-check-up-steps')) {
-  history_id = $('#history_id').val();
-  model = $('#model').val();
-  document.addEventListener('DOMContentLoaded', function () {
-    var table = NioApp.DataTable('#dt-check-up-steps', {
-      processing: true,
-      searching: false,
-      ordering: false,
-      paging: false,
-      responsive: {
-        details: {
-          renderer: function renderer(api, rowIdx, columns) {
-            var total = columns.length - 1;
-            var data = $.map(columns, function (col, i) {
-              if (total == i) {
-                return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-              } else {
-                return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-              }
-            }).join('');
-            return data ? $('<table/>').append(data) : false;
-          }
-        }
-      },
-      ajax: '/panel/template/list/' + model + '/' + history_id + '/show',
-      columns: [{
-        data: 'name'
-      }, {
-        data: 'step'
-      }, {
-        data: 'status'
-      }, {
-        data: 'progress'
-      },
-      /* { data: 'deadline'}, */
-      {
-        data: 'options'
-      }],
-      columnDefs: [{
-        className: "nk-tb-col",
-        targets: "_all"
-      }],
-      createdRow: function createdRow(row, data, dataIndex) {
-        $(row).addClass("nk-tb-item");
-      }
-    });
-  });
-}
-
-/***/ }),
-
-/***/ "./resources/js/components/module/kc_control_desk/datatable.js":
-/*!*********************************************************************!*\
-  !*** ./resources/js/components/module/kc_control_desk/datatable.js ***!
-  \*********************************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-control-desk', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-control-desk/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'fecha'
-    }, {
-      data: 'product'
-    }, {
-      data: 'client'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'progress'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-control-desk tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-/*  reference */
-
-document.addEventListener('DOMContentLoaded', function () {
-  var history_id = $('#history_id').val();
-  var table = NioApp.DataTable('#dt-credit-reference', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/reference/' + history_id + '/list',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'names'
-    }, {
-      data: 'last_name'
-    }, {
-      data: 'second_lastname'
-    }, {
-      data: 'relation'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-delivery', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-delivery/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'fecha'
-    }, {
-      data: 'product'
-    }, {
-      data: 'client'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'progress'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-delivery tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-after-market', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-after-market/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'product'
-    }, {
-      data: 'client'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'progress'
-    }, {
-      data: 'in_progress'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-after-market tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-payment', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-payments/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'product'
-    }, {
-      data: 'client'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'progress'
-    }, {
-      data: 'in_progress'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-payment tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-/* wallet */
-
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-wallet', {
-    processing: true,
-    isShowing: false,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-wallet/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'date'
-    }, {
-      data: 'ordenante'
-    }, {
-      data: 'importe'
-    }, {
-      data: 'progress'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-wallet tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-
-  if (document.getElementById('dt-wallet')) {
-    var urlParams = new URLSearchParams(window.location.search);
-    var alertParam = urlParams.get('alert');
-
-    if (alertParam === 'true') {
-      Swal.fire({
-        title: 'Solicitud de agregar fondos',
-        html: 'Te notificaremos vía email a la brevedad',
-        showCancelButton: false,
-        confirmButtonText: 'ok'
-      }).then(function (result) {
-        if (result.value) {}
-      });
-    }
-  }
-
-  if (document.getElementById('dt-down-wallet')) {
-    var _urlParams = new URLSearchParams(window.location.search);
-
-    var _alertParam = _urlParams.get('alertdown');
-
-    if (_alertParam === 'true') {
-      Swal.fire({
-        title: 'Solicitud de retirar fondos',
-        html: 'Te notificaremos vía email a la brevedad',
-        showCancelButton: false,
-        confirmButtonText: 'ok'
-      }).then(function (result) {
-        if (result.value) {}
-      });
-    }
-  }
-});
-/* mis pestamos */
-
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-mis-prestamos', {
-    processing: true,
-    isShowing: false,
-    searching: false,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-wallet/mis-restamos/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'status'
-    }, {
-      data: 'importe'
-    }, {
-      data: 'pagado'
-    }, {
-      data: 'capital_recuperado'
-    }, {
-      data: 'interes_cobrado'
-    }, {
-      data: 'capital_pendiente'
-    }, {
-      data: 'interes_proyectado'
-    }, {
-      data: 'comision_kc'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-mis-prestamos tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-down-wallet', {
-    processing: true,
-    isShowing: false,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-down-wallet/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'date'
-    }, {
-      data: 'ordenante'
-    }, {
-      data: 'importe'
-    }, {
-      data: 'progress'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-down-wallet tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-wallet-history', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-wallet/list/history/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'fecha'
-    }, {
-      data: 'tipo'
-    }, {
-      data: 'importe'
-    }, {
-      data: 'comision'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-wallet-history tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-document.addEventListener('DOMContentLoaded', function () {
-  var table = NioApp.DataTable('#dt-kc-swap', {
-    processing: true,
-    responsive: {
-      details: {
-        type: 'column',
-        target: 'td:not(:first-child):not(:nth-child(2))',
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/kc-swap/list/show',
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'product'
-    }, {
-      data: 'client'
-    }, {
-      data: 'advisor'
-    }, {
-      data: 'progress'
-    }, {
-      data: 'in_progress'
-    }, {
-      data: 'deadline'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  }); // Expand table rows on click
-
-  $('#dt-kc-swap tbody').on('click', 'td', function () {
-    var row = table.row($(this).closest('tr'));
-
-    if (row.child.isShown()) {
-      row.child.hide();
-    } else {
-      row.child.show();
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/module/kc_control_desk/reference.js":
-/*!*********************************************************************!*\
-  !*** ./resources/js/components/module/kc_control_desk/reference.js ***!
-  \*********************************************************************/
-/***/ (() => {
-
-$().ready(function () {
-  $("#frm-credit-reference").validate({
-    rules: {
-      'data_reference[last_name]': {
-        required: true
-      },
-      'data_reference[second_lastname]': {
-        required: true
-      },
-      'data_reference[names]': {
-        required: true
-      },
-      'data_reference[relationship_time_years]': {
-        number: true
-      },
-      'data_reference[relationship_time_months]': {
-        number: true
-      },
-      'data_reference[cel_phone]': {
-        required: true,
-        number: true,
-        minlength: 10,
-        maxlength: 10
-      },
-      'data_reference[local_phone]': {
-        number: true,
-        minlength: 10,
-        maxlength: 10
-      },
-      'data_reference[postal_code]': {
-        number: true,
-        minlength: 5,
-        maxlength: 5
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var new_form = document.getElementById("frm-credit-reference");
-      var data = new FormData(new_form);
-      var history_id = $('#history_id').val();
-      var reference_id = $('#reference_id').val();
-      axios.post("/panel/reference/" + history_id + "/storeReference", data).then(function (response) {
-        $('#dt-credit-reference').DataTable().ajax.reload();
-        $('#modal-reference').modal('hide');
-      })["catch"](function (e) {});
-    }
-  });
-
-  window.deleteReference = function (reference_id) {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, elimina',
-      cancelButtonText: 'Mejor no'
-    }).then(function (result) {
-      if (result.value) {
-        axios["delete"]("/panel/reference/" + reference_id + "/delete/").then(function (response) {
-          window.history.back();
-        })["catch"](function (e) {});
-      }
-    });
-  };
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/module/resumen.js":
-/*!***************************************************!*\
-  !*** ./resources/js/components/module/resumen.js ***!
-  \***************************************************/
-/***/ (() => {
-
-if (document.getElementById('checkIslimit')) {
-  var checkbox = document.getElementById('checkIslimit');
-  var numberInput = document.getElementById('lendable'); // Set initial state based on checkbox checked status
-
-  numberInput.disabled = checkbox.checked;
-  checkbox.addEventListener('change', function () {
-    numberInput.disabled = this.checked;
-  });
-  $("#frm-inversionista-prestamo").submit(function (event) {
-    event.preventDefault();
-    var InvestorId = $('#investorId').val();
-    var new_form = document.getElementById("frm-inversionista-prestamo");
-    var data = new FormData(new_form);
-    axios.post("/panel/inversionista", data).then(function (response) {
-      window.location = '/panel/inversionista/' + InvestorId;
-    })["catch"](function (e) {});
-  });
-}
-
-/***/ }),
-
-/***/ "./resources/js/components/module/template.js":
-/*!****************************************************!*\
-  !*** ./resources/js/components/module/template.js ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-
-var refresh = {
-  'newCredit': creditRefresh
-};
-$().ready(function () {
-  $("#frm-template_new_credit").validate({
-    rules: {
-      'agreement_id': {
-        required: true
-      },
-      'name': {
-        required: true
-      },
-      'last_name': {
-        required: true
-      },
-      'cellphone': {
-        number: true,
-        minlength: 10
-      },
-      'new_agreement': {
-        required: function required(element) {
-          var lead_agreement = $("#lead-agreement").val();
-
-          if (lead_agreement == 0) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_new_credit', 'newCredit');
-    }
-  }); //*form save debt credit strategy
-
-  $("#frm-template_debt_credit").validate({
-    rules: {
-      'agreement_id': {
-        required: true
-      },
-      'name': {
-        required: true
-      },
-      'last_name': {
-        required: true
-      },
-      'cellphone': {
-        number: true,
-        minlength: 10
-      },
-      'financial_id': {
-        required: true
-      },
-      'new_agreement': {
-        required: function required(element) {
-          var lead_agreement = $("#lead-agreement").val();
-
-          if (lead_agreement == 0) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_debt_credit', 'debtCredit');
-    }
-  }); //* save form  control desk step 1
-
-  $("#frm-template_control_desk_step1").validate({
-    rules: {
-      'url_redirect_next': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_control_desk_step1', 'controlDesk');
-    }
-  });
-  $("#frm-template_control_desk_step2").validate({
-    rules: {
-      /*  'credit[applied_financial_product]': {
-           required: true,
-       },
-       'credit[applied_loan_type]': {
-           required: true,
-       }, */
-      'credit[applied_import]': {
-        required: true
-      },
-      'credit[applied_term]': {
-        required: true
-      },
-      'credit[applied_periodicity]': {
-        required: true
-      },
-      'credit[applied_payment]': {
-        required: true
-      },
-      'credit[applied_loan_total_amount]': {
-        required: true
-      },
-      'credit[applied_interest_rate]': {
-        required: true
-      },
-      'credit[applied_CAT]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var input_loan = $('#input_loan').val();
-      var applied_import = $('#applied_import').val();
-
-      if (input_loan != '' && parseFloat(applied_import) > parseFloat(input_loan)) {
-        Swal.fire({
-          text: 'El importe solicitado no puede ser mayor al disponible',
-          icon: 'warning'
-        });
-      } else {
-        saveForm('frm-template_control_desk_step2', 'controlDesk');
-      }
-    }
-  });
-  $("#frm-template_control_desk_step2_task1").validate({
-    rules: {
-      'client_person[ID_primer_apellido]': {
-        required: true
-      },
-      'client_person[ID_segundo_apellido]': {
-        required: true
-      },
-      'client_person[ID_nombres]': {
-        required: true
-      },
-      'client_person[ID_vigencia]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_control_desk_step2_task1', 'controlDesk');
-    }
-  });
-  $("#frm-template_control_desk_step2_task2").validate({
-    rules: {
-      'client_person[ID_CIC]': {
-        required: true,
-        number: true,
-        minlength: 9,
-        maxlength: 9
-      },
-      'client_person[ID_IDC]': {
-        required: true,
-        number: true,
-        minlength: 9,
-        maxlength: 9
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_control_desk_step2_task2', 'controlDesk');
-    }
-  });
-  $("#frm-template_control_desk_step2_task3").validate({
-    rules: {
-      'client_person[payroll_date]': {
-        required: true
-      },
-      'client_person[payroll_total]': {
-        number: true,
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_control_desk_step2_task3', 'controlDesk');
-    }
-  });
-  $("#frm-template_control_desk_dynamic_step2").validate({
-    rules: {
-      'pay_off[deadline_date]': {
-        required: true
-      },
-      'pay_off[ammount]': {
-        number: true,
-        required: true
-      },
-      'pay_off[bank_clabe]': {
-        required: true,
-        number: true,
-        minlength: 18,
-        maxlength: 18
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_control_desk_dynamic_step2', 'controlDesk');
-    }
-  });
-  $("#frm-template_control_desk_step3_task3").validate({
-    rules: {
-      'credit[payroll_payment_capacity]': _defineProperty({
-        required: true
-      }, "required", true)
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_control_desk_step3_task3', 'controlDesk');
-    }
-  });
-  $("#frm-template_control_desk_step3_task").submit(function (event) {
-    event.preventDefault();
-    saveForm('frm-template_control_desk_step3_task', 'controlDesk');
-  });
-
-  window.getLoanAvailableByProduct = function (product) {
-    $('#text-loan').html('');
-    $('#input_loan').val('');
-    var productId = product.value;
-    $('#applied_loan_total_amount').val('');
-    $('#applied_payment').val('');
-    $('#applied_term').val('');
-    $('#applied_interest_rate').val('');
-    $('#applied_CAT').val('');
-    axios.get("/panel/financial-product/" + productId).then(function (response) {
-      var result = response.data;
-
-      if (result != null) {
-        // Use Intl.NumberFormat for locale-aware currency formatting
-        var formatter = new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-          // Replace with your desired currency code
-          minimumFractionDigits: 2 // Ensure at least two decimal places
-
-        });
-        var loan_available = result.loan_available == null || undefined ? 0 : result.loan_available;
-        var formattedAmount = formatter.format(loan_available);
-        $('#text-loan').html('Disponible: ' + formattedAmount);
-        $('#input_loan').val(loan_available);
-        $('#comision').val(result.sod_commission_amount);
-        $('#producto').val(result.type_product_id);
-
-        if (result.type_product_id == 6) {
-          $('#applied_term').val(1);
-          $('#applied_interest_rate').val(0);
-          $('#applied_CAT').val(0);
-        }
-
-        setBajoDemanda();
-      }
-    })["catch"](function (e) {
-      console.error('Error fetching loan available:', e);
-    });
-  };
-
-  window.setBajoDemanda = function () {
-    var comision = parseFloat($('#comision').val());
-    var inputAppliedImport = document.getElementById('applied_import');
-    inputAppliedImport.addEventListener('input', function () {
-      var importeSolicitado = parseFloat(inputAppliedImport.value);
-      var productId = $('#producto').val();
-
-      if (productId == 6) {
-        $('#applied_loan_total_amount').val(importeSolicitado + comision);
-        $('#applied_payment').val(importeSolicitado + comision);
-      }
-    });
-  };
-
-  $("#frm-template_control_desk_step3_1").validate({
-    rules: {
-      'client_person[sex]': {
-        required: true
-      },
-      'client_person[rfc]': {
-        required: true,
-        minlength: 13,
-        maxlength: 13
-      },
-      'client_person[curp]': {
-        required: false,
-        minlength: 18,
-        maxlength: 18
-      },
-      'client_person[client_postal_code]': {
-        required: false,
-        number: true,
-        minlength: 5,
-        maxlength: 5
-      },
-      'client_person[bank_name]': {
-        required: true
-      },
-      'client_person[bank_card_number]': {
-        number: true,
-        minlength: 16,
-        maxlength: 16
-      },
-      'client_person[bank_acount_number]': {
-        number: true,
-        minlength: 10,
-        maxlength: 10
-      },
-      'client_person[bank_clabe]': {
-        number: true,
-        minlength: 18,
-        maxlength: 18,
-        required: true
-      },
-      'client_person[monthly_income]': {
-        required: false,
-        number: true
-      },
-      'client_person[workplace_postal_code]': {
-        required: false,
-        number: true,
-        minlength: 5,
-        maxlength: 5
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_control_desk_step3_1', 'controlDesk');
-    }
-  });
-  $("#frm-template_control_desk_step3_2").validate({
-    rules: {
-      'credit[interviewer]': {
-        required: true
-      },
-
-      /* domicilio */
-      'client_person[client_postal_code]': {
-        required: true,
-        number: true,
-        minlength: 5,
-        maxlength: 5
-      },
-      'client_person[client_street]': {
-        required: true
-      },
-      'client_person[client_home_external_number]': {
-        required: true
-      },
-      'client_person[client_colony]': {
-        required: true
-      },
-      'client_person[client_city]': {
-        required: true
-      },
-      'client_person[client_state]': {
-        required: true
-      },
-      'client_person[client_country]': {
-        required: true
-      },
-      'client_person[relative_local_phone]': {
-        number: true,
-        minlength: 10,
-        maxlength: 10
-      },
-      'client_person[relative_cel_phone]': {
-        number: true,
-        minlength: 10,
-        maxlength: 10
-      },
-      'client_person[home_time_living]': {
-        number: true
-      },
-      'client_person[propety_ownnership_amount]': {
-        number: true
-      },
-      'client_person[propety_ownnership_value]': {
-        number: true
-      },
-      'client_person[vehicle_ownnership_amount]': {
-        number: true
-      },
-      'client_person[vehicle_ownnership_value]': {
-        number: true
-      },
-      'client_person[economic_dependents]': {
-        number: true
-      },
-      'client_person[aditional_labor_income]': {
-        number: true
-      },
-      'client_person[workplace_local_phone]': {
-        number: true,
-        minlength: 10,
-        maxlength: 10
-      },
-      'client_person[workplace_cel_phone]': {
-        number: true,
-        minlength: 10,
-        maxlength: 10
-      },
-      'client_person[workplace_local_phone_extension]': {
-        number: true
-      },
-      'client_person[bank_card_number]': {
-        number: true,
-        minlength: 16,
-        maxlength: 16
-      },
-      'client_person[bank_acount_number]': {
-        number: true,
-        minlength: 10,
-        maxlength: 10
-      },
-      'client_person[bank_clabe]': {
-        number: true,
-        minlength: 18,
-        maxlength: 18
-      },
-      'client_person[monthly_income]': {
-        required: true,
-        number: true
-      },
-      'client_person[workplace_postal_code]': {
-        required: true,
-        number: true,
-        minlength: 5,
-        maxlength: 5
-      },
-      'client_person[workplace_street]': {
-        required: true
-      },
-      'client_person[workplace_home_external_number]': {
-        required: true
-      },
-      'client_person[workplace_home_internal_number]': {
-        required: true
-      },
-      'client_person[workplace_colony]': {
-        required: true
-      },
-      'client_person[workplace_city]': {
-        required: true
-      },
-      'client_person[workplace_state]': {
-        required: true
-      },
-      'client_person[workplace_country]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_control_desk_step3_2', 'controlDesk');
-    }
-  });
-
-  if (document.getElementById('frm-template_control_desk_step4')) {
-    var form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4'); // Maneja el evento submit del formulario
-
-    form_control_desk_step4.addEventListener('submit', function (event) {
-      event.preventDefault(); // Evita que el formulario se envíe automáticamente
-
-      saveForm('frm-template_control_desk_step4', 'controlDesk');
-    });
-  }
-
-  if (document.getElementById('frm-template_control_desk_step3_task4')) {
-    var _form_control_desk_step = document.getElementById('frm-template_control_desk_step3_task4'); // Maneja el evento submit del formulario
-
-
-    _form_control_desk_step.addEventListener('submit', function (event) {
-      event.preventDefault(); // Evita que el formulario se envíe automáticamente
-
-      saveForm('frm-template_control_desk_step3_task4', 'controlDesk');
-    });
-  }
-
-  if (document.getElementById('frm-template_control_desk_step3_task5')) {
-    var _form_control_desk_step2 = document.getElementById('frm-template_control_desk_step3_task5'); // Maneja el evento submit del formulario
-
-
-    _form_control_desk_step2.addEventListener('submit', function (event) {
-      event.preventDefault(); // Evita que el formulario se envíe automáticamente
-
-      saveForm('frm-template_control_desk_step3_task5', 'controlDesk');
-    });
-  }
-
-  if (document.getElementById('frm-template_control_desk_dynamic_step3')) {
-    var _form_control_desk_step3 = document.getElementById('frm-template_control_desk_dynamic_step3'); // Maneja el evento submit del formulario
-
-
-    _form_control_desk_step3.addEventListener('submit', function (event) {
-      event.preventDefault(); // Evita que el formulario se envíe automáticamente
-
-      saveForm('frm-template_control_desk_dynamic_step3', 'controlDesk');
-    });
-  }
-
-  if (document.getElementById('frm-template_control_desk_step4_task1')) {
-    var _form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4_task1'); // Maneja el evento submit del formulario
-
-
-    _form_control_desk_step4.addEventListener('submit', function (event) {
-      event.preventDefault(); // Evita que el formulario se envíe automáticamente
-
-      saveForm('frm-template_control_desk_step4_task1', 'controlDesk');
-    });
-  }
-
-  if (document.getElementById('frm-template_control_desk_step4_task2')) {
-    var _form_control_desk_step5 = document.getElementById('frm-template_control_desk_step4_task2'); // Maneja el evento submit del formulario
-
-
-    _form_control_desk_step5.addEventListener('submit', function (event) {
-      event.preventDefault(); // Evita que el formulario se envíe automáticamente
-
-      saveForm('frm-template_control_desk_step4_task2', 'controlDesk');
-    });
-  }
-
-  window.openModalValidateControlDesk = function (creditId) {
-    axios.get("/panel/template/validate/" + creditId + "/controlDesk").then(function (response) {
-      var result = response.data;
-      $('#content-validate-control-desk').html(result);
-      $('#modalValidateControlDesk').modal('show');
-    })["catch"](function (e) {});
-  };
-
-  $("#frm-template_control_desk_step5").validate({
-    rules: {
-      'credit[financial_user_assigned]': {
-        required: true
-      },
-      'credit[commission]': {
-        required: true,
-        number: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      TotalCredits();
-    }
-  });
-
-  function TotalCredits() {
-    var creditId = $('#id_rel').val();
-    axios.get("/panel/client/" + creditId + "/credit/total").then(function (response) {
-      var result = response.data;
-      var total = result.total;
-
-      if (total > 1) {
-        saveForm('frm-template_control_desk_step5', 'controlDesk');
-      } else {
-        Swal.fire({
-          title: 'Este es un cliente nuevo',
-          text: 'Confirmo que se incluyó el contrato de comisión mercantil para un cliente nuevo',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Continuar',
-          cancelButtonText: 'Cancelar'
-        }).then(function (result) {
-          if (result.value) {
-            saveForm('frm-template_control_desk_step5', 'controlDesk');
-          }
-        });
-      }
-    })["catch"](function (e) {});
-  }
-
-  $("#frm-template_control_desk_step5_2").validate({
-    rules: {
-      'credit[signed]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_control_desk_step5_2', 'controlDesk');
-    }
-  });
-  $("#frm-template_delivery_step2").validate({
-    rules: {
-      'credit[changed_commission]': {
-        number: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_delivery_step2', 'delivery');
-    }
-  });
-  $("#frm-template_delivery_task1_step1").validate({
-    rules: {
-      'credit[delivered]': {
-        required: true
-      },
-      'credit[delivered_date]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_delivery_task1_step1', 'delivery');
-    }
-  });
-
-  if (document.getElementById('frm-template_delivery_step2_task1')) {
-    var _form_control_desk_step6 = document.getElementById('frm-template_delivery_step2_task1'); // Maneja el evento submit del formulario
-
-
-    _form_control_desk_step6.addEventListener('submit', function (event) {
-      event.preventDefault(); // Evita que el formulario se envíe automáticamente
-
-      saveForm('frm-template_delivery_step2_task1', 'delivery');
-    });
-  }
-
-  if (document.getElementById('frm-template_delivery_step2_task2')) {
-    var _form_control_desk_step7 = document.getElementById('frm-template_delivery_step2_task2'); // Maneja el evento submit del formulario
-
-
-    _form_control_desk_step7.addEventListener('submit', function (event) {
-      event.preventDefault(); // Evita que el formulario se envíe automáticamente
-
-      saveForm('frm-template_delivery_step2_task2', 'delivery');
-    });
-  }
-
-  $("#frm-template_delivery_dynamic_task_step1").validate({
-    rules: {
-      'credit_pay_off[delivered]': {
-        required: true
-      },
-      'credit_pay_off[delivered_date]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_delivery_dynamic_task_step1', 'delivery');
-    }
-  });
-  $("#frm-template_payment_step2").validate({
-    rules: {
-      'credit[changed_commission]': {
-        number: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_payment_step2', 'payment');
-    }
-  });
-  $("#frm-template_delivery_step3").validate({
-    rules: {
-      'credit[payment_check]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_delivery_step3', 'delivery');
-    }
-  });
-  $("#frm-template_payment_step3").validate({
-    rules: {
-      'credit[payment_check]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_payment_step3', 'payment');
-    }
-  });
-  $("#frm-template_swap_step1").validate({
-    rules: {
-      'client_person[name]': {
-        required: true
-      },
-      'client_person[last_name]': {
-        required: true
-      },
-      'client_person[second_last_name]': {
-        required: true
-      },
-      'client_person[cellphone]': {
-        required: true
-      },
-      'client_person[email]': {
-        required: true
-      },
-      'client_person[rfc]': {
-        required: true,
-        minlength: 13,
-        maxlength: 13
-      },
-      'credit[id_number]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_swap_step1', 'swap');
-    }
-  });
-  $("#frm-template_swap_step2").validate({
-    rules: {
-      'credit[url_sign]': {
-        required: true,
-        url: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_swap_step2', 'swap');
-    }
-  });
-  $("#frm-template_swap_step2-2").validate({
-    rules: {
-      'credit[signed]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_swap_step2-2', 'swap');
-    }
-  });
-  $("#frm-template_swap_step2-3").validate({
-    rules: {
-      'financial[email]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_swap_step2-3', 'swap');
-    }
-  });
-  $("#frm-template_swap_step3").validate({
-    rules: {
-      'credit[termination_number]': {
-        required: true
-      },
-      'credit[termination_bank_name]': {
-        required: true
-      },
-      'credit[termination_bank_account_holder]': {
-        required: true
-      },
-      'credit[termination_bank_clabe]': {
-        required: true
-      },
-      'credit[termination_bank_reference]': {
-        required: true
-      },
-      'credit[termination_amount]': {
-        required: true
-      },
-      'credit[termination_deadline]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_swap_step3', 'swap');
-    }
-  });
-  /* wallet */
-
-  $("#frm-template_wallet_step1").validate({
-    rules: {
-      'transaction[investor_id]': {
-        required: true
-      },
-      'transaction[bank_transfer_type]': {
-        required: true
-      },
-      'transaction[amount]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_wallet_step1', 'wallet');
-    }
-  }); //if exist implement onchange select
-
-  window.getValue = function (get) {
-    $('#content-legend').html('');
-    var ordenante = get.value;
-    axios.get("/panel/kc-wallet/" + ordenante + "/investor/get").then(function (response) {
-      var result = response.data;
-      $('#content-legend').html(result);
-    })["catch"](function (e) {});
-  };
-  /* if (document.getElementById('type_form') && $('#type_form').val() == '66') {
-      $('#content-legend-kc-down-bank').show();
-  } */
-
-
-  if (document.getElementById('frm-template_wallet_step1')) {
-    var investorIdInput = document.getElementById('investor_id'); // Check if investor_id element exists and is a hidden input
-
-    if (investorIdInput && investorIdInput.type === 'hidden') {
-      getValue(investorIdInput);
-    }
-  }
-
-  $("#frm-template_wallet_step1_2").validate({
-    rules: {
-      'transaction[operation_status]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_wallet_step1_2', 'wallet');
-    }
-  }); //* wallet-down
-
-  $("#frm-template_wallet_down_step1").validate({
-    rules: {
-      'transaction[investor_id]': {
-        required: true
-      },
-      'transaction[amount]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var withdraw_available = $('#withdraw_available').val();
-      var amount = $('#amount').val();
-
-      if (withdraw_available != '' && parseFloat(amount) > parseFloat(withdraw_available)) {
-        Swal.fire({
-          text: 'El importe a retirar debe ser menor  al disponible para el retiro',
-          icon: 'warning'
-        });
-      } else {
-        saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
-      }
-    }
-  });
-  $("#frm-template_wallet_down_step2").validate({
-    rules: {
-      'transaction[operation_status]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      saveForm('frm-template_wallet_down_step2', 'kc-down-wallet');
-    }
-  }); //*get data
-
-  if (document.getElementById('id_rel')) {
-    var id_rel = $('#id_rel').val();
-    var type_form = $('#type_form').val();
-
-    if (id_rel != '') {
-      axios.get("/panel/action-form/" + id_rel + "/" + type_form + '/form/get').then(function (response) {
-        var result = response.data;
-        var credit = result.credit;
-        var client = result.client;
-        var transaction = result.transaction;
-
-        if (type_form == 8) {
-          //checkup
-          organizationChange(credit.agreement_id, null);
-          $('#name').val(client.name);
-          $('#last_name').val(client.last_name);
-          $('#second_last_name').val(client.second_last_name);
-          $('#cellphone').val(client.cellphone);
-        }
-
-        if (type_form == 12) //reduccion
-          {
-            getFinancialProduct(credit.id, 2);
-            organizationChange(credit.agreement_id, credit.financial_id);
-            $('#name').val(client.name);
-            $('#last_name').val(client.last_name);
-            $('#second_last_name').val(client.second_last_name);
-            $('#cellphone').val(client.cellphone);
-            $('#current_payment').val(credit.current_payment / 100);
-            $('#current_periodicity').val(credit.current_periodicity).trigger("change");
-            $('#current_loan').val(credit.current_loan / 100);
-            $('#current_term').val(credit.current_term);
-            $('#current_principal_balance').val(credit.current_principal_balance / 100);
-            $('#current_total_balance').val(credit.current_total_balance / 100);
-            $('#tipo_credito').val(credit.tipo_credito).trigger("change");
-          }
-
-        if (type_form == 23) //form kc-desktop step1
-          {
-            $('#payment_capacity_period').val(credit.payment_capacity_period);
-            $('#payment_capacity').val(credit.payment_capacity);
-            $('#birth_date').val(client.birth_date);
-            $('#labor_old').val(client.labor_old);
-            $('#employee_category').val(client.employee_category);
-          }
-
-        if (type_form == 24) //form kc-desktop step2
-          {
-            $('#applied_financial').val(credit.applied_financial).trigger("change");
-            $('#applied_financial_product').val(credit.applied_financial_product).trigger("change");
-            $('#applied_loan_type').val(credit.applied_loan_type).trigger("change");
-            $('#applied_loan_discount').val(credit.applied_loan_discount);
-            $('#applied_sign_type').val(credit.applied_sign_type).trigger("change");
-            $('#applied_import').val(credit.applied_import);
-            $('#applied_term').val(credit.applied_term);
-            $('#applied_periodicity').val(credit.applied_periodicity).trigger("change");
-            $('#applied_payment').val(credit.applied_payment);
-            $('#applied_loan_total_amount').val(credit.applied_loan_total_amount);
-            $('#applied_interest_rate').val(credit.applied_interest_rate);
-            $('#applied_CAT').val(credit.applied_CAT);
-          }
-
-        if (type_form == 26) //form kc-desktop step3 - 1
-          {
-            $('#work_email').val(client.work_email);
-            $('#sex').val(client.sex).trigger("change");
-            $('#rfc').val(client.rfc);
-            $('#nationality').val(client.nationality);
-            $('#birth_state').val(client.birth_state);
-            $('#curp').val(client.curp);
-            $('#client_postal_code').val(client.client_postal_code);
-            $('#client_street').val(client.client_street);
-            $('#client_home_external_number').val(client.client_home_external_number);
-            $('#client_home_internal_number').val(client.client_home_internal_number);
-            $('#client_colony').val(client.client_colony);
-            $('#client_city').val(client.client_city);
-            $('#client_state').val(client.client_state);
-            $('#client_country').val(client.client_country);
-            $('#bank_name').val(client.bank_name);
-            $('#bank_card_number').val(client.bank_card_number);
-            $('#bank_acount_number').val(client.bank_acount_number);
-            $('#bank_clabe').val(client.bank_clabe);
-            $('#employee_number').val(client.employee_number);
-            $('#monthly_income').val(client.monthly_income);
-            $('#workplace_postal_code').val(client.workplace_postal_code);
-            $('#workplace_street').val(client.workplace_street);
-            $('#workplace_home_external_number').val(client.workplace_home_external_number);
-            $('#workplace_home_internal_number').val(client.workplace_home_internal_number);
-            $('#workplace_colony').val(client.workplace_colony);
-            $('#workplace_city').val(client.workplace_city);
-            $('#workplace_state').val(client.workplace_state);
-            $('#workplace_country').val(client.workplace_country);
-          }
-
-        if (type_form == 27) //form kc-desktop step3 - 2
-          {
-            $('#marital_status').val(client.marital_status).trigger("change");
-            $('#education_level').val(client.education_level).trigger("change");
-            $('#profession').val(client.profession);
-            $('#client_contact_time').val(client.client_contact_time);
-            $('#relative_lastname').val(client.relative_lastname);
-            $('#relative_second_lastname').val(client.relative_second_lastname);
-            $('#relative_names').val(client.relative_names);
-            $('#relative_local_phone').val(client.relative_local_phone);
-            $('#relative_cel_phone').val(client.relative_cel_phone);
-            $('#relative_contact_time').val(client.relative_contact_time);
-            $('#home_type').val(client.home_type).trigger("change");
-            $('#home_time_living').val(client.home_time_living);
-            $('#home_note').val(client.home_note);
-            $('#propety_ownnership_amount').val(client.propety_ownnership_amount);
-            $('#propety_ownnership_value').val(client.propety_ownnership_value);
-            $('#vehicle_ownnership_amount').val(client.vehicle_ownnership_amount);
-            $('#vehicle_ownnership_value').val(client.vehicle_ownnership_value);
-            $('#economic_dependents').val(client.economic_dependents);
-            $('#workplace_name').val(client.workplace_name);
-            $('#admission_date').val(client.admission_date);
-            $('#employee_area').val(client.employee_area);
-            $('#employee_position').val(client.employee_position);
-            $('#aditional_labor_source').val(client.aditional_labor_source);
-            $('#aditional_labor_income').val(client.aditional_labor_income);
-            $('#workplace_local_phone').val(client.workplace_local_phone);
-            $('#workplace_cel_phone').val(client.workplace_cel_phone);
-            $('#workplace_code').val(client.workplace_code);
-            $('#workplace_local_phone_extension').val(client.workplace_local_phone_extension);
-            selectRadio(credit.client_public_servant, 'client_public_servant');
-            $('#client_public_servant_position').val(credit.client_public_servant_position);
-            $('#client_public_servant_period').val(credit.client_public_servant_period);
-            selectRadio(credit.relative_public_servant, 'relative_public_servant');
-            $('#relative_public_servant_lastname').val(credit.relative_public_servant_lastname);
-            $('#relative_public_servant_second_lastname').val(credit.relative_public_servant_second_lastname);
-            $('#relative_public_servant_names').val(credit.relative_public_servant_names);
-            $('#relative_public_servant_relationship').val(credit.relative_public_servant_relationship);
-            $('#relative_public_servant_position').val(credit.relative_public_servant_position);
-            $('#relative_public_servant_period').val(credit.relative_public_servant_period);
-            selectRadio(credit.prepaid, 'prepaid');
-            selectPrepadMethod(credit.prepad_method, 'prepad_method');
-            $('#prepaid_frequency').val(credit.prepaid_frequency);
-            $('#prepaid_source').val(credit.prepaid_source);
-            selectRadio(credit.endorsement, 'endorsement');
-            selectRadio(credit.real_beneficiary, 'real_beneficiary');
-            selectRadio(credit.soruce_provider, 'soruce_provider');
-            selectRadio(credit.real_propetary, 'real_propetary');
-            $('#notes').val(credit.notes);
-            $('#client_postal_code').val(client.client_postal_code);
-            $('#client_street').val(client.client_street);
-            $('#client_home_external_number').val(client.client_home_external_number);
-            $('#client_home_internal_number').val(client.client_home_internal_number);
-            $('#client_colony').val(client.client_colony);
-            $('#client_city').val(client.client_city);
-            $('#client_state').val(client.client_state);
-            $('#client_country').val(client.client_country);
-          }
-
-        if (type_form == 29) //form kc-desktop step 5
-          {
-            $('#financial_user_assigned').val(credit.financial_user_assigned).trigger("change");
-            $('#commission').val(credit.commission);
-            $('#commission_note').val(credit.commission_note);
-          }
-
-        if (type_form == 32) //form kc-ddelivery step 2
-          {
-            $('#changed_commission').val(credit.changed_commission / 100);
-            $('#changed_commission_note').val(credit.changed_commission_note);
-          }
-
-        if (type_form == 34) //form kc-ddelivery step 3
-          {
-            $('#payment_check').val(credit.payment_check).trigger("change");
-            $('#payment_check_note').val(credit.payment_check_note);
-          }
-
-        if (type_form == 39) //form kc-swap step 1
-          {
-            $('#name').val(client.name);
-            $('#last_name').val(client.last_name);
-            $('#second_last_name').val(client.second_last_name);
-            $('#cellphone').val(client.cellphone);
-            $('#email').val(client.email);
-            $('#rfc').val(client.rfc);
-            $('#id_number').val(credit.id_number);
-            $('#current_credit_number').val(credit.current_credit_number);
-            $('#current_payment').val(credit.current_payment / 100);
-            $('#current_periodicity').val(credit.current_periodicity).trigger("change");
-            $('#current_loan').val(credit.current_loan / 100);
-            $('#current_term').val(credit.current_term);
-            $('#current_principal_balance').val(credit.current_principal_balance / 100);
-            $('#current_total_balance').val(credit.current_total_balance / 100);
-          }
-
-        if (type_form == 40) //form kc-swap step 2
-          {
-            $('#url_sign').val(credit.url_sign);
-          }
-
-        if (type_form == 41) //form kc-swap step 2 form 2
-          {
-            $('#signed').val(credit.signed).trigger("change");
-          }
-
-        if (type_form == 61) //form kc-wallet step1
-          {
-            $('#investor_id').val(transaction.investor_id).trigger("change");
-            $('#bank_transfer_type').val(transaction.bank_transfer_type).trigger("change");
-            $('#operation_number').val(transaction.operation_number);
-            $('#amount').val(transaction.amount);
-          }
-
-        if (type_form == 63) //form kc-wallet step2
-          {
-            $('#operation_status').val(transaction.operation_status).trigger("change");
-          }
-
-        if (type_form == 67) //form kc-wallet step2
-          {
-            $('#operation_status').val(transaction.operation_status).trigger("change");
-          }
-
-        if (type_form == 66) //form kc-wallet step1
-          {
-            $('#investor_id').val(transaction.investor_id).trigger("change");
-            $('#transaction_type').val(transaction.transaction_type);
-            $('#amount').val(Math.abs(transaction.amount));
-          }
-      })["catch"](function (e) {});
-    }
-  }
-});
-
-function selectRadio(val, id) {
-  if (val == 1) {
-    document.querySelector('#' + id + '_1').checked = true;
-  } else {
-    document.querySelector('#' + id + '_2').checked = true;
-  }
-}
-
-function selectPrepadMethod(val, id) {
-  if (val == 1) {
-    document.querySelector('#' + id + '_1').checked = true;
-  } else if (val == 2) {
-    document.querySelector('#' + id + '_2').checked = true;
-  } else if (val == 3) {
-    document.querySelector('#' + id + '_3').checked = true;
-  } else if (val == 4) {
-    document.querySelector('#' + id + '_4').checked = true;
-  }
-}
-
-window.swapContinue = function (credit_id) {
-  axios.get("/panel/action-form").then(function (response) {
-    var result = response.data;
-  })["catch"](function (e) {});
-};
-
-window.swapCancel = function (id_form, model) {
-  axios.get("/panel/action-form").then(function (response) {
-    var result = response.data;
-  })["catch"](function (e) {});
-};
-
-function saveForm(id_form, model) {
-  var new_form = document.getElementById(id_form);
-  var data = new FormData(new_form);
-  var id_rel = $('#id_rel').val();
-  var url_redirect = null;
-  var is_redirect_document = null;
-
-  if (document.getElementById('url_redirect')) {
-    url_redirect = $('#url_redirect').val();
-  }
-
-  console.log(model);
-  data.append('model', model);
-  data.append('id_rel', id_rel);
-  axios.post("/panel/action-form", data).then(function (response) {
-    var result = response.data;
-
-    if (url_redirect == null) {
-      window.history.back();
-    }
-
-    if (document.getElementById('url_redirect_finish')) {
-      // Obtener el valor de "id"
-      var id = result.id; // Obtener el elemento "url_redirect_finish"
-
-      var urlRedirectFinishElement = document.getElementById('url_redirect_finish'); // Obtener el valor actual de data-redirect
-
-      var currentDataRedirect = urlRedirectFinishElement.getAttribute('data-redirect'); // Reemplazar {history_id} con el valor de "id"
-
-      var updatedDataRedirect = currentDataRedirect.replace('{history_id}', id); // Actualizar el valor de data-redirect
-
-      urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
-      /* window.location = updatedDataRedirect; */
-
-      url_redirect = updatedDataRedirect;
-
-      if (url_redirect.includes('{id}')) {
-        url_redirect = url_redirect.replace('{id}', result.id);
-      }
-    }
-
-    window.location = url_redirect;
-  })["catch"](function (e) {});
-}
-
-window.saveAndContinueTask = function (id_form) {
-  var model = $('#action-model').val();
-  var newUrl = $('#url_redirect_next').val();
-  $('#url_redirect').val(newUrl);
-  saveForm(id_form, model);
-};
-
-window.cancelTask = function () {
-  var url = $('#url_redirect').val();
-  window.location = url;
-}; //*boton saltar en swap etapa 2_3   
-
-
-window.saltarSwap = function () {
-  $('#send_email').val(0);
-  $("#frm-template_swap_step2-3").submit(); // Envía el formulario
-}; //TODO: alerta si detecto kyc
-
-
-window.kycCreditHistory = function (history_id, type) {
-  var params = {
-    1: 'curp',
-    2: 'ine',
-    3: 'rfc',
-    4: 'curp'
-  };
-  var id = params[type];
-  var id_result = params[type];
-  var param = $('#' + id).val();
-
-  if (type == 4) {
-    id_result = 'issste';
-  }
-
-  var param2 = type == 2 ? $('#identificadorCiudadano').val() : null;
-  var error = false;
-
-  if (type == 2 && param == '' && param2 == '') {
-    error = true;
-    Swal.fire({
-      text: 'Campos obligatorios',
-      icon: 'warning'
-    });
-  }
-
-  if (error == false) {
-    $('#kyc-' + id_result).html('');
-    $('#kyc-' + id_result + '-msg').html('');
-    axios.get("/panel/kc-control-desk/kc/" + history_id + "/" + param + "/" + param2 + "/" + type + "/validate").then(function (response) {
-      var result = response.data;
-      $('#kyc-' + id_result).html(result.html);
-      $('#kyc-' + id_result + '-msg').val(result.msg);
-    })["catch"](function (e) {});
-  }
-};
-
-window.showKycCurp = function (type) {
-  var params = {
-    1: 'curp',
-    2: 'ine',
-    3: 'rfc',
-    4: 'issste'
-  };
-  var id = params[type];
-  var msg = $('#kyc-' + id + '-msg').val();
-  $('#kyc-msg').html(msg);
-  $('#modal-kyc').modal('show');
-};
-
-window.deliverysendEmail = function (history_id) {
-  axios.get("/panel/kc-delivery/" + history_id + "/send-email").then(function (response) {
-    window.location = '/panel/template/steps/delivery/' + history_id + '/show';
-  })["catch"](function (e) {});
-};
-
-window.modalReference = function (history_id, reference_id) {
-  $('#modal_history_id').val(history_id);
-  $('#modal_reference_id').val(reference_id);
-
-  if (reference_id != null) {
-    axios.get("/panel/reference/" + reference_id + "/show").then(function (response) {
-      var result = response.data;
-      $('#last_name').val(result.last_name);
-      $('#second_lastname').val(result.second_lastname);
-      $('#names').val(result.names);
-      $('#relationship').val(result.relationship);
-      $('#relationship_time_years').val(result.relationship_time_years);
-      $('#relationship_time_months').val(result.relationship_time_months);
-      $('#cel_phone').val(result.cel_phone);
-      $('#local_phone').val(result.local_phone);
-      $('#contact_time').val(result.contact_time);
-      $('#postal_code').val(result.postal_code);
-      $('#street').val(result.street);
-      $('#home_external_number').val(result.home_external_number);
-      $('#home_internal_number').val(result.home_internal_number);
-      $('#colony').val(result.colony);
-      $('#city').val(result.city);
-      $('#state').val(result.state);
-      $('#country').val(result.country);
-      $('#note').val(result.note);
-    })["catch"](function (e) {});
-  }
-
-  $('#modal-reference').modal('show');
-};
-
-window.swapCreditContinue = function (history_id) {
-  var url_redirect = null;
-
-  if (document.getElementById('url_redirect')) {
-    url_redirect = $('#url_redirect').val();
-  }
-
-  axios.get("/panel/kc-swap/credit/" + history_id + "/continue").then(function (response) {
-    var result = response.data;
-
-    if (url_redirect == null) {
-      window.history.back();
-    }
-
-    window.location = url_redirect;
-  })["catch"](function (e) {});
-};
-
-window.sendCreditActive = function (historyId) {
-  axios.get("/panel/kc-delivery/" + historyId + "/send/active").then(function (response) {
-    window.location = '/panel/kc-delivery';
-  })["catch"](function (e) {});
-};
-
-window.finishControlDesk = function (historyId) {
-  axios.get("/panel/kc-control-desk/" + historyId + "/send/finish").then(function (response) {
-    window.location = '/panel/kc-control-desk';
-  })["catch"](function (e) {});
-};
-
-window.editCompraCarteraControlDesk = function (creditPayOffId) {
-  axios.get("/panel/kc-control-desk/credit-pay-off/" + creditPayOffId + '/data/get').then(function (response) {
-    var result = response.data;
-    $('#compra-cartera-ammount').val(result.ammount);
-    $('#creditPayOffId').val(creditPayOffId);
-    $('#modal-compra-cartera-cd').modal('show');
-  })["catch"](function (e) {});
-};
-
-$("#frm-modal-compra-cartera-cd").submit(function (event) {
-  event.preventDefault();
-  var new_form = document.getElementById("frm-modal-compra-cartera-cd");
-  var data = new FormData(new_form);
-  var leadId = $('#lead_id_compra_cartera').val();
-  axios.post("/panel/lead/credit-pay-off", data).then(function (response) {
-    var result = response.data;
-    location.reload();
-  })["catch"](function (e) {});
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/notification/utilities.js":
-/*!***********************************************************!*\
-  !*** ./resources/js/components/notification/utilities.js ***!
-  \***********************************************************/
-/***/ (() => {
-
-window.showNotification = function () {
-  $('#content-notification').html('');
-  $('#icon-status-notification').removeClass('icon-status-off');
-  $('#icon-status-notification').removeClass('icon-status-info');
-  axios.get("/panel/notification/show").then(function (response) {
-    var result = response.data;
-    var is_notification = result.is_notification;
-    $('#content-notification').html(result.list);
-
-    if (is_notification == 1) {
-      $('#icon-status-notification').addClass('icon-status-info');
-    } else {
-      $('#icon-status-notification').addClass('icon-status-off');
-    }
-  })["catch"](function (e) {});
-};
-
-window.readAllNotification = function () {
-  $('#icon-status-notification').removeClass('icon-status-info');
-  axios.get("/panel/notification/read").then(function (response) {
-    var result = response.data;
-    $('#icon-status-notification').addClass('icon-status-off');
-  })["catch"](function (e) {});
-};
-
-$().ready(function () {
-  showNotification();
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/product/crud.js":
-/*!*************************************************!*\
-  !*** ./resources/js/components/product/crud.js ***!
-  \*************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
-
-
-window.modalProduct = function (type, product_id) {
-  var route_datatable = $('#route_datatable').val();
-  $('#frm-product').trigger("reset");
-
-  if (type === 1) {
-    $('#product-title').html('Crear producto');
-    $('#product_id').val(null);
-  } else {
-    $('#product-title').html('Editar producto');
-    $('#product_id').val(product_id);
-    setDataUser(product_id);
-  }
-
-  $('#modal-product').modal('show');
-};
-
-function setDataUser(product_id) {
-  axios.get("/panel/product/" + product_id).then(function (response) {
-    var result = response.data; //$('#c_product_id option[value="' + result.c_product_id + '"]').attr("selected", "selected");
-
-    $('#c_service_id option[value="' + result.c_service_id + '"]').attr("selected", "selected");
-    $('#status option[value="' + result.status + '"]').attr("selected", "selected");
-    $('#comment').val(result.comment);
-    $('#product-alias').val(result.alias);
-  })["catch"](function (e) {
-    $('#admin_email-error-exist').show();
-  });
-}
-
-window.deleteProduct = function (product_id) {
-  axios.get("panel/product/" + product_id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Datos actualizados', 'Información actualizada correctamente');
-  })["catch"](function (e) {});
-};
-
-$().ready(function () {
-  $("#frm-product").validate({
-    rules: {
-      alias: {
-        required: true
-      },
-      c_product_id: {
-        required: true
-      },
-      c_service_id: {
-        required: true
-      },
-      status: {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var new_form = document.getElementById("frm-product");
-      var data = new FormData(new_form);
-      axios.post("/panel/product", data).then(function (response) {
-        var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Datos actualizados', 'Información actualizada correctamente');
-        $('#modal-product').modal('hide');
-      })["catch"](function (e) {});
-    }
-  });
-  $("#frmpassword").validate({
-    rules: {
-      user_password: {
-        required: true,
-        minlength: 8
-      },
-      user_pass_confirm: {
-        required: true,
-        minlength: 8,
-        equalTo: "#user_password"
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var new_form = document.getElementById("frmpassword");
-      var data = new FormData(new_form);
-      var route_datatable = $('#route_datatable').val();
-      axios.post("/panel/user/" + route_datatable + "/password/update", data).then(function (response) {
-        var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
-        $('#modal-user-password').modal('hide');
-      })["catch"](function (e) {});
-    }
-  });
-});
-
-window.modalPasswod = function (user_id) {
-  $('#password_user_id').val(user_id);
-  $('#modal-user-password').modal('show');
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/product/datatable_product.js":
-/*!**************************************************************!*\
-  !*** ./resources/js/components/product/datatable_product.js ***!
-  \**************************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var route = $('#route_datatable').val();
-  var table = NioApp.DataTable('#dt-product', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/product/list/show',
-    columns: [{
-      data: 'alias'
-    }, {
-      data: 'service'
-    }, {
-      data: 'comment'
-    }, {
-      data: 'status'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/resumen.js":
-/*!********************************************!*\
-  !*** ./resources/js/components/resumen.js ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-
-
-function getMonthLabels() {
-  var months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  var now = new Date();
-  var labels = [];
-
-  for (var i = 5; i >= 0; i--) {
-    var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    labels.push(months[d.getMonth()]);
-  }
-
-  return labels;
-}
-
-function fetchIngresosData(_x) {
-  return _fetchIngresosData.apply(this, arguments);
-}
-
-function _fetchIngresosData() {
-  _fetchIngresosData = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(investorId) {
-    var response;
-    return _regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/panel/inversionista/".concat(investorId, "/ingresos-mensuales"));
-
-          case 3:
-            response = _context.sent;
-            return _context.abrupt("return", response.data);
-
-          case 7:
-            _context.prev = 7;
-            _context.t0 = _context["catch"](0);
-            return _context.abrupt("return", [0, 0, 0, 0, 0, 0]);
-
-          case 10:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, null, [[0, 7]]);
-  }));
-  return _fetchIngresosData.apply(this, arguments);
-}
-
-function renderBarChartIngresos() {
-  return _renderBarChartIngresos.apply(this, arguments);
-}
-
-function _renderBarChartIngresos() {
-  _renderBarChartIngresos = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-    var _document$getElementB;
-
-    var chartEl, investorId, labels, data, ctx;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            chartEl = document.getElementById('barChartIngresos');
-
-            if (chartEl) {
-              _context2.next = 3;
-              break;
-            }
-
-            return _context2.abrupt("return");
-
-          case 3:
-            investorId = (_document$getElementB = document.getElementById('investorId')) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.value;
-
-            if (investorId) {
-              _context2.next = 6;
-              break;
-            }
-
-            return _context2.abrupt("return");
-
-          case 6:
-            labels = getMonthLabels();
-            _context2.next = 9;
-            return fetchIngresosData(investorId);
-
-          case 9:
-            data = _context2.sent;
-            ctx = chartEl.getContext('2d');
-
-            if (window.barChartIngresosInstance) {
-              window.barChartIngresosInstance.destroy();
-            }
-
-            window.barChartIngresosInstance = new Chart(ctx, {
-              type: 'bar',
-              data: {
-                labels: labels,
-                datasets: [{
-                  label: '',
-                  // vacío para evitar leyenda
-                  data: data,
-                  backgroundColor: '#9cabff',
-                  // igual que example-chart.js
-                  borderWidth: 2,
-                  borderColor: 'transparent',
-                  hoverBorderColor: 'transparent',
-                  borderSkipped: 'bottom',
-                  barPercentage: 0.6,
-                  categoryPercentage: 0.7
-                }]
-              },
-              options: {
-                plugins: {
-                  legend: {
-                    display: false
-                  },
-                  // Chart.js v3+
-                  tooltip: {
-                    callbacks: {
-                      label: function label(context) {
-                        return context.parsed.y;
-                      }
-                    },
-                    backgroundColor: '#eff6ff',
-                    titleFont: {
-                      size: 13
-                    },
-                    titleColor: '#6783b8',
-                    titleMarginBottom: 6,
-                    bodyColor: '#9eaecf',
-                    bodyFont: {
-                      size: 12
-                    },
-                    bodySpacing: 4,
-                    padding: 10,
-                    footerMarginTop: 0,
-                    displayColors: false
-                  }
-                },
-                maintainAspectRatio: false,
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    ticks: {
-                      color: '#9eaecf',
-                      font: {
-                        size: 12
-                      },
-                      padding: 5
-                    },
-                    grid: {
-                      color: 'rgba(82,100,132,0.2)',
-                      tickLength: 0,
-                      drawTicks: false
-                    }
-                  },
-                  x: {
-                    ticks: {
-                      color: '#9eaecf',
-                      font: {
-                        size: 12
-                      },
-                      padding: 5
-                    },
-                    grid: {
-                      color: 'transparent',
-                      tickLength: 10,
-                      drawTicks: false
-                    }
-                  }
-                }
-              }
-            });
-
-          case 13:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-  return _renderBarChartIngresos.apply(this, arguments);
-}
-
-document.addEventListener('DOMContentLoaded', renderBarChartIngresos);
-
-/***/ }),
-
-/***/ "./resources/js/components/tag/crud.js":
-/*!*********************************************!*\
-  !*** ./resources/js/components/tag/crud.js ***!
-  \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
-
-$().ready(function () {
-  $("#frm-tag").validate({
-    rules: {
-      'data[name]': {
-        required: true
-      },
-      'data[type_id]': {
-        required: true
-      },
-      'data[section_id]': {
-        required: true
-      },
-      'data[status]': {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      $('#frm-tag-name-unique-error').html('');
-      $('#frm-tag-name-unique-error').hide();
-      var new_form = document.getElementById("frm-tag");
-      var data = new FormData(new_form);
-      axios.post("/panel/tag", data).then(function (response) {
-        window.location = '/panel/tag';
-      })["catch"](function (e) {
-        var response = e.response;
-        var data_errors = response.data.errors;
-        $('#frm-tag-name-unique-error').html('Este campo ya se encuentra registrado.');
-        $('#frm-tag-name-unique-error').show();
-      });
-    }
-  });
-
-  if (document.getElementById('frm-tag') && $('#tag_id').val() != null) {
-    var tag_id = $('#tag_id').val();
-    axios.get("/panel/tag/" + tag_id).then(function (response) {
-      var result = response.data;
-      $('#frm-tag-name').val(result.name);
-      $('#frm-tag-type_id').val(result.type_id);
-      $('#frm-tag-type_id').trigger("change");
-      $('#frm-tag-section_id').val(result.section_id);
-      $('#frm-tag-section_id').trigger("change");
-      $('#frm-tag-comment').val(result.name);
-      $('#frm-tag-status option[value="' + result.status + '"]').attr("selected", "selected");
-    })["catch"](function (e) {});
-  }
-});
-
-window.deleteTag = function (id) {
-  axios["delete"]("/panel/tag/" + id).then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-tag', 'Datos actualizados', 'Registro guardado');
-  })["catch"](function (e) {});
-};
-
-window.alerDelete = function (id) {
-  Swal.fire({
-    title: '¿Estás seguro?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Sí, elimina',
-    cancelButtonText: 'Mejor no'
-  }).then(function (result) {
-    if (result.value) {
-      deleteTag(id);
-    }
-  });
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/tag/datatable.js":
-/*!**************************************************!*\
-  !*** ./resources/js/components/tag/datatable.js ***!
-  \**************************************************/
-/***/ (() => {
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-document.addEventListener('DOMContentLoaded', function () {
-  var _NioApp$DataTable;
-
-  var table = NioApp.DataTable('#dt-tag', (_NioApp$DataTable = {
-    processing: true,
-    ajax: '/panel/tag/list/show'
-  }, _defineProperty(_NioApp$DataTable, "processing", true), _defineProperty(_NioApp$DataTable, "responsive", {
-    details: {
-      renderer: function renderer(api, rowIdx, columns) {
-        var total = columns.length - 1;
-        var data = $.map(columns, function (col, i) {
-          if (total == i) {
-            return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-          } else {
-            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-          }
-        }).join('');
-        return data ? $('<table/>').append(data) : false;
-      }
-    }
-  }), _defineProperty(_NioApp$DataTable, "columns", [{
-    data: 'name'
-  }, {
-    data: 'type'
-  }, {
-    data: 'section'
-  }, {
-    data: 'description'
-  }, {
-    data: 'status'
-  }, {
-    data: 'options'
-  }]), _defineProperty(_NioApp$DataTable, "columnDefs", [{
-    className: "nk-tb-col",
-    targets: "_all"
-  }]), _defineProperty(_NioApp$DataTable, "createdRow", function createdRow(row, data, dataIndex) {
-    $(row).addClass("nk-tb-item");
-  }), _NioApp$DataTable));
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/toastr.js":
-/*!*******************************************!*\
-  !*** ./resources/js/components/toastr.js ***!
-  \*******************************************/
-/***/ (() => {
-
-"use strict";
-
-
-(function (NioApp, $) {
-  'use strict'; // Uses
-  // NioApp.Toast(message, type, {attr});
-  // 
-  // @message     = 'Your message' 
-  // @type        = 'info|success|warning|error',  
-  // @attr        = {position: 'bottom-right', icon: 'auto', ui: ''}
-  // 
-  // attr.ui used for additonal class as is-dark
-  // attr.icon used for custom icon
-  // attr.position used for position of the msg.
-  // Example Trigger
-
-  $('.eg-toastr-default').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for deafult toast message.', 'info');
-  });
-  $('.eg-toastr-bottom-center').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for bottom center toast message.', 'info', {
-      position: 'bottom-center'
-    });
-  });
-  $('.eg-toastr-bottom-right').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for bottom right toast message.', 'info');
-  });
-  $('.eg-toastr-bottom-left').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for bottom left toast message.', 'info', {
-      position: 'bottom-left'
-    });
-  });
-  $('.eg-toastr-bottom-full').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for bottom full width toast message.', 'info', {
-      position: 'bottom-full'
-    });
-  });
-  $('.eg-toastr-top-center').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for top center toast message.', 'info', {
-      position: 'top-center'
-    });
-  });
-  $('.eg-toastr-top-right').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for top right toast message.', 'info', {
-      position: 'top-right'
-    });
-  });
-  $('.eg-toastr-top-left').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for top left toast message.', 'info', {
-      position: 'top-left'
-    });
-  });
-  $('.eg-toastr-top-full').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for top full width toast message.', 'info', {
-      position: 'top-full'
-    });
-  });
-  $('.eg-toastr-info').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for bottom right toast message.', 'info');
-  });
-  $('.eg-toastr-success').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for success toast message.', 'success');
-  });
-  $('.eg-toastr-warning').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for warning toast message.', 'warning');
-  });
-  $('.eg-toastr-error').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is a note for error toast message.', 'error');
-  });
-  $('.eg-toastr-dark').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is dark version note of toast message.', 'info', {
-      ui: 'is-dark'
-    });
-  });
-  $('.eg-toastr-no-icon').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('This is without icon note of toast message.', 'info', {
-      icon: false
-    });
-  });
-  $('.eg-toastr-with-title').on("click", function (e) {
-    e.preventDefault();
-    toastr.clear();
-    NioApp.Toast('<h5>Update Successfully</h5><p>Your profile has been successfully updated.</p>', 'success', {
-      position: 'top-right'
-    });
-  });
-
-  window.showToast = function (title, description, type) {
-    toastr.clear();
-    NioApp.Toast('<h5>' + title + '</h5><p>' + description + '</p>', '' + type + '', {
-      position: 'top-right'
-    });
-  };
-
-  window.showToastDark = function (title, description, type) {
-    toastr.clear();
-    NioApp.Toast('<h5>' + title + '</h5><p>' + description + '</p>', '' + type + '', {
-      position: 'top-right',
-      ui: 'is-dark',
-      timeOut: 10000
-    });
-  };
-  /* toast */
-
-  /*   window.openToast = function (title, body, class_toast, subtitle) {
-      $.toast({
-        type: class_toast,
-        title: title,
-        subtitle: subtitle,
-        content: body,
-        delay: 5000,
-        
-        
-    });
-    } */
-
-  /* var toastTrigger = document.getElementsByClassName('toasts')
-  var toastLiveExample = document.getElementById('liveToast')
-  var toast = new bootstrap.Toast(toastLiveExample) */
-
-})(NioApp, jQuery);
-
-$(document).ready(function () {
-  $(".toast").toast({
-    autohide: false
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/user/crud.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/user/crud.js ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
-
-
-window.modalUser = function (type, user_id) {
-  var route_datatable = $('#route_datatable').val();
-  var title = $('#title').val();
-
-  if (document.getElementById('frmadmin')) {
-    $('#frmadmin').trigger("reset");
-    $('#financial_id').val("").trigger("change");
-    ;
-  }
-
-  if (document.getElementById('frmfinanciera')) {
-    $('#frmfinanciera').trigger("reset");
-  }
-
-  if (document.getElementById('frm-inversionista')) {
-    $('#frm-inversionista').trigger("reset");
-  }
-
-  if (type === 1) {
-    $('#user-admin-title').html('Crear usuario ' + title);
-    $('#content-password').show();
-    $('#content-pass_confirm').show();
-    $('#user_id').val(null);
-    $('#type_user').val(route_datatable);
-  } else {
-    var lbluser = route_datatable;
-
-    if (route_datatable == 'cliente-financiera') {
-      lbluser = 'cliente financiera';
-    }
-
-    if (route_datatable == 'cliente-persona') {
-      lbluser = 'cliente persona';
-    }
-
-    $('#user-admin-title').html('Editar usuario ' + lbluser);
-    $('#content-pass_confirm').hide();
-    $('#content-password').hide();
-    $('#user_id').val(user_id);
-    setDataUser(user_id);
-    $('#type_user').val(route_datatable);
-  }
-
-  $('#modal-user-admin').modal('show');
-};
-
-function setDataUser(user_id) {
-  var route_datatable = $('#route_datatable').val();
-  axios.get("/panel/user/" + route_datatable + "/" + user_id).then(function (response) {
-    var data = response.data;
-    var result = data.user;
-    var agreements = data.agreements;
-    $('#agreements').val(null).trigger('change');
-
-    if (document.getElementById('rol') != '') {
-      //*limpiar los valores razon social
-      var type_person = result.type_person;
-      $('#financial_id').val(result.financial_id).trigger("change");
-      $('#type_person option[value="' + result.type_person + '"]').attr("selected", "selected");
-      $('#rol_id option[value="' + result.rol_id + '"]').attr("selected", "selected");
-    } //TODO: borrar si todo funciona en pruebas
-
-    /* if (document.getElementById('type_person')) {
-        $('#financial_id option[value="'+result.financial_id+'"]').attr("selected", "selected");
-        $('#type_person option[value="'+result.type_person+'"]').attr("selected", "selected");
-    } */
-
-
-    $('#name').val(result.name);
-    $('#last_name').val(result.last_name);
-    $('#second_last_name').val(result.second_last_name);
-    $('#cellphone').val(result.cellphone);
-    $('#email').val(result.email);
-    $('#status option[value="' + result.status + '"]').attr("selected", "selected");
-
-    if (result.agreement_id != '') {
-      $('#agreement_id option[value="' + result.agreement_id + '"]').attr("selected", "selected");
-      $('#bank_name').val(result.bank_name);
-      $('#bank_card_number').val(result.bank_card_number);
-      $('#bank_account_number').val(result.bank_account_number);
-      $('#bank_clabe').val(result.bank_clabe);
-      $('#bank_account_holder').val(result.bank_account_holder);
-      $('#investment_bank_name').val(result.investment_bank_name);
-      $('#investment_bank_account_holder').val(result.investment_bank_account_holder);
-      $('#investment_bank_account_number').val(result.investment_bank_account_number);
-      $('#investment_bank_clabe').val(result.investment_bank_clabe);
-    }
-
-    $('#is_access_config option[value="' + result.is_access_config + '"]').attr("selected", "selected");
-
-    if (document.getElementById('financial_products_id')) {
-      var financial_products_id = result.financial_products_id.split(',');
-      $('#financial_products_id').val(financial_products_id).trigger('change');
-    }
-
-    if (document.getElementById('agreements')) {
-      // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
-      var agreementValues = agreements.map(function (item) {
-        return item.agreement_id;
-      }); // Seleccionar los valores correspondientes en los selects
-
-      $('#agreements').val(agreementValues).trigger('change');
-    }
-  })["catch"](function (e) {
-    $('#admin_email-error-exist').show();
-  });
-}
-
-window.deleteUser = function (id) {
-  axios.get("/panel/user/administrador/" + id + "/delete").then(function (response) {
-    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
-  })["catch"](function (e) {});
-};
-
-$().ready(function () {
-  if (document.getElementById('frmfinanciera')) {
-    $('#financial_id').select2({
-      dropdownParent: $('#modal-user-admin'),
-      placeholder: "Escribe para buscar..",
-      allowClear: true
-    });
-  }
-
-  $("#frmadmin").validate({
-    rules: {
-      name: {
-        required: true
-      },
-      last_name: {
-        required: true
-      },
-      cellphone: {
-        required: true,
-        number: true,
-        minlength: 10
-      },
-      email: {
-        required: true,
-        email: true
-      },
-      password: {
-        required: true,
-        minlength: 8
-      },
-      pass_confirm: {
-        required: true,
-        minlength: 8,
-        equalTo: "#password"
-      },
-      status: {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      $('#admin_email-error-exist').hide();
-      var new_form = document.getElementById("frmadmin");
-      var data = new FormData(new_form);
-      axios.post("/panel/user/administrador", data).then(function (response) {
-        var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
-        $('#modal-user-admin').modal('hide');
-      })["catch"](function (e) {
-        $('#admin_email-error-exist').show();
-      });
-    }
-  });
-  $("#frmfinanciera").validate({
-    rules: {
-      financial_id: {
-        required: true
-      },
-      type_person: {
-        required: true
-      },
-      rol_id: {
-        required: true
-      },
-      name: {
-        required: true
-      },
-      last_name: {
-        required: true
-      },
-      cellphone: {
-        number: true,
-        minlength: 10
-      },
-      email: {
-        required: true,
-        email: true
-      },
-      password: {
-        required: true,
-        minlength: 8
-      },
-      pass_confirm: {
-        required: true,
-        minlength: 8,
-        equalTo: "#password"
-      },
-      status: {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      $('#admin_email-error-exist').hide();
-      var new_form = document.getElementById("frmfinanciera");
-      var data = new FormData(new_form);
-      axios.post("/panel/user/administrador", data).then(function (response) {
-        var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera', 'Datos actualizados', 'Información actualizada correctamente');
-        $('#modal-user-admin').modal('hide');
-      })["catch"](function (e) {
-        var response = e.response;
-        var errors = response.data.errors;
-
-        if (errors.email) {
-          $('#admin_email-error-exist').show();
-        }
-
-        console.log(e.response);
-      });
-    }
-  });
-  $("#frm-inversionista").validate({
-    rules: {
-      financial_products_id: {
-        required: true
-      },
-      type_person: {
-        required: true
-      },
-      rol_id: {
-        required: true
-      },
-      name: {
-        required: true
-      },
-      last_name: {
-        required: true
-      },
-      cellphone: {
-        number: true,
-        minlength: 10
-      },
-      email: {
-        required: true,
-        email: true
-      },
-      password: {
-        required: true,
-        minlength: 8
-      },
-      pass_confirm: {
-        required: true,
-        minlength: 8,
-        equalTo: "#password"
-      },
-      status: {
-        required: true
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      $('#admin_email-error-exist').hide();
-      var new_form = document.getElementById("frm-inversionista");
-      var data = new FormData(new_form);
-      axios.post("/panel/user/administrador", data).then(function (response) {
-        var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-inversionista', 'Datos actualizados', 'Información actualizada correctamente');
-        $('#modal-user-admin').modal('hide');
-      })["catch"](function (e) {
-        var response = e.response;
-        var errors = response.data.errors;
-
-        if (errors.email) {
-          $('#admin_email-error-exist').show();
-        }
-      });
-    }
-  });
-  $(document).ready(function () {
-    // Regular save button
-    $("#frm-inversionista button:contains('Guardar'):not(:contains('bienvenida'))").click(function () {
-      $("#isResetpassword").val("0");
-    }); // Save and welcome button
-
-    $("#frm-inversionista button:contains('Guardar y dar bienvenida')").click(function () {
-      $("#isResetpassword").val("1");
-    });
-  });
-  $("#frmpassword").validate({
-    rules: {
-      user_password: {
-        required: true,
-        minlength: 8
-      },
-      user_pass_confirm: {
-        required: true,
-        minlength: 8,
-        equalTo: "#user_password"
-      }
-    },
-    submitHandler: function submitHandler(form, event) {
-      event.preventDefault();
-      var new_form = document.getElementById("frmpassword");
-      var data = new FormData(new_form);
-      var route_datatable = $('#route_datatable').val();
-      axios.post("/panel/user/" + route_datatable + "/password/update", data).then(function (response) {
-        var result = response.data;
-        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
-        $('#modal-user-password').modal('hide');
-      })["catch"](function (e) {});
-    }
-  });
-});
-
-window.modalPasswod = function (user_id) {
-  $('#password_user_id').val(user_id);
-  $('#modal-user-password').modal('show');
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/user/datatable_admin.js":
-/*!*********************************************************!*\
-  !*** ./resources/js/components/user/datatable_admin.js ***!
-  \*********************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var route = $('#route_datatable').val();
-  var table = NioApp.DataTable('#dt-admin', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/user/' + route + '/list/show',
-    columns: [{
-      data: 'name'
-    }, {
-      data: 'last_name'
-    }, {
-      data: 'second_last_name'
-    }, {
-      data: 'cellphone'
-    }, {
-      data: 'email'
-    }, {
-      data: 'status'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/user/datatable_financiera.js":
-/*!**************************************************************!*\
-  !*** ./resources/js/components/user/datatable_financiera.js ***!
-  \**************************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var route = $('#route_datatable').val();
-  var table = NioApp.DataTable('#dt-financiera', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/user/' + route + '/list/show',
-    columns: [{
-      data: 'financial'
-    }, {
-      data: 'type_person'
-    }, {
-      data: 'name'
-    }, {
-      data: 'email'
-    }, {
-      data: 'cellphone'
-    }, {
-      data: 'status'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/user/datatable_inversionista.js":
-/*!*****************************************************************!*\
-  !*** ./resources/js/components/user/datatable_inversionista.js ***!
-  \*****************************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var route = $('#route_datatable').val();
-  var table = NioApp.DataTable('#dt-inversionista', {
-    processing: true,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/user/' + route + '/list/show',
-    columns: [{
-      data: 'name'
-    }, {
-      data: 'email'
-    }, {
-      data: 'cellphone'
-    }, {
-      data: 'status'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/user/datatable_user.js":
-/*!********************************************************!*\
-  !*** ./resources/js/components/user/datatable_user.js ***!
-  \********************************************************/
-/***/ (() => {
-
-document.addEventListener('DOMContentLoaded', function () {
-  var queryParam = new URLSearchParams(window.location.search).get('query');
-  var table = NioApp.DataTable('#dt-search-user', {
-    processing: true,
-    searching: false,
-    responsive: {
-      details: {
-        renderer: function renderer(api, rowIdx, columns) {
-          var total = columns.length - 1;
-          var data = $.map(columns, function (col, i) {
-            if (total == i) {
-              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
-            } else {
-              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
-            }
-          }).join('');
-          return data ? $('<table/>').append(data) : false;
-        }
-      }
-    },
-    ajax: '/panel/user/search?query=' + queryParam,
-    columns: [{
-      data: 'id'
-    }, {
-      data: 'name'
-    }, {
-      data: 'cellphone'
-    }, {
-      data: 'origin'
-    }, {
-      data: 'options'
-    }],
-    columnDefs: [{
-      className: "nk-tb-col",
-      targets: "_all"
-    }],
-    createdRow: function createdRow(row, data, dataIndex) {
-      $(row).addClass("nk-tb-item");
-    }
-  });
-});
-
-/***/ }),
-
-/***/ "./resources/js/components/user/investor.js":
-/*!**************************************************!*\
-  !*** ./resources/js/components/user/investor.js ***!
-  \**************************************************/
-/***/ (() => {
-
-window.prestarInversionista = function () {
-  var importe = parseFloat($('#lendable').val()) || 0;
-  var totalAvailable = parseFloat($('#totalAvailable').val()) || 0;
-  var investorId = $('#investorId').val();
-  var error = true;
-
-  if (importe < 0) {
-    Swal.fire({
-      title: 'El importe debe ser mayor o igual a 0 pesos.',
-      icon: 'warning',
-      showCancelButton: true,
-      showConfirmButton: false,
-      cancelButtonText: 'Cerrar'
-    });
-  } else if (importe > totalAvailable) {
-    Swal.fire({
-      title: 'El importe debe ser menor o igual al Disponible.',
-      icon: 'warning',
-      showCancelButton: true,
-      showConfirmButton: false,
-      cancelButtonText: 'Cerrar'
-    });
-  } else {
-    error = false;
-  }
-
-  if (!error) {
-    axios.post("/panel/clients/investor/prestar/save", {
-      'lendable': importe,
-      'investorId': investorId
-    }).then(function (response) {
-      $('#modalPrestar').modal('hide');
-      location.reload();
-    })["catch"](function (e) {
-      console.error('Error en la solicitud:', e);
-    });
-  }
-};
-
-/***/ }),
-
-/***/ "./resources/js/components/utilities.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/utilities.js ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "showInfo": () => (/* binding */ showInfo)
-/* harmony export */ });
-function showInfo(redirect, idDatatable, title, msg) {
-  showToast(title, msg, 'success');
-
-  if (redirect == 1) {
-    //*redirect back
-    window.history.back();
-  }
-
-  if (idDatatable == null) {
-    location.reload();
-  } else {
-    $('#' + idDatatable).DataTable().ajax.reload();
-  }
-}
-
-window.showNotes = function (id_rel, is_lead) {
-  var model = is_lead == true ? 'lead' : 'credit';
-  axios.get('/panel/' + model + '/' + id_rel + '/notes/list').then(function (response) {
-    var result = response.data;
-    $('#content-notes').html(result.notes);
-    $('#addNote').html(result.addNote);
-    $('#modal-list-note').modal('show');
-  })["catch"](function (e) {});
-};
-
-window.AddNoteIntoNotes = function (note_id, model_note) {
-  $('#modal-list-note').modal('hide');
-  $('#id_rel').val(note_id);
-  $('#model_note').val(model_note);
-  $('#modal-lead-description').val('');
-  $('#modal-note').modal('show');
-};
-
-window.showModalActions = function (lead_id, is_lead) {
-  var model = is_lead == true ? 'lead' : 'credit';
-  $('#id-rel-action').val(lead_id);
-  $('#model-action').val(model);
-  refreshAction(lead_id, model, 'in_progress', 'content-profile-in_progress');
-  refreshAction(lead_id, model, 'completed', 'content-profile-completed');
-  $('#modal-list-actions').modal('show');
-  var addAction = '<a class="pointer" onclick="addActionIntoActions(' + lead_id + ', true, ' + is_lead + ')"><em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>';
-  $('#addActions').html(addAction);
-};
-/* window.searchClient = function (event)
-{
-    if (event.key === 'Enter') {
-        //event.preventDefault();
-        let query = $('#query').val();
-        axios
-            .post('/panel/user/search', {query:query})
-            .then(function (response) {
-                let result = response.data;
-                console.log(result);
-            })
-            .catch(e => {
-                
-            });
-    }
-} */
-
-/***/ }),
-
-/***/ "./resources/js/components/websocket.js":
-/*!**********************************************!*\
-  !*** ./resources/js/components/websocket.js ***!
-  \**********************************************/
-/***/ (() => {
-
-/* import Echo from "laravel-echo"
-
-window.Pusher = require('pusher-js');
-
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: 'abcb59ca67abeb8745bb',
-    wsHost: window.location.hostname,
-    wsPort: 6001,
-    wssPort: 6001,
-    forceTLS: true,
-    disableStats: false,
-    enabledTransports:['ws', 'wss']
-});
- Echo.channel('trades')
-            .listen('SendPush', (e) => {
-                console.log(e.trade);
-            })
- */
-// Enable pusher logging - don't include this in production
-Pusher.logToConsole = true;
-var pusher = new Pusher('cb2d06fb80592c4ce5f2', {
-  cluster: 'us2'
-});
-var channel = pusher.subscribe('kaaxclub');
-channel.bind('kaaxclub-event', function (data) {
-  var model = data.model;
-  axios.get('/panel/notification/' + model + '/show').then(function (response) {
-    var result = response.data;
-    var my_user = $('#user_id').val();
-
-    for (var index = 0; index < result.length; index++) {
-      var element = result[index];
-      var title = element.title;
-      var body = element.body;
-      var user_id = element.user_id;
-      var toast = element.toast;
-      $('#content-toast').empty().append(toast);
-    }
-
-    $(".toast").toast({
-      autohide: false
-    });
-    $(".toast").toast("show");
-    showNotification();
-  });
-});
+module.exports = /*#__PURE__*/JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
 
 /***/ }),
 
@@ -12033,14 +4310,7435 @@ function naturalPersonFullName(p) {
 
 /***/ }),
 
-/***/ "./node_modules/axios/package.json":
-/*!*****************************************!*\
-  !*** ./node_modules/axios/package.json ***!
-  \*****************************************/
-/***/ ((module) => {
+/***/ "./resources/js/components/action/credit.js":
+/*!**************************************************!*\
+  !*** ./resources/js/components/action/credit.js ***!
+  \**************************************************/
+/***/ (() => {
+
+window.modalCreditTag = function (credit_id) {
+  $('#modal-credit-tag-tag').val(null).trigger('change');
+  $('#lead-financial_id').val('').trigger('change');
+  $('#modal-credit-credit_id').val(credit_id);
+  $('#modal-credit-tag').modal('show');
+};
+$("#frm-credit-tag").submit(function (event) {
+  event.preventDefault();
+  var lead_id = $('#modal-tag-lead_id').val();
+  var new_form = document.getElementById("frm-credit-tag");
+  var data = new FormData(new_form);
+  axios.post("/panel/credit/tag/store", data).then(function (response) {
+    $('#modal-credit-tag').modal('hide');
+    creditRefresh(creditRefresh);
+  })["catch"](function (e) {});
+});
+if (document.getElementById('frm-credit-tag')) {
+  getTags();
+  getNotes();
+}
+function getTags() {
+  $('#content-tag').html('');
+  var credit_id = $('#credit-profile-credit_id').val();
+  axios.get("/panel/credit/tag/" + credit_id + "/get-all").then(function (response) {
+    var result = response.data;
+    $('#content-tag').html(result.tags);
+  })["catch"](function (e) {});
+}
+function getNotes() {
+  $('#content-note').html('');
+  var credit_id = $('#credit-profile-credit_id').val();
+  axios.get("/panel/credit/note/" + credit_id + "/get-all").then(function (response) {
+    var result = response.data;
+    $('#content-note').html(result.tags);
+  })["catch"](function (e) {});
+}
+window.creditRefresh = function () {
+  $('#modal-note').modal('hide');
+  getTags();
+  getNotes();
+};
+window.deleteTag = function (tag_id) {
+  axios.get("/panel/credit/tag/" + tag_id + "/drop").then(function (response) {
+    var result = response.data;
+    getTags();
+  })["catch"](function (e) {});
+};
+$(document).ready(function () {
+  if (document.getElementById('action-model')) {
+    var clearPreviewFiles = function clearPreviewFiles() {
+      var model = $('#action-model').val();
+      var id_rel = $('#action-id_rel').val();
+      return new Promise(function (resolve, reject) {
+        var step = $('#step').val();
+        axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
+          var result = response.data;
+          var config_files = result.config_files;
+          for (var key in config_files) {
+            if (config_files.hasOwnProperty.call(config_files, key)) {
+              var element = config_files[key];
+              $('#' + key + '-files-action-preview').html('');
+            }
+          }
+          resolve();
+        })["catch"](function (e) {
+          reject(e);
+        });
+      });
+    };
+    var model = $('#action-model').val();
+    var id_rel = $('#action-id_rel').val();
+    var step = $('#step').val();
+    console.log('model' + model);
+    if (model == '') {
+      model = null;
+    }
+    //*get configuration in template
+    if (model == 'controlDesk' || model == 'delivery') {
+      $('.myDropzone').each(function () {
+        // Obtener el ID del elemento actual
+        var key = $(this).attr('id');
+        console.log(key);
+        if (key) {
+          // Crear dinámicamente una instancia de Dropzone
+          var nameField = null;
+          if (document.getElementById('name_field_' + key)) {
+            nameField = $('#name_field_' + key).val();
+          }
+          NioApp.Dropzone('#' + key, {
+            url: "/panel/files/images/" + model + '/' + id_rel + '/' + key + '?step=' + step + '&nameField=' + nameField,
+            init: function init() {
+              this.on("sending", function (file, xhr, formData) {});
+              this.on("success", function (file, message) {
+                getData();
+              });
+              this.on("complete", function (file) {
+                this.removeAllFiles(true);
+              });
+            }
+          });
+        }
+      });
+    }
+    if (model != 'controlDesk') {
+      axios.get("/panel/files/images/" + model + '/' + id_rel + '/get/config?step=' + step).then(function (response) {
+        var result = response.data;
+        var config_files = result.config_files;
+        var step = $('#step').val();
+        var _loop = function _loop(key) {
+          if (config_files.hasOwnProperty.call(config_files, key)) {
+            var element = config_files[key];
+            //create dinamic dropzone element
+            NioApp.Dropzone('#' + key + '-dropzone-action', {
+              url: "/panel/files/images/" + model + '/' + id_rel + '/' + key + '?step=' + step,
+              init: function init() {
+                this.on("sending", function (file, xhr, formData) {
+                  var date_file = null;
+                  if (document.getElementById(key + '-date_file')) {
+                    date_file = $('#' + key + '-date_file').val();
+                  }
+                  formData.append("date_file", date_file);
+                });
+                this.on("success", function (file, message) {
+                  getData();
+                });
+                this.on("complete", function (file) {
+                  this.removeAllFiles(true);
+                });
+              }
+            });
+          }
+        };
+        for (var key in config_files) {
+          _loop(key);
+        }
+        //
+      })["catch"](function (e) {});
+    }
+    window.deleteFileTemplate = function (model, id) {
+      $('#frm-register-action-preview').html('');
+      axios.get("/panel/temp/images/" + id + "/delete").then(function (response) {
+        getData();
+        showToast('Archivos', 'Archivo borrado', 'success');
+      })["catch"](function (e) {});
+    };
+
+    //* get data saved 
+    window.getData = function () {
+      var model = $('#action-model').val();
+      var id_rel = $('#action-id_rel').val();
+      clearPreviewFiles().then(function () {
+        var step = $('#step').val();
+        axios.get("/panel/files/template/" + model + "/" + id_rel + "/show?step=" + step).then(function (response) {
+          var result = response.data;
+          var files = result.files;
+          var file_dates = result.file_date;
+          for (var key in file_dates) {
+            if (file_dates.hasOwnProperty.call(file_dates, key)) {
+              var element_date_file = file_dates[key];
+              //console.log(element_date_file.template_config_id);
+              $('#' + element_date_file.template_config_id + '-date_file').val(element_date_file.date_file);
+            }
+          }
+          for (var key_file in files) {
+            if (files.hasOwnProperty.call(files, key_file)) {
+              var element_file = files[key_file];
+              console.log(element_file.template_config_id);
+              $('#' + element_file.template_config_id + '-files-action-preview').append(element_file.preview);
+            }
+          }
+        })["catch"](function (e) {
+          console.error(e);
+        });
+      })["catch"](function (e) {
+        console.error(e);
+      });
+    };
+  }
+  $().ready(function () {
+    if (document.getElementById('action-id_rel')) {
+      getData();
+    }
+    $("#frm-action-files").validate({
+      rules: {
+        'date_file[]': {
+          required: true
+        }
+      },
+      submitHandler: function submitHandler(form, event) {
+        event.preventDefault();
+        var new_form = document.getElementById("frm-action-files");
+        var data = new FormData(new_form);
+
+        // Extract the step value from the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var step = urlParams.get('step');
+
+        // Add the step value to the FormData
+        data.append('step', step);
+        axios.post("/panel/files/template/date", data).then(function (response) {
+          var result = response.data;
+          var url_redirect = null;
+          url_redirect = $('#url_redirect').val();
+          window.location = url_redirect;
+        })["catch"](function (e) {});
+      }
+    });
+  });
+  if (document.getElementById('pruebaDropZone')) {
+    var _model = 'prueba';
+    var _id_rel = 1;
+    var key = 1;
+    NioApp.Dropzone('#pruebaDropZone', {
+      url: "/panel/files/images/" + _model + '/' + _id_rel + '/' + key,
+      init: function init() {
+        this.on("sending", function (file, xhr, formData) {});
+        this.on("success", function (file, message) {});
+        this.on("complete", function (file) {});
+      }
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/action/crud.js":
+/*!************************************************!*\
+  !*** ./resources/js/components/action/crud.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"Promise based HTTP client for the browser and node.js","main":"index.js","scripts":{"test":"grunt test","start":"node ./sandbox/server.js","build":"NODE_ENV=production grunt build","preversion":"npm test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json","postversion":"git push && git push --tags","examples":"node ./examples/server.js","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","fix":"eslint --fix lib/**/*.js"},"repository":{"type":"git","url":"https://github.com/axios/axios.git"},"keywords":["xhr","http","ajax","promise","node"],"author":"Matt Zabriskie","license":"MIT","bugs":{"url":"https://github.com/axios/axios/issues"},"homepage":"https://axios-http.com","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"jsdelivr":"dist/axios.min.js","unpkg":"dist/axios.min.js","typings":"./index.d.ts","dependencies":{"follow-redirects":"^1.14.0"},"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}]}');
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+
+window.actionModal = function (id, is_new, is_lead) {
+  var model = is_lead == true ? 'lead' : 'credit';
+  var section = is_lead == true ? 1 : 2;
+  resetAction();
+  getAdvisorLead(model, id);
+  $('#modal-action-id-rel').val(id);
+  $('#modal-action-id-section').val(section);
+  if (is_new == 'true') {
+    $('#modal-action-id-action').val(null);
+  }
+  $('#modal-action').modal('show');
+};
+window.addActionIntoActions = function (id, is_new, is_lead) {
+  $('#modal-list-actions').modal('hide');
+  var model = is_lead == true ? 'lead' : 'credit';
+  var section = is_lead == true ? 1 : 2;
+  resetAction();
+  getAdvisorLead(model, id);
+  $('#modal-action-id-rel').val(id);
+  $('#modal-action-id-section').val(section);
+  if (is_new == 'true') {
+    $('#modal-action-id-action').val(null);
+  }
+  $('#modal-action').modal('show');
+};
+if (document.getElementById('frm-action')) {
+  $('#modal-action-type').select2({
+    dropdownParent: $('#modal-action'),
+    placeholder: "Escribe para buscar..",
+    allowClear: true
+  });
+}
+function getAdvisorLead(model, id_rel) {
+  axios.get("/panel/" + model + "/" + id_rel + '/advisor/show').then(function (response) {
+    var result = response.data;
+    var advisor = result.advisor;
+    if (advisor != null) {
+      var name_advisor = advisor.name + ' ' + advisor.last_name;
+      $("#lead-asesor-id").prepend("<option value='" + advisor.id + "' selected='selected'> " + name_advisor + "</option>");
+      $("#lead-asesor-id").prop("disabled", true);
+    }
+  })["catch"](function (e) {});
+}
+
+/* function getPerson(lead_id) {
+    axios
+        .get("/panel/lead/" + lead_id)
+        .then(function (response) {
+            let result = response.data;
+            let lead = result.lead;
+            let lead_name = lead.name + ' ' + lead.last_name;
+            $("#modal-action-id-rel-lead").prepend("<option value='" + lead.id + "' selected='selected'> " + lead_name + "</option>");
+        })
+        .catch(e => {
+
+        });
+} */
+
+$().ready(function () {
+  $("#frm-action").validate({
+    rules: {
+      'data[type]': {
+        required: true
+      },
+      'data[start_date]': {
+        required: true
+      },
+      'data[advisor_id]': {
+        required: true
+      },
+      'data[start_time]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frm-action");
+      var data = new FormData(new_form);
+      var refresh_dt = $('#refresh-dt').val();
+      axios.post("/panel/action", data).then(function (response) {
+        var result = response.data;
+        var status = $('#modal-action-status').val();
+        var id_action = $('#modal-action-id-action').val();
+        console.log(status);
+        if (status == 1 && result != null) {
+          //*se marco como completada
+
+          $('#register-action-id-rel').val(result.id);
+          $('#modal-action').modal('hide');
+          resetRegisterAction();
+          if (id_action == 'null') {
+            $('#modal-register-action').modal('show');
+          }
+        } else {
+          $('#modal-action').modal('hide');
+          if (document.getElementById('is_refresh')) {
+            location.reload(); // Recargar la página
+          }
+          if (refresh_dt != 'null') {
+            (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+          } else {
+            refreshListActions();
+          }
+        }
+        //refreshListActions();
+      })["catch"](function (e) {});
+    }
+  });
+});
+function resetAction() {
+  $('#frm-action input, textarea, select').removeAttr('disabled');
+  $('#modal-action-save').show();
+  $("#modal-action-type").val('').trigger('change');
+  $('#modal-action-subject').val('');
+  $('#modal-action-start_date').val('');
+  $('#modal-action-end_date').val('');
+  $('#modal-action-description').val('');
+  $('#modal-action-id-action').val('null');
+  $('#modal-action-complete-pending').prop("checked", true);
+  $("#lead-asesor-id").val('').trigger('change');
+  $("#lead-asesor-id").prop("disabled", false);
+}
+function resetRegisterAction() {
+  $("#frm-register-action-state").val('').trigger('change');
+  $('#frm-register-action-comment').val('');
+  $('#frm-register-action-preview').html('');
+  //myDropzone.removeAllFiles(true); 
+}
+window.deleteFile = function (model, id) {
+  $('#frm-register-action-preview').html('');
+  axios.get("/panel/temp/images/" + id + "/delete").then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Archivos', 'Archivo borrado');
+    reloadFile(model);
+  })["catch"](function (e) {});
+};
+function reloadFile(model) {
+  axios.get("/panel/temp/images/" + model + '/show').then(function (response) {
+    $('#frm-register-action-preview').html(response.data);
+  })["catch"](function (e) {});
+}
+$('#frm-action input').on('change', function () {
+  var status = $('input[name=status]:checked', '#frm-action').val();
+  $('#modal-action-status').val(status);
+});
+
+//*form register action
+$().ready(function () {
+  $("#frm-register-action").validate({
+    rules: {
+      'data[state]': {
+        required: true
+      },
+      'data[comment]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frm-register-action");
+      var data = new FormData(new_form);
+      var refresh_dt = $('#refresh-dt').val();
+      axios.post("/panel/register-action", data).then(function (response) {
+        var result = response.data;
+        $('#modal-register-action').modal('hide');
+        if (refresh_dt != 'null') {
+          /* showInfo(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+          refreshListActions(); */
+          location.reload();
+        } else {
+          refreshListActions();
+        }
+      })["catch"](function (e) {});
+    }
+  });
+});
+window.modalRegisterAction = function (model, id) {
+  resetRegisterAction();
+  axios.get("/panel/register-action/set-id/" + id + '/set').then(function (response) {})["catch"](function (e) {});
+  axios.get("/panel/register-action/set-model/" + model + '/set').then(function (response) {})["catch"](function (e) {});
+  $('#register-action-model').val(model);
+  $('#register-action-id-rel').val(id);
+  $('#modal-register-action').modal('show');
+};
+window.setIdRel = function () {};
+window.deleteRegisterAction = function (action_id) {
+  var refresh_dt = $('#refresh-dt').val();
+  axios["delete"]("/panel/register-action/" + action_id).then(function (response) {
+    if (refresh_dt != 'null') {
+      (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+      refreshListActions();
+    } else {
+      refreshListActions();
+    }
+  })["catch"](function (e) {});
+};
+window.alerDeleteAction = function (id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      deleteAction(id);
+    }
+  });
+};
+window.deleteAction = function (id) {
+  var refresh_dt = $('#refresh-dt').val();
+  axios["delete"]("/panel/action/" + id).then(function (response) {
+    if (document.getElementById('modal-list-actions')) {
+      location.reload(); // Recargar la página
+    }
+    if (refresh_dt != 'null') {
+      (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, refresh_dt, 'Datos actualizados', 'Registro guardado');
+    } else {
+      refreshListActions();
+    }
+  })["catch"](function (e) {});
+};
+
+/* window.editModalAction = function(action_id, disabled) {
+    setModalAction(action_id, disabled);
+    $('#modal-action').modal('show');
+} */
+
+window.setModalAction = function (action_id, disabled, section) {
+  if (disabled == true) {
+    $('#frm-action input, textarea, select').attr('disabled', 'disabled');
+    $('#modal-action-save').hide();
+  }
+  axios.get("/panel/action/" + action_id).then(function (response) {
+    var result = response.data;
+    var action = result.action;
+    var advisor = result.advisor;
+    var lead = result.lead;
+    //*set value form action
+    if (result != null) {
+      var lead_name = lead != null ? lead.name + ' ' + lead.last_name : null;
+      $("#modal-action-type").val(action.type).trigger('change');
+      $("#modal-action-subject").val(action.subject);
+      $("#modal-action-id-action").val(action_id);
+      $("#modal-action-subject").val(action.subject);
+      $("#modal-action-id-section").val(action.section);
+      $("#modal-action-status").val(action.status);
+      $("#modal-action-start_date").val(action.start_date);
+      $("#modal-action-start_time").val(action.start_time);
+      $("#modal-action-end_date").val(action.end_date);
+      $("#modal-action-description").val(action.description);
+      $("#modal-action-id-rel").val(action.id_rel);
+      $('#modal-action').modal('show');
+      $('#lead-asesor-id').val(action.advisor_id).trigger("change");
+      if (action.status == 1) {
+        $('#modal-action-complete-active').prop("checked", true);
+        $('#modal-action-complete-pending').prop("checked", false);
+      } else {
+        $('#modal-action-complete-active').prop("checked", false);
+        $('#modal-action-complete-pending').prop("checked", true);
+      }
+      $('#modal-action').modal('show');
+    }
+  })["catch"](function (e) {});
+};
+window.refreshAction = function (id, model, status, content) {
+  if (!id || !model || !status || !content) {
+    // Si falta algún valor, no hacer nada
+    return;
+  }
+  $('#' + content).html('');
+  axios.get("/panel/action/list/" + id + "/" + model + "/" + status).then(function (response) {
+    $('#' + content).html(response.data);
+  })["catch"](function (e) {
+    // Manejo de error opcional
+  });
+};
+window.refreshListActions = function () {
+  var id_rel = $('#id-rel-action').val();
+  var model = $('#model-action').val();
+  refreshAction(id_rel, model, 'in_progress', 'content-profile-in_progress');
+  refreshAction(id_rel, model, 'completed', 'content-profile-completed');
+};
+if (document.getElementById('content-profile-in_progress')) {
+  refreshListActions();
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/action/datatable.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/action/datatable.js ***!
+  \*****************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var status = $('#dt-action-status').val();
+  var table = NioApp.DataTable('#dt-acctions', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/action/' + status + '/dt/show',
+    columns: [{
+      data: 'type'
+    }, {
+      data: 'subject'
+    }, /* { data: 'section' }, */
+    {
+      data: 'name'
+    }, {
+      data: 'date_in'
+    }, {
+      data: 'date_fin'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options',
+      className: 'nk-tb-col-tools text-end'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var status = $('#dt-action-status').val();
+  var model = $('#model').val();
+  var table = NioApp.DataTable('#dt-actions', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/action/' + status + '/' + model + '/dt/show',
+    columns: [{
+      data: 'type'
+    }, /* { data: 'section' }, */
+    {
+      data: 'name'
+    }, {
+      data: 'date_in'
+    }, {
+      data: 'options',
+      className: 'nk-tb-col-tools text-end'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/action/datatablemodule.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/action/datatablemodule.js ***!
+  \***********************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var name_status = $('#name_status').val();
+  var table = NioApp.DataTable('#dt-acctions-module', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/action/module/' + name_status + '/list',
+    columns: [{
+      data: 'action'
+    }, {
+      data: 'subject'
+    }, {
+      data: 'module'
+    }, {
+      data: 'name'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'responsable'
+    }, {
+      data: 'options',
+      className: 'nk-tb-col-tools text-end'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/agreement/crud.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/agreement/crud.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+
+window.deleteAgreement = function (agreement) {
+  axios.get("panel/agreement/" + agreement + "/delete").then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Datos actualizados', 'Información actualizada correctamente');
+  })["catch"](function (e) {});
+};
+$().ready(function () {
+  $("#frm-agreement").validate({
+    rules: {
+      'data[name]': {
+        required: true
+      },
+      'data[status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frm-agreement");
+      var data = new FormData(new_form);
+      axios.post("/panel/agreement", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-agreement', 'Datos actualizados', 'Información actualizada correctamente');
+        window.location = '/panel/agreement';
+      })["catch"](function (e) {});
+    }
+  });
+  if (document.getElementById('frm-agreement') && $('#agreement_id').val() != 'null') {
+    var agreement_id = $('#agreement_id').val();
+    axios.get("/panel/agreement/" + agreement_id).then(function (response) {
+      var result = response.data;
+      var agreement = result.agreement;
+      var financials = result.financials;
+      $('#agreement-name').val(agreement.name);
+      $('#razon_social').val(agreement.razon_social);
+      $('#agreement-description').val(agreement.description);
+      $('#agreement_term').val(agreement.agreement_term);
+
+      // Limpia las selecciones actuales en el select múltiple
+      $('#agreement-financials').val(null).trigger('change');
+      $('#agreement-status').val(agreement.status).trigger("change");
+
+      // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+      var financialValues = financials.map(function (item) {
+        return item.id;
+      });
+      // Seleccionar los valores correspondientes en los selects
+      $('#agreement-financials').val(financialValues).trigger('change');
+
+      //$('#agreement-status option[value="' + agreement.status + '"]').trigger("change");
+    })["catch"](function (e) {
+      $('#admin_email-error-exist').show();
+    });
+  }
+  function getProductComision(product_id) {
+    $('#content-costo-contratacion').html('');
+    $('#comisiones').html('');
+    axios.get("/panel/product-fee/" + product_id).then(function (response) {
+      var result = response.data;
+      $('#content-costo-contratacion').html(result.costoContratacion);
+      $('#comisiones').html(result.comisiones);
+    })["catch"](function (e) {
+      $('#admin_email-error-exist').show();
+    });
+  }
+  window.editProductFee = function (productFee, product_id, type) {
+    $('#frm-product-fees')[0].reset();
+    $('#product_fee').val(productFee);
+    $('#financial_product_id').val(product_id);
+    $('#comision_type').val(type);
+    axios.get("/panel/product-fee/" + productFee + '/showproductFee').then(function (response) {
+      var result = response.data;
+      if (result != null) {
+        $('#concepto').val(result.concepto);
+        $('#periodicidad').val(result.periodicidad);
+        $('#moneda').val(result.moneda);
+        if (result.is_valor_fijo == 1) {
+          $('#type_active').prop('checked', true).click();
+        } else {
+          $('#type_pending').prop('checked', true).click();
+        }
+        $('#valor').val(result.valor);
+        $('#porcentaje').val(result.porcentaje);
+        $('#referencia').val(result.referencia);
+        $('#modal-product-fees').modal('show');
+      }
+    })["catch"](function (e) {});
+  };
+
+  /* borrar comisiones */
+  window.deleteProductFee = function (product_fee_id) {
+    var product_id = $('#product_id').val();
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, elimina',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        axios["delete"]("/panel/product-fee/" + product_fee_id).then(function (response) {
+          getProductComision(product_id);
+        })["catch"](function (e) {});
+      }
+    });
+  };
+
+  /* borrar comisiones */
+
+  if (document.getElementById('financial_product_id')) {
+    var product_id = $('#product_id').val();
+    getProductComision(product_id);
+  }
+  $("#frm-product-fees").validate({
+    rules: {
+      'data[concepto]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var product_id = $('#financial_product_id').val();
+      var new_form = document.getElementById("frm-product-fees");
+      var data = new FormData(new_form);
+      axios.post("/panel/product-fee", data).then(function (response) {
+        getProductComision(product_id);
+        $('#modal-product-fees').modal('hide');
+        new_form.reset();
+      })["catch"](function (e) {});
+    }
+  });
+
+  //modal productfee
+  window.modalProductComision = function (product_fee, product_id, type) {
+    $('#product_fee').val(product_fee);
+    $('#financial_product_id').val(product_id);
+    $('#comision_type').val(type);
+    $('#modal-product-fees').modal('show');
+  };
+  window.showValorFijo = function (show_fijo) {
+    $('#content-valor-fijo').hide();
+    $('#content-no-valor-fijo').hide();
+    if (show_fijo) {
+      $('#content-valor-fijo').show();
+    } else {
+      $('#content-no-valor-fijo').show();
+    }
+  };
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/agreement/datatable.js":
+/*!********************************************************!*\
+  !*** ./resources/js/components/agreement/datatable.js ***!
+  \********************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var table = NioApp.DataTable('#dt-agreement', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/agreement/list/show',
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'description'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/clients/crud.js":
+/*!*************************************************!*\
+  !*** ./resources/js/components/clients/crud.js ***!
+  \*************************************************/
+/***/ (() => {
+
+$().ready(function () {
+  $("#frm-client").validate({
+    rules: {
+      'data[last_name]': {
+        required: true
+      },
+      'data[second_last_name]': {
+        required: true
+      },
+      'data[name]': {
+        required: true
+      },
+      'data[rfc]': {
+        required: true,
+        minlength: 13,
+        maxlength: 13
+      },
+      'data[bank_name]': {
+        required: true
+      },
+      'data[bank_clabe]': {
+        required: true,
+        number: true,
+        minlength: 9,
+        maxlength: 9
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var origin = $('#origin').val();
+      var new_form = document.getElementById("frm-client");
+      var data = new FormData(new_form);
+      axios.post("/panel/clients", data).then(function (response) {
+        if (origin == 'colaboradores') {
+          window.location = '/panel/clients/colaboradores/show';
+        } else {
+          window.location = '/panel/clients';
+        }
+      })["catch"](function (e) {});
+    }
+  });
+  //funcion  estatus
+
+  function setData() {
+    var client_id = $('#client_id').val();
+    if (client_id != '') {
+      console.log(client_id);
+      axios.get("/panel/clients/" + client_id).then(function (response) {
+        var result = response.data;
+        var client = result.client;
+        $('#client-name').val(client.name);
+        $('#client-last_name').val(client.last_name);
+        $('#client-second_last_name').val(client.second_last_name);
+        $('#client-cellphone').val(client.cellphone);
+        $('#client-email').val(client.email);
+        $('#client-rfc').val(client.rfc);
+        $('#lead-email').val(client.email);
+        $('#client-daily_income').val(client.daily_income);
+        $('#client-agreement').val(client.agreement_id).trigger("change");
+        var clientStatusElement = document.getElementById("client-status");
+        if (client.active == 1 && clientStatusElement) {
+          clientStatusElement.click();
+        }
+        $('#client-status').val(client.active);
+      })["catch"](function (e) {
+        $('#admin_email-error-exist').show();
+      });
+    }
+  }
+  if (document.getElementById('client_id')) {
+    setData();
+  }
+
+  //funcion  estatus
+  function updateStatusLabel() {
+    var statusCheckbox = document.getElementById('client-status');
+    var statusLabel = document.querySelector('label[for="client-status"]');
+    if (statusCheckbox.checked) {
+      statusLabel.textContent = 'Activo';
+    } else {
+      statusLabel.textContent = 'Inactivo';
+    }
+  }
+
+  // Add event listener to the status checkbox
+  var statusCheckbox = document.getElementById('client-status');
+  if (statusCheckbox) {
+    statusCheckbox.addEventListener('change', updateStatusLabel);
+    // Initial call to set the correct label
+    updateStatusLabel();
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/clients/datatable.js":
+/*!******************************************************!*\
+  !*** ./resources/js/components/clients/datatable.js ***!
+  \******************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var module_id = null;
+  if (document.getElementById('module_id')) {
+    module_id = $('#module_id').val();
+  }
+  var table_lead = NioApp.DataTable('#dt-clients', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/clients/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'agreement'
+    }, {
+      data: 'cellphone'
+    }, /* { data: 'organizacion' }, */
+    {
+      data: 'rfc'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-clients tbody').on('click', 'td', function () {
+    var row = table_lead.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/clients/datatable_colaboradores.js":
+/*!********************************************************************!*\
+  !*** ./resources/js/components/clients/datatable_colaboradores.js ***!
+  \********************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table_lead = NioApp.DataTable('#dt-colaboradores', {
+    processing: true,
+    searching: false,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/clients/list/ListColaboradores',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'agreement'
+    }, {
+      data: 'cellphone'
+    }, /* { data: 'organizacion' }, */
+    {
+      data: 'rfc'
+    }, {
+      data: 'estatus'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-colaboradores tbody').on('click', 'td', function () {
+    var row = table_lead.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/credit/datatable_in_progress.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/credit/datatable_in_progress.js ***!
+  \*****************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var status = $('#status').val();
+  var table = NioApp.DataTable('#dt-in_progress', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/credit/product/' + status + '/list',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'module'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-in_progress tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/credit/product/datatable.js":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/credit/product/datatable.js ***!
+  \*************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var status = $('#status').val();
+  var table = NioApp.DataTable('#dt-product-credit', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/credit/product/' + status + '/list',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'reason'
+    }, {
+      data: 'date'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-product-credit tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/credit/profile/datatable.js":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/credit/profile/datatable.js ***!
+  \*************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var credit_id = $('#credit-profile-credit_id').val();
+  var table = NioApp.DataTable('#dt-acctions-profile', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/credit/action/' + credit_id + '/list',
+    columns: [{
+      data: 'action'
+    }, {
+      data: 'subject'
+    }, {
+      data: 'module'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'status',
+      orderData: 'desc'
+    }, {
+      data: 'options',
+      className: 'nk-tb-col-tools text-end'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item odd");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/crm.js":
+/*!****************************************!*\
+  !*** ./resources/js/components/crm.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utilities */ "./resources/js/components/utilities.js");
+
+function move(id, form, modal, datatable, title, msg) {
+  var new_form = document.getElementById(form);
+  var data = new FormData(new_form);
+  var statusid = $('#statusid').val();
+  var old_status_id = $('#old_status_id').val();
+  axios.post("/panel/action/" + id + "/" + statusid + "/" + old_status_id + "/move", data).then(function (response) {
+    $('#' + modal).modal('hide');
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, datatable, title, msg);
+  })["catch"](function (e) {});
+}
+window.moveCrm = function (creditId, statusid, old_status_id, redirect) {
+  axios.post("/panel/action/" + creditId + "/" + statusid + "/" + old_status_id + "/move").then(function (response) {
+    window.location = redirect;
+  })["catch"](function (e) {});
+};
+window.deliveryFinish = function (id, statusid, urlredirect, is_modal) {
+  if (is_modal == true) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        actionDeliveryFinish(id, statusid, urlredirect);
+      }
+    });
+  } else {
+    actionDeliveryFinish(id, statusid, urlredirect);
+  }
+};
+function actionDeliveryFinish(id, statusid, urlredirect) {
+  axios.get("/panel/action/" + id + "/" + statusid + "/finish").then(function (response) {
+    window.location = urlredirect;
+  })["catch"](function (e) {});
+}
+window.moveModal = function (title, id, statusid, old_status_id, dt) {
+  $('#frm-archive').trigger("reset");
+  $('#modal_archive_id_rel').val(id);
+  $('#statusid').val(statusid);
+  $('#title').val('Crédito');
+  $('#old_status_id').val(old_status_id);
+  $('#dt').val(dt);
+  $('#modal-archive-title').html(title);
+  getReason(title);
+  if (title == 'Archivar' || title == 'Cancelar') {
+    $('#content-lead').show();
+  }
+  $('#modal-archive').modal('show');
+};
+window.moveModalLead = function (title, id, statusid, old_status_id, dt) {
+  $('#frm-archive').trigger("reset");
+  $('#modal_archive_id_rel').val(id);
+  $('#statusid').val(statusid);
+  $('#title').val('Prospecto');
+  $('#old_status_id').val(old_status_id);
+  $('#dt').val(dt);
+  $('#modal-archive-title').html(title);
+  getReason('ArchivarLead');
+  $('#content-lead').show();
+  $('#modal-archive').modal('show');
+};
+if (document.getElementById('frm-archive')) {
+  NioApp.Select2('#modal-reason-id', {
+    dropdownParent: $('#modal-archive')
+  });
+}
+window.concluir = function (history_id) {
+  axios.get('/panel/action/' + history_id + '/complete').then(function (response) {
+    var result = response.data;
+    window.location = result.url;
+  })["catch"](function (e) {});
+};
+$("#frm-archive").submit(function (event) {
+  event.preventDefault();
+  var id_rel = $('#modal_archive_id_rel').val();
+  var dt = $('#dt').val();
+  var msg = 'Cambios aplicados correctamente';
+  var title = $('#title').val();
+  move(id_rel, 'frm-archive', 'modal-archive', dt, title, msg);
+});
+window.modalValidate = function (id, model) {
+  $('#modal-validate-content').html('');
+  axios.get('/panel/' + id + '/' + model + '/validate/show').then(function (response) {
+    var html = response.data.table;
+    $('#modal-validate-content').html(html);
+    $('#modal-validate').modal('show');
+  })["catch"](function (e) {});
+};
+window.desition = function (history_id, credit_id, financial_id, type, status_id, is_elegir) {
+  var url_redirect = type == 1 ? '/panel/kc-check-up' : '/panel/kc-swap';
+  var param_get = is_elegir == 0 ? '?is_notify=true' : '?is_notify=false';
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      axios.get("/panel/kc-check-up/report/desition/" + credit_id + "/" + financial_id + "/" + type + "/accept" + param_get).then(function (response) {
+        var reason = response.data;
+        if (is_elegir == 0) {
+          deliveryFinish(history_id, status_id, url_redirect, false);
+        } else {
+          window.location = url_redirect;
+        }
+      })["catch"](function (e) {});
+    }
+  });
+};
+function getReason(type) {
+  $('#modal-reason-id').empty();
+  axios.get("/panel/reason/" + type + "/list").then(function (response) {
+    var reason = response.data;
+    var modal_reason_id = $('#modal-reason-id');
+    for (var key in reason) {
+      var element = reason[key];
+      var option = new Option(element, key, true, true);
+      modal_reason_id.append(option).trigger('change');
+    }
+    $('#modal-reason-id').val('').trigger('change');
+    if (financials != null) {}
+  })["catch"](function (e) {});
+}
+$(document).ready(function () {
+  var pathArray = window.location;
+  var params = new URLSearchParams(pathArray.search);
+  var param_cancel = params.get("swap_cancel");
+  if (param_cancel != null) {
+    moveModal('Cancelar', param_cancel, 17, 37, 'dt-product-credit');
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/datatable.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/datatable.js ***!
+  \**********************************************/
+/***/ (() => {
+
+/* $(document).ready(function () {
+    $('.datatable').DataTable(
+        {
+            "language": 
+            {
+                "processing": "Procesando...",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "zeroRecords": "No se encontraron resultados",
+                "emptyTable": "Ningún dato disponible en esta tabla",
+                "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "search": "Buscar:",
+                "infoThousands": ",",
+                "loadingRecords": "Cargando...",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sortDescending": ": Activar para ordenar la columna de manera descendente"
+                },
+                "buttons": {
+                    "copy": "Copiar",
+                    "colvis": "Visibilidad",
+                    "collection": "Colección",
+                    "colvisRestore": "Restaurar visibilidad",
+                    "copyKeys": "Presione ctrl o u2318 + C para copiar los datos de la tabla al portapapeles del sistema. <br \/> <br \/> Para cancelar, haga clic en este mensaje o presione escape.",
+                    "copySuccess": {
+                        "1": "Copiada 1 fila al portapapeles",
+                        "_": "Copiadas %ds fila al portapapeles"
+                    },
+                    "copyTitle": "Copiar al portapapeles",
+                    "csv": "CSV",
+                    "excel": "Excel",
+                    "pageLength": {
+                        "-1": "Mostrar todas las filas",
+                        "_": "Mostrar %d filas"
+                    },
+                    "pdf": "PDF",
+                    "print": "Imprimir",
+                    "renameState": "Cambiar nombre",
+                    "updateState": "Actualizar",
+                    "createState": "Crear Estado",
+                    "removeAllStates": "Remover Estados",
+                    "removeState": "Remover",
+                    "savedStates": "Estados Guardados",
+                    "stateRestore": "Estado %d"
+                },
+                "autoFill": {
+                    "cancel": "Cancelar",
+                    "fill": "Rellene todas las celdas con <i>%d<\/i>",
+                    "fillHorizontal": "Rellenar celdas horizontalmente",
+                    "fillVertical": "Rellenar celdas verticalmentemente"
+                },
+                "decimal": ",",
+                "searchBuilder": {
+                    "add": "Añadir condición",
+                    "button": {
+                        "0": "Constructor de búsqueda",
+                        "_": "Constructor de búsqueda (%d)"
+                    },
+                    "clearAll": "Borrar todo",
+                    "condition": "Condición",
+                    "conditions": {
+                        "date": {
+                            "after": "Despues",
+                            "before": "Antes",
+                            "between": "Entre",
+                            "empty": "Vacío",
+                            "equals": "Igual a",
+                            "notBetween": "No entre",
+                            "notEmpty": "No Vacio",
+                            "not": "Diferente de"
+                        },
+                        "number": {
+                            "between": "Entre",
+                            "empty": "Vacio",
+                            "equals": "Igual a",
+                            "gt": "Mayor a",
+                            "gte": "Mayor o igual a",
+                            "lt": "Menor que",
+                            "lte": "Menor o igual que",
+                            "notBetween": "No entre",
+                            "notEmpty": "No vacío",
+                            "not": "Diferente de"
+                        },
+                        "string": {
+                            "contains": "Contiene",
+                            "empty": "Vacío",
+                            "endsWith": "Termina en",
+                            "equals": "Igual a",
+                            "notEmpty": "No Vacio",
+                            "startsWith": "Empieza con",
+                            "not": "Diferente de",
+                            "notContains": "No Contiene",
+                            "notStarts": "No empieza con",
+                            "notEnds": "No termina con"
+                        },
+                        "array": {
+                            "not": "Diferente de",
+                            "equals": "Igual",
+                            "empty": "Vacío",
+                            "contains": "Contiene",
+                            "notEmpty": "No Vacío",
+                            "without": "Sin"
+                        }
+                    },
+                    "data": "Data",
+                    "deleteTitle": "Eliminar regla de filtrado",
+                    "leftTitle": "Criterios anulados",
+                    "logicAnd": "Y",
+                    "logicOr": "O",
+                    "rightTitle": "Criterios de sangría",
+                    "title": {
+                        "0": "Constructor de búsqueda",
+                        "_": "Constructor de búsqueda (%d)"
+                    },
+                    "value": "Valor"
+                },
+                "searchPanes": {
+                    "clearMessage": "Borrar todo",
+                    "collapse": {
+                        "0": "Paneles de búsqueda",
+                        "_": "Paneles de búsqueda (%d)"
+                    },
+                    "count": "{total}",
+                    "countFiltered": "{shown} ({total})",
+                    "emptyPanes": "Sin paneles de búsqueda",
+                    "loadMessage": "Cargando paneles de búsqueda",
+                    "title": "Filtros Activos - %d",
+                    "showMessage": "Mostrar Todo",
+                    "collapseMessage": "Colapsar Todo"
+                },
+                "select": {
+                    "cells": {
+                        "1": "1 celda seleccionada",
+                        "_": "%d celdas seleccionadas"
+                    },
+                    "columns": {
+                        "1": "1 columna seleccionada",
+                        "_": "%d columnas seleccionadas"
+                    },
+                    "rows": {
+                        "1": "1 fila seleccionada",
+                        "_": "%d filas seleccionadas"
+                    }
+                },
+                "thousands": ".",
+                "datetime": {
+                    "previous": "Anterior",
+                    "next": "Proximo",
+                    "hours": "Horas",
+                    "minutes": "Minutos",
+                    "seconds": "Segundos",
+                    "unknown": "-",
+                    "amPm": [
+                        "AM",
+                        "PM"
+                    ],
+                    "months": {
+                        "0": "Enero",
+                        "1": "Febrero",
+                        "10": "Noviembre",
+                        "11": "Diciembre",
+                        "2": "Marzo",
+                        "3": "Abril",
+                        "4": "Mayo",
+                        "5": "Junio",
+                        "6": "Julio",
+                        "7": "Agosto",
+                        "8": "Septiembre",
+                        "9": "Octubre"
+                    },
+                    "weekdays": [
+                        "Dom",
+                        "Lun",
+                        "Mar",
+                        "Mie",
+                        "Jue",
+                        "Vie",
+                        "Sab"
+                    ]
+                },
+                "editor": {
+                    "close": "Cerrar",
+                    "create": {
+                        "button": "Nuevo",
+                        "title": "Crear Nuevo Registro",
+                        "submit": "Crear"
+                    },
+                    "edit": {
+                        "button": "Editar",
+                        "title": "Editar Registro",
+                        "submit": "Actualizar"
+                    },
+                    "remove": {
+                        "button": "Eliminar",
+                        "title": "Eliminar Registro",
+                        "submit": "Eliminar",
+                        "confirm": {
+                            "_": "¿Está seguro que desea eliminar %d filas?",
+                            "1": "¿Está seguro que desea eliminar 1 fila?"
+                        }
+                    },
+                    "error": {
+                        "system": "Ha ocurrido un error en el sistema (<a target=\"\\\" rel=\"\\ nofollow\" href=\"\\\">Más información&lt;\\\/a&gt;).<\/a>"
+                    },
+                    "multi": {
+                        "title": "Múltiples Valores",
+                        "info": "Los elementos seleccionados contienen diferentes valores para este registro. Para editar y establecer todos los elementos de este registro con el mismo valor, hacer click o tap aquí, de lo contrario conservarán sus valores individuales.",
+                        "restore": "Deshacer Cambios",
+                        "noMulti": "Este registro puede ser editado individualmente, pero no como parte de un grupo."
+                    }
+                },
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                "stateRestore": {
+                    "creationModal": {
+                        "button": "Crear",
+                        "name": "Nombre:",
+                        "order": "Clasificación",
+                        "paging": "Paginación",
+                        "search": "Busqueda",
+                        "select": "Seleccionar",
+                        "columns": {
+                            "search": "Búsqueda de Columna",
+                            "visible": "Visibilidad de Columna"
+                        },
+                        "title": "Crear Nuevo Estado",
+                        "toggleLabel": "Incluir:"
+                    },
+                    "emptyError": "El nombre no puede estar vacio",
+                    "removeConfirm": "¿Seguro que quiere eliminar este %s?",
+                    "removeError": "Error al eliminar el registro",
+                    "removeJoiner": "y",
+                    "removeSubmit": "Eliminar",
+                    "renameButton": "Cambiar Nombre",
+                    "renameLabel": "Nuevo nombre para %s",
+                    "duplicateError": "Ya existe un Estado con este nombre.",
+                    "emptyStates": "No hay Estados guardados",
+                    "removeTitle": "Remover Estado",
+                    "renameTitle": "Cambiar Nombre Estado"
+                }
+            }  
+        }
+    );
+}); */
+
+/***/ }),
+
+/***/ "./resources/js/components/financial/crud.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/financial/crud.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+
+$().ready(function () {
+  $("#frm-financial").validate({
+    rules: {
+      'commercial_name': {
+        required: true
+      },
+      'company_name': {
+        required: true
+      },
+      'email': {
+        email: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#financial-commercial_name-unique-error').html('');
+      $('#financial-commercial_name-unique-error').hide();
+      var new_form = document.getElementById("frm-financial");
+      var data = new FormData(new_form);
+      axios.post("/panel/financial", data).then(function (response) {
+        var result = response.data;
+        window.location = '/panel/financial/' + result.id + '/edit';
+      })["catch"](function (e) {
+        var response = e.response;
+        var data_errors = response.data.errors;
+        $('#financial-commercial_name-unique-error').html('Este campo ya se encuentra registrado.');
+        $('#financial-commercial_name-unique-error').show();
+      });
+    }
+  });
+});
+$("#frm-financial-data-pricacy").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-data-pricacy");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial", data).then(function (response) {
+    var result = response.data;
+    showToast('Financiera', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+$("#frm-financial-buro").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-buro");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial", data).then(function (response) {
+    var result = response.data;
+    showToast('Financiera', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+if (document.getElementById('alcance_beneficios')) {
+  refreshListComplementary();
+}
+function refreshListComplementary() {
+  var product_id = $('#product_id').val();
+  axios.get("/panel/product-complementary/list/" + product_id + "/refresh").then(function (response) {
+    var result = response.data;
+    // Asignar valores al select de alcance_beneficios
+    var alcanceSelect = document.getElementById('alcance_beneficios');
+    alcanceSelect.innerHTML = ''; // Limpia el select actual
+    result.complementary_alcance.forEach(function (alcance) {
+      var option = document.createElement('option');
+      option.value = alcance.description;
+      option.text = alcance.description;
+      alcanceSelect.appendChild(option);
+    });
+    var alcanceBeneficiosArray = result.my_product.alcance_beneficios.split(',');
+    $('#alcance_beneficios').val(alcanceBeneficiosArray).trigger('change');
+    // Repite el mismo proceso para los otros selects (restriccion_exclusion, programa_educacion_financiera, referencia_comparativa)
+
+    // Asignar valores al select de restriccion_exclusion
+    var restriccionSelect = document.getElementById('restriccion_exclusion');
+    restriccionSelect.innerHTML = '';
+    result.complementary_restricciones.forEach(function (restriccion) {
+      var option = document.createElement('option');
+      option.value = restriccion.description;
+      option.text = restriccion.description;
+      restriccionSelect.appendChild(option);
+    });
+    var alcanceRestriccionArray = result.my_product.restriccion_exclusion.split(',');
+    $('#restriccion_exclusion').val(alcanceRestriccionArray).trigger('change');
+    // Asignar valores al select de programa_educacion_financiera
+    var programaSelect = document.getElementById('programa_educacion_financiera');
+    programaSelect.innerHTML = '';
+    result.complementary_programas.forEach(function (programa) {
+      var option = document.createElement('option');
+      option.value = programa.description;
+      option.text = programa.description;
+      programaSelect.appendChild(option);
+    });
+    var alcanceProgramaArray = result.my_product.programa_educacion_financiera.split(',');
+    $('#programa_educacion_financiera').val(alcanceProgramaArray).trigger('change');
+
+    // Asignar valores al select de referencia_comparativa
+    var referenciaSelect = document.getElementById('referencia_comparativa');
+    referenciaSelect.innerHTML = '';
+    result.complementary_referencias.forEach(function (referencia) {
+      var option = document.createElement('option');
+      option.value = referencia.description;
+      option.text = referencia.description;
+      referenciaSelect.appendChild(option);
+    });
+    var ReferenciaArray = result.my_product.referencia_comparativa.split(',');
+    $('#referencia_comparativa').val(ReferenciaArray).trigger('change');
+    var bankIdsArray = result.my_product.bank_ids.split(',');
+    $('#bank_ids').val(bankIdsArray).trigger('change');
+  })["catch"](function (e) {});
+}
+/*  alcance_beneficios
+restriccion_exclusion
+programa_educacion_financiera
+referencia_comparativa */
+
+window.modalComplementary = function (type) {
+  // Definir un arreglo con los títulos correspondientes a cada tipo
+  var titles = ['ALCANCE O BENEFICIOS', 'RESTRICCIONES O EXCLUSIONES', 'PROGRAMAS DE EDUCACIÓN FINANCIERA', 'REFERENCIAS CORPORATIVAS'];
+  var product_id = $('#product_id').val();
+  // Verificar que el tipo esté dentro del rango válido
+  if (type >= 1 && type <= titles.length) {
+    // Asignar el valor del título al elemento con ID 'title-complementary'
+    document.getElementById('title-complementary').textContent = titles[type - 1];
+    $('#type-complementary-service').val(type);
+    $('#product-complementary-service').val(product_id);
+    showContentComplementary();
+  } else {
+    // Tratamiento para tipos fuera del rango válido
+    document.getElementById('title-complementary').textContent = 'Título no válido';
+  }
+  $('#modal-complementary').modal('show');
+};
+$("#frm-complementary").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-complementary");
+  var data = new FormData(new_form);
+  axios.post("/panel/product-complementary", data).then(function (response) {
+    // Resetea el formulario
+    $('#product-complementary-description').val('');
+    $('#product-complementary-id').val('');
+    refreshListComplementary();
+    showContentComplementary();
+  })["catch"](function (e) {});
+});
+function showContentComplementary() {
+  var product_id = $('#product_id').val();
+  var type = $('#type-complementary-service').val();
+  axios.get("/panel/product-complementary/" + product_id + '/' + type).then(function (response) {
+    var result = response.data;
+    $('#content-complementary').html(result);
+  })["catch"](function (e) {});
+}
+window.deleteComplementary = function (complementary_id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      axios["delete"]("/panel/product-complementary/" + complementary_id).then(function (response) {
+        showContentComplementary();
+      })["catch"](function (e) {});
+    }
+  });
+};
+window.editComplementary = function (complementary_id, description) {
+  $('#product-complementary-description').val(description);
+  $('#product-complementary-id').val(complementary_id);
+  var type = $('#type-complementary-service').val();
+  modalComplementary(type);
+};
+$("#frm-financial-billing").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-billing");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial", data).then(function (response) {
+    var result = response.data;
+    showToast('Financiera', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+window.deleteFinancial = function (id) {
+  axios["delete"]("/panel/financial/" + id).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financial', 'Datos actualizados', 'Registro borrado');
+  })["catch"](function (e) {});
+};
+window.alerFinancialDelete = function (id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      deleteFinancial(id);
+    }
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/financial/datatable.js":
+/*!********************************************************!*\
+  !*** ./resources/js/components/financial/datatable.js ***!
+  \********************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-financial', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/financial/list/show',
+    columns: [{
+      data: 'commercial_name'
+    }, {
+      data: 'company_name'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/financial/product/crud.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/financial/product/crud.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utilities */ "./resources/js/components/utilities.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; var r = _regenerator(), e = r.m(_regeneratorRuntime), t = (Object.getPrototypeOf ? Object.getPrototypeOf(e) : e.__proto__).constructor; function n(r) { var e = "function" == typeof r && r.constructor; return !!e && (e === t || "GeneratorFunction" === (e.displayName || e.name)); } var o = { "throw": 1, "return": 2, "break": 3, "continue": 3 }; function a(r) { var e, t; return function (n) { e || (e = { stop: function stop() { return t(n.a, 2); }, "catch": function _catch() { return n.v; }, abrupt: function abrupt(r, e) { return t(n.a, o[r], e); }, delegateYield: function delegateYield(r, o, a) { return e.resultName = o, t(n.d, _regeneratorValues(r), a); }, finish: function finish(r) { return t(n.f, r); } }, t = function t(r, _t, o) { n.p = e.prev, n.n = e.next; try { return r(_t, o); } finally { e.next = n.n; } }), e.resultName && (e[e.resultName] = n.v, e.resultName = void 0), e.sent = n.v, e.next = n.n; try { return r.call(this, e); } finally { n.p = e.prev, n.n = e.next; } }; } return (_regeneratorRuntime = function _regeneratorRuntime() { return { wrap: function wrap(e, t, n, o) { return r.w(a(e), t, n, o && o.reverse()); }, isGeneratorFunction: n, mark: r.m, awrap: function awrap(r, e) { return new _OverloadYield(r, e); }, AsyncIterator: _regeneratorAsyncIterator, async: function async(r, e, t, o, u) { return (n(e) ? _regeneratorAsyncGen : _regeneratorAsync)(a(r), e, t, o, u); }, keys: _regeneratorKeys, values: _regeneratorValues }; })(); }
+function _regeneratorValues(e) { if (null != e) { var t = e["function" == typeof Symbol && Symbol.iterator || "@@iterator"], r = 0; if (t) return t.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) return { next: function next() { return e && r >= e.length && (e = void 0), { value: e && e[r++], done: !e }; } }; } throw new TypeError(_typeof(e) + " is not iterable"); }
+function _regeneratorKeys(e) { var n = Object(e), r = []; for (var t in n) { r.unshift(t); } return function e() { for (; r.length;) { if ((t = r.pop()) in n) return e.value = t, e.done = !1, e; } return e.done = !0, e; }; }
+function _regeneratorAsync(n, e, r, t, o) { var a = _regeneratorAsyncGen(n, e, r, t, o); return a.next().then(function (n) { return n.done ? n.value : a.next(); }); }
+function _regeneratorAsyncGen(r, e, t, o, n) { return new _regeneratorAsyncIterator(_regenerator().w(r, e, t, o), n || Promise); }
+function _regeneratorAsyncIterator(t, e) { function n(r, o, i, f) { try { var c = t[r](o), u = c.value; return u instanceof _OverloadYield ? e.resolve(u.v).then(function (t) { n("next", t, i, f); }, function (t) { n("throw", t, i, f); }) : e.resolve(u).then(function (t) { c.value = t, i(c); }, function (t) { return n("throw", t, i, f); }); } catch (t) { f(t); } } var r; this.next || (_regeneratorDefine2(_regeneratorAsyncIterator.prototype), _regeneratorDefine2(_regeneratorAsyncIterator.prototype, "function" == typeof Symbol && Symbol.asyncIterator || "@asyncIterator", function () { return this; })), _regeneratorDefine2(this, "_invoke", function (t, o, i) { function f() { return new e(function (e, r) { n(t, i, e, r); }); } return r = r ? r.then(f, f) : f(); }, !0); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
+function _OverloadYield(e, d) { this.v = e, this.k = d; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+
+var isLoaded = false;
+$().ready(function () {
+  $("#frm-product-info").validate({
+    rules: {
+      'name': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#product-name-unique-error').html('');
+      $('#product-name-unique-error').hide();
+      var new_form = document.getElementById("frm-product-info");
+      var data = new FormData(new_form);
+      axios.post("/panel/financial-product", data).then(function (response) {
+        var result = response.data;
+        //window.location = '/panel/financial/'+result.id+'/edit';
+        showToast('Producto', 'Datos guardados', 'success');
+      })["catch"](function (e) {
+        var response = e.response;
+        var data_errors = response.data.errors;
+        $('#product-name-unique-error').html('Este campo ya se encuentra registrado.');
+        $('#product-name-unique-error').show();
+      });
+    }
+  });
+  if (document.getElementById('frm-product-info') && $('#product_id').val() != 'null') {
+    var product_id = $('#product_id').val();
+
+    // Limpia las selecciones actuales en los selects
+    $('#product_periodicity_id').val(null).trigger('change');
+    $('#product-principal_pay').val(null).trigger('change');
+    axios.get("/panel/financial-product/" + product_id + '/getPeriodicityAndPaymentMethod').then(/*#__PURE__*/function () {
+      var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(response) {
+        var result, periodicities, payments, periodicityValues, paymentValues;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                // Usa async/await aquí
+                result = response.data;
+                periodicities = result.periodicities;
+                payments = result.payments; // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+                periodicityValues = periodicities.map(function (item) {
+                  return item.periodicity_id;
+                });
+                paymentValues = payments.map(function (item) {
+                  return item.payment_method_id;
+                }); // Seleccionar los valores correspondientes en los selects
+                $('#product_periodicity_id').val(periodicityValues).trigger('change');
+                $('#product-principal_pay').val(paymentValues).trigger('change');
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }())["catch"](function (e) {
+      console.error(e);
+    });
+  }
+});
+var previouslyLoadedTerms = []; // Almacena los términos previamente cargados
+
+window.setFPTerms = function () {
+  var product_id = $('#product_id').val();
+  $('#fp_terms').val(null).trigger('change');
+  // Realiza la solicitud AJAX para obtener los términos
+
+  var periodicityId = $('#product_periodicity_id').val();
+  var select = document.getElementById("fp_terms");
+
+  // Limpia el select antes de agregar opciones
+  select.innerHTML = "";
+
+  // Realiza la solicitud AJAX para obtener los términos
+  return axios.get("/panel/financial-product/" + periodicityId + '/' + product_id + '/terms/get').then(function (response) {
+    var result = response.data;
+    var terms = result.terms;
+    var getTerms = result.getTerms;
+    // Llena el select con las opciones de terms
+    terms.forEach(function (term) {
+      var option = document.createElement("option");
+      option.value = term.id; // El valor será el id
+      option.text = term.term; // El texto será el term
+      select.appendChild(option);
+    });
+
+    // Si se pasaron términos seleccionados, se seleccionan aquí
+    if (getTerms != null) {
+      var termValues = getTerms.map(function (item) {
+        return item.id;
+      });
+      $('#fp_terms').val(termValues).trigger('change');
+    }
+  })["catch"](function (e) {
+    console.error(e);
+  });
+};
+$("#frm-financial-chart").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-financial-chart");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+if (document.getElementById('tramite-proceso_tramite')) {
+  var ckeditor = CKEDITOR.replace('tramite-proceso_tramite', {
+    toolbar: [{
+      name: 'basicstyles',
+      items: ['Bold', 'Italic', 'Font', 'FontSize', 'TextColor', 'BGColor', 'RemoveFormat']
+    }, {
+      name: 'paragraph',
+      items: ['NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+    }, {
+      name: 'insert',
+      items: ['Table']
+    }],
+    language: 'es-mx'
+  });
+
+  //*axios que devuelva el valor proceso_tramite
+
+  var product_id = $('#product_id').val();
+  setTimeout(function () {
+    axios.get("/panel/financial-product/" + product_id + "/getTramite").then(function (response) {
+      var result = response.data;
+      CKEDITOR.instances['tramite-proceso_tramite'].setData(result.proceso_tramite);
+    })["catch"](function (e) {
+      // Manejar errores aquí
+    });
+  }, 2000); // 2000 milisegundos = 2 segundos
+}
+$("#frm-financial-tramite").submit(function (event) {
+  event.preventDefault();
+  var desc = CKEDITOR.instances['tramite-proceso_tramite'].getData();
+  $('#tramite-proceso_tramite').val(desc);
+  var new_form = document.getElementById("frm-financial-tramite");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+$("#frm-comisioneskc").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-comisioneskc");
+  var data = new FormData(new_form);
+  axios.post("/panel/financial-product", data).then(function (response) {
+    var result = response.data;
+    showToast('Producto', 'Datos guardados', 'success');
+  })["catch"](function (e) {});
+});
+window.deleteFinancialProduct = function (id) {
+  axios["delete"]("/panel/financial-product/" + id).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financial-product', 'Producto', 'Registro borrado');
+  })["catch"](function (e) {});
+};
+window.alerDeleteFinancialProduct = function (id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      deleteFinancialProduct(id);
+    }
+  });
+};
+if (document.getElementById('is_tramitar_active')) {
+  document.addEventListener('DOMContentLoaded', function () {
+    // Obtener referencias a los radio buttons
+    var radioSi = document.getElementById('is_tramitar_active');
+    var radioNo = document.getElementById('is_tramitar_pending');
+
+    // Obtener todos los elementos con la clase 'tramitable'
+    var tramitables = document.querySelectorAll('.tramitable');
+
+    // Función para mostrar u ocultar elementos tramitables
+    function toggleTramitables() {
+      // Si el radio "Sí" está seleccionado, mostrar todos los elementos tramitables
+      if (radioSi.checked) {
+        tramitables.forEach(function (element) {
+          element.style.display = ''; // Muestra el elemento (valor por defecto)
+        });
+      }
+      // Si el radio "No" está seleccionado, ocultar todos los elementos tramitables
+      else if (radioNo.checked) {
+        tramitables.forEach(function (element) {
+          element.style.display = 'none'; // Oculta el elemento
+        });
+      }
+    }
+
+    // Añadir event listeners a los radio buttons
+    radioSi.addEventListener('change', toggleTramitables);
+    radioNo.addEventListener('change', toggleTramitables);
+
+    // Ejecutar la función al cargar la página para establecer el estado inicial
+    toggleTramitables();
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/financial/product/datatable.js":
+/*!****************************************************************!*\
+  !*** ./resources/js/components/financial/product/datatable.js ***!
+  \****************************************************************/
+/***/ (() => {
+
+/* DT PRODUCT */
+if (document.getElementById('dt-financial-product')) {
+  var financial_id = $('#financial_id').val();
+  if (financial_id != '') {
+    document.addEventListener('DOMContentLoaded', function () {
+      var table = NioApp.DataTable('#dt-financial-product', {
+        processing: true,
+        responsive: {
+          details: {
+            renderer: function renderer(api, rowIdx, columns) {
+              var total = columns.length - 1;
+              var data = $.map(columns, function (col, i) {
+                if (total == i) {
+                  return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+                } else {
+                  return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+                }
+              }).join('');
+              return data ? $('<table/>').append(data) : false;
+            }
+          }
+        },
+        ajax: '/panel/financial/product/' + financial_id + '/list/show',
+        columns: [{
+          data: 'id'
+        }, {
+          data: 'name'
+        }, {
+          data: 'status'
+        }, {
+          data: 'options'
+        }],
+        columnDefs: [{
+          className: "nk-tb-col",
+          targets: "_all"
+        }],
+        createdRow: function createdRow(row, data, dataIndex) {
+          $(row).addClass("nk-tb-item");
+        }
+      });
+    });
+  }
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/general.js":
+/*!********************************************!*\
+  !*** ./resources/js/components/general.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utilities */ "./resources/js/components/utilities.js");
+
+window.modalNote = function (note_id, model_note) {
+  $('#id_rel').val(note_id);
+  $('#model_note').val(model_note);
+  $('#modal-lead-description').val('');
+  $('#modal-note').modal('show');
+};
+var refresh = {
+  'credit': creditRefresh
+};
+$("#frm-note").submit(function (event) {
+  event.preventDefault();
+  var model_note = $('#model_note').val();
+  var refresh_dt = $('#refresh-dt').val();
+  var new_form = document.getElementById("frm-note");
+  var data = new FormData(new_form);
+  axios.post("/panel/" + model_note + "/note", data).then(function (response) {
+    if (refresh_dt != 'null') {
+      (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
+      $('#modal-note').modal('hide');
+    } else {
+      refresh[model_note]();
+    }
+  })["catch"](function (e) {});
+});
+window.copyToClipBoardReport = function () {
+  var content = document.getElementById('url_report').value;
+
+  // Intentar usar la API del Portapapeles (navigator.clipboard) si está disponible
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(content).then(function () {
+      showToast('', 'URL copiada en el portapapeles', 'success');
+    })["catch"](function (err) {
+      console.log('No se pudo copiar al portapapeles con la API del Portapapeles', err);
+    });
+  } else {
+    // Si la API del Portapapeles no está disponible, usar métodos alternativos
+    var textarea = document.createElement('textarea');
+    textarea.value = content;
+    textarea.style.position = 'fixed'; // Para asegurarse de que sea visible
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      var successful = document.execCommand('copy');
+      var msg = successful ? 'URL copiada en el portapapeles' : 'No se pudo copiar al portapapeles';
+      showToast('', msg, successful ? 'success' : 'error');
+    } catch (err) {
+      console.log('No se pudo copiar al portapapeles con el método alternativo', err);
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/lead/crud.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/lead/crud.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+/* harmony import */ var rfc_facil__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rfc-facil */ "./node_modules/rfc-facil/dist/rfc-facil.es5.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; var r = _regenerator(), e = r.m(_regeneratorRuntime), t = (Object.getPrototypeOf ? Object.getPrototypeOf(e) : e.__proto__).constructor; function n(r) { var e = "function" == typeof r && r.constructor; return !!e && (e === t || "GeneratorFunction" === (e.displayName || e.name)); } var o = { "throw": 1, "return": 2, "break": 3, "continue": 3 }; function a(r) { var e, t; return function (n) { e || (e = { stop: function stop() { return t(n.a, 2); }, "catch": function _catch() { return n.v; }, abrupt: function abrupt(r, e) { return t(n.a, o[r], e); }, delegateYield: function delegateYield(r, o, a) { return e.resultName = o, t(n.d, _regeneratorValues(r), a); }, finish: function finish(r) { return t(n.f, r); } }, t = function t(r, _t, o) { n.p = e.prev, n.n = e.next; try { return r(_t, o); } finally { e.next = n.n; } }), e.resultName && (e[e.resultName] = n.v, e.resultName = void 0), e.sent = n.v, e.next = n.n; try { return r.call(this, e); } finally { n.p = e.prev, n.n = e.next; } }; } return (_regeneratorRuntime = function _regeneratorRuntime() { return { wrap: function wrap(e, t, n, o) { return r.w(a(e), t, n, o && o.reverse()); }, isGeneratorFunction: n, mark: r.m, awrap: function awrap(r, e) { return new _OverloadYield(r, e); }, AsyncIterator: _regeneratorAsyncIterator, async: function async(r, e, t, o, u) { return (n(e) ? _regeneratorAsyncGen : _regeneratorAsync)(a(r), e, t, o, u); }, keys: _regeneratorKeys, values: _regeneratorValues }; })(); }
+function _regeneratorValues(e) { if (null != e) { var t = e["function" == typeof Symbol && Symbol.iterator || "@@iterator"], r = 0; if (t) return t.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) return { next: function next() { return e && r >= e.length && (e = void 0), { value: e && e[r++], done: !e }; } }; } throw new TypeError(_typeof(e) + " is not iterable"); }
+function _regeneratorKeys(e) { var n = Object(e), r = []; for (var t in n) { r.unshift(t); } return function e() { for (; r.length;) { if ((t = r.pop()) in n) return e.value = t, e.done = !1, e; } return e.done = !0, e; }; }
+function _regeneratorAsync(n, e, r, t, o) { var a = _regeneratorAsyncGen(n, e, r, t, o); return a.next().then(function (n) { return n.done ? n.value : a.next(); }); }
+function _regeneratorAsyncGen(r, e, t, o, n) { return new _regeneratorAsyncIterator(_regenerator().w(r, e, t, o), n || Promise); }
+function _regeneratorAsyncIterator(t, e) { function n(r, o, i, f) { try { var c = t[r](o), u = c.value; return u instanceof _OverloadYield ? e.resolve(u.v).then(function (t) { n("next", t, i, f); }, function (t) { n("throw", t, i, f); }) : e.resolve(u).then(function (t) { c.value = t, i(c); }, function (t) { return n("throw", t, i, f); }); } catch (t) { f(t); } } var r; this.next || (_regeneratorDefine2(_regeneratorAsyncIterator.prototype), _regeneratorDefine2(_regeneratorAsyncIterator.prototype, "function" == typeof Symbol && Symbol.asyncIterator || "@asyncIterator", function () { return this; })), _regeneratorDefine2(this, "_invoke", function (t, o, i) { function f() { return new e(function (e, r) { n(t, i, e, r); }); } return r = r ? r.then(f, f) : f(); }, !0); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
+function _OverloadYield(e, d) { this.v = e, this.k = d; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) { n[e] = r[e]; } return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0) { ; } } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+
+
+window.setRfc = function () {
+  var nacimiento = $('#lead-birth_date').val();
+  var my_lastname = $('#lead-last_name').val();
+  var my_secondlastname = $('#lead-second_last_name').val();
+  var my_name = $('#lead-name').val();
+  var _nacimiento$split = nacimiento.split('-'),
+    _nacimiento$split2 = _slicedToArray(_nacimiento$split, 3),
+    my_year = _nacimiento$split2[0],
+    my_month = _nacimiento$split2[1],
+    my_day = _nacimiento$split2[2];
+  var rfc = rfc_facil__WEBPACK_IMPORTED_MODULE_1__["default"].forNaturalPerson({
+    name: my_name,
+    firstLastName: my_lastname,
+    secondLastName: my_secondlastname,
+    day: my_day,
+    month: my_month,
+    year: my_year
+  });
+  return rfc;
+};
+window.createRfc = function () {
+  var rfc = setRfc();
+  $('#lead-rfc').val(rfc);
+  checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+};
+$('.js-select2').select2({
+  placeholder: "Escribe para buscar..",
+  allowClear: true
+});
+$('.select2multiple').select2({
+  placeholder: "Escribe para buscar.."
+});
+//onchangeOrganization
+window.organizationChange = function (lead_agreement_id, financial_id, other, applied_financial_product) {
+  if (other != null) {
+    lead_agreement_id = 0;
+    $('#new_agreement').val(other);
+  }
+  //alert(lead_agreement_id);
+  if (lead_agreement_id != null) {
+    $('#lead-agreement').val(lead_agreement_id).trigger("change");
+  }
+  var lead_agreement = $("#lead-agreement").val();
+  $('#lead-content-agreement').hide();
+  if (lead_agreement == 0) {
+    $('#lead-content-agreement').show('slow');
+  }
+  if (typeof lead_agreement === 'string' && lead_agreement.trim().length == 0) {
+    $('#lead-content-agreement').hide();
+  } else {
+    getFinancial(lead_agreement, financial_id);
+    getFinancialByAgreement(lead_agreement, applied_financial_product);
+  }
+};
+window.productChange = function (lead_product_id) {
+  $('#content-importe-solicitado').hide();
+  /* $('#content-banco_nomina').hide(); */
+  //$('#content-tipo-credito').hide();
+  $('#content-consulta-buro-credito').hide();
+  $('#content-financial_product_id').hide();
+  $('#content-aval-o-garantia').hide();
+  $('#content-comment').hide();
+  $('#lead-financial_id').val(null).trigger('change');
+  if (lead_product_id != null) {
+    $('#lead-product-id').val(lead_product_id).trigger("change");
+  }
+  var product_id = $("#lead-product-id").val();
+  if (product_id == 2) {
+    //portabilidad
+    $('#content-financial_product_id').show();
+    $('#content-importe-solicitado').show();
+    /* $('#content-banco_nomina').hide(); */
+    $('#content-producto-financiero').show();
+    $('#content-consulta-buro-credito').hide();
+    $('#content-aval-o-garantia').hide();
+    $('#content-ingreso-mensual').show();
+  }
+  if (product_id == 1) {
+    // credito nomina
+    /* $('#content-banco_nomina').hide(); */
+    $('#content-importe-solicitado').show();
+    $('#content-producto-financiero').show();
+    $('#content-tipo_tramite').show();
+    $('#content-tipo-credito').show();
+    $('#content-consulta-buro-credito').hide();
+    $('#content-aval-o-garantia').hide();
+    $('#content-ingreso-mensual').show();
+  }
+  if (product_id == 4) {
+    // on-demand
+    $('#content-producto-financiero').show();
+    $('#content-ingreso-mensual').hide();
+  }
+  if (product_id == 3) {
+    //Asesoria
+
+    $('#content-comment').show();
+    $('#content-aval-o-garantia').hide();
+  }
+};
+function getFinancialByAgreement(agreementId, applied_financial_product) {
+  var selectElement = document.getElementById('applied_financial_product');
+  selectElement.options.length = 0; // Limpiar el select
+
+  axios.get("/panel/agreement/" + agreementId + "/financial-product/show").then(function (response) {
+    var financialProducts = response.data;
+    Object.keys(financialProducts).forEach(function (key) {
+      var option = document.createElement('option');
+      option.value = key;
+      option.textContent = financialProducts[key];
+      selectElement.appendChild(option);
+    });
+    if (applied_financial_product != 'null') {
+      $('#applied_financial_product').val(applied_financial_product).trigger("change");
+    }
+  })["catch"](function (e) {});
+}
+function getFinancial(lead_id, financial_id) {
+  $('#lead-financial_id').empty();
+  axios.get("/panel/lead/financial/" + lead_id + "/show").then(function (response) {
+    var result = response.data;
+    $('#lead-financial_id').empty();
+    if (result != null) {
+      var lead_financial = $('#lead-financial_id');
+      for (var key in result) {
+        var element = result[key];
+        var option = new Option(element.commercial_name, element.id, true, true);
+        lead_financial.append(option).trigger('change');
+      }
+      var _lead_id = $("#lead_id").val();
+      var history_id = $("#history_id").val();
+      if (financial_id == null) {
+        $('#lead-financial_id').val(null).trigger('change');
+      } else {
+        $('#lead-financial_id').val(financial_id).trigger('change');
+      }
+    }
+  })["catch"](function (e) {
+    $('#admin_email-error-exist').show();
+  });
+}
+window.getFinancialProduct = function (id, type) {
+  axios.get("/panel/action/financial/product/" + id + "/" + type + '/show').then(function (response) {
+    var result = response.data;
+    var financials = result.financials;
+    var financialValues = financials.map(function (item) {
+      return item.product_id;
+    });
+    // Limpia las selecciones actuales en el select múltiple
+    $('#lead-financial-product-id').val(null).trigger('change');
+    // Seleccionar los valores correspondientes en los selects
+    $('#lead-financial-product-id').val(financialValues).trigger('change');
+  })["catch"](function (e) {});
+};
+window.setChannel = function (origin_id) {
+  $('#lead-channel').empty();
+  var lead_channel = $('#lead-channel');
+  axios.get("/panel/lead/" + origin_id + "/origin/").then(function (response) {
+    var result = response.data;
+    if (result != null) {
+      for (var key in result) {
+        var element = result[key];
+        if (element != 'Selecciona una opción') {
+          var option = new Option(element, key, true, true);
+          lead_channel.append(option).trigger('change');
+        }
+      }
+    }
+    $('#lead-channel').val(null).trigger('change');
+    $('#lead-channel').val(change_channel).trigger("change");
+  })["catch"](function (e) {
+    $('#admin_email-error-exist').show();
+  });
+};
+if (document.getElementById('lead-origin-admin')) {
+  setChannel(1);
+}
+window.changeOrigen = function (change_channel) {
+  var origin_id = $("#lead-origin").val();
+  var lead_id = $("#lead_id").val();
+  $('#lead-channel').empty();
+  var lead_channel = $('#lead-channel');
+  axios.get("/panel/lead/" + origin_id + "/origin/").then(function (response) {
+    var result = response.data;
+    if (result != null) {
+      for (var key in result) {
+        var element = result[key];
+        if (element != 'Selecciona una opción') {
+          var option = new Option(element, key, true, true);
+          lead_channel.append(option).trigger('change');
+        }
+      }
+    }
+    $('#lead-channel').val(null).trigger('change');
+    if (change_channel != null) {
+      $('#lead-channel').val(change_channel).trigger("change");
+    }
+  })["catch"](function (e) {
+    $('#admin_email-error-exist').show();
+  });
+};
+
+/* $("#lead-origin" ).change(function() {
+  
+}); */
+
+window.validateLeadEdit = function (lead_id) {
+  var cellphone = $('#lead-cellphone').val();
+  var rfc = $('#lead-rfc').val();
+  axios.get("/panel/lead/" + cellphone + "/" + rfc + "/" + lead_id + "/get/validate").then(function (response) {
+    var result = response.data;
+    var isValidate = result.isValidate;
+    var contentValidaciones = result.msg;
+    var client_person_id = $('#client_person_id').val();
+    if (isValidate == true) {
+      $('#is_viability').val(1);
+      $('#content-servicio-kc').show();
+      $('#prospecto-valido').val('Prospecto válido');
+      $('#content-validaciones').show();
+      $('#content-validaciones').html(contentValidaciones);
+    } else {
+      $('#content-validaciones').html(contentValidaciones);
+      $('#is_viability').val(0);
+      $('#content-servicio-kc').hide();
+      $('#prospecto-valido').val('');
+    }
+    showContentIsValidate();
+  })["catch"](function (e) {});
+};
+window.showContentIsValidate = function () {
+  var is_viability = $('#is_viability').val();
+  var clientPersonId = $('#client_person_id').val();
+  //perfil-cliente
+
+  if (is_viability == 1) {
+    $('.perfil-cliente').each(function () {
+      $(this).attr('href', '/panel/client/' + clientPersonId);
+    });
+  }
+};
+function setData(is_change_origen, isChange, isChangeBirthDay) {
+  var lead_id = $('#lead_id').val();
+  axios.get("/panel/lead/" + lead_id).then(function (response) {
+    var result = response.data;
+    var lead = result.lead;
+    var is_viability = lead.is_viability;
+    var is_viability_credit = lead.is_viability_credit;
+    $('#tramit_type').prop('disabled', true);
+    setTimeout(function () {
+      console.log('finish');
+      $('#tramit_type').prop('disabled', false);
+      $('#tramit_type').val(lead.tramit_type).trigger("change");
+    }, 7000);
+    //productChange(product_id);
+    //organizationChange(lead.agreement_id, lead.financial_id, other, lead.applied_financial_product);
+    $('#lead-origin-agreement').val(lead.agreement_id);
+    getProductsByAgreementId(lead.agreement_id, lead.financial_product_id);
+
+    //getFinancialProduct(lead.id, 1);
+
+    if (is_change_origen == true) {
+      $('#lead-origin').val(lead.origin_id);
+      $('#lead-origin').trigger("change");
+    }
+    $('#lead-asesor-id').val(lead.asesor_id);
+    $('#lead-asesor-id').trigger("change");
+
+    /* $('#lead-type_id').val(lead.type_id);
+    $('#lead-type_id').trigger("change"); */
+
+    $('#lead-name').val(lead.name);
+    if (isChangeBirthDay == true) {
+      $('#lead-birth_date').val(lead.birth_date);
+    }
+    $('#lead-last_name').val(lead.last_name);
+    $('#lead-second_last_name').val(lead.second_last_name);
+    $('#lead-cellphone').val(lead.cellphone);
+    $('#lead-email').val(lead.email);
+    $('#lead-rfc').val(lead.rfc);
+    if (document.getElementById('lead-manychat_id')) {
+      $('#lead-manychat_id').val(lead.manychat_id);
+    }
+    $('#lead-comment').val(lead.comment);
+    $('#client_person_id').val(lead.client_person_id);
+    validateLeadEdit(lead_id); // Luego ejecuta validateLeadEdit
+
+    //changeOrigen(lead.channel_id);
+
+    $('#lead-temperature-id').val(lead.financial_id).trigger("change");
+    $('#importe_solicitado').val(lead.importe_solicitado);
+    $('#income').val(lead.income);
+    $('#bank_id').val(lead.bank_id).trigger("change");
+    $('#tipo_credito').val(lead.tipo_credito).trigger("change");
+    $('#consulta_buro').val(lead.consulta_buro).trigger("change");
+    $('#lead-agreement').val(lead.agreement_id).trigger("change");
+    if (isChange == true) {
+      checkDataLeadExist(document.getElementById('lead-cellphone'), 'cellphone'); // Call check after setting value
+      checkDataLeadExist(document.getElementById('lead-email'), 'email'); // Call check after setting value
+      checkDataLeadExist(document.getElementById('lead-rfc'), 'rfc'); // Call check after setting value
+    }
+    $('#applied_loan_type').val(lead.applied_loan_type).trigger("change");
+
+    // Get the checkbox elements
+    var checkboxViability = document.getElementById('is_viability');
+    var checkboxViabilityCredit = document.getElementById('is_viability_credit');
+
+    // Set the checked property based on the variables
+    checkboxViability.checked = is_viability === 1;
+    checkboxViabilityCredit.checked = is_viability_credit === 1;
+  })["catch"](function (e) {
+    $('#admin_email-error-exist').show();
+  });
+}
+window.checkDataLeadExist = function (valInput, id) {
+  var getValue = valInput.value;
+  var messageElement = document.getElementById(id + '-msg');
+  var lead_id = $('#lead_id').val() || null;
+  $('#content-validaciones').html('');
+  if (getValue != '') {
+    messageElement.textContent = "";
+    axios.get("/panel/lead/" + getValue + "/" + id + "/" + lead_id + "/check").then(function (response) {
+      var result = response.data;
+      var isExist = result.exist;
+      var clientPerson = result.clientPerson;
+      var isValidate = result.isValidate;
+      var creditStatus = result.creditStatus;
+      $('#lead_id').val(result.lead.id);
+      getLeadValidations();
+      $('#isNew').val(0);
+      if (id == 'cellphone') {
+        $('#content-validaciones-phone').html(result.contentValidaciones);
+      } else {
+        $('#content-validaciones-rfc').html(result.contentValidaciones);
+      }
+      //$('#content-validaciones').html(result.contentValidaciones);
+      if (typeof clientPerson !== 'undefined' && clientPerson && clientPerson.id) {
+        $('.perfil-cliente').each(function () {
+          $(this).attr('href', '/panel/client/' + clientPerson.id);
+        });
+      }
+      if (isExist > 0 && isValidate == true) {
+        $('#client_person_id').val(clientPerson.id);
+        $('#content-servicio-kc').show();
+        getProductsByAgreementId(clientPerson.agreement_id, null);
+        messageElement.classList.remove("text-danger");
+        messageElement.classList.add("text-primary");
+        messageElement.textContent = "Validación exitosa";
+        $('#is_viability').val(1);
+        //$('#lead_id').val(clientPerson.id);
+        $('#prospecto-valido').val('Prospecto válido');
+        $('#lead-origin-agreement').val(clientPerson.agreement_id);
+        if (id == 'cellphone') {
+          $('#isValidateCellphone').val(result.isValidate);
+          $('#cellphone_validated').val(1);
+          $('#rfc_validated').val(0);
+        }
+        if (id == 'rfc') {
+          $('#cellphone_validated').val(0);
+          $('#rfc_validated').val(1);
+        }
+        $('#lead-name').val(clientPerson.name);
+        $('#lead-last_name').val(clientPerson.last_name);
+        $('#lead-second_last_name').val(clientPerson.second_last_name);
+        $('#lead-birth_date').val(clientPerson.birth_date);
+        $('#lead-rfc').val(clientPerson.rfc);
+        $('#lead-email').val(clientPerson.email);
+        $('#lead-agreement').val(clientPerson.agreement_id).trigger("change");
+        if (id == 'cellphone') {
+          $('#content-validaciones-phone').html('');
+        } else {
+          $('#content-validaciones-rfc').html('');
+        }
+      } else {
+        messageElement.classList.remove("text-primary");
+        messageElement.classList.add("text-danger");
+        messageElement.textContent = "Validación fallida";
+        $('#content-servicio-kc').hide();
+        $('#prospecto-valido').val('');
+        $('#is_viability').val(0);
+      }
+    })["catch"](function (e) {});
+  }
+};
+window.showModalCompraCartera = function () {
+  var lead_id = $('#lead_id').val();
+  var client_person_id = $('#client_person_id').val();
+  $('#lead_id_compra_cartera').val(lead_id);
+  $('#client_person_id_compra_cartera').val(client_person_id);
+  $('#creditPayOffId').val('');
+  document.getElementById("frm-modal-compra-cartera").reset();
+  $('#frm-modal-compra-cartera .js-select2').val(null).trigger('change');
+  $('#modal-compra-cartera').modal('show');
+};
+window.showTableCompraCartera = function (leadId) {
+  $('#content-table-compra-cartera').html('');
+  $('#resumen-deuda-capital').val('');
+  console.log('inicio compracartera');
+  axios.get("/panel/lead/credit-pay-off/" + leadId).then(function (response) {
+    var result = response.data;
+    var table = result.table;
+    var total = result.total;
+    var montoEntregar = $('#hmonto-entregar').val();
+    console.log('axios');
+    $('#content-monto-compra-cartera').html(total.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }));
+    $('#resumen-deuda-capital').val(total);
+    $('#content-monto-entregar').html(total - montoEntregar);
+    $('#content-table-compra-cartera').html(table);
+    var leadIdValue = document.getElementById('lead_id').value;
+    var verGraficaLink = document.getElementById('ver-grafica');
+    verGraficaLink.setAttribute('href', '/grafica/' + leadIdValue);
+  })["catch"](function (e) {
+    console.log('error elementos compra de cartera');
+  });
+};
+$("#frm-modal-compra-cartera").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-modal-compra-cartera");
+  var data = new FormData(new_form);
+  var leadId = $('#lead_id_compra_cartera').val();
+  console.log(leadId);
+  axios.post("/panel/lead/credit-pay-off", data).then(function (response) {
+    var result = response.data;
+    $('#modal-compra-cartera').modal('hide');
+    showTableCompraCartera(leadId);
+  })["catch"](function (e) {});
+});
+window.deleteCompraCartera = function (creditPayOffId) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      axios["delete"]("/panel/lead/credit-pay-off/" + creditPayOffId).then(function (response) {
+        var leadId = document.getElementById("lead_id").value;
+        showTableCompraCartera(leadId);
+      })["catch"](function (e) {});
+    }
+  });
+};
+window.editCompraCartera = function (creditPayOffId) {
+  axios.get("/panel/lead/credit-pay-off/" + creditPayOffId + '/data/get').then(function (response) {
+    var result = response.data;
+    $('#compra-cartera-financial_product_id').val(result.financial_product_id).trigger("change");
+    $('#compra-cartera-ammount').val(result.ammount);
+    $('#creditPayOffId').val(creditPayOffId);
+    $('#modal-compra-cartera').modal('show');
+  })["catch"](function (e) {});
+};
+window.getProductsByAgreementId = function (leadId, productId) {
+  var clientPersonId = $('#client_person_id').val();
+  var selectElement = document.getElementById('financial_product_id');
+  selectElement.options.length = 0; // Limpiar el select
+  axios.get("/panel/lead/" + leadId + '/' + clientPersonId + "/getProducts").then(function (response) {
+    var products = response.data;
+    Object.keys(products).forEach(function (key) {
+      var option = document.createElement('option');
+      option.value = key;
+      option.textContent = products[key];
+      selectElement.appendChild(option);
+    });
+    if (productId != 'null') {
+      $('#financial_product_id').val(productId).trigger("change");
+    }
+  })["catch"](function (e) {});
+};
+window.deleteLead = function (lead_id) {
+  axios.get("panel/lead/" + lead_id + "/delete").then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Información actualizada correctamente');
+  })["catch"](function (e) {});
+};
+window.modalAdvisor = function (lead_id) {
+  $('#lead_advisor_id').val(lead_id);
+  $('#type_id').val(1);
+  $('#modal-advisor').modal('show');
+};
+window.modalAdvisorCredit = function (credit_id) {
+  $('#credit_id').val(credit_id);
+  $('#type_id').val(2);
+  $('#modal-advisor').modal('show');
+};
+$("#frm-advisor").submit(function (event) {
+  event.preventDefault();
+  var asesor_id = $('#modal-advisor-id').val();
+  var lead_id = $('#lead_advisor_id').val();
+  var credit_id = $('#credit_id').val();
+  var type_id = $('#type_id').val();
+  var url = "panel/lead/" + lead_id + "/advisor/store";
+  var dt = 'dt-lead';
+  if (type_id == 2) {
+    url = "panel/credit/" + credit_id + "/advisor/store";
+    dt = 'dt-check-up';
+  }
+  axios.post(url, {
+    asesor_id: asesor_id
+  }).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, dt, 'Datos actualizados', 'Prospecto asignado');
+    $('#modal-advisor').modal('hide');
+  })["catch"](function (e) {});
+});
+window.createClientPerson = function (lead_id) {
+  axios.post("panel/lead/" + lead_id + "/client-person/store").then(function (response) {
+    var result = response.data;
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Cuenta creada');
+  })["catch"](function (e) {
+    showToast('prospecto', 'Este email ya está registrado', 'warning');
+  });
+};
+window.modalTags = function (lead_id) {
+  $('#modal-tag-lead_id').val(lead_id);
+  $('#modal-tags').modal('show');
+};
+if (document.getElementById('frm-advisor')) {
+  $('#modal-advisor-id').select2({
+    dropdownParent: $('#modal-advisor'),
+    placeholder: "Escribe para buscar..",
+    allowClear: true
+  });
+}
+if (document.getElementById('frm-tags')) {
+  $('#modal-tags-tag').select2({
+    dropdownParent: $('#modal-tags'),
+    placeholder: "Escribe para buscar..",
+    allowClear: true
+  });
+}
+$("#frm-tags").submit(function (event) {
+  event.preventDefault();
+  var lead_id = $('#modal-tag-lead_id').val();
+  var new_form = document.getElementById("frm-tags");
+  var data = new FormData(new_form);
+  axios.post("panel/lead/" + lead_id + "/tag/update", data).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-lead', 'Datos actualizados', 'Etiqueta actualizada');
+    $('#modal-tags').modal('hide');
+  })["catch"](function (e) {});
+});
+function getAllValidate() {
+  var clientPersonId = $('#client_person_id').val();
+  var agreement = $('#lead-origin-agreement').val();
+  var productId = $('#financial_product_id').val();
+  var lead_id = $('#lead_id').val(result.id);
+  axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + '/' + lead_id + "/soad/get").then(function (response) {})["catch"](function (e) {});
+}
+window.saveLead = function (isFullSave) {
+  var new_form = document.getElementById("frm-lead");
+  var data = new FormData(new_form);
+  data.append('isFullSave', isFullSave);
+  axios.post("/panel/lead", data).then(function (response) {
+    var getResult = response.data;
+    var result = getResult.lead;
+    $('#lead_id').val(result.id);
+    $('#isNew').val(0);
+    getLeadValidations();
+  })["catch"](function (e) {});
+};
+$().ready(function () {
+  $("#frm-lead").validate({
+    rules: {
+      'data[name]': {
+        required: true
+      },
+      'data[last_name]': {
+        required: false
+      },
+      'data[cellphone]': {
+        number: true,
+        minlength: 10
+      },
+      'data[email]': {
+        required: false,
+        email: true
+      },
+      'data[origin_id]': {
+        required: true
+      },
+      'new_agreement': {
+        required: function required(element) {
+          var lead_agreement = $("#lead-agreement").val();
+          if (lead_agreement == 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frm-lead");
+      var data = new FormData(new_form);
+      data.append('isFullSave', 'true');
+      var isExport = $('#isExport').val();
+      axios.post("/panel/lead", data).then(function (response) {
+        var getResult = response.data;
+        var result = getResult.lead;
+        if (isExport == 'true') {
+          $('#lead_id').val(result.id);
+
+          //exportar
+          exportLead(result.id);
+        } else {
+          window.location = '/panel/lead';
+        }
+      })["catch"](function (e) {});
+    }
+  });
+  function exportLead(_x) {
+    return _exportLead.apply(this, arguments);
+  }
+  function _exportLead() {
+    _exportLead = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(leadId) {
+      var fileName, formData, response, blob, link;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              fileName = 'KC - Datos exportados' + leadId + '.csv'; // Replace with your logic
+              formData = new FormData();
+              formData.append('lead_id', leadId);
+              _context.next = 5;
+              return axios.post("/panel/lead/" + leadId + "/data/export", formData, {
+                responseType: 'blob'
+              });
+            case 5:
+              response = _context.sent;
+              blob = new Blob(["\uFEFF", response.data], {
+                type: 'text/csv;charset=utf-8'
+              });
+              if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, fileName);
+              } else {
+                link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = fileName;
+                link.click();
+              }
+              $('#isExport').val(false);
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+    return _exportLead.apply(this, arguments);
+  }
+});
+window.saveAndExportLead = function () {
+  $('#isExport').val(true);
+  document.getElementById('btnSave').click();
+};
+
+/* modal vista previa perfil */
+window.modalPreviewProfile = function (lead_id) {
+  $('content-preview-profile').html('');
+  axios.get("/panel/lead/" + lead_id + "/preview/profile").then(function (response) {
+    var result = response.data;
+    $('#content-preview-profile').html(result);
+    $('#modal-preview-profile').modal('show');
+  })["catch"](function (e) {});
+};
+window.modalPasswod = function (user_id) {
+  $('#password_user_id').val(user_id);
+  $('#modal-user-password').modal('show');
+};
+//*id_rel is action_id
+window.modalRegisterAction = function (id_rel) {
+  $('#register-action-id-rel').val(id_rel);
+  $('#modal-register-action').modal('show');
+};
+
+//llenar tipo de tramite
+function setSelectTramite(clientPersonId, financialProductId, tipoTramiteId) {
+  var selectElement = document.getElementById('tramit_type');
+  selectElement.options.length = 0; // Limpiar el select
+  $('#content-validaciones-soad-tramite').html('');
+  $('#content-error-producto-preautorizado').hide();
+  var typeProductId = $('#typeProductId').val();
+  var leadId = $('#lead_id').val();
+  var productId = $('#financial_product_id').val();
+  axios.get("/panel/lead/" + clientPersonId + "/" + financialProductId + "/" + leadId + "/tramite/get").then(function (response) {
+    var result = response.data;
+    var sodIsTramite = result.sodIsTramite;
+    var sodMessage = result.sodMessage;
+    var sodTramites = result.sodTramites;
+    if (sodIsTramite == true) {
+      $('#content-product-select').hide();
+      Object.keys(sodTramites).forEach(function (key) {
+        var option = document.createElement('option');
+        option.value = key;
+        option.textContent = sodTramites[key];
+        selectElement.appendChild(option);
+      });
+    } else {
+      $('#content-product-select').show();
+      $('#content-error-producto-preautorizado').show();
+    }
+    if (tipoTramiteId != 'null') {
+      $('#tramit_type').val(tipoTramiteId).trigger("change");
+    }
+    if (typeProductId != 3 && typeProductId != '') {
+      $('#content-validaciones-soad-tramite').html(sodMessage);
+    }
+  })["catch"](function (e) {});
+}
+
+//contenido tramite al cambiar el select si selecciona refinanciamiento
+window.changeTramite = function () {
+  var tramit_type = $('#tramit_type').val();
+  var clientPersonId = $('#client_person_id').val();
+  var productId = $('#financial_product_id').val();
+  var typeProductId = $('#typeProductId').val();
+  var leadId = document.getElementById("lead_id").value;
+  $('#content-product-select').hide();
+  $('#content-product').hide();
+  $('#content-refinanciado').hide();
+  $('#product-deseado-refinanciamiento').hide();
+  $('#content-product-deseado-refinanciamiento').html('');
+  if (typeProductId != 3 && typeProductId != '') {
+    $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+    $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+  }
+
+  //
+  if (tramit_type == 3 || tramit_type == 2 || tramit_type == 1) {
+    axios.get("/panel/lead/" + clientPersonId + "/" + productId + "/" + tramit_type + "/refinanciamiento/get").then(function (response) {
+      var result = response.data;
+      var montoMaximo = result.montoMaximo;
+      var plazoMaximo = result.plazoMaximo;
+      var periodicidad = result.periodicidad;
+      var payment = result.payment;
+      var productoDeseado = result.productoDeseado;
+      var terms = result.terms;
+      $('#monto-maximo').val(montoMaximo);
+      $('#plazo-maximo').val(plazoMaximo);
+      $('#periodicidad').val(periodicidad);
+      $('#periodicidad-hidden').val(result.periodicidad_id);
+      $('#pago-periodico').val(payment);
+      if (typeProductId != 3) {
+        $('#content-product-select').show();
+        $('#content-refinanciado').show();
+      }
+      $('#product-deseado-refinanciamiento').show();
+      $('#content-product-deseado-refinanciamiento').html(productoDeseado);
+      var selectTramite = document.getElementById('ref-plazo');
+      selectTramite.options.length = 0; // Limpiar el select
+
+      var defaultOption = document.createElement('option');
+      defaultOption.value = ''; // Value vacío
+      defaultOption.textContent = 'Seleccione una opción'; // Texto de la opción
+      selectTramite.appendChild(defaultOption);
+      Object.keys(terms).forEach(function (key) {
+        var option = document.createElement('option');
+        option.value = key;
+        option.textContent = terms[key];
+        selectTramite.appendChild(option);
+      });
+      if (typeProductId == 2) {
+        showTableCompraCartera(leadId);
+      }
+      saveLead(false);
+    })["catch"](function (e) {});
+  }
+};
+window.graficaProspecto = function () {
+  getChart();
+  $('#modal-chart').modal('show');
+};
+window.getMontoSolicitado = function () {
+  var clientPersonId = $('#client_person_id').val();
+  var productId = $('#financial_product_id').val();
+  var plazo = $('#ref-plazo').val();
+  var creditElement = document.getElementById('controldesk-credit_id');
+  var creditId = creditElement ? creditElement.value : null;
+  var tramit_type = $('#tramit_type').val();
+  var typeProductId = $('#typeProductId').val();
+  // Obtiene todos los checkboxes con nombre 'credits[]'
+  var checkboxes = document.querySelectorAll('input[name="credits[]"]:checked');
+
+  // Inicializa un array para guardar los valores seleccionados
+  var credits = [];
+
+  // Itera sobre los checkboxes seleccionados y almacena sus valores
+  checkboxes.forEach(function (checkbox) {
+    credits.push(checkbox.value);
+  });
+  var selectMontoMaximo = document.getElementById('ref-monto');
+  selectMontoMaximo.options.length = 0; // Limpiar el select
+
+  $('#total-refinanciable').val(0);
+  axios.post("/panel/lead" + '/' + clientPersonId + "/" + productId + "/" + tramit_type + "/" + creditId + "/montoMaximo/get", {
+    credits: credits,
+    plazo: plazo
+  }).then(function (response) {
+    var result = response.data;
+    var maximo = result.maximo;
+    var total = result.total;
+    var total_price = result.total_price;
+    var defaultOption = document.createElement('option');
+    defaultOption.value = ''; // Value vacío
+    defaultOption.textContent = 'Seleccione una opción'; // Texto de la opción
+    selectMontoMaximo.appendChild(defaultOption);
+    Object.keys(maximo).forEach(function (key) {
+      var option = document.createElement('option');
+      option.value = key;
+      option.textContent = maximo[key];
+      selectMontoMaximo.appendChild(option);
+    });
+    $('#table-refinanciamiento-total').html(total_price);
+    $('#total-refinanciable').val(total);
+    if (typeProductId != 3 && typeProductId != '') {
+      var plazosolicitado = $('#ref-plazo').val();
+      if (plazosolicitado != '') {
+        $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+      }
+    }
+    getResumen();
+  })["catch"](function (e) {});
+};
+function parseCurrency(value) {
+  if (!value) return 0; // Si el valor es null, vacío o undefined, devolver 0
+  var cleanValue = value.replace(/[^\d.]/g, ''); // Elimina cualquier caracter que no sea número o punto decimal
+  return parseFloat(cleanValue) || 0; // Convierte a número, si falla devuelve 0
+}
+window.getResumen = function () {
+  var clientPersonId = $('#client_person_id').val();
+  var productId = $('#financial_product_id').val();
+  var plazo = $('#ref-plazo').val();
+  var monto = $('#ref-monto').val();
+  var adicional = '';
+  if (document.getElementById('ref-monto-new')) {
+    monto = $('#ref-monto-new').val();
+  }
+  if (document.getElementById('isControlDesk')) {
+    var creditId = $('#controldesk-credit_id').val();
+    adicional = '?credit_id=' + creditId;
+  }
+
+  /* if (document.getElementById('ref-monto-new')) {
+      let montoNuevo = $('#total-refinanciable').val();
+      const newMontoSolicitado = Math.min(compraCartera, montoSolicitado);
+  } */
+
+  var totalRefinanciable = $('#total-refinanciable').val();
+  var tramit_type = $('#tramit_type').val();
+  var typeProductId = $('#typeProductId').val();
+  $('#go_ahead').val(0);
+  axios.get("/panel/lead/" + productId + "/" + plazo + '/' + (monto || 0) + '/' + (totalRefinanciable || 0) + '/' + tramit_type + '/getResumen' + adicional).then(function (response) {
+    var result = response.data;
+    var montoSolicitado = result.montoSolicitado;
+    var montoRefinanciar = result.montoRefinanciar;
+    var comision = result.comision;
+    var monto_entregar = result.monto_entregar;
+    var montoEntregarDecimal = null;
+    var periodicidad = result.periodicidad;
+    var plazo = result.plazo;
+    var pagoPeriodico = result.pagoPeriodico;
+    var pagoPeriodicoSF = result.pagoPeriodico_sf;
+    var pagoTotal = result.pagoTotal;
+    var tasaAnual = result.tasaAnual;
+    var cat = result.cat;
+    var kcInteres = result.kcInteres;
+    var kcPagoTotal = result.kcPagoTotal;
+    var productoFinanciero = $('#financial_product_id').val();
+    $('#selected_term').val(plazo);
+    $('#selected_loan').val(result.montoSolicitado_sf);
+    $('#applied_financial_product').val(productoFinanciero);
+    $('#content-monto-solicitado').html(montoSolicitado);
+    $('#content-monto-refinanciar').html(montoRefinanciar);
+    $('#content-comision-apertura').html(comision);
+    if (document.getElementById('total-monto-solicitado')) {
+      $('#content-monto-compra-cartera').html('');
+      $('#content-monto-compra-cartera').html($('#total-monto-solicitado_format').val());
+    }
+    var cMontoSolicitado = result.montoSolicitado_sf;
+    var cMontoCompraCartera = $('#content-monto-compra-cartera').length && $('#content-monto-compra-cartera').text().trim() ? parseCurrency($('#content-monto-compra-cartera').text().trim()) : 0;
+    var cComisionApertura = $('#content-comision-apertura').length && $('#content-comision-apertura').text().trim() ? parseCurrency($('#content-comision-apertura').text().trim()) : 0;
+    var cMontoRefinanciar = $('#content-monto-refinanciar').length && $('#content-monto-refinanciar').text().trim() ? parseCurrency($('#content-monto-refinanciar').text().trim()) : 0;
+
+    //console.log(cMontoSolicitado + '-' + cMontoCompraCartera + '-'+cComisionApertura);
+    montoEntregarDecimal = cMontoSolicitado - cMontoCompraCartera - cComisionApertura - cMontoRefinanciar;
+    monto_entregar = montoEntregarDecimal.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    $('#content-monto-entregar').html(monto_entregar);
+    $('#content-plazo').html(periodicidad);
+    $('#content-monto').html(plazo);
+    $('#content-pago-periodico').html(pagoPeriodico);
+    $('#applied_payment').val(pagoPeriodicoSF);
+    $('#applied_loan_total_amount').val(result.pagoTotalSF);
+    $('#opening_commission').val(result.comisionSF);
+    $('#net_amount').val(montoEntregarDecimal);
+    $('#content-pago-total').html(pagoTotal);
+    $('#content-tasa-anual').html(tasaAnual);
+    $('#content-cat').html(cat);
+    $('#hmonto-entregar').val(montoEntregarDecimal);
+    getChart();
+    $('#go_ahead').val(1);
+    if (typeProductId != 3) {
+      $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+      $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-danger"> Sin seleccionar  </span> </p>');
+      var plazosolicitado = $('#ref-plazo').val();
+      var montosolicitado = $('#ref-monto').val();
+      if (plazosolicitado != '') {
+        $('#content-validaciones-plazo').html('<p>Validar Crédito Seleccionado / Plazo seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+      }
+      if (montosolicitado != '') {
+        $('#content-validaciones-monto').html('<p>Validar Crédito Seleccionado / Importe seleccionado / <span class="text-primary"> Seleccionado  </span> </p>');
+      }
+    }
+    if (document.getElementById('validateBtnSave') && montoEntregarDecimal <= 0) {
+      $('#saveButton').hide();
+    } else {
+      $('#saveButton').show();
+    }
+    saveLead(false).then(function () {
+      getLeadValidations();
+    })["catch"](function (error) {
+      console.error('Error saving lead:', error);
+    });
+  })["catch"](function (e) {});
+};
+function getChart() {
+  var productId = $('#financial_product_id').val();
+  var leadId = $('#lead_id').val();
+  var plazo = $('#plazo-maximo').val();
+  var monto = $('#monto-maximo').val();
+  axios.get("/panel/lead/" + productId + "/" + leadId + "/" + plazo + '/getChart').then(function (response) {
+    var result = response.data;
+    $('#ahorro-interes-dinero').html(result.ahorroInteresDinerom);
+    $('#ahorro-interes-porcentaje').html(result.ahorroInteresPorcentaje);
+    $('#lbl-kc-pago-total').html(result.deudaPagoTotalm);
+    $('#lbl-kc-porcentaje-interes').html(result.deudaPorcentajeInteresm);
+    $('#lbl-deuda-pago-total').html(result.kcPagoTotal);
+    $('#lbl-deuda-porcentaje-interes').html(result.kcPorcentajeInteres);
+
+    // Crear múltiples gráficas de ejemplo con alturas dinámicas
+    crearGraficaApilada(chartsContainer, result.deudaInteres, result.deudaCapital, '#a34444', '#757575', "Interés", "Deuda total <br> de tus créditos");
+    crearGraficaApilada(chartsContainer, result.kcInteres, result.kcCapital, '#7eb1a2', '#57409b', "Interés", "Kaax Club");
+  })["catch"](function (e) {});
+}
+//validar soad activo y si existe la fecha en bd
+window.validateSoad = function () {
+  $('#content-refinanciado').hide();
+  $('#content-validaciones-soad').html('');
+  $('#content-validaciones-soad-date').html('');
+  $('#content-product').html('');
+  $('#content_tramit_type').hide();
+  $('#content-validaciones-soad-tramite').html('');
+  $('#go_ahead').val(0);
+  $('#loan_available-msg').html('');
+  $('#producto-deseado').hide();
+  if ($('#financial_product_id').val() != null) {
+    var clientPersonId = $('#client_person_id').val();
+    var agreement = $('#lead-origin-agreement').val();
+    var productId = $('#financial_product_id').val();
+    var lead_id = $('#lead_id').val();
+    $('#content-error-producto-preautorizado').hide();
+    axios.get("/panel/lead/" + clientPersonId + "/" + agreement + "/" + productId + "/" + lead_id + "/soad/get").then(function (response) {
+      getLeadValidations();
+      var result = response.data;
+      var typeProductId = result.type_product_id;
+      var tramitePendiente = result.tramitePendiente;
+      $('#typeProductId').val(typeProductId);
+      $('#loan_available-msg').html(result.loan_available);
+      document.getElementById('tramit_type').disabled = false;
+      if (typeProductId == 3) {
+        console.log('typeProductId-' + typeProductId);
+        $('#producto-deseado').show();
+        document.getElementById('slider').disabled = true;
+        document.getElementById('tramit_type').disabled = true;
+      }
+      if ($('#is_viability').val() == 1) {
+
+        //getAllValidate();
+      }
+      $('#content_tramit_type').show();
+      //llenar el arreglo de tipo de trámite
+      setSelectTramite(clientPersonId, productId, null);
+      if (typeProductId == 3) {
+        var TextSoad = result.TextSoad;
+        var soadActive = result.soadActive;
+        var isSoadDate = result.isSoadDate;
+        var isSodOnDate = result.isSodOnDate;
+        $('#product_id').val(typeProductId);
+        $('#is_free_of_active_sod').val(0);
+        $('#is_sod_on_date_allowed').val(0);
+        if (soadActive != 0) {
+          $('#content-validaciones-soad').html(TextSoad);
+          $('#is_free_of_active_sod').val(1);
+        }
+        $('#is_sod_on_date_allowed').val(1);
+        $('#sod_max').val(result.maximoRedondeado);
+        $('#sod_min').val(result.minimoRedondeado);
+        $('#content-validaciones-soad-date').html(isSoadDate);
+        if (isSodOnDate == true && tramitePendiente == true) {
+          document.getElementById('slider').disabled = false;
+          $('#content-product').html(result.contentProductSod);
+          $('#go_ahead').val(1);
+          //valores slider
+          var slider = document.getElementById('slider');
+          slider.min = result.minimoRedondeado;
+          slider.max = result.maximoRedondeado;
+          $('#valor-minimo').html(result.minimoRedondeado);
+          $('#valor-maximo').html(result.maximoRedondeado);
+          $('#valor-comision').html('$' + result.comision);
+          $('#sod_commision_amount').val(result.comision);
+          $('#valor-banco').html(result.bank_name);
+          $('#valor-cuenta').html(result.cuenta);
+          $('#content-product-select').show();
+          var selectElement = document.getElementById('tramit_type');
+          selectElement.options.length = 0; // Limpiar el select
+          var sodTramites = result.sodTramites;
+          Object.keys(sodTramites).forEach(function (key) {
+            var option = document.createElement('option');
+            option.value = key;
+            option.textContent = sodTramites[key];
+            selectElement.appendChild(option);
+          });
+          $('#content_tramit_type').show();
+        }
+      }
+    })["catch"](function (e) {});
+  }
+};
+if (document.getElementById('valor-slider')) {
+  var updateSliderValue = function updateSliderValue() {
+    var slider = document.getElementById('slider');
+    var displayValue = document.getElementById('valor-slider');
+
+    // Obtenemos el valor actual del slider
+    var sliderValue = parseFloat(slider.value);
+
+    // Actualizamos el contenido del span con el valor actual del slider
+    displayValue.innerHTML = '$' + sliderValue;
+    $('#sod_withdraw_amount').val(sliderValue);
+    var comision = parseFloat($('#sod_commision_amount').val());
+    var total = sliderValue + comision;
+    console.log('slider-' + sliderValue);
+    console.log('comision-' + comision);
+    if (!isNaN(total)) {
+      $('#sod_total_payment').val(total);
+    } else {
+      $('#sod_total_payment').val(0); // O puedes asignar un valor por defecto si es NaN
+      total = 0;
+    }
+    $('#valor-total').html('$' + total);
+  }; // Agregar el listener al slider para detectar cambios
+  document.getElementById('slider').addEventListener('input', updateSliderValue);
+
+  // Opcional: actualizar el valor del span al cargar la página
+  window.addEventListener('DOMContentLoaded', updateSliderValue);
+}
+$(document).ready(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          if (document.getElementById('lead-channel')) {
+            setData(true, false, true);
+          }
+        case 1:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  }, _callee2);
+})));
+$(document).on("select2:open", function () {
+  document.querySelector(".select2-container--open .select2-search__field").focus();
+});
+
+/* graficas */
+function crearGraficaApilada(contenedor, valorInteres, valorDeuda) {
+  var colorInteres = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '#e57373';
+  var colorDeuda = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '#757575';
+  var etiquetaInteres = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : "Interés";
+  var etiquetaDeuda = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : "Deuda";
+  var chartContainer = document.createElement('div');
+  chartContainer.classList.add('chart-container');
+
+  // Cálculo del total y altura dinámica para cada gráfica
+  var total = valorInteres + valorDeuda;
+  var alturaMaxima = 400; // Altura máxima en píxeles para la gráfica con mayor valor
+  var alturaGrafica = total / 16000 * alturaMaxima; // Escalado en base a un total de 16000 como máximo
+
+  // Crear la barra de la gráfica
+  var bar = document.createElement('div');
+  bar.classList.add('bar');
+  bar.style.height = "".concat(alturaGrafica, "px");
+
+  // Crear segmento de deuda
+  var segmentoDeuda = document.createElement('div');
+  segmentoDeuda.classList.add('segment', 'segment2');
+  segmentoDeuda.style.backgroundColor = colorDeuda;
+  segmentoDeuda.style.height = "".concat(valorDeuda / total * 100, "%");
+  segmentoDeuda.innerHTML = "\n    <span style=\"font-size: 1.2em; \">$".concat(valorDeuda.toLocaleString(), "</span>\n    <span style=\"font-size: 1.2em;\">").concat(etiquetaDeuda, "</span>\n  ");
+
+  // Crear segmento de interés
+  var segmentoInteres = document.createElement('div');
+  segmentoInteres.classList.add('segment', 'segment1');
+  segmentoInteres.style.backgroundColor = colorInteres;
+  segmentoInteres.style.height = "".concat(valorInteres / total * 100, "%");
+  segmentoInteres.innerHTML = "\n     <span style=\"font-size: 1.2em;\">".concat(etiquetaInteres, "</span>\n    <span style=\"font-size: 1.2em;\">$").concat(valorInteres.toLocaleString(), "</span>\n   \n  ");
+
+  // Añadir los segmentos a la barra (interés arriba)
+  bar.appendChild(segmentoInteres);
+  bar.appendChild(segmentoDeuda);
+
+  // Añadir la barra al contenedor de la gráfica
+  chartContainer.appendChild(bar);
+  contenedor.appendChild(chartContainer);
+
+  // Animación de llenado
+  setTimeout(function () {
+    segmentoInteres.style.opacity = 1;
+    segmentoInteres.style.transform = 'scaleY(1)';
+    segmentoDeuda.style.opacity = 1;
+    segmentoDeuda.style.transform = 'scaleY(1)';
+  }, 100); // Retraso para activar la animación
+}
+
+// Selecciona el contenedor principal donde se añadirán las gráficas
+var chartsContainer = document.getElementById('charts-container');
+
+/* seccion para controldesk compra de cartera */
+document.addEventListener('DOMContentLoaded', function () {
+  // Obtener elementos del DOM
+  var sumaCompraCheck = document.getElementById('sumaCompraCheck');
+  var refPlazo = document.getElementById('ref-plazo');
+  var contentMontoSolicitado = document.getElementById('content-select-monto-solicitado');
+  var contentNewMontoSolicitado = document.getElementById('content-select-new-monto-solicitado');
+
+  // Inicializar select2 si no está inicializado
+  if ($.fn.select2) {
+    $('.js-select2').select2();
+  }
+
+  // Escuchar cambios en el checkbox
+  if (document.getElementById('compra-cartera-plazo-solicitado')) {
+    sumaCompraCheck.addEventListener('change', function () {
+      if (this.checked) {
+        // Ocultar el contenedor original sin modificarlo
+        contentMontoSolicitado.style.display = 'none';
+
+        // Obtener el valor del plazo solicitado desde el campo oculto
+        var plazoSolicitadoInput = document.getElementById('compra-cartera-plazo-solicitado');
+        if (plazoSolicitadoInput && plazoSolicitadoInput.value) {
+          var plazoSolicitado = plazoSolicitadoInput.value;
+
+          // Buscar si existe esa opción en el select de plazo y seleccionarla
+          Array.from(refPlazo.options).forEach(function (option) {
+            if (option.value == plazoSolicitado) {
+              refPlazo.value = option.value;
+              $(refPlazo).trigger('change'); // Trigger change para select2
+            }
+          });
+        }
+
+        // 1. Llamar a axios para obtener los datos de compra de cartera
+        var creditId = $('#controldesk-credit_id').val();
+        var plazo = $('#ref-plazo').val();
+        var tramit_type = $('#tramit_type').val();
+        axios.get('/panel/kc-control-desk/' + creditId + '/' + tramit_type + '/' + plazo + '/compracartera/calculate').then(function (response) {
+          var data = response.data;
+          var compraCartera = data.compraCartera;
+          var montoSolicitado = data.montoSolicitado;
+          var montoRefinanciable = data.montoRefinanciable;
+          /* 
+          const newMontoSolicitado = Math.min(compraCartera, montoSolicitado); */
+          var newMontoSolicitado = compraCartera;
+          // Guardar el valor en un campo oculto para usarlo más tarde
+          document.getElementById('total-refinanciable').value = montoRefinanciable;
+
+          // 2. Seleccionar el plazo correspondiente si existe
+          // Obtener el valor de monto solicitado correctamente usando DOM nativo
+          var montoSolicitadoText = '';
+          var tablas = document.querySelectorAll('table.table-striped');
+
+          // Buscar en todas las tablas la fila que contiene "Monto solicitado"
+          tablas.forEach(function (tabla) {
+            var filas = tabla.querySelectorAll('tr');
+            filas.forEach(function (fila) {
+              var celdas = fila.querySelectorAll('td');
+              if (celdas.length >= 2 && celdas[0].textContent.trim() === 'Monto solicitado') {
+                montoSolicitadoText = celdas[1].textContent.trim();
+              }
+            });
+          });
+
+          // 3. Crear elementos en el nuevo contenedor
+
+          agregarElementosNuevoContenedor(montoSolicitado);
+        })["catch"](function (error) {
+          console.error('Error al obtener datos de compra de cartera:', error);
+        });
+      } else {
+        // Mostrar el contenedor original sin modificarlo
+        contentMontoSolicitado.style.display = '';
+
+        // Limpiar el contenedor nuevo
+        contentNewMontoSolicitado.innerHTML = '';
+
+        // Vaciar el campo oculto de total refinanciable
+        document.getElementById('total-refinanciable').value = '';
+        getMontoSolicitado();
+      }
+    });
+  }
+
+  // Función para agregar elementos al nuevo contenedor
+  function agregarElementosNuevoContenedor(monto) {
+    // Limpiar el contenedor nuevo
+    contentNewMontoSolicitado.innerHTML = '';
+
+    // Crear un input disabled visible
+    var disabledInput = document.createElement('input');
+    disabledInput.type = 'text';
+    disabledInput.className = 'form-control';
+    disabledInput.value = formatPrice(monto);
+    disabledInput.disabled = true;
+
+    // Crear un input hidden con el valor real
+    var hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'credit[applied_import]';
+    hiddenInput.id = 'ref-monto-new'; // ID diferente para evitar conflicto
+    hiddenInput.value = monto;
+
+    // Agregar los elementos al contenedor nuevo
+    contentNewMontoSolicitado.appendChild(disabledInput);
+    contentNewMontoSolicitado.appendChild(hiddenInput);
+
+    // Disparar evento para cualquier otra función que dependa del cambio
+    var event = new Event('change');
+    hiddenInput.dispatchEvent(event);
+
+    // Si getResumen es una función global, llamarla directamente
+    if (typeof getResumen === 'function') {
+      getResumen();
+    }
+  }
+
+  // Función auxiliar para formatear precio similar a Laravel
+  function formatPrice(amount) {
+    return '$ ' + parseFloat(amount).toLocaleString('es-CO', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+  }
+});
+function getLeadValidations() {
+  var leadId = $('#lead_id').val();
+  $('#content-validaciones-tabla').html('');
+  axios.get("/panel/lead/validations/".concat(leadId)).then(function (response) {
+    if (response.data.success) {
+      var html = response.data.table;
+      $('#content-validaciones-tabla').html(html);
+    } else {
+      $('#content-validaciones-tabla').html('No se encontraron validaciones');
+    }
+  })["catch"](function (error) {
+    console.error('Error:', error);
+    $('#content-validaciones-tabla').html('Error al obtener las validaciones');
+  });
+}
+function getLeadValidationsLoanTerm() {
+  var leadId = $('#lead_id').val();
+  axios.get("/panel/lead/validations/".concat(leadId, "/loan/term")).then(function (response) {
+    getLeadValidations();
+  })["catch"](function (error) {
+    console.error('Error:', error);
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/lead/datatable.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/lead/datatable.js ***!
+  \***************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var module_id = null;
+  if (document.getElementById('module_id')) {
+    module_id = $('#module_id').val();
+  }
+  var table_lead = NioApp.DataTable('#dt-lead', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/lead/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'date'
+    }, {
+      data: 'product'
+    }, /* { data: 'organizacion' }, */
+    {
+      data: 'label'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-lead tbody').on('click', 'td', function () {
+    if (typeof table_lead === 'undefined') {
+      console.warn('table_lead no está definido');
+      return;
+    }
+    var row = table_lead.row($(this).closest('tr'));
+    if (!row) {
+      console.warn('No se pudo obtener la fila');
+      return;
+    }
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+  var table_archive = NioApp.DataTable('#dt-lead-archive', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/archive/lead/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'date'
+    }, {
+      data: 'product'
+    }, {
+      data: 'origin'
+    }, {
+      data: 'reason'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-lead-archive tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+  var table__dinamic_archive = NioApp.DataTable('#dt-lead-dinamic-archive', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/archive/lead/list/' + module_id + '/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'date'
+    }, {
+      data: 'product'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-lead-dinamic-archive tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/module/datatable.js":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/module/datatable.js ***!
+  \*****************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-check-up', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-check-up/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-check-up tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/module/kc_check_up/action/datatable.js":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/module/kc_check_up/action/datatable.js ***!
+  \************************************************************************/
+/***/ (() => {
+
+var history_id;
+var model;
+var step;
+if (document.getElementById('dt-check-up-actions')) {
+  history_id = $('#history_id').val();
+  model = $('#model').val();
+  step = $('#step').val();
+}
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-check-up-actions', {
+    processing: true,
+    searching: false,
+    ordering: false,
+    paging: false,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/template/actions/list/' + model + '/' + history_id + '/show?step=' + step,
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'subject'
+    }, {
+      data: 'status'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/module/kc_check_up/action/datatable_report.js":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/module/kc_check_up/action/datatable_report.js ***!
+  \*******************************************************************************/
+/***/ (() => {
+
+var history_id;
+if (document.getElementById('dt-check-up-report-steps')) {
+  history_id = $('#history_id').val();
+}
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-check-up-report-steps', {
+    processing: true,
+    searching: false,
+    ordering: false,
+    paging: false,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-check-up/report/list/' + history_id + '/show',
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'subject'
+    }, {
+      data: 'status'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/module/kc_check_up/datatable.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/module/kc_check_up/datatable.js ***!
+  \*****************************************************************/
+/***/ (() => {
+
+var history_id;
+if (document.getElementById('dt-check-up-steps')) {
+  history_id = $('#history_id').val();
+  model = $('#model').val();
+  document.addEventListener('DOMContentLoaded', function () {
+    var table = NioApp.DataTable('#dt-check-up-steps', {
+      processing: true,
+      searching: false,
+      ordering: false,
+      paging: false,
+      responsive: {
+        details: {
+          renderer: function renderer(api, rowIdx, columns) {
+            var total = columns.length - 1;
+            var data = $.map(columns, function (col, i) {
+              if (total == i) {
+                return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+              } else {
+                return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+              }
+            }).join('');
+            return data ? $('<table/>').append(data) : false;
+          }
+        }
+      },
+      ajax: '/panel/template/list/' + model + '/' + history_id + '/show',
+      columns: [{
+        data: 'name'
+      }, {
+        data: 'step'
+      }, {
+        data: 'status'
+      }, {
+        data: 'progress'
+      }, /* { data: 'deadline'}, */
+      {
+        data: 'options'
+      }],
+      columnDefs: [{
+        className: "nk-tb-col",
+        targets: "_all"
+      }],
+      createdRow: function createdRow(row, data, dataIndex) {
+        $(row).addClass("nk-tb-item");
+      }
+    });
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/module/kc_control_desk/datatable.js":
+/*!*********************************************************************!*\
+  !*** ./resources/js/components/module/kc_control_desk/datatable.js ***!
+  \*********************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-control-desk', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-control-desk/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'fecha'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+  // Expand table rows on click
+  $('#dt-control-desk tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+  /* solicitudes */
+  var table_solicitud = NioApp.DataTable('#dt-solicitud', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/solicitud/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'fecha'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'vobo'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+  // Expand table rows on click
+  $('#dt-solicitud tbody').on('click', 'td', function () {
+    var row = table_solicitud.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/*  reference */
+document.addEventListener('DOMContentLoaded', function () {
+  var history_id = $('#history_id').val();
+  var table = NioApp.DataTable('#dt-credit-reference', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/reference/' + history_id + '/list',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'names'
+    }, {
+      data: 'last_name'
+    }, {
+      data: 'second_lastname'
+    }, {
+      data: 'relation'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-delivery', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-delivery/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'fecha'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-delivery tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-after-market', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-after-market/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+  // Expand table rows on click
+  $('#dt-after-market tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-payment', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-payments/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-payment tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/* wallet */
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-wallet', {
+    processing: true,
+    isShowing: false,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-wallet/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'date'
+    }, {
+      data: 'ordenante'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-wallet tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+  if (document.getElementById('dt-wallet')) {
+    var urlParams = new URLSearchParams(window.location.search);
+    var alertParam = urlParams.get('alert');
+    if (alertParam === 'true') {
+      Swal.fire({
+        title: 'Solicitud de agregar fondos',
+        html: 'Te notificaremos vía email a la brevedad',
+        showCancelButton: false,
+        confirmButtonText: 'ok'
+      }).then(function (result) {
+        if (result.value) {}
+      });
+    }
+  }
+  if (document.getElementById('dt-down-wallet')) {
+    var _urlParams = new URLSearchParams(window.location.search);
+    var _alertParam = _urlParams.get('alertdown');
+    if (_alertParam === 'true') {
+      Swal.fire({
+        title: 'Solicitud de retirar fondos',
+        html: 'Te notificaremos vía email a la brevedad',
+        showCancelButton: false,
+        confirmButtonText: 'ok'
+      }).then(function (result) {
+        if (result.value) {}
+      });
+    }
+  }
+});
+
+/* mis pestamos */
+
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-mis-prestamos', {
+    processing: true,
+    isShowing: false,
+    searching: false,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-wallet/mis-restamos/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'status'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'pagado'
+    }, {
+      data: 'capital_recuperado'
+    }, {
+      data: 'interes_cobrado'
+    }, {
+      data: 'capital_pendiente'
+    }, {
+      data: 'interes_proyectado'
+    }, {
+      data: 'comision_kc'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-mis-prestamos tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-down-wallet', {
+    processing: true,
+    isShowing: false,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-down-wallet/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'date'
+    }, {
+      data: 'ordenante'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-down-wallet tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-wallet-history', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-wallet/list/history/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'fecha'
+    }, {
+      data: 'tipo'
+    }, {
+      data: 'importe'
+    }, {
+      data: 'comision'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+
+  // Expand table rows on click
+  $('#dt-wallet-history tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+document.addEventListener('DOMContentLoaded', function () {
+  var table = NioApp.DataTable('#dt-kc-swap', {
+    processing: true,
+    responsive: {
+      details: {
+        type: 'column',
+        target: 'td:not(:first-child):not(:nth-child(2))',
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr  >' + '<td style="width:100%; padding-top: 10px; padding-bottom:5px" colspan="2">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td style="padding-left: 10px; width:50%"><strong>' + col.title + '</strong></td> ' + '<td style="width:50%">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/kc-swap/list/show',
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'product'
+    }, {
+      data: 'client'
+    }, {
+      data: 'advisor'
+    }, {
+      data: 'progress'
+    }, {
+      data: 'in_progress'
+    }, {
+      data: 'deadline'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+  // Expand table rows on click
+  $('#dt-kc-swap tbody').on('click', 'td', function () {
+    var row = table.row($(this).closest('tr'));
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child.show();
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/module/kc_control_desk/reference.js":
+/*!*********************************************************************!*\
+  !*** ./resources/js/components/module/kc_control_desk/reference.js ***!
+  \*********************************************************************/
+/***/ (() => {
+
+$().ready(function () {
+  $("#frm-credit-reference").validate({
+    rules: {
+      'data_reference[last_name]': {
+        required: true
+      },
+      'data_reference[second_lastname]': {
+        required: true
+      },
+      'data_reference[names]': {
+        required: true
+      },
+      'data_reference[relationship_time_years]': {
+        number: true
+      },
+      'data_reference[relationship_time_months]': {
+        number: true
+      },
+      'data_reference[cel_phone]': {
+        required: true,
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'data_reference[local_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'data_reference[postal_code]': {
+        number: true,
+        minlength: 5,
+        maxlength: 5
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frm-credit-reference");
+      var data = new FormData(new_form);
+      var history_id = $('#history_id').val();
+      var reference_id = $('#reference_id').val();
+      axios.post("/panel/reference/" + history_id + "/storeReference", data).then(function (response) {
+        $('#dt-credit-reference').DataTable().ajax.reload();
+        $('#modal-reference').modal('hide');
+      })["catch"](function (e) {});
+    }
+  });
+  window.deleteReference = function (reference_id) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, elimina',
+      cancelButtonText: 'Mejor no'
+    }).then(function (result) {
+      if (result.value) {
+        axios["delete"]("/panel/reference/" + reference_id + "/delete/").then(function (response) {
+          window.history.back();
+        })["catch"](function (e) {});
+      }
+    });
+  };
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/module/resumen.js":
+/*!***************************************************!*\
+  !*** ./resources/js/components/module/resumen.js ***!
+  \***************************************************/
+/***/ (() => {
+
+if (document.getElementById('checkIslimit')) {
+  var checkbox = document.getElementById('checkIslimit');
+  var numberInput = document.getElementById('lendable');
+
+  // Set initial state based on checkbox checked status
+  numberInput.disabled = checkbox.checked;
+  checkbox.addEventListener('change', function () {
+    numberInput.disabled = this.checked;
+  });
+  $("#frm-inversionista-prestamo").submit(function (event) {
+    event.preventDefault();
+    var InvestorId = $('#investorId').val();
+    var new_form = document.getElementById("frm-inversionista-prestamo");
+    var data = new FormData(new_form);
+    axios.post("/panel/inversionista", data).then(function (response) {
+      window.location = '/panel/inversionista/' + InvestorId;
+    })["catch"](function (e) {});
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/components/module/template.js":
+/*!****************************************************!*\
+  !*** ./resources/js/components/module/template.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
+var refresh = {
+  'newCredit': creditRefresh
+};
+$().ready(function () {
+  $("#frm-template_new_credit").validate({
+    rules: {
+      'agreement_id': {
+        required: true
+      },
+      'name': {
+        required: true
+      },
+      'last_name': {
+        required: true
+      },
+      'cellphone': {
+        number: true,
+        minlength: 10
+      },
+      'new_agreement': {
+        required: function required(element) {
+          var lead_agreement = $("#lead-agreement").val();
+          if (lead_agreement == 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_new_credit', 'newCredit');
+    }
+  });
+  //*form save debt credit strategy
+  $("#frm-template_debt_credit").validate({
+    rules: {
+      'agreement_id': {
+        required: true
+      },
+      'name': {
+        required: true
+      },
+      'last_name': {
+        required: true
+      },
+      'cellphone': {
+        number: true,
+        minlength: 10
+      },
+      'financial_id': {
+        required: true
+      },
+      'new_agreement': {
+        required: function required(element) {
+          var lead_agreement = $("#lead-agreement").val();
+          if (lead_agreement == 0) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_debt_credit', 'debtCredit');
+    }
+  });
+  //* save form  control desk step 1
+  $("#frm-template_control_desk_step1").validate({
+    rules: {
+      'url_redirect_next': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step1', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step2").validate({
+    rules: {
+      /*  'credit[applied_financial_product]': {
+           required: true,
+       },
+       'credit[applied_loan_type]': {
+           required: true,
+       }, */
+
+      'credit[applied_import]': {
+        required: true
+      },
+      'credit[applied_term]': {
+        required: true
+      },
+      'credit[applied_periodicity]': {
+        required: true
+      },
+      'credit[applied_payment]': {
+        required: true
+      },
+      'credit[applied_loan_total_amount]': {
+        required: true
+      },
+      'credit[applied_interest_rate]': {
+        required: true
+      },
+      'credit[applied_CAT]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var input_loan = $('#input_loan').val();
+      var applied_import = $('#applied_import').val();
+      if (input_loan != '' && parseFloat(applied_import) > parseFloat(input_loan)) {
+        Swal.fire({
+          text: 'El importe solicitado no puede ser mayor al disponible',
+          icon: 'warning'
+        });
+      } else {
+        saveForm('frm-template_control_desk_step2', 'controlDesk');
+      }
+    }
+  });
+  $("#frm-template_control_desk_step2_task1").validate({
+    rules: {
+      'client_person[ID_primer_apellido]': {
+        required: true
+      },
+      'client_person[ID_segundo_apellido]': {
+        required: true
+      },
+      'client_person[ID_nombres]': {
+        required: true
+      },
+      'client_person[ID_vigencia]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step2_task1', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step2_task2").validate({
+    rules: {
+      'client_person[ID_CIC]': {
+        required: true,
+        number: true,
+        minlength: 9,
+        maxlength: 9
+      },
+      'client_person[ID_IDC]': {
+        required: true,
+        number: true,
+        minlength: 9,
+        maxlength: 9
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step2_task2', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step2_task3").validate({
+    rules: {
+      'client_person[payroll_date]': {
+        required: true
+      },
+      'client_person[payroll_total]': {
+        number: true,
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step2_task3', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_dynamic_step2").validate({
+    rules: {
+      'pay_off[deadline_date]': {
+        required: true
+      },
+      'pay_off[ammount]': {
+        number: true,
+        required: true
+      },
+      'pay_off[bank_clabe]': {
+        required: true,
+        number: true,
+        minlength: 18,
+        maxlength: 18
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_dynamic_step2', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step3_task3").validate({
+    rules: {
+      'credit[payroll_payment_capacity]': _defineProperty({
+        required: true
+      }, "required", true)
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step3_task3', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step3_task").submit(function (event) {
+    event.preventDefault();
+    saveForm('frm-template_control_desk_step3_task', 'controlDesk');
+  });
+  window.getLoanAvailableByProduct = function (product) {
+    $('#text-loan').html('');
+    $('#input_loan').val('');
+    var productId = product.value;
+    $('#applied_loan_total_amount').val('');
+    $('#applied_payment').val('');
+    $('#applied_term').val('');
+    $('#applied_interest_rate').val('');
+    $('#applied_CAT').val('');
+    axios.get("/panel/financial-product/" + productId).then(function (response) {
+      var result = response.data;
+      if (result != null) {
+        // Use Intl.NumberFormat for locale-aware currency formatting
+        var formatter = new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD',
+          // Replace with your desired currency code
+          minimumFractionDigits: 2 // Ensure at least two decimal places
+        });
+        var loan_available = result.loan_available == null || undefined ? 0 : result.loan_available;
+        var formattedAmount = formatter.format(loan_available);
+        $('#text-loan').html('Disponible: ' + formattedAmount);
+        $('#input_loan').val(loan_available);
+        $('#comision').val(result.sod_commission_amount);
+        $('#producto').val(result.type_product_id);
+        if (result.type_product_id == 6) {
+          $('#applied_term').val(1);
+          $('#applied_interest_rate').val(0);
+          $('#applied_CAT').val(0);
+        }
+        setBajoDemanda();
+      }
+    })["catch"](function (e) {
+      console.error('Error fetching loan available:', e);
+    });
+  };
+  window.setBajoDemanda = function () {
+    var comision = parseFloat($('#comision').val());
+    var inputAppliedImport = document.getElementById('applied_import');
+    inputAppliedImport.addEventListener('input', function () {
+      var importeSolicitado = parseFloat(inputAppliedImport.value);
+      var productId = $('#producto').val();
+      if (productId == 6) {
+        $('#applied_loan_total_amount').val(importeSolicitado + comision);
+        $('#applied_payment').val(importeSolicitado + comision);
+      }
+    });
+  };
+  $("#frm-template_control_desk_step3_1").validate({
+    rules: {
+      'client_person[sex]': {
+        required: true
+      },
+      'client_person[rfc]': {
+        required: true,
+        minlength: 13,
+        maxlength: 13
+      },
+      'client_person[curp]': {
+        required: false,
+        minlength: 18,
+        maxlength: 18
+      },
+      'client_person[client_postal_code]': {
+        required: false,
+        number: true,
+        minlength: 5,
+        maxlength: 5
+      },
+      'client_person[bank_name]': {
+        required: true
+      },
+      'client_person[bank_card_number]': {
+        number: true,
+        minlength: 16,
+        maxlength: 16
+      },
+      'client_person[bank_acount_number]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[bank_clabe]': {
+        number: true,
+        minlength: 18,
+        maxlength: 18,
+        required: true
+      },
+      'client_person[monthly_income]': {
+        required: false,
+        number: true
+      },
+      'client_person[workplace_postal_code]': {
+        required: false,
+        number: true,
+        minlength: 5,
+        maxlength: 5
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step3_1', 'controlDesk');
+    }
+  });
+  $("#frm-template_control_desk_step3_2").validate({
+    rules: {
+      'credit[interviewer]': {
+        required: true
+      },
+      /* domicilio */
+
+      'client_person[client_postal_code]': {
+        required: true,
+        number: true,
+        minlength: 5,
+        maxlength: 5
+      },
+      'client_person[client_street]': {
+        required: true
+      },
+      'client_person[client_home_external_number]': {
+        required: true
+      },
+      'client_person[client_colony]': {
+        required: true
+      },
+      'client_person[client_city]': {
+        required: true
+      },
+      'client_person[client_state]': {
+        required: true
+      },
+      'client_person[client_country]': {
+        required: true
+      },
+      'client_person[relative_local_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[relative_cel_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[home_time_living]': {
+        number: true
+      },
+      'client_person[propety_ownnership_amount]': {
+        number: true
+      },
+      'client_person[propety_ownnership_value]': {
+        number: true
+      },
+      'client_person[vehicle_ownnership_amount]': {
+        number: true
+      },
+      'client_person[vehicle_ownnership_value]': {
+        number: true
+      },
+      'client_person[economic_dependents]': {
+        number: true
+      },
+      'client_person[aditional_labor_income]': {
+        number: true
+      },
+      'client_person[workplace_local_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[workplace_cel_phone]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[workplace_local_phone_extension]': {
+        number: true
+      },
+      'client_person[bank_card_number]': {
+        number: true,
+        minlength: 16,
+        maxlength: 16
+      },
+      'client_person[bank_acount_number]': {
+        number: true,
+        minlength: 10,
+        maxlength: 10
+      },
+      'client_person[bank_clabe]': {
+        number: true,
+        minlength: 18,
+        maxlength: 18
+      },
+      'client_person[monthly_income]': {
+        required: true,
+        number: true
+      },
+      'client_person[workplace_postal_code]': {
+        required: true,
+        number: true,
+        minlength: 5,
+        maxlength: 5
+      },
+      'client_person[workplace_street]': {
+        required: true
+      },
+      'client_person[workplace_home_external_number]': {
+        required: true
+      },
+      'client_person[workplace_home_internal_number]': {
+        required: true
+      },
+      'client_person[workplace_colony]': {
+        required: true
+      },
+      'client_person[workplace_city]': {
+        required: true
+      },
+      'client_person[workplace_state]': {
+        required: true
+      },
+      'client_person[workplace_country]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step3_2', 'controlDesk');
+    }
+  });
+  if (document.getElementById('frm-template_control_desk_step4')) {
+    var form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4');
+
+    // Maneja el evento submit del formulario
+    form_control_desk_step4.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+      saveForm('frm-template_control_desk_step4', 'controlDesk');
+    });
+  }
+  if (document.getElementById('frm-template_control_desk_step3_task4')) {
+    var _form_control_desk_step = document.getElementById('frm-template_control_desk_step3_task4');
+
+    // Maneja el evento submit del formulario
+    _form_control_desk_step.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+      saveForm('frm-template_control_desk_step3_task4', 'controlDesk');
+    });
+  }
+  if (document.getElementById('frm-template_control_desk_step3_task5')) {
+    var _form_control_desk_step2 = document.getElementById('frm-template_control_desk_step3_task5');
+
+    // Maneja el evento submit del formulario
+    _form_control_desk_step2.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+      saveForm('frm-template_control_desk_step3_task5', 'controlDesk');
+    });
+  }
+  if (document.getElementById('frm-template_control_desk_dynamic_step3')) {
+    var _form_control_desk_step3 = document.getElementById('frm-template_control_desk_dynamic_step3');
+
+    // Maneja el evento submit del formulario
+    _form_control_desk_step3.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+      saveForm('frm-template_control_desk_dynamic_step3', 'controlDesk');
+    });
+  }
+  if (document.getElementById('frm-template_control_desk_step4_task1')) {
+    var _form_control_desk_step4 = document.getElementById('frm-template_control_desk_step4_task1');
+
+    // Maneja el evento submit del formulario
+    _form_control_desk_step4.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+      saveForm('frm-template_control_desk_step4_task1', 'controlDesk');
+    });
+  }
+  if (document.getElementById('frm-template_control_desk_step4_task2')) {
+    var _form_control_desk_step5 = document.getElementById('frm-template_control_desk_step4_task2');
+
+    // Maneja el evento submit del formulario
+    _form_control_desk_step5.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+      saveForm('frm-template_control_desk_step4_task2', 'controlDesk');
+    });
+  }
+  window.openModalValidateControlDesk = function (creditId) {
+    axios.get("/panel/template/validate/" + creditId + "/controlDesk").then(function (response) {
+      var result = response.data;
+      $('#content-validate-control-desk').html(result);
+      $('#modalValidateControlDesk').modal('show');
+    })["catch"](function (e) {});
+  };
+  $("#frm-template_control_desk_step5").validate({
+    rules: {
+      'credit[financial_user_assigned]': {
+        required: true
+      },
+      'credit[commission]': {
+        required: true,
+        number: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      TotalCredits();
+    }
+  });
+  function TotalCredits() {
+    var creditId = $('#id_rel').val();
+    axios.get("/panel/client/" + creditId + "/credit/total").then(function (response) {
+      var result = response.data;
+      var total = result.total;
+      if (total > 1) {
+        saveForm('frm-template_control_desk_step5', 'controlDesk');
+      } else {
+        Swal.fire({
+          title: 'Este es un cliente nuevo',
+          text: 'Confirmo que se incluyó el contrato de comisión mercantil para un cliente nuevo',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Continuar',
+          cancelButtonText: 'Cancelar'
+        }).then(function (result) {
+          if (result.value) {
+            saveForm('frm-template_control_desk_step5', 'controlDesk');
+          }
+        });
+      }
+    })["catch"](function (e) {});
+  }
+  $("#frm-template_control_desk_step5_2").validate({
+    rules: {
+      'credit[signed]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_control_desk_step5_2', 'controlDesk');
+    }
+  });
+  $("#frm-template_delivery_step2").validate({
+    rules: {
+      'credit[changed_commission]': {
+        number: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_delivery_step2', 'delivery');
+    }
+  });
+  $("#frm-template_delivery_task1_step1").validate({
+    rules: {
+      'credit[delivered]': {
+        required: true
+      },
+      'credit[delivered_date]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_delivery_task1_step1', 'delivery');
+    }
+  });
+  if (document.getElementById('frm-template_delivery_step2_task1')) {
+    var _form_control_desk_step6 = document.getElementById('frm-template_delivery_step2_task1');
+
+    // Maneja el evento submit del formulario
+    _form_control_desk_step6.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+      saveForm('frm-template_delivery_step2_task1', 'delivery');
+    });
+  }
+  if (document.getElementById('frm-template_delivery_step2_task2')) {
+    var _form_control_desk_step7 = document.getElementById('frm-template_delivery_step2_task2');
+
+    // Maneja el evento submit del formulario
+    _form_control_desk_step7.addEventListener('submit', function (event) {
+      event.preventDefault(); // Evita que el formulario se envíe automáticamente
+      saveForm('frm-template_delivery_step2_task2', 'delivery');
+    });
+  }
+  $("#frm-template_delivery_dynamic_task_step1").validate({
+    rules: {
+      'credit_pay_off[delivered]': {
+        required: true
+      },
+      'credit_pay_off[delivered_date]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_delivery_dynamic_task_step1', 'delivery');
+    }
+  });
+  $("#frm-template_payment_step2").validate({
+    rules: {
+      'credit[changed_commission]': {
+        number: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_payment_step2', 'payment');
+    }
+  });
+  $("#frm-template_delivery_step3").validate({
+    rules: {
+      'credit[payment_check]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_delivery_step3', 'delivery');
+    }
+  });
+  $("#frm-template_payment_step3").validate({
+    rules: {
+      'credit[payment_check]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_payment_step3', 'payment');
+    }
+  });
+  $("#frm-template_swap_step1").validate({
+    rules: {
+      'client_person[name]': {
+        required: true
+      },
+      'client_person[last_name]': {
+        required: true
+      },
+      'client_person[second_last_name]': {
+        required: true
+      },
+      'client_person[cellphone]': {
+        required: true
+      },
+      'client_person[email]': {
+        required: true
+      },
+      'client_person[rfc]': {
+        required: true,
+        minlength: 13,
+        maxlength: 13
+      },
+      'credit[id_number]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_swap_step1', 'swap');
+    }
+  });
+  $("#frm-template_swap_step2").validate({
+    rules: {
+      'credit[url_sign]': {
+        required: true,
+        url: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_swap_step2', 'swap');
+    }
+  });
+  $("#frm-template_swap_step2-2").validate({
+    rules: {
+      'credit[signed]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_swap_step2-2', 'swap');
+    }
+  });
+  $("#frm-template_swap_step2-3").validate({
+    rules: {
+      'financial[email]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_swap_step2-3', 'swap');
+    }
+  });
+  $("#frm-template_swap_step3").validate({
+    rules: {
+      'credit[termination_number]': {
+        required: true
+      },
+      'credit[termination_bank_name]': {
+        required: true
+      },
+      'credit[termination_bank_account_holder]': {
+        required: true
+      },
+      'credit[termination_bank_clabe]': {
+        required: true
+      },
+      'credit[termination_bank_reference]': {
+        required: true
+      },
+      'credit[termination_amount]': {
+        required: true
+      },
+      'credit[termination_deadline]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_swap_step3', 'swap');
+    }
+  });
+
+  /* wallet */
+
+  $("#frm-template_wallet_step1").validate({
+    rules: {
+      'transaction[investor_id]': {
+        required: true
+      },
+      'transaction[bank_transfer_type]': {
+        required: true
+      },
+      'transaction[amount]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_step1', 'wallet');
+    }
+  });
+
+  //if exist implement onchange select
+  window.getValue = function (get) {
+    $('#content-legend').html('');
+    var ordenante = get.value;
+    axios.get("/panel/kc-wallet/" + ordenante + "/investor/get").then(function (response) {
+      var result = response.data;
+      $('#content-legend').html(result);
+    })["catch"](function (e) {});
+  };
+
+  /* if (document.getElementById('type_form') && $('#type_form').val() == '66') {
+      $('#content-legend-kc-down-bank').show();
+  } */
+
+  if (document.getElementById('frm-template_wallet_step1')) {
+    var investorIdInput = document.getElementById('investor_id');
+    // Check if investor_id element exists and is a hidden input
+    if (investorIdInput && investorIdInput.type === 'hidden') {
+      getValue(investorIdInput);
+    }
+  }
+  $("#frm-template_wallet_step1_2").validate({
+    rules: {
+      'transaction[operation_status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_step1_2', 'wallet');
+    }
+  });
+
+  //* wallet-down
+  $("#frm-template_wallet_down_step1").validate({
+    rules: {
+      'transaction[investor_id]': {
+        required: true
+      },
+      'transaction[amount]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var withdraw_available = $('#withdraw_available').val();
+      var amount = $('#amount').val();
+      if (withdraw_available != '' && parseFloat(amount) > parseFloat(withdraw_available)) {
+        Swal.fire({
+          text: 'El importe a retirar debe ser menor  al disponible para el retiro',
+          icon: 'warning'
+        });
+      } else {
+        saveForm('frm-template_wallet_down_step1', 'kc-down-wallet');
+      }
+    }
+  });
+  $("#frm-template_wallet_down_step2").validate({
+    rules: {
+      'transaction[operation_status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      saveForm('frm-template_wallet_down_step2', 'kc-down-wallet');
+    }
+  });
+
+  //*get data
+  if (document.getElementById('id_rel')) {
+    var id_rel = $('#id_rel').val();
+    var type_form = $('#type_form').val();
+    if (id_rel != '') {
+      axios.get("/panel/action-form/" + id_rel + "/" + type_form + '/form/get').then(function (response) {
+        var result = response.data;
+        var credit = result.credit;
+        var client = result.client;
+        var transaction = result.transaction;
+        if (type_form == 8) {
+          //checkup
+          organizationChange(credit.agreement_id, null);
+          $('#name').val(client.name);
+          $('#last_name').val(client.last_name);
+          $('#second_last_name').val(client.second_last_name);
+          $('#cellphone').val(client.cellphone);
+        }
+        if (type_form == 12)
+          //reduccion
+          {
+            getFinancialProduct(credit.id, 2);
+            organizationChange(credit.agreement_id, credit.financial_id);
+            $('#name').val(client.name);
+            $('#last_name').val(client.last_name);
+            $('#second_last_name').val(client.second_last_name);
+            $('#cellphone').val(client.cellphone);
+            $('#current_payment').val(credit.current_payment / 100);
+            $('#current_periodicity').val(credit.current_periodicity).trigger("change");
+            $('#current_loan').val(credit.current_loan / 100);
+            $('#current_term').val(credit.current_term);
+            $('#current_principal_balance').val(credit.current_principal_balance / 100);
+            $('#current_total_balance').val(credit.current_total_balance / 100);
+            $('#tipo_credito').val(credit.tipo_credito).trigger("change");
+          }
+        if (type_form == 23)
+          //form kc-desktop step1
+          {
+            $('#payment_capacity_period').val(credit.payment_capacity_period);
+            $('#payment_capacity').val(credit.payment_capacity);
+            $('#birth_date').val(client.birth_date);
+            $('#labor_old').val(client.labor_old);
+            $('#employee_category').val(client.employee_category);
+          }
+        if (type_form == 24)
+          //form kc-desktop step2
+          {
+            $('#applied_financial').val(credit.applied_financial).trigger("change");
+            $('#applied_financial_product').val(credit.applied_financial_product).trigger("change");
+            $('#applied_loan_type').val(credit.applied_loan_type).trigger("change");
+            $('#applied_loan_discount').val(credit.applied_loan_discount);
+            $('#applied_sign_type').val(credit.applied_sign_type).trigger("change");
+            $('#applied_import').val(credit.applied_import);
+            $('#applied_term').val(credit.applied_term);
+            $('#applied_periodicity').val(credit.applied_periodicity).trigger("change");
+            $('#applied_payment').val(credit.applied_payment);
+            $('#applied_loan_total_amount').val(credit.applied_loan_total_amount);
+            $('#applied_interest_rate').val(credit.applied_interest_rate);
+            $('#applied_CAT').val(credit.applied_CAT);
+          }
+        if (type_form == 26)
+          //form kc-desktop step3 - 1
+          {
+            $('#work_email').val(client.work_email);
+            $('#sex').val(client.sex).trigger("change");
+            $('#rfc').val(client.rfc);
+            $('#nationality').val(client.nationality);
+            $('#birth_state').val(client.birth_state);
+            $('#curp').val(client.curp);
+            $('#client_postal_code').val(client.client_postal_code);
+            $('#client_street').val(client.client_street);
+            $('#client_home_external_number').val(client.client_home_external_number);
+            $('#client_home_internal_number').val(client.client_home_internal_number);
+            $('#client_colony').val(client.client_colony);
+            $('#client_city').val(client.client_city);
+            $('#client_state').val(client.client_state);
+            $('#client_country').val(client.client_country);
+            $('#bank_name').val(client.bank_name);
+            $('#bank_card_number').val(client.bank_card_number);
+            $('#bank_acount_number').val(client.bank_acount_number);
+            $('#bank_clabe').val(client.bank_clabe);
+            $('#employee_number').val(client.employee_number);
+            $('#monthly_income').val(client.monthly_income);
+            $('#workplace_postal_code').val(client.workplace_postal_code);
+            $('#workplace_street').val(client.workplace_street);
+            $('#workplace_home_external_number').val(client.workplace_home_external_number);
+            $('#workplace_home_internal_number').val(client.workplace_home_internal_number);
+            $('#workplace_colony').val(client.workplace_colony);
+            $('#workplace_city').val(client.workplace_city);
+            $('#workplace_state').val(client.workplace_state);
+            $('#workplace_country').val(client.workplace_country);
+          }
+        if (type_form == 27)
+          //form kc-desktop step3 - 2
+          {
+            $('#marital_status').val(client.marital_status).trigger("change");
+            $('#education_level').val(client.education_level).trigger("change");
+            $('#profession').val(client.profession);
+            $('#client_contact_time').val(client.client_contact_time);
+            $('#relative_lastname').val(client.relative_lastname);
+            $('#relative_second_lastname').val(client.relative_second_lastname);
+            $('#relative_names').val(client.relative_names);
+            $('#relative_local_phone').val(client.relative_local_phone);
+            $('#relative_cel_phone').val(client.relative_cel_phone);
+            $('#relative_contact_time').val(client.relative_contact_time);
+            $('#home_type').val(client.home_type).trigger("change");
+            $('#home_time_living').val(client.home_time_living);
+            $('#home_note').val(client.home_note);
+            $('#propety_ownnership_amount').val(client.propety_ownnership_amount);
+            $('#propety_ownnership_value').val(client.propety_ownnership_value);
+            $('#vehicle_ownnership_amount').val(client.vehicle_ownnership_amount);
+            $('#vehicle_ownnership_value').val(client.vehicle_ownnership_value);
+            $('#economic_dependents').val(client.economic_dependents);
+            $('#workplace_name').val(client.workplace_name);
+            $('#admission_date').val(client.admission_date);
+            $('#employee_area').val(client.employee_area);
+            $('#employee_position').val(client.employee_position);
+            $('#aditional_labor_source').val(client.aditional_labor_source);
+            $('#aditional_labor_income').val(client.aditional_labor_income);
+            $('#workplace_local_phone').val(client.workplace_local_phone);
+            $('#workplace_cel_phone').val(client.workplace_cel_phone);
+            $('#workplace_code').val(client.workplace_code);
+            $('#workplace_local_phone_extension').val(client.workplace_local_phone_extension);
+            selectRadio(credit.client_public_servant, 'client_public_servant');
+            $('#client_public_servant_position').val(credit.client_public_servant_position);
+            $('#client_public_servant_period').val(credit.client_public_servant_period);
+            selectRadio(credit.relative_public_servant, 'relative_public_servant');
+            $('#relative_public_servant_lastname').val(credit.relative_public_servant_lastname);
+            $('#relative_public_servant_second_lastname').val(credit.relative_public_servant_second_lastname);
+            $('#relative_public_servant_names').val(credit.relative_public_servant_names);
+            $('#relative_public_servant_relationship').val(credit.relative_public_servant_relationship);
+            $('#relative_public_servant_position').val(credit.relative_public_servant_position);
+            $('#relative_public_servant_period').val(credit.relative_public_servant_period);
+            selectRadio(credit.prepaid, 'prepaid');
+            selectPrepadMethod(credit.prepad_method, 'prepad_method');
+            $('#prepaid_frequency').val(credit.prepaid_frequency);
+            $('#prepaid_source').val(credit.prepaid_source);
+            selectRadio(credit.endorsement, 'endorsement');
+            selectRadio(credit.real_beneficiary, 'real_beneficiary');
+            selectRadio(credit.soruce_provider, 'soruce_provider');
+            selectRadio(credit.real_propetary, 'real_propetary');
+            $('#notes').val(credit.notes);
+            $('#client_postal_code').val(client.client_postal_code);
+            $('#client_street').val(client.client_street);
+            $('#client_home_external_number').val(client.client_home_external_number);
+            $('#client_home_internal_number').val(client.client_home_internal_number);
+            $('#client_colony').val(client.client_colony);
+            $('#client_city').val(client.client_city);
+            $('#client_state').val(client.client_state);
+            $('#client_country').val(client.client_country);
+          }
+        if (type_form == 29)
+          //form kc-desktop step 5
+          {
+            $('#financial_user_assigned').val(credit.financial_user_assigned).trigger("change");
+            $('#commission').val(credit.commission);
+            $('#commission_note').val(credit.commission_note);
+          }
+        if (type_form == 32)
+          //form kc-ddelivery step 2
+          {
+            $('#changed_commission').val(credit.changed_commission / 100);
+            $('#changed_commission_note').val(credit.changed_commission_note);
+          }
+        if (type_form == 34)
+          //form kc-ddelivery step 3
+          {
+            $('#payment_check').val(credit.payment_check).trigger("change");
+            $('#payment_check_note').val(credit.payment_check_note);
+          }
+        if (type_form == 39)
+          //form kc-swap step 1
+          {
+            $('#name').val(client.name);
+            $('#last_name').val(client.last_name);
+            $('#second_last_name').val(client.second_last_name);
+            $('#cellphone').val(client.cellphone);
+            $('#email').val(client.email);
+            $('#rfc').val(client.rfc);
+            $('#id_number').val(credit.id_number);
+            $('#current_credit_number').val(credit.current_credit_number);
+            $('#current_payment').val(credit.current_payment / 100);
+            $('#current_periodicity').val(credit.current_periodicity).trigger("change");
+            $('#current_loan').val(credit.current_loan / 100);
+            $('#current_term').val(credit.current_term);
+            $('#current_principal_balance').val(credit.current_principal_balance / 100);
+            $('#current_total_balance').val(credit.current_total_balance / 100);
+          }
+        if (type_form == 40)
+          //form kc-swap step 2
+          {
+            $('#url_sign').val(credit.url_sign);
+          }
+        if (type_form == 41)
+          //form kc-swap step 2 form 2
+          {
+            $('#signed').val(credit.signed).trigger("change");
+          }
+        if (type_form == 61)
+          //form kc-wallet step1
+          {
+            $('#investor_id').val(transaction.investor_id).trigger("change");
+            $('#bank_transfer_type').val(transaction.bank_transfer_type).trigger("change");
+            $('#operation_number').val(transaction.operation_number);
+            $('#amount').val(transaction.amount);
+          }
+        if (type_form == 63)
+          //form kc-wallet step2
+          {
+            $('#operation_status').val(transaction.operation_status).trigger("change");
+          }
+        if (type_form == 67)
+          //form kc-wallet step2
+          {
+            $('#operation_status').val(transaction.operation_status).trigger("change");
+          }
+        if (type_form == 66)
+          //form kc-wallet step1
+          {
+            $('#investor_id').val(transaction.investor_id).trigger("change");
+            $('#transaction_type').val(transaction.transaction_type);
+            $('#amount').val(Math.abs(transaction.amount));
+          }
+      })["catch"](function (e) {});
+    }
+  }
+});
+function selectRadio(val, id) {
+  if (val == 1) {
+    document.querySelector('#' + id + '_1').checked = true;
+  } else {
+    document.querySelector('#' + id + '_2').checked = true;
+  }
+}
+function selectPrepadMethod(val, id) {
+  if (val == 1) {
+    document.querySelector('#' + id + '_1').checked = true;
+  } else if (val == 2) {
+    document.querySelector('#' + id + '_2').checked = true;
+  } else if (val == 3) {
+    document.querySelector('#' + id + '_3').checked = true;
+  } else if (val == 4) {
+    document.querySelector('#' + id + '_4').checked = true;
+  }
+}
+window.swapContinue = function (credit_id) {
+  axios.get("/panel/action-form").then(function (response) {
+    var result = response.data;
+  })["catch"](function (e) {});
+};
+window.swapCancel = function (id_form, model) {
+  axios.get("/panel/action-form").then(function (response) {
+    var result = response.data;
+  })["catch"](function (e) {});
+};
+function saveForm(id_form, model) {
+  var new_form = document.getElementById(id_form);
+  var data = new FormData(new_form);
+  var id_rel = $('#id_rel').val();
+  var url_redirect = null;
+  var is_redirect_document = null;
+  if (document.getElementById('url_redirect')) {
+    url_redirect = $('#url_redirect').val();
+  }
+  console.log(model);
+  data.append('model', model);
+  data.append('id_rel', id_rel);
+  axios.post("/panel/action-form", data).then(function (response) {
+    var result = response.data;
+    if (url_redirect == null) {
+      window.history.back();
+    }
+    if (document.getElementById('url_redirect_finish')) {
+      // Obtener el valor de "id"
+      var id = result.id;
+
+      // Obtener el elemento "url_redirect_finish"
+      var urlRedirectFinishElement = document.getElementById('url_redirect_finish');
+
+      // Obtener el valor actual de data-redirect
+      var currentDataRedirect = urlRedirectFinishElement.getAttribute('data-redirect');
+
+      // Reemplazar {history_id} con el valor de "id"
+      var updatedDataRedirect = currentDataRedirect.replace('{history_id}', id);
+
+      // Actualizar el valor de data-redirect
+      urlRedirectFinishElement.setAttribute('data-redirect', updatedDataRedirect);
+
+      /* window.location = updatedDataRedirect; */
+      url_redirect = updatedDataRedirect;
+      if (url_redirect.includes('{id}')) {
+        url_redirect = url_redirect.replace('{id}', result.id);
+      }
+    }
+    window.location = url_redirect;
+  })["catch"](function (e) {});
+}
+window.saveAndContinueTask = function (id_form) {
+  var model = $('#action-model').val();
+  var newUrl = $('#url_redirect_next').val();
+  $('#url_redirect').val(newUrl);
+  saveForm(id_form, model);
+};
+window.cancelTask = function () {
+  var url = $('#url_redirect').val();
+  window.location = url;
+};
+
+//*boton saltar en swap etapa 2_3   
+window.saltarSwap = function () {
+  $('#send_email').val(0);
+  $("#frm-template_swap_step2-3").submit(); // Envía el formulario
+};
+//TODO: alerta si detecto kyc
+window.kycCreditHistory = function (history_id, type) {
+  var params = {
+    1: 'curp',
+    2: 'ine',
+    3: 'rfc',
+    4: 'curp'
+  };
+  var id = params[type];
+  var id_result = params[type];
+  var param = $('#' + id).val();
+  if (type == 4) {
+    id_result = 'issste';
+  }
+  var param2 = type == 2 ? $('#identificadorCiudadano').val() : null;
+  var error = false;
+  if (type == 2 && param == '' && param2 == '') {
+    error = true;
+    Swal.fire({
+      text: 'Campos obligatorios',
+      icon: 'warning'
+    });
+  }
+  if (error == false) {
+    $('#kyc-' + id_result).html('');
+    $('#kyc-' + id_result + '-msg').html('');
+    axios.get("/panel/kc-control-desk/kc/" + history_id + "/" + param + "/" + param2 + "/" + type + "/validate").then(function (response) {
+      var result = response.data;
+      $('#kyc-' + id_result).html(result.html);
+      $('#kyc-' + id_result + '-msg').val(result.msg);
+    })["catch"](function (e) {});
+  }
+};
+window.showKycCurp = function (type) {
+  var params = {
+    1: 'curp',
+    2: 'ine',
+    3: 'rfc',
+    4: 'issste'
+  };
+  var id = params[type];
+  var msg = $('#kyc-' + id + '-msg').val();
+  $('#kyc-msg').html(msg);
+  $('#modal-kyc').modal('show');
+};
+window.deliverysendEmail = function (history_id) {
+  axios.get("/panel/kc-delivery/" + history_id + "/send-email").then(function (response) {
+    window.location = '/panel/template/steps/delivery/' + history_id + '/show';
+  })["catch"](function (e) {});
+};
+window.modalReference = function (history_id, reference_id) {
+  $('#modal_history_id').val(history_id);
+  $('#modal_reference_id').val(reference_id);
+  if (reference_id != null) {
+    axios.get("/panel/reference/" + reference_id + "/show").then(function (response) {
+      var result = response.data;
+      $('#last_name').val(result.last_name);
+      $('#second_lastname').val(result.second_lastname);
+      $('#names').val(result.names);
+      $('#relationship').val(result.relationship);
+      $('#relationship_time_years').val(result.relationship_time_years);
+      $('#relationship_time_months').val(result.relationship_time_months);
+      $('#cel_phone').val(result.cel_phone);
+      $('#local_phone').val(result.local_phone);
+      $('#contact_time').val(result.contact_time);
+      $('#postal_code').val(result.postal_code);
+      $('#street').val(result.street);
+      $('#home_external_number').val(result.home_external_number);
+      $('#home_internal_number').val(result.home_internal_number);
+      $('#colony').val(result.colony);
+      $('#city').val(result.city);
+      $('#state').val(result.state);
+      $('#country').val(result.country);
+      $('#note').val(result.note);
+    })["catch"](function (e) {});
+  }
+  $('#modal-reference').modal('show');
+};
+window.swapCreditContinue = function (history_id) {
+  var url_redirect = null;
+  if (document.getElementById('url_redirect')) {
+    url_redirect = $('#url_redirect').val();
+  }
+  axios.get("/panel/kc-swap/credit/" + history_id + "/continue").then(function (response) {
+    var result = response.data;
+    if (url_redirect == null) {
+      window.history.back();
+    }
+    window.location = url_redirect;
+  })["catch"](function (e) {});
+};
+window.sendCreditActive = function (historyId) {
+  axios.get("/panel/kc-delivery/" + historyId + "/send/active").then(function (response) {
+    window.location = '/panel/kc-delivery';
+  })["catch"](function (e) {});
+};
+window.finishControlDesk = function (historyId) {
+  axios.get("/panel/kc-control-desk/" + historyId + "/send/finish").then(function (response) {
+    window.location = '/panel/kc-control-desk';
+  })["catch"](function (e) {});
+};
+window.editCompraCarteraControlDesk = function (creditPayOffId) {
+  axios.get("/panel/kc-control-desk/credit-pay-off/" + creditPayOffId + '/data/get').then(function (response) {
+    var result = response.data;
+    $('#compra-cartera-ammount').val(result.ammount);
+    $('#creditPayOffId').val(creditPayOffId);
+    $('#modal-compra-cartera-cd').modal('show');
+  })["catch"](function (e) {});
+};
+$("#frm-modal-compra-cartera-cd").submit(function (event) {
+  event.preventDefault();
+  var new_form = document.getElementById("frm-modal-compra-cartera-cd");
+  var data = new FormData(new_form);
+  var leadId = $('#lead_id_compra_cartera').val();
+  axios.post("/panel/lead/credit-pay-off", data).then(function (response) {
+    var result = response.data;
+    location.reload();
+  })["catch"](function (e) {});
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/notification/utilities.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/notification/utilities.js ***!
+  \***********************************************************/
+/***/ (() => {
+
+window.showNotification = function () {
+  $('#content-notification').html('');
+  $('#icon-status-notification').removeClass('icon-status-off');
+  $('#icon-status-notification').removeClass('icon-status-info');
+  axios.get("/panel/notification/show").then(function (response) {
+    var result = response.data;
+    var is_notification = result.is_notification;
+    $('#content-notification').html(result.list);
+    if (is_notification == 1) {
+      $('#icon-status-notification').addClass('icon-status-info');
+    } else {
+      $('#icon-status-notification').addClass('icon-status-off');
+    }
+  })["catch"](function (e) {});
+};
+window.readAllNotification = function () {
+  $('#icon-status-notification').removeClass('icon-status-info');
+  axios.get("/panel/notification/read").then(function (response) {
+    var result = response.data;
+    $('#icon-status-notification').addClass('icon-status-off');
+  })["catch"](function (e) {});
+};
+$().ready(function () {
+  showNotification();
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/product/crud.js":
+/*!*************************************************!*\
+  !*** ./resources/js/components/product/crud.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+
+window.modalProduct = function (type, product_id) {
+  var route_datatable = $('#route_datatable').val();
+  $('#frm-product').trigger("reset");
+  if (type === 1) {
+    $('#product-title').html('Crear producto');
+    $('#product_id').val(null);
+  } else {
+    $('#product-title').html('Editar producto');
+    $('#product_id').val(product_id);
+    setDataUser(product_id);
+  }
+  $('#modal-product').modal('show');
+};
+function setDataUser(product_id) {
+  axios.get("/panel/product/" + product_id).then(function (response) {
+    var result = response.data;
+    //$('#c_product_id option[value="' + result.c_product_id + '"]').attr("selected", "selected");
+    $('#c_service_id option[value="' + result.c_service_id + '"]').attr("selected", "selected");
+    $('#status option[value="' + result.status + '"]').attr("selected", "selected");
+    $('#comment').val(result.comment);
+    $('#product-alias').val(result.alias);
+  })["catch"](function (e) {
+    $('#admin_email-error-exist').show();
+  });
+}
+window.deleteProduct = function (product_id) {
+  axios.get("panel/product/" + product_id + "/delete").then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Datos actualizados', 'Información actualizada correctamente');
+  })["catch"](function (e) {});
+};
+$().ready(function () {
+  $("#frm-product").validate({
+    rules: {
+      alias: {
+        required: true
+      },
+      c_product_id: {
+        required: true
+      },
+      c_service_id: {
+        required: true
+      },
+      status: {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frm-product");
+      var data = new FormData(new_form);
+      axios.post("/panel/product", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-product', 'Datos actualizados', 'Información actualizada correctamente');
+        $('#modal-product').modal('hide');
+      })["catch"](function (e) {});
+    }
+  });
+  $("#frmpassword").validate({
+    rules: {
+      user_password: {
+        required: true,
+        minlength: 8
+      },
+      user_pass_confirm: {
+        required: true,
+        minlength: 8,
+        equalTo: "#user_password"
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frmpassword");
+      var data = new FormData(new_form);
+      var route_datatable = $('#route_datatable').val();
+      axios.post("/panel/user/" + route_datatable + "/password/update", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
+        $('#modal-user-password').modal('hide');
+      })["catch"](function (e) {});
+    }
+  });
+});
+window.modalPasswod = function (user_id) {
+  $('#password_user_id').val(user_id);
+  $('#modal-user-password').modal('show');
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/product/datatable_product.js":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/product/datatable_product.js ***!
+  \**************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var table = NioApp.DataTable('#dt-product', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/product/list/show',
+    columns: [{
+      data: 'alias'
+    }, {
+      data: 'service'
+    }, {
+      data: 'comment'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/resumen.js":
+/*!********************************************!*\
+  !*** ./resources/js/components/resumen.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; var r = _regenerator(), e = r.m(_regeneratorRuntime), t = (Object.getPrototypeOf ? Object.getPrototypeOf(e) : e.__proto__).constructor; function n(r) { var e = "function" == typeof r && r.constructor; return !!e && (e === t || "GeneratorFunction" === (e.displayName || e.name)); } var o = { "throw": 1, "return": 2, "break": 3, "continue": 3 }; function a(r) { var e, t; return function (n) { e || (e = { stop: function stop() { return t(n.a, 2); }, "catch": function _catch() { return n.v; }, abrupt: function abrupt(r, e) { return t(n.a, o[r], e); }, delegateYield: function delegateYield(r, o, a) { return e.resultName = o, t(n.d, _regeneratorValues(r), a); }, finish: function finish(r) { return t(n.f, r); } }, t = function t(r, _t, o) { n.p = e.prev, n.n = e.next; try { return r(_t, o); } finally { e.next = n.n; } }), e.resultName && (e[e.resultName] = n.v, e.resultName = void 0), e.sent = n.v, e.next = n.n; try { return r.call(this, e); } finally { n.p = e.prev, n.n = e.next; } }; } return (_regeneratorRuntime = function _regeneratorRuntime() { return { wrap: function wrap(e, t, n, o) { return r.w(a(e), t, n, o && o.reverse()); }, isGeneratorFunction: n, mark: r.m, awrap: function awrap(r, e) { return new _OverloadYield(r, e); }, AsyncIterator: _regeneratorAsyncIterator, async: function async(r, e, t, o, u) { return (n(e) ? _regeneratorAsyncGen : _regeneratorAsync)(a(r), e, t, o, u); }, keys: _regeneratorKeys, values: _regeneratorValues }; })(); }
+function _regeneratorValues(e) { if (null != e) { var t = e["function" == typeof Symbol && Symbol.iterator || "@@iterator"], r = 0; if (t) return t.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) return { next: function next() { return e && r >= e.length && (e = void 0), { value: e && e[r++], done: !e }; } }; } throw new TypeError(_typeof(e) + " is not iterable"); }
+function _regeneratorKeys(e) { var n = Object(e), r = []; for (var t in n) { r.unshift(t); } return function e() { for (; r.length;) { if ((t = r.pop()) in n) return e.value = t, e.done = !1, e; } return e.done = !0, e; }; }
+function _regeneratorAsync(n, e, r, t, o) { var a = _regeneratorAsyncGen(n, e, r, t, o); return a.next().then(function (n) { return n.done ? n.value : a.next(); }); }
+function _regeneratorAsyncGen(r, e, t, o, n) { return new _regeneratorAsyncIterator(_regenerator().w(r, e, t, o), n || Promise); }
+function _regeneratorAsyncIterator(t, e) { function n(r, o, i, f) { try { var c = t[r](o), u = c.value; return u instanceof _OverloadYield ? e.resolve(u.v).then(function (t) { n("next", t, i, f); }, function (t) { n("throw", t, i, f); }) : e.resolve(u).then(function (t) { c.value = t, i(c); }, function (t) { return n("throw", t, i, f); }); } catch (t) { f(t); } } var r; this.next || (_regeneratorDefine2(_regeneratorAsyncIterator.prototype), _regeneratorDefine2(_regeneratorAsyncIterator.prototype, "function" == typeof Symbol && Symbol.asyncIterator || "@asyncIterator", function () { return this; })), _regeneratorDefine2(this, "_invoke", function (t, o, i) { function f() { return new e(function (e, r) { n(t, i, e, r); }); } return r = r ? r.then(f, f) : f(); }, !0); }
+function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
+function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
+function _OverloadYield(e, d) { this.v = e, this.k = d; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+
+function getMonthLabels() {
+  var months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  var now = new Date();
+  var labels = [];
+  for (var i = 5; i >= 0; i--) {
+    var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    labels.push(months[d.getMonth()]);
+  }
+  return labels;
+}
+function fetchIngresosData(_x) {
+  return _fetchIngresosData.apply(this, arguments);
+}
+function _fetchIngresosData() {
+  _fetchIngresosData = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(investorId) {
+    var response;
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_0___default().get("/panel/inversionista/".concat(investorId, "/ingresos-mensuales"));
+          case 3:
+            response = _context.sent;
+            return _context.abrupt("return", response.data);
+          case 7:
+            _context.prev = 7;
+            _context.t0 = _context["catch"](0);
+            return _context.abrupt("return", [0, 0, 0, 0, 0, 0]);
+          case 10:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[0, 7]]);
+  }));
+  return _fetchIngresosData.apply(this, arguments);
+}
+function renderBarChartIngresos() {
+  return _renderBarChartIngresos.apply(this, arguments);
+}
+function _renderBarChartIngresos() {
+  _renderBarChartIngresos = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    var _document$getElementB;
+    var chartEl, investorId, labels, data, ctx;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            chartEl = document.getElementById('barChartIngresos');
+            if (chartEl) {
+              _context2.next = 3;
+              break;
+            }
+            return _context2.abrupt("return");
+          case 3:
+            investorId = (_document$getElementB = document.getElementById('investorId')) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.value;
+            if (investorId) {
+              _context2.next = 6;
+              break;
+            }
+            return _context2.abrupt("return");
+          case 6:
+            labels = getMonthLabels();
+            _context2.next = 9;
+            return fetchIngresosData(investorId);
+          case 9:
+            data = _context2.sent;
+            ctx = chartEl.getContext('2d');
+            if (window.barChartIngresosInstance) {
+              window.barChartIngresosInstance.destroy();
+            }
+            window.barChartIngresosInstance = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: '',
+                  // vacío para evitar leyenda
+                  data: data,
+                  backgroundColor: '#9cabff',
+                  // igual que example-chart.js
+                  borderWidth: 2,
+                  borderColor: 'transparent',
+                  hoverBorderColor: 'transparent',
+                  borderSkipped: 'bottom',
+                  barPercentage: 0.6,
+                  categoryPercentage: 0.7
+                }]
+              },
+              options: {
+                plugins: {
+                  legend: {
+                    display: false
+                  },
+                  // Chart.js v3+
+                  tooltip: {
+                    callbacks: {
+                      label: function label(context) {
+                        return context.parsed.y;
+                      }
+                    },
+                    backgroundColor: '#eff6ff',
+                    titleFont: {
+                      size: 13
+                    },
+                    titleColor: '#6783b8',
+                    titleMarginBottom: 6,
+                    bodyColor: '#9eaecf',
+                    bodyFont: {
+                      size: 12
+                    },
+                    bodySpacing: 4,
+                    padding: 10,
+                    footerMarginTop: 0,
+                    displayColors: false
+                  }
+                },
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    ticks: {
+                      color: '#9eaecf',
+                      font: {
+                        size: 12
+                      },
+                      padding: 5
+                    },
+                    grid: {
+                      color: 'rgba(82,100,132,0.2)',
+                      tickLength: 0,
+                      drawTicks: false
+                    }
+                  },
+                  x: {
+                    ticks: {
+                      color: '#9eaecf',
+                      font: {
+                        size: 12
+                      },
+                      padding: 5
+                    },
+                    grid: {
+                      color: 'transparent',
+                      tickLength: 10,
+                      drawTicks: false
+                    }
+                  }
+                }
+              }
+            });
+          case 13:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _renderBarChartIngresos.apply(this, arguments);
+}
+document.addEventListener('DOMContentLoaded', renderBarChartIngresos);
+
+/***/ }),
+
+/***/ "./resources/js/components/tag/crud.js":
+/*!*********************************************!*\
+  !*** ./resources/js/components/tag/crud.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+
+$().ready(function () {
+  $("#frm-tag").validate({
+    rules: {
+      'data[name]': {
+        required: true
+      },
+      'data[type_id]': {
+        required: true
+      },
+      'data[section_id]': {
+        required: true
+      },
+      'data[status]': {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#frm-tag-name-unique-error').html('');
+      $('#frm-tag-name-unique-error').hide();
+      var new_form = document.getElementById("frm-tag");
+      var data = new FormData(new_form);
+      axios.post("/panel/tag", data).then(function (response) {
+        window.location = '/panel/tag';
+      })["catch"](function (e) {
+        var response = e.response;
+        var data_errors = response.data.errors;
+        $('#frm-tag-name-unique-error').html('Este campo ya se encuentra registrado.');
+        $('#frm-tag-name-unique-error').show();
+      });
+    }
+  });
+  if (document.getElementById('frm-tag') && $('#tag_id').val() != null) {
+    var tag_id = $('#tag_id').val();
+    axios.get("/panel/tag/" + tag_id).then(function (response) {
+      var result = response.data;
+      $('#frm-tag-name').val(result.name);
+      $('#frm-tag-type_id').val(result.type_id);
+      $('#frm-tag-type_id').trigger("change");
+      $('#frm-tag-section_id').val(result.section_id);
+      $('#frm-tag-section_id').trigger("change");
+      $('#frm-tag-comment').val(result.name);
+      $('#frm-tag-status option[value="' + result.status + '"]').attr("selected", "selected");
+    })["catch"](function (e) {});
+  }
+});
+window.deleteTag = function (id) {
+  axios["delete"]("/panel/tag/" + id).then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-tag', 'Datos actualizados', 'Registro guardado');
+  })["catch"](function (e) {});
+};
+window.alerDelete = function (id) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, elimina',
+    cancelButtonText: 'Mejor no'
+  }).then(function (result) {
+    if (result.value) {
+      deleteTag(id);
+    }
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/tag/datatable.js":
+/*!**************************************************!*\
+  !*** ./resources/js/components/tag/datatable.js ***!
+  \**************************************************/
+/***/ (() => {
+
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+document.addEventListener('DOMContentLoaded', function () {
+  var _NioApp$DataTable;
+  var table = NioApp.DataTable('#dt-tag', (_NioApp$DataTable = {
+    processing: true,
+    ajax: '/panel/tag/list/show'
+  }, _defineProperty(_NioApp$DataTable, "processing", true), _defineProperty(_NioApp$DataTable, "responsive", {
+    details: {
+      renderer: function renderer(api, rowIdx, columns) {
+        var total = columns.length - 1;
+        var data = $.map(columns, function (col, i) {
+          if (total == i) {
+            return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+          } else {
+            return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+          }
+        }).join('');
+        return data ? $('<table/>').append(data) : false;
+      }
+    }
+  }), _defineProperty(_NioApp$DataTable, "columns", [{
+    data: 'name'
+  }, {
+    data: 'type'
+  }, {
+    data: 'section'
+  }, {
+    data: 'description'
+  }, {
+    data: 'status'
+  }, {
+    data: 'options'
+  }]), _defineProperty(_NioApp$DataTable, "columnDefs", [{
+    className: "nk-tb-col",
+    targets: "_all"
+  }]), _defineProperty(_NioApp$DataTable, "createdRow", function createdRow(row, data, dataIndex) {
+    $(row).addClass("nk-tb-item");
+  }), _NioApp$DataTable));
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/toastr.js":
+/*!*******************************************!*\
+  !*** ./resources/js/components/toastr.js ***!
+  \*******************************************/
+/***/ (() => {
+
+"use strict";
+
+
+(function (NioApp, $) {
+  'use strict';
+
+  // Uses
+  // NioApp.Toast(message, type, {attr});
+  // 
+  // @message     = 'Your message' 
+  // @type        = 'info|success|warning|error',  
+  // @attr        = {position: 'bottom-right', icon: 'auto', ui: ''}
+  // 
+  // attr.ui used for additonal class as is-dark
+  // attr.icon used for custom icon
+  // attr.position used for position of the msg.
+  // Example Trigger
+  $('.eg-toastr-default').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for deafult toast message.', 'info');
+  });
+  $('.eg-toastr-bottom-center').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom center toast message.', 'info', {
+      position: 'bottom-center'
+    });
+  });
+  $('.eg-toastr-bottom-right').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom right toast message.', 'info');
+  });
+  $('.eg-toastr-bottom-left').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom left toast message.', 'info', {
+      position: 'bottom-left'
+    });
+  });
+  $('.eg-toastr-bottom-full').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom full width toast message.', 'info', {
+      position: 'bottom-full'
+    });
+  });
+  $('.eg-toastr-top-center').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for top center toast message.', 'info', {
+      position: 'top-center'
+    });
+  });
+  $('.eg-toastr-top-right').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for top right toast message.', 'info', {
+      position: 'top-right'
+    });
+  });
+  $('.eg-toastr-top-left').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for top left toast message.', 'info', {
+      position: 'top-left'
+    });
+  });
+  $('.eg-toastr-top-full').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for top full width toast message.', 'info', {
+      position: 'top-full'
+    });
+  });
+  $('.eg-toastr-info').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for bottom right toast message.', 'info');
+  });
+  $('.eg-toastr-success').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for success toast message.', 'success');
+  });
+  $('.eg-toastr-warning').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for warning toast message.', 'warning');
+  });
+  $('.eg-toastr-error').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is a note for error toast message.', 'error');
+  });
+  $('.eg-toastr-dark').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is dark version note of toast message.', 'info', {
+      ui: 'is-dark'
+    });
+  });
+  $('.eg-toastr-no-icon').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('This is without icon note of toast message.', 'info', {
+      icon: false
+    });
+  });
+  $('.eg-toastr-with-title').on("click", function (e) {
+    e.preventDefault();
+    toastr.clear();
+    NioApp.Toast('<h5>Update Successfully</h5><p>Your profile has been successfully updated.</p>', 'success', {
+      position: 'top-right'
+    });
+  });
+  window.showToast = function (title, description, type) {
+    toastr.clear();
+    NioApp.Toast('<h5>' + title + '</h5><p>' + description + '</p>', '' + type + '', {
+      position: 'top-right'
+    });
+  };
+  window.showToastDark = function (title, description, type) {
+    toastr.clear();
+    NioApp.Toast('<h5>' + title + '</h5><p>' + description + '</p>', '' + type + '', {
+      position: 'top-right',
+      ui: 'is-dark',
+      timeOut: 10000
+    });
+  };
+
+  /* toast */
+
+  /*   window.openToast = function (title, body, class_toast, subtitle) {
+      $.toast({
+        type: class_toast,
+        title: title,
+        subtitle: subtitle,
+        content: body,
+        delay: 5000,
+        
+        
+    });
+    } */
+
+  /* var toastTrigger = document.getElementsByClassName('toasts')
+  var toastLiveExample = document.getElementById('liveToast')
+  var toast = new bootstrap.Toast(toastLiveExample) */
+})(NioApp, jQuery);
+$(document).ready(function () {
+  $(".toast").toast({
+    autohide: false
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/user/crud.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/user/crud.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities */ "./resources/js/components/utilities.js");
+
+window.modalUser = function (type, user_id) {
+  var route_datatable = $('#route_datatable').val();
+  var title = $('#title').val();
+  if (document.getElementById('frmadmin')) {
+    $('#frmadmin').trigger("reset");
+    $('#financial_id').val("").trigger("change");
+    ;
+  }
+  if (document.getElementById('frmfinanciera')) {
+    $('#frmfinanciera').trigger("reset");
+  }
+  if (document.getElementById('frm-inversionista')) {
+    $('#frm-inversionista').trigger("reset");
+  }
+  if (type === 1) {
+    $('#user-admin-title').html('Crear usuario ' + title);
+    $('#content-password').show();
+    $('#content-pass_confirm').show();
+    $('#user_id').val(null);
+    $('#type_user').val(route_datatable);
+  } else {
+    var lbluser = route_datatable;
+    if (route_datatable == 'cliente-financiera') {
+      lbluser = 'cliente financiera';
+    }
+    if (route_datatable == 'cliente-persona') {
+      lbluser = 'cliente persona';
+    }
+    $('#user-admin-title').html('Editar usuario ' + lbluser);
+    $('#content-pass_confirm').hide();
+    $('#content-password').hide();
+    $('#user_id').val(user_id);
+    setDataUser(user_id);
+    $('#type_user').val(route_datatable);
+  }
+  $('#modal-user-admin').modal('show');
+};
+function setDataUser(user_id) {
+  var route_datatable = $('#route_datatable').val();
+  axios.get("/panel/user/" + route_datatable + "/" + user_id).then(function (response) {
+    var data = response.data;
+    var result = data.user;
+    var agreements = data.agreements;
+    $('#agreements').val(null).trigger('change');
+    if (document.getElementById('rol') != '') {
+      //*limpiar los valores razon social
+      var type_person = result.type_person;
+      $('#financial_id').val(result.financial_id).trigger("change");
+      $('#type_person option[value="' + result.type_person + '"]').attr("selected", "selected");
+      $('#rol_id option[value="' + result.rol_id + '"]').attr("selected", "selected");
+    }
+    //TODO: borrar si todo funciona en pruebas
+    /* if (document.getElementById('type_person')) {
+        $('#financial_id option[value="'+result.financial_id+'"]').attr("selected", "selected");
+        $('#type_person option[value="'+result.type_person+'"]').attr("selected", "selected");
+    } */
+    $('#name').val(result.name);
+    $('#last_name').val(result.last_name);
+    $('#second_last_name').val(result.second_last_name);
+    $('#cellphone').val(result.cellphone);
+    $('#email').val(result.email);
+    $('#status option[value="' + result.status + '"]').attr("selected", "selected");
+    if (result.agreement_id != '') {
+      $('#agreement_id option[value="' + result.agreement_id + '"]').attr("selected", "selected");
+      $('#bank_name').val(result.bank_name);
+      $('#bank_card_number').val(result.bank_card_number);
+      $('#bank_account_number').val(result.bank_account_number);
+      $('#bank_clabe').val(result.bank_clabe);
+      $('#bank_account_holder').val(result.bank_account_holder);
+      $('#investment_bank_name').val(result.investment_bank_name);
+      $('#investment_bank_account_holder').val(result.investment_bank_account_holder);
+      $('#investment_bank_account_number').val(result.investment_bank_account_number);
+      $('#investment_bank_clabe').val(result.investment_bank_clabe);
+    }
+    $('#is_access_config option[value="' + result.is_access_config + '"]').attr("selected", "selected");
+    if (document.getElementById('financial_products_id')) {
+      var financial_products_id = result.financial_products_id.split(',');
+      $('#financial_products_id').val(financial_products_id).trigger('change');
+    }
+    if (document.getElementById('agreements')) {
+      // Itera sobre periodicities y selecciona las opciones en product_periodicity_id
+      var agreementValues = agreements.map(function (item) {
+        return item.agreement_id;
+      });
+      // Seleccionar los valores correspondientes en los selects
+      $('#agreements').val(agreementValues).trigger('change');
+    }
+  })["catch"](function (e) {
+    $('#admin_email-error-exist').show();
+  });
+}
+window.deleteUser = function (id) {
+  axios.get("/panel/user/administrador/" + id + "/delete").then(function (response) {
+    (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
+  })["catch"](function (e) {});
+};
+$().ready(function () {
+  if (document.getElementById('frmfinanciera')) {
+    $('#financial_id').select2({
+      dropdownParent: $('#modal-user-admin'),
+      placeholder: "Escribe para buscar..",
+      allowClear: true
+    });
+  }
+  $("#frmadmin").validate({
+    rules: {
+      name: {
+        required: true
+      },
+      last_name: {
+        required: true
+      },
+      cellphone: {
+        required: true,
+        number: true,
+        minlength: 10
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 8
+      },
+      pass_confirm: {
+        required: true,
+        minlength: 8,
+        equalTo: "#password"
+      },
+      status: {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#admin_email-error-exist').hide();
+      var new_form = document.getElementById("frmadmin");
+      var data = new FormData(new_form);
+      axios.post("/panel/user/administrador", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
+        $('#modal-user-admin').modal('hide');
+      })["catch"](function (e) {
+        $('#admin_email-error-exist').show();
+      });
+    }
+  });
+  $("#frmfinanciera").validate({
+    rules: {
+      financial_id: {
+        required: true
+      },
+      type_person: {
+        required: true
+      },
+      rol_id: {
+        required: true
+      },
+      name: {
+        required: true
+      },
+      last_name: {
+        required: true
+      },
+      cellphone: {
+        number: true,
+        minlength: 10
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 8
+      },
+      pass_confirm: {
+        required: true,
+        minlength: 8,
+        equalTo: "#password"
+      },
+      status: {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#admin_email-error-exist').hide();
+      var new_form = document.getElementById("frmfinanciera");
+      var data = new FormData(new_form);
+      axios.post("/panel/user/administrador", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-financiera', 'Datos actualizados', 'Información actualizada correctamente');
+        $('#modal-user-admin').modal('hide');
+      })["catch"](function (e) {
+        var response = e.response;
+        var errors = response.data.errors;
+        if (errors.email) {
+          $('#admin_email-error-exist').show();
+        }
+        console.log(e.response);
+      });
+    }
+  });
+  $("#frm-inversionista").validate({
+    rules: {
+      financial_products_id: {
+        required: true
+      },
+      type_person: {
+        required: true
+      },
+      rol_id: {
+        required: true
+      },
+      name: {
+        required: true
+      },
+      last_name: {
+        required: true
+      },
+      cellphone: {
+        number: true,
+        minlength: 10
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 8
+      },
+      pass_confirm: {
+        required: true,
+        minlength: 8,
+        equalTo: "#password"
+      },
+      status: {
+        required: true
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      $('#admin_email-error-exist').hide();
+      var new_form = document.getElementById("frm-inversionista");
+      var data = new FormData(new_form);
+      axios.post("/panel/user/administrador", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-inversionista', 'Datos actualizados', 'Información actualizada correctamente');
+        $('#modal-user-admin').modal('hide');
+      })["catch"](function (e) {
+        var response = e.response;
+        var errors = response.data.errors;
+        if (errors.email) {
+          $('#admin_email-error-exist').show();
+        }
+      });
+    }
+  });
+  $(document).ready(function () {
+    // Regular save button
+    $("#frm-inversionista button:contains('Guardar'):not(:contains('bienvenida'))").click(function () {
+      $("#isResetpassword").val("0");
+    });
+
+    // Save and welcome button
+    $("#frm-inversionista button:contains('Guardar y dar bienvenida')").click(function () {
+      $("#isResetpassword").val("1");
+    });
+  });
+  $("#frmpassword").validate({
+    rules: {
+      user_password: {
+        required: true,
+        minlength: 8
+      },
+      user_pass_confirm: {
+        required: true,
+        minlength: 8,
+        equalTo: "#user_password"
+      }
+    },
+    submitHandler: function submitHandler(form, event) {
+      event.preventDefault();
+      var new_form = document.getElementById("frmpassword");
+      var data = new FormData(new_form);
+      var route_datatable = $('#route_datatable').val();
+      axios.post("/panel/user/" + route_datatable + "/password/update", data).then(function (response) {
+        var result = response.data;
+        (0,_utilities__WEBPACK_IMPORTED_MODULE_0__.showInfo)(2, 'dt-admin', 'Datos actualizados', 'Información actualizada correctamente');
+        $('#modal-user-password').modal('hide');
+      })["catch"](function (e) {});
+    }
+  });
+});
+window.modalPasswod = function (user_id) {
+  $('#password_user_id').val(user_id);
+  $('#modal-user-password').modal('show');
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/user/datatable_admin.js":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/user/datatable_admin.js ***!
+  \*********************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var table = NioApp.DataTable('#dt-admin', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/user/' + route + '/list/show',
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'last_name'
+    }, {
+      data: 'second_last_name'
+    }, {
+      data: 'cellphone'
+    }, {
+      data: 'email'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/user/datatable_financiera.js":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/user/datatable_financiera.js ***!
+  \**************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var table = NioApp.DataTable('#dt-financiera', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/user/' + route + '/list/show',
+    columns: [{
+      data: 'financial'
+    }, {
+      data: 'type_person'
+    }, {
+      data: 'name'
+    }, {
+      data: 'email'
+    }, {
+      data: 'cellphone'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/user/datatable_inversionista.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/user/datatable_inversionista.js ***!
+  \*****************************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var route = $('#route_datatable').val();
+  var table = NioApp.DataTable('#dt-inversionista', {
+    processing: true,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/user/' + route + '/list/show',
+    columns: [{
+      data: 'name'
+    }, {
+      data: 'email'
+    }, {
+      data: 'cellphone'
+    }, {
+      data: 'status'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/user/datatable_user.js":
+/*!********************************************************!*\
+  !*** ./resources/js/components/user/datatable_user.js ***!
+  \********************************************************/
+/***/ (() => {
+
+document.addEventListener('DOMContentLoaded', function () {
+  var queryParam = new URLSearchParams(window.location.search).get('query');
+  var table = NioApp.DataTable('#dt-search-user', {
+    processing: true,
+    searching: false,
+    responsive: {
+      details: {
+        renderer: function renderer(api, rowIdx, columns) {
+          var total = columns.length - 1;
+          var data = $.map(columns, function (col, i) {
+            if (total == i) {
+              return col.hidden ? '<tr class="py-3 " colspan="2">' + '<td class="">' + col.data + '</td>' + '</tr>' : '';
+            } else {
+              return col.hidden ? '<tr class="py-3" data-dt-row="' + col.rowIndex + '">' + '<td class="px-3 "><strong>' + col.title + '</strong></td> ' + '<td class="w-100">' + col.data + '</td>' + '</tr>' : '';
+            }
+          }).join('');
+          return data ? $('<table/>').append(data) : false;
+        }
+      }
+    },
+    ajax: '/panel/user/search?query=' + queryParam,
+    columns: [{
+      data: 'id'
+    }, {
+      data: 'name'
+    }, {
+      data: 'cellphone'
+    }, {
+      data: 'origin'
+    }, {
+      data: 'options'
+    }],
+    columnDefs: [{
+      className: "nk-tb-col",
+      targets: "_all"
+    }],
+    createdRow: function createdRow(row, data, dataIndex) {
+      $(row).addClass("nk-tb-item");
+    }
+  });
+});
+
+/***/ }),
+
+/***/ "./resources/js/components/user/investor.js":
+/*!**************************************************!*\
+  !*** ./resources/js/components/user/investor.js ***!
+  \**************************************************/
+/***/ (() => {
+
+window.prestarInversionista = function () {
+  var importe = parseFloat($('#lendable').val()) || 0;
+  var totalAvailable = parseFloat($('#totalAvailable').val()) || 0;
+  var investorId = $('#investorId').val();
+  var error = true;
+  if (importe < 0) {
+    Swal.fire({
+      title: 'El importe debe ser mayor o igual a 0 pesos.',
+      icon: 'warning',
+      showCancelButton: true,
+      showConfirmButton: false,
+      cancelButtonText: 'Cerrar'
+    });
+  } else if (importe > totalAvailable) {
+    Swal.fire({
+      title: 'El importe debe ser menor o igual al Disponible.',
+      icon: 'warning',
+      showCancelButton: true,
+      showConfirmButton: false,
+      cancelButtonText: 'Cerrar'
+    });
+  } else {
+    error = false;
+  }
+  if (!error) {
+    axios.post("/panel/clients/investor/prestar/save", {
+      'lendable': importe,
+      'investorId': investorId
+    }).then(function (response) {
+      $('#modalPrestar').modal('hide');
+      location.reload();
+    })["catch"](function (e) {
+      console.error('Error en la solicitud:', e);
+    });
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/utilities.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/utilities.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   showInfo: () => (/* binding */ showInfo)
+/* harmony export */ });
+function showInfo(redirect, idDatatable, title, msg) {
+  showToast(title, msg, 'success');
+  if (redirect == 1) {
+    //*redirect back
+    window.history.back();
+  }
+  if (idDatatable == null) {
+    location.reload();
+  } else {
+    $('#' + idDatatable).DataTable().ajax.reload();
+  }
+}
+window.showNotes = function (id_rel, is_lead) {
+  var model = is_lead == true ? 'lead' : 'credit';
+  axios.get('/panel/' + model + '/' + id_rel + '/notes/list').then(function (response) {
+    var result = response.data;
+    $('#content-notes').html(result.notes);
+    $('#addNote').html(result.addNote);
+    $('#modal-list-note').modal('show');
+  })["catch"](function (e) {});
+};
+window.AddNoteIntoNotes = function (note_id, model_note) {
+  $('#modal-list-note').modal('hide');
+  $('#id_rel').val(note_id);
+  $('#model_note').val(model_note);
+  $('#modal-lead-description').val('');
+  $('#modal-note').modal('show');
+};
+window.showModalActions = function (lead_id, is_lead) {
+  var model = is_lead == true ? 'lead' : 'credit';
+  $('#id-rel-action').val(lead_id);
+  $('#model-action').val(model);
+  refreshAction(lead_id, model, 'in_progress', 'content-profile-in_progress');
+  refreshAction(lead_id, model, 'completed', 'content-profile-completed');
+  $('#modal-list-actions').modal('show');
+  var addAction = '<a class="pointer" onclick="addActionIntoActions(' + lead_id + ', true, ' + is_lead + ')"><em class="icon ni ni-calendar-check-fill"></em><span>Agregar acción</span></a>';
+  $('#addActions').html(addAction);
+};
+
+/* window.searchClient = function (event)
+{
+    if (event.key === 'Enter') {
+        //event.preventDefault();
+        let query = $('#query').val();
+        axios
+            .post('/panel/user/search', {query:query})
+            .then(function (response) {
+                let result = response.data;
+                console.log(result);
+            })
+            .catch(e => {
+                
+            });
+    }
+} */
+
+/***/ }),
+
+/***/ "./resources/js/components/websocket.js":
+/*!**********************************************!*\
+  !*** ./resources/js/components/websocket.js ***!
+  \**********************************************/
+/***/ (() => {
+
+/* import Echo from "laravel-echo"
+
+window.Pusher = require('pusher-js');
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'abcb59ca67abeb8745bb',
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    wssPort: 6001,
+    forceTLS: true,
+    disableStats: false,
+    enabledTransports:['ws', 'wss']
+});
+ Echo.channel('trades')
+            .listen('SendPush', (e) => {
+                console.log(e.trade);
+            })
+ */
+
+// Enable pusher logging - don't include this in production
+Pusher.logToConsole = true;
+var pusher = new Pusher('cb2d06fb80592c4ce5f2', {
+  cluster: 'us2'
+});
+var channel = pusher.subscribe('kaaxclub');
+channel.bind('kaaxclub-event', function (data) {
+  var model = data.model;
+  axios.get('/panel/notification/' + model + '/show').then(function (response) {
+    var result = response.data;
+    var my_user = $('#user_id').val();
+    for (var index = 0; index < result.length; index++) {
+      var element = result[index];
+      var title = element.title;
+      var body = element.body;
+      var user_id = element.user_id;
+      var toast = element.toast;
+      $('#content-toast').empty().append(toast);
+    }
+    $(".toast").toast({
+      autohide: false
+    });
+    $(".toast").toast("show");
+    showNotification();
+  });
+});
 
 /***/ })
 
@@ -12113,102 +11811,59 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
 (() => {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
 __webpack_require__(/*! ./components/toastr */ "./resources/js/components/toastr.js");
-
 __webpack_require__(/*! ./components/notification/utilities */ "./resources/js/components/notification/utilities.js");
-
 __webpack_require__(/*! ./components/datatable */ "./resources/js/components/datatable.js");
-
 __webpack_require__(/*! ./components/user/crud */ "./resources/js/components/user/crud.js");
-
 __webpack_require__(/*! ./components/user/investor */ "./resources/js/components/user/investor.js");
-
 __webpack_require__(/*! ./components/user/datatable_admin */ "./resources/js/components/user/datatable_admin.js");
-
 __webpack_require__(/*! ./components/user/datatable_financiera */ "./resources/js/components/user/datatable_financiera.js");
-
 __webpack_require__(/*! ./components/user/datatable_inversionista */ "./resources/js/components/user/datatable_inversionista.js");
-
 __webpack_require__(/*! ./components/user/datatable_user */ "./resources/js/components/user/datatable_user.js");
-
 __webpack_require__(/*! ./components/product/datatable_product */ "./resources/js/components/product/datatable_product.js");
-
 __webpack_require__(/*! ./components/product/crud */ "./resources/js/components/product/crud.js");
-
 __webpack_require__(/*! ./components/agreement/datatable */ "./resources/js/components/agreement/datatable.js");
-
 __webpack_require__(/*! ./components/agreement/crud */ "./resources/js/components/agreement/crud.js");
-
 __webpack_require__(/*! ./components/lead/datatable */ "./resources/js/components/lead/datatable.js");
-
 __webpack_require__(/*! ./components/lead/crud */ "./resources/js/components/lead/crud.js");
-
 __webpack_require__(/*! ./components/clients/datatable */ "./resources/js/components/clients/datatable.js");
-
 __webpack_require__(/*! ./components/clients/datatable_colaboradores */ "./resources/js/components/clients/datatable_colaboradores.js");
-
 __webpack_require__(/*! ./components/clients/crud */ "./resources/js/components/clients/crud.js");
-
 __webpack_require__(/*! ./components/tag/datatable */ "./resources/js/components/tag/datatable.js");
-
 __webpack_require__(/*! ./components/tag/crud */ "./resources/js/components/tag/crud.js");
-
 __webpack_require__(/*! ./components/financial/datatable */ "./resources/js/components/financial/datatable.js");
-
 __webpack_require__(/*! ./components/financial/crud */ "./resources/js/components/financial/crud.js");
-
 __webpack_require__(/*! ./components/financial/product/datatable */ "./resources/js/components/financial/product/datatable.js");
-
 __webpack_require__(/*! ./components/financial/product/crud */ "./resources/js/components/financial/product/crud.js");
-
 __webpack_require__(/*! ./components/crm */ "./resources/js/components/crm.js");
-
 __webpack_require__(/*! ./components/action/datatable */ "./resources/js/components/action/datatable.js");
-
 __webpack_require__(/*! ./components/action/crud */ "./resources/js/components/action/crud.js");
-
 __webpack_require__(/*! ./components/action/credit */ "./resources/js/components/action/credit.js");
-
 __webpack_require__(/*! ./components/general */ "./resources/js/components/general.js");
-
 __webpack_require__(/*! ./components/module/datatable */ "./resources/js/components/module/datatable.js");
-
 __webpack_require__(/*! ./components/module/template */ "./resources/js/components/module/template.js");
-
 __webpack_require__(/*! ./components/module/resumen */ "./resources/js/components/module/resumen.js");
-
 __webpack_require__(/*! ./components/module/kc_check_up/datatable */ "./resources/js/components/module/kc_check_up/datatable.js");
-
 __webpack_require__(/*! ./components/module/kc_check_up/action/datatable */ "./resources/js/components/module/kc_check_up/action/datatable.js");
-
 __webpack_require__(/*! ./components/module/kc_check_up/action/datatable_report */ "./resources/js/components/module/kc_check_up/action/datatable_report.js");
-
 __webpack_require__(/*! ./components/module/kc_control_desk/datatable */ "./resources/js/components/module/kc_control_desk/datatable.js");
-
 __webpack_require__(/*! ./components/module/kc_control_desk/reference */ "./resources/js/components/module/kc_control_desk/reference.js");
-
 __webpack_require__(/*! ./components/action/datatablemodule */ "./resources/js/components/action/datatablemodule.js");
-
 __webpack_require__(/*! ./components/credit/profile/datatable */ "./resources/js/components/credit/profile/datatable.js");
-
 __webpack_require__(/*! ./components/credit/product/datatable */ "./resources/js/components/credit/product/datatable.js");
-
 __webpack_require__(/*! ./components/credit/datatable_in_progress */ "./resources/js/components/credit/datatable_in_progress.js");
-
 __webpack_require__(/*! ./components/resumen */ "./resources/js/components/resumen.js");
-
 window.moveElement = function (section, id, idDatatable) {
   // Deshabilita el botón para evitar clics múltiples
   var button = document.querySelector('.moveElement');
   button.disabled = true;
   axios.get("/panel/" + section + "/" + id + "/move").then(function (response) {
     console.log(idDatatable);
-
     if (idDatatable == null) {
       location.reload();
     } else {
@@ -12219,7 +11874,6 @@ window.moveElement = function (section, id, idDatatable) {
     button.disabled = false;
   });
 };
-
 window.msgProfile = function () {
   Swal.fire({
     title: 'Este usuario no tiene ningún trámite',
@@ -12230,12 +11884,10 @@ window.msgProfile = function () {
     cancelButtonText: 'Cerrar'
   });
 };
-
 window.isAccess = function () {
   axios.get("/user/tyc/validate").then(function (response) {
     var result = response.data;
     var is_block = result.is_block;
-
     if (is_block == true) {
       $('#modal-access').modal('show');
     } else {
@@ -12243,7 +11895,6 @@ window.isAccess = function () {
     }
   })["catch"](function (e) {});
 };
-
 $("#frm-tyc").submit(function (event) {
   event.preventDefault();
   var new_form = document.getElementById('frm-tyc');
@@ -12260,6 +11911,7 @@ $().ready(function () {
     isAccess();
   });
 });
+
 /* $( "#frm-contact" ).submit(function( event ) {
     event.preventDefault();
     alert('test');
@@ -12283,19 +11935,17 @@ tippy(document.querySelectorAll('.active-tooltip'), {
   },
   allowHTML: true
 });
-/* grafica dona investors */
 
+/* grafica dona investors */
 if (document.getElementById('TrafficChannelDoughnutData')) {
   var analyticsDoughnut = function analyticsDoughnut(selector, set_data) {
     var $selector = selector ? $(selector) : $('.analytics-doughnut');
     $selector.each(function () {
       var $self = $(this),
-          _self_id = $self.attr('id'),
-          _get_data = typeof set_data === 'undefined' ? eval(_self_id) : set_data;
-
+        _self_id = $self.attr('id'),
+        _get_data = typeof set_data === 'undefined' ? eval(_self_id) : set_data;
       var selectCanvas = document.getElementById(_self_id).getContext("2d");
       var chart_data = [];
-
       for (var i = 0; i < _get_data.datasets.length; i++) {
         chart_data.push({
           backgroundColor: _get_data.datasets[i].background,
@@ -12305,7 +11955,6 @@ if (document.getElementById('TrafficChannelDoughnutData')) {
           data: _get_data.datasets[i].data
         });
       }
-
       var chart = new Chart(selectCanvas, {
         type: 'doughnut',
         data: {
@@ -12355,8 +12004,6 @@ if (document.getElementById('TrafficChannelDoughnutData')) {
       });
     });
   }; // init chart
-
-
   var disponiblePrestaroRetirar = $('#disponiblePrestaroRetirar').val();
   var procesoPrestado = $('#procesoPrestado').val();
   var prestamoCreditosActivos = $('#prestamoCreditosActivos').val();
@@ -12374,7 +12021,6 @@ if (document.getElementById('TrafficChannelDoughnutData')) {
     analyticsDoughnut();
   });
 }
-
 __webpack_require__(/*! ./components/websocket */ "./resources/js/components/websocket.js");
 })();
 

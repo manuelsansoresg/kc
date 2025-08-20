@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Lib\Cemail;
 use App\Lib\Csendgrid;
 use App\Lib\Manychat;
 use App\Lib\Slack;
@@ -479,6 +480,28 @@ class HistoryLog extends Model
                 HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $id_rel, 0);
             }
+        }
+
+        if ($status_id == HistoryLog::SOLICITUD) {
+            //obtener el cliente y su organizacion
+            $credit = Credit::find($id_rel);
+            $client = $credit!=null ? $credit->client : null;
+            $name_client = $client!=null ? $client->name.' '. $client->last_name. ' '. $client->second_last_name : null;
+
+
+            $agreement_id = $credit!=null ? $credit->agreement_id : null;
+            //obtener todos los creditos con la organizacion del solicitante
+            $getUsers = User::where('agreement_id', $agreement_id)->role('Cliente inversionista')->get();
+            // disparar envio de correo
+            $subject = 'Solicitud de Vo.Bo. - ' . $name_client;
+            $emails = $getUsers->pluck('email')->implode(',');
+            $data_email = array(
+                'name_client' => $name_client
+            );
+
+            $sendEmail = new Cemail($emails, 'solicitud',  $subject, $data_email);
+
+            $sendEmail->sendEmail();
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {

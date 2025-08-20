@@ -454,7 +454,8 @@ class Credit extends Model
 
     public static function listDatatableSolicitud()
     {
-        $get_list = HistoryLog::wherein('status_id', HistoryLog::SOLICITUD);
+        $users        = array();
+        $get_list = HistoryLog::where('status_id', HistoryLog::SOLICITUD);
         if (Auth::user()->hasRole('Cliente inversionista')) {
             $get_list->join('credits', 'history_logs.id_rel', 'credit.id');
             $get_list->where('agreement_id', Auth::user()->agreement_id);
@@ -462,15 +463,17 @@ class Credit extends Model
         }
         $get_list = $get_list->where('status', 1)->orderBy('created_at', 'DESC')
                     ->get();
+
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);
             $client           = $query->creditClientPerson;
             $financialProduct = FinancialProduct::find($query->applied_financial_product);
             $tipoCredito      = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
             $alias_product    = $tipoCredito      != null ? $tipoCredito->alias : null;
-            $templateStrategy = TemplateValues::STRATEGY['solicitud'];
+            $model            = HistoryLog::$name_model[HistoryLog::KC_CONTROL_DESK];
+            $templateStrategy = TemplateValues::STRATEGY[$model];
             $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
-            $percent = 80;
+            $percent          = (new $templateStrategy)->getPercent($history);
 
 
             $content_client  = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
@@ -488,7 +491,7 @@ class Credit extends Model
                 'options' => $option
             );
         }
-
+        return $users;
     }
     
     public static function listDatatable($status)
