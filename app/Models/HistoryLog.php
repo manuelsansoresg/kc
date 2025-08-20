@@ -16,17 +16,17 @@ class HistoryLog extends Model
 {
     use HasFactory;
 
-    const LEAD_ARCHIVE                        = 1;
-    const ADD_PROSPECT                        = 2;
-    const CREATE_PROSPECT                     = 3;
-    const LEAD_CONVERT                        = 4;
-    const CREATE_CLIENT_PERSON                = 5;
+    const LEAD_ARCHIVE         = 1;
+    const ADD_PROSPECT         = 2;
+    const CREATE_PROSPECT      = 3;
+    const LEAD_CONVERT         = 4;
+    const CREATE_CLIENT_PERSON = 5;
     
-    const KC_CHECK_UP                         = 6;
-    const KC_CHECK_UP_ACTION_UPLOAD           = 7;
-    const KC_CHECK_UP_ACTION_FORM             = 8;
-    const KC_CHECK_UP_ACTION_REPORT           = 9;
-    const KC_CHECK_UP_ACTION_DESITION         = 14;
+    const KC_CHECK_UP                 = 6;
+    const KC_CHECK_UP_ACTION_UPLOAD   = 7;
+    const KC_CHECK_UP_ACTION_FORM     = 8;
+    const KC_CHECK_UP_ACTION_REPORT   = 9;
+    const KC_CHECK_UP_ACTION_DESITION = 14;
 
     const KC_CHECK_UP_DEBT_REDUCTION          = 10;
     const KC_CHECK_UP_DEBT_REDUCTION_UPLOAD   = 11;
@@ -34,89 +34,91 @@ class HistoryLog extends Model
     const KC_CHECK_UP_DEBT_REDUCTION_REPORT   = 13;
     const KC_CHECK_UP_DEBT_REDUCTION_DESITION = 15;
 
-    const CREDIT_ARCHIVE                      = 16;
-    const CREDIT_CANCELED                     = 17;
-    const CREDIT_REJECTED                     = 18;
+    const CREDIT_ARCHIVE  = 16;
+    const CREDIT_CANCELED = 17;
+    const CREDIT_REJECTED = 18;
     
-    const CREDIT_IN_PROGRESS                  = 19;
+    const CREDIT_IN_PROGRESS = 19;
     
-    const NEW_CREDIT_KC_CHECK_UP              = 20;
+    const NEW_CREDIT_KC_CHECK_UP = 20;
 
-    const KC_CONTROL_DESK                     = 21;
-    const KC_CONTROL_DESK_TASK1_STEP1         = 22;
-    const KC_CONTROL_DESK_TASK2_STEP1         = 23;
-    const KC_CONTROL_DESK_TASK3_STEP1         = 24;
-    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP1  = 25;
+    const KC_CONTROL_DESK                    = 21;
+    const KC_CONTROL_DESK_TASK1_STEP1        = 22;
+    const KC_CONTROL_DESK_TASK2_STEP1        = 23;
+    const KC_CONTROL_DESK_TASK3_STEP1        = 24;
+    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP1 = 25;
     
     
-    const KC_CONTROL_DESK_TASK1_STEP2         = 26;
-    const KC_CONTROL_DESK_TASK2_STEP2         = 27;
-    const KC_CONTROL_DESK_TASK3_STEP2         = 28;
-    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP2  = 57;
-
-    
-    const KC_CONTROL_DESK_TASK1_STEP3         = 58;
-    const KC_CONTROL_DESK_TASK2_STEP3         = 59;
-    const KC_CONTROL_DESK_TASK3_STEP3         = 69;
-    const KC_CONTROL_DESK_TASK4_STEP3         = 70;
-    const KC_CONTROL_DESK_TASK5_STEP3         = 71;
-    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP3  = 72;
-    
-    const KC_CONTROL_DESK_TASK1_STEP4         = 73;
-    const KC_CONTROL_DESK_TASK2_STEP4         = 74;
+    const KC_CONTROL_DESK_TASK1_STEP2        = 26;
+    const KC_CONTROL_DESK_TASK2_STEP2        = 27;
+    const KC_CONTROL_DESK_TASK3_STEP2        = 28;
+    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP2 = 57;
 
     
-    const KC_DELIVERY                         = 30;
-    const KC_DELIVERY_TASK1_STEP1             = 75;
-    const KC_DELIVERY__DYNAMIC_TASK_STEP2     = 76;
+    const KC_CONTROL_DESK_TASK1_STEP3        = 58;
+    const KC_CONTROL_DESK_TASK2_STEP3        = 59;
+    const KC_CONTROL_DESK_TASK3_STEP3        = 69;
+    const KC_CONTROL_DESK_TASK4_STEP3        = 70;
+    const KC_CONTROL_DESK_TASK5_STEP3        = 71;
+    const KC_CONTROL_DESK_DYNAMIC_TASK_STEP3 = 72;
     
-    const KC_DELIVERY_TASK1_STEP2             = 77;
-    const KC_DELIVERY_TASK2_STEP2             = 78;
+    const KC_CONTROL_DESK_TASK1_STEP4 = 73;
+    const KC_CONTROL_DESK_TASK2_STEP4 = 74;
 
     
-    const CREDITS_PAID                        = 35;
-    const CREDITS_DELIVERED                   = 55;
+    const KC_DELIVERY                     = 30;
+    const KC_DELIVERY_TASK1_STEP1         = 75;
+    const KC_DELIVERY__DYNAMIC_TASK_STEP2 = 76;
+    
+    const KC_DELIVERY_TASK1_STEP2 = 77;
+    const KC_DELIVERY_TASK2_STEP2 = 78;
 
-    const KC_AFTER_MARKET                     = 36;
-    const KC_AFTER_FORM                       = 48;
     
-    const KC_SWAP                             = 37;
-    const KC_SWAP_UPLOAD                      = 38;
-    const KC_SWAP_FORM                        = 39;
-    const KC_SWAP_UPLOAD_2                    = 46;
-    
-    const KC_SWAP_FORM_STEP_2                 = 40;
-    const KC_SWAP_FORM_STEP_2_2               = 41;
-    const KC_SWAP_UPLOAD_STEP_2_3             = 42;
-    const KC_SWAP_FORM_STEP_2_3               = 43;
-    
-    const KC_SWAP_UPLOAD_STEP_3               = 44;
-    const KC_SWAP_FORM_STEP_3                 = 45;
-    const KC_SWAP_FORM_STEP_3_2               = 47;
-    
-    const KC_PAYMENT                          = 49;
-    const KC_PAYMENT_FORM_STEP_1              = 52;
-    const KC_PAYMENT_UPLOAD_STEP_1            = 53;
+    const CREDITS_PAID      = 35;
+    const CREDITS_DELIVERED = 55;
 
-    const KC_PAYMENT_FORM_STEP_2              = 54;
+    const KC_AFTER_MARKET = 36;
+    const KC_AFTER_FORM   = 48;
     
-    const KC_PAYMENT_PAID_ARCHIVE             = 50;
-    const KC_PAYMENT_UNPAID_ARCHIVE           = 51;
-    const KC_AFTER_MARKET_ARCHIVE             = 56;
+    const KC_SWAP          = 37;
+    const KC_SWAP_UPLOAD   = 38;
+    const KC_SWAP_FORM     = 39;
+    const KC_SWAP_UPLOAD_2 = 46;
     
-    //deposit founds
-    const KC_WALLET                           = 60;
-    const KC_WALLET_ADD_FORM                  = 61;
-    const KC_WALLET_ADD_UPLOAD                = 62;
+    const KC_SWAP_FORM_STEP_2     = 40;
+    const KC_SWAP_FORM_STEP_2_2   = 41;
+    const KC_SWAP_UPLOAD_STEP_2_3 = 42;
+    const KC_SWAP_FORM_STEP_2_3   = 43;
+    
+    const KC_SWAP_UPLOAD_STEP_3 = 44;
+    const KC_SWAP_FORM_STEP_3   = 45;
+    const KC_SWAP_FORM_STEP_3_2 = 47;
+    
+    const KC_PAYMENT               = 49;
+    const KC_PAYMENT_FORM_STEP_1   = 52;
+    const KC_PAYMENT_UPLOAD_STEP_1 = 53;
 
-    const KC_WALLET_ADD_FORM_STEP_2           = 63;
-    const KC_WALLET_ADD_UPLOAD_STEP_2         = 64;
+    const KC_PAYMENT_FORM_STEP_2 = 54;
+    
+    const KC_PAYMENT_PAID_ARCHIVE   = 50;
+    const KC_PAYMENT_UNPAID_ARCHIVE = 51;
+    const KC_AFTER_MARKET_ARCHIVE   = 56;
+    
+        //deposit founds
+    const KC_WALLET            = 60;
+    const KC_WALLET_ADD_FORM   = 61;
+    const KC_WALLET_ADD_UPLOAD = 62;
 
-    const KC_DOWN_WALLET                     = 65;
-    const KC_DOWN_WALLET_ADD_FORM            = 66;
+    const KC_WALLET_ADD_FORM_STEP_2   = 63;
+    const KC_WALLET_ADD_UPLOAD_STEP_2 = 64;
 
-    const KC_DOWN_WALLET_ADD_UPLOAD_STEP_2   = 68;
-    const KC_DOWN_WALLET_ADD_FORM_STEP_2     = 67;
+    const KC_DOWN_WALLET          = 65;
+    const KC_DOWN_WALLET_ADD_FORM = 66;
+
+    const KC_DOWN_WALLET_ADD_UPLOAD_STEP_2 = 68;
+    const KC_DOWN_WALLET_ADD_FORM_STEP_2   = 67;
+
+    const SOLICITUD = 79;
     
 
     protected $fillable = [
@@ -209,6 +211,8 @@ class HistoryLog extends Model
         76 => null,
         77 => 'Enviar info a S2',
         78 => 'Activar crédito en S2',
+        79 => 'Solicitud',
+
     ];
     
     public static $label_subject = [
@@ -282,6 +286,8 @@ class HistoryLog extends Model
         76 => null,
         77 => 'Enviar info a S2',
         78 => 'Activar crédito en S2',
+        79 => 'Solicitud',
+
     ];
 
     public static $name_model = [
@@ -347,6 +353,8 @@ class HistoryLog extends Model
         76 => 'delivery',
         77 => 'delivery',
         78 => 'delivery',
+        79 => 'solicitud',
+
     ];
 
     public static function move($id_rel, $status_id, $old_status_id, $request = null, $update_old_status = true)

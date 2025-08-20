@@ -128,6 +128,8 @@ class Credit extends Model
         'collection_date',
         'canceled',
         'status',
+        'go_ahead',
+
         'refinanciable',
         'iva',
         'ret_iva',
@@ -449,6 +451,45 @@ class Credit extends Model
         }
         
     }
+
+    public static function listDatatableSolicitud()
+    {
+        $get_list = HistoryLog::wherein('status_id', HistoryLog::SOLICITUD);
+        if (Auth::user()->hasRole('Cliente inversionista')) {
+            $get_list->join('credits', 'history_logs.id_rel', 'credit.id');
+            $get_list->where('agreement_id', Auth::user()->agreement_id);
+            
+        }
+        $get_list = $get_list->where('status', 1)->orderBy('created_at', 'DESC')
+                    ->get();
+        foreach ($get_list as $history) {
+            $query            = Credit::find($history->id_rel);
+            $client           = $query->creditClientPerson;
+            $financialProduct = FinancialProduct::find($query->applied_financial_product);
+            $tipoCredito      = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
+            $alias_product    = $tipoCredito      != null ? $tipoCredito->alias : null;
+            $templateStrategy = TemplateValues::STRATEGY['solicitud'];
+            $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
+            $percent = 80;
+
+
+            $content_client  = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
+            $content_product = \View::make('panel.module.checkup.product', [ 'alias_product' => $alias_product])->render();
+            $progress_bar    = \View::make('panel.module.checkup.progressbar', [ 'client' => $client, 'percent' => $percent])->render();
+            $option          = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
+
+            $users[] = array(
+                'id' => $history->id_rel,
+                'fecha' => formatDateNameMonthHour($history->created_at),
+                'product' => $content_product,
+                'client' => $content_client,
+                'vobo' => config('enums.go_ahead')[$query->go_ahead],
+                'progress' => $progress_bar,
+                'options' => $option
+            );
+        }
+
+    }
     
     public static function listDatatable($status)
     {
@@ -462,6 +503,7 @@ class Credit extends Model
                 $product          = $query->creditProduct;
                 $alias_product    = $product !== null ? $product->alias : null;
                 $client           = $query->creditClientPerson;
+                $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
                 $advisor          = $query->creditAdvisor;
                 $route            = self::routeShowStep()[$history->status_id];
                 $model            = HistoryLog::$name_model[$history->status_id];

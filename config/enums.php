@@ -327,5 +327,11 @@ return [
         4 => 'Activo',
         5 => 'Liquidado',
     ],
+   
+    'go_ahead' => [
+        1 => 'En espera',
+        2 => 'Otorgado ',
+        3 => 'Denegado ',
+    ],
     
 ];

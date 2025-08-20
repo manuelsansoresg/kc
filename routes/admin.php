@@ -332,6 +332,8 @@ Route::group(['prefix' => 'credit'], function () {
     
 });
 
+Route::resource('solicitud', '\App\Http\Controllers\Panel\Credit\SolicitudController')->middleware('auth');
+
 //* actions template
 Route::resource('action-form', '\App\Http\Controllers\Panel\Module\FormController')->middleware('auth');
 Route::resource('action-document', '\App\Http\Controllers\Panel\Credit\DocumentController')->middleware('auth');
