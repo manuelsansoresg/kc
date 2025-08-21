@@ -147,7 +147,7 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <h5 class="title">Permisos</h5>
+                                <span class="preview-title-lg overline-title text-primary">Permisos</span>
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-4">
