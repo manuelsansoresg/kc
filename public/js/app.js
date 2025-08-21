@@ -8455,7 +8455,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, {
       data: 'client'
     }, {
-      data: 'advisor'
+      data: 'vobo'
     }, {
       data: 'progress'
     }, {

@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
             { data: 'fecha' },
             { data: 'product' },
             { data: 'client' },
-            { data: 'advisor' },
+            { data: 'vobo' },
             { data: 'progress'},
             { data: 'options'},
         ],

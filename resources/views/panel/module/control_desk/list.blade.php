@@ -34,7 +34,7 @@
                                             <th>Fecha</th>
                                             <th>Servicio KC</th>
                                             <th data-priority="1">Cliente</th>
-                                            <th>Asesor</th>
+                                            <th>Vo.Bo.</th>
                                             <th>Progreso</th>
                                             <th></th>
                                         </tr>

@@ -507,6 +507,8 @@ class Credit extends Model
                 $query            = Credit::find($history->id_rel);
                 $product          = $query->creditProduct;
                 $alias_product    = $product !== null ? $product->alias : null;
+                $status_vobo = $alias_product == 'Crédito personal' || $alias_product == 'Soluciona tu deuda' ? config('enums.go_ahead')[$query->go_ahead] : 'N/A';
+
                 $client           = $query->creditClientPerson;
                 $content_client   = \View::make('panel.module.checkup.content_client', [ 'client' => $client])->render();
                 $advisor          = $query->creditAdvisor;
@@ -556,6 +558,7 @@ class Credit extends Model
                         'advisor' => $name_advisor,
                         'progress' => $progress_bar,
                         'in_progress' => $in_progress,
+                        'vobo' => $status_vobo,
                         'deadline' => $dead_line,
                         'options' => $option
                     );
@@ -566,6 +569,7 @@ class Credit extends Model
                         'product' => $content_product,
                         'client' => $content_client,
                         'advisor' => $name_advisor,
+                        'vobo' => $status_vobo,
                         'progress' => $progress_bar,
                         'in_progress' => $in_progress,
                         'deadline' => $dead_line,
@@ -578,6 +582,7 @@ class Credit extends Model
                         'product' => $content_product,
                         'client' => $content_client,
                         'advisor' => $name_advisor,
+                        'vobo' => $status_vobo,
                         'progress' => $progress_bar,
                         'in_progress' => $in_progress,
                         'deadline' => $dead_line,
