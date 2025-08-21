@@ -208,12 +208,25 @@ class User extends Authenticatable
                     ]);
                 }
             }
-            if ($request->rol_id == 1) {
-                $user->givePermissionTo('RRHH');
+           //guardar o editar permisos
+            if ($user) {
+                // Limpiar permisos existentes
                 $user->revokePermissionTo('Administración');
-            } else {
-                $user->givePermissionTo('Administración');
-                $user->revokePermissionTo('RRHH');
+                $user->revokePermissionTo('Gestionar colaboradores');
+                $user->revokePermissionTo('Otorgar Vo.Bo');
+                
+                // Asignar nuevos permisos basados en los checkboxes
+                if ($request->has('permission_administracion') && $request->permission_administracion == '1') {
+                    $user->givePermissionTo('Administración');
+                }
+                
+                if ($request->has('permission_gestionar_colaboradores') && $request->permission_gestionar_colaboradores == '1') {
+                    $user->givePermissionTo('Gestionar colaboradores');
+                }
+                
+                if ($request->has('permission_otorgar_vobo') && $request->permission_otorgar_vobo == '1') {
+                    $user->givePermissionTo('Otorgar Vo.Bo');
+                }
             }
 
             // Enviar correo de recuperación de contraseña

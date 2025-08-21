@@ -52,7 +52,7 @@ class InvestorController extends Controller
     {
         $investor = Investor::find($id);
         $getUser = User::find(Auth::user()->id);
-        $getPermission = $getUser->can('RRHH') ;
+        $getPermission = $getUser->can('Gestionar colaboradores') ;
         if ($getPermission === true) {
             return redirect('/panel/clients/colaboradores/show');
         }

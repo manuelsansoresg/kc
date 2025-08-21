@@ -36,7 +36,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                               {{--  <div class="col-md-6">
                                     <div class="form-group"><label class="form-label">*Permiso</label>
                                         <div class="form-control-select">
                                             <select name="rol_id" class="form-control" id="rol_id" onchange="showRazon()">
@@ -47,7 +47,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 
                                 <div class="col-md-6">
                                         <div class="form-group">
@@ -146,6 +146,37 @@
                                         </div>
                                     </div>
                                 </div>
+                                <hr>
+                                <h5 class="title">Permisos</h5>
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="permission_administracion" id="permission_administracion" value="1">
+                                                <label class="form-check-label" for="permission_administracion">
+                                                    Administración
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="permission_gestionar_colaboradores" id="permission_gestionar_colaboradores" value="1">
+                                                <label class="form-check-label" for="permission_gestionar_colaboradores">
+                                                    Gestionar colaboradores
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="permission_otorgar_vobo" id="permission_otorgar_vobo" value="1">
+                                                <label class="form-check-label" for="permission_otorgar_vobo">
+                                                    Otorgar Vo.Bo
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <hr>
                                 <h6>Cuenta concentradora</h6>
                                 <div class="col-md-6" id="content-password">

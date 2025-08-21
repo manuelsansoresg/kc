@@ -59,7 +59,7 @@ class ClienteInversionistaController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
+        $user = User::with('permissions')->find($id);
         $investor = Investor::where('user_id', $user->id)->first();
         $getInvestors = null;
         if ($investor != null) {
@@ -68,6 +68,7 @@ class ClienteInversionistaController extends Controller
         
         $data = array(
             'user' => $user,
+            'permissions' => $user->permissions,
             'agreements' => $getInvestors
         );
         return response()->json($data);

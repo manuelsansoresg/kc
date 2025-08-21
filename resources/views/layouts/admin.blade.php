@@ -357,7 +357,7 @@
                                     @endcan
                                     @endhasrole
                                     @hasrole('Cliente inversionista')
-                                    @if (auth()->user()->can('Administración') || auth()->user()->can('RRHH'))
+                                    @if (auth()->user()->can('Administración') || auth()->user()->can('Gestionar colaboradores'))
                                     <li class="nk-menu-item">
                                     <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}

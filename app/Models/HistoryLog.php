@@ -491,7 +491,8 @@ class HistoryLog extends Model
 
             $agreement_id = $credit!=null ? $credit->agreement_id : null;
             //obtener todos los creditos con la organizacion del solicitante
-            $getUsers = User::where('agreement_id', $agreement_id)->role('Cliente inversionista')->get();
+            $getUsers = User::where('agreement_id', $agreement_id)->role('Cliente inversionista')->permission('Otorgar Vo.Bo')->get();
+
             // disparar envio de correo
             $subject = 'Solicitud de Vo.Bo. - ' . $name_client;
             $emails = $getUsers->pluck('email')->implode(',');

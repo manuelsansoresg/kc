@@ -22,6 +22,11 @@ window.modalUser = function (type, user_id) {
         $('#user_id').val(null);
         $('#type_user').val(route_datatable);
         
+        // Limpiar checkboxes de permisos al crear nuevo usuario
+        $('#permission_administracion').prop('checked', false).prop('disabled', false);
+        $('#permission_gestionar_colaboradores').prop('checked', false).prop('disabled', false);
+        $('#permission_otorgar_vobo').prop('checked', false).prop('disabled', false);
+        
     } else {
         let lbluser = route_datatable;
         if (route_datatable == 'cliente-financiera') {
@@ -99,6 +104,38 @@ function setDataUser(user_id) {
             // Seleccionar los valores correspondientes en los selects
             $('#agreements').val(agreementValues).trigger('change');
 
+        }
+        
+        // Cargar permisos del usuario
+        // Limpiar checkboxes de permisos
+        $('#permission_administracion').prop('checked', false);
+        $('#permission_gestionar_colaboradores').prop('checked', false);
+        $('#permission_otorgar_vobo').prop('checked', false);
+        
+        // Habilitar todos los checkboxes por defecto
+        $('#permission_administracion').prop('disabled', false);
+        $('#permission_gestionar_colaboradores').prop('disabled', false);
+        $('#permission_otorgar_vobo').prop('disabled', false);
+        
+        if (data.permissions && data.permissions.length > 0) {
+            // Marcar permisos existentes
+            data.permissions.forEach(function(permission) {
+                if (permission.name === 'Administración') {
+                    $('#permission_administracion').prop('checked', true);
+                }
+                if (permission.name === 'Gestionar colaboradores') {
+                    $('#permission_gestionar_colaboradores').prop('checked', true);
+                }
+                if (permission.name === 'Otorgar Vo.Bo') {
+                    $('#permission_otorgar_vobo').prop('checked', true);
+                }
+            });
+            
+            // Aplicar lógica de bloqueo si Administración está marcado
+            if ($('#permission_administracion').is(':checked')) {
+                $('#permission_gestionar_colaboradores').prop('disabled', true);
+                $('#permission_otorgar_vobo').prop('disabled', true);
+            }
         }
         
 
@@ -367,3 +404,17 @@ window.modalPasswod = function (user_id) {
     $('#password_user_id').val(user_id);
     $('#modal-user-password').modal('show');
 }
+
+// Funcionalidad para manejar los checkboxes de permisos
+// Si se selecciona Administración, se bloquean los otros dos checkboxes
+$(document).on('change', '#permission_administracion', function() {
+    if ($(this).is(':checked')) {
+        // Bloquear y desmarcar los otros checkboxes
+        $('#permission_gestionar_colaboradores').prop('checked', false).prop('disabled', true);
+        $('#permission_otorgar_vobo').prop('checked', false).prop('disabled', true);
+    } else {
+        // Habilitar los otros checkboxes
+        $('#permission_gestionar_colaboradores').prop('disabled', false);
+        $('#permission_otorgar_vobo').prop('disabled', false);
+    }
+});

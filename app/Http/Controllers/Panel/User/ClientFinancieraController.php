@@ -57,8 +57,13 @@ class ClientFinancieraController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        return response()->json($user);
+        $user = User::with('permissions')->find($id);
+        $data = [
+            'user' => $user,
+            'permissions' => $user->permissions,
+            'agreements' => [] // Mantener compatibilidad con el frontend
+        ];
+        return response()->json($data);
     }
 
     /**
