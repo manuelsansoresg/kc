@@ -148,10 +148,12 @@
                                         @if ($totalPercent == 100)
                                             @if ($isFinish == true)
                                             <div class="col-12  text-end mt-5">
+                                                <a onclick="openModalValidateControlDesk({{ $history->id_rel }})" class="btn btn-outline-secondary pointer">Validaciones</a>
                                                 <a onclick="finishControlDesk({{ $history->id }})" class="btn btn-outline-success">Continuar</a>
                                             </div>
                                             @else
                                             <div class="col-12  text-end mt-5">
+                                                <a onclick="openModalValidateControlDesk({{ $history->id_rel }})" class="btn btn-outline-secondary pointer">Validaciones</a>
                                                 <a onclick="openModalValidateControlDesk({{  $history->id_rel }})" class="btn btn-outline-secondary">Continuar</a>
                                             </div>
                                             @endif
@@ -208,7 +210,7 @@
                     <div id="content-validate-control-desk"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
