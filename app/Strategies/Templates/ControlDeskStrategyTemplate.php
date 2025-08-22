@@ -4419,9 +4419,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             
                             
                             //mover para que aparezca en kc-wallet / solicitud 
-                            $tipoCredito      = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
-                            $alias_product    = $tipoCredito      != null ? $tipoCredito->alias : null;
-                            if($alias_product == 'Crédito personal' || $alias_product = 'Soluciona tu deuda'){
+                            $tipoCredito   = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
+                            $alias_product = $tipoCredito      != null ? $tipoCredito->alias : null;
+                            $agreement     = Agreement::find($credit->agreement_id);
+                            $auto_go_ahead = $agreement        != null && $agreement->auto_go_ahead == 1 ? true : false;
+
+                            if(($alias_product == 'Crédito personal' || $alias_product == 'Soluciona tu deuda') && !$auto_go_ahead) {
                                 HistoryLog::move($credit->id, HistoryLog::SOLICITUD, HistoryLog::KC_CONTROL_DESK, null, false);
                             }
 

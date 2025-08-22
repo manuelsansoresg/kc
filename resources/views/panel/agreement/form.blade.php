@@ -115,6 +115,20 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="form-group"><label class="form-label"></label>
+                                           <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" 
+                                                        class="custom-control-input" 
+                                                        name="data[auto_go_ahead]" 
+                                                        id="auto_go_ahead"
+                                                        value="1"
+                                                        {{ isset($agreement->auto_go_ahead) && $agreement->auto_go_ahead ? 'checked' : '' }}>
+                                                    <label class="custom-control-label" for="auto_go_ahead">Auto Go Ahead</label>
+                                                </div>
+                                        </div>
+                                    </div>
 
                                     <input type="hidden" id="agreement_id" name="agreement_id" value="{{ $agreement_id }}">
                                     <div class="col-12">

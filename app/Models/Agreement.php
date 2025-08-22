@@ -12,6 +12,7 @@ class Agreement extends Model
         'name',
         'description',
         'status',
+        'auto_go_ahead',
         'loan_available',
         'sod_schedule_id',
         'agreement_term',

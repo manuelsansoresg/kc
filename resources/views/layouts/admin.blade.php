@@ -339,14 +339,27 @@
                                             <span class="nk-menu-text"><em class="icon ni ni-upload"></em> Retirar fondos</span>
                                         </a>
                                     </li><!-- .nk-menu-item -->
-                                    
-                                    <li class="nk-menu-item">
-                                        <a href="/panel/solicitud" class="nk-menu-link">
+                                    @hasrole('Cliente inversionista')
+                                        @php
+                                            $agreement = Auth::user()->agreement;
+                                        @endphp
+                                        @if ($agreement != null && $agreement->auto_go_ahead != 1)
+                                            
+                                            <li class="nk-menu-item">
+                                                <a href="/panel/solicitud" class="nk-menu-link">
+                                                    <span class="nk-menu-text"><em class="icon ni ni-clipboad-check"></em> Solicitudes </span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                        @endif
+                                    @endhasrole
 
-                                            {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                            <span class="nk-menu-text"><em class="icon ni ni-clipboad-check"></em> Solicitudes</span>
-                                        </a>
-                                    </li><!-- .nk-menu-item -->
+                                    @hasrole('Administrador')
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/solicitud" class="nk-menu-link">
+                                                <span class="nk-menu-text"><em class="icon ni ni-clipboad-check"></em> Solicitudes </span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                    @endhasrole
                                     
                                     {{-- <li class="nk-menu-item">
                                         <a href="/panel/kc-wallet/list/history" class="nk-menu-link">

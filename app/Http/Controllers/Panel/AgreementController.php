@@ -82,12 +82,12 @@ class AgreementController extends Controller
         //$products = $get_financials->financial;
         //dd($get_financials);
         $financials = array();
-        if ($get_financials != null) {
+       /*  if ($get_financials != null) {
             foreach ($get_financials as $financial) {
                 $product = FinancialProduct::getbyIdFirst($financial->product_id);
                 $financials[]= $product;
             }
-        }
+        } */
         //$financials = trim($financials, ',');
         $data = array('agreement' => $agreement, 'financials' => $financials);
         return response()->json($data);
