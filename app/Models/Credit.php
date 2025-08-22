@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FinancialProduct;
+use App\Models\Product;
 
 class Credit extends Model
 {
@@ -849,6 +850,22 @@ class Credit extends Model
             \Log::error('Error en getInvestorImport(): ' . $e->getMessage());
             return null;
         }
+    }
+
+    public function getProduct()
+    {
+        $financialProduct = FinancialProduct::find($this->applied_financial_product);
+        $tipoCredito   = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
+        $alias_product = $tipoCredito      != null ? $tipoCredito->alias : null;
+        
+        return $alias_product;
+    }
+
+    public function getStatusSolicitud()
+    {
+        $get_solicitud = HistoryLog::where(['id_rel' => $this->id, 'status' => 1, 'status_id' => HistoryLog::SOLICITUD])->first();
+        $solicitud = $get_solicitud != null ? true : false;
+        return $solicitud;
     }
 
     public function investorsCredits()
