@@ -102,7 +102,7 @@ class TemplateController extends Controller
     public function validateControlDesk($creditId)
     {
         $creditControlDesk = CreditsControlDesk::where('credit_id', $creditId)->get();
-        $table           = \View::make('panel.module.control_desk.list_validate', ['creditControlDesk' => $creditControlDesk])->render();
+        $table = \View::make('panel.module.control_desk.list_validate', ['creditControlDesk' => $creditControlDesk])->render();
         return response()->json($table);
     }
 

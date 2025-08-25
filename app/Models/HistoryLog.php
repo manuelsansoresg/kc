@@ -503,6 +503,14 @@ class HistoryLog extends Model
             $sendEmail = new Cemail($emails, 'solicitud',  $subject, $data_email);
 
             $sendEmail->sendEmail();
+
+            //guardar en la tabla como error pendiente 
+            CreditsControlDesk::create([
+                'credit_id' => $id_rel,
+                'validation' => 'Vo.Bo. Otorgante',
+                'status' => 1,
+                'mandatory' => 1,
+            ]);
         }
 
         if ($status_id == HistoryLog::KC_DELIVERY) {

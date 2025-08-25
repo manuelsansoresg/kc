@@ -130,6 +130,7 @@
                                                                                                 $agreement = $credit->creditAgreement;
                                                                                                 if ($agreement && $agreement->auto_go_ahead == 1) {
                                                                                                     $statusSolicitud = $credit->getStatusSolicitud();
+                                                                                                    
                                                                                                     if ($statusSolicitud) {
                                                                                                         // Si getStatusSolicitud es true, mostrar botón sin disabled
                                                                                                         $isDisabled = false;
@@ -151,6 +152,7 @@
                                                                                             @endif
                                                                                         @endif
                                                                                     @endif
+                                                                                    
                                                                                      <a href="{{ $list_action['link'] }}" 
                                                                                                 class="btn btn-outline-primary btn-sm">
                                                                                                     Abrir

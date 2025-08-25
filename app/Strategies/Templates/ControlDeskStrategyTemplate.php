@@ -4428,7 +4428,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                                 HistoryLog::move($credit->id, HistoryLog::SOLICITUD, HistoryLog::KC_CONTROL_DESK, null, false);
                             }
 
-                            HistoryLog::move($credit->id, HistoryLog::SOLICITUD, HistoryLog::KC_CONTROL_DESK, null, false);
                         }
                     }
 

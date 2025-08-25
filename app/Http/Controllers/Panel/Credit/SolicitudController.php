@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel\Credit;
 use App\Http\Controllers\Controller;
 use App\Models\Credit;
 use App\Models\CreditPayOff;
+use App\Models\CreditsControlDesk;
 use App\Models\FinancialProduct;
 use App\Models\HistoryLog;
 use App\Models\Product;
@@ -58,12 +59,20 @@ class SolicitudController extends Controller
     {
         $history = HistoryLog::find($history_id);
         Credit::where('id', $history->id_rel)->update([
-            'status' => 2 //aceptar
+            'go_ahead' => 2 //aceptar
         ]);
-        HistoryLog::where('id', $history_id)->update([
+        HistoryLog::where('id', $history_id)
+            ->where('status_id', HistoryLog::SOLICITUD)
+            ->update([
             'status' => 0 //aceptar
         ]);
 
+        //remover el error pendiente 
+        CreditsControlDesk::where('credit_id', $history->id_rel)
+            ->where('validation', 'Vo.Bo. Otorgante')
+            ->update([
+                'status' => 1,
+            ]);
 
         return response()->json(['data' => 'ok']);
     }
