@@ -33,6 +33,7 @@ class CreditsControlDesk extends Model
     public static function saveEdit($creditId, $request, $validate, $task_id = null, $isOnlyCreate = false, $mandatory =1, $aliasProduct = null)
     {
         $idvalue  = Str::slug($validate).$task_id;
+        
 
         if ($validate == 'dynamic') {
             $validate = $aliasProduct;
@@ -50,6 +51,7 @@ class CreditsControlDesk extends Model
             'status' => $value,
             'mandatory' => $mandatory,
         );
+        
         if ($isOnlyCreate == false) {
             if ($getExist->count() == 0) {
                 CreditsControlDesk::create($dataCredit);

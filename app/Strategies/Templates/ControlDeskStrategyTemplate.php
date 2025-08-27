@@ -6415,21 +6415,17 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         $cepExists = File::isExistCep($creditId);
         
         if ($validation == CreditsControlDesk::$labelValidate[1] || $validation == CreditsControlDesk::$labelValidate[2] || $validation == CreditsControlDesk::$labelValidate[4] || $validation == CreditsControlDesk::$labelValidate[5] || $validation == CreditsControlDesk::$labelValidate[6]) {
+
             if ($validation == CreditsControlDesk::$labelValidate[6]) {
-                              
                 $validation = $validate;
-                
             }
             $credits = CreditsControlDesk::where([
                 'credit_id' => $creditId,
                 'validation' => $validation,
             ]);
             
-    
             $total = $credits->count();
-
-            $percent = ($total > $elements && $cepExists) ? 100 : 0;
-        
+            $percent = ($total > $elements ) ? 100 : 0;
             return $percent;
         } elseif ($validation == CreditsControlDesk::$labelValidate[3]) {
             $credit = Credit::find($creditId);
