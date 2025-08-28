@@ -56,12 +56,17 @@ class Agreement extends Model
 
     public static function saveEdit($request)
     {
+        $data = $request->data;
+        
+        // Manejar el checkbox auto_go_ahead: si no está presente, establecer como 0
+        $data['auto_go_ahead'] = isset($data['auto_go_ahead']) ? 1 : 0;
+        
         if ($request->agreement_id == null) {
-            $agreement = new Agreement($request->data);
+            $agreement = new Agreement($data);
             $agreement->save();
         } else {
             $agreement = Agreement::find($request->agreement_id);
-            $agreement->fill($request->data);
+            $agreement->fill($data);
             $agreement->update();
         }
        

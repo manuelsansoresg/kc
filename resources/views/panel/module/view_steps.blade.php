@@ -120,36 +120,29 @@
                                                                                     @if ($list_action['status'] == 'En curso')
                                                                                         @php
                                                                                             $showButton = true;
-                                                                                            $isDisabled = false;
-                                                                                            
                                                                                             // Validación especial para productos específicos y tarea específica
                                                                                             $productName = $credit->getProduct();
                                                                                             if (($productName == 'Soluciona tu deuda' || $productName == 'Crédito personal') && 
                                                                                                 $list_action['name'] == '5- Validar clabe cliente') {
-                                                                                                
+                                                                                                   
                                                                                                 $agreement = $credit->creditAgreement;
-                                                                                                if ($agreement && $agreement->auto_go_ahead == 1) {
+                                                                                                if ($agreement && $agreement->auto_go_ahead === 0) {
                                                                                                     $statusSolicitud = $credit->getStatusSolicitud();
                                                                                                     
                                                                                                     if ($statusSolicitud) {
-                                                                                                        // Si getStatusSolicitud es true, mostrar botón sin disabled
-                                                                                                        $isDisabled = false;
+                                                                                                        // Si getStatusSolicitud es true, mostrar botón 
+                                                                                                        $showButton = true;
                                                                                                     } else {
-                                                                                                        // Si getStatusSolicitud es false, mostrar botón disabled
-                                                                                                        $isDisabled = true;
+                                                                                                        $showButton = false;
                                                                                                     }
-                                                                                                }
+                                                                                                } 
                                                                                             }
                                                                                         @endphp
-                                                                                        
-                                                                                        @if ($showButton)
-                                                                                            @if (!$isDisabled)
-                                                                                                <a href="{{ $list_action['link'] }}" 
+                                                                                        @if ($showButton === true)
+                                                                                           <a href="{{ $list_action['link'] }}" 
                                                                                                 class="btn btn-outline-primary btn-sm">
                                                                                                     Abrir
-                                                                                                </a>
-                                                                                               
-                                                                                            @endif
+                                                                                            </a>
                                                                                         @endif
                                                                                     @endif
                                                                                     

@@ -874,7 +874,7 @@ class Credit extends Model
     public function getStatusSolicitud()
     {
         $get_solicitud = HistoryLog::where(['id_rel' => $this->id, 'status' => 1, 'status_id' => HistoryLog::SOLICITUD])->count();
-        $solicitud = $get_solicitud > 0 ? true : false;
+        $solicitud = $get_solicitud > 0 ? false : true;
         return $solicitud;
     }
 
