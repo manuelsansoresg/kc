@@ -347,13 +347,7 @@
                                         </li><!-- .nk-menu-item -->
                                     @endhasrole
 
-                                    @hasrole('Administrador')
-                                        <li class="nk-menu-item">
-                                            <a href="/panel/solicitud" class="nk-menu-link">
-                                                <span class="nk-menu-text"><em class="icon ni ni-clipboad-check"></em> Solicitudes </span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                    @endhasrole
+                                   
                                     
                                     {{-- <li class="nk-menu-item">
                                         <a href="/panel/kc-wallet/list/history" class="nk-menu-link">
@@ -362,6 +356,13 @@
                                     </li> --}}
                                     
                                     @endcan
+                                    @endhasrole
+                                     @hasrole('Administrador')
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/solicitud" class="nk-menu-link">
+                                                <span class="nk-menu-text"><em class="icon ni ni-clipboad-check"></em> Solicitudes </span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
                                     @endhasrole
                                     @hasrole('Cliente inversionista')
                                     @if (auth()->user()->can('Administración') || auth()->user()->can('Gestionar colaboradores'))

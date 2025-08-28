@@ -6425,11 +6425,16 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ]);
             
             $total = $credits->count();
-            $percent = ($total > $elements ) ? 100 : 0;
+            if($validation == CreditsControlDesk::$labelValidate[5])
+            {
+                $percent = ($total > $elements && $cepExists) ? 100 : 0;
+            } else {
+                $percent = ($total > $elements ) ? 100 : 0;
+            }
             return $percent;
         } elseif ($validation == CreditsControlDesk::$labelValidate[3]) {
             $credit = Credit::find($creditId);
-            $percent = ($credit->payroll_payment_capacity != null && $cepExists) ? 100 : 0 ;
+            $percent = ($credit->payroll_payment_capacity != null) ? 100 : 0 ;
         }
         return $percent;
         
