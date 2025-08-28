@@ -456,14 +456,24 @@ class Credit extends Model
     public static function listDatatableSolicitud()
     {
         $users        = array();
+        
+
         $get_list = HistoryLog::where('status_id', HistoryLog::SOLICITUD);
         if (Auth::user()->hasRole('Cliente inversionista')) {
-            $get_list->join('credits', 'history_logs.id_rel', 'credit.id');
-            $get_list->where('agreement_id', Auth::user()->agreement_id);
-            
+            $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
+            if ($getInvestor != null) {
+                $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->pluck('credit_id')->toArray();
+                
+                // Filtrar directamente por los credit_id del inversor
+                $get_list->whereIn('id_rel', $getInvestorCredits ?? []);
+            }
         }
-        $get_list = $get_list->where('status', 1)->orderBy('created_at', 'DESC')
-                    ->get();
+        $get_list = $get_list->where('history_logs.status', 1)->orderBy('history_logs.created_at', 'DESC');
+        
+        
+        $get_list = $get_list->get();
+        
+        // Debug: verificar resultado
 
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);

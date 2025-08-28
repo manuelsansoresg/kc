@@ -340,17 +340,11 @@
                                         </a>
                                     </li><!-- .nk-menu-item -->
                                     @hasrole('Cliente inversionista')
-                                        @php
-                                            $agreement = Auth::user()->agreement;
-                                        @endphp
-                                        @if ($agreement != null && $agreement->auto_go_ahead != 1)
-                                            
-                                            <li class="nk-menu-item">
-                                                <a href="/panel/solicitud" class="nk-menu-link">
-                                                    <span class="nk-menu-text"><em class="icon ni ni-clipboad-check"></em> Solicitudes </span>
-                                                </a>
-                                            </li><!-- .nk-menu-item -->
-                                        @endif
+                                         <li class="nk-menu-item">
+                                            <a href="/panel/solicitud" class="nk-menu-link">
+                                                <span class="nk-menu-text"><em class="icon ni ni-clipboad-check"></em> Solicitudes </span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
                                     @endhasrole
 
                                     @hasrole('Administrador')
