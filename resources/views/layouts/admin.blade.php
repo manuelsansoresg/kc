@@ -367,6 +367,11 @@
                                         <span class="nk-menu-text"> <i class="fa-solid fa-users"></i> Mis colaboradores</span>
                                     </a>
                                     </li><!-- .nk-menu-item -->
+                                     <li class="nk-menu-item">
+                                            <a href="/panel/solicitud" class="nk-menu-link">
+                                                <span class="nk-menu-text"><em class="icon ni ni-clipboad-check"></em> Solicitudes </span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
                                     @endif
                                     
                                     @endhasrole
