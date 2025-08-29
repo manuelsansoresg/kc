@@ -26,7 +26,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\File as FileFacade;
+use App\Models\File;
 
 class HomeController extends Controller
 {
@@ -226,7 +227,7 @@ class HomeController extends Controller
 
         if ($client->cm_agreement == null) {
         }
-        if (!File::exists($filePath)) {
+        if (!FileFacade::exists($filePath)) {
         }
         $pdf = Pdf::loadView('contrato_cliente', $data);
         $pdf->setPaper('A4');
