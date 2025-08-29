@@ -45,7 +45,7 @@ class SolicitudController extends Controller
     {
         $history = HistoryLog::find($history_id);
         Credit::where('id', $history->id_rel)->update([
-            'status' => 3 //denegar
+            'go_ahead' => 3 //denegar
         ]);
         HistoryLog::where('id', $history_id)->update([
             'status' => 0 //denegar
