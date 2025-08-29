@@ -121,7 +121,7 @@
                                                                                         @php
                                                                                             $showButton = true;
                                                                                             // Validación especial para productos específicos y tarea específica
-                                                                                            $productName = $credit->getProduct();
+                                                                                            $productName = $credit ? $credit->getProduct() : null;
                                                                                             if (($productName == 'Soluciona tu deuda' || $productName == 'Crédito personal') && 
                                                                                                 $list_action['name'] == '5- Validar clabe cliente') {
                                                                                                    
