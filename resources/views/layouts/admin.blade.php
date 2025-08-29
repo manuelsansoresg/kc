@@ -378,14 +378,7 @@
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                     @endcan
-                                     @can('Gestionar colaboradores')
-                                      <li class="nk-menu-item">
-                                        <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
-                                            {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                            <span class="nk-menu-text"> <i class="fa-solid fa-users"></i> Mis colaboradores</span>
-                                        </a>
-                                    </li><!-- .nk-menu-item -->
-                                    @endcan
+                                   
                                     @endhasrole
                                 <li class="nk-menu-item">
                                     <a href="/panel/ayuda" class="nk-menu-link">
