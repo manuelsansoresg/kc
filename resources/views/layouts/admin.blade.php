@@ -361,18 +361,23 @@
                                     @endhasrole
                                     @hasrole('Cliente inversionista')
                                     @if (auth()->user()->can('Administración'))
-                                    <li class="nk-menu-item">
-                                    <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
-                                        {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text"> <i class="fa-solid fa-users"></i> Mis colaboradores</span>
-                                    </a>
-                                    </li><!-- .nk-menu-item -->
-                                   
-                                    @endif
-                                    @if (auth()->user()->can('Gestionar colaboradores'))
-                                          <li class="nk-menu-item">
+                                        <li class="nk-menu-item">
+                                            <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
+                                                {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                                <span class="nk-menu-text"> <i class="fa-solid fa-users"></i> Mis colaboradores</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                         <li class="nk-menu-item">
                                             <a href="/panel/solicitud" class="nk-menu-link">
                                                 <span class="nk-menu-text"><em class="icon ni ni-clipboad-check"></em> Solicitudes </span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                    @endif
+                                    @if (auth()->user()->can('Gestionar colaboradores'))
+                                         <li class="nk-menu-item">
+                                            <a href="/panel/clients/colaboradores/show" class="nk-menu-link">
+                                                {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
+                                                <span class="nk-menu-text"> <i class="fa-solid fa-users"></i> Mis colaboradores</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                     @endif
