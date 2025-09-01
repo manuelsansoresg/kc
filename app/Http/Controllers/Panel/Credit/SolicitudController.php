@@ -51,7 +51,7 @@ class SolicitudController extends Controller
             'status' => 0 //denegar
         ]);
 
-
+        HistoryLog::move($history->id_rel, HistoryLog::CANCEL_VO_BO, HistoryLog::SOLICITUD, null, false);
         return response()->json(['data' => 'ok']);
     }
 
@@ -73,7 +73,7 @@ class SolicitudController extends Controller
             ->update([
                 'status' => 1,
             ]);
-
+        HistoryLog::move($history->id_rel, HistoryLog::ACEPT_VO_BO, HistoryLog::SOLICITUD, null, false);
         return response()->json(['data' => 'ok']);
     }
 
