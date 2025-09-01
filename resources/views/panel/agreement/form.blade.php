@@ -108,9 +108,11 @@
                                                     class="form-control" 
                                                     id="sod_schedule_id" >
                                                     <option value="">Seleccione una opción</option>
-                                                    @foreach ($sodNames as $sodName)
-                                                        <option value="{{ $sodName->id }}" {{ $agreement->sod_schedule_id == $sodName->id? 'selected' : null  }}> {{ $sodName->name }} </option>
-                                                    @endforeach
+                                                    @if ($sodNames != null)
+                                                        @foreach ($sodNames as $sodName)
+                                                            <option value="{{ $sodName->id }}" {{ $agreement->sod_schedule_id == $sodName->id? 'selected' : null  }}> {{ $sodName->name }} </option>
+                                                        @endforeach
+                                                    @endif
                                                 </select>
                                             </div>
                                         </div>
