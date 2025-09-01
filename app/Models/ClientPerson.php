@@ -116,9 +116,10 @@ class ClientPerson extends Model
 
     public static function listDatatable($isAdmin = true, $origin = null)
     {
+        $data        = array();
         if ($isAdmin === true) {
             $clientPersons = ClientPerson::all();
-            $data        = array();
+            
             foreach ($clientPersons as $query) {
                 $agreement = Agreement::find($query->agreement_id);
                 $option         = \View::make('panel.client.add_option_dt', [ 'id' => $query->id, 'origin' => $origin])->render();
