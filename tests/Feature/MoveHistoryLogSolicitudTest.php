@@ -2,7 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Lib\Cemail;
+use App\Models\Credit;
 use App\Models\HistoryLog;
+use App\Models\InvestorsAgreement;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -17,7 +21,31 @@ class MoveHistoryLogSolicitudTest extends TestCase
     public function test_example()
     {
         $response = $this->get('/');
-        HistoryLog::move(52, HistoryLog::SOLICITUD, HistoryLog::KC_CONTROL_DESK, null, false);
+        $credit = Credit::find(52);
+        $client = $credit!=null ? $credit->client : null;
+        $name_client = $client!=null ? $client->name.' '. $client->last_name. ' '. $client->second_last_name : null;
+
+
+        $agreement_id = $credit!=null ? $credit->agreement_id : null;
+        //obtener todos los creditos con la organizacion del solicitante
+        // Buscar el inversor asociado al usuario
+        
+        $getInvestors = InvestorsAgreement::where('agreement_id', $agreement_id)->get();
+        $investorIds = $getInvestors->pluck('investor_id');
+
+        $getUsers = User::whereIn('id', $investorIds)->role('Cliente inversionista')->permission('Otorgar Vo.Bo')->get();
+
+        // disparar envio de correo
+        $emails = $getUsers->pluck('email')->implode(',');
+        echo "Correos a enviar: " . $emails . "\n";
+        $subject = 'Solicitud de Vo.Bo. - ' . $name_client;
+        $data_email = array(
+            'name_client' => $name_client
+        );
+
+        $sendEmail = new Cemail($emails, 'solicitud',  $subject, $data_email);
+        $sendEmail->sendEmail();
+        
         $response->assertStatus(200);
     }
 }
