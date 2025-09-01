@@ -10,6 +10,7 @@ use App\Models\InvestorsAgreement;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class MoveHistoryLogSolicitudTest extends TestCase
@@ -46,8 +47,18 @@ class MoveHistoryLogSolicitudTest extends TestCase
             'name_client' => $name_client
         );
 
+        // Verificar que no hay correos enviados antes
+        Mail::fake();
+        
         $sendEmail = new Cemail($emails, 'solicitud',  $subject, $data_email);
         $sendEmail->sendEmail();
+        
+        // Verificar que el correo se envió
+        Mail::assertSent(function ($mail) use ($emails) {
+            return $mail->hasTo($emails);
+        });
+        
+        echo "Correo enviado correctamente en el test\n";
         
         $response->assertStatus(200);
     }
