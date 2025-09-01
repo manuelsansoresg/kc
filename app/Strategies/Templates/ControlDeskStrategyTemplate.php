@@ -4427,6 +4427,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             if(($alias_product == 'Crédito personal' || $alias_product == 'Soluciona tu deuda') && !$auto_go_ahead) {
                                 HistoryLog::move($credit->id, HistoryLog::SOLICITUD, HistoryLog::KC_CONTROL_DESK, null, false);
                             }
+                           
+                            if(($alias_product == 'Crédito personal' || $alias_product == 'Soluciona tu deuda') && $auto_go_ahead) {
+                                Credit::where('id', $credit->id)->update([
+                                    'go_ahead' => 2
+                                ]);
+                            }
 
                         }
                     }
