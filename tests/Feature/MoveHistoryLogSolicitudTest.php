@@ -54,7 +54,7 @@ class MoveHistoryLogSolicitudTest extends TestCase
         $sendEmail->sendEmail();
         
         // Verificar que el correo se envió
-        Mail::assertSent(function ($mail) use ($emails) {
+        Mail::assertSent(function (\Illuminate\Mail\Mailable $mail) use ($emails) {
             return $mail->hasTo($emails);
         });
         
