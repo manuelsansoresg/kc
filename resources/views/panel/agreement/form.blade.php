@@ -36,7 +36,7 @@
                                                 @php
                                                     $products = $m_financial_product->getAll();
                                                 @endphp
-                                                <input type="text" name="data[name]" id="agreement-name" class="form-control">
+                                                <input type="text" name="data[name]" id="agreement-name" class="form-control" value="{{ isset($agreement) ? $agreement->name : '' }}">
                                                 
                                             </div>
                                         </div>
@@ -46,7 +46,7 @@
                                             <label class="form-label" for="frm-product-name">Razón social</label>
                                             <div class="form-control-wrap">
                                               
-                                                <input type="text" name="data[razon_social]" id="razon_social" class="form-control">
+                                                <input type="text" name="data[razon_social]" id="razon_social" class="form-control" value="{{ isset($agreement) ? $agreement->razon_social : '' }}">
                                                 
                                             </div>
                                         </div>
@@ -56,7 +56,7 @@
                                             <label class="form-label">Descripcion</label>
                                             <div class="form-control-wrap">
                                               
-                                                <textarea name="data[description]" id="agreement-description" cols="30" rows="4" class="form-control"></textarea>
+                                                <textarea name="data[description]" id="agreement-description" cols="30" rows="4" class="form-control">{{ isset($agreement) ? $agreement->description : '' }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -77,7 +77,7 @@
                                         <div class="form-group">
                                             <label class="form-label" for="frm-product-name">*Vigencia</label>
                                             <div class="form-control-wrap">
-                                               <input type="date" class="form-control" name="data[agreement_term]" id="agreement_term" required>
+                                               <input type="date" class="form-control" name="data[agreement_term]" id="agreement_term" value="{{ isset($agreement) ? $agreement->agreement_term : '' }}" required>
                                                 
                                             </div>
                                         </div>
@@ -93,7 +93,7 @@
                                                     class="form-control" 
                                                     id="agreement-status" >
                                                     @foreach ($list_status as $key => $get_status)
-                                                        <option value="{{ $key }}"> {{ $get_status }} </option>
+                                                        <option value="{{ $key }}" {{ isset($agreement) && $agreement->status == $key ? 'selected' : '' }}> {{ $get_status }} </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -108,11 +108,9 @@
                                                     class="form-control" 
                                                     id="sod_schedule_id" >
                                                     <option value="">Seleccione una opción</option>
-                                                    @if ($sodNames != null)
-                                                        @foreach ($sodNames as $sodName)
-                                                            <option value="{{ $sodName->id }}" {{ $agreement->sod_schedule_id == $sodName->id? 'selected' : null  }}> {{ $sodName->name }} </option>
-                                                        @endforeach
-                                                    @endif
+                                                    @foreach ($sodNames as $sodName)
+                                                        <option value="{{ $sodName->id }}" {{ isset($agreement) && $agreement->sod_schedule_id == $sodName->id ? 'selected' : '' }}> {{ $sodName->name }} </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
