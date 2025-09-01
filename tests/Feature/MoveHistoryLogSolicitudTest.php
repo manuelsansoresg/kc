@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Lib\Cemail;
 use App\Models\Credit;
 use App\Models\HistoryLog;
+use App\Models\Investor;
 use App\Models\InvestorsAgreement;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -32,8 +33,10 @@ class MoveHistoryLogSolicitudTest extends TestCase
         
         $getInvestors = InvestorsAgreement::where('agreement_id', $agreement_id)->get();
         $investorIds = $getInvestors->pluck('investor_id');
-
-        $getUsers = User::whereIn('id', $investorIds)->role('Cliente inversionista')->permission('Otorgar Vo.Bo')->get();
+        $getUserInvestor = Investor::whereIn('id', $investorIds)->get();
+        $user_ids = $getUserInvestor->pluck('user_id');
+        echo "inversionistas: " . $user_ids . "\n";
+        $getUsers = User::whereIn('id', $user_ids)->role('Cliente inversionista')->permission('Otorgar Vo.Bo')->get();
 
         // disparar envio de correo
         $emails = $getUsers->pluck('email')->implode(',');
