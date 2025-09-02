@@ -100,11 +100,11 @@
             @endif
             <tr>
                 <td>Comisión por apertura:</td>
-                <td>$<span id="content-comision-apertura"></span></td>
+                <td><span id="content-comision-apertura"></span></td>
             </tr>
             <tr>
                 <td>Monto a entregar:</td>
-                <td>$<span id="content-monto-entregar"></span></td>
+                <td><span id="content-monto-entregar"></span></td>
             </tr>
             <tr>
                 <td>Periodicidad:</td>
@@ -116,11 +116,11 @@
             </tr>
             <tr>
                 <td>Pago periódico:</td>
-                <td>$<span id="content-pago-periodico"></span></td>
+                <td><span id="content-pago-periodico"></span></td>
             </tr>
             <tr>
                 <td>Pago total:</td>
-                <td>$<span id="content-pago-total"></span></td>
+                <td><span id="content-pago-total"></span></td>
             </tr>
             <tr>
                 <td>Tasa anual:</td>
