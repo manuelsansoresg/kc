@@ -502,7 +502,7 @@ class HistoryLog extends Model
 
             // disparar envio de correo
             $emails = $getUsers->pluck('email')->implode(',');
-            $subject = 'Solicitud de Vo.Bo. - ' . $name_client;
+            $subject = 'Solicitud de Vo.Bo. - ' . $credit->id.' '.$name_client;
             $data_email = array(
                 'name_client' => $name_client
             );

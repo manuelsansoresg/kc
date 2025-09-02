@@ -16,7 +16,7 @@
                 <br> <br>
                 Puedes ver, otorgar o denegar el Vo.Bo. en la sección Solicitudes de tu panel.
                 <br><br>
-                <a href="{{ url('/panel/solicitudes') }}" style="background-color:#6576ff;border-radius:4px;color:#ffffff;display:inline-block;font-size:13px;font-weight:600;line-height:44px;text-align:center;text-decoration:none;text-transform: uppercase; padding: 0 30px">Ver solicitudes</a>
+                <a href="{{ url('/panel/solicitud') }}" style="background-color:#6576ff;border-radius:4px;color:#ffffff;display:inline-block;font-size:13px;font-weight:600;line-height:44px;text-align:center;text-decoration:none;text-transform: uppercase; padding: 0 30px">Ver solicitudes</a>
 
                 <br><br> Si tienes alguna duda, no dudes en contactarnos.
 
