@@ -494,12 +494,11 @@ class HistoryLog extends Model
 
             $agreement_id = $credit!=null ? $credit->agreement_id : null;
             //obtener todos los creditos con la organizacion del solicitante
-            // Buscar el inversor asociado al usuario
-            
             $getInvestors = InvestorsAgreement::where('agreement_id', $agreement_id)->get();
             $investorIds = $getInvestors->pluck('investor_id');
-
-            $getUsers = User::whereIn('id', $investorIds)->role('Cliente inversionista')->permission('Otorgar Vo.Bo')->get();
+            $getUserInvestor = Investor::whereIn('id', $investorIds)->get();
+            $user_ids = $getUserInvestor->pluck('user_id');
+            $getUsers = User::whereIn('id', $user_ids)->role('Cliente inversionista')->permission('Otorgar Vo.Bo')->get();
 
             // disparar envio de correo
             $emails = $getUsers->pluck('email')->implode(',');
