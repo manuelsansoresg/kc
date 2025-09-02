@@ -83,7 +83,7 @@
         <table class="table">
             <tr>
                 <td>Monto solicitado:</td>
-                <td>$<span id="content-monto-solicitado"></span></td>
+                <td><span id="content-monto-solicitado"></span></td>
             </tr>
             @if ($tramitType == 3)
                 <tr>
