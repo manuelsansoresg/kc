@@ -463,19 +463,14 @@ class Credit extends Model
             $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
             if ($getInvestor != null) {
                 // Obtener tanto credit_id como agreement_id mediante join con credits
-                $getInvestorCredits = InvestorsCredit::join('credits', 'investors_credits.credit_id', '=', 'credits.id')
-                    ->where('investors_credits.investor_id', $getInvestor->id)
-                    ->select('investors_credits.credit_id', 'credits.agreement_id')
+                $getInvestorCredits = InvestorsAgreement::
+                    where('investor_id', $getInvestor->id)
+                    ->select('agreement_id')
                     ->get();
-                
-                $creditIds = $getInvestorCredits->pluck('credit_id')->toArray();
                 $agreementIds = $getInvestorCredits->pluck('agreement_id')->unique()->toArray();
                 
                 // Hacer join con credits para poder filtrar por agreement_id
                 $get_list->join('credits', 'history_logs.id_rel', '=', 'credits.id');
-                
-                // Filtrar por los credit_id del inversor
-                $get_list->whereIn('history_logs.id_rel', $creditIds ?? []);
                 // Filtrar por los agreement_id relacionados
                 $get_list->whereIn('credits.agreement_id', $agreementIds ?? []);
             }
