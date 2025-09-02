@@ -498,7 +498,13 @@ class HistoryLog extends Model
             $investorIds = $getInvestors->pluck('investor_id');
             $getUserInvestor = Investor::whereIn('id', $investorIds)->get();
             $user_ids = $getUserInvestor->pluck('user_id');
-            $getUsers = User::whereIn('id', $user_ids)->role('Cliente inversionista')->role('Administración')->permission('Otorgar Vo.Bo')->get();
+            $getUsers = User::whereIn('id', $user_ids)->role('Cliente inversionista')
+                ->where(function($query) {
+                    $query->permission('Otorgar Vo.Bo')
+                          ->orWhere(function($subQuery) {
+                              $subQuery->permission('Administración');
+                          });
+                })->get();
 
             // disparar envio de correo
             $emails = $getUsers->pluck('email')->implode(',');
