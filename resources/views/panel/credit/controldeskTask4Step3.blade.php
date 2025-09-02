@@ -193,7 +193,7 @@
         <table class="table">
             <tr>
                 <td>Monto solicitado:</td>
-                <td>$<span id="content-monto-solicitado"></span></td>
+                <td><span id="content-monto-solicitado"></span></td>
             </tr>
             @if ($credit->tramit_type == 3)
                 <tr>
@@ -206,7 +206,7 @@
                 <td>Monto compra cartera:</td>
                 <input type="hidden" id="total-monto-solicitado" value="{{ $totalCompraCartera }}">
                 <input type="hidden" id="total-monto-solicitado_format" value="{{ format_price($totalCompraCartera) }}">
-                <td>$<span id="content-monto-compra-cartera"></span></td>
+                <td><span id="content-monto-compra-cartera"></span></td>
                 
             </tr>
             @endif

@@ -167,11 +167,7 @@ class HomeController extends Controller
         ->first();
 
         
-        if ($statusFirmaContratoCM == null) {
-            abort(404);
-        } else {
-            $isFirma = $client->cm_agreement == null ? true : false;
-        }
+        $isFirma = $client->cm_agreement == null ? true : false;
 
         //$isFirma = true;
         $agreement = Agreement::find($credit->agreement_id);
