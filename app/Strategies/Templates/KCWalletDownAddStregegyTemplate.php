@@ -386,9 +386,11 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                         'name' => $getUserInvestor->name. ' '.$getUserInvestor->last_name. ' '.$getUserInvestor->second_last_name,
                         
                     );
-                    
-                    $sendEmail = new Cemail($getUserInvestor->email, 'retirar_fondos', 'Fondos retirados exitosamente', $data_sendgrid);
-                    $sendEmail->sendEmail();
+                     $getUser = User::find(Auth::user()->id);
+                    if ( $getUser->can('Administración')) {
+                        $sendEmail = new Cemail($getUserInvestor->email, 'retirar_fondos', 'Fondos retirados exitosamente', $data_sendgrid);
+                        $sendEmail->sendEmail();
+                    }
 
                 }
 

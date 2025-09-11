@@ -466,8 +466,11 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                         'link_account' => asset('panel/inversionista/'.$investor_id),
                     );
                     //d-38330ff956fc48dc89b4efad477b3985
-                    $sendEmail = new Cemail($getUserInvestor->email, 'agregar_fondos', 'Fondos agregados exitosamente', $data_sendgrid);
-                    $sendEmail->sendEmail();
+                    $getUser = User::find(Auth::user()->id);
+                    if ( $getUser->can('Administración')) {
+                        $sendEmail = new Cemail($getUserInvestor->email, 'agregar_fondos', 'Fondos agregados exitosamente', $data_sendgrid);
+                        $sendEmail->sendEmail();
+                    }
 
                 }
             }
