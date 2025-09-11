@@ -483,6 +483,9 @@ class HistoryLog extends Model
                 HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $id_rel, 0);
             }
+
+            $sendEmail = new Cemail();
+            $sendEmail->nuevaSolicitud($id_rel);
         }
 
         if ($status_id == HistoryLog::SOLICITUD) {

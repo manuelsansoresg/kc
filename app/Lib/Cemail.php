@@ -1,5 +1,11 @@
 <?php
 namespace App\Lib;
+
+use App\Models\Agreement;
+use App\Models\Credit;
+use App\Models\Investor;
+use App\Models\InvestorsAgreement;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 class Cemail
@@ -11,7 +17,7 @@ class Cemail
     public $template;
     public $cc;
 
-    public function __construct($to = null, $template, $subject = '', $content= '', $cc= '')
+    public function __construct($to = null, $template = null, $subject = '', $content= '', $cc= '')
     {
         $this->to       = $to;
         $this->subject  = $subject;
@@ -26,6 +32,26 @@ class Cemail
         }
         $this->template = $template;
         $this->cc       = $cc;
+    }
+
+    public function nuevaSolicitud($credit_id)
+    {
+        $credit = Credit::find($credit_id);
+        $client = $credit->client;
+        $product = $credit->creditProduct;
+        $investor_ids = InvestorsAgreement::where('agreement_id', $credit->agreement_id)->pluck('investor_id');
+        $investors = Investor::whereIn('id', $investor_ids)->pluck('user_id');
+        $users = User::whereIn('id', $investors)->get();
+        $emails = $users->pluck('email')->implode(',');
+        $nombre_completo = $credit->id.' '.$client->name.' '.$client->lastname. ' '. $client->second_last_name;
+        $subject = 'Nueva solicitud de ' . $product->alias . '  - '. $nombre_completo;
+        $data_email = array(
+            'nombre_completo' => $nombre_completo,
+            'product' => $product,
+        );
+
+        $sendEmail = new Cemail($emails, 'nueva_solicitud',  $subject, $data_email);
+        $sendEmail->sendEmail();
     }
 
     public function sendEmail()

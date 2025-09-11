@@ -34,27 +34,23 @@
                             <div class="card card-bordered card-preview">
                                 <div class="card-inner">
                                     <div class="preview-block">
+                                        @if (session('success'))
+                                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                {{ session('success') }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        @endif
                                         <form id="notificationForm" action="{{ route('email-notification.store') }}" method="POST">
                                             @csrf
-                                            <div class="col-md-6 mt-3">
-                                                <div class="form-group">
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="form-control-wrap me-3">
-                                                            <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input"
-                                                                    id="notification_new_request" name="notification_new_request"
-                                                                    value="1" {{ $user->notification_new_request == '1' || $user->notification_new_request == 1 ? 'checked' : '' }}>
-
-                                                                <label class="custom-control-label"
-                                                                    for="notification_new_request"></label>
-                                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group"><label class="form-label"></label>
+                                                <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" name="notification_new_request" id="notification_new_request" value="1" {{ Auth()->user()->notification_new_request == '1' || Auth()->user()->notification_new_request == 1 ? 'checked' : '' }}>
+                                                            <label class="custom-control-label" for="notification_new_request">Nueva Solicitud </label>
                                                         </div>
-                                                        <label class="form-label" for="notification_new_request">Nueva
-                                                            Solicitud</label>
-                                                    </div>
-                                                    <small class="d-block">Se crea una nueva solicitud</small>
                                                 </div>
                                             </div>
+
                                             <div class="col-12 mt-3">
                                                 <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                                                     <li>
@@ -76,39 +72,4 @@
 
 @endsection
 
-@section('scripts')
-<script>
-$(document).ready(function() {
-    $('#notificationForm').on('submit', function(e) {
-        e.preventDefault();
-        
-        var formData = $(this).serialize();
-        var submitBtn = $('#btnSave');
-        
-        // Deshabilitar el botón mientras se procesa
-        submitBtn.prop('disabled', true).text('Guardando...');
-        
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                if (response.success) {
-                    toastr.success(response.message);
-                } else {
-                    toastr.error('Error al guardar la configuración');
-                }
-            },
-            error: function(xhr, status, error) {
-                toastr.error('Error al procesar la solicitud');
-                console.error('Error:', error);
-            },
-            complete: function() {
-                // Rehabilitar el botón
-                submitBtn.prop('disabled', false).text('Guardar');
-            }
-        });
-    });
-});
-</script>
-@endsection
+

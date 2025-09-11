@@ -47,10 +47,7 @@ class NotificationEmailController extends Controller
             'notification_new_request' => $notificationNewRequest
         ]);
         
-        return response()->json([
-            'success' => true,
-            'message' => 'Configuración de notificaciones actualizada correctamente'
-        ]);
+        return redirect('panel/email-notification')->with('success', 'Configuración de notificaciones actualizada correctamente');
     }
 
     /**
