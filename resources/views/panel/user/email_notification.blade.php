@@ -60,6 +60,26 @@
                                                 </div>
                                                 <small class="d-block">Se entrega un crédito.</small>
                                             </div>
+                                           
+                                            <div class="col-md-6 mt-3">
+                                                <div class="form-group"><label class="form-label"></label>
+                                                <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" name="fondos_agregados_exito" id="fondos_agregados_exito" value="1"  disabled checked>
+                                                        <label class="custom-control-label" for="fondos_agregados_exito">Fondos agregados con éxito </label>
+                                                    </div>
+                                                </div>
+                                                <small class="d-block">Confirmación de que los fondos fueron agregados y están listos para ser prestados.</small>
+                                            </div>
+                                           
+                                            <div class="col-md-6 mt-3">
+                                                <div class="form-group"><label class="form-label"></label>
+                                                <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" name="fondos_retirados_exito" id="fondos_retirados_exito" value="1"  disabled checked>
+                                                        <label class="custom-control-label" for="fondos_retirados_exito">Fondos retirados con éxito </label>
+                                                    </div>
+                                                </div>
+                                                <small class="d-block">Confirmación de que los fondos fueron retirados y depositados a tu cuenta bancaria.</small>
+                                            </div>
                                             
                                             
 
