@@ -50,6 +50,8 @@ class User extends Authenticatable
         'financial_products_id',
         'bank_account_holder',
         'notification_new_request',
+        'notification_credit_delivered',
+        
 
     ];
 

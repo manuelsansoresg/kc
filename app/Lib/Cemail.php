@@ -57,6 +57,30 @@ class Cemail
             $sendEmail->sendEmail();
         }
     }
+    
+    public function creditoEntregado($credit_id)
+    {
+        $credit = Credit::find($credit_id);
+        $client = $credit->client;
+        $product = $credit->creditProduct;
+        $investor_ids = InvestorsAgreement::where('agreement_id', $credit->agreement_id)->pluck('investor_id');
+        $investors = Investor::whereIn('id', $investor_ids)->pluck('user_id');
+        $users = User::whereIn('id', $investors)->where('notification_credit_delivered', 1)->get();
+        
+        // Solo enviar correo si hay usuarios con notificaciones habilitadas
+        if ($users->count() > 0) {
+            $emails = $users->pluck('email')->implode(',');
+            $nombre_completo = $credit->id.' '.$client->name.' '.$client->lastname. ' '. $client->second_last_name;
+            $subject =  $product->alias . ' entregado  -'. $nombre_completo;
+            $data_email = array(
+                'nombre_completo' => $nombre_completo,
+                'product' => $product,
+            );
+
+            $sendEmail = new Cemail($emails, 'credito_entregado',  $subject, $data_email);
+            $sendEmail->sendEmail();
+        }
+    }
 
     public function sendEmail()
     {

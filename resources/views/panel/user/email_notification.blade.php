@@ -49,7 +49,19 @@
                                                             <label class="custom-control-label" for="notification_new_request">Nueva Solicitud </label>
                                                         </div>
                                                 </div>
+                                                <small class="d-block">Se crea una nueva solicitud</small>
                                             </div>
+                                            <div class="col-md-6 mt-3">
+                                                <div class="form-group"><label class="form-label"></label>
+                                                <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" name="notification_credit_delivered" id="notification_credit_delivered" value="1" {{ Auth()->user()->notification_credit_delivered == '1' || Auth()->user()->notification_credit_delivered == 1 ? 'checked' : '' }}>
+                                                        <label class="custom-control-label" for="notification_credit_delivered">Credito entregado </label>
+                                                    </div>
+                                                </div>
+                                                <small class="d-block">Se entrega un crédito.</small>
+                                            </div>
+                                            
+                                            
 
                                             <div class="col-12 mt-3">
                                                 <ul class="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">

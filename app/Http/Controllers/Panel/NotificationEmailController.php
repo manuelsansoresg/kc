@@ -42,9 +42,11 @@ class NotificationEmailController extends Controller
         
         // Si el checkbox no está marcado, no llega en el request, por lo que asignamos 0
         $notificationNewRequest = $request->has('notification_new_request') ? 1 : 0;
+        $notificationCreditDelivered = $request->has('notification_credit_delivered') ? 1 : 0;
         
         $user->update([
-            'notification_new_request' => $notificationNewRequest
+            'notification_new_request' => $notificationNewRequest,
+            'notification_credit_delivered' => $notificationCreditDelivered
         ]);
         
         return redirect('panel/email-notification')->with('success', 'Configuración de notificaciones actualizada correctamente');

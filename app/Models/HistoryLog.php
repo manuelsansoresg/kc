@@ -635,7 +635,9 @@ class HistoryLog extends Model
 
         if ($status_id == HistoryLog::CREDITS_DELIVERED) {
             $credit = Credit::find($id_rel);
-            Credit::sendEmailDelivered($credit->id);
+
+            $sendEmail = new Cemail();
+            $sendEmail->creditoEntregado($id_rel);
         }
 
         $isChange = false;
