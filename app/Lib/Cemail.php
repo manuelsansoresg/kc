@@ -41,17 +41,21 @@ class Cemail
         $product = $credit->creditProduct;
         $investor_ids = InvestorsAgreement::where('agreement_id', $credit->agreement_id)->pluck('investor_id');
         $investors = Investor::whereIn('id', $investor_ids)->pluck('user_id');
-        $users = User::whereIn('id', $investors)->get();
-        $emails = $users->pluck('email')->implode(',');
-        $nombre_completo = $credit->id.' '.$client->name.' '.$client->lastname. ' '. $client->second_last_name;
-        $subject = 'Nueva solicitud de ' . $product->alias . '  - '. $nombre_completo;
-        $data_email = array(
-            'nombre_completo' => $nombre_completo,
-            'product' => $product,
-        );
+        $users = User::whereIn('id', $investors)->where('notification_new_request', 1)->get();
+        
+        // Solo enviar correo si hay usuarios con notificaciones habilitadas
+        if ($users->count() > 0) {
+            $emails = $users->pluck('email')->implode(',');
+            $nombre_completo = $credit->id.' '.$client->name.' '.$client->lastname. ' '. $client->second_last_name;
+            $subject = 'Nueva solicitud de ' . $product->alias . '  - '. $nombre_completo;
+            $data_email = array(
+                'nombre_completo' => $nombre_completo,
+                'product' => $product,
+            );
 
-        $sendEmail = new Cemail($emails, 'nueva_solicitud',  $subject, $data_email);
-        $sendEmail->sendEmail();
+            $sendEmail = new Cemail($emails, 'nueva_solicitud',  $subject, $data_email);
+            $sendEmail->sendEmail();
+        }
     }
 
     public function sendEmail()
