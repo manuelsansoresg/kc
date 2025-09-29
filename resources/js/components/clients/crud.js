@@ -22,8 +22,8 @@ $().ready(function () {
             'data[bank_clabe]': {
                 required: true,
                 number: true,
-                minlength: 9,
-                maxlength: 9
+                minlength: 18,
+                maxlength: 18
             },
             
 

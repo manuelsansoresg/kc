@@ -250,3 +250,33 @@
         </div>
     </div>
 @endsection
+
+@section('scripts')
+<script>
+$(document).ready(function() {
+    @if($client_id != null && isset($client))
+        // Cargar datos del cliente en el formulario
+        $('#client-name').val('{{ $client->name ?? "" }}');
+        $('#client-last_name').val('{{ $client->last_name ?? "" }}');
+        $('#client-second_last_name').val('{{ $client->second_last_name ?? "" }}');
+        $('#client-cellphone').val('{{ $client->cellphone ?? "" }}');
+        $('#client-email').val('{{ $client->email ?? "" }}');
+        $('#client-rfc').val('{{ $client->rfc ?? "" }}');
+        $('#client-birth_date').val('{{ $client->birth_date ?? "" }}');
+        $('#bank_name').val('{{ $client->bank_name ?? "" }}');
+        $('#bank_clabe').val('{{ $client->bank_clabe ?? "" }}');
+        $('#daily_income').val('{{ $client->daily_income ?? "" }}');
+        
+        // Seleccionar el acuerdo si existe
+        @if(isset($client->agreement_id) && $client->agreement_id)
+            $('#client-agreement option[value="{{ $client->agreement_id }}"]').attr("selected", "selected");
+        @endif
+        
+        // Establecer el estado activo
+        @if(isset($client->active))
+            $('#client-status').prop('checked', {{ $client->active ? 'true' : 'false' }});
+        @endif
+    @endif
+});
+</script>
+@endsection

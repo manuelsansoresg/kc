@@ -92,6 +92,17 @@ function setDataUser(user_id) {
             $('#investment_bank_clabe').val(result.investment_bank_clabe);
 
         }
+        
+        // También llenar los campos del formulario de cliente si existen
+        if (document.getElementById('client-name')) {
+            $('#client-name').val(result.name);
+            $('#client-last_name').val(result.last_name);
+            $('#client-cellphone').val(result.cellphone);
+            $('#client-email').val(result.email);
+            $('#client-rfc').val(result.rfc);
+            $('#client-birth_date').val(result.birth_date);
+            $('#client-agreement option[value="'+result.agreement_id+'"]').attr("selected", "selected");
+        }
         $('#is_access_config option[value="'+result.is_access_config+'"]').attr("selected", "selected");
         if (document.getElementById('financial_products_id')) {
             const financial_products_id = result.financial_products_id.split(',');

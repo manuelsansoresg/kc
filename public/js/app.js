@@ -5228,8 +5228,8 @@ $().ready(function () {
       'data[bank_clabe]': {
         required: true,
         number: true,
-        minlength: 9,
-        maxlength: 9
+        minlength: 18,
+        maxlength: 18
       }
     },
     submitHandler: function submitHandler(form, event) {
@@ -5377,7 +5377,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
   var table_lead = NioApp.DataTable('#dt-colaboradores', {
     processing: true,
-    searching: false,
+    searching: true,
     responsive: {
       details: {
         type: 'column',
@@ -11195,6 +11195,17 @@ function setDataUser(user_id) {
       $('#investment_bank_account_holder').val(result.investment_bank_account_holder);
       $('#investment_bank_account_number').val(result.investment_bank_account_number);
       $('#investment_bank_clabe').val(result.investment_bank_clabe);
+    }
+
+    // También llenar los campos del formulario de cliente si existen
+    if (document.getElementById('client-name')) {
+      $('#client-name').val(result.name);
+      $('#client-last_name').val(result.last_name);
+      $('#client-cellphone').val(result.cellphone);
+      $('#client-email').val(result.email);
+      $('#client-rfc').val(result.rfc);
+      $('#client-birth_date').val(result.birth_date);
+      $('#client-agreement option[value="' + result.agreement_id + '"]').attr("selected", "selected");
     }
     $('#is_access_config option[value="' + result.is_access_config + '"]').attr("selected", "selected");
     if (document.getElementById('financial_products_id')) {
