@@ -437,6 +437,22 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'is_disabled' => null
             ],
             3 => [
+               'title_section' => null,
+                'title' => 'Evidencia de transferencia',
+                'subtitle' => '',
+                'name_field' => 'evidencia_transferencia',
+                'id_field' => '1',
+                'is_required' => true,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'file',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            4 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
@@ -452,7 +468,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'value' => $urlRedirect,
                 'col' => 'col-12'
             ],
-            4 => [
+            5 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'data[id_rel]',
@@ -551,11 +567,27 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                     }
 
                 }
+
+                
             }
 
             if ($percent2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM_STEP_2, $history->id_rel, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET, $history->id_rel, 1);
+
+                //guardar imagen evidencia_transferencia
+                 if ($request->hasFile('evidencia_transferencia') != false) {
+                    $document   = $request->file('evidencia_transferencia');
+                    $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
+                    $data = array(
+                            'name' => $name_full,
+                            'model' => File::MODEL['wallet'],
+                            'id_rel' => $transaction['transaction']->id,
+                            'template_config_id' => 2,
+                            'step' => 2,
+                        );
+                    File::create($data);
+                 }
                 
             }
         }
@@ -839,22 +871,22 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
         $name    = [
             1 => 'Formulario',
-            2 => 'Carga',
+            //2 => 'Carga',
         ];
 
         $subject    = [
             1 => $subject2,
-            2 => $subject1,
+            //2 => $subject1,
         ];
 
         $percentages    = [
             1 => $percent_form,
-            2 => $percent_upload,
+            //2 => $percent_upload,
         ];
 
         $link    = [
             1 => "/panel/action-form/wallet/{$history_id}/form?step=2&step_origin=null",
-            2 => "/panel/template/action-document/wallet/{$history_id}?step=2",
+            //2 => "/panel/template/action-document/wallet/{$history_id}?step=2",
         ];
 
         $statuses = [];
@@ -869,7 +901,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
         $data = array();
 
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 1; $i++) {
             $data[] = array(
                 'name' => $name[$i],
                 'subject' => $subject[$i],
