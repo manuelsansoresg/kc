@@ -512,6 +512,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'step' => 1,
             );
             File::create($data);
+
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM,$transaction['transaction']->id, 1);
+
+            HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD,$transaction['transaction']->id, 1);
         }
 
         if (isset($data['investor_id'])) {
@@ -526,21 +530,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             $percent2 = self::percentForm2($history);
             
             
-            if ($percent == 100) {
-                
-
-                HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM, $history->id_rel, 1);
-
-                HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD, $history->id_rel, 1);
-                
-                
-                $getTransaction = $transaction['transaction'];
-                //Transaction::setTotalCapital($getTransaction->investor_id);
-                
-                
-                
-            }
-
+            
            
             //confirmar transferencia exitosa
             
