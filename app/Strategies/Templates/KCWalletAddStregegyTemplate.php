@@ -499,6 +499,21 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $idRel = $dataRel!= null ? $dataRel['id_rel'] : null;
         $transaction = Transaction::saveEdit($request, false, $idRel);
 
+        //adjuntar imagen 
+        if ($request->hasFile('comprobante_transferencia') != false) {
+            $document   = $request->file('comprobante_transferencia');
+            $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
+            
+            $data = array(
+                'name' => $name_full,
+                'model' => File::MODEL['wallet'],
+                'id_rel' => $transaction['transaction']->id,
+                'template_config_id' => 1,
+                'step' => 1,
+            );
+            File::create($data);
+        }
+
         if (isset($data['investor_id'])) {
             Investor::updateInvestorData($data['investor_id']);
         }
@@ -510,7 +525,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             
             $percent2 = self::percentForm2($history);
             
-
+            
             if ($percent == 100) {
                 
 
@@ -526,20 +541,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 
             }
 
-            //adjuntar imagen 
-            if ($request->hasFile('comprobante_transferencia') != false) {
-                $document   = $request->file('comprobante_transferencia');
-                $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
-                
-                $data = array(
-                    'name' => $name_full,
-                    'model' => File::MODEL['wallet'],
-                    'id_rel' => $transaction['transaction']->id,
-                    'template_config_id' => 1,
-                    'step' => 1,
-                );
-                File::create($data);
-            }
+           
             //confirmar transferencia exitosa
             
             if (isset($data['operation_status']) && $data['operation_status'] == 1) {
