@@ -7587,7 +7587,7 @@ window.getResumen = function () {
     $('#applied_financial_product').val(productoFinanciero);
     $('#content-monto-solicitado').html(montoSolicitado);
     $('#content-monto-refinanciar').html(montoRefinanciar);
-    $('#content-comision-apertura').html(comision);
+    $('#content-comision-apertura').html(result.comision);
     if (document.getElementById('total-monto-solicitado')) {
       $('#content-monto-compra-cartera').html('');
       $('#content-monto-compra-cartera').html($('#total-monto-solicitado_format').val());
@@ -7603,7 +7603,7 @@ window.getResumen = function () {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     });
-    $('#content-monto-entregar').html(monto_entregar);
+    $('#content-monto-entregar').html(result.monto_entregar);
     $('#content-plazo').html(periodicidad);
     $('#content-monto').html(plazo);
     $('#content-pago-periodico').html(pagoPeriodico);

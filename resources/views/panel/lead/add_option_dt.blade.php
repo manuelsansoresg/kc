@@ -46,18 +46,19 @@ $user = Auth::user();
                             $getFinancial = $m_financial_product::find($lead->financial_product_id);
                             
                         @endphp
-                       
-                        @if (($lead->go_ahead === 0  && $creditStatus === false) || $validate === 0 )
-                            <li>
-                                <a class="pointer" onclick="modalValidate({{ $id }}, 'lead', 'dt-lead')">
-                                    <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
-                            </li>
-                        @else
-                            <li>
-                                <a class="pointer moveElement"  onclick="moveElement('lead', {{ $id }}, 'dt-lead')">
-                                    <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
-                            </li>
-                        @endif
+                        
+                           
+                            @if (($lead->go_ahead === 0  && $creditStatus === false) || $validate == false )
+                                <li>
+                                    <a class="pointer" onclick="modalValidate({{ $id }}, 'lead', 'dt-lead')">
+                                        <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
+                                </li>
+                            @else
+                                <li>
+                                    <a class="pointer moveElement"  onclick="moveElement('lead', {{ $id }}, 'dt-lead')">
+                                        <em class="icon ni ni-arrow-right-circle"></em>Continuar</span></a>
+                                </li>
+                            @endif
 
                         <li>
                             <a class="pointer" href="/panel/lead/{{ $id }}/edit"  data-bs-toggle="tooltip" data-bs-placement="top">
