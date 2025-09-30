@@ -406,7 +406,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $history = HistoryLog::find($history_id);
         $id_rel = $id_rel == null ?  $history->id_rel : $id_rel;
         
-        $urlRedirect = '/panel/template/steps/wallet/'.$history_id.'/show';
+        $urlRedirect = '/panel/kc-wallet';
         $elements = array(
             1 => [
                 'title_section' => 'Verificar transferencia',
@@ -561,7 +561,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
                 
             }
-
+            
             if ($percent2 == 100) {
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM_STEP_2, $history->id_rel, 1);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET, $history->id_rel, 1);
@@ -578,6 +578,9 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                             'step' => 2,
                         );
                     File::create($data);
+
+                    HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, $history->id_rel, 1);
+                    self::finish($history->id_rel, 2);
                  }
                 
             }
