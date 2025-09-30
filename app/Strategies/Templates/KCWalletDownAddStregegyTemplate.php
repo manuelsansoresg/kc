@@ -129,7 +129,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
         $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
         $optionInvestor = $is_investor === true ? $getInvestor->id : $users;
         
-        $format_withdraw_available = 'Disponible para retiro: $';
+        $format_withdraw_available = 'Disponible para retiro: ';
         $withdraw_available = $getInvestor != null && $getInvestor->withdraw_available > 0 ?   $getInvestor->withdraw_available : 0;
         $format_withdraw_available .= format_price($withdraw_available);
         $format_withdraw_available = $format_withdraw_available;
@@ -299,7 +299,23 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
-            3 => [
+             3 => [
+               'title_section' => null,
+                'title' => 'Evidencia de transferencia',
+                'subtitle' => '',
+                'name_field' => 'evidencia_transferencia',
+                'id_field' => '1',
+                'is_required' => true,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'file',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+            4 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
@@ -315,7 +331,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 'value' => $urlRedirect,
                 'col' => 'col-12'
             ],
-            4 => [
+            5 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'data[id_rel]',
@@ -367,6 +383,22 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
                 if ($percent2 < 100) {
                     HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, $history->id_rel, 0);
                     HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_FORM_STEP_2, $history->id_rel, 0);
+
+                    //guardar imagen evidencia_transferencia
+                    if ($request->hasFile('evidencia_transferencia') != false) {
+                        $document   = $request->file('evidencia_transferencia');
+                        $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
+                        $data = array(
+                                'name' => $name_full,
+                                'model' => File::MODEL['kc-down-wallet'],
+                                'id_rel' => $history->id_rel,
+                                'template_config_id' => 2,
+                                'step' => 2,
+                            );
+                        File::create($data);
+                        HistoryLog::move($history->id_rel, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, null, false);
+                        self::finish($history->id_rel, 2);
+                    }
                 }
             }
 
@@ -639,22 +671,22 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
 
 
         $name    = [
-            1 => 'Carga',
-            2 => 'Formulario',
+            1 => 'Formulario',
+            //2 => 'Formulario',
         ];
         $subject    = [
-            1 => HistoryLog::$label_subject[64],
-            2 => HistoryLog::$label_subject[63],
+            1 => HistoryLog::$label_subject[63],
+            //1 => HistoryLog::$label_subject[64],
         ];
 
         $percentages    = [
-            1 => self::percentFile($history->id_rel, 2),
-            2 => self::percentForm2($history),
+            1 => self::percentForm2($history),
+            //1 => self::percentFile($history->id_rel, 2),
         ];
         
         $link    = [
-            1  => "/panel/template/action-document/kc-down-wallet/{$history_id}?step=2",
-            2 => "/panel/action-form/kc-down-wallet/{$history->id}/form?step=2",
+            1 => "/panel/action-form/kc-down-wallet/{$history->id}/form?step=2",
+            //1  => "/panel/template/action-document/kc-down-wallet/{$history_id}?step=2",
         ];
         $statuses = [];
         $currentTaskInProgress = false;
@@ -666,7 +698,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
             }
         }
 
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 1; $i++) {
             $data[] = array(
                 'name' => $name[$i],
                 'subject' => $subject[$i],
@@ -765,7 +797,7 @@ class KCWalletDownAddStregegyTemplate implements TemplateInterface
     {
         $transaction     = Transaction::find($history->id_rel);
         // Iterar sobre las tareas (1 a 4) y sumar los promedios
-        $totalSteps = 2; // Número total de tareas
+        $totalSteps = 1; // Número total de tareas
         $totalAverage = 0;
         for ($step = 1; $step <= $totalSteps; $step++) {
             $averageStep = self::calculateStepAverage($history->id, $step);
