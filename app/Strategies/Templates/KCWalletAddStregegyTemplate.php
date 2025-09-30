@@ -155,6 +155,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
     public function configFormStep1($id_rel, $history_id)
     {
+        
         $name_form = 'frm-template_wallet_step1';
         $type_form    = HistoryLog::KC_WALLET_ADD_FORM;
         $users = User::getUserRoleInvestor('Cliente inversionista');
@@ -207,7 +208,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'onchange' => 'getValue(this)',
             ],
 
-            2 => [
+            /* 2 => [
                 'title_section' => null,
                 'title' => 'Tipo de operación',
                 'subtitle' => '¿Desde el mismo banco o SPEI?',
@@ -237,7 +238,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'options' => null,
                 'is_required' => false,
                 'is_disabled' => null
-            ],
+            ], */
 
             4 => [
                 'title_section' => null,
@@ -254,7 +255,35 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
-            5 => [
+            
+            /* 5 => [
+                'col' => 'col-12',
+                'title_section' => null,
+                'title' => null,
+                'is_required' => false,
+                'is_disabled' => null,
+                'type' => 'div',
+            ], */
+           
+
+            6 => [
+               'title_section' => null,
+                'title' => 'Comprobante transferencia',
+                'subtitle' => 'adjunta el documento comprobante',
+                'name_field' => 'comprobante_transferencia',
+                'id_field' => '1',
+                'is_required' => true,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'file',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
+
+            7 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
@@ -271,7 +300,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'col' => 'col-12'
             ],
 
-            6=> [
+            8=> [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'step',
@@ -287,7 +316,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'value' => 1,
                 'col' => 'col-12'
             ],
-            7=> [
+           9 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'task',
@@ -304,7 +333,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'col' => 'col-12'
             ],
 
-            8 => [
+            10 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'data[id_rel]',
@@ -320,6 +349,39 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'value' => $id_rel,
                 'col' => 'col-12'
             ],
+           
+            11 => [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'action-model',
+                'id_field' => 'action-model',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 'wallet',
+                'col' => 'col-12'
+            ],
+            12 =>  [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => 'action-id_rel',
+                'id_field' => 'action-id_rel',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'hidden',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => $id_rel,
+                'col' => 'col-12'
+            ]
             
             
         );
@@ -431,8 +493,24 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             $percent = self::percentForm($history);
             
             $percent2 = self::percentForm2($history);
+            
 
             if ($percent == 100) {
+                //adjuntar imagen 
+                if ($request->hasFile('comprobante_transferencia') != false) {
+                    $document   = $request->file('comprobante_transferencia');
+                    $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
+                    
+                    $data = array(
+                        'name' => $name_full,
+                        'model' => File::MODEL['wallet'],
+                        'id_rel' => $transaction['transaction']->id,
+                        'template_config_id' => 1,
+                        'step' => 1,
+                    );
+                    File::create($data);
+                }
+
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM, $history->id_rel, 1);
 
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD, $history->id_rel, 1);
@@ -666,21 +744,21 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
         $name    = [
             1 => 'Formulario',
-            2 => 'Carga',
+            //2 => 'Carga',
         ];
         $subject    = [
             1 => HistoryLog::$label_subject[61],
-            2 => HistoryLog::$label_subject[62],
+            //2 => HistoryLog::$label_subject[62],
         ];
 
         $percentages    = [
             1 => self::percentForm($history),
-            2 => self::percentFile($history->id_rel),
+            //2 => self::percentFile($history->id_rel),
         ];
         
         $link    = [
             1 => "/panel/action-form/wallet/{$history_id}/form?step=1&step_origin=null",
-            2 => "/panel/template/action-document/wallet/{$history_id}?step=1",
+            //2 => "/panel/template/action-document/wallet/{$history_id}?step=1",
         ];
         $statuses = [];
         $currentTaskInProgress = false;
@@ -692,7 +770,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             }
         }
 
-        for ($i = 1; $i <= 2; $i++) {
+        for ($i = 1; $i <= 1; $i++) {
             $data[] = array(
                 'name' => $name[$i],
                 'subject' => $subject[$i],
