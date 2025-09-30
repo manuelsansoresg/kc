@@ -81,6 +81,13 @@ class LeadValidation extends Model
         
         $validateMonto = $validateMonto && $validateTramite;
 
+        // Validación adicional: verificar que selected_term y selected_loan no sean null
+        $lead = \App\Models\Lead::find($leadId);
+        $hasSelectedCredit = false;
+        if ($lead) {
+            $hasSelectedCredit = !is_null($lead->selected_term) && !is_null($lead->selected_loan);
+        }
+
         // Check that all existing validations have status = 1
         $allValid = true;
         foreach ($validations as $validation) {
@@ -90,6 +97,7 @@ class LeadValidation extends Model
             }
         }
 
-        return $validateMonto;
+        // Retornar true solo si todas las validaciones pasan Y tiene crédito seleccionado
+        return $validateMonto && $hasSelectedCredit;
     }
 }
