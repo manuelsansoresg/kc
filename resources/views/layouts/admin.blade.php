@@ -396,7 +396,7 @@
                                 <li class="nk-menu-item">
                                     <a href="/panel/email-notification" class="nk-menu-link">
                                         {{-- <span class="nk-menu-icon"><em class="icon ni ni-happy"></em></span> --}}
-                                        <span class="nk-menu-text"> <em class="icon ni ni-bell"></em> Notificaciónes</span>
+                                        <span class="nk-menu-text"> <em class="icon ni ni-bell"></em> Notificaciones</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
@@ -654,7 +654,7 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-xl dropdown-menu-end dropdown-menu-s1">
                                             <div class="dropdown-head">
-                                                <span class="sub-title nk-dropdown-title">Notificaciónes</span>
+                                                <span class="sub-title nk-dropdown-title">Notificaciones</span>
                                                 <a class="pointer" onclick="readAllNotification()">Marcar como
                                                     leidas</a>
                                             </div>

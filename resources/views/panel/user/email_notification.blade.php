@@ -14,13 +14,13 @@
                         <div class="nk-block-head nk-block-head-lg wide-sm">
                             <div class="nk-block-head-content">
 
-                                <h3 class="nk-block-title page-title">Notificaciónes</h3>
+                                <h3 class="nk-block-title page-title">Notificaciones</h3>
                                 <div class="nk-block-des text-soft">
                                     <nav>
                                         <ul class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/panel/home">Inicio</a></li>
                                             <li class="breadcrumb-item active"><a
-                                                    href="/panel/email-notification">Notificaciónes</a></li>
+                                                    href="/panel/email-notification">Notificaciones</a></li>
                                         </ul>
                                     </nav>
                                     <p class="text-muted mt-1"><small>Listado de las notificaciones generadas por el
