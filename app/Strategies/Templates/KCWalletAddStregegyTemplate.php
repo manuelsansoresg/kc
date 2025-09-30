@@ -180,7 +180,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'id' => 'url_redirect_finish',
                 'class' => 'btn btn-primary',
                 'link' => '#',
-                'data-redirect' => '/panel/template/action-document/wallet/{id}?step=1_2'
+                'data-redirect' => '/panel/kc-wallet'
             );
             //$urlRedirect = '/panel/template/action-document/wallet/{id}?step=1_2';
         }
@@ -512,20 +512,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             
 
             if ($percent == 100) {
-                //adjuntar imagen 
-                if ($request->hasFile('comprobante_transferencia') != false) {
-                    $document   = $request->file('comprobante_transferencia');
-                    $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
-                    
-                    $data = array(
-                        'name' => $name_full,
-                        'model' => File::MODEL['wallet'],
-                        'id_rel' => $transaction['transaction']->id,
-                        'template_config_id' => 1,
-                        'step' => 1,
-                    );
-                    File::create($data);
-                }
+                
 
                 HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM, $history->id_rel, 1);
 
@@ -537,6 +524,21 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 
                 
                 
+            }
+
+            //adjuntar imagen 
+            if ($request->hasFile('comprobante_transferencia') != false) {
+                $document   = $request->file('comprobante_transferencia');
+                $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
+                
+                $data = array(
+                    'name' => $name_full,
+                    'model' => File::MODEL['wallet'],
+                    'id_rel' => $transaction['transaction']->id,
+                    'template_config_id' => 1,
+                    'step' => 1,
+                );
+                File::create($data);
             }
             //confirmar transferencia exitosa
             
