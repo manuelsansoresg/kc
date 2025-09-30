@@ -526,10 +526,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         if ($request->history_id != 'null') {
             $history = HistoryLog::find($request->history_id);
             $percent = self::percentForm($history);
-            
             $percent2 = self::percentForm2($history);
-            
-            
             
            
             //confirmar transferencia exitosa
