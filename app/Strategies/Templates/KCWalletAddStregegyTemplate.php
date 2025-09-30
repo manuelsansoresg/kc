@@ -578,9 +578,10 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                             'step' => 2,
                         );
                     File::create($data);
-
-                    HistoryLog::updateStatusProgress(HistoryLog::KC_DOWN_WALLET_ADD_UPLOAD_STEP_2, $history->id_rel, 1);
-                    self::finish($history->id_rel, 2);
+                    
+                    $getTransaction = Transaction::find($history->id_rel);
+                    Investor::updateInvestorData($getTransaction->investor_id);
+                    HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD_STEP_2, $history->id_rel, 1);
                  }
                 
             }
