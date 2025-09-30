@@ -196,7 +196,7 @@ class Transaction extends Model
                 $dead_line        = (new $templateStrategy)->moduleDeadline($history);
                 $menu_options          = (new $templateStrategy)->menuPrincipalOptions($history);
                 $option = null;
-                if ($is_admin || $is_investor) {
+                if ($is_admin ) {
                     $option               = \View::make('panel.module.checkup.actions.add_option_dt', ['options' => $menu_options['options']])->render();
                 }
     

@@ -161,7 +161,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $users = User::getUserRoleInvestor('Cliente inversionista');
         $funding_operation_type = config('enums.funding_operation');
 
-        $urlRedirect = $history_id == 'null' ? '/panel/kc-wallet' : '/panel/template/steps/wallet/'.$history_id.'/show';
+        $urlRedirect = '/panel/kc-wallet';
         $buttonLinkExtraFinish = null;
         $is_redirect_document = false;
         
@@ -597,21 +597,19 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
     public function percentForm($history)
     {
         $transaction = Transaction::find($history->id_rel);
-        $percent = 0;
-
-        $total_valid = 0;
         
-        
-        if ($transaction != null && $transaction->investor_id != null) {
+        /* if ($transaction != null && $transaction->investor_id != null) {
             $total_valid = 50;
         }
         if ($transaction != null && $transaction->bank_transfer_type != null) {
             $total_valid = $total_valid + 50;
-        }
-
+        } */
+       
+       if ($transaction != null && $transaction->amount != '') {
+           return  100;
+       }
         
-        $percent =  (100 / 100) * $total_valid;
-        return $percent;
+        return 0;
     }
     
     public function percentForm2($history)
@@ -738,6 +736,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $config_files = self::configUpload($step);
         
         foreach ($config_files as $key => $config_file) {
+            
             $file = File::where([
                 'model' => $model,
                 'id_rel' => $id_rel,
@@ -1009,9 +1008,11 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
     public function getPercent($history, $show_current_show = false)
     {
+        
         self::checkTaskAndFinish($history->id_rel);
         $percent_form1   = self::percentForm($history) == 100 ? 1 : 0;
         $percent_upload1   = self::percentFile($history->id_rel)== 100 ? 1 : 0;
+        
         $percent_form2   = self::percentForm2($history)== 100 ? 1 : 0;
         $percent_upload2   = self::percentFile($history->id_rel, 2)== 100 ? 1 : 0;
         $status_progress = $percent_form1 + $percent_upload1 + $percent_form2 + $percent_upload2;
@@ -1116,7 +1117,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
 
     public function menuPrincipalOptions($history)
     {
-
+        
         $menu = array(
             'options' => array(
                 [
