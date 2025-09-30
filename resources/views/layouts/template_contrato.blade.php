@@ -163,7 +163,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-xl dropdown-menu-end dropdown-menu-s1">
                                 <div class="dropdown-head">
-                                    <span class="sub-title nk-dropdown-title">Notificaciónes</span>
+                                    <span class="sub-title nk-dropdown-title">Notificaciones</span>
                                     <a class="pointer" onclick="readAllNotification()">Marcar como
                                         leidas</a>
                                 </div>

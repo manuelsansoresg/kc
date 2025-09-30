@@ -125,7 +125,7 @@
                                                         id="auto_go_ahead"
                                                         value="1"
                                                         {{ isset($agreement->auto_go_ahead) && $agreement->auto_go_ahead ? 'checked' : '' }}>
-                                                    <label class="custom-control-label" for="auto_go_ahead">Auto Go Ahead</label>
+                                                    <label class="custom-control-label" for="auto_go_ahead">Otorgar Vo.Bo. automáticamente</label>
                                                 </div>
                                         </div>
                                     </div>
