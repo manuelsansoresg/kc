@@ -116,16 +116,27 @@
                                                                                 
                                                                                 <td class="col-4 text-end">
                                                                                     {!! $list_action['statusBadge'] !!}
+                                                                                     @php
+                                                                                        $agreement = $credit->creditAgreement;
+                                                                                        $productName = $credit ? $credit->getProduct() : null;
+                                                                                    @endphp
+                                                                                    @if (($productName == 'Soluciona tu deuda' || $productName == 'Crédito personal'))
                                                                                     
+                                                                                    @if ($agreement && $agreement->auto_go_ahead === 0)
+                                                                                            @php
+                                                                                                $credit->setOtorgarVobo($credit->id);
+                                                                                            @endphp
+                                                                                        @endif
+                                                                                    @endif
                                                                                     @if ($list_action['status'] == 'En curso')
                                                                                         @php
                                                                                             $showButton = true;
                                                                                             // Validación especial para productos específicos y tarea específica
-                                                                                            $productName = $credit ? $credit->getProduct() : null;
+                                                                                            
                                                                                             if (($productName == 'Soluciona tu deuda' || $productName == 'Crédito personal') && 
                                                                                                 $list_action['name'] == '5- Validar clabe cliente') {
                                                                                                    
-                                                                                                $agreement = $credit->creditAgreement;
+                                                                                               
                                                                                                 if ($agreement && $agreement->auto_go_ahead === 0) {
                                                                                                     $statusSolicitud = $credit->getStatusSolicitud();
                                                                                                     

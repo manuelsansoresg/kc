@@ -886,6 +886,26 @@ class Credit extends Model
         return $solicitud;
     }
 
+    public function setOtorgarVobo($credit_id)
+    {
+        $getCredit = Credit::find($credit_id);
+        if ($getCredit != null ) {
+            $status = $getCredit->go_ahead == 2 ? 1 : 0;
+            CreditsControlDesk::updateOrCreate(
+                // 1. Array de ATRIBUTOS para BUSCAR (Condición WHERE)
+                [
+                    'credit_id'  => $credit_id,
+                    'validation' => 'Otorgar Vo.Bo',
+                    'mandatory'  => 1,
+                ],
+                // 2. Array de VALORES para ACTUALIZAR (o incluir en la creación)
+                [
+                    'status' => $status,
+                ]
+            );
+        }
+    }
+
     public function investorsCredits()
     {
         return $this->hasMany(InvestorsCredit::class, 'credit_id');

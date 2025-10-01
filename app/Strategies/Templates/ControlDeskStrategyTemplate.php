@@ -4422,7 +4422,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             $tipoCredito   = $financialProduct != null  ? Product::find($financialProduct->type_product_id) : null;
                             $alias_product = $tipoCredito      != null ? $tipoCredito->alias : null;
                             $agreement     = Agreement::find($credit->agreement_id);
-                            $auto_go_ahead = $agreement        != null && $agreement->auto_go_ahead == 1 ? true : false;
+                            $auto_go_ahead = $agreement != null && $agreement->auto_go_ahead == 1 ? true : false;
 
                             if(($alias_product == 'Crédito personal' || $alias_product == 'Soluciona tu deuda') && !$auto_go_ahead) {
                                 HistoryLog::move($credit->id, HistoryLog::SOLICITUD, HistoryLog::KC_CONTROL_DESK, null, false);
@@ -6288,6 +6288,15 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             return $credit->status === 1;
                         });
         $creditControl = CreditsControlDesk::where('validation', 'Fondos suficientes')->where('credit_id', $history->id_rel)->first();
+        //agregar validacion otorgar vobo
+        $credit = Credit::find($history->id_rel);
+        $agreement = $credit->creditAgreement;
+        $productName = $credit ? $credit->getProduct() : null;
+        if(($productName == 'Soluciona tu deuda' || $productName == 'Crédito personal') && 
+            $agreement && $agreement->auto_go_ahead === 0 && $credit->go_ahead != 2)
+        {
+            return false;
+        }
         
         return  $creditControl != null  && $creditControl->status == 1 && $statusAllTrue  ? true : false;
     }

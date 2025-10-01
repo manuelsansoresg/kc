@@ -28,6 +28,7 @@ class CreditsControlDesk extends Model
         8 => 'Solicitud/Descuento SOD',
         9 => 'Firma de contrato válida',
         10 => 'Fondos suficientes',
+        11 => 'Otorgar Vo.Bo',
     ];
 
     public static function saveEdit($creditId, $request, $validate, $task_id = null, $isOnlyCreate = false, $mandatory =1, $aliasProduct = null)
