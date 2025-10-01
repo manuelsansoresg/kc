@@ -127,7 +127,7 @@ class KcWalletController extends Controller
         $data = array();
 
         if ($getInvestor != null) {
-            $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->get();
+            $getInvestorCredits = InvestorsCredit::where('investor_id', $getInvestor->id)->orderBy('created_at', 'desc')->get();
 
             foreach ($getInvestorCredits as $getInvestorCredit) {
                 $getCollection = Collection::where('kc_credit_id', $getInvestorCredit->credit_id)->first();
