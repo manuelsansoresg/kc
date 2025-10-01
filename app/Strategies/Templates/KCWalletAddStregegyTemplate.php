@@ -160,8 +160,9 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $type_form    = HistoryLog::KC_WALLET_ADD_FORM;
         $users = User::getUserRoleInvestor('Cliente inversionista');
         $funding_operation_type = config('enums.funding_operation');
-
-        $urlRedirect = '/panel/kc-wallet';
+        $is_investor = Auth::user()->hasRole('Cliente inversionista');
+        $alert = $is_investor === true ? '?alert=true' : null;
+        $urlRedirect = '/panel/kc-wallet'.$alert; 
         $buttonLinkExtraFinish = null;
         $is_redirect_document = false;
         
@@ -180,7 +181,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'id' => 'url_redirect_finish',
                 'class' => 'btn btn-primary',
                 'link' => '#',
-                'data-redirect' => '/panel/kc-wallet'
+                'data-redirect' => '/panel/kc-wallet'.$alert
             );
             //$urlRedirect = '/panel/template/action-document/wallet/{id}?step=1_2';
         }

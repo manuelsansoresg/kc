@@ -394,6 +394,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let table = NioApp.DataTable('#dt-wallet', {
         processing: true,
         isShowing: false,
+        order: [[0, 'desc']], // Orden descendente por la columna ID
         responsive: {
             details: {
                 type: 'column',
@@ -501,6 +502,7 @@ document.addEventListener('DOMContentLoaded', function () {
         processing: true,
         isShowing: false,
         searching: false,
+        order: [[0, 'desc']], // Orden descendente por la columna ID
         responsive: {
             details: {
                 type: 'column',
@@ -574,6 +576,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let table = NioApp.DataTable('#dt-down-wallet', {
         processing: true,
         isShowing: false,
+        order: [[0, 'desc']], // Orden descendente por la columna ID
         responsive: {
             details: {
                 type: 'column',
