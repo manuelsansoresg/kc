@@ -29,7 +29,8 @@ async function renderBarChartIngresos() {
     const investorId = document.getElementById('investorId')?.value;
     if (!investorId) return;
     const labels = getMonthLabels();
-    const data = await fetchIngresosData(investorId);
+    const rawData = await fetchIngresosData(investorId);
+    const data = Array.isArray(rawData) ? rawData.map(v => Number(v) || 0) : [];
     const ctx = chartEl.getContext('2d');
     if (window.barChartIngresosInstance) {
         window.barChartIngresosInstance.destroy();
@@ -56,7 +57,8 @@ async function renderBarChartIngresos() {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return context.parsed.y;
+                            const val = context.parsed.y || 0;
+                            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(val);
                         }
                     },
                     backgroundColor: '#eff6ff',
@@ -75,7 +77,14 @@ async function renderBarChartIngresos() {
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: { color: '#9eaecf', font: { size: 12 }, padding: 5 },
+                    ticks: {
+                        color: '#9eaecf',
+                        font: { size: 12 },
+                        padding: 5,
+                        callback: function(value) {
+                            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(value);
+                        }
+                    },
                     grid: { color: 'rgba(82,100,132,0.2)', tickLength: 0, drawTicks: false }
                 },
                 x: {

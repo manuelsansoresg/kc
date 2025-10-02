@@ -10700,7 +10700,7 @@ function renderBarChartIngresos() {
 function _renderBarChartIngresos() {
   _renderBarChartIngresos = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     var _document$getElementB;
-    var chartEl, investorId, labels, data, ctx;
+    var chartEl, investorId, labels, rawData, data, ctx;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -10723,7 +10723,10 @@ function _renderBarChartIngresos() {
             _context2.next = 9;
             return fetchIngresosData(investorId);
           case 9:
-            data = _context2.sent;
+            rawData = _context2.sent;
+            data = Array.isArray(rawData) ? rawData.map(function (v) {
+              return Number(v) || 0;
+            }) : [];
             ctx = chartEl.getContext('2d');
             if (window.barChartIngresosInstance) {
               window.barChartIngresosInstance.destroy();
@@ -10755,7 +10758,11 @@ function _renderBarChartIngresos() {
                   tooltip: {
                     callbacks: {
                       label: function label(context) {
-                        return context.parsed.y;
+                        var val = context.parsed.y || 0;
+                        return new Intl.NumberFormat('es-MX', {
+                          style: 'currency',
+                          currency: 'MXN'
+                        }).format(val);
                       }
                     },
                     backgroundColor: '#eff6ff',
@@ -10783,7 +10790,13 @@ function _renderBarChartIngresos() {
                       font: {
                         size: 12
                       },
-                      padding: 5
+                      padding: 5,
+                      callback: function callback(value) {
+                        return new Intl.NumberFormat('es-MX', {
+                          style: 'currency',
+                          currency: 'MXN'
+                        }).format(value);
+                      }
                     },
                     grid: {
                       color: 'rgba(82,100,132,0.2)',
@@ -10808,7 +10821,7 @@ function _renderBarChartIngresos() {
                 }
               }
             });
-          case 13:
+          case 14:
           case "end":
             return _context2.stop();
         }
@@ -12097,7 +12110,11 @@ if (document.getElementById('TrafficChannelDoughnutData')) {
               rtl: NioApp.State.isRTL,
               callbacks: {
                 label: function label(context) {
-                  return "".concat(context.parsed, " ").concat(_get_data.dataUnit);
+                  var formatted = new Intl.NumberFormat('es-MX', {
+                    style: 'currency',
+                    currency: 'MXN'
+                  }).format(context.parsed);
+                  return formatted;
                 }
               },
               backgroundColor: '#fff',
@@ -12130,12 +12147,12 @@ if (document.getElementById('TrafficChannelDoughnutData')) {
   var prestamoCreditosActivos = $('#prestamoCreditosActivos').val();
   var TrafficChannelDoughnutData = {
     labels: ["Disponible para prestar o retirar", "En proceso de ser prestado", "Préstamos en créditos activos"],
-    dataUnit: 'People',
+    dataUnit: '',
     legend: false,
     datasets: [{
       borderColor: "#fff",
       background: ["#798bff", "#b8acff", "#ffa9ce", "#f9db7b"],
-      data: [disponiblePrestaroRetirar, procesoPrestado, prestamoCreditosActivos]
+      data: [Number(disponiblePrestaroRetirar) || 0, Number(procesoPrestado) || 0, Number(prestamoCreditosActivos) || 0]
     }]
   };
   NioApp.coms.docReady.push(function () {

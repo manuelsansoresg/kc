@@ -160,12 +160,16 @@ tippy(document.querySelectorAll('.active-tooltip'), {
 
     var TrafficChannelDoughnutData = {
       labels: ["Disponible para prestar o retirar", "En proceso de ser prestado", "Préstamos en créditos activos"],
-      dataUnit: 'People',
+      dataUnit: '',
       legend: false,
       datasets: [{
         borderColor: "#fff",
         background: ["#798bff", "#b8acff", "#ffa9ce", "#f9db7b"],
-        data: [disponiblePrestaroRetirar, procesoPrestado, prestamoCreditosActivos]
+        data: [
+          Number(disponiblePrestaroRetirar) || 0,
+          Number(procesoPrestado) || 0,
+          Number(prestamoCreditosActivos) || 0
+        ]
       }]
     };
     function analyticsDoughnut(selector, set_data) {
@@ -206,7 +210,8 @@ tippy(document.querySelectorAll('.active-tooltip'), {
                 rtl: NioApp.State.isRTL,
                 callbacks: {
                   label: function label(context) {
-                    return "".concat(context.parsed, " ").concat(_get_data.dataUnit);
+                    var formatted = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(context.parsed);
+                    return formatted;
                   }
                 },
                 backgroundColor: '#fff',
