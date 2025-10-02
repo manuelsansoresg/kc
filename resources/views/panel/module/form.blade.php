@@ -15,7 +15,52 @@
             @if ($element['title_section'] != '')
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}" id="{{ isset($element['id_field'])? $element['id_field'] : null  }}">
                     <span class="preview-title-lg overline-title {{ isset($element['class'])? $element['class'] :null  }} "> {!! $element['title_section'] !!} </span>
+                    @if (isset($element['childs']))
+                        @foreach ($element['childs'] as $child)
+                            @if ( $child['type'] == 'href')
+                                <div class="form-group mb-0">
+                                    <label class="form-label"> </label>
+                                    <div class="form-control-wrap">
+                                        <a 
+                                        @if (isset($child['link']))
+                                            href="{{ $child['link'] }}"
+                                        @endif
+                                        @if (isset($child['onclick']))
+                                            onclick="{{ $child['onclick'] }}"
+                                        @endif
+                                        @if (isset($child['target']))
+                                            target="{{ $child['target'] }}"
+                                        @endif
+                                        class="{{ $child['class'] }}">{!! $child['name_field'] !!} </a>
+                                    </div>
+                                </div>
+                            @endif
+                            @if ( $child['type'] == 'text')
+                            <div class="form-group mb-0">
+                                <label class="form-label"> </label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" 
+                                        name="{{ $child['name_field'] }}" placeholder="{{ $child['placeholder'] }}"
+                                        id="{{ $child['id_field'] }}" value="">
+                                </div>
+                            </div>
+                            @endif
+                           
+                            @if ($child['type'] == 'div')
+                                <div  class="{{ isset($child['col'])? $child['col'] : 'col-md-6'  }}" id="{{ isset($child['id_field'])? $child['id_field'] : ''  }}">
+                                    {!! $child['name_field'] !!}
+                                </div>
+                            @endif
+                        @endforeach
+                  {{--   @for ($i = 0; $i < $element['childs']; $i++)
+                    @php
+                        $child = $element['childs'][$i];
+                    @endphp
+                   
+                    @endfor --}}
+                @endif
                 </div>
+                
             @endif
             @if ($element['type'] == 'dropzone')
                 <div class="{{ isset($element['col'])? $element['col'] : 'col-md-6'  }}">

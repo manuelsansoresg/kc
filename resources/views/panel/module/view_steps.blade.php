@@ -116,12 +116,12 @@
                                                                                 
                                                                                 <td class="col-4 text-end">
                                                                                     {!! $list_action['statusBadge'] !!}
-                                                                                     @php
-                                                                                        $agreement = $credit->creditAgreement;
-                                                                                        $productName = $credit ? $credit->getProduct() : null;
+                                                                                    @php
+                                                                                        $agreement = $credit != null ? $credit->creditAgreement : null;
+                                                                                        $productName = $credit != null ? $credit->getProduct() : null;
                                                                                     @endphp
-                                                                                    @if (($productName == 'Soluciona tu deuda' || $productName == 'Crédito personal'))
-                                                                                    
+                                                                                    @if ($productName != null && ($productName == 'Soluciona tu deuda' || $productName == 'Crédito personal'))
+                                                                                     
                                                                                     @if ($agreement && $agreement->auto_go_ahead === 0)
                                                                                             @php
                                                                                                 $credit->setOtorgarVobo($credit->id);
@@ -133,7 +133,7 @@
                                                                                             $showButton = true;
                                                                                             // Validación especial para productos específicos y tarea específica
                                                                                             
-                                                                                            if (($productName == 'Soluciona tu deuda' || $productName == 'Crédito personal') && 
+                                                                                            if ($productName != null && ($productName == 'Soluciona tu deuda' || $productName == 'Crédito personal') && 
                                                                                                 $list_action['name'] == '5- Validar clabe cliente') {
                                                                                                    
                                                                                                

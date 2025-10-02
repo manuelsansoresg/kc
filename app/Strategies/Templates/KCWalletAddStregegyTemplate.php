@@ -8,11 +8,14 @@ use App\Models\File;
 use App\Models\HistoryLog;
 use App\Models\Investor;
 use App\Models\InvestorsCredit;
+use App\Models\TemplateFile;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Strategies\TemplateInterface;
 use Illuminate\Support\Facades\Auth;
 use ParagonIE\Sodium\Core\Curve25519\H;
+
+use function PHPSTORM_META\type;
 
 class KCWalletAddStregegyTemplate implements TemplateInterface
 {
@@ -406,6 +409,14 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $operations = config('enums.operation_status');
         $history = HistoryLog::find($history_id);
         $id_rel = $id_rel == null ?  $history->id_rel : $id_rel;
+        //obtener imagenes
+        $getFile = File::where([
+                'model' => File::MODEL['wallet'],
+                'id_rel' => $id_rel,
+                'template_config_id' => 2,
+                'step' => 2,
+        ])->orderBy('id', 'DESC')->first();
+        $file = $getFile != null ? '<a href="'.url('files_upload/'.$getFile->name).'" target="_blank">Ver comprobante</a>' : null;
         
         $urlRedirect = '/panel/kc-wallet';
         $elements = array(
@@ -421,7 +432,20 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'is_option_array' => false,
                 'options' => null,
                 'is_required' => null,
-                'is_disabled' => null
+                'is_disabled' => null,
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'type' => 'div',
+                        'name' => 'Valida',
+                        'name_field' =>  $file,
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 1,
+                        'is_required' => true,
+                    ),
+                   
+                )
             ],
             2 => [
                 'title_section' => null,
@@ -494,7 +518,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
     public function saveForm($request)
     {
         $data = $request->transaction;
-        
+        $path = File::PATH;
         //formulario etapa 1
         $dataRel = isset($request->data)? $request['data'] : null;
         $idRel = $dataRel!= null ? $dataRel['id_rel'] : null;
@@ -505,14 +529,16 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
             $document   = $request->file('comprobante_transferencia');
             $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
             
-            $data = array(
-                'name' => $name_full,
-                'model' => File::MODEL['wallet'],
-                'id_rel' => $transaction['transaction']->id,
-                'template_config_id' => 1,
-                'step' => 1,
-            );
-            File::create($data);
+            if ($document->move($path, $name_full)) {
+                $data = array(
+                    'name' => $name_full,
+                    'model' => File::MODEL['wallet'],
+                    'id_rel' => $transaction['transaction']->id,
+                    'template_config_id' => 1,
+                    'step' => 1,
+                );
+                File::create($data);
+            }
 
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_FORM,$transaction['transaction']->id, 1);
 
@@ -571,14 +597,17 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                  if ($request->hasFile('evidencia_transferencia') != false) {
                     $document   = $request->file('evidencia_transferencia');
                     $name_full  = rand(1, 999).'-'.$document->getClientOriginalName();
-                    $data = array(
-                            'name' => $name_full,
-                            'model' => File::MODEL['wallet'],
-                            'id_rel' => $transaction['transaction']->id,
-                            'template_config_id' => 2,
-                            'step' => 2,
-                        );
-                    File::create($data);
+
+                    if ($document->move($path, $name_full)) {
+                        $data = array(
+                                'name' => $name_full,
+                                'model' => File::MODEL['wallet'],
+                                'id_rel' => $transaction['transaction']->id,
+                                'template_config_id' => 2,
+                                'step' => 2,
+                            );
+                        File::create($data);
+                    }
                     
                     $getTransaction = Transaction::find($history->id_rel);
                     Investor::updateInvestorData($getTransaction->investor_id);
