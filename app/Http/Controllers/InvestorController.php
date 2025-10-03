@@ -56,6 +56,12 @@ class InvestorController extends Controller
         if ($getPermission === true) {
             return redirect('/panel/clients/colaboradores/show');
         }
+        
+        if ($getUser->can('Otorgar Vo.Bo')) {
+            return redirect('panel/solicitud');
+        }
+
+
         if($investor == null) {
             abort(404);
         }
