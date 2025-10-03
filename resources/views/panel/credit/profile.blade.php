@@ -561,7 +561,20 @@
                                                                     <a href="{{ asset($path.'/'.$file['name']) }}">{{ $file['name_template'] }}</a>
                                                                 </td>
                                                                 <td class="tb-tnx-info">
-                                                                    <a href="{{ asset($path.'/'.$file['name']) }}" download>Descargar</a>
+                                                                    @php
+                                                                        $downloadName = $file['name'];
+                                                                        // Si se quiere un nombre más limpio, usar name_template conservando la extensión original
+                                                                        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                                                                        $baseTemplate = $file['name_template'];
+                                                                        // Evita espacios problemáticos en algunos navegadores
+                                                                        $safeBase = str_replace(['/', '\\'], '-', $baseTemplate);
+                                                                        $suggested = $safeBase . '.' . $ext;
+                                                                        // Usa el nombre sugerido si existe extensión detectada
+                                                                        if (!empty($ext)) {
+                                                                            $downloadName = $suggested;
+                                                                        }
+                                                                    @endphp
+                                                                    <a href="{{ asset($path.'/'.$file['name']) }}" download="{{ $downloadName }}">Descargar</a>
 
                                                                 </td>
 

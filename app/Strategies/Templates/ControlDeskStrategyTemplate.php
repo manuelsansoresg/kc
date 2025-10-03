@@ -6345,17 +6345,22 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 1 => [
                     'name' => 'Contrato firmado',
                 ],
+                // Asegura que el template_config_id 4 (usado cuando step=4) también devuelva "Contrato firmado"
+                4 => [
+                    'name' => 'Contrato firmado',
+                ],
             );
         }
 
         $config = null;
-        //dd($elements, $template_config_id);
-        try {
-            //code...
+        // Selecciona configuración si existe; en caso contrario, aplica un fallback para step ≠ 1 y ≠ '3_5'
+        if (isset($elements[$template_config_id])) {
             $config = $elements[$template_config_id];
-        } catch (\Exception $th) {
-        
-            //dd($elements, $template_config_id, $step);
+        } else {
+            // Fallback: cuando el paso es distinto a 1 y '3_5', devolver "Contrato firmado"
+            if ($step != 1 && $step != '3_5') {
+                $config = ['name' => 'Contrato firmado'];
+            }
         }
        
 
