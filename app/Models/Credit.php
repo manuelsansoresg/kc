@@ -458,7 +458,16 @@ class Credit extends Model
         $users        = array();
         
 
-        $get_list = HistoryLog::where('status_id', HistoryLog::SOLICITUD);
+        $get_list = HistoryLog::select(
+            'history_logs.id as id',
+            'history_logs.id_rel as id_rel',
+            'history_logs.status_id',
+            'history_logs.old_status_id',
+            'history_logs.status',
+            'history_logs.created_at',
+            'history_logs.updated_at',
+        )
+                            ->where('status_id', HistoryLog::SOLICITUD);
         if (Auth::user()->hasRole('Cliente inversionista')) {
             $getInvestor = Investor::where('user_id', Auth::user()->id)->first();
             if ($getInvestor != null) {
@@ -482,7 +491,7 @@ class Credit extends Model
         $get_list = $get_list->get();
         
         // Debug: verificar resultado
-
+        //dd($get_list);
         foreach ($get_list as $history) {
             $query            = Credit::find($history->id_rel);
             $client           = $query->creditClientPerson;
