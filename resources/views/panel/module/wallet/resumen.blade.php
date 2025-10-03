@@ -13,10 +13,25 @@
                           <div class="row">
                             <div class="col-6 d-flex align-items-center">
                                 @if ($investor->pending_funding_amount > 0)
-                                    <div class="d-flex align-items-center h-100">
-                                        <span>Importe de créditos en espera de fondeo: {{ format_price($investor->pending_funding_amount) }}</span>
+                                    <div class="card shadow-sm border-0 w-100 my-2">
+                                        <div class="card-body d-flex align-items-center justify-content-between py-3">
+                                            <div>
+                                                <div class="text-muted small mb-1">Importe de créditos en espera de fondeo</div>
+                                                <div class="h4 mb-0">{{ format_price($investor->pending_funding_amount) }}</div>
+                                            </div>
+                                            <span class="badge bg-info text-dark">Pendiente</span>
+                                        </div>
                                     </div>
                                 @endif
+                                <div class="card shadow-sm border-0 w-100 my-2">
+                                        <div class="card-body d-flex align-items-center justify-content-between py-3">
+                                            <div>
+                                                <div class="text-muted small mb-1">Importe de créditos en espera de fondeo</div>
+                                                <div class="h4 mb-0">{{ format_price($investor->pending_funding_amount) }}</div>
+                                            </div>
+                                            <span class="badge bg-info text-dark">Pendiente</span>
+                                        </div>
+                                    </div>
                             </div>
                             <div class="col-6 d-flex align-items-center justify-content-end">
                                 <div class="d-flex align-items-center h-100">
