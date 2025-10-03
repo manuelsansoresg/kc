@@ -72,8 +72,8 @@ class InvestorsCredit extends Model
         // ✅ 6. Actualizar balances y reintentar fondeo por inversionista
         foreach ($investorIds as $investorId) {
             Investor::updateInvestorData($investorId);
-            InvestorsCredit::fundCredits($financialProductId);
         }
+        InvestorsCredit::fundCredits($financialProductId);
 
         return true;
     }
@@ -98,6 +98,7 @@ class InvestorsCredit extends Model
         $canFund = true;
     
         foreach ($credits as $credit) {
+            InvestorsCredit::where('credit_id', $credit->id)->delete();
             $amountRequired = $credit->applied_import;
             $loanTotalAmount = $credit->applied_loan_total_amount;
     
