@@ -413,10 +413,21 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
         $getFile = File::where([
                 'model' => File::MODEL['wallet'],
                 'id_rel' => $id_rel,
+                'template_config_id' => 1,
+                'step' => 1,
+        ])->orderBy('id', 'DESC')->first();
+        
+        $getFileComprobante = File::where([
+                'model' => File::MODEL['wallet'],
+                'id_rel' => $id_rel,
                 'template_config_id' => 2,
                 'step' => 2,
         ])->orderBy('id', 'DESC')->first();
+
+        
         $file = $getFile != null ? '<a href="'.url('files_upload/'.$getFile->name).'" target="_blank">Ver comprobante</a>' : null;
+        $fileComprobante = $getFileComprobante != null ? '<a href="'.url('files_upload/'.$getFileComprobante->name).'" target="_blank">Ver evidencia</a>' : null;
+        
         
         $urlRedirect = '/panel/kc-wallet';
         $elements = array(
@@ -447,7 +458,36 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                    
                 )
             ],
+
             2 => [
+                'title_section' => 'Verificar evidencia',
+                'title' => null,
+                'name_field' => null,
+                'id_field' => null,
+                'comment_admin' => null,
+                'comment_webApp' => null,
+                'placeholder' => null,
+                'type' => null,
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => null,
+                'is_disabled' => null,
+                'childs' => array(
+                    0 => array(
+                        'link' => null,
+                        'type' => 'div',
+                        'name' => 'Valida',
+                        'name_field' =>  $fileComprobante,
+                        'class' => null,
+                        'onclick' => null,
+                        'value' => 1,
+                        'is_required' => true,
+                    ),
+                   
+                )
+            ],
+
+            3 => [
                 'title_section' => null,
                 'title' => 'Confirmar transferencia',
                 'name_field' => 'transaction[operation_status]',
@@ -461,7 +501,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
-            3 => [
+            4 => [
                'title_section' => null,
                 'title' => 'Evidencia de transferencia',
                 'subtitle' => '',
@@ -477,7 +517,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'is_required' => true,
                 'is_disabled' => null
             ],
-            4 => [
+            5 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
@@ -493,7 +533,7 @@ class KCWalletAddStregegyTemplate implements TemplateInterface
                 'value' => $urlRedirect,
                 'col' => 'col-12'
             ],
-            5 => [
+            6 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'data[id_rel]',
