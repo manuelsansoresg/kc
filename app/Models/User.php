@@ -221,6 +221,8 @@ class User extends Authenticatable
                 // Asignar nuevos permisos basados en los checkboxes
                 if ($request->has('permission_administracion') && $request->permission_administracion == '1') {
                     $user->givePermissionTo('Administración');
+                    $user->givePermissionTo('Gestionar colaboradores');
+                    $user->givePermissionTo('Otorgar Vo.Bo');
                 }
                 
                 if ($request->has('permission_gestionar_colaboradores') && $request->permission_gestionar_colaboradores == '1') {

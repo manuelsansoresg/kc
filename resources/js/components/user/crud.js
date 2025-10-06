@@ -421,11 +421,11 @@ window.modalPasswod = function (user_id) {
 $(document).on('change', '#permission_administracion', function() {
     if ($(this).is(':checked')) {
         // Bloquear y desmarcar los otros checkboxes
-        $('#permission_gestionar_colaboradores').prop('checked', false).prop('disabled', true);
-        $('#permission_otorgar_vobo').prop('checked', false).prop('disabled', true);
+        $('#permission_gestionar_colaboradores').prop('checked', true).prop('disabled', true);
+        $('#permission_otorgar_vobo').prop('checked', true).prop('disabled', true);
     } else {
         // Habilitar los otros checkboxes
-        $('#permission_gestionar_colaboradores').prop('disabled', false);
-        $('#permission_otorgar_vobo').prop('disabled', false);
+         $('#permission_gestionar_colaboradores').prop('checked', false).prop('disabled', false);
+        $('#permission_otorgar_vobo').prop('checked', false).prop('disabled', false);
     }
 });
