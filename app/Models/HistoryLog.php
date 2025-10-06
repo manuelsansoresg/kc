@@ -233,7 +233,7 @@ class HistoryLog extends Model
         18 => 'Rechazado',
         19 => 'En curso',
         20 => 'Nuevo crédito en KC - Check up',
-        22 => 'Cargar Anverso INE',
+        22 => 'Anverso INE',
         23 => 'Reverso INE',
         24 => 'Última nómina',
         25 => '',

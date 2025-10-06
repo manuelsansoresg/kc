@@ -550,7 +550,7 @@
                                                                     $nombre = $client->id.'-'.$client->name.' '.$client->last_name.' '.$client->second_last_name.' contrato SOD.pdf';
                                                                 @endphp
                                                                 <tr>
-                                                                    <td><a href="{{ asset('firma_contratos/'.$nombre) }}" >{{ $nombre }}</a></td>
+                                                                    <td><a href="{{ asset('firma_contratos/'.$nombre) }}" target="_blank">{{ $nombre }}</a></td>
                                                                     <td><a href="{{ asset('firma_contratos/'.$nombre) }}" download>Descargar</a></td>
                                                                 </tr>
                                                             @endif

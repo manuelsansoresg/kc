@@ -5054,7 +5054,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         for ($i = 1; $i <= 3; $i++) {
             
             $data[] = [
-                'name' => "{$i}- " . ($i === 1 ? 'Cargar Anverso INE' : ($i === 2 ? 'Reverso INE' : 'Última nómina')),
+                'name' => "{$i}- " . ($i === 1 ? 'Anverso INE' : ($i === 2 ? 'Reverso INE' : 'Última nómina')),
                 'subject' => $subjects[$i],
                 'helpText' => $helpText[$i],
                 'status' => $statuses[$i],
@@ -6343,7 +6343,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         if ($step == 1) {
             $elements = array(
                 1 => [
-                    'name' => 'Cargar Anverso INE',
+                    'name' => 'Anverso INE',
                 ],
                 2 => [
                     'name' => 'Reverso INE',
