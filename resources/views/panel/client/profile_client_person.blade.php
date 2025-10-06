@@ -246,7 +246,7 @@
                                                                 
                                                                 
                                                                 <td>
-                                                                    {{ formatDateNameMonth($client_person->created_at, false) }}
+                                                                    {{ formatDateNameMonth($credit->created_at, false) }}
                                                                 </td>
                                                                 <td>
                                                                     <a href="/panel/credit/{{ $credit->id }}">Abrir</a>
