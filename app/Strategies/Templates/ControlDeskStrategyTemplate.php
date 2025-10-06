@@ -1313,8 +1313,40 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
         );
 
-        // Add conditional elements based on clabe_ownership
+        // Add conditional element 6 based on clabe_ownership
         if ($client->clabe_ownership == 1) {
+            //mostrar archivo adjunto si esta validado 
+            $path       = File::PATH;
+            $getFile = File::where([
+                'model' => 21,
+                'id_rel' => $credit->id,
+                'template_config_id' => 4,
+                'step' => '3_5',
+                'client_id' => $client->id,
+            ])->orderBy('id', 'DESC')->first();
+            $file_validate =  $getFile != null ? '<a href="/'.$path.'/'.$getFile->name.'" target="_blank">Ver CEP</a>' : 'No hay archivo adjunto';
+
+            $elements[2] = [
+                'title_section' => null,
+                'title' => null,
+                'name_field' => '',
+                'content' => $file_validate,
+                'id_field' => '',
+                'comment_admin' => '',
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'div',
+                'is_option_array' => false,
+                'options' => 'null',
+                'is_required' => false,
+                'is_disabled' => null,
+                'value' => 'controlDesk',
+                'col' => 'col-12'
+            ];
+        }
+
+        // Add conditional elements based on clabe_ownership
+        if ($client->clabe_ownership != 1) {
             $elements[2] = [
                 'title_section' => null,
                 'title' => 'CEP',
@@ -1406,8 +1438,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             'col' => 'col-12'
         ];
 
-        // Add conditional element 6 based on clabe_ownership
-        if ($client->clabe_ownership == 1) {
+        
+        if ($client->clabe_ownership != 1) {
             $elements[6] = [
                 'title_section' => null,
                 'title' => null,
