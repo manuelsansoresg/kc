@@ -12,4 +12,9 @@ class InvestorProduct extends Model
         'financial_products_id',
         'investor_id',
     ];
+
+    public function investor()
+    {
+        return $this->belongsTo(Investor::class, 'investor_id');
+    }
 }
