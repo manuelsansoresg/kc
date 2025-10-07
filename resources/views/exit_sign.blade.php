@@ -16,6 +16,7 @@
             <div class="col-12 mb-3">
                 @if (isset($type) && $type == 1)
                     <h5>Contrato firmado correctamente</h5>
+                    <p>Te contactaremos en breve para continuar con el trámite</p>
                     @else
                     <h5>Contrato no firmado</h5>
                 @endif

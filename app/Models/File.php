@@ -48,7 +48,7 @@ class File extends Model
     }
 
 
-    public static function saveCep($request, $creditId)
+    public static function saveCep($request, $creditId, $step_file = '3_5')
     {
         $getCredit = Credit::where('id', $creditId)->first();
         $client = ClientPerson::where('id', $getCredit->client_person_id)->first();
@@ -64,7 +64,7 @@ class File extends Model
             // Genera una cadena aleatoria de 3 caracteres
             $randomString = self::generateRandomString(3);
             // Construye el nombre completo del archivo con la cadena aleatoria
-            $name_full = $id_rel . '-' . $client->name . $client->last_name . $client->second_last_name . ' CEP_' . $randomString . '.' . $originalExtension;
+            $name_full = $id_rel . '-' . $client->name . $client->last_name . $client->second_last_name . 'CEP_' . $randomString . '.' . $originalExtension;
 
             $path       = File::PATH;
             
@@ -74,7 +74,7 @@ class File extends Model
                     'model' => $model,
                     'id_rel' => $id_rel,
                     'template_config_id' => $template_config_id,
-                    'step' => '3_5',
+                    'step' => $step_file,
                     'client_id' => $client_id,
                 );
                 
