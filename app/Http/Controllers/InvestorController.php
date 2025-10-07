@@ -50,6 +50,7 @@ class InvestorController extends Controller
      */
     public function show($id)
     {
+        Investor::updateInvestorData($id);
         $investor = Investor::find($id);
         $getUser = User::find(Auth::user()->id);
         $getPermission = $getUser->can('Gestionar colaboradores') ;

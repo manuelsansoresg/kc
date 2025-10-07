@@ -94,7 +94,14 @@ class InvestorsCredit extends Model
             ->orderBy('created_at', 'asc')
             ->get();
     
-        $investorProducts = InvestorProduct::where('financial_products_id', $financialProductId)->get();
+        // Eager load investors to have a stateful collection
+        $investorProducts = InvestorProduct::where('financial_products_id', $financialProductId)->with('investor')->get();
+        $activeInvestors = $investorProducts->map(function ($invProd) {
+            return $invProd->investor;
+        })->filter(function ($investor) {
+            return $investor && $investor->loan_active == 1;
+        });
+    
         $canFund = true;
     
         foreach ($credits as $credit) {
@@ -105,9 +112,9 @@ class InvestorsCredit extends Model
             if ($canFund && $availablePool >= $amountRequired) {
                 $assignedSum = 0;
     
-                foreach ($investorProducts as $invProd) {
-                    $investor = Investor::find($invProd->investor_id);
-                    if (!$investor || $investor->loan_active != 1) {
+                // Use the stateful collection of active investor objects
+                foreach ($activeInvestors as $investor) {
+                    if ($investor->loan_available <= 0) { // Skip if they have no funds left
                         continue;
                     }
     
@@ -116,23 +123,30 @@ class InvestorsCredit extends Model
                     $percent = min($percent, 100);
     
                     $import = ($percent * $amountRequired) / 100;
-                    $totalCredit = ($percent * $loanTotalAmount) / 100;
+                    // Ensure investor does not contribute more than they have
+                    $import = min($import, $investor->loan_available);
+    
+                    // Recalculate percentage based on the actual import amount, handling division by zero
+                    $final_percent = $amountRequired > 0 ? ($import / $amountRequired) * 100 : 0;
+                    $totalCredit = ($final_percent * $loanTotalAmount) / 100;
     
                     InvestorsCredit::create([
                         'credit_id'       => $credit->id,
                         'investor_id'     => $investor->id,
-                        'percentage'      => $percent,
+                        'percentage'      => $final_percent,
                         'import'          => $import,
                         'total_credit'    => $totalCredit,
                         'commission_rate' => $financialProduct->collection_commission_rate,
                         'status'          => 2,
                     ]);
     
+                    // Update the local investor object's available funds for the next credit iteration
+                    $investor->loan_available -= $import;
                     $assignedSum += $import;
                 }
     
                 $availablePool -= $assignedSum;
-                $credit->funding_capital = $amountRequired;
+                $credit->funding_capital = $assignedSum; // Use assignedSum to reflect actual funded amount
                 $credit->status = 2;
                 $credit->save();
                 $statusSOD = 1;
@@ -165,7 +179,7 @@ class InvestorsCredit extends Model
         }
     
         // ✅ Recalcular balances finales tras fondeo
-        $investorIds = $investorProducts->pluck('investor_id')->unique();
+        $investorIds = $activeInvestors->pluck('id')->unique();
         foreach ($investorIds as $invId) {
             Investor::updateInvestorData($invId);
         }
