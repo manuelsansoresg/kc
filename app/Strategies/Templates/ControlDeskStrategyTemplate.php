@@ -1521,8 +1521,24 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'is_disabled' => null,
             ],
             
+           2 => [
+                'title_section' => null,
+                'title' => 'CEP',
+                'subtitle' => 'Adjunta el comprobante electrónico de pago',
+                'name_field' => 'cep',
+                'id_field' => '1',
+                'is_required' => true,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'file',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+           ],
             
-            2 => [
+            3 => [
                 'title_section' => null,
                 'title' => '*Pertenencia de cuenta',
                 'subtitle' => 'Indica si la clabe pertenece al cliente',
@@ -1562,7 +1578,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             ],
             
            
-            3 => [
+            4 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
@@ -1578,7 +1594,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
                 'col' => 'col-12'
             ],
-            4 => [
+            5 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect_next',
@@ -4510,7 +4526,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                         
                         $alias = 'Validar clabe '.$getTask3['alias'];
                         $percenttDynamicStep3  = self::DynamicPercentStep3($credit->id, $labelValidate, 0 , $alias);
+                        
                         CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null, false, 1, $alias);
+                        //guardar cep
+                        $step_file = $step.'_'.$task;
+                        File::saveCep($request, $credit->id, $step_file);
+                        
                         if ($percenttDynamicStep3 == 100) {
                             HistoryLog::where([
                                 'is_credit' => 1,
