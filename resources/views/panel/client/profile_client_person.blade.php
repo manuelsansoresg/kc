@@ -258,7 +258,15 @@
                                                 </table>
                                             </div>
                                             <div class="tab-pane {{ $tab == 'documents' ? 'active' : null}}" id="tabDocuments">
+                                                <table class="table table-tranx">
+                                                        <thead>
+                                                            <tr class="tb-tnx-head">
+                                                                <th class="tb-tnx-id"><span class="">Documento</span></th>
+                                                                <th class="tb-tnx-info">
+                                                                </th>
 
+                                                            </tr>
+                                                        </thead>
                                                 @php
                                                     $files = $m_file->getFileClients($client->id);
                                                 @endphp
@@ -272,7 +280,10 @@
                                                     $path = $file->step == '3_5' || ($file->template_config_id == 4 && $file->model == 21 &&  $step == '3' ) ? 'files_upload/' : 'firma_contratos/';
                                                     
                                                 @endphp
-                                                    <a href="{{ asset($path.$file->name) }}" target="_blank">{{ $file->name }}</a>  <br>
+                                                 <tr>
+                                                    <td><a href="{{ asset($path.$file->name) }}" target="_blank">{{ $file->name }}</a></td>
+                                                    <td><a href="{{ asset($path.$file->name) }}" download>Descargar</a></td>
+                                                </tr>
                                                 @endforeach
                                                 {{-- @if ($client->cm_agreement != null)
                                                 @php
@@ -280,6 +291,7 @@
                                                 @endphp
                                                     <a href="{{ asset('firma_contratos/'.$nombre) }}" target="_blank">{{ $nombre }}</a>
                                                 @endif --}}
+                                                </table>
                                             </div>
                                             
                                         </div>
