@@ -32,7 +32,7 @@
     $tipo_credito         = isset(config('financial_enums.type_products')[$credit->tipo_credito]) ? config('financial_enums.type_products')[$credit->tipo_credito]  : null;
 
     //TODO: hacer que al pasar de prospecto a credito cambiar el model
-    $files = $m_file->getByIdRelandModel($credit->id, [$m_history_log::KC_CHECK_UP, $m_history_log::KC_CONTROL_DESK, $m_history_log::KC_CHECK_UP_DEBT_REDUCTION, $m_history_log::KC_SWAP, $m_history_log::KC_DELIVERY]);
+    $files = $m_file->getByIdRelandModel($credit->id, [$m_history_log::KC_CHECK_UP, $m_history_log::KC_CONTROL_DESK, $m_history_log::KC_CHECK_UP_DEBT_REDUCTION, $m_history_log::KC_SWAP, $m_history_log::KC_DELIVERY], null, true);
     $path = $m_file::PATH;
     
     $status = array(
@@ -554,11 +554,19 @@
                                                                     <td><a href="{{ asset('firma_contratos/'.$nombre) }}" download>Descargar</a></td>
                                                                 </tr>
                                                             @endif
-                                                            
                                                             @foreach ($files as $file)
+                                                            @php
+                                                                $parts = explode('_', $file['step']);
+                                                                // El primer elemento siempre será el nuevo valor de $step
+                                                                $step = $parts[0];
+                                                                // $task será el segundo elemento si existe, de lo contrario será null
+                                                                $task = (count($parts) > 1) ? $parts[1] : null;
+                                                                $new_path = $file['template_config_id'] == 4 && $file['model'] == 21 &&  $step == '3' ? 'files_upload' : $path;
+                                                                $name_file = $file['template_config_id'] == 4 && $file['model'] == 21 &&  $step == '3' ? $file['name'] : $file['name_template'];
+                                                            @endphp
                                                             <tr class="tb-tnx-item">
                                                                 <td class="tb-tnx-id">
-                                                                    <a href="{{ asset($path.'/'.$file['name']) }}">{{ $file['name_template'] }}</a>
+                                                                    <a href="{{ asset($path.'/'.$file['name']) }}">{{ $name_file }}</a>
                                                                 </td>
                                                                 <td class="tb-tnx-info">
                                                                     @php
@@ -573,6 +581,8 @@
                                                                         if (!empty($ext)) {
                                                                             $downloadName = $suggested;
                                                                         }
+
+                                                                        
                                                                     @endphp
                                                                     <a href="{{ asset($path.'/'.$file['name']) }}" download="{{ $downloadName }}">Descargar</a>
 

@@ -134,10 +134,13 @@ class File extends Model
         return $files;
     }
     
-    public static function getByIdRelandModel($id_rel, $models, $template_id = null)
+    public static function getByIdRelandModel($id_rel, $models, $template_id = null, $is_client_null = false)
     {
         //dd($models);
-        $files = File::where(['id_rel' => $id_rel])->whereIn('model', $models)->where('client_id', null);
+        $files = File::where(['id_rel' => $id_rel])->whereIn('model', $models);
+        if ($is_client_null == false) {
+            $files->where('client_id', null);
+        }
         if ($template_id != null) {
             $files->whereIn('template_config_id', $template_id);
         }
@@ -148,7 +151,7 @@ class File extends Model
             $fileStrategy   = TemplateValues::STRATEGY[HistoryLog::$name_model[$file->model]];
             $get_file       = (new $fileStrategy)->getFile($file->template_config_id, $file->id_rel, $file->step);
             if (isset( $get_file['name'])) {
-                $new_file[] = array('name_template' => $get_file['name'], 'name' => $file->name);
+                $new_file[] = array('name_template' => $get_file['name'], 'name' => $file->name, 'step' => $file->step, 'template_config_id' => $file->template_config_id, 'model' => $file->model);
             }
         }
         return $new_file;

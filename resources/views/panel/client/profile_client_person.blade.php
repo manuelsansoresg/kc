@@ -272,12 +272,8 @@
                                                 @endphp
                                                 @foreach ($files as $file)
                                                 @php
-                                                    $parts = explode('_', $file->step);
-                                                    // El primer elemento siempre será el nuevo valor de $step
-                                                    $step = $parts[0];
-                                                    // $task será el segundo elemento si existe, de lo contrario será null
-                                                    $task = (count($parts) > 1) ? $parts[1] : null;
-                                                    $path = $file->step == '3_5' || ($file->template_config_id == 4 && $file->model == 21 &&  $step == '3' ) ? 'files_upload/' : 'firma_contratos/';
+                                                    
+                                                    $path = $file->step == '3_5'  ? 'files_upload/' : 'firma_contratos/';
                                                     
                                                 @endphp
                                                  <tr>
