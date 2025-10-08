@@ -18,8 +18,8 @@ class Slack
 
     public function sendMessage()
     {
-        /* Notification::route('slack', $this->hook)
-            ->notify(new SlackNotification($this->title, $this->message)); */
+        Notification::route('slack', $this->hook)
+            ->notify(new SlackNotification($this->title, $this->message));
     }
 
 }
