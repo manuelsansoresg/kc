@@ -216,7 +216,7 @@ class Credit extends Model
                 'iva_commission'    => $ivaCommission,
                 'total_balance'     => $col->saldo_total_real * $p,
                 'credit_status'     => $col->status,
-                'refinanciable'     => $col->refinanciable,
+                //'refinanciable'     => $col->refinanciable,
                 'status'            => $newStatus,
             ]);
     
@@ -289,6 +289,13 @@ class Credit extends Model
         if (!$getCredit) {
             return;
         }
+
+        $refinanciable = 0;
+        if ($getCredit->status == 4 && $getCredit->applied_loan_total_amount > 0 && ($getCredit->total_collected / $getCredit->applied_loan_total_amount) > 0.25 && $getCredit->placed_capital > 1) {
+            $refinanciable = 1;
+        }
+        $getCredit->refinanciable = $refinanciable;
+        $getCredit->save();
 
         $clientPersonId = $getCredit->client_person_id;
 
