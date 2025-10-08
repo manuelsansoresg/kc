@@ -115,6 +115,10 @@ class Credit extends Model
         'refinance_adjustment',
         'third_party_adjustment',
         'net_amount',
+        'placed_capital',
+        'recovered_capital',
+        'total_balance',
+        'total_collected',
         'tramit_type',
         
         'payroll_date',
@@ -173,8 +177,15 @@ class Credit extends Model
     public static function setDataPago($creditId)
     {
         // 1) obtengo colección
-        $col = AgreementCollection::where('credit_id', $creditId)->first();
+        $col = agreementCollection::where('credit_id', $creditId)->first();
         if (!$col) return;
+
+        Credit::where('id', $col->kc_credit_id)->update([
+            'placed_capital' => $col->saldo_insoluto_real,
+            'recovered_capital' => $col->abono_acumulado_real,
+            'total_balance' => $col->saldo_total_real,
+            'total_collected' => $col->pago_acumulado_real,
+        ]);
     
         // 2) obtengo todos los investors_credits de este crédito KAAX
         $ics = InvestorsCredit::where('credit_id', $col->kc_credit_id)->get();

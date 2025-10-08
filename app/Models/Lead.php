@@ -61,6 +61,8 @@ class Lead extends Model
         'go_ahead',
         'selected_term',
         'selected_loan',
+        'selected_payment',
+        'selected_total_credit',
         'plazo_maximo',
         'monto_maximo',
         'pago_maximo',

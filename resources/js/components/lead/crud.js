@@ -1145,6 +1145,8 @@ window.getResumen = function()
         let productoFinanciero = $('#financial_product_id').val();
         $('#selected_term').val(plazo);
         $('#selected_loan').val(result.montoSolicitado_sf);
+        $('#selected_payment').val(pagoPeriodicoSF);
+        $('#selected_total_credit').val(result.pagoTotalSF);
         $('#applied_financial_product').val(productoFinanciero);
 
         $('#content-monto-solicitado').html(montoSolicitado);
