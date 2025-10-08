@@ -929,7 +929,7 @@ class LeadController extends Controller
             $credit->alias = $statusEnum[$credit->status] ?? 'N/A';
         });
         
-        $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
+        $productoDeseado =  \View::make('panel.credit.listRefinanciable', ['credits' => $getCollection, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
         
         if ($financialProduct->max_term != null) {
             $terms = FpTerm::select('terms.id', 'terms.term')
