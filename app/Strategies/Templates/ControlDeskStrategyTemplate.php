@@ -1083,10 +1083,27 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'step' => 0.01,
                 'col' => 'col-6',
             ],
+
+            3 => [
+                'title_section' => null,
+                'title' => 'Evidencia capacidad  de pago',
+                'subtitle' => '&nbsp;',
+                'name_field' => 'file',
+                'id_field' => '1',
+                'is_required' => true,
+                'comment_admin' => null,
+                'comment_webApp' =>  null,
+                'placeholder' => '',
+                'type' => 'file',
+                'is_option_array' => false,
+                'options' => null,
+                'is_required' => true,
+                'is_disabled' => null
+            ],
             
             
            
-            3 => [
+            4 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect',
@@ -1102,7 +1119,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 'value' => '/panel/template/steps/controlDesk/' . $history_id . '/show',
                 'col' => 'col-12'
             ],
-            4 => [
+            
+            5 => [
                 'title_section' => null,
                 'title' => null,
                 'name_field' => 'url_redirect_next',
@@ -4425,6 +4443,32 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                             HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, null, false);
                             HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK4_STEP3, $credit->id, 0);
                         }
+                        $step_task = $step.'_'.$task;
+                        // Preparar request para subir archivo asociado a esta tarea/etapa
+                        // Asegurar que el request incluya el 'step' esperado por File::upload
+                        try {
+                            if (method_exists($request, 'request')) {
+                                $request->request->set('step', $step_task);
+                            } else {
+                                // Fallback: asignación directa si no es un Illuminate Request
+                                $request->step = $step_task;
+                            }
+
+                            // Si viene la imagen bajo otro nombre (p.ej. 'image'), mapearla a 'file'
+                            if (method_exists($request, 'file')) {
+                                $image = $request->file('image');
+                                if ($image) {
+                                    if (property_exists($request, 'files') && method_exists($request->files, 'set')) {
+                                        $request->files->set('file', $image);
+                                    }
+                                }
+                            }
+                            //dd(File::MODEL['controlDesk'], $credit->id, $request, 3);
+                            // Subir archivo al modelo controlDesk (21) con template_config_id = 3
+                            File::upload(File::MODEL['controlDesk'], $credit->id, $request, 3);
+                        } catch (\Exception $e) {
+                            // Evitar romper el flujo si falla la carga; registrar si se requiere
+                        }
                     }
 
                     if ($task == 4) {
@@ -6356,6 +6400,14 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
     public function getFile($template_config_id, $creditId = null,  $step = null)
     {
+        // Priorizar retornos directos para pasos específicos
+        if ($step === '3_3') {
+            return ['name' => 'Evidencia CP'];
+        }
+        if ($step === '3_5') {
+            return ['name' => 'CEP'];
+        }
+
         /* $taks = self::ElementsTaskStep1($history_id, null);
         $templateId = $step -1;
         $task = $taks[$templateId];
@@ -6387,12 +6439,6 @@ class ControlDeskStrategyTemplate implements TemplateInterface
             }
             /* $dynamicIndex = 4;
             'name' => "{$dynamicIndex}- Capturar {$creditPayOff->name}", */
-        } elseif ($step == '3_5') {
-            $elements = array(
-               4 => [
-                    'name' => 'CEP',
-                ],
-            );
         } else {
             $elements = array(
                 1 => [
@@ -6406,12 +6452,12 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
 
         $config = null;
-        // Selecciona configuración si existe; en caso contrario, aplica un fallback para step ≠ 1 y ≠ '3_5'
+        // Selecciona configuración si existe; en caso contrario, aplica fallback para pasos distintos a 1
         if (isset($elements[$template_config_id])) {
             $config = $elements[$template_config_id];
         } else {
-            // Fallback: cuando el paso es distinto a 1 y '3_5', devolver "Contrato firmado"
-            if ($step != 1 && $step != '3_5') {
+            // Fallback: cuando el paso es distinto a 1, devolver "Contrato firmado"
+            if ($step != 1) {
                 $config = ['name' => 'Contrato firmado'];
             }
         }

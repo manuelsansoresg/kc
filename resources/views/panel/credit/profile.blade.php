@@ -563,7 +563,11 @@
                                                                 $task = (count($parts) > 1) ? $parts[1] : null;
                                                                 $new_path = $file['template_config_id'] == 4 && $file['model'] == 21 &&  $step == '3' ? 'files_upload' : $path;
                                                                 $name_file = $file['template_config_id'] == 4 && $file['model'] == 21 &&  $step == '3' ? $file['name'] : $file['name_template'];
+                                                                $$name_file = $file['step'] == '3_3' ? $file['name_template'] : $name_file;
                                                             @endphp
+                                                            @if ($file['step'] == '3_3')
+                                                                {{ $file['name_template'] }}
+                                                            @endif
                                                             <tr class="tb-tnx-item">
                                                                 <td class="tb-tnx-id">
                                                                     <a href="{{ asset($path.'/'.$file['name']) }}">{{ $name_file }}</a>
