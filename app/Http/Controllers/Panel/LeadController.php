@@ -912,11 +912,11 @@ class LeadController extends Controller
         
         $productoDeseado     = null;
 
-        $getCollection = Credit::select(
-                                'id as kc_credit_id',
-                                'collection_date as fecha_cobro',
-                                'applied_payment as descuento',
-                                'placed_capital as saldo_insoluto_real',
+        $credits = Credit::select(
+                                'id',
+                                'collection_date',
+                                'applied_payment',
+                                'placed_capital',
                                 'status'
                             )
                             ->where('client_person_id', $clientPerson->id)
@@ -925,11 +925,11 @@ class LeadController extends Controller
                             ->get();
 
         $statusEnum = config('enums.investorsCreditsStatus');
-        $getCollection->each(function($credit) use ($statusEnum) {
+        $credits->each(function($credit) use ($statusEnum) {
             $credit->alias = $statusEnum[$credit->status] ?? 'N/A';
         });
         
-        $productoDeseado =  \View::make('panel.credit.listRefinanciable', ['credits' => $getCollection, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
+        $productoDeseado =  \View::make('panel.credit.listRefinanciable', ['credits' => $credits, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
         
         if ($financialProduct->max_term != null) {
             $terms = FpTerm::select('terms.id', 'terms.term')
@@ -967,10 +967,10 @@ class LeadController extends Controller
        
 
         foreach ($credits as $credit) {
-            $getCollection = Collection::find($credit);
-            if ($getCollection != null) {
-                $descuento += $getCollection->descuento;
-                $total += $getCollection->saldo_insoluto_real;
+            $creditModel = Credit::find($credit);
+            if ($creditModel != null) {
+                $descuento += $creditModel->applied_payment;
+                $total += $creditModel->placed_capital;
             }
         }
         if ($tramitType == 3) { //refinanciamiento

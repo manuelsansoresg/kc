@@ -15,17 +15,17 @@
                 @endphp
                 @foreach ($credits as $credit)
                     @php
-                        $total += $credit->saldo_insoluto_real;
+                        $total += $credit->placed_capital;
                     @endphp
                     <tr>
                         <td> <input type="checkbox" name="credits[]" id="{{ $credit->id }}" value="{{ $credit->id }}" checked >  </td>
-                        <td> {{ $credit->kc_credit_id }} </td>
-                        <td> {{ date('d-m-Y', strtotime($credit->fecha_cobro)) }} </td>
+                        <td> {{ $credit->id }} </td>
+                        <td> {{ date('d-m-Y', strtotime($credit->collection_date)) }} </td>
                         <td> 
-                            {{ $credit->descuento }} 
+                            {{ $credit->applied_payment }} 
                         </td>
                         <td> {{ $credit->alias }} </td>
-                        <td> {{ $credit->saldo_insoluto_real }}  </td>
+                        <td> {{ $credit->placed_capital }}  </td>
                     </tr>
                 @endforeach
                 <tr>
