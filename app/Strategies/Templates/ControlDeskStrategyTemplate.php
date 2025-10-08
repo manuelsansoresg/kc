@@ -1086,8 +1086,8 @@ class ControlDeskStrategyTemplate implements TemplateInterface
 
             3 => [
                 'title_section' => null,
-                'title' => 'Evidencia capacidad  de pago',
-                'subtitle' => '&nbsp;',
+                'title' => 'Evidencia capacidad de pago',
+                'subtitle' => 'Evidencia de cálculo',
                 'name_field' => 'file',
                 'id_field' => '1',
                 'is_required' => true,
