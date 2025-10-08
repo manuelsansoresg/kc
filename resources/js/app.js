@@ -53,7 +53,43 @@ require('./components/resumen');
 window.moveElement = function (section, id, idDatatable) {
      // Deshabilita el botón para evitar clics múltiples
      const button = document.querySelector('.moveElement');
-     button.disabled = true;
+     if (button) {
+        button.disabled = true;
+     }
+
+    // Mostrar overlay de carga global
+    const styleId = 'kc-global-loading-style';
+    let styleEl = document.getElementById(styleId);
+    if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = styleId;
+        styleEl.textContent = `
+            @keyframes kc-rotate { to { transform: rotate(360deg); } }
+            #kc-global-loading .spinner { width: 40px; height: 40px; border: 4px solid #fff; border-top-color: transparent; border-radius: 50%; animation: kc-rotate 0.8s linear infinite; }
+            #kc-global-loading .text { color: #fff; font-size: 14px; margin-top: 12px; }
+        `;
+        document.head.appendChild(styleEl);
+    }
+
+    const overlayId = 'kc-global-loading';
+    let overlay = document.getElementById(overlayId);
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = overlayId;
+        overlay.setAttribute('style','position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.35);z-index:9999;');
+        const container = document.createElement('div');
+        container.setAttribute('style','display:flex;flex-direction:column;align-items:center;');
+        const spinner = document.createElement('div');
+        spinner.className = 'spinner';
+        const text = document.createElement('div');
+        text.className = 'text';
+        text.textContent = 'Procesando...';
+        container.appendChild(spinner);
+        container.appendChild(text);
+        overlay.appendChild(container);
+        document.body.appendChild(overlay);
+    }
+    overlay.style.display = 'flex';
 
     axios
     .get("/panel/"+section+"/"+id+"/move")
@@ -69,7 +105,12 @@ window.moveElement = function (section, id, idDatatable) {
     })
     .finally(() => {
         // Habilita el botón nuevamente después de que se complete la solicitud Axios
-        button.disabled = false;
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+        if (button) {
+            button.disabled = false;
+        }
     });
     
 }
