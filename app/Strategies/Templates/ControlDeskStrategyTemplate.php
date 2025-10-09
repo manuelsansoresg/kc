@@ -5131,7 +5131,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
 
         // Handle dynamic tasks
-        $CreditPayOff = CreditPayOff::select('financial_products.name')
+        $CreditPayOff = CreditPayOff::select('financial_products.name', 'credit_pay_off.kc_credit_id_payed_off')
             ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
             ->where(['new_kc_credit_id' => $credit->id])
             ->get();
@@ -5144,8 +5144,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 $currentTaskInProgress = true;
             }
 
+            $taskName = "{$dynamicIndex}- Cotización {$creditPayOff->name}";
+            if ($creditPayOff->kc_credit_id_payed_off !== null) {
+                $taskName .= " - {$creditPayOff->kc_credit_id_payed_off}";
+            }
+
             $data[] = [
-                'name' => "{$dynamicIndex}- Cotización {$creditPayOff->name}",
+                'name' => $taskName,
                 'subject' => " ".$creditPayOff->name,
                 'helpText' => 'Adjunta el documento '. $creditPayOff->name,
                 'status' => $dynamicStatus,
@@ -5230,7 +5235,7 @@ class ControlDeskStrategyTemplate implements TemplateInterface
         }
 
         // Handle dynamic tasks
-        $CreditPayOff = CreditPayOff::select('credit_pay_off.id', 'financial_products.name')
+        $CreditPayOff = CreditPayOff::select('credit_pay_off.id', 'financial_products.name', 'credit_pay_off.kc_credit_id_payed_off')
             ->join('financial_products', 'financial_products.id', 'credit_pay_off.financial_product_id')
             ->where(['new_kc_credit_id' => $credit->id])
             ->get();
@@ -5245,8 +5250,13 @@ class ControlDeskStrategyTemplate implements TemplateInterface
                 $currentTaskInProgress = true;
             }
 
+            $taskName = "{$dynamicIndex}- Capturar {$creditPayOff->name}";
+            if ($creditPayOff->kc_credit_id_payed_off !== null) {
+                $taskName .= " - {$creditPayOff->kc_credit_id_payed_off}";
+            }
+
             $data[] = [
-                'name' => "{$dynamicIndex}- Capturar {$creditPayOff->name}",
+                'name' => $taskName,
                 'subject' => " ".$creditPayOff->name,
                 'helpText' => null,
                 'status' => $dynamicStatus,

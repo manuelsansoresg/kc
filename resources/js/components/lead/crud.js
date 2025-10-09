@@ -1118,10 +1118,11 @@ window.getResumen = function()
     let totalRefinanciable = $('#total-refinanciable').val();
     let tramit_type = $('#tramit_type').val();
     let typeProductId = $('#typeProductId').val();
+    let montoCompraCartera = $('#resumen-deuda-capital').val();
     
     $('#go_ahead').val(0);
     axios
-    .get("/panel/lead/"+productId+"/"+plazo+'/'+(monto || 0)+'/'+(totalRefinanciable || 0)+'/'+tramit_type+'/getResumen'+adicional)
+    .get("/panel/lead/"+productId+"/"+plazo+'/'+(monto || 0)+'/'+(totalRefinanciable || 0)+'/'+tramit_type+'/'+(montoCompraCartera || 0)+'/getResumen'+adicional)
     .then(function (response) {
         let result = response.data;
         let montoSolicitado =  result.montoSolicitado;
