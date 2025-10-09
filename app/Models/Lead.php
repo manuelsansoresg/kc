@@ -554,17 +554,16 @@ class Lead extends Model
         CurrentFinancialProduct::saveEdit($lead->id, $request);
         
         if ($isFullSave == true && $credits != null) {
-            foreach ($credits as $credit) {
-                $collection = Collection::find($credit);
-                $credit = Credit::find($collection->kc_credit_id);
+            foreach ($credits as $credit_id) {
+                $credit = Credit::find($credit_id);
                 $client = ClientPerson::find($credit->client_person_id);
                 $financial_product_id = $credit->applied_financial_product;
-                $importe = $collection->saldo_insoluto_real;
+                $importe = $credit->placed_capital;
                 $validated_clabe = $client->bank_clabe == $client->validated_clabe ? 1 : 0;
                 $dataPayoff = array(
                     'client_person_id' => $data['client_person_id'],
                     'lead_id' => $request->lead_id,
-                    'kc_credit_id_payed_off' => $collection->kc_credit_id,
+                    'kc_credit_id_payed_off' => $credit->id,
                     'financial_product_id' => $financial_product_id,
                     'bank_clabe' => $client->bank_clabe,
                     'bank_clabe_valid' => $validated_clabe,
@@ -573,7 +572,7 @@ class Lead extends Model
                 $existCredit = CreditPayOff::where([
                     'client_person_id' => $data['client_person_id'],
                     'lead_id' => $request->lead_id,
-                    'kc_credit_id_payed_off' => $collection->kc_credit_id,
+                    'kc_credit_id_payed_off' => $credit->id,
                     'financial_product_id' => $financial_product_id,
                 ])->count();
                 if ($existCredit == 0) {
