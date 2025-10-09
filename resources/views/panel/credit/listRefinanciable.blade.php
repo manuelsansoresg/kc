@@ -22,15 +22,15 @@
                         <td> {{ $credit->id }} </td>
                         <td> {{ date('d-m-Y', strtotime($credit->collection_date)) }} </td>
                         <td> 
-                            {{ $credit->applied_payment }} 
+                            {{ format_price($credit->applied_payment) }} 
                         </td>
                         <td> {{ $credit->alias }} </td>
-                        <td> {{ $credit->placed_capital }}  </td>
+                        <td> {{ format_price($credit->placed_capital) }}  </td>
                     </tr>
                 @endforeach
                 <tr>
                     <td colspan="5" class="text-end"> Total: </td>
-                    <td><span id="table-refinanciamiento-total"> {{ $total }} </span></td>
+                    <td><span id="table-refinanciamiento-total"> {{ format_price($total) }} </span></td>
                 </tr>
             </table>
         </div>
