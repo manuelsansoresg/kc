@@ -88,7 +88,7 @@
             @if ($tramitType == 3)
                 <tr>
                     <td>Monto a refinanciar:</td>
-                    <td>$<span id="content-monto-refinanciar"></span></td>
+                    <td><span id="content-monto-refinanciar"></span></td>
                 </tr>
             @endif
             @if ($type_product_id == 2)
