@@ -231,7 +231,7 @@ class CreditController extends Controller
                 $creditIds = Credit::where('client_person_id', $clientPersonId)->pluck('id');
 
                 // Verificar si hay al menos un crédito refinanciable
-                $hasRefinanciable = InvestorsCredit::whereIn('credit_id', $creditIds)
+                $hasRefinanciable = Credit::whereIn('id', $creditIds)
                     ->where('refinanciable', 1)
                     ->exists();
 

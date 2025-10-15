@@ -911,14 +911,25 @@ class LeadController extends Controller
         }
         
         $productoDeseado     = null;
-        $getCollection = Collection::select('collections.kc_credit_id', 'collections.id', 'collections.fecha_cobro', 'collections.descuento', 'crm_status_list.alias', 'collections.saldo_insoluto_real')
-                                    ->join('clients_credit_info', 'clients_credit_info.credit_id', 'collections.credit_id')
-                                    ->join('crm_status_list', 'crm_status_list.id', 'collections.status')
-                                    ->where('collections.refinanciable', 1)
-                                    ->where('collections.kc_client_id', $clientPerson->id)
-                                    ->where('clients_credit_info.producto', '<>', 3)->get();
+
+        $credits = Credit::select(
+                                'id',
+                                'collection_date',
+                                'applied_payment',
+                                'placed_capital',
+                                'status'
+                            )
+                            ->where('client_person_id', $clientPerson->id)
+                            ->where('refinanciable', 1)
+                            ->where('product_id', '<>', 3)
+                            ->get();
+
+        $statusEnum = config('enums.investorsCreditsStatus');
+        $credits->each(function($credit) use ($statusEnum) {
+            $credit->alias = $statusEnum[$credit->status] ?? 'N/A';
+        });
         
-        $productoDeseado =  \View::make('panel.credit.listRefinanciable ', ['credits' => $getCollection, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
+        $productoDeseado =  \View::make('panel.credit.listRefinanciable', ['credits' => $credits, 'tramitType' => $tramitType, 'type_product_id' => $financialProduct->type_product_id])->render();
         
         if ($financialProduct->max_term != null) {
             $terms = FpTerm::select('terms.id', 'terms.term')
@@ -956,10 +967,10 @@ class LeadController extends Controller
        
 
         foreach ($credits as $credit) {
-            $getCollection = Collection::find($credit);
-            if ($getCollection != null) {
-                $descuento += $getCollection->descuento;
-                $total += $getCollection->saldo_insoluto_real;
+            $creditModel = Credit::find($credit);
+            if ($creditModel != null) {
+                $descuento += $creditModel->applied_payment;
+                $total += $creditModel->placed_capital;
             }
         }
         if ($tramitType == 3) { //refinanciamiento
@@ -990,14 +1001,10 @@ class LeadController extends Controller
         return response()->json($data);
     }
 
-    public function getResumen( FinancialProduct $financialProduct, $plazo, $monto, $total, $tramitType)
+    public function getResumen( FinancialProduct $financialProduct, $plazo, $monto, $total, $tramitType, $montoCompraCartera = 0)
     {
         $comision = $monto * $financialProduct->opening_commission_rate / 100;
-        if ($tramitType == 3) {
-            $montoEntregar = $monto - $comision - $total;
-        } else {
-            $montoEntregar = $monto - $comision;
-        }
+        $montoEntregar = $monto - $comision - $total - $montoCompraCartera;
         
         $periodicidad = config('financial_enums.periodicity_products')[$financialProduct->periodicity_id];
         $getCalc = new CalculadoraCredito();

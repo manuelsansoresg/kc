@@ -15,22 +15,22 @@
                 @endphp
                 @foreach ($credits as $credit)
                     @php
-                        $total += $credit->saldo_insoluto_real;
+                        $total += $credit->placed_capital;
                     @endphp
                     <tr>
                         <td> <input type="checkbox" name="credits[]" id="{{ $credit->id }}" value="{{ $credit->id }}" checked >  </td>
-                        <td> {{ $credit->kc_credit_id }} </td>
-                        <td> {{ date('d-m-Y', strtotime($credit->fecha_cobro)) }} </td>
+                        <td> {{ $credit->id }} </td>
+                        <td> {{ date('d-m-Y', strtotime($credit->collection_date)) }} </td>
                         <td> 
-                            {{ $credit->descuento }} 
+                            {{ format_price($credit->applied_payment) }} 
                         </td>
                         <td> {{ $credit->alias }} </td>
-                        <td> {{ $credit->saldo_insoluto_real }}  </td>
+                        <td> {{ format_price($credit->placed_capital) }}  </td>
                     </tr>
                 @endforeach
                 <tr>
                     <td colspan="5" class="text-end"> Total: </td>
-                    <td><span id="table-refinanciamiento-total"> {{ $total }} </span></td>
+                    <td><span id="table-refinanciamiento-total"> {{ format_price($total) }} </span></td>
                 </tr>
             </table>
         </div>
@@ -88,7 +88,7 @@
             @if ($tramitType == 3)
                 <tr>
                     <td>Monto a refinanciar:</td>
-                    <td>$<span id="content-monto-refinanciar"></span></td>
+                    <td><span id="content-monto-refinanciar"></span></td>
                 </tr>
             @endif
             @if ($type_product_id == 2)

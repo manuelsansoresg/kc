@@ -198,7 +198,7 @@
             @if ($credit->tramit_type == 3)
                 <tr>
                     <td>Monto a refinanciar:</td>
-                    <td>$<span id="content-monto-refinanciar"></span></td>
+                    <td><span id="content-monto-refinanciar"></span></td>
                 </tr>
             @endif
             @if ($financialProduct->type_product_id == 2)
