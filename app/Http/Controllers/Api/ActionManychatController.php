@@ -316,8 +316,12 @@ class ActionManychatController extends Controller
             'sod_min' => $minimoRedondeado,
             'sod_max' => $maximoRedondeado,
         ]);
-        
-        return response()->json(['lead' => $lead]);
+        $data_lead = array(
+            'lead' => $lead,
+            'sod_min' => $minimoRedondeado,
+            'sod_max' => $maximoRedondeado,
+        );
+        return response()->json($data_lead);
     }
 
     public function setUrlRfc(Request $request)
