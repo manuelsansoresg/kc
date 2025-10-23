@@ -302,17 +302,16 @@ class ActionManychatController extends Controller
         $tramit_type = 1;
         $data = $request->all();
         $manychat_id = $data['id'];
-        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
         Lead::where('id', $lead->id)->update([
             'tramit_type' => $tramit_type,
         ]);
 
         //get monto min max
         $data_min_max = array('whatsapp_phone' => $data['whatsapp_phone']);
-        $lead = Lead::getMontoMinMax($data_min_max, false);
-        $minimoRedondeado = $lead['monto_minimo'];
-        $maximoRedondeado = $lead['monto_maximo'];
-        Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->update([
+        $lead_monto_maximo_minimo = Lead::getMontoMinMax($data_min_max, false);
+        $minimoRedondeado = $lead_monto_maximo_minimo['monto_minimo'];
+        $maximoRedondeado = $lead_monto_maximo_minimo['monto_maximo'];
+        Lead::where('id', $lead->id)->update([
             'sod_min' => $minimoRedondeado,
             'sod_max' => $maximoRedondeado,
         ]);
