@@ -309,7 +309,7 @@ class ActionManychatController extends Controller
 
         //get monto min max
         $data_min_max = array('whatsapp_phone' => $data['whatsapp_phone']);
-        $lead = Lead::getMontoMinMax($data_min_max);
+        $lead = Lead::getMontoMinMax($data_min_max, false);
         $minimoRedondeado = $lead['monto_minimo'];
         $maximoRedondeado = $lead['monto_maximo'];
         Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->update([
