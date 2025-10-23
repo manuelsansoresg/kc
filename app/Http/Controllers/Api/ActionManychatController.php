@@ -279,6 +279,7 @@ class ActionManychatController extends Controller
         }
         //set sod
         $productId       = 3;
+        $comision = 0;
         
         if ($getClientPerson != null) { //solo aplicar tipo de tramite cuando sea sod
             $productIds = FinancialAgreement::where('agreement_id', $getClientPerson->agreement_id)
@@ -292,6 +293,7 @@ class ActionManychatController extends Controller
                 Lead::where('id', $lead->id)->update([
                     'financial_product_id' => $matchedProduct->id,
                 ]);
+                $comision = $matchedProduct->sod_commission_amount;
             }
            
         }
@@ -311,6 +313,7 @@ class ActionManychatController extends Controller
         $lead_monto_maximo_minimo = Lead::getMontoMinMax($data_min_max, false);
         $minimoRedondeado = $lead_monto_maximo_minimo['monto_minimo'];
         $maximoRedondeado = $lead_monto_maximo_minimo['monto_maximo'];
+
         Lead::where('id', $lead->id)->update([
             'sod_min' => $minimoRedondeado,
             'sod_max' => $maximoRedondeado,
@@ -319,6 +322,7 @@ class ActionManychatController extends Controller
             'lead' => $lead,
             'sod_min' => $minimoRedondeado,
             'sod_max' => $maximoRedondeado,
+            'comision' => $comision
         );
         return response()->json($data_lead);
     }
