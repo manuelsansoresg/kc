@@ -20,6 +20,7 @@ use App\Models\Product;
 use App\Models\SodScheduleDate;
 use App\Models\SodScheduleName;
 use App\Models\TempTable;
+use App\Models\User;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
 use Carbon\Carbon;
@@ -240,6 +241,8 @@ class ActionManychatController extends Controller
         $cellphone   = $data['whatsapp_phone'];
         $cleanPhone  = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $productId   = 3;
+
+        $user = User::where('cellphone', $cleanPhone)->first();
        
         $lead = Lead::create([
             'manychat_id' => $manychat_id,
@@ -250,7 +253,10 @@ class ActionManychatController extends Controller
         (new $notification)->send($lead->id);
         HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
         // validar identidad
-        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $getClientPerson = ClientPerson::where('user_id', $user->id)->first();
+        ClientPerson::where('user_id', $user->id)->update([
+            'cellphone' => $cleanPhone,
+        ]);
         $identity_validated = $getClientPerson != null && $getClientPerson->identity_validated == 1 ? true : false;
         $lead = Lead::find($lead->id);
         
@@ -273,7 +279,6 @@ class ActionManychatController extends Controller
         }
         //set sod
         $productId       = 3;
-        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
         
         if ($getClientPerson != null) { //solo aplicar tipo de tramite cuando sea sod
             $productIds = FinancialAgreement::where('agreement_id', $getClientPerson->agreement_id)
