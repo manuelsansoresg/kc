@@ -69,14 +69,14 @@ class Lead extends Model
         'periodicity',
     ];
 
-    public function getMontoMinMax($request)
+    public function getMontoMinMax($request, $isSendManyChat = true)
     {
-        $data = $request->all();
-        $manychat_id = $data['id'];
+        $data = $isSendManyChat == true ? $request->all() : $request;
+        $manychat_id = $isSendManyChat == true ? $data['id'] : null ;
         $cellphone = $data['whatsapp_phone'];
         $cleanPhone = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
-        $manychat = new Manychat();
+        
 
         // Definir mínimo fijo
         $minimoRedondeado = 100;
@@ -109,11 +109,14 @@ class Lead extends Model
         }
 
         // Enviar datos a ManyChat
-        $dataField = array(
-            'SOD - Monto Máximo disponible' => $maximoRedondeado,
-            'SOD - Monto Mínimo disponible' => $minimoRedondeado,
-        );
-        $manychat->setCustomFields($dataField, $manychat_id);
+        if ($isSendManyChat == true) {
+            $manychat = new Manychat();
+            $dataField = array(
+                'SOD - Monto Máximo disponible' => $maximoRedondeado,
+                'SOD - Monto Mínimo disponible' => $minimoRedondeado,
+            );
+            $manychat->setCustomFields($dataField, $manychat_id);
+        }
 
         return array(
             'monto_minimo' => $minimoRedondeado,

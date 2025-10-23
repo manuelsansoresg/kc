@@ -212,6 +212,7 @@ class ActionManychatController extends Controller
 
         return response()->json(['validate' => $statusCellphone]);
     }
+    
 
     public function createLead(Request $request)
     {
@@ -229,6 +230,88 @@ class ActionManychatController extends Controller
         (new $notification)->send($lead->id);
         HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
 
+        return response()->json(['lead' => $lead]);
+    }
+
+    public function setLeadSod(Request $request)
+    {
+        $data        = $request->all();
+        $manychat_id = $data['id'];
+        $cellphone   = $data['whatsapp_phone'];
+        $cleanPhone  = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
+        $productId   = 3;
+       
+        $lead = Lead::create([
+            'manychat_id' => $manychat_id,
+            'cellphone' => $cleanPhone,
+        ]);
+        //* Execute notification in create lead
+        $notification   = SendNotificationsValues::STRATEGY['leadNewProspect'];
+        (new $notification)->send($lead->id);
+        HistoryLog::move($lead->id, HistoryLog::CREATE_PROSPECT, HistoryLog::CREATE_PROSPECT);
+        // validar identidad
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $identity_validated = $getClientPerson != null && $getClientPerson->identity_validated == 1 ? true : false;
+        $lead = Lead::find($lead->id);
+        
+        if ($identity_validated == 1) {
+            $cellphone_validated = $lead->cellphone != null ? true : false;
+            $rfc_validated = $lead->cellphone == null && $lead->rfc != null ? true : false;
+
+            Lead::where('id', $lead->id)->update([
+                'name' => $getClientPerson->name,
+                'last_name' => $getClientPerson->last_name,
+                'second_last_name' => $getClientPerson->second_last_name,
+                'birth_date' => $getClientPerson->birth_date,
+                'rfc' => $getClientPerson->rfc,
+                'email' => $getClientPerson->email,
+                'agreement_id' => $getClientPerson->agreement_id,
+                'client_person_id' => $getClientPerson->id,
+                'cellphone_validated' => $cellphone_validated,
+                'rfc_validated' => $rfc_validated,
+            ]);
+        }
+        //set sod
+        $productId       = 3;
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        
+        if ($getClientPerson != null) { //solo aplicar tipo de tramite cuando sea sod
+            $productIds = FinancialAgreement::where('agreement_id', $getClientPerson->agreement_id)
+                                    ->pluck('product_id')
+                                    ->toArray();
+            $matchedProduct = FinancialProduct::whereIn('id', $productIds)
+            ->where('type_product_id', $productId)
+            ->first();
+
+            if ($matchedProduct != null) {
+                Lead::where('id', $lead->id)->update([
+                    'financial_product_id' => $matchedProduct->id,
+                ]);
+            }
+           
+        }
+        
+        Lead::where('id', $lead->id)->update(['product_id' => $productId]);
+
+        //tipo tramite
+        $tramit_type = 1;
+        $data = $request->all();
+        $manychat_id = $data['id'];
+        $lead = Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->first();
+        Lead::where('id', $lead->id)->update([
+            'tramit_type' => $tramit_type,
+        ]);
+
+        //get monto min max
+        $data_min_max = array('whatsapp_phone' => $data['whatsapp_phone']);
+        $lead = Lead::getMontoMinMax($data_min_max);
+        $minimoRedondeado = $lead['monto_minimo'];
+        $maximoRedondeado = $lead['monto_maximo'];
+        Lead::where('manychat_id', $manychat_id)->orderBy('id', 'desc')->update([
+            'sod_min' => $minimoRedondeado,
+            'sod_max' => $maximoRedondeado,
+        ]);
+        
         return response()->json(['lead' => $lead]);
     }
 
