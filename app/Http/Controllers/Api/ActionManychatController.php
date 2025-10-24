@@ -327,6 +327,37 @@ class ActionManychatController extends Controller
         return response()->json($data_lead);
     }
 
+    public function continueSod(Request $request)
+    {
+        $data        = $request->all();
+        $lead_id = $data['lead_id'];
+        $manychat_id = $data['id'];
+        $cellphone   = $data['whatsapp_phone'];
+        $cleanPhone  = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
+        $productId   = 3;
+
+        $user = User::where('cellphone', $cleanPhone)->first();
+        $lead = Lead::find($lead_id);
+        //api/tipo-tramite/1/store
+        Lead::where('id', $lead->id)->update([
+            'tramit_type' => 1,
+        ]);
+        //api/aditional-data-save
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $mcData = array(
+            'client_person_id' => $getClientPerson->id,
+            'product_id' => $lead->product_id,
+            'selected_loan' => $lead->selected_loan,
+            'selected_term' => $lead->product_id == 3 ? 1 : 0,
+            'financial_product_id' => $lead->financial_product_id,
+        );
+        $leadData = Lead::prepareLeadDataFromMC($mcData);
+        Lead::where('id', $lead->id)->update($leadData);
+        //api/send-control-desk
+        $template   = TemplateValues::STRATEGY['lead'];
+        $move       = (new $template)->move($lead->id, false, true);
+    }
+
     public function setUrlRfc(Request $request)
     {
         $data = $request->all();
