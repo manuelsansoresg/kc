@@ -331,10 +331,8 @@ class ActionManychatController extends Controller
     {
         $data        = $request->all();
         $lead_id = $data['lead_id'];
-        $manychat_id = $data['id'];
         $cellphone   = $data['whatsapp_phone'];
         $cleanPhone  = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
-        $productId   = 3;
 
         $user = User::where('cellphone', $cleanPhone)->first();
         $lead = Lead::find($lead_id);
