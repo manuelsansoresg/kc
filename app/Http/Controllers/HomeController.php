@@ -145,11 +145,12 @@ class HomeController extends Controller
 
     public function contratoClient(ClientPerson $client,  Credit $credit)
     {
-        $isFirma = false;
-        $firma = null;
-        $token = null;
-        $ip = null;
-        $hostname = null;
+        $isFirma   = false;
+        $firma     = null;
+        $token     = null;
+        $ip        = null;
+        $hostname  = null;
+        $get_firma = $_GET['is_firma'] ? true : false;
 
         $history = HistoryLog::where([
             'id_rel' => $credit->id,
@@ -168,6 +169,7 @@ class HomeController extends Controller
 
         
         $isFirma = $client->cm_agreement == null ? true : false;
+        $isFirma = $get_firma ? true : $isFirma;
 
         //$isFirma = true;
         $agreement = Agreement::find($credit->agreement_id);
@@ -242,12 +244,13 @@ class HomeController extends Controller
 
     public function contratoCreditSod(Credit $credit)
     {
-        $client  = $credit->creditClientPerson;
-        $isFirma = false;
-        $firma = null;
-        $token = null;
-        $ip = null;
-        $hostname = null;
+        $client    = $credit->creditClientPerson;
+        $isFirma   = false;
+        $firma     = null;
+        $token     = null;
+        $ip        = null;
+        $hostname  = null;
+        $get_firma = $_GET['is_firma'] ? true : false;
         
         $agreement = Agreement::find($credit->agreement_id);
 
@@ -269,6 +272,9 @@ class HomeController extends Controller
         } else {
             $isFirma = $credit->sod_agreement == null ? true : false;
         }
+
+        $isFirma = $get_firma ? true : $isFirma;
+
         return view('contrato_sod', compact('client', 'credit', 'agreement', 'history', 'isFirma', 'firma', 'token'));
     }
 

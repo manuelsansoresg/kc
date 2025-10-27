@@ -896,14 +896,17 @@ class ActionManychatController extends Controller
 
         if ($credit != null) {
             $client = $getClientPerson;
-            $manychat = new Manychat();
+            
             $firmaContrato = $client!= null && $client->cm_agreement == 1 ? true : false;
             $urlContrato = $client!= null ? asset('/client/contratocm/'.$client->id.'/'.$credit->id) : null;
-            $dataField = array(
-                'Prospecto - Firma Contrato CM' => $firmaContrato,
-                'Prospecto - URL contrato CM' => $urlContrato,
-            );
-           $manychat->setCustomFields($dataField, $manychat_id);
+            if ($manychat_id != null) {
+                $dataField = array(
+                    'Prospecto - Firma Contrato CM' => $firmaContrato,
+                    'Prospecto - URL contrato CM' => $urlContrato,
+                );
+                $manychat = new Manychat();
+                $manychat->setCustomFields($dataField, $manychat_id);
+            }
         }
         return response()->json(['firmaContrato' => $firmaContrato, 'urlContrato' => $urlContrato]);
     }
