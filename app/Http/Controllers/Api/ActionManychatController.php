@@ -375,7 +375,17 @@ class ActionManychatController extends Controller
     {
         $data = $request->all();
         $cellphone   = $data['whatsapp_phone'];
+        $cleanPhone  = substr(preg_replace('/[^0-9]/', '', $cellphone), -10);
         
+        $getClientPerson = ClientPerson::where('cellphone', $cleanPhone)->first();
+        $credit = $getClientPerson->credit;
+
+        $labelValidate = CreditsControlDesk::$labelValidate[9];
+        CreditsControlDesk::saveEdit($credit->id, $request, $labelValidate, null);   
+        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $credit->id, 1); //terminar tarea
+
+        HistoryLog::move($credit->id, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, null, false);
+        HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK2_STEP4, $credit->id, 0);
        
     }
 
