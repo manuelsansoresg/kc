@@ -169,7 +169,7 @@ class HomeController extends Controller
 
         
         $isFirma = $client->cm_agreement == null ? true : false;
-        $isFirma = $get_firma ? true : $isFirma;
+        $isFirma = $get_firma ? false : $isFirma;
 
         //$isFirma = true;
         $agreement = Agreement::find($credit->agreement_id);
@@ -273,7 +273,7 @@ class HomeController extends Controller
             $isFirma = $credit->sod_agreement == null ? true : false;
         }
 
-        $isFirma = $get_firma ? true : $isFirma;
+        $isFirma = $get_firma ? false : $isFirma;
 
         return view('contrato_sod', compact('client', 'credit', 'agreement', 'history', 'isFirma', 'firma', 'token'));
     }
