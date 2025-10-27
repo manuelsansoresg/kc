@@ -150,7 +150,7 @@ class HomeController extends Controller
         $token     = null;
         $ip        = null;
         $hostname  = null;
-        $get_firma = $_GET['is_firma'] ? true : false;
+        $get_firma = isset($_GET['is_firma']) ? true : false;
 
         $history = HistoryLog::where([
             'id_rel' => $credit->id,
@@ -250,7 +250,7 @@ class HomeController extends Controller
         $token     = null;
         $ip        = null;
         $hostname  = null;
-        $get_firma = $_GET['is_firma'] ? true : false;
+        $get_firma = isset($_GET['is_firma']) ? true : false;
         
         $agreement = Agreement::find($credit->agreement_id);
 
