@@ -387,7 +387,7 @@ class ActionManychatController extends Controller
                 ], 404);
             }
             
-            $credit = $getClientPerson->credit;
+            $credit = $getClientPerson->credit()->first();
             
             if (!$credit) {
                 return response()->json([
