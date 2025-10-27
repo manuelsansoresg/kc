@@ -47,6 +47,7 @@ Route::post('validate-phone', [ActionManychatController::class, 'validatePhone']
 Route::post('create-lead', [ActionManychatController::class, 'createLead']);
 Route::post('set-lead-sod', [ActionManychatController::class, 'setLeadSod']);
 Route::post('continue-sod', [ActionManychatController::class, 'continueSod']);
+Route::post('firma-docs-sod', [ActionManychatController::class, 'firmaDocsSod']);
 
 Route::post('set-url-rfc', [ActionManychatController::class, 'setUrlRfc']);
 Route::post('validate-cliente-activo', [ActionManychatController::class, 'validateClienteActivo']);

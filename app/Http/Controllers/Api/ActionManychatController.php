@@ -371,6 +371,14 @@ class ActionManychatController extends Controller
         return response()->json($data);
     }
 
+    public function firmaDocsSod(Request $request)
+    {
+        $data = $request->all();
+        $cellphone   = $data['whatsapp_phone'];
+        
+       
+    }
+
     public function setUrlRfc(Request $request)
     {
         $data = $request->all();
