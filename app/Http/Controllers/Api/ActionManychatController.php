@@ -354,6 +354,21 @@ class ActionManychatController extends Controller
         //api/send-control-desk
         $template   = TemplateValues::STRATEGY['lead'];
         $move       = (new $template)->move($lead->id, false, true);
+
+        $credit = Credit::where([
+            'client_person_id' => $getClientPerson->id,
+            'credit_status' => HistoryLog::KC_CONTROL_DESK
+        ])->first();
+        $firmaContrato = $getClientPerson!= null && $getClientPerson->cm_agreement == 1 ? true : false;
+        $urlContrato = $getClientPerson!= null ? asset('/client/contratocm/'.$getClientPerson->id.'/'.$credit->id) : null;
+        $urlContrato_sod =  asset('/client/sod/'.$credit->id);
+        
+        $data = array(
+            'firmaContrato' => $firmaContrato,
+            'urlContrato' => $urlContrato,
+            'urlContrato_sod' => $urlContrato_sod,
+        );
+        return response()->json($data);
     }
 
     public function setUrlRfc(Request $request)
