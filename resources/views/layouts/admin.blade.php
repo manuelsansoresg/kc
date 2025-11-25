@@ -90,7 +90,7 @@
                                     <li class="nk-menu-item has-sub">
                                         <a href="#" class="nk-menu-link nk-menu-toggle">
                                             <span class="nk-menu-icon"><em class="icon ni ni-check-circle-cut"></em></span>
-                                            <span class="nk-menu-text">Acccciones Prospectos</span>
+                                            <span class="nk-menu-text">Acciones Prospectos</span>
                                         </a>
                                         <ul class="nk-menu-sub">
 
