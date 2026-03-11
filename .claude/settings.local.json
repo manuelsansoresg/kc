@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep -v \"^$\")"
+      "Bash(grep -v \"^$\")",
+      "Bash(grep -n \"new Slack\\\\|notification_slack\\\\|use App\\\\\\\\Lib\\\\\\\\Slack\" /c/laragon/www/kc/.worktrees/main/app/Strategies/Notifications/PushLeadNewProspect.php /c/laragon/www/kc/.worktrees/main/app/Strategies/Notifications/PushNewCreditKcCheckUp.php /c/laragon/www/kc/.worktrees/main/app/Models/HistoryLog.php /c/laragon/www/kc/.worktrees/main/app/Models/Action.php)",
+      "Bash(grep -rn \"new Slack\\\\|notification_slack->send\\\\|use App\\\\\\\\Lib\\\\\\\\Slack\" /c/laragon/www/kc/.worktrees/main/app/)"
     ]
   }
 }
