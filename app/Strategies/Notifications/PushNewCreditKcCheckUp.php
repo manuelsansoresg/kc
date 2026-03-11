@@ -2,7 +2,6 @@
 
 namespace App\Strategies\Notifications;
 
-use App\Lib\Slack;
 use App\Models\HistoryLog;
 use App\Models\Notification;
 use App\Models\User;
