@@ -2,7 +2,6 @@
 
 namespace App\Strategies\Notifications;
 
-use App\Lib\Slack;
 use App\Models\Notification;
 use App\Models\User;
 use App\Strategies\Notifications\Models\Pusher;
@@ -26,8 +25,6 @@ class PushLeadNewProspect implements SendNotificationsInterface
         $push  = new Pusher;
         $push->send(['model' => 'leadNewProspect']);
 
-        $notification_slack = new Slack('kaaxClub', 'nuevo prospecto');
-        $notification_slack->sendMessage();
     }
     
     public function get($user_id = null, $status = 0)

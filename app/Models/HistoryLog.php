@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Lib\Csendgrid;
 use App\Lib\Manychat;
-use App\Lib\Slack;
 use App\Models\kaaxSidecc\CreditKaaxSidecc;
 use App\Strategies\Values\SendNotificationsValues;
 use App\Strategies\Values\TemplateValues;
@@ -424,8 +423,6 @@ class HistoryLog extends Model
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP_ACTION_FORM, $id_rel, 0);
             }
 
-            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Check up');
-            $notification_slack->sendMessage();
         }
 
         if ($status_id == HistoryLog::KC_CHECK_UP_DEBT_REDUCTION) {
@@ -464,9 +461,6 @@ class HistoryLog extends Model
             //*Cuando es crédito nuevo y viene de KC-Checkup
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
 
-            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Control desk');
-            $notification_slack->sendMessage();
-
             if ($financialProduct != null && $financialProduct->type_product_id == 3) {
                 HistoryLog::move($id_rel, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, HistoryLog::KC_CONTROL_DESK_TASK1_STEP4);
                 HistoryLog::updateStatusProgress(HistoryLog::KC_CONTROL_DESK_TASK1_STEP4, $id_rel, 0);
@@ -477,8 +471,6 @@ class HistoryLog extends Model
             HistoryLog::move($id_rel, HistoryLog::KC_DELIVERY_TASK1_STEP1, HistoryLog::KC_DELIVERY_TASK1_STEP1);
             InvestorsCredit::lockFundingIfComplete($id_rel);
 
-            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Delivery');
-            $notification_slack->sendMessage();
         }
 
         if ($status_id == HistoryLog::KC_SWAP) {
@@ -491,8 +483,6 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_SWAP_UPLOAD_2, $id_rel, 0);
             //*Cuando es crédito nuevo y viene de KC-Checkup
             HistoryLog::updateStatusProgress(HistoryLog::KC_CHECK_UP, $id_rel, 1);
-            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Swap');
-            $notification_slack->sendMessage();
         }
 
         if ($status_id == HistoryLog::KC_PAYMENT) {
@@ -509,21 +499,15 @@ class HistoryLog extends Model
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_FORM_STEP_1, $id_rel, 1);
             HistoryLog::updateStatusProgress(HistoryLog::KC_PAYMENT_UPLOAD_STEP_1, $id_rel, 0);
 
-            $notification_slack = new Slack('kaaxClub', 'Crédito en KC - Payments');
-            $notification_slack->sendMessage();
         }
 
         if ($status_id == HistoryLog::KC_WALLET) {
             HistoryLog::move($id_rel, HistoryLog::KC_WALLET_ADD_UPLOAD, HistoryLog::KC_WALLET_ADD_UPLOAD);
             HistoryLog::updateStatusProgress(HistoryLog::KC_WALLET_ADD_UPLOAD, $id_rel, 0);
 
-            $notification_slack = new Slack('kaaxClub', 'KC Wallet - Solicitud de agregar fondos');
-            $notification_slack->sendMessage();
         }
 
         if ($status_id == HistoryLog::KC_DOWN_WALLET) {
-            $notification_slack = new Slack('kaaxClub', 'KC Wallet - Solicitud de retiro de fondos');
-            $notification_slack->sendMessage();
         }
 
         if ($status_id == HistoryLog::KC_AFTER_MARKET) {
